@@ -1,0 +1,17 @@
+#
+# backup, build, and release
+#
+
+/backups/
+/release/
+/build/
+
+#
+# source migration
+#
+
+/old/
+
+#
+# eof
+#
