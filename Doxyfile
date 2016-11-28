@@ -1,0 +1,56 @@
+##############################################################################
+#
+# Doxyfile (static configuration variables).
+#
+##############################################################################
+
+OUTPUT_LANGUAGE        = English
+
+OPTIMIZE_OUTPUT_FOR_C  = YES
+
+STRIP_FROM_PATH        = .
+STRIP_FROM_INC_PATH    = .
+
+RECURSIVE              = NO
+EXAMPLE_RECURSIVE      = YES
+
+EXTRACT_PRIVATE        = NO
+INTERNAL_DOCS          = NO
+
+SORT_MEMBER_DOCS       = YES
+SORT_BRIEF_DOCS        = YES
+SORT_GROUP_NAMES       = YES
+
+GENERATE_TODOLIST      = YES
+GENERATE_TESTLIST      = YES
+GENERATE_BUGLIST       = YES
+GENERATE_DEPRECATEDLIST= YES
+
+HTML_COLORSTYLE_HUE    =
+HTML_COLORSTYLE_SAT    =
+HTML_COLORSTYLE_GAMMA  =
+HTML_TIMESTAMP         = YES
+
+DISABLE_INDEX          = NO
+GENERATE_TREEVIEW      = YES
+
+SOURCE_BROWSER         = YES
+STRIP_CODE_COMMENTS    = NO
+
+HTML_DYNAMIC_SECTIONS  = YES
+HAVE_DOT               = YES
+INTERACTIVE_SVG        = YES
+DOT_IMAGE_FORMAT       = svg
+
+#GENERATE_LEGEND        = YES
+
+COMPACT_LATEX          = YES
+LATEX_SOURCE_CODE      = NO
+PAPER_TYPE             = letter
+
+MAN_EXTENSION          = .3
+
+
+##############################################################################
+# eof
+##############################################################################
