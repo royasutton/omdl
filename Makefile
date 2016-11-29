@@ -24,8 +24,10 @@ include $(AMU_PM_PREFIX)amu_pm_init
 #verbose_seam                           := $(false)
 #debug_dif_filter                       := $(true)
 
+output_path_add_project_version         := $(false)
+
+targets_depends_project                 := $(false)
 version_checks                          := $(true)
-targets_depends_project                 := $(true)
 generate_latex                          := $(true)
 
 release_project                         := $(false)
@@ -44,7 +46,7 @@ endif
 # Project
 #------------------------------------------------------------------------------#
 project_name        := omdl
-project_version     := 0.1
+project_version     := $(shell git describe --tags --dirty --always)
 project_brief       := OpenSCAD Mechanical Design Library
 
 docs_group_id       := framework
