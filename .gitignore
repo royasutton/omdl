@@ -1,5 +1,5 @@
 #
-# backup, build, and release
+# backup, build, and release directories
 #
 
 /backups/
@@ -7,10 +7,10 @@
 /build/
 
 #
-# source migration
+# work directory
 #
 
-/old/
+/work/
 
 #
 # eof
