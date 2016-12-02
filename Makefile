@@ -49,7 +49,7 @@ project_name        := omdl
 project_version     := $(shell git describe --tags --dirty --always)
 project_brief       := OpenSCAD Mechanical Design Library
 
-docs_group_id       := framework
+docs_group_id       := primitives
 project_logo        :=
 seam_defines        := INCLUDE_PATH=include
 
