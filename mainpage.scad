@@ -49,8 +49,8 @@
     dependencies and all library [API]'s include [Doxygen markups] that
     describe its parameters, behavior, and use.
 
-    Revolutionary no... But a big step in the evolution of a standard way
-    to share documented OpenSCAD scripts!
+    <em>Revolutionary no... But a big step in the evolution of a standard
+    way to share documented OpenSCAD scripts!</em>
 
   \section quickstart Quickstart
 
@@ -153,7 +153,7 @@
 
     Now you may include the desired library primitives in your project as
     follows, replacing the version number as needed (multiple version of
-    the library may coexists):
+    a library may coexists):
 
     \verbatim
     include <omdl-v0.2/shapes2de.scad>;
@@ -171,7 +171,8 @@
     change should bear your copyright notice alongside the original authors'
     copyright notices typically located at the top of each file.
 
-    Ideas, requests, comments, and constructive criticism are welcome.
+    Ideas, requests, comments, contributions, and constructive criticism
+    are welcome.
 
   [omdl]: https://github.com/royasutton/omdl
   [openscad-amu]: https://github.com/royasutton/openscad-amu
