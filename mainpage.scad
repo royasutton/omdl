@@ -52,7 +52,7 @@
     <em>Revolutionary no... But a big step in the evolution of a standard
     way to share documented OpenSCAD scripts!</em>
 
-  \section quickstart Quickstart
+  \section quickstart Quick Start
 
     The [omdl] consist of a collection of libraries that may be \c used
     or \c included as expected.
@@ -61,7 +61,7 @@
 
     \dontinclude mainpage_quickstart.scad
     \skip include
-    \until h=10 );
+    \until valign="center" );
 
     \amu_make png_files (append=quickstart extension=png)
     \amu_make eps_files (append=quickstart extension=png2eps)
@@ -259,8 +259,13 @@ BEGIN_SCOPE quickstart;
     vrnd  = [1, 2, 4];
 
     cone( h=20, r=10, vr=2 );
+    rotate([0, 0, 360/20])
     st_radial_copy( n=5, angle=true )
       etriangle_vl_c( vs=frame, vc=core, vr=vrnd, h=10 );
+
+    translate([0, -50,0])
+    linear_extrude(height=10)
+    text( text="omdl", size=20, halign="center", valign="center" );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
