@@ -65,7 +65,9 @@ include <transform.scad>;
   \param    size <vector|decimal> A vector [x, y] of decimals
             or a single decimal for (x=y).
 
-  \param    vr <decimal> The corner rounding radius.
+  \param    vr <vector|decimal> The corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
   \param    center <boolean> Center about origin.
 
@@ -86,11 +88,11 @@ module rectangle
 
   translate(center==true ? [-rx/2, -ry/2] : [0,0])
   {
-    if ( vr == undef )
+    if ( vr == undef )                  // no rounding
     {
       square([rx, ry]);
     }
-    else
+    else if ( len(vr) == undef )        // equal rounding
     {
       for (y = [ [0, 1], [1, -1] ],
            x = [ [0, 1], [1, -1] ])
@@ -104,6 +106,45 @@ module rectangle
 
       translate([vr, 0])
       square([rx, ry] - [vr*2, 0]);
+    }
+    else                                // individual rounding
+    {
+      crv = [ (len(vr) >= 1) ? vr[0] : 0,
+              (len(vr) >= 2) ? vr[1] : 0,
+              (len(vr) >= 3) ? vr[2] : 0,
+              (len(vr) >= 4) ? vr[3] : 0 ];
+
+       for ( i =  [ [0, 0,  1, 0,  1],
+                    [1, 1, -1, 0,  1],
+                    [2, 1, -1, 1, -1],
+                    [3, 0,  1, 1, -1] ] )
+       {
+         if ( crv[i[0]] > 0 )
+         {
+           translate([rx*i[1] + crv[i[0]] * i[2], ry*i[3] + crv[i[0]] * i[4]])
+           circle (r=crv[i[0]]);
+         }
+       }
+
+      ppv =
+      [
+        for
+        (
+          i = [
+                [0,  0,  0,  0,  1],
+                [0,  0,  1,  0,  0],
+                [1,  1, -1,  0,  0],
+                [1,  1,  0,  0,  1],
+                [2,  1,  0,  1, -1],
+                [2,  1, -1,  1,  0],
+                [3,  0,  1,  1,  0],
+                [3,  0,  0,  1, -1]
+              ]
+        )
+          [rx*i[1] + crv[i[0]] * i[2], ry*i[3] + crv[i[0]] * i[4]]
+      ];
+
+      polygon( points=ppv, paths=[ [0,1,2,3,4,5,6,7] ] );
     }
   }
 }
@@ -121,9 +162,15 @@ module rectangle
   \param    co <vector> Core offset. A vector [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
-  \param    vr <decimal> The default corner rounding radius.
-  \param    vr1 <decimal> The outer corner rounding radius.
-  \param    vr2 <decimal> The core corner rounding radius.
+  \param    vr <vector|decimal> The default corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
+  \param    vr1 <vector|decimal> The outer corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
+  \param    vr2 <vector|decimal> The core corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
   \param    center <boolean> Center about origin.
 
@@ -1117,9 +1164,9 @@ BEGIN_SCOPE dim;
     $fn = 72;
 
     if (shape == "rectangle")
-      rectangle( size=[25,40], vr=5, center=true );
+      rectangle( size=[25,40], vr=[0,10,10,5], center=true );
     else if (shape == "rectangle_c")
-      rectangle_c( size=[40,25], t=[15,5], vr1=10, vr2=2.5, co=[0,5], center=true );
+      rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, co=[0,5], center=true );
     else if (shape == "triangle_ppp")
       triangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], vr=2, centroid=true );
     else if (shape == "triangle_lll")

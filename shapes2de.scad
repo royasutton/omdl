@@ -67,7 +67,9 @@ include <shapes2d.scad>;
   \param    h <vector|decimal> A vector of decimals or a single decimal to
             specify simple extrusion height.
 
-  \param    vr <decimal> The corner rounding radius.
+  \param    vr <vector|decimal> The corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
   \param    center <boolean> Center about origin.
 
@@ -106,9 +108,15 @@ module erectangle
   \param    co <vector> Core offset. A vector [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
-  \param    vr <decimal> The default corner rounding radius.
-  \param    vr1 <decimal> The outer corner rounding radius.
-  \param    vr2 <decimal> The core corner rounding radius.
+  \param    vr <vector|decimal> The default corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
+  \param    vr1 <vector|decimal> The outer corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
+  \param    vr2 <vector|decimal> The core corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
   \param    center <boolean> Center about origin.
 
