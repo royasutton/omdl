@@ -73,8 +73,10 @@ library             := mainpage \
 backup_files_add    := README.md \
                        lgpl-2.1.txt
 
-release_files_add         := $(backup_files_add)
-release_archive_files_add := $(backup_files_add)
+release_files_add         = $(backup_files_add) \
+                            $(output_path)latex/refman.pdf
+
+release_archive_files_add = $(backup_files_add)
 
 # temp
 edit: ; geany Makefile $(src_files)
