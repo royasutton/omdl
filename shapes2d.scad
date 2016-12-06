@@ -114,17 +114,17 @@ module rectangle
               (len(vr) >= 3) ? vr[2] : 0,
               (len(vr) >= 4) ? vr[3] : 0 ];
 
-       for ( i =  [ [0, 0,  1, 0,  1],
-                    [1, 1, -1, 0,  1],
-                    [2, 1, -1, 1, -1],
-                    [3, 0,  1, 1, -1] ] )
-       {
-         if ( crv[i[0]] > 0 )
-         {
-           translate([rx*i[1] + crv[i[0]] * i[2], ry*i[3] + crv[i[0]] * i[4]])
-           circle (r=crv[i[0]]);
-         }
-       }
+      for ( i =  [ [0, 0,  1, 0,  1],
+                   [1, 1, -1, 0,  1],
+                   [2, 1, -1, 1, -1],
+                   [3, 0,  1, 1, -1] ] )
+      {
+        if ( crv[i[0]] > 0 )
+        {
+         translate([rx*i[1] + crv[i[0]] * i[2], ry*i[3] + crv[i[0]] * i[4]])
+         circle (r=crv[i[0]]);
+        }
+      }
 
       ppv =
       [
@@ -220,6 +220,100 @@ module rectangle_c
   else
   {
     rectangle(size=od, vr=or, center=center);
+  }
+}
+
+//! A rhombus.
+/***************************************************************************//**
+  \param    size <vector|decimal> A vector [w, h] of decimals
+            or a single decimal for (w=h).
+
+  \param    vr <vector|decimal> The corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
+
+  \param    center <boolean> Center about origin.
+
+  \details
+
+    \b Example
+    \amu_eval ( function=rhombus ${example_dim} )
+
+    See [Wikipedia](https://en.wikipedia.org/wiki/Rhombus)
+    for more information.
+*******************************************************************************/
+module rhombus
+(
+  size,
+  vr,
+  center = false
+)
+{
+  rx = (len(size) >= 1) ? size[0]/2 : size/2;
+  ry = (len(size) >= 2) ? size[1]/2 : rx;
+
+  translate(center==true ? [0,0] : [rx, ry])
+  {
+    if ( vr == undef )                    // no rounding
+    {
+      polygon
+      (
+        points=[ [rx,0], [0,ry], [-rx,0], [0,-ry] ],
+        paths=[ [0,1,2,3] ]
+      );
+    }
+    else                                  // individual rounding
+    {
+      erc = (len(vr) == undef) ? vr : 0;  // equal rounding
+
+      crv = [ (len(vr) >= 1) ? vr[0] : erc,
+              (len(vr) >= 2) ? vr[1] : erc,
+              (len(vr) >= 3) ? vr[2] : erc,
+              (len(vr) >= 4) ? vr[3] : erc ];
+
+      a1 = angle_pp2pp(v1t=[0,ry], v1i=[rx,0], v2t=[0,-ry], v2i=[rx,0]) / 2;
+      a2 = 90 - a1;
+
+      for ( i = [ [0,  1, -1,  0,  0],
+                  [1,  0,  0,  1, -1],
+                  [2, -1,  1,  0,  0],
+                  [3,  0,  0, -1,  1] ] )
+      {
+        translate
+        (
+          [ rx*i[1] + crv[i[0]]/sin(a1) * i[2], ry*i[3] + crv[i[0]]/sin(a2) * i[4] ]
+        )
+        circle (r=crv[i[0]]);
+      }
+
+      ppv =
+      [
+        for
+        (
+          i = [
+                [0,  0,  1, -1,  0, -1],
+                [0,  0,  1, -1,  0,  1],
+                [1,  1,  0,  1,  1, -1],
+                [1,  1,  0, -1,  1, -1],
+                [2,  0, -1,  1,  0,  1],
+                [2,  0, -1,  1,  0, -1],
+                [3,  1,  0, -1, -1,  1],
+                [3,  1,  0, +1, -1, +1]
+              ]
+        )
+          ( i[1] == 0 )
+          ? [
+              rx*i[2] + crv[i[0]] * (1/sin(a1)-sin(a1)) * i[3],
+              ry*i[4] + crv[i[0]] * cos(a1) * i[5]
+            ]
+          : [
+              rx*i[2] + crv[i[0]] * cos(a2) * i[3],
+              ry*i[4] + crv[i[0]] * (1/sin(a2)-sin(a2)) * i[5]
+            ]
+      ];
+
+      polygon( points=ppv, paths=[ [0,1,2,3,4,5,6,7] ] );
+    }
   }
 }
 
@@ -1167,6 +1261,8 @@ BEGIN_SCOPE dim;
       rectangle( size=[25,40], vr=[0,10,10,5], center=true );
     else if (shape == "rectangle_c")
       rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, co=[0,5], center=true );
+    else if (shape == "rhombus")
+      rhombus( size=[40,25], vr=[2,4,2,4], center=true );
     else if (shape == "triangle_ppp")
       triangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], vr=2, centroid=true );
     else if (shape == "triangle_lll")
@@ -1204,6 +1300,7 @@ BEGIN_SCOPE dim;
               strings "
                 rectangle
                 rectangle_c
+                rhombus
                 triangle_ppp
                 triangle_lll
                 triangle_vl_c

@@ -155,6 +155,39 @@ module erectangle_c
   );
 }
 
+//! An extruded rhombus.
+/***************************************************************************//**
+  \param    size <vector|decimal> A vector [w, h] of decimals
+            or a single decimal for (w=h).
+
+  \param    h <vector|decimal> A vector of decimals or a single decimal to
+            specify simple extrusion height.
+
+  \param    vr <vector|decimal> The corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
+
+  \param    center <boolean> Center about origin.
+
+  \details
+
+    \sa st_linear_extrude_scale for a description on specifying \p h.
+
+    \b Example
+    \amu_eval ( function=erhombus ${example_dim} )
+*******************************************************************************/
+module erhombus
+(
+  size,
+  h,
+  vr,
+  center = false
+)
+{
+  st_linear_extrude_scale(h=h, center=center)
+  rhombus(size=size, vr=vr, center=center);
+}
+
 //! An extruded general triangle specified by three vertices.
 /***************************************************************************//**
   \param    v1 <vector> A vector [x, y] for vertex 1.
@@ -890,6 +923,8 @@ BEGIN_SCOPE dim;
       erectangle( size=[25,40], vr=5, h=20, center=true );
     else if (shape == "erectangle_c")
       erectangle_c(size=[40,20], t=[10,1], co=[0,-6], cr=10, vr=5, h=30, center=true);
+    else if (shape == "erhombus")
+      erhombus( size=[40,25], h=10, vr=[3,0,3,9], center=true );
     else if (shape == "etriangle_ppp")
       etriangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], h=20, vr=2, centroid=true, center=true );
     else if (shape == "etriangle_lll")
@@ -927,6 +962,7 @@ BEGIN_SCOPE dim;
               strings "
                 erectangle
                 erectangle_c
+                erhombus
                 etriangle_ppp
                 etriangle_lll
                 etriangle_vl_c
