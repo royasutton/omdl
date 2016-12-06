@@ -247,6 +247,40 @@
 //----------------------------------------------------------------------------//
 
 /*
+BEGIN_SCOPE logo;
+  BEGIN_OPENSCAD;
+    include <shapes2de.scad>;
+    include <shapes3d.scad>;
+
+    $fn = 36;
+
+    frame = triangle_vp2vl( [ [30,0], [0,40], [30,40] ] );
+    core  = 2 * frame / 3;
+    vrnd  = [1, 2, 4];
+
+    cone( h=20, r=10, vr=2 );
+    rotate([0, 0, 360/20])
+    st_radial_copy( n=5, angle=true )
+      etriangle_vl_c( vs=frame, vc=core, vr=vrnd, h=10 );
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    views   name "views" distance "250" views "top";
+    images  name "sizes" aspect "1:1" xsizes "55";
+
+    variables
+      set_makefile "${__MAKE_FILE__}"  add_depend "${__MAKE_FILE__}"
+      set_source "${__SCOPE_FILE__}"  set_prefix "${__PREFIX__}"
+
+      set_ext "png"
+      set_convert_exts "eps"  set_convert_opts "-verbose"
+      set_opts "--preview --projection=p"
+      set_opts_combine "views sizes";
+
+    script begin_makefile summary tables targets menu end_makefile;
+  END_MFSCRIPT;
+END_SCOPE;
+
 BEGIN_SCOPE quickstart;
   BEGIN_OPENSCAD;
     include <shapes2de.scad>;
