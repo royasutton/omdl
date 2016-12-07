@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# png configuration
+# configuration: Portable Network Graphics (png)
 #
 ###############################################################################
 
@@ -12,6 +12,7 @@ variables \
   set_convert_exts "eps" \
   set_convert_opts "-verbose" \
   \
+  set_opts "--preview --projection=o --colorscheme=Cornfield" \
   set_opts_combine "sizes"
 
 ###############################################################################

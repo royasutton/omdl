@@ -1,11 +1,16 @@
 ###############################################################################
 #
-# csg configuration
+# configuration: Constructive solid geometry (csg)
 #
 ###############################################################################
 
 variables \
-  set_ext "csg"
+  set_ext "csg" \
+  \
+  clear_convert \
+  \
+  set_opts "--render" \
+  clear_opts_combine
 
 ###############################################################################
 # eof
