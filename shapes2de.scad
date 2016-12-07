@@ -983,6 +983,40 @@ BEGIN_SCOPE dim;
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;
+
+BEGIN_SCOPE manifest;
+  BEGIN_OPENSCAD;
+    include <shapes2de.scad>;
+
+    $fn = 72;
+
+    st_cartesian_copy( grid=5, incr=60, center=true )
+    {
+      erectangle( size=[25,40], vr=5, h=20, center=true );
+      erectangle_c(size=[40,20], t=[10,1], co=[0,-6], cr=10, vr=5, h=30, center=true);
+      erhombus( size=[40,25], h=10, vr=[3,0,3,9], center=true );
+      etriangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], h=20, vr=2, centroid=true, center=true );
+      etriangle_lll( s1=30, s2=40, s3=50, h=20, vr=2, centroid=true, center=true );
+      etriangle_vl_c(vs=50, vc=30, h=15, co=[0,-10], cr=180, vr=[2,2,8], centroid=true, center=true);
+      etriangle_lal( s1=50, a=60, s2=30, h=20, vr=2, centroid=true, center=true );
+      etriangle_ala( a1=30, s=50, a2=60, h=20, vr=2, centroid=true, center=true );
+      etriangle_aal( a1=60, a2=30, s=40, h=20, vr=2, centroid=true, center=true );
+      etriangle_ll( x=30, y=40, h=20, vr=2, centroid=true, center=true );
+      etriangle_la( x=40, aa=30, h=20, vr=2, centroid=true, center=true );
+      engon( n=6, r=25, h=20, vr=6, center=true );
+      eellipse( size=[25, 40], h=20, center=true );
+      eellipse_c( size=[25,40], core=[16,10], co=[0,10], cr=45, h=20, center=true );
+      eellipse_s( size=[25,40], h=20, a1=90, a2=180, center=true );
+      eellipse_cs( size=[25,40], t=[10,5], a1=90, a2=180, co=[10,0], cr=45, h=20, center=true );
+      estar2d( size=[40, 15], h=15, n=5, vr=2, center=true );
+    }
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {config_std,config_stl}.mfs;
+    include --path "${INCLUDE_PATH}" script_std.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
 */
 
 //----------------------------------------------------------------------------//

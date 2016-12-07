@@ -621,7 +621,7 @@ BEGIN_SCOPE dim;
     else if (shape == "ellipsoid_s")
       ellipsoid_s( size=[60,15], a1=0, a2=270 );
     else if (shape == "tetrahedron")
-      tetrahedron( r = 2, center=true );
+      tetrahedron( r = 20, center=true );
     else if (shape == "pyramid_q")
       pyramid_q( h=5, x=35, y=20, center=true );
     else if (shape == "torus_rp")
@@ -652,6 +652,42 @@ BEGIN_SCOPE dim;
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter";
+    include --path "${INCLUDE_PATH}" script_std.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE manifest;
+  BEGIN_OPENSCAD;
+    include <shapes3d.scad>;
+
+    group = 1;
+    $fn = 72;
+
+    if (group == 1)
+    st_cartesian_copy( grid=4, incr=60, center=true )
+    {
+      cone( h=25, r=10, vr=2 );
+      cuboid( size=[25,40,20], vr=5, center=true );
+      ellipsoid( size=[40,25] );
+      ellipsoid_s( size=[60,15], a1=0, a2=270 );
+      tetrahedron( r = 20, center=true );
+      pyramid_q( h=5, x=35, y=20, center=true );
+      star3d(size=40, n=5, half=false);
+    }
+
+    if (group == 2)
+    st_cartesian_copy( grid=4, incr=140, center=true )
+    {
+      torus_rp( size=[40,20], core=[35,20], r=40, l=60, co=[0,2.5], vr=2, center=true );
+      torus_tp( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
+      torus_ep(size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2]);
+    }
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {config_std,config_stl}.mfs;
+    defines   name "group" define "group" integers "1 2";
+    variables set_opts_combine "group";
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;

@@ -30,7 +30,6 @@
   \ingroup shapes shapes_2d
 *******************************************************************************/
 
-use <console.scad>;
 include <transform.scad>;
 
 //----------------------------------------------------------------------------//
@@ -1318,6 +1317,40 @@ BEGIN_SCOPE dim;
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter";
+    include --path "${INCLUDE_PATH}" script_std.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE manifest;
+  BEGIN_OPENSCAD;
+    include <shapes2d.scad>;
+
+    $fn = 72;
+
+    st_cartesian_copy( grid=5, incr=60, center=true )
+    {
+      rectangle( size=[25,40], vr=[0,10,10,5], center=true );
+      rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, co=[0,5], center=true );
+      rhombus( size=[40,25], vr=[2,4,2,4], center=true );
+      triangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], vr=2, centroid=true );
+      triangle_lll( s1=30, s2=40, s3=50, vr=2, centroid=true );
+      triangle_vl_c( vs=[30,50,50], vc=[20,40,40], co=[0,-4], vr1=[1,1,6], vr2=4, centroid=true );
+      triangle_lal( s1=50, a=60, s2=30, vr=2, centroid=true );
+      triangle_ala( a1=30, s=50, a2=60, vr=2, centroid=true );
+      triangle_aal( a1=60, a2=30, s=40, vr=2, centroid=true );
+      triangle_ll( x=30, y=40, vr=2, centroid=true );
+      triangle_la( x=40, aa=30, vr=2, centroid=true );
+      ngon( n=6, r=25, vr=6 );
+      ellipse( size=[25, 40] );
+      ellipse_c( size=[25,40], core=[16,10], co=[0,10], cr=45 );
+      ellipse_s( size=[25,40], a1=90, a2=180 );
+      ellipse_cs( size=[25,40], t=[10,5], a1=90, a2=180, co=[10,0], cr=45);
+      star2d( size=[40, 15], n=5, vr=2 );
+    }
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {config_std,config_dxf}.mfs;
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;
