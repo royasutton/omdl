@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# standard script (new makefile, ext menu)
+# script: new makefile + menu(ext)
 #
 ###############################################################################
 
@@ -12,6 +12,7 @@ script \
     summary \
     tables \
     targets \
+    \
     menu_ext \
     \
   end_makefile

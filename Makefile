@@ -85,9 +85,10 @@ release_files_add    = $(backup_files_add) \
 
 release_archive_files_add = $(backup_files_add)
 
-# temp
+# comment out to build shape manifest release files
 scopes_exclude_filter := %manifest.bash
 
+# temp
 edit: ; geany Makefile $(src_files)
 
 #------------------------------------------------------------------------------#

@@ -49,7 +49,7 @@ include <math.scad>;
       \skip use
       \until ( tsum=tsum );
 
-    result:  \include table_example_na.log
+    result:  \include table_example.log
 
   @{
 *******************************************************************************/
@@ -488,9 +488,7 @@ BEGIN_SCOPE example;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_std,config_csg}.mfs;
-    defines   name "na" define "na" strings "na";
-    variables add_opts_combine "na";
+    include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;

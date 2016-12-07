@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# stl script (append makefile, ext+src+all menu)
+# script: append makefile + menu(ext, src, all)
 #
 ###############################################################################
 
@@ -10,6 +10,7 @@ script \
     summary \
     tables \
     targets \
+    \
     menu_ext \
     menu_src \
     menu_all \

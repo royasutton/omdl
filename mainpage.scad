@@ -265,19 +265,13 @@ BEGIN_SCOPE logo;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    views   name "views" distance "250" views "top";
-    images  name "sizes" aspect "1:1" xsizes "55";
+    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
 
-    variables
-      set_makefile "${__MAKE_FILE__}"  add_depend "${__MAKE_FILE__}"
-      set_source "${__SCOPE_FILE__}"  set_prefix "${__PREFIX__}"
+    views     name "views" distance "250" views "top";
+    images    name "slogo" aspect "1:1" xsizes "55";
+    variables set_opts_combine "views slogo";
 
-      set_ext "png"
-      set_convert_exts "eps"  set_convert_opts "-verbose"
-      set_opts "--preview --projection=p"
-      set_opts_combine "views sizes";
-
-    script begin_makefile summary tables targets menu end_makefile;
+    include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 
@@ -303,14 +297,16 @@ BEGIN_SCOPE quickstart;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_std,config_png}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
+
     views     name "views" views "top bottom right diag";
     variables add_opts_combine "views";
     variables add_opts "--viewall --autocenter";
-    include --path "${INCLUDE_PATH}" script_std_newext.mfs;
+
+    include --path "${INCLUDE_PATH}" script_new.mfs;
 
     include --path "${INCLUDE_PATH}" config_stl.mfs;
-    include --path "${INCLUDE_PATH}" script_stl_appall.mfs;
+    include --path "${INCLUDE_PATH}" script_app.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */
