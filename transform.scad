@@ -30,6 +30,7 @@
   \ingroup transforms transforms_extrude transforms_replicate
 *******************************************************************************/
 
+use <console.scad>;
 include <math.scad>;
 
 //----------------------------------------------------------------------------//
@@ -245,12 +246,12 @@ module st_linear_extrude_scale
   @{
 
   \defgroup transforms_replicate Replications
-  \brief    Shape Replications.
+  \brief    Shape Replications and distribution.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Copy and radially distribute a 2D or 3D shape equally about the z-axis.
+//! Distribute copies of a 2D or 3D shape equally about a z-axis radius.
 /***************************************************************************//**
   \param    n <decimal> The number of equally spaced radii.
   \param    r <decimal> The shape move radius.
@@ -278,6 +279,91 @@ module st_radial_copy
   }
 }
 
+//! Distribute copies of 2D or 3D shapes about Cartesian grid.
+/***************************************************************************//**
+  \param    grid <vector|decimal> A vector [x, y, z] of decimals or a
+            single decimal for (x=y=z).
+  \param    incr <vector|decimal> A vector [x, y, z] of decimals or a
+            single decimal for (x=y=z).
+  \param    copy <decimal> Number of times to iterate over children.
+  \param    center <boolean> Center distribution about origin.
+
+  \details
+
+    \b Example
+    \amu_eval ( function=st_cartesian_copy ${example_dim} )
+*******************************************************************************/
+module st_cartesian_copy
+(
+  grid,
+  incr,
+  copy = 1,
+  center = false
+)
+{
+  gridx = (len(grid)>=1) ? grid[0] : grid;
+  gridy = (len(grid)>=2) ? grid[1] : gridx;
+  gridz = (len(grid)>=3) ? grid[2] : gridx;
+
+  incrx = (len(incr)>=1) ? incr[0] : incr;
+  incry = (len(incr)>=2) ? incr[1] : incrx;
+  incrz = (len(incr)>=3) ? incr[2] : incrx;
+
+  if ( ( $children * copy ) > ( gridx * gridy * gridz ) )
+  {
+    log_warn("more objects than grid capacity, shapes will overlap.");
+    log_info
+    (
+      str
+      (
+        "children=", $children,
+        ", copies=", copy,
+        ", objects=", $children * copy
+      )
+    );
+    log_info
+    (
+      str
+      (
+        "grid[x,y,z]=[", gridx, ", ", gridy, ", ", gridz, "]",
+        ", capacity=", gridx * gridy * gridz
+      )
+    );
+  }
+
+  translate
+  (
+    center==true
+    ? [
+        -( min($children * copy, gridx) -1 )                   * incrx / 2,
+        -( min(ceil($children * copy/gridx), gridy) -1 )       * incry / 2,
+        -( min(ceil($children * copy/gridx/gridy), gridz) -1 ) * incrz / 2
+      ]
+    : [0,0,0]
+  )
+  if ( copy > 0 )
+  {
+    for
+    (
+      y = [0 : (copy-1)],
+      x = [0 : ($children-1)]
+    )
+    {
+      i = y * $children + x;
+
+      translate
+      (
+        [
+          incrx * (i%gridx),
+          incry * (floor(i/gridx)%gridy),
+          incrz * (floor(floor(i/gridx)/gridy)%gridz)
+        ]
+      )
+      children([x]);
+    }
+  }
+}
+
 //! @}
 //! @}
 
@@ -301,6 +387,8 @@ BEGIN_SCOPE dim;
       st_linear_extrude_scale( [5,10,15,-5], center=true ) square( [20,15], center=true );
     else if (shape == "st_radial_copy")
       st_radial_copy( n=7, r=6, move=true ) square( [20,1], center=true );
+    else if (shape == "st_cartesian_copy")
+      st_cartesian_copy( grid=[5,5,4], incr=10, copy=50, center=true ) {cube(10, center=true); sphere(10);}
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -312,6 +400,7 @@ BEGIN_SCOPE dim;
                 st_rotate_extrude_elongate
                 st_linear_extrude_scale
                 st_radial_copy
+                st_cartesian_copy
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter";
