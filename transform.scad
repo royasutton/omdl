@@ -36,6 +36,32 @@ include <math.scad>;
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
   \addtogroup transforms
+
+    \amu_define caption (Extrusions and Replications)
+
+    \amu_make png_files (append=dim extension=png)
+    \amu_make eps_files (append=dim extension=png2eps)
+    \amu_shell file_cnt ("echo ${png_files} | wc -w")
+    \amu_shell cell_num ("seq -f '(%g)' -s '^' ${file_cnt}")
+
+    \htmlonly
+      \amu_image_table
+        (
+          type=html columns=4 image_width="200" cell_files="${png_files}"
+          table_caption="${caption}" cell_captions="${cell_num}"
+        )
+    \endhtmlonly
+    \latexonly
+      \amu_image_table
+        (
+          type=latex columns=4 image_width="1.25in" cell_files="${eps_files}"
+          table_caption="${caption}" cell_captions="${cell_num}"
+        )
+    \endlatexonly
+*******************************************************************************/
+
+/***************************************************************************//**
+  \addtogroup transforms
   @{
 
   \defgroup transforms_extrude Extrusions
