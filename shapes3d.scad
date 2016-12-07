@@ -354,6 +354,55 @@ module pyramid_q
   );
 }
 
+//! A three dimensional star.
+/***************************************************************************//**
+  \param    size <vector|decimal> A vector [l, w, h] of decimals
+            or a single decimal for (size=l=2*w=4*h).
+
+  \param    n <decimal> The number of points.
+
+  \param    half <boolean> Render upper half only.
+
+  \details
+
+    \b Example
+    \amu_eval ( function=star3d ${example_dim} )
+*******************************************************************************/
+module star3d
+(
+  size,
+  n = 5,
+  half = false
+)
+{
+  l = (len(size) >= 1) ? size[0] : size;
+  w = (len(size) >= 2) ? size[1] : l/2;
+  h = (len(size) >= 3) ? size[2] : w/2;
+
+  if (half == true)
+  {
+    difference()
+    {
+      st_radial_copy(n=n, angle=true, move=false)
+      scale([1, 1, h/w])
+      rotate([45, 0, 0])
+      rotate([0, 90, 0])
+      pyramid_q(x=w, y=w, h=l, center=false);
+
+      translate([0,0,-h/2])
+      cylinder(r=l, h=h, center=true);
+    }
+  }
+  else
+  {
+    st_radial_copy(n=n, angle=true, move=false)
+    scale([1, 1, h/w])
+    rotate([45, 0, 0])
+    rotate([0, 90, 0])
+    pyramid_q(x=w, y=w, h=l, center=false);
+  }
+}
+
 //! A rectangular cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
   \param    size <vector|decimal> The profile size. A vector [x, y] of decimals
@@ -548,55 +597,6 @@ module torus_ep
   );
 }
 
-//! A three dimensional star.
-/***************************************************************************//**
-  \param    size <vector|decimal> A vector [l, w, h] of decimals
-            or a single decimal for (size=l=2*w=4*h).
-
-  \param    n <decimal> The number of points.
-
-  \param    half <boolean> Render upper half only.
-
-  \details
-
-    \b Example
-    \amu_eval ( function=star3d ${example_dim} )
-*******************************************************************************/
-module star3d
-(
-  size,
-  n = 5,
-  half = false
-)
-{
-  l = (len(size) >= 1) ? size[0] : size;
-  w = (len(size) >= 2) ? size[1] : l/2;
-  h = (len(size) >= 3) ? size[2] : w/2;
-
-  if (half == true)
-  {
-    difference()
-    {
-      st_radial_copy(n=n, angle=true, move=false)
-      scale([1, 1, h/w])
-      rotate([45, 0, 0])
-      rotate([0, 90, 0])
-      pyramid_q(x=w, y=w, h=l, center=false);
-
-      translate([0,0,-h/2])
-      cylinder(r=l, h=h, center=true);
-    }
-  }
-  else
-  {
-    st_radial_copy(n=n, angle=true, move=false)
-    scale([1, 1, h/w])
-    rotate([45, 0, 0])
-    rotate([0, 90, 0])
-    pyramid_q(x=w, y=w, h=l, center=false);
-  }
-}
-
 //! @}
 //! @}
 
@@ -624,14 +624,14 @@ BEGIN_SCOPE dim;
       tetrahedron( r = 20, center=true );
     else if (shape == "pyramid_q")
       pyramid_q( h=5, x=35, y=20, center=true );
+    else if (shape == "star3d")
+      star3d(size=40, n=5, half=true);
     else if (shape == "torus_rp")
       torus_rp( size=[40,20], core=[35,20], r=40, l=60, co=[0,2.5], vr=2, center=true );
     else if (shape == "torus_tp")
       torus_tp( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
     else if (shape == "torus_ep")
       torus_ep(size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2]);
-    else if (shape == "star3d")
-      star3d(size=40, n=5, half=true);
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
