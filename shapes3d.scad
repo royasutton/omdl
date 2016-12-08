@@ -331,7 +331,7 @@ module tetrahedron
 /***************************************************************************//**
   \param    x <decimal> The base x-length.
   \param    y <decimal> The base y-length.
-  \param    h <decimal> The height.
+  \param    z <decimal> The z-height.
 
   \param    center <boolean> Center about origin.
 
@@ -346,13 +346,13 @@ module pyramid_q
 (
   x,
   y,
-  h,
+  z,
   center = false
 )
 {
   tw = x/2;
   th = y/2;
-  ph = h;
+  ph = z;
 
   translate(center==true ? [0,0,-ph/2] : [0,0,0])
   polyhedron
@@ -409,7 +409,7 @@ module star3d
       scale([1, 1, h/w])
       rotate([45, 0, 0])
       rotate([0, 90, 0])
-      pyramid_q(x=w, y=w, h=l, center=false);
+      pyramid_q(x=w, y=w, z=l, center=false);
 
       translate([0,0,-h/2])
       cylinder(r=l, h=h, center=true);
@@ -421,7 +421,7 @@ module star3d
     scale([1, 1, h/w])
     rotate([45, 0, 0])
     rotate([0, 90, 0])
-    pyramid_q(x=w, y=w, h=l, center=false);
+    pyramid_q(x=w, y=w, z=l, center=false);
   }
 }
 
@@ -645,7 +645,7 @@ BEGIN_SCOPE dim;
     else if (shape == "tetrahedron")
       tetrahedron( r = 20, center=true );
     else if (shape == "pyramid_q")
-      pyramid_q( h=5, x=35, y=20, center=true );
+      pyramid_q( x=35, y=20, z=5, center=true );
     else if (shape == "star3d")
       star3d(size=40, n=5, half=true);
     else if (shape == "torus_rp")
@@ -695,7 +695,7 @@ BEGIN_SCOPE manifest;
       ellipsoid( size=[40,25] );
       ellipsoid_s( size=[60,15], a1=0, a2=270 );
       tetrahedron( r = 20, center=true );
-      pyramid_q( h=5, x=35, y=20, center=true );
+      pyramid_q( x=35, y=20, z=5, center=true );
       star3d(size=40, n=5, half=false);
     }
 
