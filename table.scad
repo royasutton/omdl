@@ -61,7 +61,7 @@ include <math.scad>;
             containing the table rows.
   \param    row_id <string> The row identifier string to locate.
   \returns  <decimal> The row index where the identifier is located. If the
-            identifier does not exists, returns \b [].
+            identifier does not exists, returns \b empty_v.
 *******************************************************************************/
 function table_get_row_idx
 (
@@ -113,7 +113,7 @@ function table_last_row
             containing the table columns.
   \param    col_id <string> The column identifier string to locate.
   \returns  <decimal> The column index where the identifier is located. If the
-            identifier does not exists, returns \b [].
+            identifier does not exists, returns \b empty_v.
 *******************************************************************************/
 function table_get_col_idx
 (
@@ -198,9 +198,9 @@ function table_exists
 ) = ( (row_id != undef) && (col_id != undef) ) ?
       ( table_get(trows, tcols, row_id, col_id) != undef )
   : ( (row_id != undef) && (col_id == undef) ) ?
-      ( table_get_row_idx(rows,row_id) != [] )
+      ( table_get_row_idx(rows,row_id) != empty_v )
   : ( (row_id == undef) && (col_id != undef) ) ?
-      ( table_get_col_idx(cols,col_id) != [] )
+      ( table_get_col_idx(cols,col_id) != empty_v )
   : false;
 
 //! Get the size of a table.
@@ -337,7 +337,7 @@ module table_dump
   {
     if
     (
-      ( search( r, rows_sel, 1, 0 )[0] != [] ) ||
+      ( search( r, rows_sel, 1, 0 )[0] != empty_v ) ||
       ( len( rows_sel ) == 0 ) ||
       ( len( rows_sel ) == undef )
     )
@@ -351,7 +351,7 @@ module table_dump
       {
         if
         (
-          ( search( c, cols_sel, 1, 0 )[0] != [] ) ||
+          ( search( c, cols_sel, 1, 0 )[0] != empty_v ) ||
           ( len( cols_sel ) == 0 ) ||
           ( len( cols_sel ) == undef )
         )
@@ -402,7 +402,7 @@ function table_copy
   for ( r = rows )
     if
     (
-      ( search( r, rows_sel, 1, 0 )[0] != [] ) ||
+      ( search( r, rows_sel, 1, 0 )[0] != empty_v ) ||
       ( len( rows_sel ) == 0 ) ||
       ( len( rows_sel ) == undef )
     )
@@ -410,7 +410,7 @@ function table_copy
       for ( c = cols )
         if
         (
-          ( search( c, cols_sel, 1, 0 )[0] != [] ) ||
+          ( search( c, cols_sel, 1, 0 )[0] != empty_v ) ||
           ( len( cols_sel ) == 0 ) ||
           ( len( cols_sel ) == undef )
         )
@@ -434,7 +434,7 @@ function table_sum
   cols,
   rows_sel,
   cols_sel
-) = sum_v ( table_copy(rows, cols, rows_sel, cols_sel) );
+) = esum ( table_copy(rows, cols, rows_sel, cols_sel) );
 
 //! @}
 //! @}

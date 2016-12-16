@@ -29,7 +29,7 @@
 
   \note Include this library file using the \b include statement.
 
-  \ingroup math math_test math_vector math_ngon math_triangle
+  \ingroup math math_test math_vec_ops math_vec_comp math_ngon math_triangle
 *******************************************************************************/
 
 include <constants.scad>;
@@ -45,33 +45,156 @@ include <constants.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Test if a number is invalid, or not a number.
+//! Test if a value is defined.
 /***************************************************************************//**
-  \param    n <decimal> A decimal value.
-  \returns  <boolean> \b true when the number is \b nan and \b false otherwise.
+  \param    v <value> A value.
+  \returns  <boolean> \b false when the value equals \b undef and \b true
+            otherwise.
 *******************************************************************************/
-function is_nan( n ) = ( n != n );
+function is_defined( v ) = (v == undef) ? false : true;
 
-//! Test if a number is greater than largest representable number.
+//! Test if a vector is empty.
 /***************************************************************************//**
-  \param    n <decimal> A decimal value.
-  \returns  <boolean> \b true when the number is \b inf and \b false otherwise.
+  \param    v <vector> A vector.
+  \returns  <boolean> \b true when the vector (or string) is empty
+            and \b false otherwise.
 *******************************************************************************/
-function is_inf( n ) = ( n == (1e200*1e200) );
+function is_empty( v ) = (len(v) == 0);
 
-//! Test if a integer number is even.
+//! Test if a value is scalar.
 /***************************************************************************//**
-  \param    n <integer> An integer value.
-  \returns  <boolean> \b true when the number is even and \b false otherwise.
-*******************************************************************************/
-function is_even( n ) = ( ((n % 2) == 0) ? true : false );
+  \param    v <value> A value.
+  \returns  <boolean> \b true when the value is scalar
+            and \b false otherwise.
 
-//! Test if a integer number is odd.
-/***************************************************************************//**
-  \param    n <integer> An integer value.
-  \returns  <boolean> \b true when the number is odd and \b false otherwise.
+  \details
+
+     value is      | defined result
+    :-------------:|:-----------------:
+     \b undef      | not defined
+     integer       | \b true
+     decimal       | \b true
+     boolean       | \b true
+     string        | \b false
+     vector        | \b false
+     range         | not defined
+
+    A scalar value consists of a single value.
 *******************************************************************************/
-function is_odd( n ) = ( ((n % 2) == 0) ? false : true );
+function is_scalar( v ) = (len(v) == undef);
+
+//! Test if a value is a vector.
+/***************************************************************************//**
+  \param    v <value> A value.
+  \returns  <boolean> \b true when the value is a vector
+            and \b false otherwise.
+
+  \details
+
+     value is      | defined result
+    :-------------:|:-----------------:
+     \b undef      | not defined
+     integer       | \b false
+     decimal       | \b false
+     boolean       | \b false
+     string        | \b true
+     vector        | \b true
+     range         | \b false
+
+    A vector value consists of one or more comma-separated values within
+    braces.
+*******************************************************************************/
+function is_vector( v ) = (len(v) != undef);
+
+//! Test if a value is a string.
+/***************************************************************************//**
+  \param    v <value> A value.
+  \returns  <boolean> \b true when the value is a string
+            and \b false otherwise.
+*******************************************************************************/
+function is_string( v ) = (str(v) == v);
+
+//! Test if a value is one of the predefined boolean constants.
+/***************************************************************************//**
+  \param    v <value> A value.
+  \returns  <boolean> \b true when the value is one of the predefined
+            boolean constants <tt>[true|false]</tt> and \b false otherwise.
+*******************************************************************************/
+function is_bool
+(
+  v
+) = is_string(v) ? false
+  : (str(v) == "true") ? true
+  : (str(v) == "false") ? true
+  : false;
+
+//! Test if a value is an integer.
+/***************************************************************************//**
+  \param    v <value> A value.
+  \returns  <boolean> \b true when the value is an integer
+            and \b false otherwise.
+*******************************************************************************/
+function is_intger
+(
+  v
+) = !is_defined(v) ? false
+  : ((v % 1) == 0);
+
+//! Test if a value is a decimal.
+/***************************************************************************//**
+  \param    v <value> A value.
+  \returns  <boolean> \b true when the value is a decimal
+            and \b false otherwise.
+*******************************************************************************/
+function is_decimal( v ) = ((v % 1) > 0);
+
+//! Test if a value is a range definition.
+/***************************************************************************//**
+  \param    v <value> A value.
+  \returns  <boolean> \b true when the value is a range definition
+            and \b false otherwise.
+*******************************************************************************/
+function is_range
+(
+  v
+) = is_defined(v) &&
+    !is_vector(v) &&
+    !is_string(v) &&
+    !is_bool(v) &&
+    !is_intger(v) &&
+    !is_decimal(v);
+
+//! Test if a numerical value is invalid (Not A Number).
+/***************************************************************************//**
+  \param    v <value> A decimal or integer value.
+  \returns  <boolean> \b true when the number is determined to be \b nan
+            and \b false otherwise.
+*******************************************************************************/
+function is_nan( v ) = ( v != v );
+
+//! Test if a numerical value is greater than the largest representable number.
+/***************************************************************************//**
+  \param    v <value> A decimal or integer value.
+  \returns  <boolean> \b true when the number is determined to equal \b inf
+            and \b false otherwise.
+*******************************************************************************/
+function is_inf( v ) = ( v == (number_max * number_max) );
+
+//! Test if a numerical value is even.
+/***************************************************************************//**
+  \param    v <value> A numerical value.
+  \returns  <boolean> \b true when the number is determined to be even
+            and \b false otherwise.
+*******************************************************************************/
+function is_even( v ) = ( ((v % 2) == 0) ? true : false );
+
+//! Test if a numerical value is odd.
+/***************************************************************************//**
+  \param    v <value> A numerical value.
+  \returns  <boolean> \b true when the number is determined to be odd
+            and \b false otherwise.
+*******************************************************************************/
+function is_odd( v ) = ( ((v % 2) == 0) ? false : true );
 
 //! @}
 //! @}
@@ -81,35 +204,241 @@ function is_odd( n ) = ( ((n % 2) == 0) ? false : true );
   \addtogroup math
   @{
 
-  \defgroup math_vector Point and vector
-  \brief    Point, vector, and plane computations.
+  \defgroup math_vec_ops Vector Operations
+  \brief    Common vector operations.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Compute the sum of a range of vector terms.
+//! Return the first element of a vector.
 /***************************************************************************//**
-  \param    v <vector> A vector n-tuple of values.
-  \param    e <decimal> The vector term at which to end summation.
-  \param    b <decimal> The vector term at which to begin summation.
-  \returns  <decimal> The summation of the vector terms.
+  \param    v <vector> A vector.
+  \returns  The first element of the vector.
+            Returns \b undef when \p v is not defined, is not a vector,
+            or is empty.
 *******************************************************************************/
-function sum_vr
+function first
+(
+  v
+) = v[0];
+
+//! Return the last element of a vector.
+/***************************************************************************//**
+  \param    v <vector> A vector.
+  \returns  The last element of the vector.
+            Returns \b undef when \p v is not defined, is not a vector,
+            or is empty.
+*******************************************************************************/
+function last
+(
+  v
+) = !is_defined(v) ? undef
+  : !is_vector(v) ? undef
+  : is_empty(v) ? undef
+  : v[len(v)-1];
+
+//! Return a new vector containing the first element of a vector.
+/***************************************************************************//**
+  \param    v <vector> A vector.
+  \returns  A new vector containing the first element of the vector.
+            Returns \b undef when \p v is not defined, is not a vector,
+            or is empty.
+*******************************************************************************/
+function head
+(
+  v
+) = !is_defined(v) ? undef
+  : !is_vector(v) ? undef
+  : is_empty(v) ? undef
+  : [first(v)];
+
+//! Return a new vector containing all but the first element of a vector.
+/***************************************************************************//**
+  \param    v <vector> A vector.
+  \returns  A new vector containing all but the first element of the vector.
+            Returns \b undef when \p v is not defined, is not a vector,
+            or is empty.
+*******************************************************************************/
+function tail
+(
+  v
+) = !is_defined(v) ? undef
+  : !is_vector(v) ? undef
+  : is_empty(v) ? undef
+  : (len(v) == 1) ? empty_v
+  : [for (i = [1 : len(v)-1]) v[i]];
+
+//! Return a copy of a vector with its elements in reverse order.
+/***************************************************************************//**
+  \param    v <vector> A vector.
+  \returns  A copy of the vector with its elements in reversed order.
+            Returns \b undef when \p v is not defined or is not a vector.
+*******************************************************************************/
+function reverse
+(
+  v
+) = !is_defined(v) ? undef
+  : !is_vector(v) ? undef
+  : is_empty(v) ? empty_v
+  : concat( reverse(tail(v)), first(v) );
+
+//! Element-wise concatenation of two or more vectors.
+/***************************************************************************//**
+  \param    v <vector> A vector of two or more vectors.
+  \returns  A new vector constructed from the element-wise concatenation
+            of the vectors in \p v. The length will be limited by the
+            vector with the least number of elements.
+
+  \details
+
+    \b Example
+    \code{.C}
+    v1=["a", "b", "c", "d"];
+    v2=[1, 2, 3];
+
+    echo( econcat( [v1, v2] ) );
+    \endcode
+
+    \b Result
+    \code{.C}
+    ECHO: [["a", 1], ["b", 2], ["c", 3]]
+    \endcode
+*******************************************************************************/
+function econcat
+(
+  v
+) = is_empty(v) ? empty_v
+  : (min([for (i = v) len(i)]) == 0) ? empty_v
+  : let
+    (
+      t = [for (i = [0 : len(v)-1]) tail(v[i])],
+      h = [for (i = [0 : len(v)-1]) first(v[i])]
+    )
+    concat([h], econcat(t));
+
+//! Convert and concatenate vector elements into a single string.
+/***************************************************************************//**
+  \param    v <vector> A vector of values.
+  \returns  A new string constructed by converting the elements of the
+            vector to strings and concatenating.
+
+  \details
+
+    \b Example
+    \code{.C}
+    v1=["a", "b", "c", "d"];
+    v2=[1, 2, 3];
+
+    echo( estr(concat(v1, v2)) );
+    \endcode
+
+    \b Result
+    \code{.C}
+    ECHO: "abcd123"
+    \endcode
+*******************************************************************************/
+function estr
+(
+  v
+) = !is_defined(v) ? undef
+  : !is_vector(v) ? undef
+  : is_empty(v) ? empty_str
+  : (len(v) == 1) ? str(first(v))
+  : str(first(v), estr(tail(v)));
+
+//! Sort the element of a vector using the quick sort method.
+/***************************************************************************//**
+  \param    v <vector> A vector.
+  \returns  A new vector with element sorted in ascending order.
+
+  \details
+
+    See [Wikipedia](https://en.wikipedia.org/wiki/Quicksort)
+    for more information.
+*******************************************************************************/
+function qsort
+(
+  v
+) = is_empty(v) ? empty_v
+  : let
+    (
+      mp = v[floor(len(v)/2)],
+
+      lt = [for (i = [0 : len(v)-1]) if (v[i]  < mp) v[i]],
+      eq = [for (i = [0 : len(v)-1]) if (v[i] == mp) v[i]],
+      gt = [for (i = [0 : len(v)-1]) if (v[i]  > mp) v[i]]
+
+    )
+    concat(qsort(lt), eq, qsort(gt));
+
+//! Compute the sum of a range of vector elements.
+/***************************************************************************//**
+  \param    v <vector> A vector of numerical values.
+  \param    e <integer> The vector element at which to end summation.
+  \param    b <integer> The vector element at which to begin summation.
+  \returns  <decimal> The summation of the vector elements.
+*******************************************************************************/
+function ersum
 (
   v,
   e,
   b=0
-) = ( (e == b) ? v[e] : v[e] + sum_vr(v, e-1, b) );
+) = (e == b) ? v[e]
+  : v[e] + ersum(v, e-1, b);
 
-//! Compute the sum of the vector terms.
+//! Compute the sum of all of the vector elements.
 /***************************************************************************//**
-  \param    v <vector> A vector n-tuple of values.
-  \returns  <decimal> The summation of the vector terms.
+  \param    v <vector> A vector of numerical values.
+  \returns  <decimal> The summation of all of the vector elements.
 *******************************************************************************/
-function sum_v
+function esum
 (
   v
-) = sum_vr( v, len( v ) - 1, 0);
+) = ersum( v, len( v ) - 1, 0);
+
+//! Value defined or default operation.
+/***************************************************************************//**
+  \param    v <value> A value.
+  \param    d <value> A default value.
+  \returns  The value \p v when it is defined
+            or the value \p d otherwise.
+*******************************************************************************/
+function defined_or
+(
+  v,
+  d
+) = is_defined(v) ? v
+  : d;
+
+//! Vector element defined or default operation.
+/***************************************************************************//**
+  \param    v <vector> A vector.
+  \param    e <integer> A vector element.
+  \param    d <value> A default value.
+  \returns  The value of vector element \p e, namely <tt>v[e]</tt>, when it
+            exists or the value \p d otherwise.
+*******************************************************************************/
+function edefined_or
+(
+  v,
+  e,
+  d
+) = (len(v) > e) ? v[e]
+  : d;
+
+//! @}
+//! @}
+
+//----------------------------------------------------------------------------//
+/***************************************************************************//**
+  \addtogroup math
+  @{
+
+  \defgroup math_vec_comp Point, Vector and Plane
+  \brief    Point, vector, and plane computations.
+  @{
+*******************************************************************************/
+//----------------------------------------------------------------------------//
 
 //! Compute the distance between two points in a Euclidean 1, 2, or 3D-space.
 /***************************************************************************//**
@@ -467,7 +796,7 @@ function are_coplanar
   \addtogroup math
   @{
 
-  \defgroup math_ngon n-sided polygon
+  \defgroup math_ngon n-gon Solutions
   \brief    Regular n-sided polygon computations.
   @{
 *******************************************************************************/
@@ -513,7 +842,7 @@ function ngon_vp
   \addtogroup math
   @{
 
-  \defgroup math_triangle Triangles
+  \defgroup math_triangle Triangle Solutions
   \brief    Triangle computations.
 
   \details

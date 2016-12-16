@@ -72,6 +72,12 @@ number_max = 1e308;
 //! The smallest representable number in OpenSCAD scripts.
 number_min = -1e308;
 
+//! A string with no content (the empty string).
+empty_str = "";
+
+//! A vector with no content (the empty vector).
+empty_v = [];
+
 //! @}
 //! @}
 
