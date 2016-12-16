@@ -64,9 +64,9 @@ include <constants.scad>;
       \skip include
       \until to="dms");
 
-    result (base_angle_length = \b r):  \include units_angle_example_r.log
-    result (base_angle_length = \b d):  \include units_angle_example_d.log
-    result (base_angle_length = \b dms): \include units_angle_example_dms.log
+    \b Result (base_angle_length = \b r):  \include units_angle_example_r.log
+    \b Result (base_angle_length = \b d):  \include units_angle_example_d.log
+    \b Result (base_angle_length = \b dms): \include units_angle_example_dms.log
 
   @{
 *******************************************************************************/

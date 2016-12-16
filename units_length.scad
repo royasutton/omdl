@@ -72,10 +72,10 @@
       \skip include
       \until to="mm");
 
-    result (base_unit_length = \b mm):  \include units_length_example_mm.log
-    result (base_unit_length = \b cm):  \include units_length_example_cm.log
-    result (base_unit_length = \b mil): \include units_length_example_mil.log
-    result (base_unit_length = \b in):  \include units_length_example_in.log
+    \b Result (base_unit_length = \b mm):  \include units_length_example_mm.log
+    \b Result (base_unit_length = \b cm):  \include units_length_example_cm.log
+    \b Result (base_unit_length = \b mil): \include units_length_example_mil.log
+    \b Result (base_unit_length = \b in):  \include units_length_example_in.log
 
     \b Example (equivalent lengths)
 

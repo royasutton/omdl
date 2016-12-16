@@ -59,10 +59,10 @@ include <units_length.scad>;
       \skip include
       \until f));
 
-    result (base_unit_length = \b mm):  \include resolution_example_mm.log
-    result (base_unit_length = \b cm):  \include resolution_example_cm.log
-    result (base_unit_length = \b mil): \include resolution_example_mil.log
-    result (base_unit_length = \b in):  \include resolution_example_in.log
+    \b Result (base_unit_length = \b mm):  \include resolution_example_mm.log
+    \b Result (base_unit_length = \b cm):  \include resolution_example_cm.log
+    \b Result (base_unit_length = \b mil): \include resolution_example_mil.log
+    \b Result (base_unit_length = \b in):  \include resolution_example_in.log
 
   @{
 *******************************************************************************/

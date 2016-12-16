@@ -48,7 +48,7 @@ use <utilities.scad>;
       \skip use
       \until log_error( message );
 
-    result:  \include console_example.log
+    \b Result \include console_example.log
 
   @{
 *******************************************************************************/

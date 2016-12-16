@@ -49,7 +49,7 @@ include <math.scad>;
       \skip use
       \until ( tsum=tsum );
 
-    result:  \include table_example.log
+    \b Result \include table_example.log
 
   @{
 *******************************************************************************/
