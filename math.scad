@@ -53,6 +53,14 @@ include <constants.scad>;
 *******************************************************************************/
 function is_defined( v ) = (v == undef) ? false : true;
 
+//! Test if a value is not defined.
+/***************************************************************************//**
+  \param    v <value> A value.
+  \returns  <boolean> \b true when the value equals \b undef and \b false
+            otherwise.
+*******************************************************************************/
+function not_defined( v ) = (v == undef) ? true : false;
+
 //! Test if a vector is empty.
 /***************************************************************************//**
   \param    v <vector> A vector.
@@ -137,7 +145,7 @@ function is_bool
 function is_intger
 (
   v
-) = !is_defined(v) ? false
+) = not_defined(v) ? false
   : ((v % 1) == 0);
 
 //! Test if a value is a decimal.
@@ -232,7 +240,7 @@ function first
 function last
 (
   v
-) = !is_defined(v) ? undef
+) = not_defined(v) ? undef
   : !is_vector(v) ? undef
   : is_empty(v) ? undef
   : v[len(v)-1];
@@ -247,7 +255,7 @@ function last
 function head
 (
   v
-) = !is_defined(v) ? undef
+) = not_defined(v) ? undef
   : !is_vector(v) ? undef
   : is_empty(v) ? undef
   : [first(v)];
@@ -262,7 +270,7 @@ function head
 function tail
 (
   v
-) = !is_defined(v) ? undef
+) = not_defined(v) ? undef
   : !is_vector(v) ? undef
   : is_empty(v) ? undef
   : (len(v) == 1) ? empty_v
@@ -277,7 +285,7 @@ function tail
 function reverse
 (
   v
-) = !is_defined(v) ? undef
+) = not_defined(v) ? undef
   : !is_vector(v) ? undef
   : is_empty(v) ? empty_v
   : concat( reverse(tail(v)), first(v) );
@@ -340,7 +348,7 @@ function econcat
 function estr
 (
   v
-) = !is_defined(v) ? undef
+) = not_defined(v) ? undef
   : !is_vector(v) ? undef
   : is_empty(v) ? empty_str
   : (len(v) == 1) ? str(first(v))
