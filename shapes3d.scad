@@ -109,12 +109,12 @@ module cone
   vr2
 )
 {
-  cr = (r == undef) ? d/2 : r;
+  cr = defined_or(r, d/2);
 
-  br = (vr1 == undef) ? vr : vr1;
-  pr = (vr2 == undef) ? vr : vr2;
+  br = defined_or(vr1, vr);
+  pr = defined_or(vr2, vr);
 
-  if ( (br == undef) || (pr == undef) )
+  if ( not_defined(br) || not_defined(pr) )
   {
     cylinder(h=h, r1=cr, r2=0, center=false);
   }
@@ -153,12 +153,12 @@ module cuboid
   center = false
 )
 {
-  bx = (len(size) >= 1) ? size[0] : size;
-  by = (len(size) >= 2) ? size[1] : bx;
-  bz = (len(size) >= 3) ? size[2] : by;
+  bx = edefined_or(size, 0, size);
+  by = edefined_or(size, 1, bx);
+  bz = edefined_or(size, 2, by);
 
   translate(center==true ? [0,0,0] : [bx/2, by/2, bz/2])
-  if ( vr == undef )
+  if ( not_defined(vr) )
   {
     cube([bx, by, bz], center=true);
   }
@@ -213,8 +213,8 @@ module ellipsoid
   size
 )
 {
-  w = (len(size) >= 1) ? size[0] : size;
-  h = (len(size) >= 2) ? size[1] : w;
+  w = edefined_or(size, 0, size);
+  h = edefined_or(size, 1, w);
 
   if (w == h)
   {
@@ -247,8 +247,8 @@ module ellipsoid_s
   a2 = 0
 )
 {
-  w = (len(size) >= 1) ? size[0] : size;
-  h = (len(size) >= 2) ? size[1] : w;
+  w = edefined_or(size, 0, size);
+  h = edefined_or(size, 1, w);
 
   trx = w/2 * sqrt(2) + 1;
   try = w/2 * sqrt(2) + 1;
@@ -259,7 +259,7 @@ module ellipsoid_s
   pa3 = (1 * a1 + 3 * a2) / 4;
   pa4 = (0 * a1 + 4 * a2) / 4;
 
-  if(a2 > a1)
+  if (a2 > a1)
   {
     intersection()
     {
@@ -397,9 +397,9 @@ module star3d
   half = false
 )
 {
-  l = (len(size) >= 1) ? size[0] : size;
-  w = (len(size) >= 2) ? size[1] : l/2;
-  h = (len(size) >= 3) ? size[2] : w/2;
+  l = edefined_or(size, 0, size);
+  w = edefined_or(size, 1, l/2);
+  h = edefined_or(size, 2, w/2);
 
   if (half == true)
   {

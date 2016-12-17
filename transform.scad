@@ -203,11 +203,11 @@ module st_linear_extrude_scale
   center = false
 )
 {
-  if (h == undef)
+  if ( not_defined(h) )
   {
     children();
   }
-  else if (len(h) == undef)
+  else if ( is_scalar(h) )
   {
     translate(center==true ? [0, 0, -h/2] : [0,0,0])
     linear_extrude(height=h)
@@ -327,13 +327,13 @@ module st_cartesian_copy
   center = false
 )
 {
-  gridx = (len(grid)>=1) ? grid[0] : grid;
-  gridy = (len(grid)>=2) ? grid[1] : gridx;
-  gridz = (len(grid)>=3) ? grid[2] : gridx;
+  gridx = edefined_or(grid, 0, grid);
+  gridy = edefined_or(grid, 1, gridx);
+  gridz = edefined_or(grid, 2, gridx);
 
-  incrx = (len(incr)>=1) ? incr[0] : incr;
-  incry = (len(incr)>=2) ? incr[1] : incrx;
-  incrz = (len(incr)>=3) ? incr[2] : incrx;
+  incrx = edefined_or(incr, 0, incr);
+  incry = edefined_or(incr, 1, incrx);
+  incrz = edefined_or(incr, 2, incrx);
 
   if ( ( $children * copy ) > ( gridx * gridy * gridz ) )
   {

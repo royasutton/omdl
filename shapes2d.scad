@@ -104,16 +104,16 @@ module rectangle
   center = false
 )
 {
-  rx = (len(size) >= 1) ? size[0] : size;
-  ry = (len(size) >= 2) ? size[1] : rx;
+  rx = edefined_or(size, 0, size);
+  ry = edefined_or(size, 1, rx);
 
   translate(center==true ? [-rx/2, -ry/2] : [0,0])
   {
-    if ( vr == undef )                  // no rounding
+    if ( not_defined(vr) )              // no rounding
     {
       square([rx, ry]);
     }
-    else if ( len(vr) == undef )        // equal rounding
+    else if ( is_scalar(vr) )           // equal rounding
     {
       for (y = [ [0, 1], [1, -1] ],
            x = [ [0, 1], [1, -1] ])
@@ -130,10 +130,10 @@ module rectangle
     }
     else                                // individual rounding
     {
-      crv = [ (len(vr) >= 1) ? vr[0] : 0,
-              (len(vr) >= 2) ? vr[1] : 0,
-              (len(vr) >= 3) ? vr[2] : 0,
-              (len(vr) >= 4) ? vr[3] : 0 ];
+      crv = [ edefined_or(vr, 0, 0),
+              edefined_or(vr, 1, 0),
+              edefined_or(vr, 2, 0),
+              edefined_or(vr, 3, 0) ];
 
       for ( i =  [ [0, 0,  1, 0,  1],
                    [1, 1, -1, 0,  1],
@@ -217,23 +217,23 @@ module rectangle_c
   center = false
 )
 {
-  rx = (len(size) >= 1) ? size[0] : size;
-  ry = (len(size) >= 2) ? size[1] : rx;
+  rx = edefined_or(size, 0, size);
+  ry = edefined_or(size, 1, rx);
 
-  od = ((t != undef) && (core != undef)) ? (core + t) : size;
-  id = ((t != undef) && (size != undef)) ? (size - t) : core;
+  od = (is_defined(t) && is_defined(core)) ? (core + t) : size;
+  id = (is_defined(t) && is_defined(size)) ? (size - t) : core;
 
-  or = (vr1 == undef) ? vr : vr1;
-  ir = (vr2 == undef) ? vr : vr2;
+  or = defined_or(vr1, vr);
+  ir = defined_or(vr2, vr);
 
-  if ( id != undef )
+  if ( is_defined(id) )
   {
     translate(center==true ? [0,0] : [rx/2, ry/2])
     difference()
     {
       rectangle(size=od, vr=or, center=true);
 
-      translate(co==undef ? [0,0] : co)
+      translate(is_defined(co) ? co : [0,0])
       rotate([0, 0, cr])
       rectangle(size=id, vr=ir, center=true);
     }
@@ -270,12 +270,12 @@ module rhombus
   center = false
 )
 {
-  rx = (len(size) >= 1) ? size[0]/2 : size/2;
-  ry = (len(size) >= 2) ? size[1]/2 : rx;
+  rx = edefined_or(size, 0, size) / 2;
+  ry = edefined_or(size, 1, rx*2) / 2;
 
   translate(center==true ? [0,0] : [rx, ry])
   {
-    if ( vr == undef )                    // no rounding
+    if ( not_defined(vr) )              // no rounding
     {
       polygon
       (
@@ -283,14 +283,14 @@ module rhombus
         paths=[ [0,1,2,3] ]
       );
     }
-    else                                  // individual rounding
+    else                                // individual rounding
     {
-      erc = (len(vr) == undef) ? vr : 0;  // equal rounding
+      erc = is_scalar(vr) ? vr : 0;     // equal rounding
 
-      crv = [ (len(vr) >= 1) ? vr[0] : erc,
-              (len(vr) >= 2) ? vr[1] : erc,
-              (len(vr) >= 3) ? vr[2] : erc,
-              (len(vr) >= 4) ? vr[3] : erc ];
+      crv = [ edefined_or(vr, 0, erc),
+              edefined_or(vr, 1, erc),
+              edefined_or(vr, 2, erc),
+              edefined_or(vr, 3, erc) ];
 
       a1 = angle_pp2pp(v1t=[0,ry], v1i=[rx,0], v2t=[0,-ry], v2i=[rx,0]) / 2;
       a2 = 90 - a1;
@@ -370,9 +370,9 @@ module triangle_ppp
   incenter = false
 )
 {
-  cr1 = (v1r == undef) ? vr : v1r;
-  cr2 = (v2r == undef) ? vr : v2r;
-  cr3 = (v3r == undef) ? vr : v3r;
+  cr1 = defined_or(v1r, vr);
+  cr2 = defined_or(v2r, vr);
+  cr3 = defined_or(v3r, vr);
 
   translate
   (
@@ -386,7 +386,7 @@ module triangle_ppp
       ? -triangle_centroid_ppp( v1=v1, v2=v2, v3=v3 )
       : [0,0]
   )
-  if ( (cr1==undef) || (cr2==undef) || (cr3==undef) )
+  if ( not_defined(cr1) || not_defined(cr2) || not_defined(cr3) )
   {
     polygon( points=[v1, v2, v3], paths=[[0,1,2]] );
   }
@@ -441,7 +441,7 @@ module triangle_vp
   incenter = false
 )
 {
-  if ( len(vr) == undef )
+  if ( is_scalar(vr) )
   {
     triangle_ppp
     (
@@ -551,7 +551,7 @@ module triangle_vl
   incenter = false
 )
 {
-  if ( len(vr) == undef )
+  if ( is_scalar(vr) )
   {
     triangle_lll
     (
@@ -612,19 +612,18 @@ module triangle_vl_c
   incenter = false
 )
 {
-  ts1 = (len(vs) >= 1) ? vs[0] : vs;
-  ts2 = (len(vs) >= 2) ? vs[1] : ts1;
-  ts3 = (len(vs) >= 3) ? vs[2] : ts2;
+  ts1 = edefined_or(vs, 0, vs);
+  ts2 = edefined_or(vs, 1, ts1);
+  ts3 = edefined_or(vs, 2, ts2);
 
-  tc1 = (len(vc) >= 1) ? vc[0] : vc;
-  tc2 = (len(vc) >= 2) ? vc[1] : tc1;
-  tc3 = (len(vc) >= 3) ? vc[2] : tc2;
+  tc1 = edefined_or(vc, 0, vc);
+  tc2 = edefined_or(vc, 1, tc1);
+  tc3 = edefined_or(vc, 2, tc2);
 
-  vrs = (vr1 == undef) ? vr : vr1;
-  vrc = (vr2 == undef) ? vr : vr2;
+  vrs = defined_or(vr1, vr);
+  vrc = defined_or(vr2, vr);
 
-
-  if ( vc != undef )
+  if ( is_defined(vc) )
   {
     translate
     (
@@ -647,7 +646,7 @@ module triangle_vl_c
         centroid=true, incenter=false
       );
 
-      translate(co==undef ? [0,0] : co)
+      translate(is_defined(co) ? co : [0,0])
       rotate([0, 0, cr])
       triangle_vl
       (
@@ -978,9 +977,9 @@ module triangle_la
   incenter = false
 )
 {
-  a = ( aa != undef ) ? aa : (90 - oa);
+  a = defined_or(aa, 90 - oa);
 
-  if ( x != undef )
+  if ( is_defined(x) )
   {
     triangle_ppp
     (
@@ -990,7 +989,7 @@ module triangle_la
     );
   }
 
-  if ( y != undef )
+  if ( is_defined(y) )
   {
     triangle_ppp
     (
@@ -1023,7 +1022,7 @@ module ngon
   vr
 )
 {
-  if ( vr == undef )
+  if ( not_defined(vr) )
   {
     circle(r=r, $fn=n);
   }
@@ -1055,8 +1054,8 @@ module ellipse
   size
 )
 {
-  rx = (len(size) >= 1) ? size[0] : size;
-  ry = (len(size) >= 2) ? size[1] : rx;
+  rx = edefined_or(size, 0, size);
+  ry = edefined_or(size, 1, rx);
 
   if ( rx == ry )
   {
@@ -1100,16 +1099,16 @@ module ellipse_c
   cr = 0
 )
 {
-  od = ((t != undef) && (core != undef)) ? (core + t) : size;
-  id = ((t != undef) && (size != undef)) ? (size - t) : core;
+  od = (is_defined(t) && is_defined(core)) ? (core + t) : size;
+  id = (is_defined(t) && is_defined(size)) ? (size - t) : core;
 
-  if ( id != undef )
+  if ( is_defined(id) )
   {
     difference()
     {
       ellipse(size=od);
 
-      translate(co==undef ? [0,0] : co)
+      translate(is_defined(co) ? co : [0,0])
       rotate([0, 0, cr])
       ellipse(size=id);
     }
@@ -1140,8 +1139,8 @@ module ellipse_s
   a2 = 0
 )
 {
-  rx = (len(size) >= 1) ? size[0] : size;
-  ry = (len(size) >= 2) ? size[1] : rx;
+  rx = edefined_or(size, 0, size);
+  ry = edefined_or(size, 1, rx);
 
   trx = rx * sqrt(2) + 1;
   try = ry * sqrt(2) + 1;
@@ -1152,7 +1151,7 @@ module ellipse_s
   pa3 = (1 * a1 + 3 * a2) / 4;
   pa4 = (0 * a1 + 4 * a2) / 4;
 
-  if(a2 > a1)
+  if (a2 > a1)
   {
     intersection()
     {
@@ -1212,16 +1211,16 @@ module ellipse_cs
   cr = 0
 )
 {
-  od = ((t != undef) && (core != undef)) ? (core + t) : size;
-  id = ((t != undef) && (size != undef)) ? (size - t) : core;
+  od = (is_defined(t) && is_defined(core)) ? (core + t) : size;
+  id = (is_defined(t) && is_defined(size)) ? (size - t) : core;
 
-  if ( id != undef )
+  if ( is_defined(id) )
   {
     difference()
     {
       ellipse_s(a1=a1, a2=a2, size=od);
 
-      translate(co==undef ? [0,0] : co)
+      translate(is_defined(co) ? co : [0,0])
       rotate([0, 0, cr])
       ellipse(size=id);
     }
@@ -1254,8 +1253,8 @@ module star2d
   vr
 )
 {
-  l = (len(size) >= 1) ? size[0] : size;
-  w = (len(size) >= 2) ? size[1] : l/2;
+  l = edefined_or(size, 0, size);
+  w = edefined_or(size, 1, l/2);
 
   st_radial_copy(n=n, angle=true, move=false)
   rotate([0, 0, -90])
