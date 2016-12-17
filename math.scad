@@ -204,6 +204,54 @@ function is_even( v ) = ( ((v % 2) == 0) ? true : false );
 *******************************************************************************/
 function is_odd( v ) = ( ((v % 2) == 0) ? false : true );
 
+//! Test that all vector elements equal a comparison value.
+/***************************************************************************//**
+  \param    v <vector> A vector.
+  \param    cv <value> A comparison value.
+  \returns  <boolean> \b true when all vector elements equal the value \p cv
+            and \b false otherwise. Returns \b true for \b empty_v.
+*******************************************************************************/
+function all_equal
+(
+  v,
+  cv
+) = !is_vector(v) ? (v == cv)
+  : is_empty(v) ? true
+  : (first(v) != cv) ? false
+  : all_equal(tail(v), cv);
+
+//! Test that no vector element equals a comparison value.
+/***************************************************************************//**
+  \param    v <vector> A vector.
+  \param    cv <value> A comparison value.
+  \returns  <boolean> \b true when no vector element equals the value \p cv
+            and \b false otherwise. Returns \b true for \b empty_v.
+*******************************************************************************/
+function none_equal
+(
+  v,
+  cv
+) = !is_vector(v) ? (v != cv)
+  : is_empty(v) ? true
+  : (first(v) == cv) ? false
+  : none_equal(tail(v), cv);
+
+//! Test if any vector element equals a comparison value.
+/***************************************************************************//**
+  \param    v <vector> A vector.
+  \param    cv <value> A comparison value.
+  \returns  <boolean> \b true when any vector element equals the value \p cv
+            and \b false otherwise. Returns \b false for \b empty_v.
+*******************************************************************************/
+function any_equal
+(
+  v,
+  cv
+) = !is_vector(v) ? (v == cv)
+  : is_empty(v) ? false
+  : (first(v) == cv) ? true
+  : any_equal(tail(v), cv);
+
 //! @}
 //! @}
 
