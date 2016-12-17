@@ -220,22 +220,6 @@ function all_equal
   : (first(v) != cv) ? false
   : all_equal(tail(v), cv);
 
-//! Test that no vector element equals a comparison value.
-/***************************************************************************//**
-  \param    v <vector> A vector.
-  \param    cv <value> A comparison value.
-  \returns  <boolean> \b true when no vector element equals the value \p cv
-            and \b false otherwise. Returns \b true for \b empty_v.
-*******************************************************************************/
-function none_equal
-(
-  v,
-  cv
-) = !is_vector(v) ? (v != cv)
-  : is_empty(v) ? true
-  : (first(v) == cv) ? false
-  : none_equal(tail(v), cv);
-
 //! Test if any vector element equals a comparison value.
 /***************************************************************************//**
   \param    v <vector> A vector.
@@ -251,6 +235,22 @@ function any_equal
   : is_empty(v) ? false
   : (first(v) == cv) ? true
   : any_equal(tail(v), cv);
+
+//! Test that no vector element is undefined.
+/***************************************************************************//**
+  \param    v <vector> A vector.
+  \returns  <boolean> \b true when no vector element equals \p undef
+            and \b false otherwise.
+*******************************************************************************/
+function all_defined(v) = !any_equal(v, undef);
+
+//! Test if any vector element is undefined.
+/***************************************************************************//**
+  \param    v <vector> A vector.
+  \returns  <boolean> \b true when any vector element equals \p undef
+            and \b false otherwise.
+*******************************************************************************/
+function any_undefined(v) = any_equal(v, undef);
 
 //! @}
 //! @}
