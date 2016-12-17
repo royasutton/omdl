@@ -171,6 +171,7 @@ BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     use <console.scad>;
 
+    $log_debug = true;
     message = "console log message";
 
     // general
@@ -178,6 +179,7 @@ BEGIN_SCOPE example;
 
     // debugging
     log_debug( message );
+    log_debug( message, $log_debug = false );
 
     // information
     log_info( message );
