@@ -114,7 +114,7 @@ module cone
   br = defined_or(vr1, vr);
   pr = defined_or(vr2, vr);
 
-  if ( not_defined(br) || not_defined(pr) )
+  if ( any_undefined([br, pr]) )
   {
     cylinder(h=h, r1=cr, r2=0, center=false);
   }

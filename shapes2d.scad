@@ -220,8 +220,8 @@ module rectangle_c
   rx = edefined_or(size, 0, size);
   ry = edefined_or(size, 1, rx);
 
-  od = (is_defined(t) && is_defined(core)) ? (core + t) : size;
-  id = (is_defined(t) && is_defined(size)) ? (size - t) : core;
+  od = all_defined([t, core]) ? (core + t) : size;
+  id = all_defined([t, size]) ? (size - t) : core;
 
   or = defined_or(vr1, vr);
   ir = defined_or(vr2, vr);
@@ -386,7 +386,7 @@ module triangle_ppp
       ? -triangle_centroid_ppp( v1=v1, v2=v2, v3=v3 )
       : [0,0]
   )
-  if ( not_defined(cr1) || not_defined(cr2) || not_defined(cr3) )
+  if ( any_undefined([cr1, cr2, cr3]) )
   {
     polygon( points=[v1, v2, v3], paths=[[0,1,2]] );
   }
@@ -1099,8 +1099,8 @@ module ellipse_c
   cr = 0
 )
 {
-  od = (is_defined(t) && is_defined(core)) ? (core + t) : size;
-  id = (is_defined(t) && is_defined(size)) ? (size - t) : core;
+  od = all_defined([t, core]) ? (core + t) : size;
+  id = all_defined([t, size]) ? (size - t) : core;
 
   if ( is_defined(id) )
   {
@@ -1211,8 +1211,8 @@ module ellipse_cs
   cr = 0
 )
 {
-  od = (is_defined(t) && is_defined(core)) ? (core + t) : size;
-  id = (is_defined(t) && is_defined(size)) ? (size - t) : core;
+  od = all_defined([t, core]) ? (core + t) : size;
+  id = all_defined([t, size]) ? (size - t) : core;
 
   if ( is_defined(id) )
   {
