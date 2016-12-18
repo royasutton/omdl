@@ -338,6 +338,35 @@ function reverse
   : is_empty(v) ? empty_v
   : concat( reverse(tail(v)), head(v) );
 
+//! Return a new vector containing a select element of a vector of vectors.
+/***************************************************************************//**
+  \param    v <vector> A vector.
+  \param    f <boolean> Select each vectors first element.
+  \param    l <boolean> Select each vectors last element.
+  \param    e <integer> A vector element index selection.
+  \returns  A new vector composed by choosing the selected element from
+            each member-vector of the given vector \p v.
+            Returns \b undef when \p v is not defined or is not a vector.
+
+  \details
+
+  \note     When more than one selection criteria is specified, the
+            order of priority is: \p e, \p l, \p f.
+*******************************************************************************/
+function eselect
+(
+  v,
+  f = true,
+  l = false,
+  e
+) = not_defined(v) ? undef
+  : !is_vector(v) ? undef
+  : is_empty(v) ? empty_v
+  : is_defined(e) ? concat( [first(v)[e]], eselect(tail(v), f, l, e) )
+  : (l == true) ? concat( [last(first(v))], eselect(tail(v), f, l, e) )
+  : (f == true) ? concat( [first(first(v))], eselect(tail(v), f, l, e) )
+  : undef;
+
 //! Element-wise concatenation of two or more vectors.
 /***************************************************************************//**
   \param    v <vector> A vector of two or more vectors.
@@ -436,8 +465,8 @@ function qsort
 //! Compute the sum of a range of vector elements.
 /***************************************************************************//**
   \param    v <vector> A vector of numerical values.
-  \param    e <integer> The vector element at which to end summation.
-  \param    b <integer> The vector element at which to begin summation.
+  \param    e <integer> The vector element index at which to end summation.
+  \param    b <integer> The vector element index at which to begin summation.
   \returns  <decimal> The summation of the vector elements.
 *******************************************************************************/
 function ersum
@@ -475,7 +504,7 @@ function defined_or
 //! Vector element defined or default operation.
 /***************************************************************************//**
   \param    v <vector> A vector.
-  \param    e <integer> A vector element.
+  \param    e <integer> A vector element index.
   \param    d <value> A default value.
   \returns  The value of vector element \p e, namely <tt>v[e]</tt>, when it
             exists or the value \p d otherwise.
