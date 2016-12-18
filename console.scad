@@ -56,27 +56,27 @@ use <utilities.scad>;
 
 //! Output message to console.
 /***************************************************************************//**
-  \param    message <string> The message to output.
+  \param    m <string> An output message.
 *******************************************************************************/
-module log_echo( message )
+module log_echo( m )
 {
-  um = (message==undef) ? "" : message;
+  um = (m==undef) ? "" : m;
 
   echo ( um );
 }
 
 //! Output diagnostic message to console.
 /***************************************************************************//**
-  \param    message <string> The message to output.
+  \param    m <string> An output message.
 
   \details
 
-    When \p $log_debug == \p true, message are written to the console. When
+    When \p $log_debug == \p true, message is written to the console. When
     \p false, output is not generated.
 *******************************************************************************/
-module log_debug( message )
+module log_debug( m )
 {
-  um = (message==undef) ? "" : message;
+  um = (m==undef) ? "" : m;
 
   mt = "[ DEBUG ]";
   sp = chr( 32 );
@@ -89,11 +89,11 @@ module log_debug( message )
 
 //! Output information message to console.
 /***************************************************************************//**
-  \param    message <string> The message to output.
+  \param    m <string> An output message.
 *******************************************************************************/
-module log_info( message )
+module log_info( m )
 {
-  um = (message==undef) ? "" : message;
+  um = (m==undef) ? "" : m;
 
   mt = "[ INFO ]";
   sp = chr( 32 );
@@ -104,11 +104,11 @@ module log_info( message )
 
 //! Output warning message to console.
 /***************************************************************************//**
-  \param    message <string> The message to output.
+  \param    m <string> An output message.
 *******************************************************************************/
-module log_warn( message )
+module log_warn( m )
 {
-  um = (message==undef) ? "" : message;
+  um = (m==undef) ? "" : m;
 
   mt = "[ WARNING ]";
   bc = 35;
@@ -126,7 +126,7 @@ module log_warn( message )
 
 //! Output error message to console.
 /***************************************************************************//**
-  \param    message <string> The message to output.
+  \param    m <string> An output message.
 
   \details
 
@@ -135,9 +135,9 @@ module log_warn( message )
     To alert of the critical error, the error message is also rendered
     graphically.
 *******************************************************************************/
-module log_error( message )
+module log_error( m )
 {
-  um = (message==undef) ? "" : message;
+  um = (m==undef) ? "" : m;
 
   mt = "[ ERROR ]";
   bc = 35;
