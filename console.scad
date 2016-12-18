@@ -80,7 +80,7 @@ module log_debug( m )
 
   mt = "[ DEBUG ]";
   sp = chr( 32 );
-  cs = stack( idx_e = 1 );
+  cs = stack( e = 1 );
 
   if ( $log_debug == true )
     echo ( str(mt, sp, cs, ";", sp, um) );
@@ -97,7 +97,7 @@ module log_info( m )
 
   mt = "[ INFO ]";
   sp = chr( 32 );
-  cs = stack( idx_e = 1 );
+  cs = stack( e = 1 );
 
   echo ( str(mt, sp, cs, ";", sp, um) );
 }
@@ -113,7 +113,7 @@ module log_warn( m )
   mt = "[ WARNING ]";
   bc = 35;
   sp = chr( 32 );
-  cs = stack( idx_e = 1 );
+  cs = stack( e = 1 );
   hb = chr( [for (i=[0:1:len(um)+len(mt)+4]) bc] );
   ms = str(chr(bc), sp, mt, sp, um, sp, chr(bc));
 
@@ -142,7 +142,7 @@ module log_error( m )
   mt = "[ ERROR ]";
   bc = 35;
   sp = chr( 32 );
-  cs = stack( idx_e = 1 );
+  cs = stack( e = 1 );
   hb = chr( [for (i=[0:1:len(um)+len(mt)+6]) bc] );
   hs = chr( concat([bc, bc],[for (i=[0:1:len(um)+len(mt)+2]) 32],[bc, bc]) );
   ms = str(chr(bc), chr(bc), sp, mt, sp, um, sp, chr(bc), chr(bc));

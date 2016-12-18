@@ -39,16 +39,16 @@
 
 //! Format the current instantiation stack as a string.
 /***************************************************************************//**
-  \param    idx_b <decimal> The instantiation stack beginning level.
-  \param    idx_e <decimal> The instantiation stack ending level.
+  \param    b <decimal> The instantiation stack beginning level.
+  \param    e <decimal> The instantiation stack ending level.
 *******************************************************************************/
 function stack
 (
-  idx_b = $parent_modules -1,
-  idx_e = 0
-) = idx_b == undef ? "<top-level>"
-  : idx_b >  idx_e ? str( parent_module( idx_b ), "(): ", stack( idx_b - 1, idx_e ) )
-  :                  str( parent_module( idx_b ), "()" );
+  b = $parent_modules -1,
+  e = 0
+) = (b == undef) ? "<top-level>"
+  : (b > e) ? str( parent_module( b ), "(): ", stack( b-1, e ) )
+  : str( parent_module( b ), "()" );
 
 //! @}
 
