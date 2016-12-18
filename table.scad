@@ -178,6 +178,46 @@ function table_get
   col_id
 ) = rows[table_get_row_idx(rows,row_id)][table_get_col_idx(cols,col_id)];
 
+//! Form a vector from the specified column of each table row.
+/***************************************************************************//**
+  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
+            containing the table rows.
+  \param    cols <2d-vector> A two dimensional vector (c-tuple x 1-tuple)
+            containing the table columns.
+  \param    col_id <string> The column identifier string.
+  \returns  <vector> The vector formed by selecting the \p col_id for
+            each row in the table.
+            If column does not exists, returns \b undef.
+*******************************************************************************/
+function table_get_row_cols
+(
+  rows,
+  cols,
+  col_id
+) = table_exists(rows,cols,col_id=col_id)
+  ? eselect(table_copy(rows,cols,cols_sel=[col_id]),f=true)
+  : undef;
+
+//! Form a vector of each table row identifier.
+/***************************************************************************//**
+  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
+            containing the table rows.
+  \returns  <vector> The vector of table row identifiers.
+            If column \c "id" does not exists, returns \b undef.
+
+  \details
+
+  \note     This functions assumes the first element of each table row to
+            be the row identifier, as enforced by the table_check(). As
+            an alternative, the function table_get_row_cols(), of the form
+            table_get_row_cols(rows, cols, "id"), may be used without this
+            assumption.
+*******************************************************************************/
+function table_get_row_ids
+(
+  rows
+) = eselect(rows,f=true);
+
 //! Test the existence of a table row and column identifier.
 /***************************************************************************//**
   \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
@@ -452,7 +492,7 @@ BEGIN_SCOPE example;
     base_unit_length = "mm";
 
     table_cols =
-     [// id,  description
+    [ // id,  description
       ["id",  "row identifier"],
       ["ht",  "head type [r|h|s]"],
       ["td",  "thread diameter"],
@@ -478,6 +518,12 @@ BEGIN_SCOPE example;
 
     if ( table_exists( cols=table_cols, col_id="nl" ) )
       echo ( "metric 'nl' available" );
+
+    table_ids = table_get_row_ids( table_rows );
+    table_cols_tl = table_get_row_cols( table_rows, table_cols, "tl" );
+
+    echo ( table_ids=table_ids );
+    echo ( table_cols_tl=table_cols_tl );
 
     tnew = table_copy( table_rows, table_cols, cols_sel=["tl", "nl"] );
     tsum = table_sum( table_rows, table_cols, cols_sel=["tl", "nl"] );
