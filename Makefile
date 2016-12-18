@@ -60,6 +60,7 @@ library             := mainpage \
                        constants \
                        math \
                        utilities \
+                       validation \
                        console \
                        units_angle \
                        units_length \
