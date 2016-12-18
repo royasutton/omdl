@@ -402,18 +402,18 @@ function estr
   : (len(v) == 1) ? str(first(v))
   : str(first(v), estr(tail(v)));
 
-//! Sort the numerical elements of a vector using the quick sort method.
+//! Sort the elements of a vector using the quick sort method.
 /***************************************************************************//**
   \param    v <vector> A vector.
   \returns  A new vector with element sorted in ascending order.
 
   \details
 
-  \warning This implementation relies on the OpenSCAD numerical
-           comparison operators '<' and '>' which produce valid
-           results for scalar numbers only. Therefore this function
-           only produce valid results for a vector containing
-           scalar numbers only.
+  \warning This implementation relies on the OpenSCAD comparison operators
+           '<' and '>' which expect the operands to be either two scalar
+           numbers or two strings. Therefore this function only produce
+           valid results for a vector containing all scalar numbers or all
+           strings.
 
     See [Wikipedia](https://en.wikipedia.org/wiki/Quicksort)
     for more information.
