@@ -336,7 +336,7 @@ function reverse
 ) = not_defined(v) ? undef
   : !is_vector(v) ? undef
   : is_empty(v) ? empty_v
-  : concat( reverse(tail(v)), first(v) );
+  : concat( reverse(tail(v)), head(v) );
 
 //! Element-wise concatenation of two or more vectors.
 /***************************************************************************//**
