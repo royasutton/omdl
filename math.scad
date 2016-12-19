@@ -142,7 +142,7 @@ function is_bool
   \returns  <boolean> \b true when the value is an integer
             and \b false otherwise.
 *******************************************************************************/
-function is_intger
+function is_integer
 (
   v
 ) = not_defined(v) ? false
@@ -169,8 +169,8 @@ function is_range
     !is_vector(v) &&
     !is_string(v) &&
     !is_bool(v) &&
-    !is_intger(v) &&
     !is_decimal(v);
+    !is_integer(v) &&
 
 //! Test if a numerical value is invalid (Not A Number).
 /***************************************************************************//**
