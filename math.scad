@@ -161,6 +161,15 @@ function is_decimal( v ) = ((v % 1) > 0);
   \param    v <value> A value.
   \returns  <boolean> \b true when the value is a range definition
             and \b false otherwise.
+
+  \details
+
+  \internal
+    Currently a range is determined to be that which does not fit in any
+    other value category. This is likely to fail as OpenSCAD matures.
+    This exclusion test should be replaced by a suitable inclusion test
+    when possible.
+  \endinternal
 *******************************************************************************/
 function is_range
 (
@@ -169,8 +178,10 @@ function is_range
     !is_vector(v) &&
     !is_string(v) &&
     !is_bool(v) &&
-    !is_decimal(v);
     !is_integer(v) &&
+    !is_decimal(v) &&
+    !is_nan(v) &&
+    !is_inf(v);
 
 //! Test if a numerical value is invalid (Not A Number).
 /***************************************************************************//**
