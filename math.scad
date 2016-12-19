@@ -204,16 +204,28 @@ function is_inf( v ) = ( v == (number_max * number_max) );
   \param    v <value> A numerical value.
   \returns  <boolean> \b true when the number is determined to be even
             and \b false otherwise.
+
+  \details
+
+  \note     The value must be valid (\c v != \b nan) and defined
+            (\c v != \b undef) but may be positive or negative. Any
+            numeric value that is not an integer returns \b false.
 *******************************************************************************/
-function is_even( v ) = ( ((v % 2) == 0) ? true : false );
+function is_even( v ) = !is_integer(v) ? false : ((v % 2) == 0);
 
 //! Test if a numerical value is odd.
 /***************************************************************************//**
   \param    v <value> A numerical value.
   \returns  <boolean> \b true when the number is determined to be odd
             and \b false otherwise.
+
+  \details
+
+  \note     The value must be valid (\c v != \b nan) and defined
+            (\c v != \b undef) but may be positive or negative. Any
+            numeric value that is not an integer returns \b false.
 *******************************************************************************/
-function is_odd( v ) = ( ((v % 2) == 0) ? false : true );
+function is_odd( v ) = !is_integer(v) ? false : ((v % 2) != 0);
 
 //! Test that all vector elements equal a comparison value.
 /***************************************************************************//**
