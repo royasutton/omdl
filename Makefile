@@ -58,6 +58,7 @@ project_files_add   := $(wildcard include/*.mfs)
 
 library             := mainpage \
                        constants \
+                       primitives \
                        math \
                        utilities \
                        validation \
