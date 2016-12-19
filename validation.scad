@@ -58,6 +58,13 @@
      "true" \| true     | cv is true
      "false" \| false   | cv is false
 
+    \b Example
+
+      \dontinclude validation_example.scad
+      \skip use
+      \until log_info( fail_result );
+
+    \b Result \include validation_example.log
 *******************************************************************************/
 function validate
 (
@@ -84,6 +91,53 @@ function validate
   : (pf?false : str("FAILED: '", d, "'.  Unknown test '", t, "'."));
 
 //! @}
+
+//----------------------------------------------------------------------------//
+// openscad-amu auxiliary scripts
+//----------------------------------------------------------------------------//
+
+/*
+BEGIN_SCOPE example;
+  BEGIN_OPENSCAD;
+    use <validation.scad>;
+    use <console.scad>;
+
+    //
+    // function to validate
+    //
+    function f1( x ) = (x == undef) ? 1 : 2;
+
+    farg = undef;     // function test argument
+    erv1 = 1;         // correct expected function result
+    erv2 = 3;         // incorrect expected function result
+
+    //
+    // pass test example
+    //
+    pass_result = validate("test-a f1(farg)", f1(farg), "eq", erv1);
+
+    if ( !validate(cv=f1(farg), t="eq", ev=erv1, pf=true) )
+      log_warn( pass_result );
+    else
+      log_info( pass_result );
+
+    //
+    // fail test example
+    //
+    fail_result = validate("test-b f1(farg)", f1(farg), "eq", erv2);
+
+    if ( !validate(cv=f1(farg), t="eq", ev=erv2, pf=true) )
+      log_warn( fail_result );
+    else
+      log_info( fail_result );
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
+    include --path "${INCLUDE_PATH}" script_std.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
 
 //----------------------------------------------------------------------------//
 // end of file
