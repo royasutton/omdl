@@ -37,18 +37,36 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Format the current instantiation stack as a string.
+//! Format the function call stack as a string.
 /***************************************************************************//**
-  \param    b <decimal> The instantiation stack beginning level.
-  \param    e <decimal> The instantiation stack ending level.
+  \param    b <decimal> The stack index bottom offset.
+            Include function names above this offset.
+  \param    t <decimal> The stack index top offset.
+            Include function names below this offset.
+
+  \returns  <string> A colon-separated list of functions names for the
+            current function call stack.
+
+  \note     Returns \b undef when \p b is greater than the current number
+            of function instances (ie: <tt>bo > $parent_modules-1</tt>).
+  \note     Returns the string \c "root()" when the function call stack
+            is empty (ie: at the root of the script).
 *******************************************************************************/
 function stack
 (
-  b = $parent_modules -1,
-  e = 0
-) = (b == undef) ? "<top-level>"
-  : (b > e) ? str( parent_module( b ), "(): ", stack( b-1, e ) )
-  : str( parent_module( b ), "()" );
+  b = 0,
+  t = 0
+) = let
+  (
+    bo = abs(b),
+    to = abs(t),
+    i = $parent_modules - 1 - bo
+  )
+  ($parent_modules == undef) ? "root()"
+  : (bo > $parent_modules-1) ? undef
+  : (i  < to) ? "root()"
+  : (i == to) ? str( parent_module( i ), "()" )
+  : str( parent_module( i ), "(): ", stack( bo + 1, to ) );
 
 //! @}
 
