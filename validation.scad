@@ -77,18 +77,18 @@ function validate
   = (t == "eq") ?
     (
       (cv == ev)
-      ? (pf?true  : str("passed: '", d, "'."))
-      : (pf?false : str("FAILED: '", d, "'.  Got '", cv, "'. Expected to equal '", ev, "'."))
+      ? (pf?true  : str("passed: '", d, "'"))
+      : (pf?false : str("FAILED: '", d, "'.  Got '", cv, "'. Expected to equal '", ev, "'"))
     )
   : (t == "neq") ?
     (
       (cv != ev)
-      ? (pf?true  : str("passed: '", d, "'."))
-      : (pf?false : str("FAILED: '", d, "'.  Got '", cv, "'. Expected to not equal '", ev, "'."))
+      ? (pf?true  : str("passed: '", d, "'"))
+      : (pf?false : str("FAILED: '", d, "'.  Got '", cv, "'. Expected to not equal '", ev, "'"))
     )
   : ( (t == true)  || (t == "true")  ) ? validate(d, cv, "eq", true, pf)
   : ( (t == false) || (t == "false") ) ? validate(d, cv, "eq", false, pf)
-  : (pf?false : str("FAILED: '", d, "'.  Unknown test '", t, "'."));
+  : (pf?false : str("FAILED: '", d, "'.  Unknown test '", t, "'"));
 
 //! @}
 
