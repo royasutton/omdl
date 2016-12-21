@@ -47,7 +47,12 @@
     language-based mechanical design. With [omdl], all library primitives
     are \em parametric with minimal, mostly zero, global variable
     dependencies and all library [API]'s include [Doxygen markups] that
-    describe its parameters, behavior, and use.
+    describe its parameters, behavior, and use. Validation scripts are
+    used to check that the core user-space building blocks work as
+    expected across evolving [OpenSCAD] versions. These validation are
+    performed automatically when rebuilding the documentation. See the
+    \ref validation "validation section" for the results generated with
+    this documentation.
 
     <em>Revolutionary no... But a big step in the evolution of a standard
     way to share documented OpenSCAD scripts!</em>
@@ -192,6 +197,13 @@
 
 *******************************************************************************/
 
+// validation results root page.
+/***************************************************************************//**
+  \page validation Validation
+    \li \subpage tv_prim
+*******************************************************************************/
+
+// base group categories.
 /***************************************************************************//**
   \defgroup constants Constants
   \brief    General design constants.
