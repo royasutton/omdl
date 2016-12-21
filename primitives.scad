@@ -269,11 +269,10 @@ function is_odd( v ) = !is_integer(v) ? false : ((v % 2) != 0);
   \param    v <vector> A vector.
   \param    cv <value> A comparison value.
   \returns  <boolean> \b true when all vector elements equal the value \p cv
-            and \b false otherwise. Always returns \b true for a single
-            element vector containing either \b empty_v or \b empty_str.
+            and \b false otherwise.
 
-  \warning  Care must be taken when \p v is a single element vector
-            containing either \b empty_v or \b empty_str as noted in above.
+  \warning  Always returns \b true when \p v is a single value containing
+            either \b empty_v or \b empty_str.
 *******************************************************************************/
 function all_equal
 (
@@ -289,11 +288,10 @@ function all_equal
   \param    v <vector> A vector.
   \param    cv <value> A comparison value.
   \returns  <boolean> \b true when any vector element equals the value \p cv
-            and \b false otherwise. Always returns \b false for a single
-            element vector containing either \b empty_v or \b empty_str.
+            and \b false otherwise.
 
-  \warning  Care must be taken when \p v is a single element vector
-            containing either \b empty_v or \b empty_str as noted in above.
+  \warning  Always returns \b false when \p v is a single value containing
+            either \b empty_v or \b empty_str.
 *******************************************************************************/
 function any_equal
 (
@@ -307,18 +305,106 @@ function any_equal
 //! Test that no vector element is undefined.
 /***************************************************************************//**
   \param    v <vector> A vector.
-  \returns  <boolean> \b true when no vector element equals \p undef
+  \returns  <boolean> \b true when no vector element equals \b undef
             and \b false otherwise.
+
+  \warning  Always returns \b true when \p v is a single value containing
+            either \b empty_v or \b empty_str.
 *******************************************************************************/
 function all_defined(v) = !any_equal(v, undef);
 
 //! Test if any vector element is undefined.
 /***************************************************************************//**
   \param    v <vector> A vector.
-  \returns  <boolean> \b true when any vector element equals \p undef
+  \returns  <boolean> \b true when any vector element equals \b undef
             and \b false otherwise.
+
+  \warning  Always returns \b false when \p v is a single value containing
+            either \b empty_v or \b empty_str.
 *******************************************************************************/
 function any_undefined(v) = any_equal(v, undef);
+
+//! Test if all vector elements are scalars.
+/***************************************************************************//**
+  \param    v <vector> A vector.
+  \returns  <boolean> \b true when all vector elements are scalar values
+            and \b false otherwise.
+            Returns the value of \p v when it is not defined.
+
+  \warning  Always returns \b true when \p v is a single value containing
+            either \b empty_v or \b empty_str.
+*******************************************************************************/
+function all_scalars
+(
+  v
+) = not_defined(v) ? v
+  : is_scalar(v) ? true
+  : is_empty(v) ? true
+  : !is_scalar(first(v)) ? false
+  : all_scalars(tail(v));
+
+//! Test if all vector elements are vectors.
+/***************************************************************************//**
+  \param    v <vector> A vector.
+  \returns  <boolean> \b true when all vector elements are vector values
+            and \b false otherwise.
+            Returns the value of \p v when it is not defined.
+
+  \note     This function distinguishes between vectors and strings. If any
+            vectors element is a strings, \b false will be returned.
+
+  \warning  Always returns \b true when \p v is a single value containing
+            either \b empty_v or \b empty_str.
+*******************************************************************************/
+function all_vectors
+(
+  v
+) = not_defined(v) ? v
+  : is_scalar(v) ? false
+  : is_empty(v) ? true
+  : is_string(first(v)) ? false
+  : !is_vector(first(v)) ? false
+  : all_vectors(tail(v));
+
+//! Test if all vector elements are strings.
+/***************************************************************************//**
+  \param    v <vector> A vector.
+  \returns  <boolean> \b true when all vector elements are string values
+            and \b false otherwise.
+            Returns the value of \p v when it is not defined.
+
+  \warning  Always returns \b true when \p v is a single value containing
+            either \b empty_v or \b empty_str.
+*******************************************************************************/
+function all_strings
+(
+  v
+) = not_defined(v) ? v
+  : is_scalar(v) ? false
+  : is_empty(v) ? true
+  : !is_string(first(v)) ? false
+  : all_strings(tail(v));
+
+//! Test if all vector elements are vectors (or strings) of a given length.
+/***************************************************************************//**
+  \param    v <vector> A vector.
+  \param    l <integer> The length.
+  \returns  <boolean> \b true when all vector elements are vectors
+            (or strings) with length equal to \p l and \b false otherwise.
+            Returns the value of \p v when it is not defined.
+
+  \warning  Always returns \b true when \p v is a single value containing
+            either \b empty_v or \b empty_str.
+*******************************************************************************/
+function all_len
+(
+  v,
+  l
+) = not_defined(v) ? v
+  : is_scalar(v) ? false
+  : is_empty(v) ? true
+  : (len(first(v)) != l) ? false
+  : all_len(tail(v),l);
 
 //! @}
 //! @}
@@ -826,14 +912,20 @@ BEGIN_SCOPE validate;
 
         good_r =
         [ // function       01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23
-          ["all_defined",   f, t, t, t, t, t, t, t, t, t, f, t, t, t, t, t, t, f, f, t, t, t, t],
-          ["any_undefined", t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
           ["all_equal_T",   f, f, t, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t],
           ["all_equal_F",   f, f, f, t, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
           ["all_equal_U",   t, f, f, f, f, f, t, t, f, f, t, f, f, f, f, f, f, f, t, f, f, f, f],
           ["any_equal_T",   f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t],
           ["any_equal_F",   f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f],
-          ["any_equal_U",   t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f]
+          ["any_equal_U",   t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
+          ["all_defined",   f, t, t, t, t, t, t, t, t, t, f, t, t, t, t, t, t, f, f, t, t, t, t],
+          ["any_undefined", t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
+          ["all_scalars",   u, t, t, t, f, f, s, s, s, s, t, t, t, f, f, f, f, t, t, f, t, t, t],
+          ["all_vectors",   u, f, f, f, f, f, t, t, f, f, f, f, f, t, t, f, t, f, f, t, f, f, f],
+          ["all_strings",   u, f, f, f, t, t, t, s, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+          ["all_len_1",     u, f, f, f, t, t, s, s, f, f, f, f, f, t, f, f, f, f, f, t, f, f, f],
+          ["all_len_2",     u, f, f, f, f, f, s, s, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f],
+          ["all_len_3",     u, f, f, f, f, f, s, s, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f]
         ];
 
         // sanity-test tables
@@ -847,8 +939,8 @@ BEGIN_SCOPE validate;
           value_text = table_get(test_r, test_c, vid, "td");
           pass_value = table_get(good_r, good_c, fname, vid);
 
-          test_pass = validate( cv=fresult, t=pass_value, pf=true );
-          test_text = validate( str(fname, "(", get_value(vid), ")=", pass_value), fresult, pass_value );
+          test_pass = validate( cv=fresult, t="eq", ev=pass_value, pf=true );
+          test_text = validate( str(fname, "(", get_value(vid), ")=", pass_value), fresult, "eq", pass_value );
 
           if ( pass_value != s )
           {
@@ -862,14 +954,20 @@ BEGIN_SCOPE validate;
         }
 
         // Indirect function calls would be very useful here!!!
-        for (vid=test_ids) run_test( "all_defined", all_defined(get_value(vid)), vid );
-        for (vid=test_ids) run_test( "any_undefined", any_undefined(get_value(vid)), vid );
         for (vid=test_ids) run_test( "all_equal_T", all_equal(get_value(vid),t), vid );
         for (vid=test_ids) run_test( "all_equal_F", all_equal(get_value(vid),f), vid );
         for (vid=test_ids) run_test( "all_equal_U", all_equal(get_value(vid),u), vid );
         for (vid=test_ids) run_test( "any_equal_T", any_equal(get_value(vid),t), vid );
         for (vid=test_ids) run_test( "any_equal_F", any_equal(get_value(vid),f), vid );
         for (vid=test_ids) run_test( "any_equal_U", any_equal(get_value(vid),u), vid );
+        for (vid=test_ids) run_test( "all_defined", all_defined(get_value(vid)), vid );
+        for (vid=test_ids) run_test( "any_undefined", any_undefined(get_value(vid)), vid );
+        for (vid=test_ids) run_test( "all_scalars", all_scalars(get_value(vid)), vid );
+        for (vid=test_ids) run_test( "all_vectors", all_vectors(get_value(vid)), vid );
+        for (vid=test_ids) run_test( "all_strings", all_strings(get_value(vid)), vid );
+        for (vid=test_ids) run_test( "all_len_1", all_len(get_value(vid),1), vid );
+        for (vid=test_ids) run_test( "all_len_2", all_len(get_value(vid),2), vid );
+        for (vid=test_ids) run_test( "all_len_3", all_len(get_value(vid),3), vid );
 
         // end-of-tests
       END_OPENSCAD;
