@@ -85,71 +85,70 @@ include <constants.scad>;
 //! Test if a value is defined.
 /***************************************************************************//**
   \param    v <value> A value.
-  \returns  <boolean> \b false when the value equals \b undef and \b true
-            otherwise.
+  \returns  <boolean> \b true when the value is defined
+            and \b false otherwise.
 *******************************************************************************/
 function is_defined( v ) = (v == undef) ? false : true;
 
 //! Test if a value is not defined.
 /***************************************************************************//**
   \param    v <value> A value.
-  \returns  <boolean> \b true when the value equals \b undef and \b false
-            otherwise.
+  \returns  <boolean> \b true when the value is not defined
+            and \b false otherwise.
 *******************************************************************************/
 function not_defined( v ) = (v == undef) ? true : false;
 
-//! Test if a vector is empty.
+//! Test if an iterable value is empty.
 /***************************************************************************//**
-  \param    v <vector> A vector.
-  \returns  <boolean> \b true when the vector (or string) is empty
+  \param    v <value> An iterable value.
+  \returns  <boolean> \b true when the iterable value has zero elements
             and \b false otherwise.
 *******************************************************************************/
 function is_empty( v ) = (len(v) == 0);
 
-//! Test if a value is scalar.
+//! Test if a value is a single non-iterable value.
 /***************************************************************************//**
   \param    v <value> A value.
-  \returns  <boolean> \b true when the value is scalar
+  \returns  <boolean> \b true when the value is a single non-iterable value
             and \b false otherwise.
 
   \details
 
      value is      | defined result
     :-------------:|:-----------------:
-     \b undef      | not defined
+     \b undef      | \b true
+     \b inf        | \b true
+     \b nan        | \b true
      integer       | \b true
      decimal       | \b true
      boolean       | \b true
      string        | \b false
      vector        | \b false
      range         | not defined
-
-    A scalar value consists of a single value.
 *******************************************************************************/
 function is_scalar( v ) = (len(v) == undef);
 
-//! Test if a value is a vector.
+//! Test if a value has multiple parts and is iterable.
 /***************************************************************************//**
   \param    v <value> A value.
-  \returns  <boolean> \b true when the value is a vector
+  \returns  <boolean> \b true when the value is an iterable multi-part value
             and \b false otherwise.
 
   \details
 
      value is      | defined result
     :-------------:|:-----------------:
-     \b undef      | not defined
+     \b undef      | \b false
+     \b inf        | \b false
+     \b nan        | \b false
      integer       | \b false
      decimal       | \b false
      boolean       | \b false
      string        | \b true
      vector        | \b true
-     range         | \b false
-
-    A vector value consists of one or more comma-separated values within
-    braces.
+     range         | not defined
 *******************************************************************************/
-function is_vector( v ) = (len(v) != undef);
+function is_iterable( v ) = (len(v) != undef);
 
 //! Test if a value is a string.
 /***************************************************************************//**
@@ -159,7 +158,15 @@ function is_vector( v ) = (len(v) != undef);
 *******************************************************************************/
 function is_string( v ) = (str(v) == v);
 
-//! Test if a value is one of the predefined boolean constants.
+//! Test if a value is a vector.
+/***************************************************************************//**
+  \param    v <value> A value.
+  \returns  <boolean> \b true when the value is a vector
+            and \b false otherwise.
+*******************************************************************************/
+function is_vector( v ) =  is_iterable(v) && !is_string(v);
+
+//! Test if a value is a boolean constant.
 /***************************************************************************//**
   \param    v <value> A value.
   \returns  <boolean> \b true when the value is one of the predefined
@@ -193,6 +200,17 @@ function is_integer
 *******************************************************************************/
 function is_decimal( v ) = ((v % 1) > 0);
 
+//! Test if a value is a number.
+/***************************************************************************//**
+  \param    v <value> A value.
+  \returns  <boolean> \b true when the value is a number
+            and \b false otherwise.
+
+  \warning  Returns \b true even for numerical values that are considered
+            infinite and invalid.
+*******************************************************************************/
+function is_number( v ) = is_defined(v % 1);
+
 //! Test if a value is a range definition.
 /***************************************************************************//**
   \param    v <value> A value.
@@ -212,26 +230,26 @@ function is_range
 (
   v
 ) = is_defined(v) &&
-    !is_vector(v) &&
-    !is_string(v) &&
+    !is_iterable(v) &&
     !is_bool(v) &&
     !is_integer(v) &&
     !is_decimal(v) &&
     !is_nan(v) &&
     !is_inf(v);
 
-//! Test if a numerical value is invalid (Not A Number).
+//! Test if a numerical value is invalid.
 /***************************************************************************//**
-  \param    v <value> A decimal or integer value.
-  \returns  <boolean> \b true when the number is determined to be \b nan
-            and \b false otherwise.
+  \param    v <value> A numerical value.
+  \returns  <boolean> \b true when the value is determined to be \b nan
+            (Not A Number) and \b false otherwise.
 *******************************************************************************/
 function is_nan( v ) = ( v != v );
 
-//! Test if a numerical value is greater than the largest representable number.
+//! Test if a numerical value is infinite.
 /***************************************************************************//**
-  \param    v <value> A decimal or integer value.
-  \returns  <boolean> \b true when the number is determined to equal \b inf
+  \param    v <value> A numerical value.
+  \returns  <boolean> \b true when the value is determined to be
+            \b inf (greater than the largest representable number)
             and \b false otherwise.
 *******************************************************************************/
 function is_inf( v ) = ( v == (number_max * number_max) );
@@ -239,100 +257,94 @@ function is_inf( v ) = ( v == (number_max * number_max) );
 //! Test if a numerical value is even.
 /***************************************************************************//**
   \param    v <value> A numerical value.
-  \returns  <boolean> \b true when the number is determined to be even
+  \returns  <boolean> \b true when the value is determined to be \e even
             and \b false otherwise.
 
   \details
 
-  \note     The value must be valid (\c v != \b nan) and defined
-            (\c v != \b undef) but may be positive or negative. Any
-            numeric value that is not an integer returns \b false.
+  \note     The value must be valid and defined but may be positive or
+            negative. Any value that is not an integer returns \b false.
 *******************************************************************************/
 function is_even( v ) = !is_integer(v) ? false : ((v % 2) == 0);
 
 //! Test if a numerical value is odd.
 /***************************************************************************//**
   \param    v <value> A numerical value.
-  \returns  <boolean> \b true when the number is determined to be odd
+  \returns  <boolean> \b true when the value is determined to be \e odd
             and \b false otherwise.
 
   \details
 
-  \note     The value must be valid (\c v != \b nan) and defined
-            (\c v != \b undef) but may be positive or negative. Any
-            numeric value that is not an integer returns \b false.
+  \note     The value must be valid and defined but may be positive or
+            negative. Any value that is not an integer returns \b false.
 *******************************************************************************/
 function is_odd( v ) = !is_integer(v) ? false : ((v % 2) != 0);
 
-//! Test that all vector elements equal a comparison value.
+//! Test that all elements of an iterable value equal a comparison value.
 /***************************************************************************//**
-  \param    v <vector> A vector.
+  \param    v <value> An iterable value.
   \param    cv <value> A comparison value.
-  \returns  <boolean> \b true when all vector elements equal the value \p cv
+  \returns  <boolean> \b true when all elements equal the value \p cv
             and \b false otherwise.
 
-  \warning  Always returns \b true when \p v is a single value containing
-            either \b empty_v or \b empty_str.
+  \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_equal
 (
   v,
   cv
-) = !is_vector(v) ? (v == cv)
+) = !is_iterable(v) ? (v == cv)
   : is_empty(v) ? true
   : (first(v) != cv) ? false
   : all_equal(tail(v), cv);
 
-//! Test if any vector element equals a comparison value.
+//! Test if any element of an iterable value equals a comparison value.
 /***************************************************************************//**
-  \param    v <vector> A vector.
+  \param    v <value> An iterable value.
   \param    cv <value> A comparison value.
-  \returns  <boolean> \b true when any vector element equals the value \p cv
+  \returns  <boolean> \b true when any element equals the value \p cv
             and \b false otherwise.
 
-  \warning  Always returns \b false when \p v is a single value containing
-            either \b empty_v or \b empty_str.
+  \warning  Always returns \b false when \p v is empty.
 *******************************************************************************/
 function any_equal
 (
   v,
   cv
-) = !is_vector(v) ? (v == cv)
+) = !is_iterable(v) ? (v == cv)
   : is_empty(v) ? false
   : (first(v) == cv) ? true
   : any_equal(tail(v), cv);
 
-//! Test that no vector element is undefined.
+//! Test that no element of an iterable value is undefined.
 /***************************************************************************//**
-  \param    v <vector> A vector.
-  \returns  <boolean> \b true when no vector element equals \b undef
+  \param    v <value> An iterable value.
+  \returns  <boolean> \b true when no element is undefined
             and \b false otherwise.
 
-  \warning  Always returns \b true when \p v is a single value containing
-            either \b empty_v or \b empty_str.
+  \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_defined(v) = !any_equal(v, undef);
 
-//! Test if any vector element is undefined.
+//! Test if any element of an iterable value is undefined.
 /***************************************************************************//**
-  \param    v <vector> A vector.
-  \returns  <boolean> \b true when any vector element equals \b undef
+  \param    v <value> An iterable value.
+  \returns  <boolean> \b true when any element is undefined
             and \b false otherwise.
 
-  \warning  Always returns \b false when \p v is a single value containing
-            either \b empty_v or \b empty_str.
+  \warning  Always returns \b false when \p v is empty.
 *******************************************************************************/
 function any_undefined(v) = any_equal(v, undef);
 
-//! Test if all vector elements are scalars.
+//! Test if all elements of an iterable value are scalars.
 /***************************************************************************//**
-  \param    v <vector> A vector.
-  \returns  <boolean> \b true when all vector elements are scalar values
+  \param    v <value> An iterable value.
+  \returns  <boolean> \b true when all elements are scalar values
             and \b false otherwise.
+            Returns \b true when \p v is a single scalar value.
             Returns the value of \p v when it is not defined.
 
-  \warning  Always returns \b true when \p v is a single value containing
-            either \b empty_v or \b empty_str.
+  \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_scalars
 (
@@ -343,18 +355,15 @@ function all_scalars
   : !is_scalar(first(v)) ? false
   : all_scalars(tail(v));
 
-//! Test if all vector elements are vectors.
+//! Test if all elements of an iterable value are vectors.
 /***************************************************************************//**
-  \param    v <vector> A vector.
-  \returns  <boolean> \b true when all vector elements are vector values
+  \param    v <value> An iterable value.
+  \returns  <boolean> \b true when all elements are vector values
             and \b false otherwise.
+            Returns \b true when \p v is a single vector value.
             Returns the value of \p v when it is not defined.
 
-  \note     This function distinguishes between vectors and strings. If any
-            vectors element is a strings, \b false will be returned.
-
-  \warning  Always returns \b true when \p v is a single value containing
-            either \b empty_v or \b empty_str.
+  \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_vectors
 (
@@ -362,19 +371,18 @@ function all_vectors
 ) = not_defined(v) ? v
   : is_scalar(v) ? false
   : is_empty(v) ? true
-  : is_string(first(v)) ? false
   : !is_vector(first(v)) ? false
   : all_vectors(tail(v));
 
-//! Test if all vector elements are strings.
+//! Test if all elements of an iterable value are strings.
 /***************************************************************************//**
-  \param    v <vector> A vector.
-  \returns  <boolean> \b true when all vector elements are string values
+  \param    v <value> An iterable value.
+  \returns  <boolean> \b true when all elements are string values
             and \b false otherwise.
+            Returns \b true when \p v is a single string value.
             Returns the value of \p v when it is not defined.
 
-  \warning  Always returns \b true when \p v is a single value containing
-            either \b empty_v or \b empty_str.
+  \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_strings
 (
@@ -385,16 +393,15 @@ function all_strings
   : !is_string(first(v)) ? false
   : all_strings(tail(v));
 
-//! Test if all vector elements are vectors (or strings) of a given length.
+//! Test if all elements of an iterable value have a given length.
 /***************************************************************************//**
-  \param    v <vector> A vector.
+  \param    v <value> An iterable value.
   \param    l <integer> The length.
-  \returns  <boolean> \b true when all vector elements are vectors
-            (or strings) with length equal to \p l and \b false otherwise.
+  \returns  <boolean> \b true when all elements have length equal to \p l
+            and \b false otherwise.
             Returns the value of \p v when it is not defined.
 
-  \warning  Always returns \b true when \p v is a single value containing
-            either \b empty_v or \b empty_str.
+  \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_len
 (
@@ -438,95 +445,96 @@ function all_len
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Return the first element of a vector.
+//! Return the first element of an iterable value.
 /***************************************************************************//**
-  \param    v <vector> A vector.
-  \returns  The first element of the vector.
-            Returns the value of \p v when it is not defined or not a vector.
-            Returns \b undef when it is an empty vector (or string).
+  \param    v <value> An iterable value.
+  \returns  The first element of \p v.
+            Returns the value of \p v when it is not defined or is not iterable.
+            Returns \b undef when \p v is empty.
 *******************************************************************************/
 function first
 (
   v
-) = !is_vector(v) ? v
+) = !is_iterable(v) ? v
   : v[0];
 
-//! Return the last element of a vector.
+//! Return the last element of an iterable value.
 /***************************************************************************//**
-  \param    v <vector> A vector.
-  \returns  The last element of the vector.
-            Returns the value of \p v when it is not defined or not a vector.
-            Returns \b undef when it is an empty vector (or string).
+  \param    v <value> An iterable value.
+  \returns  The last element of \p v.
+            Returns the value of \p v when it is not defined or is not iterable.
+            Returns \b undef when \p v is empty.
 *******************************************************************************/
 function last
 (
   v
 ) = not_defined(v) ? v
-  : !is_vector(v) ? v
+  : !is_iterable(v) ? v
   : is_empty(v) ? undef
   : v[len(v)-1];
 
-//! Return a new vector containing the first element of a vector.
+//! Return a vector containing the first element of an iterable value.
 /***************************************************************************//**
-  \param    v <vector> A vector.
-  \returns  A new vector containing the first element of the vector.
-            Returns the value of \p v when it is not defined or not a vector.
-            Returns \b undef when it is an empty vector (or string).
+  \param    v <value> An iterable value.
+  \returns  A new vector containing the first element of \p v.
+            Returns the value of \p v when it is not defined or is not iterable.
+            Returns \b undef when \p v is empty.
 *******************************************************************************/
 function head
 (
   v
 ) = not_defined(v) ? v
-  : !is_vector(v) ? v
+  : !is_iterable(v) ? v
   : is_empty(v) ? undef
   : [first(v)];
 
-//! Return a new vector containing all but the first element of a vector.
+//! Return a vector containing all but the first element of an iterable value.
 /***************************************************************************//**
-  \param    v <vector> A vector.
-  \returns  A new vector containing all but the first element of the vector.
-            Returns the value of \p v when it is not defined or not a vector.
-            Returns \b undef when it is an empty vector (or string).
+  \param    v <value> An iterable value.
+  \returns  A new vector containing all but the first element of \p v.
+            Returns the value of \p v when it is not defined or is not iterable.
+            Returns \b empty_v when \p v contains a single element.
+            Returns \b undef when \p v is empty.
 *******************************************************************************/
 function tail
 (
   v
 ) = not_defined(v) ? v
-  : !is_vector(v) ? v
+  : !is_iterable(v) ? v
   : is_empty(v) ? undef
   : (len(v) == 1) ? empty_v
   : [for (i = [1 : len(v)-1]) v[i]];
 
-//! Return a copy of a vector with its elements in reverse order.
+//! Return a vector containing the elements of an iterable value in reverse order.
 /***************************************************************************//**
-  \param    v <vector> A vector.
-  \returns  A copy of the vector with its elements in reversed order.
-            Returns the value of \p v when it is not defined, not a vector,
-            or it is an empty vector (or string).
+  \param    v <value> An iterable value.
+  \returns  A new vector with the elements of \p v in reversed order.
+            Returns the value of \p v when it is not defined, is not iterable,
+            or is empty.
 *******************************************************************************/
 function reverse
 (
   v
 ) = not_defined(v) ? v
-  : !is_vector(v) ? v
+  : !is_iterable(v) ? v
   : is_empty(v) ? v
   : concat( reverse(tail(v)), head(v) );
 
-//! Return a new vector containing a select element of a vector of vectors.
+//! Return a vector containing select elements of each iterable vector member.
 /***************************************************************************//**
-  \param    v <vector> A vector.
-  \param    f <boolean> Select each vectors first element.
-  \param    l <boolean> Select each vectors last element.
-  \param    e <integer> A vector element index selection.
-  \returns  A new vector composed by choosing the selected element from
-            each member-vector of the given vector \p v.
-            Returns the value of \p v when it is not defined, not a vector,
-            or it is an empty vector (or string).
+  \param    v <vector> A vector of iterable values.
+  \param    f <boolean> Select the first element of each iterable value.
+  \param    l <boolean> Select the last element of each iterable value.
+  \param    e <integer> Select an element index for each iterable value.
+  \returns  A new vector containing the selected element of each iterable
+            value of \p v.
+            Returns the value of \p v when it is not defined, is not iterable,
+            or is empty.
 
   \details
 
   \note     When more than one selection criteria is specified, the
-            order of priority is: \p e, \p l, \p f.
+            order of precedence is: \p e, \p l, \p f.
 *******************************************************************************/
 function eselect
 (
@@ -535,25 +543,22 @@ function eselect
   l = false,
   e
 ) = not_defined(v) ? v
-  : !is_vector(v) ? v
+  : !is_iterable(v) ? v
   : is_empty(v) ? v
   : is_defined(e) ? concat( [first(v)[e]], eselect(tail(v), f, l, e) )
   : (l == true) ? concat( [last(first(v))], eselect(tail(v), f, l, e) )
   : (f == true) ? concat( [first(first(v))], eselect(tail(v), f, l, e) )
   : undef;
 
-//! Element-wise concatenation of two or more vectors.
+//! Return a vector containing the element-wise concatenation of iterable values.
 /***************************************************************************//**
-  \param    v <vector> A vector of two or more vectors.
+  \param    v <vector> A vector of iterable values.
   \returns  A new vector constructed from the element-wise concatenation
-            of the vectors in \p v. The length will be limited by the
-            vector with the least number of elements.
-            Returns the value of \p v when it is not defined, it is not
-            a vector, it is an empty vector (or string), or when any
-            element of \p v is not a vector.
-            Returns \b empty_v for any vector with two or more elements
-            where there exists one or more elements that are an empty
-            vector (or string).
+            of each iterable value in \p v. The length will be limited by
+            the iterable value with the shortest length.
+            Returns the value of \p v when it is not defined, is empty, or
+            when any element of \p v (including \p v itself) is not iterable.
+            Returns \b empty_v when any iterable value in \p v is empty.
 
   \details
 
@@ -574,9 +579,9 @@ function econcat
 (
   v
 ) = not_defined(v) ? v
-  : !is_vector(v) ? v
+  : !is_iterable(v) ? v
   : is_empty(v) ? v
-  : any_undefined([for (i = v) len(i)]) ? v       // any element not a vector?
+  : any_undefined([for (i = v) len(i)]) ? v       // any element not iterable?
   : (min([for (i = v) len(i)]) == 0) ? empty_v    // any element empty?
   : let
     (
@@ -585,13 +590,13 @@ function econcat
     )
     concat([h], econcat(t));
 
-//! Convert and concatenate vector elements into a single string.
+//! Concatenate vector elements into a single string.
 /***************************************************************************//**
   \param    v <vector> A vector of values.
-  \returns  A new string constructed by converting the elements of the
-            vector to strings and concatenating.
-            Returns the value of \p v when it is not defined, not a vector,
-            or it is an empty vector (or string).
+  \returns  A new string constructed by converting each element of the
+            vector to a string and concatenating together.
+            Returns the value of \p v when it is not defined, is not iterable,
+            or is empty.
 
   \details
 
@@ -612,17 +617,17 @@ function estr
 (
   v
 ) = not_defined(v) ? v
-  : !is_vector(v) ? v
+  : !is_iterable(v) ? v
   : is_empty(v) ? v
   : (len(v) == 1) ? str(first(v))
   : str(first(v), estr(tail(v)));
 
-//! Sort the elements of a vector using the quick sort method.
+//! Sort the elements of an iterable value using the quick sort method.
 /***************************************************************************//**
-  \param    v <vector> A vector.
-  \returns  A new vector with element sorted in ascending order.
-            Returns the value of \p v when it is not defined, not a vector,
-            or it is an empty vector (or string).
+  \param    v <value> An iterable value.
+  \returns  A new vector with elements sorted in ascending order.
+            Returns the value of \p v when it is not defined, is not iterable,
+            or is empty.
 
   \details
 
@@ -639,7 +644,7 @@ function qsort
 (
   v
 ) = not_defined(v) ? v
-  : !is_vector(v) ? v
+  : !is_iterable(v) ? v
   : is_empty(v) ? v
   : let
     (
@@ -652,43 +657,36 @@ function qsort
     )
     concat(qsort(lt), eq, qsort(gt));
 
-//! Compute the sum of a range of vector elements.
+//! Compute the numerical sum of a range of vector elements.
 /***************************************************************************//**
   \param    v <vector> A vector of numerical values.
-  \param    e <integer> The vector element index at which to end summation.
-  \param    b <integer> The vector element index at which to begin summation.
-  \returns  <decimal> The summation of the vector elements.
-            Returns the value of \p v when it is not defined.
-            Returns \b undef when it is not a vector.
-            Returns \b 0 when it is an empty vector (or string).
-*******************************************************************************/
-function ersum
-(
-  v,
-  e,
-  b=0
-) = not_defined(v) ? v
-  : !is_vector(v) ? undef
-  : is_empty(v) ? 0
-  : (e == b) ? v[e]
-  : v[e] + ersum(v, e-1, b);
-
-//! Compute the sum of all of the vector elements.
-/***************************************************************************//**
-  \param    v <vector> A vector of numerical values.
-  \returns  <decimal> The summation of all of the vector elements.
-            Returns the value of \p v when it is not defined.
-            Returns \b undef when it is not a vector.
-            Returns \b 0 when it is an empty vector (or string).
+  \param    b <integer> The vector element index at which to begin summation
+            (first element when not specified).
+  \param    e <integer> The vector element index at which to end summation
+            (last element when not specified).
+  \returns  <decimal> The summation of the elements.
+            Returns \b undef when \p v is not defined, is not iterable,
+            or is empty.
 *******************************************************************************/
 function esum
 (
-  v
-) = ersum( v, len( v ) - 1, 0);
+  v,
+  b,
+  e
+) = let
+    (
+      s = is_defined(b) ? min(max(b,0),len(v)-1) : 0,
+      i = is_defined(e) ? max(min(e,len(v)-1),0) : len(v)-1
+    )
+    not_defined(v) ? undef
+  : !is_iterable(v) ? undef
+  : is_empty(v) ? undef
+  : (i == s) ? v[i]
+  : v[i] + esum(v, s, i-1);
 
-//! Value defined or default operation.
+//! Choose defined or default value.
 /***************************************************************************//**
-  \param    v <value> A value.
+  \param    v <value> A test value.
   \param    d <value> A default value.
   \returns  The value \p v when it is defined or the value \p d otherwise.
 *******************************************************************************/
@@ -699,13 +697,13 @@ function defined_or
 ) = is_defined(v) ? v
   : d;
 
-//! Vector element defined or default operation.
+//! Choose defined vector element or default value.
 /***************************************************************************//**
   \param    v <vector> A vector.
-  \param    e <integer> A vector element index.
+  \param    e <integer> A test element index.
   \param    d <value> A default value.
   \returns  The value of vector element \p e, namely <tt>v[e]</tt>, when it
-            exists or the value \p d otherwise.
+            is defined or the value \p d otherwise.
 *******************************************************************************/
 function edefined_or
 (
@@ -759,7 +757,7 @@ BEGIN_SCOPE validate;
           ["t09", "The invalid number nan",     0 / 0],
           ["t10", "The boolean true",           true],
           ["t11", "The boolean false",          false],
-          ["t12", "A character",                "a"],
+          ["t12", "A character string",         "a"],
           ["t13", "A string",                   "This is a longer string"],
           ["t14", "The empty string",           empty_str],
           ["t15", "The empty vector",           empty_v],
@@ -787,12 +785,14 @@ BEGIN_SCOPE validate;
           ["is_defined",  f, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t],
           ["not_defined", t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
           ["is_empty",    f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f],
-          ["is_scalar",   s, t, t, t, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, s, s],
-          ["is_vector",   s, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, t, t, t, f, f],
+          ["is_scalar",   t, t, t, t, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, s, s],
+          ["is_iterable", f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, t, t, t, s, s],
+          ["is_vector",   f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, s, s],
           ["is_string",   f, f, f, f, f, f, f, f, f, f, f, t, t, t, f, f, f, f, f, f, f],
           ["is_bool",     f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
           ["is_integer",  f, t, t, t, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
           ["is_decimal",  f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+          ["is_number",   f, t, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f],
           ["is_range",    f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t],
           ["is_nan",      f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f],
           ["is_inf",      f, f, f, f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f],
@@ -831,11 +831,13 @@ BEGIN_SCOPE validate;
         for (vid=test_ids) run_test( "not_defined", not_defined(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_empty", is_empty(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_scalar", is_scalar(get_value(vid)), vid );
+        for (vid=test_ids) run_test( "is_iterable", is_iterable(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_vector", is_vector(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_string", is_string(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_bool", is_bool(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_integer", is_integer(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_decimal", is_decimal(get_value(vid)), vid );
+        for (vid=test_ids) run_test( "is_number", is_number(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_range", is_range(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_nan", is_nan(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_inf", is_inf(get_value(vid)), vid );
@@ -878,7 +880,7 @@ BEGIN_SCOPE validate;
           ["t02", "An odd integer",             1],
           ["t03", "The boolean true",           true],
           ["t04", "The boolean false",          false],
-          ["t05", "A character",                "a"],
+          ["t05", "A character string",         "a"],
           ["t06", "A string",                   "This is a longer string"],
           ["t07", "The empty string",           empty_str],
           ["t08", "The empty vector",           empty_v],
@@ -1136,7 +1138,7 @@ BEGIN_SCOPE validate;
         ],
         ["esum",
           undef,                                              // t01
-          0,                                                  // t02
+          undef,                                              // t02
           undef,                                              // t03
           undef,                                              // t04
           undef,                                              // t05
