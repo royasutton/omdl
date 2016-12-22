@@ -652,9 +652,9 @@ function estr
 
   \warning This implementation relies on the comparison operators
            '<' and '>' which expect the operands to be either two scalar
-           numbers or two strings. Therefore this function only produce
-           valid results for a vector containing all scalar numbers or all
-           strings.
+           numbers or two strings. Therefore, this function returns \b undef
+           for vectors containing anything other than all scalar numbers
+           or all strings.
 
     See [Wikipedia](https://en.wikipedia.org/wiki/Quicksort)
     for more information.
@@ -663,7 +663,8 @@ function qsort
 (
   v
 ) = not_defined(v) ? v
-  : !is_iterable(v) ? v
+  : !(all_strings(v) || all_numbers(v)) ? undef  // not all numbers or strings
+  : !is_iterable(v) ? v                          // a single number or string
   : is_empty(v) ? v
   : let
     (
@@ -1147,14 +1148,14 @@ BEGIN_SCOPE validate;
         ["qsort",
           undef,                                              // t01
           empty_v,                                            // t02
-          [0:0.5:9],                                          // t03
+          undef,                                              // t03
           [" ","A","g","i","n","r","s","t"],                  // t04
           ["apple","banana","grape","orange"],                // t05
           ["a","a","a","b","n","n","s"],                      // t06
-          [undef],                                            // t07
-          skip,                                               // t08
-          skip,                                               // t09
-          skip,                                               // t10
+          undef,                                              // t07
+          undef,                                              // t08
+          undef,                                              // t09
+          undef,                                              // t10
           [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
         ],
         ["esum",
