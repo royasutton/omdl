@@ -393,6 +393,25 @@ function all_strings
   : !is_string(first(v)) ? false
   : all_strings(tail(v));
 
+//! Test if all elements of an iterable value are numbers.
+/***************************************************************************//**
+  \param    v <value> An iterable value.
+  \returns  <boolean> \b true when all elements are numerical values
+            and \b false otherwise.
+            Returns \b true when \p v is a single numerical value.
+            Returns the value of \p v when it is not defined.
+
+  \warning  Always returns \b true when \p v is empty.
+*******************************************************************************/
+function all_numbers
+(
+  v
+) = not_defined(v) ? v
+  : is_scalar(v) ? is_number(v)
+  : is_empty(v) ? true
+  : !is_number(first(v)) ? false
+  : all_numbers(tail(v));
+
 //! Test if all elements of an iterable value have a given length.
 /***************************************************************************//**
   \param    v <value> An iterable value.
@@ -925,6 +944,7 @@ BEGIN_SCOPE validate;
           ["all_scalars",   u, t, t, t, f, f, s, s, s, s, t, t, t, f, f, f, f, t, t, f, t, t, t],
           ["all_vectors",   u, f, f, f, f, f, t, t, f, f, f, f, f, t, t, f, t, f, f, t, f, f, f],
           ["all_strings",   u, f, f, f, t, t, t, s, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+          ["all_numbers",   u, t, f, f, f, f, s, s, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
           ["all_len_1",     u, f, f, f, t, t, s, s, f, f, f, f, f, t, f, f, f, f, f, t, f, f, f],
           ["all_len_2",     u, f, f, f, f, f, s, s, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f],
           ["all_len_3",     u, f, f, f, f, f, s, s, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f]
@@ -967,6 +987,7 @@ BEGIN_SCOPE validate;
         for (vid=test_ids) run_test( "all_scalars", all_scalars(get_value(vid)), vid );
         for (vid=test_ids) run_test( "all_vectors", all_vectors(get_value(vid)), vid );
         for (vid=test_ids) run_test( "all_strings", all_strings(get_value(vid)), vid );
+        for (vid=test_ids) run_test( "all_numbers", all_numbers(get_value(vid)), vid );
         for (vid=test_ids) run_test( "all_len_1", all_len(get_value(vid),1), vid );
         for (vid=test_ids) run_test( "all_len_2", all_len(get_value(vid),2), vid );
         for (vid=test_ids) run_test( "all_len_3", all_len(get_value(vid),3), vid );
