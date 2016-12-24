@@ -47,18 +47,27 @@ include <primitives.scad>;
 
 //! Compute the distance between two points in a Euclidean 1, 2, or 3D-space.
 /***************************************************************************//**
-  \param    x <vector> A 1, 2, or 3-tuple of coordinates.
-  \param    y <vector> A 1, 2, or 3-tuple of coordinates.
+  \param    p1 <vector> A 1, 2, or 3-tuple of coordinates.
+  \param    p2 <vector> A 1, 2, or 3-tuple of coordinates.
 
   \returns  <decimal> The distance between the two points.
             Returns \b 'undef' when x and y do not have same number of terms
             or for n-tuple where n>3.
+
+  \details
+
+    When \p p2 is not given, it is assumed to be at the origin.
 *******************************************************************************/
 function distance_pp
 (
-  x,
-  y
-) = all_len([x, y], 1) ?
+  p1,
+  p2
+) = let
+    (
+      x=p1,
+      y=defined_or( p2, evector(0, len(p1)) )
+    )
+    all_len([x, y], 1) ?
       abs
       (
         x[0] - y[0]
@@ -234,11 +243,7 @@ function angle_vv
   : all_len([v1t, v2t, v1i, v2i], 3) ?  // 3D, tails specified
     atan2
     (
-      distance_pp
-      (
-        cross_vv( v1t=v1t, v2t=v2t, v1i=v1i, v2i=v2i ),
-        origin3d
-      ),
+      distance_pp( cross_vv( v1t=v1t, v2t=v2t, v1i=v1i, v2i=v2i ) ),
       dot_vv( v1t=v1t, v2t=v2t, v1i=v1i, v2i=v2i )
     )
   : all_len([v1t, v2t], 2) ?            // 2D, heads only
@@ -250,11 +255,7 @@ function angle_vv
   : all_len([v1t, v2t], 3) ?            // 3D, heads only
     atan2
     (
-      distance_pp
-      (
-        cross_vv( v1t=v1t, v2t=v2t ),
-        origin3d
-      ),
+      distance_pp( cross_vv( v1t=v1t, v2t=v2t ) ),
       dot_vv( v1t=v1t, v2t=v2t )
     )
   : undef ;
@@ -320,9 +321,7 @@ function normalized_v
   vt,
   vi
 ) = all_defined([vt, vi]) ? (vt-vi) / distance_pp(vt, vi)
-  : len(vt) == 1 ? [sign( vt[0] )]
-  : len(vt) == 2 ? vt / distance_pp(vt, origin2d)
-  : len(vt) == 3 ? vt / distance_pp(vt, origin3d)
+  : any_equal([1, 2, 3], len(vt)) ? vt / distance_pp(vt)
   : undef ;
 
 //! Test if three vectors are coplanar in Euclidean 3D-space.
