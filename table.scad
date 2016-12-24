@@ -67,7 +67,7 @@ function table_get_row_idx
 (
   rows,
   row_id
-) = search( [row_id], rows, 1, 0 )[0];
+) = first( search( [row_id], rows, 1, 0 ) );
 
 //! Get the row for a table row identifier.
 /***************************************************************************//**
@@ -95,7 +95,7 @@ function table_get_col_idx
 (
   cols,
   col_id
-) = search( [col_id], cols, 1, 0 )[0];
+) = first( search( [col_id], cols, 1, 0 ) );
 
 //! Get the column for a table column identifier.
 /***************************************************************************//**
@@ -146,8 +146,8 @@ function table_get_row_cols
   rows,
   cols,
   col_id
-) = table_exists(rows,cols,col_id=col_id)
-  ? eselect(table_copy(rows,cols,cols_sel=[col_id]),f=true)
+) = table_exists(rows,cols,col_id=col_id) ?
+    eselect(table_copy(rows,cols,cols_sel=[col_id]),f=true)
   : undef;
 
 //! Form a vector of each table row identifier.
@@ -187,12 +187,12 @@ function table_exists
   cols,
   row_id,
   col_id
-) = ( (row_id != undef) && (col_id != undef) ) ?
-      ( table_get(trows, tcols, row_id, col_id) != undef )
-  : ( (row_id != undef) && (col_id == undef) ) ?
-      ( table_get_row_idx(rows,row_id) != empty_v )
-  : ( (row_id == undef) && (col_id != undef) ) ?
-      ( table_get_col_idx(cols,col_id) != empty_v )
+) = ( is_defined(row_id) && is_defined(col_id) ) ?
+      is_defined(table_get(trows, tcols, row_id, col_id))
+  : ( is_defined(row_id) && not_defined(col_id) ) ?
+      !is_empty(table_get_row_idx(rows,row_id))
+  : ( not_defined(row_id) && is_defined(col_id) ) ?
+      !is_empty(table_get_col_idx(cols,col_id))
   : false;
 
 //! Get the size of a table.
@@ -214,8 +214,8 @@ function table_size
 (
   rows,
   cols
-) = ( (rows != undef) && (cols == undef) ) ? len( rows )
-  : ( (rows == undef) && (cols != undef) ) ? len( cols )
+) = ( is_defined(rows) && not_defined(cols) ) ? len( rows )
+  : ( not_defined(rows) && is_defined(cols) ) ? len( cols )
   : len( rows ) * len( cols );
 
 //! Perform some basic validation/checks on a table.
@@ -242,8 +242,8 @@ module table_check
 {
   if (verbose) log_info("begin table check");
 
-  // column one should be 'id'
-  if ( cols[0][0] != "id")
+  // first word of first column should be 'id'
+  if ( first( first(cols) ) != "id")
   {
     log_warn ("table column 0 should be 'id'");
   }
@@ -262,7 +262,7 @@ module table_check
       log_error (
         str (
           "row ", table_get_row_idx(rows, r),
-          ", id=[", r[0], "]",
+          ", id=[", first(r), "]",
           ", has incorrect column count=[", len ( r ),"]"
         )
       );
@@ -272,14 +272,14 @@ module table_check
   // no repeat column identifiers
   if (verbose) log_info ("checking for repeat column identifiers.");
   for (c = cols)
-    if ( len(search( [c[0]] , cols, 0, 0 )[0]) > 1 )
-      log_warn ( str("repeating column identifier [", c[0], "]") );
+    if ( len(first(search([first(c)], cols, 0, 0))) > 1 )
+      log_warn ( str("repeating column identifier [", first(c), "]") );
 
   // no repeat row identifiers
   if (verbose) log_info ("checking for repeat row identifiers.");
   for (r = rows)
-    if ( len(search( [r[0]] , rows, 0, 0 )[0]) > 1 )
-      log_warn ( str("repeating row identifier [", r[0], "]") );
+    if ( len(first(search([first(r)], rows, 0, 0))) > 1 )
+      log_warn ( str("repeating row identifier [", first(r), "]") );
 
   if (verbose)
   {
@@ -321,17 +321,16 @@ module table_dump
   number=true
 )
 {
-  maxr0 = max( [for (r = rows) (len(r[0]))] ) + 1;
-  maxc0 = max( [for (c = cols) (len(c[0]))] ) + 1;
-  maxc1 = max( [for (c = cols) (len(c[1]))] ) + 1;
+  maxr0 = max( [for (r = rows) len( first(r) )] ) + 1;
+  maxc0 = max( [for (c = cols) len( first(c) )] ) + 1;
+  maxc1 = max( [for (c = cols) len( c[1] )] ) + 1;
 
   for ( r = rows )
   {
     if
     (
-      ( search( r, rows_sel, 1, 0 )[0] != empty_v ) ||
-      ( len( rows_sel ) == 0 ) ||
-      ( len( rows_sel ) == undef )
+      not_defined( rows_sel ) || is_empty( rows_sel ) ||
+      !is_empty( first( search( r, rows_sel, 1, 0 ) ) )
     )
     {
       if ( number )
@@ -343,16 +342,16 @@ module table_dump
       {
         if
         (
-          ( search( c, cols_sel, 1, 0 )[0] != empty_v ) ||
-          ( len( cols_sel ) == 0 ) ||
-          ( len( cols_sel ) == undef )
+          not_defined( cols_sel ) || is_empty( cols_sel ) ||
+          !is_empty( first( search( c, cols_sel, 1, 0 ) ) )
         )
         {
-          log_echo (
+          log_echo
+          (
             str (
-              "[", r[0], "]", chr([for (i=[0:1:maxr0-len(r[0])]) 32]),
-              "[", c[0], "]", chr([for (i=[0:1:maxc0-len(c[0])]) 32]),
-              "(", c[1], ")", chr([for (i=[0:1:maxc1-len(c[1])]) 32]),
+              "[", first(r), "]", chr(evector(32, maxr0-len(first(r)))),
+              "[", first(c), "]", chr(evector(32, maxc0-len(first(c)))),
+              "(", c[1], ")", chr(evector(32, maxc1-len(c[1]))),
               "= [", table_get(rows, cols, r, c), "]"
             )
           );
@@ -363,7 +362,8 @@ module table_dump
 
   if ( number ) {
     log_echo();
-    log_echo (
+    log_echo
+    (
       str (
         "table size: ",
         table_size(rows=rows), " rows by ",
@@ -394,17 +394,15 @@ function table_copy
   for ( r = rows )
     if
     (
-      ( search( r, rows_sel, 1, 0 )[0] != empty_v ) ||
-      ( len( rows_sel ) == 0 ) ||
-      ( len( rows_sel ) == undef )
+      not_defined( rows_sel ) || is_empty( rows_sel ) ||
+      !is_empty( first( search( r, rows_sel, 1, 0 ) ) )
     )
     [
       for ( c = cols )
         if
         (
-          ( search( c, cols_sel, 1, 0 )[0] != empty_v ) ||
-          ( len( cols_sel ) == 0 ) ||
-          ( len( cols_sel ) == undef )
+          not_defined( cols_sel ) || is_empty( cols_sel ) ||
+          !is_empty( first( search( c, cols_sel, 1, 0 ) ) )
         )
           table_get(rows, cols, r, c)
     ]
@@ -426,7 +424,7 @@ function table_sum
   cols,
   rows_sel,
   cols_sel
-) = esum ( table_copy(rows, cols, rows_sel, cols_sel) );
+) = esum( table_copy(rows, cols, rows_sel, cols_sel) );
 
 //! @}
 //! @}
