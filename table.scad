@@ -83,30 +83,6 @@ function table_get_row
   row_id
 ) = rows[ table_get_row_idx(rows, row_id) ];
 
-//! Get the first table row.
-/***************************************************************************//**
-  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
-            containing the table rows.
-  \returns  <vector> The first table row. If the table is empty,
-            returns \b undef.
-*******************************************************************************/
-function table_first_row
-(
-  rows
-) = rows[ 0 ];
-
-//! Get the last table row.
-/***************************************************************************//**
-  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
-            containing the table rows.
-  \returns  <vector> The last table row. If the table is empty,
-            returns \b undef.
-*******************************************************************************/
-function table_last_row
-(
-  rows
-) = rows[ len( rows ) - 1 ];
-
 //! Get the index for a table column identifier.
 /***************************************************************************//**
   \param    cols <2d-vector> A two dimensional vector (c-tuple x 1-tuple)
@@ -134,30 +110,6 @@ function table_get_col
   cols,
   col_id
 ) = cols[ table_get_col_idx(cols, col_id) ];
-
-//! Get the first table column.
-/***************************************************************************//**
-  \param    cols <2d-vector> A two dimensional vector (c-tuple x 1-tuple)
-            containing the table columns.
-  \returns  <vector> The first table column. If the table is empty,
-            returns \b undef.
-*******************************************************************************/
-function table_first_col
-(
-  cols
-) = cols[ 0 ];
-
-//! Get the last table column.
-/***************************************************************************//**
-  \param    cols <2d-vector> A two dimensional vector (c-tuple x 1-tuple)
-            containing the table columns.
-  \returns  <vector> The last table column. If the table is empty,
-            returns \b undef.
-*******************************************************************************/
-function table_last_col
-(
-  cols
-) = cols[ len( cols ) - 1];
 
 //! Get the value for a table row and column identifier.
 /***************************************************************************//**
