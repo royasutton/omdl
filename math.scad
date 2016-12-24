@@ -316,7 +316,7 @@ function angle_vvn
     When specified by head coordinate only, the tail is assumed to
     be at origin.
 *******************************************************************************/
-function normalized_v
+function norm_v
 (
   vt,
   vi
@@ -403,7 +403,7 @@ function ngon_vp
 [
   for ( a = [0:(360/n):359] )
     let( v = [r*cos(a), r*sin(a)] )
-    (vr == undef) ? v : v - vr/cos(180/n) * normalized_v(vt=v)
+    (vr == undef) ? v : v - vr/cos(180/n) * norm_v(vt=v)
 ];
 
 //! @}
