@@ -773,7 +773,7 @@ BEGIN_SCOPE validate;
         [
           ["id", "identifier"],
           ["td", "description"],
-          ["tv", "vale"]
+          ["tv", "value"]
         ];
 
         // test-values rows
@@ -903,7 +903,7 @@ BEGIN_SCOPE validate;
         [
           ["id", "identifier"],
           ["td", "description"],
-          ["tv", "vale"]
+          ["tv", "value"]
         ];
 
         // test-values rows
@@ -1033,7 +1033,7 @@ BEGIN_SCOPE validate;
       [
         ["id", "identifier"],
         ["td", "description"],
-        ["tv", "vale"]
+        ["tv", "value"]
       ];
 
       // test-values rows
