@@ -733,6 +733,19 @@ function edefined_or
 ) = (len(v) > e) ? v[e]
   : d;
 
+//! Create a vector with a repeating constant element.
+/***************************************************************************//**
+  \param    e <value> An element value.
+  \param    n <integer> A copy count.
+  \returns  A vector with \p n copies of the element value.
+            Returns \b empty_v when \p n<1.
+*******************************************************************************/
+function evector
+(
+  e,
+  n
+) = (n<1) ? empty_v : [for (i=[0:1:n-1]) e];
+
 //! @}
 //! @}
 
