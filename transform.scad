@@ -300,7 +300,7 @@ module st_radial_copy
   for ( p = ngon_vp( r=r, n=n ) )
   {
     translate(move==true ? p : [0,0])
-    rotate(angle==true ? [0, 0, angle_p2p ( x_axis2d_uv, p )] : [0, 0, 0])
+    rotate(angle==true ? [0, 0, angle_vv( v1t=x_axis2d_uv, v2t=p )] : [0, 0, 0])
     children();
   }
 }

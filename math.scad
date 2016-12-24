@@ -47,28 +47,29 @@ include <primitives.scad>;
 
 //! Compute the distance between two points in a Euclidean 1, 2, or 3D-space.
 /***************************************************************************//**
-  \param    x <vector> A 1, 2, or 3-tuple vector of values.
-  \param    y <vector> A 1, 2, or 3-tuple vector of values.
-  \returns  <decimal> The distance between two points. Returns \b 'undef'
-            when x and y do not have same number of terms and for n-tuple
-            with n>3.
+  \param    x <vector> A 1, 2, or 3-tuple of coordinates.
+  \param    y <vector> A 1, 2, or 3-tuple of coordinates.
+
+  \returns  <decimal> The distance between the two points.
+            Returns \b 'undef' when x and y do not have same number of terms
+            or for n-tuple where n>3.
 *******************************************************************************/
-function distance_p2p
+function distance_pp
 (
   x,
   y
-) = ( len(x) + len(y) ) == 2 ?
+) = all_len([x, y], 1) ?
       abs
       (
         x[0] - y[0]
       )
-  : ( len(x) + len(y) ) == 4 ?
+  : all_len([x, y], 2) ?
       sqrt
       (
           (x[0] - y[0]) * (x[0] - y[0])
         + (x[1] - y[1]) * (x[1] - y[1])
       )
-  : ( len(x) + len(y) ) == 6 ?
+  : all_len([x, y], 3) ?
       sqrt
       (
           (x[0] - y[0]) * (x[0] - y[0])
@@ -79,53 +80,50 @@ function distance_p2p
 
 //! Compute the dot product of two vectors.
 /***************************************************************************//**
-  \param    v1t <vector> Vector 1 head. An n-tuple vector of values.
-  \param    v1i <vector> Vector 1 tail. An n-tuple vector of values.
-  \param    v2t <vector> Vector 2 head. An n-tuple vector of values.
-  \param    v2i <vector> Vector 2 tail. An n-tuple vector of values.
-  \returns  <decimal> The dot product of the two vectors. Returns \b 'undef'
-            when vector coordinates do not have same number of terms, n.
+  \param    v1t <vector> Vector 1 head. An n-tuple of coordinates.
+  \param    v2t <vector> Vector 2 head. An n-tuple of coordinates.
+
+  \param    v1i <vector> Vector 1 tail. An n-tuple of coordinates.
+  \param    v2i <vector> Vector 2 tail. An n-tuple of coordinates.
+
+  \returns  <decimal> The dot product of the two vectors.
+            Returns \b 'undef' when vector coordinates do not have same
+            number of terms, n.
 
   \details
+
+    Each vector may be specified by both its head and tail coordinates.
+    When specified by head coordinate only, the tail is assumed to
+    be at origin.
 
     See [Wikipedia](https://en.wikipedia.org/wiki/Dot_product)
     for more information.
 *******************************************************************************/
-function dot_pp2pp
+function dot_vv
 (
   v1t,
-  v1i,
   v2t,
+  v1i,
   v2i
-) = ((v1t-v1i) * (v2t-v2i));
+) = all_defined([v1i, v2i]) ? ((v1t-v1i) * (v2t-v2i)) : (v1t * v2t);
 
-//! Compute the dot product of two vectors.
+//! Compute the cross product of two vectors in a Euclidean 3D-space (2D).
 /***************************************************************************//**
-  \param    v1 <vector> Vector 1 head. An n-tuple vector of values.
-  \param    v2 <vector> Vector 2 head. An n-tuple vector of values.
-  \returns  <decimal> The dot product of the two vectors. Returns \b 'undef'
-            when vector coordinates do not have same number of terms, n.
+  \param    v1t <vector> Vector 1 head. A 2 or 3-tuple of coordinates.
+  \param    v2t <vector> Vector 2 head. A 2 or 3-tuple of coordinates.
+
+  \param    v1i <vector> Vector 1 tail. A 2 or 3-tuple of coordinates.
+  \param    v2i <vector> Vector 2 tail. A 2 or 3-tuple of coordinates.
+
+  \returns  <decimal> The cross product of the two vectors.
+            Returns \b 'undef' when vector coordinates do not have same
+            number of terms, n.
 
   \details
 
-    Vector tails at origin.
-*******************************************************************************/
-function dot_p2p
-(
-  v1,
-  v2
-) = (v1 * v2);
-
-//! Compute the cross product (determinant) of two vectors in a Euclidean 3D-space (2D).
-/***************************************************************************//**
-  \param    v1t <vector> Vector 1 head. A 2 or 3-tuple vector of values.
-  \param    v1i <vector> Vector 1 tail. A 2 or 3-tuple vector of values.
-  \param    v2t <vector> Vector 2 head. A 2 or 3-tuple vector of values.
-  \param    v2i <vector> Vector 2 tail. A 2 or 3-tuple vector of values.
-  \returns  <decimal> The dot product of the two vectors. Returns \b 'undef'
-            when vector coordinates do not have same number of terms, n.
-
-  \details
+    Each vector may be specified by both its head and tail coordinates.
+    When specified by head coordinate only, the tail is assumed to
+    be at origin.
 
     See Wikipedia [cross](https://en.wikipedia.org/wiki/Cross_product)
     and [determinant] (https://en.wikipedia.org/wiki/Determinant)
@@ -141,257 +139,226 @@ function dot_p2p
     future.
   \endinternal
 *******************************************************************************/
-function cross_pp2pp
+function cross_vv
 (
   v1t,
-  v1i,
   v2t,
+  v1i,
   v2i
-) = cross((v1t-v1i), (v2t-v2i));
-
-//! Compute the cross product (determinant) of two vectors in a Euclidean 3D-space (2D).
-/***************************************************************************//**
-  \param    v1 <vector> Vector 1 head. A 2 or 3-tuple vector of values.
-  \param    v2 <vector> Vector 2 head. A 2 or 3-tuple vector of values.
-  \returns  <decimal> The dot product of the two vectors. Returns \b 'undef'
-            when vector coordinates do not have same number of terms, n.
-
-  \details
-
-    Vector tails at origin.
-*******************************************************************************/
-function cross_p2p
-(
-  v1,
-  v2
-) = cross(v1, v2);
+) = all_defined([v1i, v2i]) ? cross((v1t-v1i), (v2t-v2i)) : cross(v1t, v2t);
 
 //! Compute scalar triple product of two vectors in a Euclidean 2 or 3D-space.
 /***************************************************************************//**
-  \param    v1t <vector> Vector 1 head. A 2 or 3-tuple vector of values.
-  \param    v1i <vector> Vector 1 tail. A 2 or 3-tuple vector of values.
-  \param    v2t <vector> Vector 2 head. A 2 or 3-tuple vector of values.
-  \param    v2i <vector> Vector 2 tail. A 2 or 3-tuple vector of values.
-  \param    v3t <vector> Vector 3 head. A 2 or 3-tuple vector of values.
-  \param    v3i <vector> Vector 3 tail. A 2 or 3-tuple vector of values.
+  \param    v1t <vector> Vector 1 head. A 2 or 3-tuple of coordinates.
+  \param    v2t <vector> Vector 2 head. A 2 or 3-tuple of coordinates.
+  \param    v3t <vector> Vector 3 head. A 2 or 3-tuple of coordinates.
+
+  \param    v1i <vector> Vector 1 tail. A 2 or 3-tuple of coordinates.
+  \param    v2i <vector> Vector 2 tail. A 2 or 3-tuple of coordinates.
+  \param    v3i <vector> Vector 3 tail. A 2 or 3-tuple of coordinates.
+
   \returns  <decimal> The scalar triple product of the three vectors.
             Returns \b 'undef' when vector coordinates do not have same
             number of terms, n.
 
   \details
+
+    Each vector may be specified by both its head and tail coordinates.
+    When specified by head coordinate only, the tail is assumed to
+    be at origin.
 
     [v1, v2, v3] = v1 * (v2 x v3)
 
     See [Wikipedia] (https://en.wikipedia.org/wiki/Triple_product)
     for more information.
 *******************************************************************************/
-function striple_pp2pp
+function striple_vvv
 (
   v1t,
-  v1i,
   v2t,
-  v2i,
   v3t,
+  v1i,
+  v2i,
   v3i
-) = len(v1t) + len(v1i) + len(v2t) + len(v2i) + len(v3t) + len(v3i) == 12 ?
-      dot_pp2pp
-      (
-        v1t=v1t,
-        v1i=v1i,
-        v2t=cross_pp2pp( v1t=v2t, v1i=v2i, v2t=v3t, v2i=v3i ),
-        v2i=0
-      )
-  : len(v1t) + len(v1i) + len(v2t) + len(v2i) + len(v3t) + len(v3i) == 18 ?
-      dot_pp2pp
-      (
-        v1t=v1t,
-        v1i=v1i,
-        v2t=cross_pp2pp( v1t=v2t, v1i=v2i, v2t=v3t, v2i=v3i ),
-        v2i=[0,0,0]
-      )
-  : undef ;
-
-//! Compute the cross product (determinant) of two vectors in a Euclidean 3D-space (2D).
-/***************************************************************************//**
-  \param    v1 <vector> Vector 1 head. A 2 or 3-tuple vector of values.
-  \param    v2 <vector> Vector 2 head. A 2 or 3-tuple vector of values.
-  \param    v3 <vector> Vector 3 head. A 2 or 3-tuple vector of values.
-  \returns  <decimal> The scalar triple product of the three vectors.
-            Returns \b 'undef' when vector coordinates do not have same
-            number of terms, n.
-
-  \details
-
-    Vector tails at origin.
-*******************************************************************************/
-function striple_p2p
-(
-  v1,
-  v2,
-  v3
-) = len(v1) + len(v2) + len(v2) == 6 ?
-      striple_pp2pp
-      (
-        v1t=v1,
-        v1i=[0,0],
-        v2t=v2,
-        v2i=[0,0],
-        v3t=v3,
-        v3i=[0,0]
-      )
-  : len(v1) + len(v2)+ len(v2)  == 9 ?
-      striple_pp2pp
-      (
-        v1t=v1,
-        v1i=[0,0,0],
-        v2t=v2,
-        v2i=[0,0,0],
-        v3t=v3,
-        v3i=[0,0,0]
-      )
-  : undef ;
+) = all_defined([v1i, v2i, v3i]) ?      // tails specified
+    dot_vv
+    (
+      v1t=v1t,
+      v2t=cross_vv( v1t=v2t, v2t=v3t, v1i=v2i, v2i=v3i ),
+      v1i=v1i,
+      v2i=all_len([v1t, v2t, v3t, v1i, v2i, v3i], 3) ? origin3d : 0
+    )
+  : dot_vv                              // heads only
+    (
+      v1t=v1t, v2t=cross_vv( v1t=v2t, v2t=v3t )
+    );
 
 //! Compute the angle between two vectors in a Euclidean 2 or 3D-space.
 /***************************************************************************//**
-  \param    v1t <vector> Vector 1 head. A 2 or 3-tuple vector of values.
-  \param    v1i <vector> Vector 1 tail. A 2 or 3-tuple vector of values.
-  \param    v2t <vector> Vector 2 head. A 2 or 3-tuple vector of values.
-  \param    v2i <vector> Vector 2 tail. A 2 or 3-tuple vector of values.
-  \param    nt <vector> Normal vector head. A 3-tuple vector of values.
-  \param    ni <vector> Normal vector tail. A 3-tuple vector of values.
-  \returns  <decimal> The angle between the two vectors. Returns \b 'undef'
-            when vector coordinates do not have same number of terms or when
-            the vectors do not intersect.
+  \param    v1t <vector> Vector 1 head. A 2 or 3-tuple of coordinates.
+  \param    v2t <vector> Vector 2 head. A 2 or 3-tuple of coordinates.
+
+  \param    v1i <vector> Vector 1 tail. A 2 or 3-tuple of coordinates.
+  \param    v2i <vector> Vector 2 tail. A 2 or 3-tuple of coordinates.
+
+  \returns  <decimal> The angle between the two vectors in degrees.
+            Returns \b 'undef' when vector coordinates do not have same
+            number of terms or when the vectors do not intersect.
 
   \details
 
-  \note For 3D vectors, a normal vector \p n is required to identify
-        the perpendicular plane and axis of rotation for for two vectors.
+    Each vector may be specified by both its head and tail coordinates.
+    When specified by head coordinate only, the tail is assumed to
+    be at origin.
+
+  \note For 3D vectors, a normal vector is required to uniquely
+        identify the perpendicular plane and axis of rotation for the
+        two vectors. This function calculates the positive angle, and
+        the plane and axis of rotation will be that which fits this
+        assumed positive angle.
+
+  \sa angle_vvn().
 *******************************************************************************/
-function angle_pp2pp
+function angle_vv
 (
   v1t,
-  v1i,
   v2t,
-  v2i,
-  nt,
-  ni
-) = len(v1t) + len(v1i) + len(v2t) + len(v2i) == 8 ?
-      atan2
+  v1i,
+  v2i
+) = all_len([v1t, v2t, v1i, v2i], 2) ?  // 2D, tails specified
+    atan2
+    (
+      cross_vv( v1t=v1t, v2t=v2t, v1i=v1i, v2i=v2i ),
+      dot_vv( v1t=v1t, v2t=v2t, v1i=v1i, v2i=v2i )
+    )
+  : all_len([v1t, v2t, v1i, v2i], 3) ?  // 3D, tails specified
+    atan2
+    (
+      distance_pp
       (
-        cross_pp2pp( v1t=v1t, v1i=v1i, v2t=v2t, v2i=v2i ),
-        dot_pp2pp( v1t=v1t, v1i=v1i, v2t=v2t, v2i=v2i )
-      )
-  : len(v1t) + len(v1i) + len(v2t) + len(v2i) == 12 ?
-      atan2
+        cross_vv( v1t=v1t, v2t=v2t, v1i=v1i, v2i=v2i ),
+        origin3d
+      ),
+      dot_vv( v1t=v1t, v2t=v2t, v1i=v1i, v2i=v2i )
+    )
+  : all_len([v1t, v2t], 2) ?            // 2D, heads only
+    atan2
+    (
+      cross_vv( v1t=v1t, v2t=v2t ),
+      dot_vv( v1t=v1t, v2t=v2t )
+    )
+  : all_len([v1t, v2t], 3) ?            // 3D, heads only
+    atan2
+    (
+      distance_pp
       (
-        cross_pp2pp( v1t=v1t, v1i=v1i, v2t=v2t, v2i=v2i ),
-        dot_pp2pp( v1t=v1t, v1i=v1i, v2t=v2t, v2i=v2i )
-      )
+        cross_vv( v1t=v1t, v2t=v2t ),
+        origin3d
+      ),
+      dot_vv( v1t=v1t, v2t=v2t )
+    )
   : undef ;
 
-//! Compute the angle between two vectors in a Euclidean 2 or 3D-space.
+//! Compute the angle between two vectors in a Euclidean 3D-space.
 /***************************************************************************//**
-  \param    v1 <vector> Vector 1 head. A 2 or 3-tuple vector of values.
-  \param    v2 <vector> Vector 2 head. A 2 or 3-tuple vector of values.
-  \param    n <vector> Normal vector head. A 3-tuple vector of values.
-  \returns  <decimal> The angle between the two vectors. Returns \b 'undef'
-            when vector coordinates do not have same number of terms or when
-            the vectors do not intersect.
+  \param    v1t <vector> Vector 1 head. A 3-tuple of coordinates.
+  \param    v2t <vector> Vector 2 head. A 3-tuple of coordinates.
+  \param    nvt <vector> Normal vector head. A 3-tuple of coordinates.
+
+  \param    v1i <vector> Vector 1 tail. A 3-tuple of coordinates.
+  \param    v2i <vector> Vector 2 tail. A 3-tuple of coordinates.
+  \param    nvi <vector> Normal vector tail. A 3-tuple of coordinates.
+
+  \returns  <decimal> The angle between the two vectors in degrees.
+            Returns \b 'undef' when vector coordinates do not have same
+            number of terms or when the vectors do not intersect.
 
   \details
 
-    Vector tails at origin.
+    Each vector may be specified by both its head and tail coordinates.
+    When specified by head coordinate only, the tail is assumed to
+    be at origin.
 
-  \note For 3D vectors, a normal vector \p n is required to identify
-        the perpendicular plane and axis of rotation for for two vectors.
+  \sa angle_vv().
 *******************************************************************************/
-function angle_p2p
+function angle_vvn
 (
-  v1,
-  v2,
-  n
-) = len(v1) + len(v2) == 4 ?
-      angle_pp2pp( v1t=v1, v1i=[0,0], v2t=v2, v2i=[0,0] )
-  : len(v1) + len(v2) == 6 ?
-      angle_pp2pp( v1t=v1, v1i=[0,0,0], v2t=v2, v2i=[0,0,0], nt=n, ni=[0,0,0] )
+  v1t,
+  v2t,
+  nvt,
+  v1i,
+  v2i,
+  nvi
+) = all_len([v1t, v2t, nvt, v1i, v2i, nvi], 3) ?
+    atan2
+    (
+      striple_vvv
+      (
+        v1t=nvt, v2t=v1t, v3t=v2t, v1i=nvi, v2i=v1i, v3i=v2i
+      ),
+      dot_vv( v1t=v1t, v2t=v2t, v1i=v1i, v2i=v2i )
+    )
   : undef ;
 
-//! Compute the unit vector for a 1, 2, or 3 term vector.
+//! Compute the normalized unit vector for a 1, 2, or 3 term vector.
 /***************************************************************************//**
-  \param    vt <vector> Vector head. A 1, 2, or 3-tuple vector of values.
-  \param    vi <vector> Vector tail. A 1, 2, or 3-tuple vector of values.
-  \returns  <vector> The vector normalized to the unit-vector.
-            Returns \b 'undef' when vector coordinates do not have same number
-            of terms or for n-tuple with n>3.
+  \param    vt <vector> Vector head. A 1, 2, or 3-tuple of coordinates.
+  \param    vi <vector> Vector tail. A 1, 2, or 3-tuple of coordinates.
+
+  \returns  <vector> The vector normalized to its unit-vector.
+            Returns \b 'undef' when vector coordinates do not have same
+            number of terms or for n-tuple where n>3.
+
+  \details
+
+    The vector may be specified by both its head and tail coordinates.
+    When specified by head coordinate only, the tail is assumed to
+    be at origin.
 *******************************************************************************/
-function normalized_pp
+function normalized_v
 (
   vt,
   vi
-) = (vt-vi) / distance_p2p(vt, vi);
-
-//! Compute the unit vector for a 1, 2, or 3 term vector.
-/***************************************************************************//**
-  \param    v <vector> Vector head. A 1, 2, or 3-tuple vector of values.
-  \returns  <vector> The vector normalized to the unit-vector.
-            Returns \b 'undef' for n-tuple with n>3.
-
-  \details
-
-    Vector tail assumed to be at origin.
-*******************************************************************************/
-function normalized_p
-(
-  v
-) = len(v) == 1 ? sign( v[0] )
-  : len(v) == 2 ? normalized_pp( vt=v, vi=[0,0] )
-  : len(v) == 3 ? normalized_pp( vt=v, vi=[0,0,0] )
+) = all_defined([vt, vi]) ? (vt-vi) / distance_pp(vt, vi)
+  : len(vt) == 1 ? [sign( vt[0] )]
+  : len(vt) == 2 ? vt / distance_pp(vt, origin2d)
+  : len(vt) == 3 ? vt / distance_pp(vt, origin3d)
   : undef ;
 
 //! Test if three vectors are coplanar in Euclidean 3D-space.
 /***************************************************************************//**
-  \param    v1t <vector> Vector 1 head. A 3-tuple vector of values.
-  \param    v1i <vector> Vector 1 tail. A 3-tuple vector of values.
-  \param    v2t <vector> Vector 2 head. A 3-tuple vector of values.
-  \param    v2i <vector> Vector 2 tail. A 3-tuple vector of values.
-  \param    v3t <vector> Vector 3 head. A 3-tuple vector of values.
-  \param    v3i <vector> Vector 3 tail. A 3-tuple vector of values.
+  \param    v1t <vector> Vector 1 head. A 3-tuple of coordinates.
+  \param    v2t <vector> Vector 2 head. A 3-tuple of coordinates.
+  \param    v3t <vector> Vector 3 head. A 3-tuple of coordinates.
+
+  \param    v1i <vector> Vector 1 tail. A 3-tuple of coordinates.
+  \param    v2i <vector> Vector 2 tail. A 3-tuple of coordinates.
+  \param    v3i <vector> Vector 3 tail. A 3-tuple of coordinates.
+
   \returns  <boolean> \b true when all three vectors are coplanar,
             and \b false otherwise.
   \details
 
+    Each vector may be specified by both its head and tail coordinates.
+    When specified by head coordinate only, the tail is assumed to
+    be at origin.
+
     See [Wikipedia] (https://en.wikipedia.org/wiki/Coplanarity)
     for more information.
 
-  \note When unspecified, vector initiate at the origin. In order for the
-        vectors to be coplanar, they must all be within the same plane.
-        This function can also be used to test if vectors are in a plane
-        that is parallel to a coplanar plane by using non-zero vector
-        tails.
+  \note Coplanar vectors must all be within the same plane. However,
+        this function can test if vectors are in a plane that is
+        parallel to a coplanar plane by using non-zero vector tails.
 *******************************************************************************/
-function are_coplanar
+function are_coplanar_vvv
 (
   v1t,
-  v1i,
   v2t,
-  v2i,
   v3t,
+  v1i,
+  v2i,
   v3i
-) = ( dot_pp2pp
-      (
-        v1t=v1t,
-        v1i=(v1i == undef) ? [0,0,0] : v1i,
-        v2t=cross_pp2pp
-            (
-              v1t=v2t,
-              v1i=(v2i == undef) ? [0,0,0] : v2i,
-              v2t=v3t,
-              v2i=(v3i == undef) ? [0,0,0] : v3i
-            ),
-        v2i=[0,0,0]
-      ) == 0
-    );
+) = ( striple_vvv( v1t, v2t, v3t, v1i, v2i, v3i ) == 0 );
 
 //! @}
 //! @}
@@ -412,8 +379,9 @@ function are_coplanar
   \param    n <decimal> The number of sides.
   \param    r <decimal> The ngon vertex radius.
   \param    vr <decimal> The vertex rounding radius.
-  \returns  <vector> A vector [v1, v2, ..., vn] of vectors [x, y] of decimal
-            vertex coordinates.
+
+  \returns  <vector> A vector [v1, v2, ..., vn] of vectors [x, y] of
+            coordinates.
 
     \b Example
     \code{.C}
@@ -436,7 +404,7 @@ function ngon_vp
 [
   for ( a = [0:(360/n):359] )
     let( v = [r*cos(a), r*sin(a)] )
-    (vr == undef) ? v : v - vr/cos(180/n) * normalized_p(v=v)
+    (vr == undef) ? v : v - vr/cos(180/n) * normalized_v(vt=v)
 ];
 
 //! @}
@@ -464,8 +432,8 @@ function ngon_vp
   \param    s1 <decimal> The length of the side 1.
   \param    s2 <decimal> The length of the side 2.
   \param    s3 <decimal> The length of the side 3.
-  \returns  <vector> A vector [v1, v2, v3] of vectors [x, y] of decimal
-            coordinates.
+
+  \returns  <vector> A vector [v1, v2, v3] of vectors [x, y] of coordinates.
 
   \details
 
@@ -483,7 +451,7 @@ function triangle_lll2vp
   s3
 ) =
 [
-  [0, 0],
+  origin2d,
   [s1, 0],
   [
     ( s1*s1 + s3*s3 - (s2*s2) ) / ( 2*s1 ),
@@ -494,8 +462,8 @@ function triangle_lll2vp
 //! Compute the vertices of a plane triangle given its side lengths.
 /***************************************************************************//**
   \param    v <vector> of decimal side lengths.
-  \returns  <vector> A vector [v1, v2, v3] of vectors [x, y] of decimal
-            coordinates.
+
+  \returns  <vector> A vector [v1, v2, v3] of vectors [x, y] of coordinates.
 
   \details
 
@@ -513,10 +481,11 @@ function triangle_vl2vp
 
 //! Compute the side lengths of a triangle given its vertices.
 /***************************************************************************//**
-  \param    v1 <vector> A vector [x, y] for vertex 1.
-  \param    v2 <vector> A vector [x, y] for vertex 2.
-  \param    v3 <vector> A vector [x, y] for vertex 3.
-  \returns  <vector> A vector [s1, s2, s3] decimals.
+  \param    v1 <vector> A vector [x, y] for vertex 1 coordinates.
+  \param    v2 <vector> A vector [x, y] for vertex 2 coordinates.
+  \param    v3 <vector> A vector [x, y] for vertex 3 coordinates.
+
+  \returns  <vector> A vector [s1, s2, s3] of lengths.
 
   \note     Vertices are numbered counterclockwise.
 *******************************************************************************/
@@ -525,12 +494,13 @@ function triangle_ppp2vl
   v1,
   v2,
   v3
-) = [ distance_p2p(v1, v2), distance_p2p(v2, v3), distance_p2p(v3, v1) ];
+) = [ distance_pp(v1, v2), distance_pp(v2, v3), distance_pp(v3, v1) ];
 
 //! Compute the side lengths of a triangle given its vertices.
 /***************************************************************************//**
-  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y].
-  \returns  <vector> A vector [s1, s2, s3] decimals.
+  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
+
+  \returns  <vector> A vector [s1, s2, s3] of lengths.
 
   \note     Vertices are numbered counterclockwise.
 *******************************************************************************/
@@ -541,10 +511,11 @@ function triangle_vp2vl
 
 //! Compute the centroid (geometric center) of a triangle.
 /***************************************************************************//**
-  \param    v1 <vector> A vector [x, y] for vertex 1.
-  \param    v2 <vector> A vector [x, y] for vertex 2.
-  \param    v3 <vector> A vector [x, y] for vertex 3.
-  \returns  <vector> A vector [x, y] decimals.
+  \param    v1 <vector> A vector [x, y] for vertex 1 coordinates.
+  \param    v2 <vector> A vector [x, y] for vertex 2 coordinates.
+  \param    v3 <vector> A vector [x, y] for vertex 3 coordinates.
+
+  \returns  <vector> A vector [x, y] of coordinates.
 *******************************************************************************/
 function triangle_centroid_ppp
 (
@@ -555,8 +526,9 @@ function triangle_centroid_ppp
 
 //! Compute the centroid (geometric center) of a triangle.
 /***************************************************************************//**
-  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y].
-  \returns  <vector> A vector [x, y] decimals.
+  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
+
+  \returns  <vector> A vector [x, y] of coordinates.
 *******************************************************************************/
 function triangle_centroid_vp
 (
@@ -565,10 +537,11 @@ function triangle_centroid_vp
 
 //! Compute the coordinate for the triangle's incircle.
 /***************************************************************************//**
-  \param    v1 <vector> A vector [x, y] for vertex 1.
-  \param    v2 <vector> A vector [x, y] for vertex 2.
-  \param    v3 <vector> A vector [x, y] for vertex 3.
-  \returns  <vector> A vector [x, y] decimals.
+  \param    v1 <vector> A vector [x, y] for vertex 1 coordinates.
+  \param    v2 <vector> A vector [x, y] for vertex 2 coordinates.
+  \param    v3 <vector> A vector [x, y] for vertex 3 coordinates.
+
+  \returns  <vector> A vector [x, y] of coordinates.
 
   \details
 
@@ -584,26 +557,27 @@ function triangle_incenter_ppp
 [
   (
     (
-        v1[0] * distance_p2p(v2, v3)
-      + v2[0] * distance_p2p(v3, v1)
-      + v3[0] * distance_p2p(v1, v2)
+        v1[0] * distance_pp(v2, v3)
+      + v2[0] * distance_pp(v3, v1)
+      + v3[0] * distance_pp(v1, v2)
     )
-    / ( distance_p2p(v1, v2) + distance_p2p(v2, v3) + distance_p2p(v3, v1) )
+    / ( distance_pp(v1, v2) + distance_pp(v2, v3) + distance_pp(v3, v1) )
   ),
   (
     (
-        v1[1] * distance_p2p(v2, v3)
-      + v2[1] * distance_p2p(v3, v1)
-      + v3[1] * distance_p2p(v1, v2)
+        v1[1] * distance_pp(v2, v3)
+      + v2[1] * distance_pp(v3, v1)
+      + v3[1] * distance_pp(v1, v2)
     )
-    / ( distance_p2p(v1, v2) + distance_p2p(v2, v3) + distance_p2p(v3, v1) )
+    / ( distance_pp(v1, v2) + distance_pp(v2, v3) + distance_pp(v3, v1) )
   )
 ];
 
 //! Compute the coordinate for the triangle's incircle.
 /***************************************************************************//**
-  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y].
-  \returns  <vector> A vector [x, y] decimals.
+  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
+
+  \returns  <vector> A vector [x, y] of coordinates.
 
   \details
 
@@ -617,9 +591,10 @@ function triangle_incenter_vp
 
 //! Compute the inradius of a triangle's incircle.
 /***************************************************************************//**
-  \param    v1 <vector> A vector [x, y] for vertex 1.
-  \param    v2 <vector> A vector [x, y] for vertex 2.
-  \param    v3 <vector> A vector [x, y] for vertex 3.
+  \param    v1 <vector> A vector [x, y] for vertex 1 coordinates.
+  \param    v2 <vector> A vector [x, y] for vertex 2 coordinates.
+  \param    v3 <vector> A vector [x, y] for vertex 3 coordinates.
+
   \returns  <decimal> The incircle radius.
 *******************************************************************************/
 function triangle_inradius_ppp
@@ -631,16 +606,17 @@ function triangle_inradius_ppp
 sqrt
 (
   (
-      ( - distance_p2p(v1, v2) + distance_p2p(v2, v3) + distance_p2p(v3, v1) )
-    * ( + distance_p2p(v1, v2) - distance_p2p(v2, v3) + distance_p2p(v3, v1) )
-    * ( + distance_p2p(v1, v2) + distance_p2p(v2, v3) - distance_p2p(v3, v1) )
+      ( - distance_pp(v1, v2) + distance_pp(v2, v3) + distance_pp(v3, v1) )
+    * ( + distance_pp(v1, v2) - distance_pp(v2, v3) + distance_pp(v3, v1) )
+    * ( + distance_pp(v1, v2) + distance_pp(v2, v3) - distance_pp(v3, v1) )
   )
-  / ( distance_p2p(v1, v2) + distance_p2p(v2, v3) + distance_p2p(v3, v1) )
+  / ( distance_pp(v1, v2) + distance_pp(v2, v3) + distance_pp(v3, v1) )
 ) / 2;
 
 //! Compute the inradius of a triangle's incircle.
 /***************************************************************************//**
-  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y].
+  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
+
   \returns  <decimal> The incircle radius.
 *******************************************************************************/
 function triangle_inradius_vp
