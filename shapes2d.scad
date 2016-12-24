@@ -107,7 +107,7 @@ module rectangle
   rx = edefined_or(size, 0, size);
   ry = edefined_or(size, 1, rx);
 
-  translate(center==true ? [-rx/2, -ry/2] : [0,0])
+  translate(center==true ? [-rx/2, -ry/2] : origin2d)
   {
     if ( not_defined(vr) )              // no rounding
     {
@@ -228,12 +228,12 @@ module rectangle_c
 
   if ( is_defined(id) )
   {
-    translate(center==true ? [0,0] : [rx/2, ry/2])
+    translate(center==true ? origin2d : [rx/2, ry/2])
     difference()
     {
       rectangle(size=od, vr=or, center=true);
 
-      translate(is_defined(co) ? co : [0,0])
+      translate(is_defined(co) ? co : origin2d)
       rotate([0, 0, cr])
       rectangle(size=id, vr=ir, center=true);
     }
@@ -273,7 +273,7 @@ module rhombus
   rx = edefined_or(size, 0, size) / 2;
   ry = edefined_or(size, 1, rx*2) / 2;
 
-  translate(center==true ? [0,0] : [rx, ry])
+  translate(center==true ? origin2d : [rx, ry])
   {
     if ( not_defined(vr) )              // no rounding
     {
@@ -378,13 +378,13 @@ module triangle_ppp
   (
     ( centroid==false ) && ( incenter==true )
       ? -triangle_incenter_ppp( v1=v1, v2=v2, v3=v3 )
-      : [0,0]
+      : origin2d
   )
   translate
   (
     ( centroid==true ) && ( incenter==false )
       ? -triangle_centroid_ppp( v1=v1, v2=v2, v3=v3 )
-      : [0,0]
+      : origin2d
   )
   if ( any_undefined([cr1, cr2, cr3]) )
   {
@@ -511,7 +511,7 @@ module triangle_lll
   }
   else
   {
-    v1 = [0, 0];
+    v1 = origin2d;
     v2 = [s1, 0];
     v3 = [s1 - p3[0], p3[1]];
 
@@ -629,12 +629,12 @@ module triangle_vl_c
     (
       ( centroid==false ) && ( incenter==true )
         ? -triangle_incenter_vp( triangle_lll2vp(s1=ts1, s2=ts2, s3=ts3) )
-        : [0,0]
+        : origin2d
     )
     translate
     (
       ( centroid==true ) && ( incenter==false )
-        ? [0,0]
+        ? origin2d
         : triangle_centroid_vp( triangle_lll2vp(s1=ts1, s2=ts2, s3=ts3) )
     )
     difference()
@@ -646,7 +646,7 @@ module triangle_vl_c
         centroid=true, incenter=false
       );
 
-      translate(is_defined(co) ? co : [0,0])
+      translate(is_defined(co) ? co : origin2d)
       rotate([0, 0, cr])
       triangle_vl
       (
@@ -934,7 +934,7 @@ module triangle_ll
 {
   triangle_ppp
   (
-    v1=[0,0], v2=[x,0], v3=[0,y],
+    v1=origin2d, v2=[x,0], v3=[0,y],
     vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
     centroid=centroid, incenter=incenter
   );
@@ -983,7 +983,7 @@ module triangle_la
   {
     triangle_ppp
     (
-      v1=[0,0], v2=[x,0], v3=[0,tan(a)*x],
+      v1=origin2d, v2=[x,0], v3=[0,tan(a)*x],
       vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
       centroid=centroid, incenter=incenter
     );
@@ -993,7 +993,7 @@ module triangle_la
   {
     triangle_ppp
     (
-      v1=[0,0], v2=[tan(a)*y,0], v3=[0,y],
+      v1=origin2d, v2=[tan(a)*y,0], v3=[0,y],
       vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
       centroid=centroid, incenter=incenter
     );
@@ -1108,7 +1108,7 @@ module ellipse_c
     {
       ellipse(size=od);
 
-      translate(is_defined(co) ? co : [0,0])
+      translate(is_defined(co) ? co : origin2d)
       rotate([0, 0, cr])
       ellipse(size=id);
     }
@@ -1159,13 +1159,13 @@ module ellipse_s
 
       polygon
       ([
-        [0,0],
+        origin2d,
         [trx * cos(pa0), try * sin(pa0)],
         [trx * cos(pa1), try * sin(pa1)],
         [trx * cos(pa2), try * sin(pa2)],
         [trx * cos(pa3), try * sin(pa3)],
         [trx * cos(pa4), try * sin(pa4)],
-        [0,0]
+        origin2d
       ]);
     }
   }
@@ -1220,7 +1220,7 @@ module ellipse_cs
     {
       ellipse_s(a1=a1, a2=a2, size=od);
 
-      translate(is_defined(co) ? co : [0,0])
+      translate(is_defined(co) ? co : origin2d)
       rotate([0, 0, cr])
       ellipse(size=id);
     }

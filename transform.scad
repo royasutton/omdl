@@ -209,7 +209,7 @@ module st_linear_extrude_scale
   }
   else if ( is_scalar(h) )
   {
-    translate(center==true ? [0, 0, -h/2] : [0,0,0])
+    translate(center==true ? [0, 0, -h/2] : origin3d)
     linear_extrude(height=h)
     children();
   }
@@ -231,7 +231,7 @@ module st_linear_extrude_scale
     h2 = (n2>0) ? z2 * z : 0;
     h0 = z - h1 - h2;
 
-    translate(center==true ? [0, 0, -z/2] : [0,0,0])
+    translate(center==true ? [0, 0, -z/2] : origin3d)
     {
       if (h1 > 0)
       {
@@ -299,8 +299,8 @@ module st_radial_copy
 {
   for ( p = ngon_vp( r=r, n=n ) )
   {
-    translate(move==true ? p : [0,0])
-    rotate(angle==true ? [0, 0, angle_vv( v1t=x_axis2d_uv, v2t=p )] : [0, 0, 0])
+    translate(move==true ? p : origin2d)
+    rotate(angle==true ? [0, 0, angle_vv( v1t=x_axis2d_uv, v2t=p )] : origin3d)
     children();
   }
 }
@@ -365,7 +365,7 @@ module st_cartesian_copy
         -( min(ceil($children * copy/gridx), gridy) -1 )       * incry / 2,
         -( min(ceil($children * copy/gridx/gridy), gridz) -1 ) * incrz / 2
       ]
-    : [0,0,0]
+    : origin3d
   )
   if ( copy > 0 )
   {

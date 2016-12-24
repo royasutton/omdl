@@ -157,7 +157,7 @@ module cuboid
   by = edefined_or(size, 1, bx);
   bz = edefined_or(size, 2, by);
 
-  translate(center==true ? [0,0,0] : [bx/2, by/2, bz/2])
+  translate(center==true ? origin3d : [bx/2, by/2, bz/2])
   if ( not_defined(vr) )
   {
     cube([bx, by, bz], center=true);
@@ -269,13 +269,13 @@ module ellipsoid_s
       linear_extrude(height=h)
       polygon
       ([
-        [0,0],
+        origin2d,
         [trx * cos(pa0), try * sin(pa0)],
         [trx * cos(pa1), try * sin(pa1)],
         [trx * cos(pa2), try * sin(pa2)],
         [trx * cos(pa3), try * sin(pa3)],
         [trx * cos(pa4), try * sin(pa4)],
-        [0,0]
+        origin2d
       ]);
     }
   }
@@ -307,7 +307,7 @@ module tetrahedron
   o = r/2;
   a = r*sqrt(3)/2;
 
-  translate(center==true ? [0,0,0] : [0,0,o])
+  translate(center==true ? origin3d : [0,0,o])
   polyhedron
   (
     points =
@@ -354,7 +354,7 @@ module pyramid_q
   th = y/2;
   ph = z;
 
-  translate(center==true ? [0,0,-ph/2] : [0,0,0])
+  translate(center==true ? [0,0,-ph/2] : origin3d)
   polyhedron
   (
     points=
