@@ -65,7 +65,7 @@ function distance_pp
 ) = let
     (
       x=p1,
-      y=defined_or( p2, evector(0, len(p1)) )
+      y=defined_or( p2, consts(len(p1), 0) )
     )
     all_len([x, y], 1) ?
       abs

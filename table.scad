@@ -349,9 +349,9 @@ module table_dump
           log_echo
           (
             str (
-              "[", first(r), "]", chr(evector(32, maxr0-len(first(r)))),
-              "[", first(c), "]", chr(evector(32, maxc0-len(first(c)))),
-              "(", c[1], ")", chr(evector(32, maxc1-len(c[1]))),
+              "[", first(r), "]", chr(consts(maxr0-len(first(r)), 32)),
+              "[", first(c), "]", chr(consts(maxc0-len(first(c)), 32)),
+              "(", c[1], ")", chr(consts(maxc1-len(c[1]), 32)),
               "= [", table_get(rows, cols, r, c), "]"
             )
           );
@@ -424,7 +424,7 @@ function table_sum
   cols,
   rows_sel,
   cols_sel
-) = esum( table_copy(rows, cols, rows_sel, cols_sel) );
+) = sum( table_copy(rows, cols, rows_sel, cols_sel) );
 
 //! @}
 //! @}

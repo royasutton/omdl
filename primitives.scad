@@ -84,7 +84,8 @@ include <constants.scad>;
 
 //! Test if a value is defined.
 /***************************************************************************//**
-  \param    v <value> A value.
+  \param    v \<value> A value.
+
   \returns  <boolean> \b true when the value is defined
             and \b false otherwise.
 *******************************************************************************/
@@ -92,7 +93,8 @@ function is_defined( v ) = (v == undef) ? false : true;
 
 //! Test if a value is not defined.
 /***************************************************************************//**
-  \param    v <value> A value.
+  \param    v \<value> A value.
+
   \returns  <boolean> \b true when the value is not defined
             and \b false otherwise.
 *******************************************************************************/
@@ -100,7 +102,8 @@ function not_defined( v ) = (v == undef) ? true : false;
 
 //! Test if an iterable value is empty.
 /***************************************************************************//**
-  \param    v <value> An iterable value.
+  \param    v \<value> An iterable value.
+
   \returns  <boolean> \b true when the iterable value has zero elements
             and \b false otherwise.
 *******************************************************************************/
@@ -108,7 +111,8 @@ function is_empty( v ) = (len(v) == 0);
 
 //! Test if a value is a single non-iterable value.
 /***************************************************************************//**
-  \param    v <value> A value.
+  \param    v \<value> A value.
+
   \returns  <boolean> \b true when the value is a single non-iterable value
             and \b false otherwise.
 
@@ -130,7 +134,8 @@ function is_scalar( v ) = (len(v) == undef);
 
 //! Test if a value has multiple parts and is iterable.
 /***************************************************************************//**
-  \param    v <value> A value.
+  \param    v \<value> A value.
+
   \returns  <boolean> \b true when the value is an iterable multi-part value
             and \b false otherwise.
 
@@ -152,7 +157,8 @@ function is_iterable( v ) = (len(v) != undef);
 
 //! Test if a value is a string.
 /***************************************************************************//**
-  \param    v <value> A value.
+  \param    v \<value> A value.
+
   \returns  <boolean> \b true when the value is a string
             and \b false otherwise.
 *******************************************************************************/
@@ -160,7 +166,8 @@ function is_string( v ) = (str(v) == v);
 
 //! Test if a value is a vector.
 /***************************************************************************//**
-  \param    v <value> A value.
+  \param    v \<value> A value.
+
   \returns  <boolean> \b true when the value is a vector
             and \b false otherwise.
 *******************************************************************************/
@@ -168,7 +175,8 @@ function is_vector( v ) =  is_iterable(v) && !is_string(v);
 
 //! Test if a value is a boolean constant.
 /***************************************************************************//**
-  \param    v <value> A value.
+  \param    v \<value> A value.
+
   \returns  <boolean> \b true when the value is one of the predefined
             boolean constants <tt>[true|false]</tt> and \b false otherwise.
 *******************************************************************************/
@@ -182,7 +190,8 @@ function is_bool
 
 //! Test if a value is an integer.
 /***************************************************************************//**
-  \param    v <value> A value.
+  \param    v \<value> A value.
+
   \returns  <boolean> \b true when the value is an integer
             and \b false otherwise.
 *******************************************************************************/
@@ -194,7 +203,8 @@ function is_integer
 
 //! Test if a value is a decimal.
 /***************************************************************************//**
-  \param    v <value> A value.
+  \param    v \<value> A value.
+
   \returns  <boolean> \b true when the value is a decimal
             and \b false otherwise.
 *******************************************************************************/
@@ -202,7 +212,8 @@ function is_decimal( v ) = ((v % 1) > 0);
 
 //! Test if a value is a number.
 /***************************************************************************//**
-  \param    v <value> A value.
+  \param    v \<value> A value.
+
   \returns  <boolean> \b true when the value is a number
             and \b false otherwise.
 
@@ -213,7 +224,8 @@ function is_number( v ) = is_defined(v % 1);
 
 //! Test if a value is a range definition.
 /***************************************************************************//**
-  \param    v <value> A value.
+  \param    v \<value> A value.
+
   \returns  <boolean> \b true when the value is a range definition
             and \b false otherwise.
 
@@ -239,7 +251,8 @@ function is_range
 
 //! Test if a numerical value is invalid.
 /***************************************************************************//**
-  \param    v <value> A numerical value.
+  \param    v \<value> A numerical value.
+
   \returns  <boolean> \b true when the value is determined to be \b nan
             (Not A Number) and \b false otherwise.
 *******************************************************************************/
@@ -247,7 +260,8 @@ function is_nan( v ) = ( v != v );
 
 //! Test if a numerical value is infinite.
 /***************************************************************************//**
-  \param    v <value> A numerical value.
+  \param    v \<value> A numerical value.
+
   \returns  <boolean> \b true when the value is determined to be
             \b inf (greater than the largest representable number)
             and \b false otherwise.
@@ -256,7 +270,8 @@ function is_inf( v ) = ( v == (number_max * number_max) );
 
 //! Test if a numerical value is even.
 /***************************************************************************//**
-  \param    v <value> A numerical value.
+  \param    v \<value> A numerical value.
+
   \returns  <boolean> \b true when the value is determined to be \e even
             and \b false otherwise.
 
@@ -269,7 +284,8 @@ function is_even( v ) = !is_integer(v) ? false : ((v % 2) == 0);
 
 //! Test if a numerical value is odd.
 /***************************************************************************//**
-  \param    v <value> A numerical value.
+  \param    v \<value> A numerical value.
+
   \returns  <boolean> \b true when the value is determined to be \e odd
             and \b false otherwise.
 
@@ -282,8 +298,9 @@ function is_odd( v ) = !is_integer(v) ? false : ((v % 2) != 0);
 
 //! Test that all elements of an iterable value equal a comparison value.
 /***************************************************************************//**
-  \param    v <value> An iterable value.
-  \param    cv <value> A comparison value.
+  \param    v \<value> An iterable value.
+  \param    cv \<value> A comparison value.
+
   \returns  <boolean> \b true when all elements equal the value \p cv
             and \b false otherwise.
 
@@ -300,8 +317,9 @@ function all_equal
 
 //! Test if any element of an iterable value equals a comparison value.
 /***************************************************************************//**
-  \param    v <value> An iterable value.
-  \param    cv <value> A comparison value.
+  \param    v \<value> An iterable value.
+  \param    cv \<value> A comparison value.
+
   \returns  <boolean> \b true when any element equals the value \p cv
             and \b false otherwise.
 
@@ -318,7 +336,8 @@ function any_equal
 
 //! Test that no element of an iterable value is undefined.
 /***************************************************************************//**
-  \param    v <value> An iterable value.
+  \param    v \<value> An iterable value.
+
   \returns  <boolean> \b true when no element is undefined
             and \b false otherwise.
 
@@ -328,7 +347,8 @@ function all_defined(v) = !any_equal(v, undef);
 
 //! Test if any element of an iterable value is undefined.
 /***************************************************************************//**
-  \param    v <value> An iterable value.
+  \param    v \<value> An iterable value.
+
   \returns  <boolean> \b true when any element is undefined
             and \b false otherwise.
 
@@ -338,7 +358,8 @@ function any_undefined(v) = any_equal(v, undef);
 
 //! Test if all elements of an iterable value are scalars.
 /***************************************************************************//**
-  \param    v <value> An iterable value.
+  \param    v \<value> An iterable value.
+
   \returns  <boolean> \b true when all elements are scalar values
             and \b false otherwise.
             Returns \b true when \p v is a single scalar value.
@@ -357,7 +378,8 @@ function all_scalars
 
 //! Test if all elements of an iterable value are vectors.
 /***************************************************************************//**
-  \param    v <value> An iterable value.
+  \param    v \<value> An iterable value.
+
   \returns  <boolean> \b true when all elements are vector values
             and \b false otherwise.
             Returns \b true when \p v is a single vector value.
@@ -376,7 +398,8 @@ function all_vectors
 
 //! Test if all elements of an iterable value are strings.
 /***************************************************************************//**
-  \param    v <value> An iterable value.
+  \param    v \<value> An iterable value.
+
   \returns  <boolean> \b true when all elements are string values
             and \b false otherwise.
             Returns \b true when \p v is a single string value.
@@ -395,7 +418,8 @@ function all_strings
 
 //! Test if all elements of an iterable value are numbers.
 /***************************************************************************//**
-  \param    v <value> An iterable value.
+  \param    v \<value> An iterable value.
+
   \returns  <boolean> \b true when all elements are numerical values
             and \b false otherwise.
             Returns \b true when \p v is a single numerical value.
@@ -414,8 +438,9 @@ function all_numbers
 
 //! Test if all elements of an iterable value have a given length.
 /***************************************************************************//**
-  \param    v <value> An iterable value.
+  \param    v \<value> An iterable value.
   \param    l <integer> The length.
+
   \returns  <boolean> \b true when all elements have length equal to \p l
             and \b false otherwise.
             Returns the value of \p v when it is not defined.
@@ -466,8 +491,9 @@ function all_len
 
 //! Return the first element of an iterable value.
 /***************************************************************************//**
-  \param    v <value> An iterable value.
-  \returns  The first element of \p v.
+  \param    v \<value> An iterable value.
+
+  \returns  \<value> The first element of \p v.
             Returns the value of \p v when it is not defined or is not iterable.
             Returns \b undef when \p v is empty.
 *******************************************************************************/
@@ -479,8 +505,9 @@ function first
 
 //! Return the last element of an iterable value.
 /***************************************************************************//**
-  \param    v <value> An iterable value.
-  \returns  The last element of \p v.
+  \param    v \<value> An iterable value.
+
+  \returns  \<value> The last element of \p v.
             Returns the value of \p v when it is not defined or is not iterable.
             Returns \b undef when \p v is empty.
 *******************************************************************************/
@@ -494,8 +521,9 @@ function last
 
 //! Return a vector containing the first element of an iterable value.
 /***************************************************************************//**
-  \param    v <value> An iterable value.
-  \returns  A new vector containing the first element of \p v.
+  \param    v \<value> An iterable value.
+
+  \returns  <vector> Containing the first element of \p v.
             Returns the value of \p v when it is not defined or is not iterable.
             Returns \b undef when \p v is empty.
 *******************************************************************************/
@@ -509,8 +537,9 @@ function head
 
 //! Return a vector containing all but the first element of an iterable value.
 /***************************************************************************//**
-  \param    v <value> An iterable value.
-  \returns  A new vector containing all but the first element of \p v.
+  \param    v \<value> An iterable value.
+
+  \returns  <vector> Containing all but the first element of \p v.
             Returns the value of \p v when it is not defined or is not iterable.
             Returns \b empty_v when \p v contains a single element.
             Returns \b undef when \p v is empty.
@@ -524,10 +553,11 @@ function tail
   : (len(v) == 1) ? empty_v
   : [for (i = [1 : len(v)-1]) v[i]];
 
-//! Return a vector containing the elements of an iterable value in reverse order.
+//! Reverse the elements of an iterable value.
 /***************************************************************************//**
-  \param    v <value> An iterable value.
-  \returns  A new vector with the elements of \p v in reversed order.
+  \param    v \<value> An iterable value.
+
+  \returns  <vector> Containing the elements of \p v in reversed order.
             Returns the value of \p v when it is not defined, is not iterable,
             or is empty.
 *******************************************************************************/
@@ -539,42 +569,69 @@ function reverse
   : is_empty(v) ? v
   : concat( reverse(tail(v)), head(v) );
 
-//! Return a vector containing select elements of each iterable vector member.
+//! Select an element from each iterable value.
 /***************************************************************************//**
   \param    v <vector> A vector of iterable values.
   \param    f <boolean> Select the first element of each iterable value.
   \param    l <boolean> Select the last element of each iterable value.
-  \param    e <integer> Select an element index for each iterable value.
-  \returns  A new vector containing the selected element of each iterable
-            value of \p v.
+  \param    i <integer> Select an element index for each iterable value.
+
+  \returns  <vector> Containing the selected element of each iterable value
+            of \p v.
             Returns the value of \p v when it is not defined, is not iterable,
             or is empty.
 
   \details
 
   \note     When more than one selection criteria is specified, the
-            order of precedence is: \p e, \p l, \p f.
+            order of precedence is: \p i, \p l, \p f.
 *******************************************************************************/
 function eselect
 (
   v,
   f = true,
   l = false,
-  e
+  i
 ) = not_defined(v) ? v
   : !is_iterable(v) ? v
   : is_empty(v) ? v
-  : is_defined(e) ? concat( [first(v)[e]], eselect(tail(v), f, l, e) )
-  : (l == true) ? concat( [last(first(v))], eselect(tail(v), f, l, e) )
-  : (f == true) ? concat( [first(first(v))], eselect(tail(v), f, l, e) )
+  : is_defined(i) ? concat( [first(v)[i]], eselect(tail(v), f, l, i) )
+  : (l == true) ? concat( [last(first(v))], eselect(tail(v), f, l, i) )
+  : (f == true) ? concat( [first(first(v))], eselect(tail(v), f, l, i) )
   : undef;
 
-//! Return a vector containing the element-wise concatenation of iterable values.
+//! Select a range of elements from an iterable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+  \param    r <range> A range of element indexes.
+
+  \returns  <vector> Containing the vector elements specified by the
+            range defined by \p r.
+            Returns the value of \p v when it is not defined, is not iterable,
+            or is empty.
+
+  \warning  The range indexes should map to existing elements of \p v.
+*******************************************************************************/
+function rselect
+(
+  v,
+  r
+) = !all_defined([v, r]) ? v
+  : !is_iterable(v) ? v
+  : is_empty(v) ? v
+  : let
+    ( // vector elements bounds limits
+      s = [max(r[0], 0) : max(r[1], 1) : max(min(r[2], len(v)-1), 0)]
+    )
+    [for (j = [for (i=s) i]) v[j]];
+
+//! Merge vectors of iterable values (parallel concatenation).
 /***************************************************************************//**
   \param    v <vector> A vector of iterable values.
-  \returns  A new vector constructed from the element-wise concatenation
-            of each iterable value in \p v. The length will be limited by
-            the iterable value with the shortest length.
+  \param    j <boolean> Join each concatenation as a separate element.
+
+  \returns  <vector> Containing the element-wise concatenation of each
+            iterable value in \p v.
             Returns the value of \p v when it is not defined, is empty, or
             when any element of \p v (including \p v itself) is not iterable.
             Returns \b empty_v when any iterable value in \p v is empty.
@@ -586,17 +643,23 @@ function eselect
     v1=["a", "b", "c", "d"];
     v2=[1, 2, 3];
 
-    echo( econcat( [v1, v2] ) );
+    echo( merge( [v1, v2], true ) );
+    echo( merge( [v1, v2], false ) );
     \endcode
 
     \b Result
     \code{.C}
     ECHO: [["a", 1], ["b", 2], ["c", 3]]
+    ECHO: ["a", 1, "b", 2, "c", 3]
     \endcode
+
+  \note     The resulting vector length will be limited by the iterable
+            value with the shortest length.
 *******************************************************************************/
-function econcat
+function merge
 (
-  v
+  v,
+  j = true
 ) = not_defined(v) ? v
   : !is_iterable(v) ? v
   : is_empty(v) ? v
@@ -607,13 +670,18 @@ function econcat
       t = [for (i = [0 : len(v)-1]) tail(v[i])],
       h = [for (i = [0 : len(v)-1]) first(v[i])]
     )
-    concat([h], econcat(t));
+    (j == true) ?
+    concat([h], merge(t, j))
+  : concat(h, merge(t, j));
 
-//! Concatenate vector elements into a single string.
+//! Append a value to each element of an iterable value (serial concatenation).
 /***************************************************************************//**
   \param    v <vector> A vector of values.
-  \returns  A new string constructed by converting each element of the
-            vector to a string and concatenating together.
+  \param    av \<value> A value to append.
+  \param    j <boolean> Join each concatenation as a separate element.
+  \param    l <boolean> Append to last element.
+
+  \returns  <vector> With \p av appended to each element of \p v.
             Returns the value of \p v when it is not defined, is not iterable,
             or is empty.
 
@@ -624,7 +692,47 @@ function econcat
     v1=["a", "b", "c", "d"];
     v2=[1, 2, 3];
 
-    echo( estr(concat(v1, v2)) );
+    echo( append( v1, v2, j=true ) );
+    echo( append( v1, v2, j=false ) );
+    \endcode
+
+    \b Result
+    \code{.C}
+    ECHO: [["a", 1, 2, 3], ["b", 1, 2, 3], ["c", 1, 2, 3], ["d", 1, 2, 3]]
+    ECHO: ["a", 1, 2, 3, "b", 1, 2, 3, "c", 1, 2, 3, "d", 1, 2, 3
+    \endcode
+*******************************************************************************/
+function append
+(
+  v,
+  av,
+  j = true,
+  l = true
+) = not_defined(v) ? v
+  : !is_iterable(v) ? v
+  : is_empty(v) ? v
+  : ((len(v) == 1) && (l == false)) ? (j == true) ? [first(v)] : first(v)
+  : (j == true) ?
+    concat([concat(first(v), av)], append(tail(v), av, l, j))
+  : concat(first(v), av, append(tail(v), av, l, j));
+
+//! Convert all vector elements to strings and concatenate.
+/***************************************************************************//**
+  \param    v <vector> A vector of values.
+
+  \returns  <string> Constructed by converting each element of the vector
+            to a string and concatenating together.
+            Returns the value of \p v when it is not defined, is not iterable,
+            or is empty.
+
+  \details
+
+    \b Example
+    \code{.C}
+    v1=["a", "b", "c", "d"];
+    v2=[1, 2, 3];
+
+    echo( vstr(concat(v1, v2)) );
     \endcode
 
     \b Result
@@ -632,19 +740,20 @@ function econcat
     ECHO: "abcd123"
     \endcode
 *******************************************************************************/
-function estr
+function vstr
 (
   v
 ) = not_defined(v) ? v
   : !is_iterable(v) ? v
   : is_empty(v) ? v
   : (len(v) == 1) ? str(first(v))
-  : str(first(v), estr(tail(v)));
+  : str(first(v), vstr(tail(v)));
 
 //! Sort the elements of an iterable value using the quick sort method.
 /***************************************************************************//**
-  \param    v <value> An iterable value.
-  \returns  A new vector with elements sorted in ascending order.
+  \param    v \<value> An iterable value.
+
+  \returns  <vector> With elements sorted in ascending order.
             Returns the value of \p v when it is not defined, is not iterable,
             or is empty.
 
@@ -677,74 +786,77 @@ function qsort
     )
     concat(qsort(lt), eq, qsort(gt));
 
-//! Compute the numerical sum of a range of vector elements.
+//! Compute the numerical sum of vector elements.
 /***************************************************************************//**
   \param    v <vector> A vector of numerical values.
-  \param    b <integer> The vector element index at which to begin summation
+  \param    i1 <integer> The element index at which to begin summation
             (first element when not specified).
-  \param    e <integer> The vector element index at which to end summation
+  \param    i2 <integer> The element index at which to end summation
             (last element when not specified).
-  \returns  <decimal> The summation of the elements.
-            Returns \b undef when \p v is not defined, is not iterable,
-            or is empty.
+
+  \returns  <decimal> The summation over the element range.
+            Returns \b undef when \p v is not defined, is not iterable
+            and not a number, or is empty. Returns \b v when it is
+            is not iterable but is a number.
 *******************************************************************************/
-function esum
+function sum
 (
   v,
-  b,
-  e
+  i1,
+  i2
 ) = let
     (
-      s = is_defined(b) ? min(max(b,0),len(v)-1) : 0,
-      i = is_defined(e) ? max(min(e,len(v)-1),0) : len(v)-1
+      s = is_defined(i1) ? min(max(i1,0),len(v)-1) : 0,
+      i = is_defined(i2) ? max(min(i2,len(v)-1),0) : len(v)-1
     )
     not_defined(v) ? undef
-  : !is_iterable(v) ? undef
+  : !is_iterable(v) ? is_number(v) ? v : undef
   : is_empty(v) ? undef
   : (i == s) ? v[i]
-  : v[i] + esum(v, s, i-1);
+  : v[i] + sum(v, s, i-1);
 
-//! Choose defined or default value.
+//! Return a defined or default value.
 /***************************************************************************//**
-  \param    v <value> A test value.
-  \param    d <value> A default value.
-  \returns  The value \p v when it is defined or the value \p d otherwise.
+  \param    v \<value> A value.
+  \param    d \<value> A default value.
+
+  \returns  \<value> \p v when it is defined or \p d otherwise.
 *******************************************************************************/
 function defined_or
 (
   v,
   d
-) = is_defined(v) ? v
-  : d;
+) = is_defined(v) ? v : d;
 
-//! Choose defined vector element or default value.
+//! Return a defined vector element or default value.
 /***************************************************************************//**
   \param    v <vector> A vector.
-  \param    e <integer> A test element index.
-  \param    d <value> A default value.
-  \returns  The value of vector element \p e, namely <tt>v[e]</tt>, when it
-            is defined or the value \p d otherwise.
+  \param    i <integer> An element index.
+  \param    d \<value> A default value.
+
+  \returns  \<value> <tt>v[i]</tt> when it is defined or \p d otherwise.
 *******************************************************************************/
 function edefined_or
 (
   v,
-  e,
+  i,
   d
-) = (len(v) > e) ? v[e]
-  : d;
+) = (len(v) > i) ? v[i] : d;
 
-//! Create a vector with a repeating constant element.
+//! Create a vector with constant elements.
 /***************************************************************************//**
-  \param    e <value> An element value.
-  \param    n <integer> A copy count.
-  \returns  A vector with \p n copies of the element value.
-            Returns \b empty_v when \p n<1.
+  \param    n <integer> The element count.
+  \param    v \<value> The element value.
+
+  \returns  <vector> with \p n copies of the element value.
+            When an element value is not specified, each element is assigned
+            its index position. Returns \b empty_v when \p n<1.
 *******************************************************************************/
-function evector
+function consts
 (
-  e,
-  n
-) = (n<1) ? empty_v : [for (i=[0:1:n-1]) e];
+  n,
+  v
+) = (n<1) ? empty_v : [for (i=[0:1:n-1]) defined_or(v, i)];
 
 //! @}
 //! @}
@@ -763,7 +875,7 @@ BEGIN_SCOPE validate;
         use <console.scad>;
         use <validation.scad>;
 
-        show_passed  = true;    // show test that pass
+        show_passing = true;    // show passing tests
         show_skipped = true;    // show skipped tests
 
         echo( str("OpenSCAD Version ", version()) );
@@ -805,7 +917,7 @@ BEGIN_SCOPE validate;
         test_ids = table_get_row_ids( test_r );
 
         // expected columns: ("id" + one column for each test)
-        good_c = econcat([concat("id", test_ids), concat("identifier", test_ids)]);
+        good_c = merge([concat("id", test_ids), concat("identifier", test_ids)]);
 
         // expected rows: ("golden" test results), use 's' to skip test
         t = true;   // shortcuts
@@ -852,7 +964,7 @@ BEGIN_SCOPE validate;
           {
             if ( !test_pass )
               log_warn( str(vid, "(", value_text, ") ", test_text) );
-            else if ( show_passed )
+            else if ( show_passing )
               log_info( str(vid, " ", test_text) );
           }
           else if ( show_skipped )
@@ -893,7 +1005,7 @@ BEGIN_SCOPE validate;
         use <console.scad>;
         use <validation.scad>;
 
-        show_passed  = true;    // show test that pass
+        show_passing = true;    // show passing tests
         show_skipped = true;    // show skipped tests
 
         echo( str("OpenSCAD Version ", version()) );
@@ -937,7 +1049,7 @@ BEGIN_SCOPE validate;
         test_ids = table_get_row_ids( test_r );
 
         // expected columns: ("id" + one column for each test)
-        good_c = econcat([concat("id", test_ids), concat("identifier", test_ids)]);
+        good_c = merge([concat("id", test_ids), concat("identifier", test_ids)]);
 
         // expected rows: ("golden" test results), use 's' to skip test
         t = true;   // shortcuts
@@ -982,7 +1094,7 @@ BEGIN_SCOPE validate;
           {
             if ( !test_pass )
               log_warn( str(vid, "(", value_text, ") ", test_text) );
-            else if ( show_passed )
+            else if ( show_passing )
               log_info( str(vid, " ", test_text) );
           }
           else if ( show_skipped )
@@ -1023,7 +1135,7 @@ BEGIN_SCOPE validate;
       use <console.scad>;
       use <validation.scad>;
 
-      show_passed  = true;    // show test that pass
+      show_passing = true;    // show passing tests
       show_skipped = true;    // show skipped tests
 
       echo( str("OpenSCAD Version ", version()) );
@@ -1055,7 +1167,7 @@ BEGIN_SCOPE validate;
       test_ids = table_get_row_ids( test_r );
 
       // expected columns: ("id" + one column for each test)
-      good_c = econcat([concat("id", test_ids), concat("identifier", test_ids)]);
+      good_c = merge([concat("id", test_ids), concat("identifier", test_ids)]);
 
       // expected rows: ("golden" test results), use 's' to skip test
       skip = -1;  // skip test
@@ -1128,7 +1240,7 @@ BEGIN_SCOPE validate;
           [15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0]             // t11
 
         ],
-        ["econcat",
+        ["merge",
           undef,                                              // t01
           empty_v,                                            // t02
           [0:0.5:9],                                          // t03
@@ -1145,7 +1257,33 @@ BEGIN_SCOPE validate;
           [[1,4,7,"a"],[2,5,8,"b"],[3,6,9,"c"]],              // t10
           [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
         ],
-        ["estr",
+        ["append_0",
+          undef,                                              // t01
+          empty_v,                                            // t02
+          [0:0.5:9],                                          // t03
+          [
+            ["A",0],[" ",0],["s",0],["t",0],
+            ["r",0],["i",0],["n",0],["g",0]
+          ],                                                  // t04
+          [
+            ["orange",0],["apple",0],
+            ["grape",0],["banana",0]
+          ],                                                  // t05
+          [
+            ["b",0],["a",0],["n",0],["a",0],
+            ["n",0],["a",0],["s",0]
+          ],                                                  // t06
+          [[undef,0]],                                        // t07
+          [[1,2,0],[2,3,0]],                                  // t08
+          [["ab",0],[1,2,0],[2,3,0],[4,5,0]],                 // t09
+          [[1,2,3,0],[4,5,6,0],[7,8,9,0],["a","b","c",0]],    // t10
+          [
+            [0,0],[1,0],[2,0],[3,0],[4,0],[5,0],
+            [6,0],[7,0],[8,0],[9,0],[10,0],[11,0],
+            [12,0],[13,0],[14,0],[15,0]
+          ]                                                   // t11
+        ],
+        ["vstr",
           undef,                                              // t01
           empty_v,                                            // t02
           [0:0.5:9],                                          // t03
@@ -1171,7 +1309,7 @@ BEGIN_SCOPE validate;
           undef,                                              // t10
           [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
         ],
-        ["esum",
+        ["sum",
           undef,                                              // t01
           undef,                                              // t02
           undef,                                              // t03
@@ -1223,6 +1361,19 @@ BEGIN_SCOPE validate;
           [2,5,8,"b"],                                        // t10
           skip                                                // t11
         ],
+        ["rselect_02",
+          undef,                                              // t01
+          empty_v,                                            // t02
+          [0:0.5:9],                                          // t03
+          ["A"," ","s"],                                      // t04
+          ["orange","apple","grape"],                         // t05
+          ["b","a","n"],                                      // t06
+          [undef],                                            // t07
+          [[1,2],[2,3]],                                      // t08
+          ["ab",[1,2],[2,3]],                                 // t09
+          [[1,2,3],[4,5,6],[7,8,9]],                          // t10
+          [0,1,2]                                             // t11
+        ],
         ["defined_or_D",
           "default",                                          // t01
           empty_v,                                            // t02
@@ -1269,7 +1420,7 @@ BEGIN_SCOPE validate;
         {
           if ( !test_pass )
             log_warn( str(vid, "(", value_text, ") ", test_text) );
-          else if ( show_passed )
+          else if ( show_passing )
             log_info( str(vid, " ", test_text) );
         }
         else if ( show_skipped )
@@ -1282,13 +1433,15 @@ BEGIN_SCOPE validate;
       for (vid=test_ids) run_test( "head", head(get_value(vid)), vid );
       for (vid=test_ids) run_test( "tail", tail(get_value(vid)), vid );
       for (vid=test_ids) run_test( "reverse", reverse(get_value(vid)), vid );
-      for (vid=test_ids) run_test( "econcat", econcat(get_value(vid)), vid );
-      for (vid=test_ids) run_test( "estr", estr(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "merge", merge(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "append_0", append(get_value(vid),0), vid );
+      for (vid=test_ids) run_test( "vstr", vstr(get_value(vid)), vid );
       for (vid=test_ids) run_test( "qsort", qsort(get_value(vid)), vid );
-      for (vid=test_ids) run_test( "esum", esum(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "sum", sum(get_value(vid)), vid );
       for (vid=test_ids) run_test( "eselect_F", eselect(get_value(vid),f=true), vid );
       for (vid=test_ids) run_test( "eselect_L", eselect(get_value(vid),l=true), vid );
-      for (vid=test_ids) run_test( "eselect_1", eselect(get_value(vid),e=1), vid );
+      for (vid=test_ids) run_test( "eselect_1", eselect(get_value(vid),i=1), vid );
+      for (vid=test_ids) run_test( "rselect_02", rselect(get_value(vid),r=[0:2]), vid );
       for (vid=test_ids) run_test( "defined_or_D", defined_or(get_value(vid),"default"), vid );
       for (vid=test_ids) run_test( "edefined_or_DE3", edefined_or(get_value(vid),3,"default"), vid );
 

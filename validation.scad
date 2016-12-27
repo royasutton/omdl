@@ -40,9 +40,9 @@
 //! Compare a computed value with an expected result.
 /***************************************************************************//**
   \param    d <string> A validation description.
-  \param    cv <value> A computed value to validate.
+  \param    cv \<value> A computed value to validate.
   \param    t <string|boolean> The validation type.
-  \param    ev <value> The expected result value.
+  \param    ev \<value> The expected result value.
 
   \param    pf <boolean> Result reported as pass or fail boolean value.
 
