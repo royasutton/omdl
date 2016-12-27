@@ -54,9 +54,6 @@
     \ref validation "validation section" for the results generated with
     this documentation.
 
-    <em>Revolutionary no... But a big step in the evolution of a standard
-    way to share documented OpenSCAD scripts!</em>
-
   \section quickstart Quick Start
 
     The [omdl] consist of a collection of libraries that may be \c used
