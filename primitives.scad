@@ -677,11 +677,11 @@ function merge
 //! Append a value to each element of an iterable value (serial concatenation).
 /***************************************************************************//**
   \param    v <vector> A vector of values.
-  \param    av \<value> A value to append.
+  \param    nv \<value> A new value to append.
   \param    j <boolean> Join each concatenation as a separate element.
   \param    l <boolean> Append to last element.
 
-  \returns  <vector> With \p av appended to each element of \p v.
+  \returns  <vector> With \p nv appended to each element of \p v.
             Returns the value of \p v when it is not defined, is not iterable,
             or is empty.
 
@@ -705,7 +705,7 @@ function merge
 function append
 (
   v,
-  av,
+  nv,
   j = true,
   l = true
 ) = not_defined(v) ? v
@@ -713,8 +713,8 @@ function append
   : is_empty(v) ? v
   : ((len(v) == 1) && (l == false)) ? (j == true) ? [first(v)] : first(v)
   : (j == true) ?
-    concat([concat(first(v), av)], append(tail(v), av, l, j))
-  : concat(first(v), av, append(tail(v), av, l, j));
+    concat([concat(first(v), nv)], append(tail(v), nv, l, j))
+  : concat(first(v), nv, append(tail(v), nv, l, j));
 
 //! Convert all vector elements to strings and concatenate.
 /***************************************************************************//**
