@@ -312,6 +312,7 @@ function is_odd( v ) = !is_integer(v) ? false : ((v % 2) != 0);
   \returns  <boolean> \b true when all elements equal the value \p cv
             and \b false otherwise.
 
+  \note     The scalar value of \p v is is compared when it is not iterable.
   \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_equal
@@ -331,6 +332,7 @@ function all_equal
   \returns  <boolean> \b true when any element equals the value \p cv
             and \b false otherwise.
 
+  \note     The scalar value of \p v is is compared when it is not iterable.
   \warning  Always returns \b false when \p v is empty.
 *******************************************************************************/
 function any_equal
@@ -349,6 +351,7 @@ function any_equal
   \returns  <boolean> \b true when no element is undefined
             and \b false otherwise.
 
+  \note     The scalar value of \p v is is tested when it is not iterable.
   \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_defined(v) = !any_equal(v, undef);
@@ -360,6 +363,7 @@ function all_defined(v) = !any_equal(v, undef);
   \returns  <boolean> \b true when any element is undefined
             and \b false otherwise.
 
+  \note     The scalar value of \p v is is tested when it is not iterable.
   \warning  Always returns \b false when \p v is empty.
 *******************************************************************************/
 function any_undefined(v) = any_equal(v, undef);
@@ -373,6 +377,7 @@ function any_undefined(v) = any_equal(v, undef);
             Returns \b true when \p v is a single scalar value.
             Returns the value of \p v when it is not defined.
 
+  \note     The scalar value of \p v is is tested when it is not iterable.
   \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_scalars
@@ -393,6 +398,7 @@ function all_scalars
             Returns \b true when \p v is a single vector value.
             Returns the value of \p v when it is not defined.
 
+  \note     The scalar value of \p v is is tested when it is not iterable.
   \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_vectors
@@ -413,6 +419,7 @@ function all_vectors
             Returns \b true when \p v is a single string value.
             Returns the value of \p v when it is not defined.
 
+  \note     The scalar value of \p v is is tested when it is not iterable.
   \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_strings
@@ -433,6 +440,7 @@ function all_strings
             Returns \b true when \p v is a single numerical value.
             Returns the value of \p v when it is not defined.
 
+  \note     The scalar value of \p v is is tested when it is not iterable.
   \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_numbers
@@ -453,6 +461,7 @@ function all_numbers
             and \b false otherwise.
             Returns the value of \p v when it is not defined.
 
+  \note     The scalar value of \p v is is tested when it is not iterable.
   \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_len
@@ -507,7 +516,8 @@ function all_len
   \param    v \<value> The element value.
 
   \returns  <vector> With \p l copies of the element value \p v.
-            Returns \b empty_v when <tt>(l < 1)</tt>.
+            Returns \b empty_v when \p l is not a number or if
+            <tt>(l < 1)</tt>.
 
   \details
 
@@ -519,6 +529,7 @@ function consts
   l,
   v
 ) = (l<1) ? empty_v
+  : !is_number(l) ? empty_v
   : is_defined(v) ? [for (i=[0:1:l-1]) v]
   : [for (i=[0:1:l-1]) i];
 
@@ -980,7 +991,11 @@ function insert
   mi = 0
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? undef
-  : is_empty(v) ? concat(nv)
+  : is_empty(v) ?
+    (
+      ( is_defined(mv) && any_equal(mv, empty_v)) ||
+      (not_defined(mv) && (i == 0))
+    ) ? concat(nv) : undef
   : ((i<0) || (i>len(v))) ? undef
   : let
     (
@@ -1365,6 +1380,19 @@ BEGIN_SCOPE validate;
 
       good_r =
       [ // function
+        ["consts",
+          empty_v,                                            // t01
+          empty_v,                                            // t02
+          empty_v,                                            // t03
+          empty_v,                                            // t04
+          empty_v,                                            // t05
+          empty_v,                                            // t06
+          empty_v,                                            // t07
+          empty_v,                                            // t08
+          empty_v,                                            // t09
+          empty_v,                                            // t10
+          empty_v                                             // t11
+        ],
         ["vstr",
           undef,                                              // t01
           empty_str,                                          // t02
@@ -1578,7 +1606,20 @@ BEGIN_SCOPE validate;
           undef,                                              // t10
           [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
         ],
-        ["append_0",
+        ["strip",
+          undef,                                              // t01
+          empty_v,                                            // t02
+          undef,                                              // t03
+          ["A"," ","s","t","r","i","n","g"],                  // t04
+          ["orange","apple","grape","banana"],                // t05
+          ["b","a","n","a","n","a","s"],                      // t06
+          [undef],                                            // t07
+          [[1,2],[2,3]],                                      // t08
+          ["ab",[1,2],[2,3],[4,5]],                           // t09
+          [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]],            // t10
+          [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
+        ],
+        ["append_T0",
           undef,                                              // t01
           [[0]],                                              // t02
           undef,                                              // t03
@@ -1603,6 +1644,32 @@ BEGIN_SCOPE validate;
             [6,0],[7,0],[8,0],[9,0],[10,0],[11,0],
             [12,0],[13,0],[14,0],[15,0]
           ]                                                   // t11
+        ],
+        ["insert_T0",
+          undef,                                              // t01
+          undef,                                              // t02
+          undef,                                              // t03
+          undef,                                              // t04
+          ["orange",0,"apple","grape","banana"],              // t05
+          ["b","a","n","a","n","a",0,"s"],                    // t06
+          undef,                                              // t07
+          [[1,2],0,[2,3]],                                    // t08
+          ["ab",[1,2],0,[2,3],[4,5]],                         // t09
+          undef,                                              // t10
+          [0,1,2,3,4,0,5,6,7,8,9,10,11,12,13,14,15]           // t11
+        ],
+        ["delete_T0",
+          undef,                                              // t01
+          empty_v,                                            // t02
+          undef,                                              // t03
+          ["A"," ","s","t","r","i","n","g"],                  // t04
+          ["orange","grape","banana"],                        // t05
+          ["b","a","n","a","n","a"],                          // t06
+          [undef],                                            // t07
+          [[1,2]],                                            // t08
+          ["ab",[1,2],[4,5]],                                 // t09
+          [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]],            // t10
+          [0,1,2,3,4,6,7,8,9,10,11,12,13,14,15]               // t11
         ]
       ];
 
@@ -1632,6 +1699,7 @@ BEGIN_SCOPE validate;
       }
 
       // Indirect function calls would be very useful here!!!
+      for (vid=test_ids) run_test( "consts", consts(get_value(vid)), vid );
       for (vid=test_ids) run_test( "vstr", vstr(get_value(vid)), vid );
       for (vid=test_ids) run_test( "sum", sum(get_value(vid)), vid );
       for (vid=test_ids) run_test( "defined_or_D", defined_or(get_value(vid),"default"), vid );
@@ -1648,7 +1716,10 @@ BEGIN_SCOPE validate;
       for (vid=test_ids) run_test( "pmerge", pmerge(get_value(vid)), vid );
       for (vid=test_ids) run_test( "reverse", reverse(get_value(vid)), vid );
       for (vid=test_ids) run_test( "qsort", qsort(get_value(vid)), vid );
-      for (vid=test_ids) run_test( "append_0", append(0,get_value(vid)), vid );
+      for (vid=test_ids) run_test( "strip", strip(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "append_T0", append(0,get_value(vid)), vid );
+      for (vid=test_ids) run_test( "insert_T0", insert(0,get_value(vid),mv=["x","r","apple","s",[2,3],5]), vid );
+      for (vid=test_ids) run_test( "delete_T0", delete(get_value(vid),mv=["x","r","apple","s",[2,3],5]), vid );
 
       // end-of-tests
     END_OPENSCAD;
