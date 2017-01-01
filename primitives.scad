@@ -82,6 +82,10 @@ include <constants.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
+//----------------------------------------------------------------------------//
+// group 1
+//----------------------------------------------------------------------------//
+
 //! Test if a value is defined.
 /***************************************************************************//**
   \param    v \<value> A value.
@@ -296,6 +300,10 @@ function is_even( v ) = !is_integer(v) ? false : ((v % 2) == 0);
 *******************************************************************************/
 function is_odd( v ) = !is_integer(v) ? false : ((v % 2) != 0);
 
+//----------------------------------------------------------------------------//
+// group 2
+//----------------------------------------------------------------------------//
+
 //! Test that all elements of an iterable value equal a comparison value.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
@@ -489,6 +497,127 @@ function all_len
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
+//----------------------------------------------------------------------------//
+// create / convert
+//----------------------------------------------------------------------------//
+
+//! Create a vector of constant elements.
+/***************************************************************************//**
+  \param    l <integer> The vector length.
+  \param    v \<value> The element value.
+
+  \returns  <vector> With \p l copies of the element value \p v.
+            Returns \b empty_v when <tt>(l < 1)</tt>.
+
+  \details
+
+  \note     When \p v is not specified, each element is assigned the value
+            of its index position.
+*******************************************************************************/
+function consts
+(
+  l,
+  v
+) = (l<1) ? empty_v
+  : is_defined(v) ? [for (i=[0:1:l-1]) v]
+  : [for (i=[0:1:l-1]) i];
+
+//! Convert all vector elements to strings and concatenate.
+/***************************************************************************//**
+  \param    v <vector> A vector of values.
+
+  \returns  <string> Constructed by converting each element of the vector
+            to a string and concatenating together.
+            Returns \b undef when \p v is not defined.
+
+  \details
+
+    \b Example
+    \code{.C}
+    v1=["a", "b", "c", "d"];
+    v2=[1, 2, 3];
+
+    echo( vstr(concat(v1, v2)) );
+    \endcode
+
+    \b Result
+    \code{.C}
+    ECHO: "abcd123"
+    \endcode
+*******************************************************************************/
+function vstr
+(
+  v
+) = not_defined(v) ? undef
+  : !is_iterable(v) ? str(v)
+  : is_empty(v) ? empty_str
+  : (len(v) == 1) ? str(first(v))
+  : str(first(v), vstr(tail(v)));
+
+//! Compute the sum of a vector of numbers.
+/***************************************************************************//**
+  \param    v <range|vector> A vector of numerical values.
+  \param    i1 <integer> The element index at which to begin summation
+            (first when not specified).
+  \param    i2 <integer> The element index at which to end summation
+            (last when not specified).
+
+  \returns  <decimal> The summation of elements over the index range.
+            Returns \b v when it is a scalar number.
+            Returns 0 when \p v is empty.
+            Returns \b undef when \p v is not defined or is not iterable
+            and not a number.
+*******************************************************************************/
+function sum
+(
+  v,
+  i1,
+  i2
+) = not_defined(v) ? undef
+  : is_empty(v) ? 0
+  : is_number(v) ? v
+  : is_range(v) ? sum([for (i=v) i], i1, i2)
+  : !is_iterable(v) ? undef
+  : let
+    (
+      s = is_defined(i1) ? min(max(i1,0),len(v)-1) : 0,
+      i = is_defined(i2) ? max(min(i2,len(v)-1),0) : len(v)-1
+    )
+    (i == s) ? v[i]
+  : v[i] + sum(v, s, i-1);
+
+//----------------------------------------------------------------------------//
+// select
+//----------------------------------------------------------------------------//
+
+//! Return a defined or default value.
+/***************************************************************************//**
+  \param    v \<value> A value.
+  \param    d \<value> A default value.
+
+  \returns  \<value> \p v when it is defined or \p d otherwise.
+*******************************************************************************/
+function defined_or
+(
+  v,
+  d
+) = is_defined(v) ? v : d;
+
+//! Return a defined vector element or default value.
+/***************************************************************************//**
+  \param    v <vector> A vector.
+  \param    i <integer> An element index.
+  \param    d \<value> A default value.
+
+  \returns  \<value> <tt>v[i]</tt> when it is defined or \p d otherwise.
+*******************************************************************************/
+function edefined_or
+(
+  v,
+  i,
+  d
+) = (len(v) > i) ? v[i] : d;
+
 //! Return the first element of an iterable value.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
@@ -553,21 +682,31 @@ function tail
   : (len(v) == 1) ? empty_v
   : [for (i = [1 : len(v)-1]) v[i]];
 
-//! Reverse the elements of an iterable value.
+//! Select a range of elements from an iterable value.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
+  \param    i <range|vector|integer> Index selection.
 
-  \returns  <vector> Containing the elements of \p v in reversed order.
+  \returns  <vector> Containing the vector element indexes selected in \p i.
+            Returns \b undef when \p i does not map to an element of \p v.
             Returns \b empty_v when \p v is empty.
             Returns \b undef when \p v is not defined or is not iterable.
 *******************************************************************************/
-function reverse
+function rselect
 (
-  v
-) = not_defined(v) ? undef
+  v,
+  i
+) = !all_defined([v, i]) ? undef
   : !is_iterable(v) ? undef
   : is_empty(v) ? empty_v
-  : [for (i = [len(v)-1 : -1 : 0]) v[i]];
+  : is_number(i) && ((i<0) || (i>(len(v)-1))) ? undef
+  : is_vector(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
+  : is_range(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
+  : let
+    (
+      s = is_number(i) ? [i] : i
+    )
+    [for (j = [for (k=s) k]) v[j]];
 
 //! Select an element from each iterable value.
 /***************************************************************************//**
@@ -600,31 +739,35 @@ function eselect
   : (f == true) ? concat( [first(first(v))], eselect(tail(v), f, l, i) )
   : undef;
 
-//! Select a range of elements from an iterable value.
-/***************************************************************************//**
-  \param    v \<value> An iterable value.
-  \param    i <range|vector|integer> Index selection.
+//----------------------------------------------------------------------------//
+// reorder
+//----------------------------------------------------------------------------//
 
-  \returns  <vector> Containing the vector element indexes selected in \p i.
-            Returns \b undef when \p i does not map to an element of \p v.
+//! Serial-merge vectors of iterable values.
+/***************************************************************************//**
+  \param    v <vector> A vector of iterable values.
+  \param    r <boolean> Recursively merge iterable elements.
+
+  \returns  <vector> Containing the serial-wise element concatenation
+            of each element in \p v.
             Returns \b empty_v when \p v is empty.
-            Returns \b undef when \p v is not defined or is not iterable.
+            Returns \b undef when \p v is not defined.
+
+  \details
+
+  \note     A string, although iterable, is treated as a merged unit
+            when recursive merge is enabled.
 *******************************************************************************/
-function rselect
+function smerge
 (
   v,
-  i
-) = !all_defined([v, i]) ? undef
-  : !is_iterable(v) ? undef
+  r = false
+) = not_defined(v) ? undef
   : is_empty(v) ? empty_v
-  : is_number(i) && ((i<0) || (i>(len(v)-1))) ? undef
-  : is_vector(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
-  : is_range(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
-  : let
-    (
-      s = is_number(i) ? [i] : i
-    )
-    [for (j = [for (k=s) k]) v[j]];
+  : !is_iterable(v) ? [v]
+  : ((r == true) && is_iterable(first(v)) && !is_string(first(v))) ?
+    concat(smerge(first(v), r), smerge(tail(v), r))
+  : concat(first(v), smerge(tail(v), r));
 
 //! Parallel-merge vectors of iterable values.
 /***************************************************************************//**
@@ -678,31 +821,83 @@ function pmerge
     (j == true) ? concat([h], pmerge(t, j))
   : concat(h, pmerge(t, j));
 
-//! Serial-merge vectors of iterable values.
+//! Reverse the elements of an iterable value.
 /***************************************************************************//**
-  \param    v <vector> A vector of iterable values.
-  \param    r <boolean> Recursively merge iterable elements.
+  \param    v \<value> An iterable value.
 
-  \returns  <vector> Containing the serial-wise element concatenation
-            of each element in \p v.
+  \returns  <vector> Containing the elements of \p v in reversed order.
             Returns \b empty_v when \p v is empty.
-            Returns \b undef when \p v is not defined.
+            Returns \b undef when \p v is not defined or is not iterable.
+*******************************************************************************/
+function reverse
+(
+  v
+) = not_defined(v) ? undef
+  : !is_iterable(v) ? undef
+  : is_empty(v) ? empty_v
+  : [for (i = [len(v)-1 : -1 : 0]) v[i]];
+
+//! Sort the elements of an iterable value using the quick sort method.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+  \param    r <boolean> Reverse sort order.
+
+  \returns  <vector> With elements sorted in ascending order.
+            Returns \b undef when \p v is not all strings or all numbers.
+            Returns \b undef when \p v is not defined or is not iterable.
 
   \details
 
-  \note     A string, although iterable, is treated as a merged unit
-            when recursive merge is enabled.
+  \warning This implementation relies on the comparison operators
+           '<' and '>' which expect the operands to be either two scalar
+           numbers or two strings. Therefore, this function returns \b undef
+           for vectors containing anything other than all scalar numbers
+           or all strings.
+
+    See [Wikipedia](https://en.wikipedia.org/wiki/Quicksort)
+    for more information.
 *******************************************************************************/
-function smerge
+function qsort
 (
   v,
   r = false
 ) = not_defined(v) ? undef
+  : !is_iterable(v) ? undef
   : is_empty(v) ? empty_v
-  : !is_iterable(v) ? [v]
-  : ((r == true) && is_iterable(first(v)) && !is_string(first(v))) ?
-    concat(smerge(first(v), r), smerge(tail(v), r))
-  : concat(first(v), smerge(tail(v), r));
+  : !(all_strings(v) || all_numbers(v)) ? undef  // not all numbers or strings
+  : let
+    (
+      mp = v[floor(len(v)/2)],
+
+      lt = [for (i = [0 : len(v)-1]) if (v[i]  < mp) v[i]],
+      eq = [for (i = [0 : len(v)-1]) if (v[i] == mp) v[i]],
+      gt = [for (i = [0 : len(v)-1]) if (v[i]  > mp) v[i]]
+
+    )
+    (r == true) ? concat(qsort(gt, r), eq, qsort(lt, r))
+  : concat(qsort(lt, r), eq, qsort(gt, r));
+
+//----------------------------------------------------------------------------//
+// grow / reduce
+//----------------------------------------------------------------------------//
+
+//! Strip all matching values from an iterable value.
+/***************************************************************************//**
+  \param    v <vector> A vector of values.
+  \param    mv \<value> A match value.
+
+  \returns  <vector> \p v with all elements equal to \p mv removed.
+            Returns \b undef when \p v is not defined or is not iterable.
+*******************************************************************************/
+function strip
+(
+  v,
+  mv = empty_v
+) = not_defined(v) ? undef
+  : !is_iterable(v) ? undef
+  : is_empty(v) ? empty_v
+  : (first(v) == mv) ? concat(strip(tail(v), mv))
+  : concat(head(v), strip(tail(v), mv));
 
 //! Append a value to each element of an iterable value.
 /***************************************************************************//**
@@ -747,24 +942,6 @@ function append
     )
   : (j == true) ? concat([concat(first(v), nv)], append(nv, tail(v), j, l))
   : concat(first(v), nv, append(nv, tail(v), j, l));
-
-//! Strip all matching values from an iterable value.
-/***************************************************************************//**
-  \param    v <vector> A vector of values.
-  \param    mv \<value> A match value.
-
-  \returns  <vector> \p v with all elements equal to \p mv removed.
-            Returns \b undef when \p v is not defined or is not iterable.
-*******************************************************************************/
-function strip
-(
-  v,
-  mv = empty_v
-) = not_defined(v) ? undef
-  : !is_iterable(v) ? undef
-  : is_empty(v) ? empty_v
-  : (first(v) == mv) ? concat(strip(tail(v), mv))
-  : concat(head(v), strip(tail(v), mv));
 
 //! Insert a new value into an iterable value.
 /***************************************************************************//**
@@ -872,159 +1049,6 @@ function delete
     )
     strip(n, empty_v);
 
-//! Convert all vector elements to strings and concatenate.
-/***************************************************************************//**
-  \param    v <vector> A vector of values.
-
-  \returns  <string> Constructed by converting each element of the vector
-            to a string and concatenating together.
-            Returns \b undef when \p v is not defined.
-
-  \details
-
-    \b Example
-    \code{.C}
-    v1=["a", "b", "c", "d"];
-    v2=[1, 2, 3];
-
-    echo( vstr(concat(v1, v2)) );
-    \endcode
-
-    \b Result
-    \code{.C}
-    ECHO: "abcd123"
-    \endcode
-*******************************************************************************/
-function vstr
-(
-  v
-) = not_defined(v) ? undef
-  : !is_iterable(v) ? str(v)
-  : is_empty(v) ? empty_str
-  : (len(v) == 1) ? str(first(v))
-  : str(first(v), vstr(tail(v)));
-
-//! Sort the elements of an iterable value using the quick sort method.
-/***************************************************************************//**
-  \param    v \<value> An iterable value.
-  \param    r <boolean> Reverse sort order.
-
-  \returns  <vector> With elements sorted in ascending order.
-            Returns \b undef when \p v is not all strings or all numbers.
-            Returns \b undef when \p v is not defined or is not iterable.
-
-  \details
-
-  \warning This implementation relies on the comparison operators
-           '<' and '>' which expect the operands to be either two scalar
-           numbers or two strings. Therefore, this function returns \b undef
-           for vectors containing anything other than all scalar numbers
-           or all strings.
-
-    See [Wikipedia](https://en.wikipedia.org/wiki/Quicksort)
-    for more information.
-*******************************************************************************/
-function qsort
-(
-  v,
-  r = false
-) = not_defined(v) ? undef
-  : !is_iterable(v) ? undef
-  : is_empty(v) ? empty_v
-  : !(all_strings(v) || all_numbers(v)) ? undef  // not all numbers or strings
-  : let
-    (
-      mp = v[floor(len(v)/2)],
-
-      lt = [for (i = [0 : len(v)-1]) if (v[i]  < mp) v[i]],
-      eq = [for (i = [0 : len(v)-1]) if (v[i] == mp) v[i]],
-      gt = [for (i = [0 : len(v)-1]) if (v[i]  > mp) v[i]]
-
-    )
-    (r == true) ? concat(qsort(gt, r), eq, qsort(lt, r))
-  : concat(qsort(lt, r), eq, qsort(gt, r));
-
-//! Compute the sum of a vector of numbers.
-/***************************************************************************//**
-  \param    v <range|vector> A vector of numerical values.
-  \param    i1 <integer> The element index at which to begin summation
-            (first when not specified).
-  \param    i2 <integer> The element index at which to end summation
-            (last when not specified).
-
-  \returns  <decimal> The summation of elements over the index range.
-            Returns \b v when it is a scalar number.
-            Returns 0 when \p v is empty.
-            Returns \b undef when \p v is not defined or is not iterable
-            and not a number.
-*******************************************************************************/
-function sum
-(
-  v,
-  i1,
-  i2
-) = not_defined(v) ? undef
-  : is_empty(v) ? 0
-  : is_number(v) ? v
-  : is_range(v) ? sum([for (i=v) i], i1, i2)
-  : !is_iterable(v) ? undef
-  : let
-    (
-      s = is_defined(i1) ? min(max(i1,0),len(v)-1) : 0,
-      i = is_defined(i2) ? max(min(i2,len(v)-1),0) : len(v)-1
-    )
-    (i == s) ? v[i]
-  : v[i] + sum(v, s, i-1);
-
-//! Return a defined or default value.
-/***************************************************************************//**
-  \param    v \<value> A value.
-  \param    d \<value> A default value.
-
-  \returns  \<value> \p v when it is defined or \p d otherwise.
-*******************************************************************************/
-function defined_or
-(
-  v,
-  d
-) = is_defined(v) ? v : d;
-
-//! Return a defined vector element or default value.
-/***************************************************************************//**
-  \param    v <vector> A vector.
-  \param    i <integer> An element index.
-  \param    d \<value> A default value.
-
-  \returns  \<value> <tt>v[i]</tt> when it is defined or \p d otherwise.
-*******************************************************************************/
-function edefined_or
-(
-  v,
-  i,
-  d
-) = (len(v) > i) ? v[i] : d;
-
-//! Create a vector of constant elements.
-/***************************************************************************//**
-  \param    l <integer> The vector length.
-  \param    v \<value> The element value.
-
-  \returns  <vector> With \p l copies of the element value \p v.
-            Returns \b empty_v when <tt>(l < 1)</tt>.
-
-  \details
-
-  \note     When \p v is not specified, each element is assigned the value
-            of its index position.
-*******************************************************************************/
-function consts
-(
-  l,
-  v
-) = (l<1) ? empty_v
-  : is_defined(v) ? [for (i=[0:1:l-1]) v]
-  : [for (i=[0:1:l-1]) i];
-
 //! @}
 //! @}
 
@@ -1099,8 +1123,8 @@ BEGIN_SCOPE validate;
           ["is_empty",    f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f],
           ["is_scalar",   t, t, t, t, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, s, s],
           ["is_iterable", f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, t, t, t, s, s],
-          ["is_vector",   f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, s, s],
           ["is_string",   f, f, f, f, f, f, f, f, f, f, f, t, t, t, f, f, f, f, f, f, f],
+          ["is_vector",   f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, s, s],
           ["is_bool",     f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
           ["is_integer",  f, t, t, t, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
           ["is_decimal",  f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
@@ -1144,8 +1168,8 @@ BEGIN_SCOPE validate;
         for (vid=test_ids) run_test( "is_empty", is_empty(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_scalar", is_scalar(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_iterable", is_iterable(get_value(vid)), vid );
-        for (vid=test_ids) run_test( "is_vector", is_vector(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_string", is_string(get_value(vid)), vid );
+        for (vid=test_ids) run_test( "is_vector", is_vector(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_bool", is_bool(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_integer", is_integer(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_decimal", is_decimal(get_value(vid)), vid );
@@ -1341,6 +1365,58 @@ BEGIN_SCOPE validate;
 
       good_r =
       [ // function
+        ["vstr",
+          undef,                                              // t01
+          empty_str,                                          // t02
+          "[0 : 0.5 : 9]",                                    // t03
+          "A string",                                         // t04
+          "orangeapplegrapebanana",                           // t05
+          "bananas",                                          // t06
+          "undef",                                            // t07
+          "[1, 2][2, 3]",                                     // t08
+          "ab[1, 2][2, 3][4, 5]",                             // t09
+          "[1, 2, 3][4, 5, 6][7, 8, 9][\"a\", \"b\", \"c\"]", // t10
+          "0123456789101112131415"                            // t11
+        ],
+        ["sum",
+          undef,                                              // t01
+          0,                                                  // t02
+          85.5,                                               // t03
+          undef,                                              // t04
+          undef,                                              // t05
+          undef,                                              // t06
+          undef,                                              // t07
+          [3,5],                                              // t08
+          undef,                                              // t09
+          [undef,undef,undef],                                // t10
+          120                                                 // t11
+        ],
+        ["defined_or_D",
+          "default",                                          // t01
+          empty_v,                                            // t02
+          [0:0.5:9],                                          // t03
+          "A string",                                         // 04
+          ["orange","apple","grape","banana"],                // t05
+          ["b","a","n","a","n","a","s"],                      // t06
+          [undef],                                            // t07
+          [[1,2],[2,3]],                                      // t08
+          ["ab",[1,2],[2,3],[4,5]],                           // t09
+          [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]],            // t10
+          [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
+        ],
+        ["edefined_or_DE3",
+          "default",                                          // t01
+          "default",                                          // t02
+          "default",                                          // t03
+          "t",                                                // t04
+          "banana",                                           // t05
+          "a",                                                // t06
+          "default",                                          // t07
+          "default",                                          // t08
+          [4,5],                                              // t09
+          ["a","b","c"],                                      // t10
+          3                                                   // t11
+        ],
         ["first",
           undef,                                              // t01
           undef,                                              // t02
@@ -1393,114 +1469,18 @@ BEGIN_SCOPE validate;
           [[4,5,6],[7,8,9],["a","b","c"]],                    // t10
           [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]               // t11
         ],
-        ["reverse",
+        ["rselect_02",
           undef,                                              // t01
           empty_v,                                            // t02
           undef,                                              // t03
-          ["g","n","i","r","t","s"," ","A"],                  // t04
-          ["banana","grape","apple","orange"],                // t05
-          ["s","a","n","a","n","a","b"],                      // t06
-          [undef],                                            // t07
-          [[2,3],[1,2]],                                      // t08
-          [[4,5],[2,3],[1,2],"ab"],                           // t09
-          [["a","b","c"],[7,8,9],[4,5,6],[1,2,3]],            // t10
-          [15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0]             // t11
-
-        ],
-        ["pmerge",
-          undef,                                              // t01
-          empty_v,                                            // t02
-          undef,                                              // t03
-          [["A"," ","s","t","r","i","n","g"]],                // t04
-          [
-            ["o","a","g","b"],["r","p","r","a"],
-            ["a","p","a","n"],["n","l","p","a"],
-            ["g","e","e","n"]
-          ],                                                  // t05
-          [["b","a","n","a","n","a","s"]],                    // t06
-          undef,                                              // t07
-          [[1,2],[2,3]],                                      // t08
-          [["a",1,2,4],["b",2,3,5]],                          // t09
-          [[1,4,7,"a"],[2,5,8,"b"],[3,6,9,"c"]],              // t10
-          undef                                               // t11
-        ],
-        ["smerge",
-          undef,                                              // t01
-          empty_v,                                            // t02
-          [[0:0.5:9]],                                        // t03
-          ["A"," ","s","t","r","i","n","g"],                  // t04
-          ["orange","apple","grape","banana"],                // t05
-          ["b","a","n","a","n","a","s"],                      // t06
-          [undef],                                            // t07
-          [1,2,2,3],                                          // t08
-          ["ab",1,2,2,3,4,5],                                 // t09
-          [1,2,3,4,5,6,7,8,9,"a","b","c"],                    // t10
-          [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
-        ],
-        ["append_0",
-          undef,                                              // t01
-          [[0]],                                              // t02
-          undef,                                              // t03
-          [
-            ["A",0],[" ",0],["s",0],["t",0],
-            ["r",0],["i",0],["n",0],["g",0]
-          ],                                                  // t04
-          [
-            ["orange",0],["apple",0],
-            ["grape",0],["banana",0]
-          ],                                                  // t05
-          [
-            ["b",0],["a",0],["n",0],["a",0],
-            ["n",0],["a",0],["s",0]
-          ],                                                  // t06
-          [[undef,0]],                                        // t07
-          [[1,2,0],[2,3,0]],                                  // t08
-          [["ab",0],[1,2,0],[2,3,0],[4,5,0]],                 // t09
-          [[1,2,3,0],[4,5,6,0],[7,8,9,0],["a","b","c",0]],    // t10
-          [
-            [0,0],[1,0],[2,0],[3,0],[4,0],[5,0],
-            [6,0],[7,0],[8,0],[9,0],[10,0],[11,0],
-            [12,0],[13,0],[14,0],[15,0]
-          ]                                                   // t11
-        ],
-        ["vstr",
-          undef,                                              // t01
-          empty_str,                                          // t02
-          "[0 : 0.5 : 9]",                                    // t03
-          "A string",                                         // t04
-          "orangeapplegrapebanana",                           // t05
-          "bananas",                                          // t06
-          "undef",                                            // t07
-          "[1, 2][2, 3]",                                     // t08
-          "ab[1, 2][2, 3][4, 5]",                             // t09
-          "[1, 2, 3][4, 5, 6][7, 8, 9][\"a\", \"b\", \"c\"]", // t10
-          "0123456789101112131415"                            // t11
-        ],
-        ["qsort",
-          undef,                                              // t01
-          empty_v,                                            // t02
-          undef,                                              // t03
-          [" ","A","g","i","n","r","s","t"],                  // t04
-          ["apple","banana","grape","orange"],                // t05
-          ["a","a","a","b","n","n","s"],                      // t06
+          ["A"," ","s"],                                      // t04
+          ["orange","apple","grape"],                         // t05
+          ["b","a","n"],                                      // t06
           undef,                                              // t07
           undef,                                              // t08
-          undef,                                              // t09
-          undef,                                              // t10
-          [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
-        ],
-        ["sum",
-          undef,                                              // t01
-          0,                                                  // t02
-          85.5,                                               // t03
-          undef,                                              // t04
-          undef,                                              // t05
-          undef,                                              // t06
-          undef,                                              // t07
-          [3,5],                                              // t08
-          undef,                                              // t09
-          [undef,undef,undef],                                // t10
-          120                                                 // t11
+          ["ab",[1,2],[2,3]],                                 // t09
+          [[1,2,3],[4,5,6],[7,8,9]],                          // t10
+          [0,1,2]                                             // t11
         ],
         ["eselect_F",
           undef,                                              // t01
@@ -1541,44 +1521,88 @@ BEGIN_SCOPE validate;
           [2,5,8,"b"],                                        // t10
           skip                                                // t11
         ],
-        ["rselect_02",
+        ["smerge",
           undef,                                              // t01
           empty_v,                                            // t02
-          undef,                                              // t03
-          ["A"," ","s"],                                      // t04
-          ["orange","apple","grape"],                         // t05
-          ["b","a","n"],                                      // t06
-          undef,                                              // t07
-          undef,                                              // t08
-          ["ab",[1,2],[2,3]],                                 // t09
-          [[1,2,3],[4,5,6],[7,8,9]],                          // t10
-          [0,1,2]                                             // t11
-        ],
-        ["defined_or_D",
-          "default",                                          // t01
-          empty_v,                                            // t02
-          [0:0.5:9],                                          // t03
-          "A string",                                         // 04
+          [[0:0.5:9]],                                        // t03
+          ["A"," ","s","t","r","i","n","g"],                  // t04
           ["orange","apple","grape","banana"],                // t05
           ["b","a","n","a","n","a","s"],                      // t06
           [undef],                                            // t07
-          [[1,2],[2,3]],                                      // t08
-          ["ab",[1,2],[2,3],[4,5]],                           // t09
-          [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]],            // t10
+          [1,2,2,3],                                          // t08
+          ["ab",1,2,2,3,4,5],                                 // t09
+          [1,2,3,4,5,6,7,8,9,"a","b","c"],                    // t10
           [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
         ],
-        ["edefined_or_DE3",
-          "default",                                          // t01
-          "default",                                          // t02
-          "default",                                          // t03
-          "t",                                                // t04
-          "banana",                                           // t05
-          "a",                                                // t06
-          "default",                                          // t07
-          "default",                                          // t08
-          [4,5],                                              // t09
-          ["a","b","c"],                                      // t10
-          3                                                   // t11
+        ["pmerge",
+          undef,                                              // t01
+          empty_v,                                            // t02
+          undef,                                              // t03
+          [["A"," ","s","t","r","i","n","g"]],                // t04
+          [
+            ["o","a","g","b"],["r","p","r","a"],
+            ["a","p","a","n"],["n","l","p","a"],
+            ["g","e","e","n"]
+          ],                                                  // t05
+          [["b","a","n","a","n","a","s"]],                    // t06
+          undef,                                              // t07
+          [[1,2],[2,3]],                                      // t08
+          [["a",1,2,4],["b",2,3,5]],                          // t09
+          [[1,4,7,"a"],[2,5,8,"b"],[3,6,9,"c"]],              // t10
+          undef                                               // t11
+        ],
+        ["reverse",
+          undef,                                              // t01
+          empty_v,                                            // t02
+          undef,                                              // t03
+          ["g","n","i","r","t","s"," ","A"],                  // t04
+          ["banana","grape","apple","orange"],                // t05
+          ["s","a","n","a","n","a","b"],                      // t06
+          [undef],                                            // t07
+          [[2,3],[1,2]],                                      // t08
+          [[4,5],[2,3],[1,2],"ab"],                           // t09
+          [["a","b","c"],[7,8,9],[4,5,6],[1,2,3]],            // t10
+          [15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0]             // t11
+
+        ],
+        ["qsort",
+          undef,                                              // t01
+          empty_v,                                            // t02
+          undef,                                              // t03
+          [" ","A","g","i","n","r","s","t"],                  // t04
+          ["apple","banana","grape","orange"],                // t05
+          ["a","a","a","b","n","n","s"],                      // t06
+          undef,                                              // t07
+          undef,                                              // t08
+          undef,                                              // t09
+          undef,                                              // t10
+          [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
+        ],
+        ["append_0",
+          undef,                                              // t01
+          [[0]],                                              // t02
+          undef,                                              // t03
+          [
+            ["A",0],[" ",0],["s",0],["t",0],
+            ["r",0],["i",0],["n",0],["g",0]
+          ],                                                  // t04
+          [
+            ["orange",0],["apple",0],
+            ["grape",0],["banana",0]
+          ],                                                  // t05
+          [
+            ["b",0],["a",0],["n",0],["a",0],
+            ["n",0],["a",0],["s",0]
+          ],                                                  // t06
+          [[undef,0]],                                        // t07
+          [[1,2,0],[2,3,0]],                                  // t08
+          [["ab",0],[1,2,0],[2,3,0],[4,5,0]],                 // t09
+          [[1,2,3,0],[4,5,6,0],[7,8,9,0],["a","b","c",0]],    // t10
+          [
+            [0,0],[1,0],[2,0],[3,0],[4,0],[5,0],
+            [6,0],[7,0],[8,0],[9,0],[10,0],[11,0],
+            [12,0],[13,0],[14,0],[15,0]
+          ]                                                   // t11
         ]
       ];
 
@@ -1608,23 +1632,23 @@ BEGIN_SCOPE validate;
       }
 
       // Indirect function calls would be very useful here!!!
+      for (vid=test_ids) run_test( "vstr", vstr(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "sum", sum(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "defined_or_D", defined_or(get_value(vid),"default"), vid );
+      for (vid=test_ids) run_test( "edefined_or_DE3", edefined_or(get_value(vid),3,"default"), vid );
       for (vid=test_ids) run_test( "first", first(get_value(vid)), vid );
       for (vid=test_ids) run_test( "last", last(get_value(vid)), vid );
       for (vid=test_ids) run_test( "head", head(get_value(vid)), vid );
       for (vid=test_ids) run_test( "tail", tail(get_value(vid)), vid );
-      for (vid=test_ids) run_test( "reverse", reverse(get_value(vid)), vid );
-      for (vid=test_ids) run_test( "pmerge", pmerge(get_value(vid)), vid );
-      for (vid=test_ids) run_test( "smerge", smerge(get_value(vid)), vid );
-      for (vid=test_ids) run_test( "append_0", append(0,get_value(vid)), vid );
-      for (vid=test_ids) run_test( "vstr", vstr(get_value(vid)), vid );
-      for (vid=test_ids) run_test( "qsort", qsort(get_value(vid)), vid );
-      for (vid=test_ids) run_test( "sum", sum(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "rselect_02", rselect(get_value(vid),i=[0:2]), vid );
       for (vid=test_ids) run_test( "eselect_F", eselect(get_value(vid),f=true), vid );
       for (vid=test_ids) run_test( "eselect_L", eselect(get_value(vid),l=true), vid );
       for (vid=test_ids) run_test( "eselect_1", eselect(get_value(vid),i=1), vid );
-      for (vid=test_ids) run_test( "rselect_02", rselect(get_value(vid),i=[0:2]), vid );
-      for (vid=test_ids) run_test( "defined_or_D", defined_or(get_value(vid),"default"), vid );
-      for (vid=test_ids) run_test( "edefined_or_DE3", edefined_or(get_value(vid),3,"default"), vid );
+      for (vid=test_ids) run_test( "smerge", smerge(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "pmerge", pmerge(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "reverse", reverse(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "qsort", qsort(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "append_0", append(0,get_value(vid)), vid );
 
       // end-of-tests
     END_OPENSCAD;
