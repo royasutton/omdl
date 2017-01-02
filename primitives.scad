@@ -959,8 +959,8 @@ function append
   \param    nv \<value> A new value to insert.
   \param    v <vector> A vector of values.
   \param    i <integer> An index insert position.
-  \param    mv \<value> A match value insert position
-            (or an iterable value of match values).
+  \param    mv \<vector|value> A vector of match values candidates
+            (or a single match value).
   \param    mi <integer> A match index.
 
   \returns  <vector> With \p nv inserted into \p v at the specified position.
@@ -974,8 +974,8 @@ function append
   \details
 
   \note     The insert position can be specified by an index, an element
-            match value, or an iterable value of potential match values.
-  \note     When \p mv is an iterable value of potential match values, the
+            match value, or vector of potential match values.
+  \note     When \p mv is a vector of potential match values, the
             first matching value from \p mv that exists in \p v is selected.
   \note     When the selected matching value repeats in \p v, \p mi
             indicates which match is use as the insert position.
@@ -999,7 +999,7 @@ function insert
   : ((i<0) || (i>len(v))) ? undef
   : let
     (
-      m = is_iterable(mv) ? mv : [mv],
+      m = is_vector(mv) ? mv : [mv],
       p = is_defined(mv) ? first(strip(search(m, v, 0, 0)))[mi] : i,
       h = (p>0) ? [for (i = [0 : p-1]) v[i]] : empty_v,
       t = (p>len(v)-1) ? empty_v : [for (i = [p : len(v)-1]) v[i]]
@@ -1010,8 +1010,8 @@ function insert
 /***************************************************************************//**
   \param    v <vector> A vector of values.
   \param    i <range|vector|integer> Deletion Indexes.
-  \param    mv \<value> A deletion match value
-            (or an iterable value of deletion match values).
+  \param    mv \<vector|value> A vector of deletion match values
+            (or a single match values).
   \param    mc <integer> A match count.
 
   \returns  <vector> \p v with all specified element removed.
@@ -1022,10 +1022,9 @@ function insert
 
   \note     The elements to delete can be specified by an index position,
             a vector of index positions, an index range, an element match
-            value, or an iterable value of element match values.
-  \note     When \p mv is an iterable value of element match values, all
-            matching values from \p mv that exists in \p v are candidates
-            for deletion.
+            value, or a vector of element match values.
+  \note     When \p mv is a vector of match values, all matching values
+            from \p mv that exists in \p v are candidates for deletion.
             For each matching candidate, \p mc indicates the quantity to
             remove. If <tt>(mc == 0)</tt> all candidates are removed.
   \note     When more than one deletion criteria is specified, the
@@ -1045,7 +1044,7 @@ function delete
   : is_range(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
   : let
     (
-      m = is_iterable(mv) ? mv : [mv],
+      m = is_vector(mv) ? mv : [mv],
       p = is_defined(mv) ?
         (
           (mc == 1) ? smerge(search(m, v, mc, 0), false)
