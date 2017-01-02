@@ -304,15 +304,16 @@ function is_odd( v ) = !is_integer(v) ? false : ((v % 2) != 0);
 // group 2
 //----------------------------------------------------------------------------//
 
-//! Test that all elements of an iterable value equal a comparison value.
+//! Test if all elements of a value equal a comparison value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v \<value> A value or an iterable value.
   \param    cv \<value> A comparison value.
 
   \returns  <boolean> \b true when all elements equal the value \p cv
             and \b false otherwise.
 
-  \note     The scalar value of \p v is is compared when it is not iterable.
+  \details
+
   \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_equal
@@ -324,15 +325,16 @@ function all_equal
   : (first(v) != cv) ? false
   : all_equal(tail(v), cv);
 
-//! Test if any element of an iterable value equals a comparison value.
+//! Test if any element of a value equals a comparison value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v \<value> A value or an iterable value.
   \param    cv \<value> A comparison value.
 
   \returns  <boolean> \b true when any element equals the value \p cv
             and \b false otherwise.
 
-  \note     The scalar value of \p v is is compared when it is not iterable.
+  \details
+
   \warning  Always returns \b false when \p v is empty.
 *******************************************************************************/
 function any_equal
@@ -344,40 +346,43 @@ function any_equal
   : (first(v) == cv) ? true
   : any_equal(tail(v), cv);
 
-//! Test that no element of an iterable value is undefined.
+//! Test if no element of a value is undefined.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v \<value> A value or an iterable value.
 
   \returns  <boolean> \b true when no element is undefined
             and \b false otherwise.
 
-  \note     The scalar value of \p v is is tested when it is not iterable.
+  \details
+
   \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_defined(v) = !any_equal(v, undef);
 
-//! Test if any element of an iterable value is undefined.
+//! Test if any element of a value is undefined.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v \<value> A value or an iterable value.
 
   \returns  <boolean> \b true when any element is undefined
             and \b false otherwise.
 
-  \note     The scalar value of \p v is is tested when it is not iterable.
+  \details
+
   \warning  Always returns \b false when \p v is empty.
 *******************************************************************************/
 function any_undefined(v) = any_equal(v, undef);
 
-//! Test if all elements of an iterable value are scalars.
+//! Test if all elements of a value are scalars.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v \<value> A value or an iterable value.
 
   \returns  <boolean> \b true when all elements are scalar values
             and \b false otherwise.
             Returns \b true when \p v is a single scalar value.
             Returns the value of \p v when it is not defined.
 
-  \note     The scalar value of \p v is is tested when it is not iterable.
+  \details
+
   \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_scalars
@@ -389,16 +394,17 @@ function all_scalars
   : !is_scalar(first(v)) ? false
   : all_scalars(tail(v));
 
-//! Test if all elements of an iterable value are vectors.
+//! Test if all elements of a value are vectors.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v \<value> A value or an iterable value.
 
   \returns  <boolean> \b true when all elements are vector values
             and \b false otherwise.
             Returns \b true when \p v is a single vector value.
             Returns the value of \p v when it is not defined.
 
-  \note     The scalar value of \p v is is tested when it is not iterable.
+  \details
+
   \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_vectors
@@ -410,16 +416,17 @@ function all_vectors
   : !is_vector(first(v)) ? false
   : all_vectors(tail(v));
 
-//! Test if all elements of an iterable value are strings.
+//! Test if all elements of a value are strings.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v \<value> A value or an iterable value.
 
   \returns  <boolean> \b true when all elements are string values
             and \b false otherwise.
             Returns \b true when \p v is a single string value.
             Returns the value of \p v when it is not defined.
 
-  \note     The scalar value of \p v is is tested when it is not iterable.
+  \details
+
   \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_strings
@@ -431,16 +438,17 @@ function all_strings
   : !is_string(first(v)) ? false
   : all_strings(tail(v));
 
-//! Test if all elements of an iterable value are numbers.
+//! Test if all elements of a value are numbers.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v \<value> A value or an iterable value.
 
   \returns  <boolean> \b true when all elements are numerical values
             and \b false otherwise.
             Returns \b true when \p v is a single numerical value.
             Returns the value of \p v when it is not defined.
 
-  \note     The scalar value of \p v is is tested when it is not iterable.
+  \details
+
   \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_numbers
@@ -452,16 +460,17 @@ function all_numbers
   : !is_number(first(v)) ? false
   : all_numbers(tail(v));
 
-//! Test if all elements of an iterable value have a given length.
+//! Test if all elements of a value have a given length.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v \<value> A value or an iterable value.
   \param    l <integer> The length.
 
   \returns  <boolean> \b true when all elements have length equal to \p l
             and \b false otherwise.
             Returns the value of \p v when it is not defined.
 
-  \note     The scalar value of \p v is is tested when it is not iterable.
+  \details
+
   \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
 function all_len
