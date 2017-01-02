@@ -948,11 +948,11 @@ function append
   : is_empty(v) ? ((j == true) ? [concat(nv)] : concat(nv))
   : (len(v) == 1) ?
     (
-      (j == true) ? (l == true) ? [concat(first(v), nv)] : [head(v)]
-      : (l == true) ? concat(first(v), nv) : head(v)
+      (j == true) ? (l == true) ? [concat(head(v), nv)] : [head(v)]
+      : (l == true) ? concat(head(v), nv) : head(v)
     )
-  : (j == true) ? concat([concat(first(v), nv)], append(nv, tail(v), j, l))
-  : concat(first(v), nv, append(nv, tail(v), j, l));
+  : (j == true) ? concat([concat(head(v), nv)], append(nv, tail(v), j, l))
+  : concat(head(v), nv, append(nv, tail(v), j, l));
 
 //! Insert a new value into an iterable value.
 /***************************************************************************//**
