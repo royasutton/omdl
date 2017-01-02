@@ -483,6 +483,40 @@ function all_len
   : (len(first(v)) != l) ? false
   : all_len(tail(v),l);
 
+//! Test if all elements of two values are approximately equal.
+/***************************************************************************//**
+  \param    v1 \<value> A value or an iterable value 1.
+  \param    v2 \<value> A value or an iterable value 2.
+  \param    p \<number> A numerical precision.
+
+  \returns  <boolean> \b true when all elements of each values are
+            sufficiently equal and \b false otherwise. All numerical
+            comparisons are performed with precision limited by \p p. All
+            non-numeric comparisons test for exact equality.
+
+  \details
+
+  \note     The parameter \p p indicated the number of digits of precision
+            for each numerical comparison.
+
+  \warning  Always returns \b true when \p v is empty.
+*******************************************************************************/
+function almost_equal
+(
+  v1,
+  v2,
+  p = 4
+) = all_scalars([v1, v2]) ?
+    (
+      all_numbers([v1, v2]) ? ( (abs(v1-v2) * pow(10, p)) < 1 )
+    : (v1 == v2)
+    )
+  : (is_string(v1) || is_string(v2)) ? (v1 == v2)
+  : all_equal([v1, v2], empty_v) ? true
+  : any_equal([v1, v2], empty_v) ? false
+  : !almost_equal(first(v1), first(v2), p) ? false
+  : almost_equal(tail(v1), tail(v2), p);
+
 //! @}
 //! @}
 
@@ -1285,22 +1319,26 @@ BEGIN_SCOPE validate;
         s = -1;     // skip test
 
         good_r =
-        [ // function       01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23
-          ["all_equal_T",   f, f, t, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t],
-          ["all_equal_F",   f, f, f, t, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
-          ["all_equal_U",   t, f, f, f, f, f, t, t, f, f, t, f, f, f, f, f, f, f, t, f, f, f, f],
-          ["any_equal_T",   f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t],
-          ["any_equal_F",   f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f],
-          ["any_equal_U",   t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
-          ["all_defined",   f, t, t, t, t, t, t, t, t, t, f, t, t, t, t, t, t, f, f, t, t, t, t],
-          ["any_undefined", t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
-          ["all_scalars",   u, t, t, t, f, f, s, s, s, s, t, t, t, f, f, f, f, t, t, f, t, t, t],
-          ["all_vectors",   u, f, f, f, f, f, t, t, f, f, f, f, f, t, t, f, t, f, f, t, f, f, f],
-          ["all_strings",   u, f, f, f, t, t, t, s, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
-          ["all_numbers",   u, t, f, f, f, f, s, s, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
-          ["all_len_1",     u, f, f, f, t, t, s, s, f, f, f, f, f, t, f, f, f, f, f, t, f, f, f],
-          ["all_len_2",     u, f, f, f, f, f, s, s, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f],
-          ["all_len_3",     u, f, f, f, f, f, s, s, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f]
+        [ // function         01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+          ["all_equal_T",     f, f, t, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t],
+          ["all_equal_F",     f, f, f, t, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+          ["all_equal_U",     t, f, f, f, f, f, t, t, f, f, t, f, f, f, f, f, f, f, t, f, f, f, f],
+          ["any_equal_T",     f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t],
+          ["any_equal_F",     f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f],
+          ["any_equal_U",     t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
+          ["all_defined",     f, t, t, t, t, t, t, t, t, t, f, t, t, t, t, t, t, f, f, t, t, t, t],
+          ["any_undefined",   t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
+          ["all_scalars",     u, t, t, t, f, f, s, s, s, s, t, t, t, f, f, f, f, t, t, f, t, t, t],
+          ["all_vectors",     u, f, f, f, f, f, t, t, f, f, f, f, f, t, t, f, t, f, f, t, f, f, f],
+          ["all_strings",     u, f, f, f, t, t, t, s, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+          ["all_numbers",     u, t, f, f, f, f, s, s, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
+          ["all_len_1",       u, f, f, f, t, t, s, s, f, f, f, f, f, t, f, f, f, f, f, t, f, f, f],
+          ["all_len_2",       u, f, f, f, f, f, s, s, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f],
+          ["all_len_3",       u, f, f, f, f, f, s, s, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f],
+          ["almost_equal_AA", t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t],
+          ["almost_equal_T",  f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+          ["almost_equal_F",  f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+          ["almost_equal_U",  t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f]
         ];
 
         // sanity-test tables
@@ -1344,6 +1382,10 @@ BEGIN_SCOPE validate;
         for (vid=test_ids) run_test( "all_len_1", all_len(get_value(vid),1), vid );
         for (vid=test_ids) run_test( "all_len_2", all_len(get_value(vid),2), vid );
         for (vid=test_ids) run_test( "all_len_3", all_len(get_value(vid),3), vid );
+        for (vid=test_ids) run_test( "almost_equal_AA", almost_equal(get_value(vid),get_value(vid)), vid );
+        for (vid=test_ids) run_test( "almost_equal_T", almost_equal(get_value(vid),t), vid );
+        for (vid=test_ids) run_test( "almost_equal_F", almost_equal(get_value(vid),f), vid );
+        for (vid=test_ids) run_test( "almost_equal_U", almost_equal(get_value(vid),u), vid );
 
         // end-of-tests
       END_OPENSCAD;
