@@ -792,7 +792,7 @@ function smerge
 //! Parallel-merge vectors of iterable values.
 /***************************************************************************//**
   \param    v <vector> A vector of iterable values.
-  \param    j <boolean> Join each merge as a separate element.
+  \param    j <boolean> Join each merge as a vector.
 
   \returns  <vector> Containing the parallel-wise element concatenation
             of each iterable value in \p v.
@@ -923,7 +923,8 @@ function strip
 /***************************************************************************//**
   \param    nv \<value> A new value to append.
   \param    v <vector> A vector of values.
-  \param    j <boolean> Join each appendage as a separate element.
+  \param    r <boolean> Reduce vector element value before appending.
+  \param    j <boolean> Join each appendage as a vector.
   \param    l <boolean> Append to last element.
 
   \returns  <vector> With \p nv appended to each element of \p v.
@@ -933,35 +934,47 @@ function strip
 
     \b Example
     \code{.C}
-    v1=["a", "b", "c", "d"];
+    v1=[["a"], ["b"], ["c"], ["d"]];
     v2=[1, 2, 3];
 
-    echo( append( v2, v1, j=true, l=true ) );
+    echo( append( v2, v1 ) );
+    echo( append( v2, v1, r=false ) );
     echo( append( v2, v1, j=false, l=false ) );
     \endcode
 
     \b Result
     \code{.C}
     ECHO: [["a", 1, 2, 3], ["b", 1, 2, 3], ["c", 1, 2, 3], ["d", 1, 2, 3]]
+    ECHO: [[["a"], 1, 2, 3], [["b"], 1, 2, 3], [["c"], 1, 2, 3], [["d"], 1, 2, 3]]
     ECHO: ["a", 1, 2, 3, "b", 1, 2, 3, "c", 1, 2, 3, "d"]
     \endcode
+
+  \note     Appending with reduction causes \p nv to be appended to the
+            \e elements of each value of \p v that is a vector. Otherwise,
+            \p nv is appended to the \e vector itself of each value of
+            \p v that is a vector.
 *******************************************************************************/
 function append
 (
   nv,
   v,
+  r = true,
   j = true,
   l = true
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? undef
   : is_empty(v) ? ((j == true) ? [concat(nv)] : concat(nv))
-  : (len(v) == 1) ?
+  : let
     (
-      (j == true) ? (l == true) ? [concat(head(v), nv)] : [head(v)]
-      : (l == true) ? concat(head(v), nv) : head(v)
+      ce = (r == true) ? first(v) : head(v)
     )
-  : (j == true) ? concat([concat(head(v), nv)], append(nv, tail(v), j, l))
-  : concat(head(v), nv, append(nv, tail(v), j, l));
+    (len(v) == 1) ?
+    (
+      (j == true) ? (l == true) ? [concat(ce, nv)] : [ce]
+      : (l == true) ? concat(ce, nv) : ce
+    )
+  : (j == true) ? concat([concat(ce, nv)], append(nv, tail(v), r, j, l))
+  : concat(concat(ce, nv), append(nv, tail(v), r, j, l));
 
 //! Insert a new value into an iterable value.
 /***************************************************************************//**
