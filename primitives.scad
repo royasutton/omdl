@@ -809,8 +809,7 @@ function eselect
 
   \details
 
-  \note     A string, although iterable, is treated as a merged unit
-            when recursive merge is enabled.
+  \note     A string, although iterable, is treated as a merged unit.
 *******************************************************************************/
 function smerge
 (
@@ -818,8 +817,9 @@ function smerge
   r = false
 ) = not_defined(v) ? undef
   : is_empty(v) ? empty_v
+  : is_string(v) ? [v]
   : !is_iterable(v) ? [v]
-  : ((r == true) && is_iterable(first(v)) && !is_string(first(v))) ?
+  : ((r == true) && is_iterable(first(v))) ?
     concat(smerge(first(v), r), smerge(tail(v), r))
   : concat(first(v), smerge(tail(v), r));
 
@@ -853,6 +853,7 @@ function smerge
 
   \note     The resulting vector length will be limited by the iterable
             value with the shortest length.
+  \note     A string, although iterable, is treated as a merged unit.
 *******************************************************************************/
 function pmerge
 (
@@ -861,6 +862,7 @@ function pmerge
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? undef
   : is_empty(v) ? empty_v
+  : is_string(v) ? [v]
   : let
     (
       l = [for (i = v) len(i)]          // element lengths
@@ -869,8 +871,8 @@ function pmerge
   : (min(l) == 0) ? empty_v             // any element empty?
   : let
     (
-      h = [for (i = [0 : len(v)-1]) first(v[i])],
-      t = [for (i = [0 : len(v)-1]) tail(v[i])]
+      h = [for (i = v) first(i)],
+      t = [for (i = v) tail(i)]
     )
     (j == true) ? concat([h], pmerge(t, j))
   : concat(h, pmerge(t, j));
@@ -923,9 +925,9 @@ function qsort
     (
       mp = v[floor(len(v)/2)],
 
-      lt = [for (i = [0 : len(v)-1]) if (v[i]  < mp) v[i]],
-      eq = [for (i = [0 : len(v)-1]) if (v[i] == mp) v[i]],
-      gt = [for (i = [0 : len(v)-1]) if (v[i]  > mp) v[i]]
+      lt = [for (i = v) if (i  < mp) i],
+      eq = [for (i = v) if (i == mp) i],
+      gt = [for (i = v) if (i  > mp) i]
 
     )
     (r == true) ? concat(qsort(gt, r), eq, qsort(lt, r))
@@ -1616,7 +1618,7 @@ BEGIN_SCOPE validate;
           undef,                                              // t01
           empty_v,                                            // t02
           [[0:0.5:9]],                                        // t03
-          ["A"," ","s","t","r","i","n","g"],                  // t04
+          ["A string"],                                       // t04
           ["orange","apple","grape","banana"],                // t05
           ["b","a","n","a","n","a","s"],                      // t06
           [undef],                                            // t07
@@ -1629,7 +1631,7 @@ BEGIN_SCOPE validate;
           undef,                                              // t01
           empty_v,                                            // t02
           undef,                                              // t03
-          [["A"," ","s","t","r","i","n","g"]],                // t04
+          ["A string"],                                       // t04
           [
             ["o","a","g","b"],["r","p","r","a"],
             ["a","p","a","n"],["n","l","p","a"],
@@ -1660,7 +1662,7 @@ BEGIN_SCOPE validate;
           undef,                                              // t01
           empty_v,                                            // t02
           undef,                                              // t03
-          [" ","A","g","i","n","r","s","t"],                  // t04
+          ["A string"],                                       // t04
           ["apple","banana","grape","orange"],                // t05
           ["a","a","a","b","n","n","s"],                      // t06
           undef,                                              // t07
