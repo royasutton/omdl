@@ -844,7 +844,7 @@ BEGIN_SCOPE validate;
         if ( table_get(good_r, good_c, fname, vid) != skip )
           children();
         else if ( show_skipped )
-          log_info( str(vid, " *skip*: '", fname, "(", value_text, ")'") );
+          log_info( str("*skip*: ", vid, " '", fname, "(", value_text, ")'") );
       }
       module test( fname, fresult, vid )
       {
