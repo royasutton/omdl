@@ -30,6 +30,8 @@
   \ingroup utilities
 *******************************************************************************/
 
+include <primitives.scad>;
+
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
   \ingroup utilities
@@ -37,34 +39,44 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Compare a computed value with an expected result.
+//! Compare a computed test value with an known good result.
 /***************************************************************************//**
-  \param    d <string> A validation description.
+  \param    d <string> A description.
   \param    cv \<value> A computed value to validate.
   \param    t <string|boolean> The validation type.
-  \param    ev \<value> The expected result value.
+  \param    ev \<value> The expected good value.
 
-  \param    pf <boolean> Result reported as pass or fail boolean value.
+  \param    p \<number> A numerical precision for approximate comparisons.
 
-  \returns  <string|boolean> Validation comparison result indicating
-            if the test passed or failed.
+  \param    pf <boolean> Result reported as a pass or fail boolean value.
+
+  \returns  <string|boolean> Validation result indicating if the test
+            passed or failed.
 
   \details
 
-     validation types   | pass if (else fail)
-    :------------------:|:----------------------------:
-     "eq"               | cv equal ev
-     "neq"              | cv not equal to ev
-     "true" \| true     | cv is true
-     "false" \| false   | cv is false
+     validation types     | pass if (else fail)
+    :--------------------:|:----------------------------:
+     "almost"             | \p cv almost equals \p ev
+     "equals"             | \p cv equals \p ev
+     "not"                | \p cv not equal to \p ev
+     "true" \| \b true    | \p cv is \b true
+     "false" \| \b false  | \p cv is \b false
 
     \b Example
 
       \dontinclude validation_example.scad
       \skip use
-      \until log_info( fail_result );
+      \until tvae2, 4) );
 
     \b Result \include validation_example.log
+
+  \note     When performing an almost equal validation type, the
+            comparison precision is controlled by \p p. This specifies
+            the number of digits of precision for each numerical comparison.
+            A passing result indicates that \p cv equals \p ev to the
+            number of decimal digits specified by \p p. The comparison
+            is performed by the function \ref almost_equal.
 *******************************************************************************/
 function validate
 (
@@ -72,22 +84,45 @@ function validate
   cv,
   t,
   ev,
+  p = 4,
   pf = false
 )
-  = (t == "eq") ?
+  = (t == "equals") ?
     (
       (cv == ev)
       ? (pf?true  : str("passed: '", d, "'"))
-      : (pf?false : str("FAILED: '", d, "'.  Got '", cv, "'. Expected to equal '", ev, "'"))
+      : (pf?false : str
+                    (
+                      "FAILED: '", d, "'.  Got '", cv,
+                      "'. Expected to equal '", ev, "'"
+                    )
+        )
     )
-  : (t == "neq") ?
+  : (t == "not") ?
     (
       (cv != ev)
       ? (pf?true  : str("passed: '", d, "'"))
-      : (pf?false : str("FAILED: '", d, "'.  Got '", cv, "'. Expected to not equal '", ev, "'"))
+      : (pf?false : str
+                    (
+                      "FAILED: '", d, "'.  Got '", cv,
+                      "'. Expected to not equal '", ev, "'"
+                    )
+        )
     )
-  : ( (t == true)  || (t == "true")  ) ? validate(d, cv, "eq", true, pf)
-  : ( (t == false) || (t == "false") ) ? validate(d, cv, "eq", false, pf)
+  : ( (t == true)  || (t == "true")  ) ? validate(d, cv, "equals", true, p, pf)
+  : ( (t == false) || (t == "false") ) ? validate(d, cv, "equals", false, p, pf)
+  :  (t == "almost") ?
+    (
+      almost_equal(cv, ev, p)
+      ? (pf?true  : str("passed: '", d, "'"))
+      : (pf?false : str
+                    (
+                      "FAILED: '", d, "'.  Got '", cv,
+                      "'. Expected to almost equal '", ev, "'",
+                      " to ", p, " digits"
+                    )
+        )
+    )
   : (pf?false : str("FAILED: '", d, "'.  Unknown test '", t, "'"));
 
 //! @}
@@ -114,9 +149,9 @@ BEGIN_SCOPE example;
     //
     // pass test example
     //
-    pass_result = validate("test-a f1(farg)", f1(farg), "eq", erv1);
+    pass_result = validate("test-a f1(farg)", f1(farg), "equals", erv1);
 
-    if ( !validate(cv=f1(farg), t="eq", ev=erv1, pf=true) )
+    if ( !validate(cv=f1(farg), t="equals", ev=erv1, pf=true) )
       log_warn( pass_result );
     else
       log_info( pass_result );
@@ -124,12 +159,21 @@ BEGIN_SCOPE example;
     //
     // fail test example
     //
-    fail_result = validate("test-b f1(farg)", f1(farg), "eq", erv2);
+    fail_result = validate("test-b f1(farg)", f1(farg), "equals", erv2);
 
-    if ( !validate(cv=f1(farg), t="eq", ev=erv2, pf=true) )
+    if ( !validate(cv=f1(farg), t="equals", ev=erv2, pf=true) )
       log_warn( fail_result );
     else
       log_info( fail_result );
+
+    //
+    // almost equal test example
+    //
+    tvae1 = [[90.001], [[45.009], true]];
+    tvae2 = [[90.002], [[45.010], true]];
+
+    log_info( validate("test-c", tvae1, "almost", tvae2, 3) );
+    log_warn( validate("test-d", tvae1, "almost", tvae2, 4) );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;

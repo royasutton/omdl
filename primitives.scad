@@ -1352,8 +1352,8 @@ BEGIN_SCOPE validate;
           value_text = table_get(test_r, test_c, vid, "td");
           pass_value = table_get(good_r, good_c, fname, vid);
 
-          test_pass = validate( cv=fresult, t="eq", ev=pass_value, pf=true );
-          test_text = validate( str(fname, "(", get_value(vid), ")=", pass_value), fresult, "eq", pass_value );
+          test_pass = validate( cv=fresult, t="equals", ev=pass_value, pf=true );
+          test_text = validate( str(fname, "(", get_value(vid), ")=", pass_value), fresult, "equals", pass_value );
 
           if ( pass_value != s )
           {
@@ -1747,8 +1747,8 @@ BEGIN_SCOPE validate;
         value_text = table_get(test_r, test_c, vid, "td");
         pass_value = table_get(good_r, good_c, fname, vid);
 
-        test_pass = validate( cv=fresult, t="eq", ev=pass_value, pf=true );
-        test_text = validate( str(fname, "(", get_value(vid), ")=", pass_value), fresult, "eq", pass_value );
+        test_pass = validate( cv=fresult, t="equals", ev=pass_value, pf=true );
+        test_text = validate( str(fname, "(", get_value(vid), ")=", pass_value), fresult, "equals", pass_value );
 
         if ( pass_value != skip )
         {
