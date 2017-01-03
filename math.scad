@@ -156,7 +156,7 @@ function cross_vv
   v2i
 ) = all_defined([v1i, v2i]) ? cross((v1t-v1i), (v2t-v2i)) : cross(v1t, v2t);
 
-//! Compute scalar triple product of two vectors in a Euclidean 2 or 3D-space.
+//! Compute scalar triple product of two vectors in a Euclidean 3D-space.
 /***************************************************************************//**
   \param    v1t <vector> Vector 1 head. A 2 or 3-tuple of coordinates.
   \param    v2t <vector> Vector 2 head. A 2 or 3-tuple of coordinates.
@@ -180,6 +180,12 @@ function cross_vv
 
     See [Wikipedia] (https://en.wikipedia.org/wiki/Triple_product)
     for more information.
+
+  \warning  For 2D vectors, this function produces a 2D \e non-scalar
+            vector result. The cross produce function computes the 2x2
+            determinant of the 2D vectors <tt>(v2 x v3)</tt>, which is
+            a scalar value, and this value is \e multiplied by \c v1,
+            which results in a 2D vector.
 *******************************************************************************/
 function striple_vvv
 (
