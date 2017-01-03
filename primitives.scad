@@ -184,7 +184,7 @@ function is_vector( v ) =  is_iterable(v) && !is_string(v);
   \returns  <boolean> \b true when the value is one of the predefined
             boolean constants <tt>[true|false]</tt> and \b false otherwise.
 *******************************************************************************/
-function is_bool
+function is_boolean
 (
   v
 ) = is_string(v) ? false
@@ -247,7 +247,7 @@ function is_range
   v
 ) = is_defined(v) &&
     !is_iterable(v) &&
-    !is_bool(v) &&
+    !is_boolean(v) &&
     !is_integer(v) &&
     !is_decimal(v) &&
     !is_nan(v) &&
@@ -1195,7 +1195,7 @@ BEGIN_SCOPE validate;
           ["is_iterable", f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, t, t, t, s, s],
           ["is_string",   f, f, f, f, f, f, f, f, f, f, f, t, t, t, f, f, f, f, f, f, f],
           ["is_vector",   f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, s, s],
-          ["is_bool",     f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
+          ["is_boolean",  f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
           ["is_integer",  f, t, t, t, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
           ["is_decimal",  f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
           ["is_number",   f, t, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f],
@@ -1240,7 +1240,7 @@ BEGIN_SCOPE validate;
         for (vid=test_ids) run_test( "is_iterable", is_iterable(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_string", is_string(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_vector", is_vector(get_value(vid)), vid );
-        for (vid=test_ids) run_test( "is_bool", is_bool(get_value(vid)), vid );
+        for (vid=test_ids) run_test( "is_boolean", is_boolean(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_integer", is_integer(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_decimal", is_decimal(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_number", is_number(get_value(vid)), vid );
