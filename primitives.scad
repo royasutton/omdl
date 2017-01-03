@@ -44,7 +44,7 @@ include <constants.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \page tv_prim_test Variable Tests Validation
+  \page tv_prim_test Variable Tests
     \li \subpage tv_prim_test_g1_s
     \li \subpage tv_prim_test_g1_r
     \li \subpage tv_prim_test_g2_s
@@ -522,7 +522,7 @@ function almost_equal
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \page tv_prim_vector Vector Operations Validation
+  \page tv_prim_vector Vector Operations
     \li \subpage tv_prim_vector_s
     \li \subpage tv_prim_vector_r
   \page tv_prim_vector_s Validation Script
