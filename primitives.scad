@@ -1112,14 +1112,11 @@ function delete
         : is_vector(i) ? i
         : is_range(i) ? [for (y=i) y]
         : undef
-      ,
-      n =
-      [
-        for (i = [0 : len(v)-1])
-          is_empty(first(search([i], p, 1, 0))) ? v[i] : empty_v
-      ]
     )
-    strip(n, empty_v);
+    [
+      for (i = [0 : len(v)-1])
+        if ( is_empty(first(search([i], p, 1, 0))) ) v[i]
+    ];
 
 //! @}
 //! @}
