@@ -957,9 +957,9 @@ function smerge
   v,
   r = false
 ) = not_defined(v) ? undef
+  : !is_iterable(v) ? [v]
   : is_empty(v) ? empty_v
   : is_string(v) ? [v]
-  : !is_iterable(v) ? [v]
   : ((r == true) && is_iterable(first(v))) ?
     concat(smerge(first(v), r), smerge(tail(v), r))
   : concat(first(v), smerge(tail(v), r));
