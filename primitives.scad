@@ -517,6 +517,147 @@ function almost_equal
   : !almost_equal(first(v1), first(v2), p) ? false
   : almost_equal(tail(v1), tail(v2), p);
 
+//! Compare any two values (may be iterable and/or of different types).
+/***************************************************************************//**
+  \param    v1 \<value> A value or an iterable value 1.
+  \param    v2 \<value> A value or an iterable value 2.
+  \param    s <boolean> Order ranges by their numerical sum.
+
+  \returns  <integer> \b -1 when <tt>(v2 < v1)</tt>,
+                      \b +1 when <tt>(v2 > v1)</tt>, and
+                      \b  0 when <tt>(v2 == v1)</tt>.
+
+  \details
+
+    The following table summarizes how values are ordered.
+
+     order | type     | \p s      | intra-type ordering
+    :-----:|:--------:|:---------:|:--------------------------------------
+      1    | \b undef |           | (singular)
+      2    | number   |           | numerical comparison
+      3    | string   |           | lexical comparison
+      4    | boolean  |           | \b false \< \b true
+      5    | vector   |           | lengths then element-wise comparison
+      6    | range    | \b true   | compare sum of range elements
+      6    | range    | \b false  | lengths then element-wise comparison
+
+  \note     When comparing two vectors of equal length, the comparison
+            continue element-by-element until an ordering can be
+            determined. Two vectors are declared equal when all elements
+            have been compared and no ordering has been determined.
+
+  \warning  The performance of element-wise comparisons of vectors
+            degrades exponentially with vector size.
+  \warning  The sum of a range may quickly exceeded the intermediate
+            variable storage capacity for long ranges.
+*******************************************************************************/
+function compare
+(
+  v1,
+  v2,
+  s = true
+) = let( v2_nd = not_defined(v2) )
+    not_defined(v1) ?
+    (
+      v2_nd ? 0
+    : 1 // others are greater
+    )
+  // v1 a number
+  : let( v2_in = is_number(v2) )
+    is_number(v1) ?
+    (
+      v2_nd ? -1
+    : v2_in ?
+      (
+        (v1 > v2) ? -1
+      : (v2 > v1) ? +1
+      : 0
+      )
+    : 1 // others are greater
+    )
+  // v1 a string
+  : let( v2_is = is_string(v2) )
+    is_string(v1) ?
+    (
+      (v2_nd || v2_in) ? -1
+    : v2_is ?
+      (
+        (v1 > v2) ? -1
+      : (v2 > v1) ? +1
+      : 0
+      )
+    : 1 // others are greater
+    )
+  // v1 a boolean
+  : let( v2_ib = is_boolean(v2) )
+    is_boolean(v1) ?
+    (
+      (v2_nd || v2_in || v2_is) ? -1
+    : v2_ib ?
+      (
+        ((v1 == true)  && (v2 == false)) ? -1   // defined: true > false
+      : ((v1 == false) && (v2 == true))  ? +1
+      : 0
+      )
+    : 1 // others are greater
+    )
+  // v1 a vector
+  : let( v2_iv = is_vector(v2) )
+    is_vector(v1) ?
+    (
+      (v2_nd || v2_in || v2_is || v2_ib) ? -1
+    : v2_iv ?
+      (
+        let
+        (
+          l1 = len(smerge(v1, true)),           // get total element count
+          l2 = len(smerge(v2, true))
+        )
+        (l1 > l2) ? -1                          // longest vector is greater
+      : (l2 > l1) ? +1
+      : ((l1 == 0) && (l2 == 0)) ? 0            // reached end, are equal
+      : let
+        (
+          cf = compare(first(v1), first(v2), s) // compare first elements
+        )
+        (cf != 0) ? cf                          // not equal, ordering determined
+      : compare(tail(v1), tail(v2), s)          // equal, check remaining
+      )
+    : 1 // others are greater
+    )
+  // v1 assume a range.
+  : is_range(v2) ?
+    (
+      (v1 == v2) ? 0                            // equal range definitions
+      // compare range sums
+    : (s == true) ?
+      (
+        let
+        (
+          rs1 = sum(v1),                        // compute range sums
+          rs2 = sum(v2)
+        )
+        (rs1 > rs2) ? -1                        // greatest sum is greater
+      : (rs2 > rs1) ? +1
+      : 0                                       // sums equal
+      )
+      // compare range vectors
+    : (
+        let
+        (
+          rv1 = [for (i=v1) i],                 // convert to vectors
+          rv2 = [for (i=v2) i],
+          rl1 = len(rv1),                       // get lengths
+          rl2 = len(rv2)
+        )
+        (rl1 > rl2) ? -1                        // longest range is greater
+      : (rl2 > rl1) ? +1
+      : compare(rv1, rv2, s)                    // equal so compare as vectors
+      )
+    )
+  // v2 not a range so v1 > v2
+  : -1;
+
 //! @}
 //! @}
 
@@ -893,7 +1034,7 @@ function reverse
   : is_empty(v) ? empty_v
   : [for (i = [len(v)-1 : -1 : 0]) v[i]];
 
-//! Sort the elements of an iterable value using the quick sort method.
+//! Sort the numeric or string elements of an iterable value using quick sort.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
   \param    r <boolean> Reverse sort order.
@@ -932,6 +1073,61 @@ function qsort
     )
     (r == true) ? concat(qsort(gt, r), eq, qsort(lt, r))
   : concat(qsort(lt, r), eq, qsort(gt, r));
+
+//! Hierarchically sort all elements of an iterable value using quick sort.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+  \param    d <integer> Recursive sort depth.
+  \param    r <boolean> Reverse sort order.
+  \param    s <boolean> Order ranges by their numerical sum.
+
+  \returns  <vector> With all elements sorted in ascending order.
+            Returns \b undef when \p v is not defined or is not iterable.
+
+  \details
+
+    Elements are sorted using the \ref compare function. See its documentation
+    for a description of the parameter \p s. To recursively sort all elements,
+    set \p d greater than, or equal to, the maximum level of hierarchy in
+    \p v.
+
+    See [Wikipedia](https://en.wikipedia.org/wiki/Quicksort)
+    for more information.
+*******************************************************************************/
+function qsort2
+(
+  v,
+  d = 0,
+  r = false,
+  s = true
+) = not_defined(v) ? undef
+  : !is_iterable(v) ? undef
+  : is_empty(v) ? empty_v
+  : let
+    (
+      mp = v[floor(len(v)/2)],
+
+      lt =
+      [
+        for (i = v)
+          if (compare(mp, i, s) == -1)
+            ((d > 0) && is_vector(i)) ? qsort2(i, d-1, r, s) : i
+      ],
+      eq =
+      [
+        for (i = v)
+          if (compare(mp, i, s) ==  0)
+            ((d > 0) && is_vector(i)) ? qsort2(i, d-1, r, s) : i
+      ],
+      gt =
+      [
+        for (i = v)
+          if (compare(mp, i, s) == +1)
+            ((d > 0) && is_vector(i)) ? qsort2(i, d-1, r, s) : i
+      ]
+    )
+    (r == true) ? concat(qsort2(gt, d, r, s), eq, qsort2(lt, d, r, s))
+  : concat(qsort2(lt, d, r, s), eq, qsort2(gt, d, r, s));
 
 //----------------------------------------------------------------------------//
 // grow / reduce
@@ -1337,7 +1533,8 @@ BEGIN_SCOPE validate;
           ["almost_equal_AA", t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t],
           ["almost_equal_T",  f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
           ["almost_equal_F",  f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
-          ["almost_equal_U",  t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f]
+          ["almost_equal_U",  t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+          ["compare_AA",      t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t]
         ];
 
         // sanity-test tables
@@ -1385,6 +1582,7 @@ BEGIN_SCOPE validate;
         for (vid=test_ids) run_test( "almost_equal_T", almost_equal(get_value(vid),t), vid );
         for (vid=test_ids) run_test( "almost_equal_F", almost_equal(get_value(vid),f), vid );
         for (vid=test_ids) run_test( "almost_equal_U", almost_equal(get_value(vid),u), vid );
+        for (vid=test_ids) run_test( "compare_AA", compare(get_value(vid),get_value(vid)) == 0, vid );
 
         // end-of-tests
       END_OPENSCAD;
@@ -1653,7 +1851,6 @@ BEGIN_SCOPE validate;
           [[4,5],[2,3],[1,2],"ab"],                           // t09
           [["a","b","c"],[7,8,9],[4,5,6],[1,2,3]],            // t10
           [15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0]             // t11
-
         ],
         ["qsort",
           undef,                                              // t01
@@ -1667,6 +1864,19 @@ BEGIN_SCOPE validate;
           undef,                                              // t09
           undef,                                              // t10
           [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
+        ],
+        ["qsort2_HR",
+          undef,                                              // t01
+          empty_v,                                            // t02
+          undef,                                              // t03
+          ["A string"],                                       // t04
+          ["orange","grape","banana","apple"],                // t05
+          ["s","n","n","b","a","a","a"],                      // t06
+          [undef],                                            // t07
+          [[3,2],[2,1]],                                      // t08
+          [[5,4],[3,2],[2,1],"ab"],                           // t09
+          [["c","b","a"],[9,8,7],[6,5,4],[3,2,1]],            // t10
+          [15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0]             // t11
         ],
         ["strip",
           undef,                                              // t01
@@ -1778,6 +1988,7 @@ BEGIN_SCOPE validate;
       for (vid=test_ids) run_test( "pmerge", pmerge(get_value(vid)), vid );
       for (vid=test_ids) run_test( "reverse", reverse(get_value(vid)), vid );
       for (vid=test_ids) run_test( "qsort", qsort(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "qsort2_HR", qsort2(get_value(vid), d=5, r=true), vid );
       for (vid=test_ids) run_test( "strip", strip(get_value(vid)), vid );
       for (vid=test_ids) run_test( "append_T0", append(0,get_value(vid)), vid );
       for (vid=test_ids) run_test( "insert_T0", insert(0,get_value(vid),mv=["x","r","apple","s",[2,3],5]), vid );
