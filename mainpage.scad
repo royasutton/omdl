@@ -158,8 +158,8 @@
     a library may coexists):
 
     \verbatim
-    include <omdl-v0.2/shapes2de.scad>;
-    include <omdl-v0.2/shapes3d.scad>;
+    include <omdl-v0.3/shapes2de.scad>;
+    include <omdl-v0.3/shapes3d.scad>;
     ...
     \endverbatim
 
