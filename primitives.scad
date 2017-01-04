@@ -1034,14 +1034,14 @@ function reverse
   : is_empty(v) ? empty_v
   : [for (i = [len(v)-1 : -1 : 0]) v[i]];
 
-//! Sort the numeric or string elements of an iterable value using quick sort.
+//! Sort the numeric or string elements of a vector using quick sort.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v \<value> A vector of values.
   \param    r <boolean> Reverse sort order.
 
   \returns  <vector> With elements sorted in ascending order.
             Returns \b undef when \p v is not all strings or all numbers.
-            Returns \b undef when \p v is not defined or is not iterable.
+            Returns \b undef when \p v is not defined or is not a vector.
 
   \details
 
@@ -1059,7 +1059,7 @@ function qsort
   v,
   r = false
 ) = not_defined(v) ? undef
-  : !is_iterable(v) ? undef
+  : !is_vector(v) ? undef
   : is_empty(v) ? empty_v
   : !(all_strings(v) || all_numbers(v)) ? undef  // not all numbers or strings
   : let
@@ -1074,15 +1074,15 @@ function qsort
     (r == true) ? concat(qsort(gt, r), eq, qsort(lt, r))
   : concat(qsort(lt, r), eq, qsort(gt, r));
 
-//! Hierarchically sort all elements of an iterable value using quick sort.
+//! Hierarchically sort all elements of a vector using quick sort.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v \<value> A vector of values.
   \param    d <integer> Recursive sort depth.
   \param    r <boolean> Reverse sort order.
   \param    s <boolean> Order ranges by their numerical sum.
 
   \returns  <vector> With all elements sorted in ascending order.
-            Returns \b undef when \p v is not defined or is not iterable.
+            Returns \b undef when \p v is not defined or is not a vector.
 
   \details
 
@@ -1101,7 +1101,7 @@ function qsort2
   r = false,
   s = true
 ) = not_defined(v) ? undef
-  : !is_iterable(v) ? undef
+  : !is_vector(v) ? undef
   : is_empty(v) ? empty_v
   : let
     (
@@ -1856,7 +1856,7 @@ BEGIN_SCOPE validate;
           undef,                                              // t01
           empty_v,                                            // t02
           undef,                                              // t03
-          ["A string"],                                       // t04
+          undef,                                              // t04
           ["apple","banana","grape","orange"],                // t05
           ["a","a","a","b","n","n","s"],                      // t06
           undef,                                              // t07
@@ -1869,7 +1869,7 @@ BEGIN_SCOPE validate;
           undef,                                              // t01
           empty_v,                                            // t02
           undef,                                              // t03
-          ["A string"],                                       // t04
+          undef,                                              // t04
           ["orange","grape","banana","apple"],                // t05
           ["s","n","n","b","a","a","a"],                      // t06
           [undef],                                            // t07
