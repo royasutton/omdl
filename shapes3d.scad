@@ -692,12 +692,12 @@ BEGIN_SCOPE manifest;
     if (group == 1)
     st_cartesian_copy( grid=4, incr=60, center=true )
     {
-      cone( h=25, r=10, vr=2 );
+      translate([0,0,-12.5]) cone( h=25, r=15, vr=2 );
       cuboid( size=[25,40,20], vr=5, center=true );
       ellipsoid( size=[40,25] );
       ellipsoid_s( size=[60,15], a1=0, a2=270 );
-      tetrahedron( r = 20, center=true );
-      pyramid_q( x=35, y=20, z=5, center=true );
+      tetrahedron( r = 15, center=true );
+      pyramid_q( x=35, y=40, z=25, center=true );
       star3d(size=40, n=5, half=false);
     }
 
