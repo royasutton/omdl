@@ -1373,7 +1373,7 @@ BEGIN_SCOPE manifest;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_dxf}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_svg}.mfs;
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;

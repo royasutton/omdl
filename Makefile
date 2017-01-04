@@ -80,7 +80,7 @@ release_files_add    = $(backup_files_add) \
                        $(output_path)latex/refman.pdf \
                        \
                        $(output_path)stl/mainpage_quickstart.stl \
-                       $(output_path)dxf/shapes2d_manifest.dxf \
+                       $(output_path)dxf/shapes2d_manifest.svg \
                        $(output_path)stl/shapes2de_manifest.stl \
                        $(output_path)stl/shapes3d_manifest_1.stl \
                        $(output_path)stl/shapes3d_manifest_2.stl
