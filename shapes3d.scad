@@ -297,6 +297,7 @@ module ellipsoid_s
     \amu_eval ( function=tetrahedron ${example_dim} )
 
   \todo Support vertex rounding radius.
+  \todo Identify cause of missing face. Using hull() as a workaround.
 *******************************************************************************/
 module tetrahedron
 (
@@ -308,6 +309,7 @@ module tetrahedron
   a = r*sqrt(3)/2;
 
   translate(center==true ? origin3d : [0,0,o])
+  hull()
   polyhedron
   (
     points =
