@@ -1,16 +1,21 @@
 ###############################################################################
 #
-# configuration: Constructive solid geometry (csg)
+# script: new makefile + menu(ext)
 #
 ###############################################################################
 
-variables \
-  set_ext "csg" \
-  \
-  clear_convert \
-  \
-  set_opts "--render" \
-  clear_opts_combine
+script \
+  begin_makefile \
+    \
+    include "${__AMU_INCLUDE_PATH__}/parallel_jobs.mk" \
+    \
+    summary \
+    tables \
+    targets \
+    \
+    menu_ext \
+    \
+  end_makefile
 
 ###############################################################################
 # eof

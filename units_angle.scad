@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file   units_angle.scad
   \author Roy Allen Sutton
-  \date   2015-2016
+  \date   2015-2017
 
   \copyright
 
@@ -64,9 +64,9 @@ include <constants.scad>;
       \skip include
       \until to="dms");
 
-    result (base_angle_length = \b r):  \include units_angle_example_r.log
-    result (base_angle_length = \b d):  \include units_angle_example_d.log
-    result (base_angle_length = \b dms): \include units_angle_example_dms.log
+    \b Result (base_angle_length = \b r):  \include units_angle_example_r.log
+    \b Result (base_angle_length = \b d):  \include units_angle_example_d.log
+    \b Result (base_angle_length = \b dms): \include units_angle_example_dms.log
 
   @{
 *******************************************************************************/
@@ -186,9 +186,11 @@ BEGIN_SCOPE example;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_std,config_csg}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
+
     defines   name "units" define "base_unit_angle" strings "r d dms";
     variables add_opts_combine "units";
+
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;

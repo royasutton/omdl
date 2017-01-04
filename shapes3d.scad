@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file   shapes3d.scad
   \author Roy Allen Sutton
-  \date   2015-2016
+  \date   2015-2017
 
   \copyright
 
@@ -38,6 +38,28 @@ include <shapes2d.scad>;
 /***************************************************************************//**
   \addtogroup shapes
   @{
+
+    \amu_define caption (3D Shapes)
+
+    \amu_make png_files (append=dim extension=png)
+    \amu_make eps_files (append=dim extension=png2eps)
+    \amu_shell file_cnt ("echo ${png_files} | wc -w")
+    \amu_shell cell_num ("seq -f '(%g)' -s '^' ${file_cnt}")
+
+    \htmlonly
+      \amu_image_table
+        (
+          type=html columns=4 image_width="200" cell_files="${png_files}"
+          table_caption="${caption}" cell_captions="${cell_num}"
+        )
+    \endhtmlonly
+    \latexonly
+      \amu_image_table
+        (
+          type=latex columns=4 image_width="1.25in" cell_files="${eps_files}"
+          table_caption="${caption}" cell_captions="${cell_num}"
+        )
+    \endlatexonly
 
   \defgroup shapes_3d 3D Shapes
   \brief    Three dimensional geometric shapes.
@@ -87,12 +109,12 @@ module cone
   vr2
 )
 {
-  cr = (r == undef) ? d/2 : r;
+  cr = defined_or(r, d/2);
 
-  br = (vr1 == undef) ? vr : vr1;
-  pr = (vr2 == undef) ? vr : vr2;
+  br = defined_or(vr1, vr);
+  pr = defined_or(vr2, vr);
 
-  if ( (br == undef) || (pr == undef) )
+  if ( any_undefined([br, pr]) )
   {
     cylinder(h=h, r1=cr, r2=0, center=false);
   }
@@ -131,12 +153,12 @@ module cuboid
   center = false
 )
 {
-  bx = (len(size) >= 1) ? size[0] : size;
-  by = (len(size) >= 2) ? size[1] : bx;
-  bz = (len(size) >= 3) ? size[2] : by;
+  bx = edefined_or(size, 0, size);
+  by = edefined_or(size, 1, bx);
+  bz = edefined_or(size, 2, by);
 
-  translate(center==true ? [0,0,0] : [bx/2, by/2, bz/2])
-  if ( vr == undef )
+  translate(center==true ? origin3d : [bx/2, by/2, bz/2])
+  if ( not_defined(vr) )
   {
     cube([bx, by, bz], center=true);
   }
@@ -191,8 +213,8 @@ module ellipsoid
   size
 )
 {
-  w = (len(size) >= 1) ? size[0] : size;
-  h = (len(size) >= 2) ? size[1] : w;
+  w = edefined_or(size, 0, size);
+  h = edefined_or(size, 1, w);
 
   if (w == h)
   {
@@ -225,8 +247,8 @@ module ellipsoid_s
   a2 = 0
 )
 {
-  w = (len(size) >= 1) ? size[0] : size;
-  h = (len(size) >= 2) ? size[1] : w;
+  w = edefined_or(size, 0, size);
+  h = edefined_or(size, 1, w);
 
   trx = w/2 * sqrt(2) + 1;
   try = w/2 * sqrt(2) + 1;
@@ -237,7 +259,7 @@ module ellipsoid_s
   pa3 = (1 * a1 + 3 * a2) / 4;
   pa4 = (0 * a1 + 4 * a2) / 4;
 
-  if(a2 > a1)
+  if (a2 > a1)
   {
     intersection()
     {
@@ -247,13 +269,13 @@ module ellipsoid_s
       linear_extrude(height=h)
       polygon
       ([
-        [0,0],
+        origin2d,
         [trx * cos(pa0), try * sin(pa0)],
         [trx * cos(pa1), try * sin(pa1)],
         [trx * cos(pa2), try * sin(pa2)],
         [trx * cos(pa3), try * sin(pa3)],
         [trx * cos(pa4), try * sin(pa4)],
-        [0,0]
+        origin2d
       ]);
     }
   }
@@ -275,6 +297,7 @@ module ellipsoid_s
     \amu_eval ( function=tetrahedron ${example_dim} )
 
   \todo Support vertex rounding radius.
+  \todo Identify cause of missing face. Using hull() as a workaround.
 *******************************************************************************/
 module tetrahedron
 (
@@ -285,7 +308,8 @@ module tetrahedron
   o = r/2;
   a = r*sqrt(3)/2;
 
-  translate(center==true ? [0,0,0] : [0,0,o])
+  translate(center==true ? origin3d : [0,0,o])
+  hull()
   polyhedron
   (
     points =
@@ -309,7 +333,7 @@ module tetrahedron
 /***************************************************************************//**
   \param    x <decimal> The base x-length.
   \param    y <decimal> The base y-length.
-  \param    h <decimal> The height.
+  \param    z <decimal> The z-height.
 
   \param    center <boolean> Center about origin.
 
@@ -324,15 +348,15 @@ module pyramid_q
 (
   x,
   y,
-  h,
+  z,
   center = false
 )
 {
   tw = x/2;
   th = y/2;
-  ph = h;
+  ph = z;
 
-  translate(center==true ? [0,0,-ph/2] : [0,0,0])
+  translate(center==true ? [0,0,-ph/2] : origin3d)
   polyhedron
   (
     points=
@@ -354,6 +378,55 @@ module pyramid_q
   );
 }
 
+//! A three dimensional star.
+/***************************************************************************//**
+  \param    size <vector|decimal> A vector [l, w, h] of decimals
+            or a single decimal for (size=l=2*w=4*h).
+
+  \param    n <decimal> The number of points.
+
+  \param    half <boolean> Render upper half only.
+
+  \details
+
+    \b Example
+    \amu_eval ( function=star3d ${example_dim} )
+*******************************************************************************/
+module star3d
+(
+  size,
+  n = 5,
+  half = false
+)
+{
+  l = edefined_or(size, 0, size);
+  w = edefined_or(size, 1, l/2);
+  h = edefined_or(size, 2, w/2);
+
+  if (half == true)
+  {
+    difference()
+    {
+      st_radial_copy(n=n, angle=true, move=false)
+      scale([1, 1, h/w])
+      rotate([45, 0, 0])
+      rotate([0, 90, 0])
+      pyramid_q(x=w, y=w, z=l, center=false);
+
+      translate([0,0,-h/2])
+      cylinder(r=l, h=h, center=true);
+    }
+  }
+  else
+  {
+    st_radial_copy(n=n, angle=true, move=false)
+    scale([1, 1, h/w])
+    rotate([45, 0, 0])
+    rotate([0, 90, 0])
+    pyramid_q(x=w, y=w, z=l, center=false);
+  }
+}
+
 //! A rectangular cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
   \param    size <vector|decimal> The profile size. A vector [x, y] of decimals
@@ -373,6 +446,16 @@ module pyramid_q
   \param    vr <decimal> The profile default corner rounding radius.
   \param    vr1 <decimal> The profile outer corner rounding radius.
   \param    vr2 <decimal> The profile core corner rounding radius.
+
+  \param    vr <vector|decimal> The profile default corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
+  \param    vr1 <vector|decimal> The profile outer corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
+  \param    vr2 <vector|decimal> The profile core corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.
@@ -538,55 +621,6 @@ module torus_ep
   );
 }
 
-//! A three dimensional star.
-/***************************************************************************//**
-  \param    size <vector|decimal> A vector [l, w, h] of decimals
-            or a single decimal for (size=l=2*w=4*h).
-
-  \param    n <decimal> The number of points.
-
-  \param    half <boolean> Render upper half only.
-
-  \details
-
-    \b Example
-    \amu_eval ( function=star3d ${example_dim} )
-*******************************************************************************/
-module star3d
-(
-  size,
-  n = 5,
-  half = false
-)
-{
-  l = (len(size) >= 1) ? size[0] : size;
-  w = (len(size) >= 2) ? size[1] : l/2;
-  h = (len(size) >= 3) ? size[2] : w/2;
-
-  if (half == true)
-  {
-    difference()
-    {
-      st_radial_copy(n=n, angle=true, move=false)
-      scale([1, 1, h/w])
-      rotate([45, 0, 0])
-      rotate([0, 90, 0])
-      pyramid_q(x=w, y=w, h=l, center=false);
-
-      translate([0,0,-h/2])
-      cylinder(r=l, h=h, center=true);
-    }
-  }
-  else
-  {
-    st_radial_copy(n=n, angle=true, move=false)
-    scale([1, 1, h/w])
-    rotate([45, 0, 0])
-    rotate([0, 90, 0])
-    pyramid_q(x=w, y=w, h=l, center=false);
-  }
-}
-
 //! @}
 //! @}
 
@@ -611,21 +645,22 @@ BEGIN_SCOPE dim;
     else if (shape == "ellipsoid_s")
       ellipsoid_s( size=[60,15], a1=0, a2=270 );
     else if (shape == "tetrahedron")
-      tetrahedron( r = 2, center=true );
+      tetrahedron( r = 20, center=true );
     else if (shape == "pyramid_q")
-      pyramid_q( h=5, x=35, y=20, center=true );
+      pyramid_q( x=35, y=20, z=5, center=true );
+    else if (shape == "star3d")
+      star3d(size=40, n=5, half=true);
     else if (shape == "torus_rp")
       torus_rp( size=[40,20], core=[35,20], r=40, l=60, co=[0,2.5], vr=2, center=true );
     else if (shape == "torus_tp")
       torus_tp( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
     else if (shape == "torus_ep")
       torus_ep(size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2]);
-    else if (shape == "star3d")
-      star3d(size=40, n=5, half=true);
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_std,config_png}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
+
     views     name "views" views "diag";
     defines   name "shapes" define "shape"
               strings "
@@ -642,6 +677,45 @@ BEGIN_SCOPE dim;
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter";
+
+    include --path "${INCLUDE_PATH}" script_std.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE manifest;
+  BEGIN_OPENSCAD;
+    include <shapes3d.scad>;
+
+    group = 1;
+    $fn = 72;
+
+    if (group == 1)
+    st_cartesian_copy( grid=4, incr=60, center=true )
+    {
+      translate([0,0,-12.5]) cone( h=25, r=15, vr=2 );
+      cuboid( size=[25,40,20], vr=5, center=true );
+      ellipsoid( size=[40,25] );
+      ellipsoid_s( size=[60,15], a1=0, a2=270 );
+      tetrahedron( r = 15, center=true );
+      pyramid_q( x=35, y=40, z=25, center=true );
+      star3d(size=40, n=5, half=false);
+    }
+
+    if (group == 2)
+    st_cartesian_copy( grid=4, incr=140, center=true )
+    {
+      torus_rp( size=[40,20], core=[35,20], r=40, l=60, co=[0,2.5], vr=2, center=true );
+      torus_tp( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
+      torus_ep(size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2]);
+    }
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {config_base,config_stl}.mfs;
+
+    defines   name "group" define "group" integers "1 2";
+    variables set_opts_combine "group";
+
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;

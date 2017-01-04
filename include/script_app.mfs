@@ -1,18 +1,19 @@
 ###############################################################################
 #
-# standard script (new makefile, ext menu)
+# script: append makefile + menu(ext, src, all)
 #
 ###############################################################################
 
 script \
-  begin_makefile \
-    \
-    include "${__AMU_INCLUDE_PATH__}/parallel_jobs.mk" \
+  begin_makefile_append \
     \
     summary \
     tables \
     targets \
+    \
     menu_ext \
+    menu_src \
+    menu_all \
     \
   end_makefile
 

@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file   mainpage.scad
   \author Roy Allen Sutton
-  \date   2016
+  \date   2015-2017
 
   \copyright
 
@@ -47,12 +47,14 @@
     language-based mechanical design. With [omdl], all library primitives
     are \em parametric with minimal, mostly zero, global variable
     dependencies and all library [API]'s include [Doxygen markups] that
-    describe its parameters, behavior, and use.
+    describe its parameters, behavior, and use. Validation scripts are
+    used to check that the core user-space building blocks work as
+    expected across evolving [OpenSCAD] versions. These validation are
+    performed automatically when rebuilding the documentation. See the
+    \ref validation "validation section" for the results generated with
+    this documentation.
 
-    <em>Revolutionary no... But a big step in the evolution of a standard
-    way to share documented OpenSCAD scripts!</em>
-
-  \section quickstart Quickstart
+  \section quickstart Quick Start
 
     The [omdl] consist of a collection of libraries that may be \c used
     or \c included as expected.
@@ -61,7 +63,7 @@
 
     \dontinclude mainpage_quickstart.scad
     \skip include
-    \until h=10 );
+    \until valign="center" );
 
     \amu_make png_files (append=quickstart extension=png)
     \amu_make eps_files (append=quickstart extension=png2eps)
@@ -156,8 +158,8 @@
     a library may coexists):
 
     \verbatim
-    include <omdl-v0.2/shapes2de.scad>;
-    include <omdl-v0.2/shapes3d.scad>;
+    include <omdl-v0.3/shapes2de.scad>;
+    include <omdl-v0.3/shapes3d.scad>;
     ...
     \endverbatim
 
@@ -192,6 +194,14 @@
 
 *******************************************************************************/
 
+// validation results root page.
+/***************************************************************************//**
+  \page validation Validation
+    \li \subpage tv_prim
+    \li \subpage tv_math
+*******************************************************************************/
+
+// base group categories.
 /***************************************************************************//**
   \defgroup constants Constants
   \brief    General design constants.
@@ -247,6 +257,34 @@
 //----------------------------------------------------------------------------//
 
 /*
+BEGIN_SCOPE logo;
+  BEGIN_OPENSCAD;
+    include <shapes2de.scad>;
+    include <shapes3d.scad>;
+
+    $fn = 36;
+
+    frame = triangle_vp2vl( [ [30,0], [0,40], [30,40] ] );
+    core  = 2 * frame / 3;
+    vrnd  = [1, 2, 4];
+
+    cone( h=20, r=10, vr=2 );
+    rotate([0, 0, 360/20])
+    st_radial_copy( n=5, angle=true )
+      etriangle_vl_c( vs=frame, vc=core, vr=vrnd, h=10 );
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
+
+    views     name "views" distance "250" views "top";
+    images    name "slogo" aspect "1:1" xsizes "55";
+    variables set_opts_combine "views slogo";
+
+    include --path "${INCLUDE_PATH}" script_std.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
 BEGIN_SCOPE quickstart;
   BEGIN_OPENSCAD;
     include <shapes2de.scad>;
@@ -259,19 +297,26 @@ BEGIN_SCOPE quickstart;
     vrnd  = [1, 2, 4];
 
     cone( h=20, r=10, vr=2 );
+    rotate([0, 0, 360/20])
     st_radial_copy( n=5, angle=true )
       etriangle_vl_c( vs=frame, vc=core, vr=vrnd, h=10 );
+
+    translate([0, -50,0])
+    linear_extrude(height=10)
+    text( text="omdl", size=20, halign="center", valign="center" );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_std,config_png}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
+
     views     name "views" views "top bottom right diag";
     variables add_opts_combine "views";
     variables add_opts "--viewall --autocenter";
-    include --path "${INCLUDE_PATH}" script_std_newext.mfs;
+
+    include --path "${INCLUDE_PATH}" script_new.mfs;
 
     include --path "${INCLUDE_PATH}" config_stl.mfs;
-    include --path "${INCLUDE_PATH}" script_stl_appall.mfs;
+    include --path "${INCLUDE_PATH}" script_app.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

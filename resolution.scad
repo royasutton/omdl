@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file   resolution.scad
   \author Roy Allen Sutton
-  \date   2015-2016
+  \date   2015-2017
 
   \copyright
 
@@ -59,10 +59,10 @@ include <units_length.scad>;
       \skip include
       \until f));
 
-    result (base_unit_length = \b mm):  \include resolution_example_mm.log
-    result (base_unit_length = \b cm):  \include resolution_example_cm.log
-    result (base_unit_length = \b mil): \include resolution_example_mil.log
-    result (base_unit_length = \b in):  \include resolution_example_in.log
+    \b Result (base_unit_length = \b mm):  \include resolution_example_mm.log
+    \b Result (base_unit_length = \b cm):  \include resolution_example_cm.log
+    \b Result (base_unit_length = \b mil): \include resolution_example_mil.log
+    \b Result (base_unit_length = \b in):  \include resolution_example_in.log
 
   @{
 *******************************************************************************/
@@ -444,9 +444,11 @@ BEGIN_SCOPE example;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_std,config_csg}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
+
     defines   name "units" define "base_unit_length" strings "mm cm mil in";
     variables add_opts_combine "units";
+
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;

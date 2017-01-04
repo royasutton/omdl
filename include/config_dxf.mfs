@@ -1,11 +1,11 @@
 ###############################################################################
 #
-# configuration: Constructive solid geometry (csg)
+# configuration: AutoCAD Drawing Exchange Format (dxf)
 #
 ###############################################################################
 
 variables \
-  set_ext "csg" \
+  set_ext "dxf" \
   \
   clear_convert \
   \

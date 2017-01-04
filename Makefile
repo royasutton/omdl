@@ -50,7 +50,7 @@ project_version     := $(shell git describe --tags --dirty --always)
 project_brief       := OpenSCAD Mechanical Design Library
 
 docs_group_id       := primitives
-project_logo        :=
+project_logo        := mainpage_logo_top_55x55
 seam_defines        := INCLUDE_PATH=include
 
 doxygen_config      := Doxyfile
@@ -58,8 +58,10 @@ project_files_add   := $(wildcard include/*.mfs)
 
 library             := mainpage \
                        constants \
+                       primitives \
                        math \
                        utilities \
+                       validation \
                        console \
                        units_angle \
                        units_length \
@@ -73,8 +75,20 @@ library             := mainpage \
 backup_files_add    := README.md \
                        lgpl-2.1.txt
 
-release_files_add         := $(backup_files_add)
-release_archive_files_add := $(backup_files_add)
+release_files_add    = $(backup_files_add) \
+                       \
+                       $(output_path)latex/refman.pdf \
+                       \
+                       $(output_path)stl/mainpage_quickstart.stl \
+                       $(output_path)dxf/shapes2d_manifest.svg \
+                       $(output_path)stl/shapes2de_manifest.stl \
+                       $(output_path)stl/shapes3d_manifest_1.stl \
+                       $(output_path)stl/shapes3d_manifest_2.stl
+
+release_archive_files_add = $(backup_files_add)
+
+# comment out to build shape manifest release files
+scopes_exclude_filter := %manifest.bash
 
 # temp
 edit: ; geany Makefile $(src_files)

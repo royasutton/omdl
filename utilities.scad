@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file   utilities.scad
   \author Roy Allen Sutton
-  \date   2015-2016
+  \date   2015-2017
 
   \copyright
 
@@ -37,18 +37,36 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Format the current instantiation stack as a string.
+//! Format the function call stack as a string.
 /***************************************************************************//**
-  \param    idx_b <decimal> The instantiation stack beginning level.
-  \param    idx_e <decimal> The instantiation stack ending level.
+  \param    b <decimal> The stack index bottom offset.
+            Include function names above this offset.
+  \param    t <decimal> The stack index top offset.
+            Include function names below this offset.
+
+  \returns  <string> A colon-separated list of functions names for the
+            current function call stack.
+
+  \note     Returns \b undef when \p b is greater than the current number
+            of function instances (ie: <tt>bo > $parent_modules-1</tt>).
+  \note     Returns the string \c "root()" when the function call stack
+            is empty (ie: at the root of the script).
 *******************************************************************************/
 function stack
 (
-  idx_b = $parent_modules -1,
-  idx_e = 0
-) = idx_b == undef ? "<top-level>"
-  : idx_b >  idx_e ? str( parent_module( idx_b ), "(): ", stack( idx_b - 1, idx_e ) )
-  :                  str( parent_module( idx_b ), "()" );
+  b = 0,
+  t = 0
+) = let
+  (
+    bo = abs(b),
+    to = abs(t),
+    i = $parent_modules - 1 - bo
+  )
+  ($parent_modules == undef) ? "root()"
+  : (bo > $parent_modules-1) ? undef
+  : (i  < to) ? "root()"
+  : (i == to) ? str( parent_module( i ), "()" )
+  : str( parent_module( i ), "(): ", stack( bo + 1, to ) );
 
 //! @}
 

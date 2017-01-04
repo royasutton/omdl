@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file   shapes2d.scad
   \author Roy Allen Sutton
-  \date   2015-2016
+  \date   2015-2017
 
   \copyright
 
@@ -30,13 +30,34 @@
   \ingroup shapes shapes_2d
 *******************************************************************************/
 
-use <console.scad>;
 include <transform.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
   \addtogroup shapes
   @{
+
+    \amu_define caption (2D Shapes)
+
+    \amu_make png_files (append=dim extension=png)
+    \amu_make eps_files (append=dim extension=png2eps)
+    \amu_shell file_cnt ("echo ${png_files} | wc -w")
+    \amu_shell cell_num ("seq -f '(%g)' -s '^' ${file_cnt}")
+
+    \htmlonly
+      \amu_image_table
+        (
+          type=html columns=4 image_width="200" cell_files="${png_files}"
+          table_caption="${caption}" cell_captions="${cell_num}"
+        )
+    \endhtmlonly
+    \latexonly
+      \amu_image_table
+        (
+          type=latex columns=4 image_width="1.25in" cell_files="${eps_files}"
+          table_caption="${caption}" cell_captions="${cell_num}"
+        )
+    \endlatexonly
 
   \defgroup shapes_2d 2D Shapes
   \brief    Two dimensional geometric shapes.
@@ -65,7 +86,9 @@ include <transform.scad>;
   \param    size <vector|decimal> A vector [x, y] of decimals
             or a single decimal for (x=y).
 
-  \param    vr <decimal> The corner rounding radius.
+  \param    vr <vector|decimal> The corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
   \param    center <boolean> Center about origin.
 
@@ -81,16 +104,16 @@ module rectangle
   center = false
 )
 {
-  rx = (len(size) >= 1) ? size[0] : size;
-  ry = (len(size) >= 2) ? size[1] : rx;
+  rx = edefined_or(size, 0, size);
+  ry = edefined_or(size, 1, rx);
 
-  translate(center==true ? [-rx/2, -ry/2] : [0,0])
+  translate(center==true ? [-rx/2, -ry/2] : origin2d)
   {
-    if ( vr == undef )
+    if ( not_defined(vr) )              // no rounding
     {
       square([rx, ry]);
     }
-    else
+    else if ( is_scalar(vr) )           // equal rounding
     {
       for (y = [ [0, 1], [1, -1] ],
            x = [ [0, 1], [1, -1] ])
@@ -104,6 +127,45 @@ module rectangle
 
       translate([vr, 0])
       square([rx, ry] - [vr*2, 0]);
+    }
+    else                                // individual rounding
+    {
+      crv = [ edefined_or(vr, 0, 0),
+              edefined_or(vr, 1, 0),
+              edefined_or(vr, 2, 0),
+              edefined_or(vr, 3, 0) ];
+
+      for ( i =  [ [0, 0,  1, 0,  1],
+                   [1, 1, -1, 0,  1],
+                   [2, 1, -1, 1, -1],
+                   [3, 0,  1, 1, -1] ] )
+      {
+        if ( crv[i[0]] > 0 )
+        {
+         translate([rx*i[1] + crv[i[0]] * i[2], ry*i[3] + crv[i[0]] * i[4]])
+         circle (r=crv[i[0]]);
+        }
+      }
+
+      ppv =
+      [
+        for
+        (
+          i = [
+                [0,  0,  0,  0,  1],
+                [0,  0,  1,  0,  0],
+                [1,  1, -1,  0,  0],
+                [1,  1,  0,  0,  1],
+                [2,  1,  0,  1, -1],
+                [2,  1, -1,  1,  0],
+                [3,  0,  1,  1,  0],
+                [3,  0,  0,  1, -1]
+              ]
+        )
+          [rx*i[1] + crv[i[0]] * i[2], ry*i[3] + crv[i[0]] * i[4]]
+      ];
+
+      polygon( points=ppv, paths=[ [0,1,2,3,4,5,6,7] ] );
     }
   }
 }
@@ -121,9 +183,15 @@ module rectangle
   \param    co <vector> Core offset. A vector [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
-  \param    vr <decimal> The default corner rounding radius.
-  \param    vr1 <decimal> The outer corner rounding radius.
-  \param    vr2 <decimal> The core corner rounding radius.
+  \param    vr <vector|decimal> The default corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
+  \param    vr1 <vector|decimal> The outer corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
+  \param    vr2 <vector|decimal> The core corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
   \param    center <boolean> Center about origin.
 
@@ -149,23 +217,23 @@ module rectangle_c
   center = false
 )
 {
-  rx = (len(size) >= 1) ? size[0] : size;
-  ry = (len(size) >= 2) ? size[1] : rx;
+  rx = edefined_or(size, 0, size);
+  ry = edefined_or(size, 1, rx);
 
-  od = ((t != undef) && (core != undef)) ? (core + t) : size;
-  id = ((t != undef) && (size != undef)) ? (size - t) : core;
+  od = all_defined([t, core]) ? (core + t) : size;
+  id = all_defined([t, size]) ? (size - t) : core;
 
-  or = (vr1 == undef) ? vr : vr1;
-  ir = (vr2 == undef) ? vr : vr2;
+  or = defined_or(vr1, vr);
+  ir = defined_or(vr2, vr);
 
-  if ( id != undef )
+  if ( is_defined(id) )
   {
-    translate(center==true ? [0,0] : [rx/2, ry/2])
+    translate(center==true ? origin2d : [rx/2, ry/2])
     difference()
     {
       rectangle(size=od, vr=or, center=true);
 
-      translate(co==undef ? [0,0] : co)
+      translate(is_defined(co) ? co : origin2d)
       rotate([0, 0, cr])
       rectangle(size=id, vr=ir, center=true);
     }
@@ -173,6 +241,100 @@ module rectangle_c
   else
   {
     rectangle(size=od, vr=or, center=center);
+  }
+}
+
+//! A rhombus.
+/***************************************************************************//**
+  \param    size <vector|decimal> A vector [w, h] of decimals
+            or a single decimal for (w=h).
+
+  \param    vr <vector|decimal> The corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
+
+  \param    center <boolean> Center about origin.
+
+  \details
+
+    \b Example
+    \amu_eval ( function=rhombus ${example_dim} )
+
+    See [Wikipedia](https://en.wikipedia.org/wiki/Rhombus)
+    for more information.
+*******************************************************************************/
+module rhombus
+(
+  size,
+  vr,
+  center = false
+)
+{
+  rx = edefined_or(size, 0, size) / 2;
+  ry = edefined_or(size, 1, rx*2) / 2;
+
+  translate(center==true ? origin2d : [rx, ry])
+  {
+    if ( not_defined(vr) )              // no rounding
+    {
+      polygon
+      (
+        points=[ [rx,0], [0,ry], [-rx,0], [0,-ry] ],
+        paths=[ [0,1,2,3] ]
+      );
+    }
+    else                                // individual rounding
+    {
+      erc = is_scalar(vr) ? vr : 0;     // equal rounding
+
+      crv = [ edefined_or(vr, 0, erc),
+              edefined_or(vr, 1, erc),
+              edefined_or(vr, 2, erc),
+              edefined_or(vr, 3, erc) ];
+
+      a1 = angle_vv(v1t=[0,ry], v1i=[rx,0], v2t=[0,-ry], v2i=[rx,0]) / 2;
+      a2 = 90 - a1;
+
+      for ( i = [ [0,  1, -1,  0,  0],
+                  [1,  0,  0,  1, -1],
+                  [2, -1,  1,  0,  0],
+                  [3,  0,  0, -1,  1] ] )
+      {
+        translate
+        (
+          [ rx*i[1] + crv[i[0]]/sin(a1) * i[2], ry*i[3] + crv[i[0]]/sin(a2) * i[4] ]
+        )
+        circle (r=crv[i[0]]);
+      }
+
+      ppv =
+      [
+        for
+        (
+          i = [
+                [0,  0,  1, -1,  0, -1],
+                [0,  0,  1, -1,  0,  1],
+                [1,  1,  0,  1,  1, -1],
+                [1,  1,  0, -1,  1, -1],
+                [2,  0, -1,  1,  0,  1],
+                [2,  0, -1,  1,  0, -1],
+                [3,  1,  0, -1, -1,  1],
+                [3,  1,  0, +1, -1, +1]
+              ]
+        )
+          ( i[1] == 0 )
+          ? [
+              rx*i[2] + crv[i[0]] * (1/sin(a1)-sin(a1)) * i[3],
+              ry*i[4] + crv[i[0]] * cos(a1) * i[5]
+            ]
+          : [
+              rx*i[2] + crv[i[0]] * cos(a2) * i[3],
+              ry*i[4] + crv[i[0]] * (1/sin(a2)-sin(a2)) * i[5]
+            ]
+      ];
+
+      polygon( points=ppv, paths=[ [0,1,2,3,4,5,6,7] ] );
+    }
   }
 }
 
@@ -208,23 +370,23 @@ module triangle_ppp
   incenter = false
 )
 {
-  cr1 = (v1r == undef) ? vr : v1r;
-  cr2 = (v2r == undef) ? vr : v2r;
-  cr3 = (v3r == undef) ? vr : v3r;
+  cr1 = defined_or(v1r, vr);
+  cr2 = defined_or(v2r, vr);
+  cr3 = defined_or(v3r, vr);
 
   translate
   (
     ( centroid==false ) && ( incenter==true )
       ? -triangle_incenter_ppp( v1=v1, v2=v2, v3=v3 )
-      : [0,0]
+      : origin2d
   )
   translate
   (
     ( centroid==true ) && ( incenter==false )
       ? -triangle_centroid_ppp( v1=v1, v2=v2, v3=v3 )
-      : [0,0]
+      : origin2d
   )
-  if ( (cr1==undef) || (cr2==undef) || (cr3==undef) )
+  if ( any_undefined([cr1, cr2, cr3]) )
   {
     polygon( points=[v1, v2, v3], paths=[[0,1,2]] );
   }
@@ -232,13 +394,13 @@ module triangle_ppp
   {
     ic = triangle_incenter_ppp( v1=v1, v2=v2, v3=v3 );
 
-    a1 = angle_pp2pp(v1t=v2, v1i=v1, v2t=ic, v2i=v1);
-    a2 = angle_pp2pp(v1t=v3, v1i=v2, v2t=ic, v2i=v2);
-    a3 = angle_pp2pp(v1t=v1, v1i=v3, v2t=ic, v2i=v3);
+    a1 = angle_vv(v1t=v2, v1i=v1, v2t=ic, v2i=v1);
+    a2 = angle_vv(v1t=v3, v1i=v2, v2t=ic, v2i=v2);
+    a3 = angle_vv(v1t=v1, v1i=v3, v2t=ic, v2i=v3);
 
-    c1 = v1 + cr1/sin(a1) * normalized_pp(vt=ic, vi=v1);
-    c2 = v2 + cr2/sin(a2) * normalized_pp(vt=ic, vi=v2);
-    c3 = v3 + cr3/sin(a3) * normalized_pp(vt=ic, vi=v3);
+    c1 = v1 + cr1/sin(a1) * norm_v(vt=ic, vi=v1);
+    c2 = v2 + cr2/sin(a2) * norm_v(vt=ic, vi=v2);
+    c3 = v3 + cr3/sin(a3) * norm_v(vt=ic, vi=v3);
 
     hull()
     {
@@ -279,7 +441,7 @@ module triangle_vp
   incenter = false
 )
 {
-  if ( len(vr) == undef )
+  if ( is_scalar(vr) )
   {
     triangle_ppp
     (
@@ -349,7 +511,7 @@ module triangle_lll
   }
   else
   {
-    v1 = [0, 0];
+    v1 = origin2d;
     v2 = [s1, 0];
     v3 = [s1 - p3[0], p3[1]];
 
@@ -389,7 +551,7 @@ module triangle_vl
   incenter = false
 )
 {
-  if ( len(vr) == undef )
+  if ( is_scalar(vr) )
   {
     triangle_lll
     (
@@ -450,30 +612,29 @@ module triangle_vl_c
   incenter = false
 )
 {
-  ts1 = (len(vs) >= 1) ? vs[0] : vs;
-  ts2 = (len(vs) >= 2) ? vs[1] : ts1;
-  ts3 = (len(vs) >= 3) ? vs[2] : ts2;
+  ts1 = edefined_or(vs, 0, vs);
+  ts2 = edefined_or(vs, 1, ts1);
+  ts3 = edefined_or(vs, 2, ts2);
 
-  tc1 = (len(vc) >= 1) ? vc[0] : vc;
-  tc2 = (len(vc) >= 2) ? vc[1] : tc1;
-  tc3 = (len(vc) >= 3) ? vc[2] : tc2;
+  tc1 = edefined_or(vc, 0, vc);
+  tc2 = edefined_or(vc, 1, tc1);
+  tc3 = edefined_or(vc, 2, tc2);
 
-  vrs = (vr1 == undef) ? vr : vr1;
-  vrc = (vr2 == undef) ? vr : vr2;
+  vrs = defined_or(vr1, vr);
+  vrc = defined_or(vr2, vr);
 
-
-  if ( vc != undef )
+  if ( is_defined(vc) )
   {
     translate
     (
       ( centroid==false ) && ( incenter==true )
         ? -triangle_incenter_vp( triangle_lll2vp(s1=ts1, s2=ts2, s3=ts3) )
-        : [0,0]
+        : origin2d
     )
     translate
     (
       ( centroid==true ) && ( incenter==false )
-        ? [0,0]
+        ? origin2d
         : triangle_centroid_vp( triangle_lll2vp(s1=ts1, s2=ts2, s3=ts3) )
     )
     difference()
@@ -485,7 +646,7 @@ module triangle_vl_c
         centroid=true, incenter=false
       );
 
-      translate(co==undef ? [0,0] : co)
+      translate(is_defined(co) ? co : origin2d)
       rotate([0, 0, cr])
       triangle_vl
       (
@@ -773,7 +934,7 @@ module triangle_ll
 {
   triangle_ppp
   (
-    v1=[0,0], v2=[x,0], v3=[0,y],
+    v1=origin2d, v2=[x,0], v3=[0,y],
     vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
     centroid=centroid, incenter=incenter
   );
@@ -816,23 +977,23 @@ module triangle_la
   incenter = false
 )
 {
-  a = ( aa != undef ) ? aa : (90 - oa);
+  a = defined_or(aa, 90 - oa);
 
-  if ( x != undef )
+  if ( is_defined(x) )
   {
     triangle_ppp
     (
-      v1=[0,0], v2=[x,0], v3=[0,tan(a)*x],
+      v1=origin2d, v2=[x,0], v3=[0,tan(a)*x],
       vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
       centroid=centroid, incenter=incenter
     );
   }
 
-  if ( y != undef )
+  if ( is_defined(y) )
   {
     triangle_ppp
     (
-      v1=[0,0], v2=[tan(a)*y,0], v3=[0,y],
+      v1=origin2d, v2=[tan(a)*y,0], v3=[0,y],
       vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
       centroid=centroid, incenter=incenter
     );
@@ -861,7 +1022,7 @@ module ngon
   vr
 )
 {
-  if ( vr == undef )
+  if ( not_defined(vr) )
   {
     circle(r=r, $fn=n);
   }
@@ -893,8 +1054,8 @@ module ellipse
   size
 )
 {
-  rx = (len(size) >= 1) ? size[0] : size;
-  ry = (len(size) >= 2) ? size[1] : rx;
+  rx = edefined_or(size, 0, size);
+  ry = edefined_or(size, 1, rx);
 
   if ( rx == ry )
   {
@@ -938,16 +1099,16 @@ module ellipse_c
   cr = 0
 )
 {
-  od = ((t != undef) && (core != undef)) ? (core + t) : size;
-  id = ((t != undef) && (size != undef)) ? (size - t) : core;
+  od = all_defined([t, core]) ? (core + t) : size;
+  id = all_defined([t, size]) ? (size - t) : core;
 
-  if ( id != undef )
+  if ( is_defined(id) )
   {
     difference()
     {
       ellipse(size=od);
 
-      translate(co==undef ? [0,0] : co)
+      translate(is_defined(co) ? co : origin2d)
       rotate([0, 0, cr])
       ellipse(size=id);
     }
@@ -978,8 +1139,8 @@ module ellipse_s
   a2 = 0
 )
 {
-  rx = (len(size) >= 1) ? size[0] : size;
-  ry = (len(size) >= 2) ? size[1] : rx;
+  rx = edefined_or(size, 0, size);
+  ry = edefined_or(size, 1, rx);
 
   trx = rx * sqrt(2) + 1;
   try = ry * sqrt(2) + 1;
@@ -990,7 +1151,7 @@ module ellipse_s
   pa3 = (1 * a1 + 3 * a2) / 4;
   pa4 = (0 * a1 + 4 * a2) / 4;
 
-  if(a2 > a1)
+  if (a2 > a1)
   {
     intersection()
     {
@@ -998,13 +1159,13 @@ module ellipse_s
 
       polygon
       ([
-        [0,0],
+        origin2d,
         [trx * cos(pa0), try * sin(pa0)],
         [trx * cos(pa1), try * sin(pa1)],
         [trx * cos(pa2), try * sin(pa2)],
         [trx * cos(pa3), try * sin(pa3)],
         [trx * cos(pa4), try * sin(pa4)],
-        [0,0]
+        origin2d
       ]);
     }
   }
@@ -1050,16 +1211,16 @@ module ellipse_cs
   cr = 0
 )
 {
-  od = ((t != undef) && (core != undef)) ? (core + t) : size;
-  id = ((t != undef) && (size != undef)) ? (size - t) : core;
+  od = all_defined([t, core]) ? (core + t) : size;
+  id = all_defined([t, size]) ? (size - t) : core;
 
-  if ( id != undef )
+  if ( is_defined(id) )
   {
     difference()
     {
       ellipse_s(a1=a1, a2=a2, size=od);
 
-      translate(co==undef ? [0,0] : co)
+      translate(is_defined(co) ? co : origin2d)
       rotate([0, 0, cr])
       ellipse(size=id);
     }
@@ -1092,8 +1253,8 @@ module star2d
   vr
 )
 {
-  l = (len(size) >= 1) ? size[0] : size;
-  w = (len(size) >= 2) ? size[1] : l/2;
+  l = edefined_or(size, 0, size);
+  w = edefined_or(size, 1, l/2);
 
   st_radial_copy(n=n, angle=true, move=false)
   rotate([0, 0, -90])
@@ -1117,9 +1278,11 @@ BEGIN_SCOPE dim;
     $fn = 72;
 
     if (shape == "rectangle")
-      rectangle( size=[25,40], vr=5, center=true );
+      rectangle( size=[25,40], vr=[0,10,10,5], center=true );
     else if (shape == "rectangle_c")
-      rectangle_c( size=[40,25], t=[15,5], vr1=10, vr2=2.5, co=[0,5], center=true );
+      rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, co=[0,5], center=true );
+    else if (shape == "rhombus")
+      rhombus( size=[40,25], vr=[2,4,2,4], center=true );
     else if (shape == "triangle_ppp")
       triangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], vr=2, centroid=true );
     else if (shape == "triangle_lll")
@@ -1151,12 +1314,14 @@ BEGIN_SCOPE dim;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_std,config_png}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
+
     views     name "views" views "top";
     defines   name "shapes" define "shape"
               strings "
                 rectangle
                 rectangle_c
+                rhombus
                 triangle_ppp
                 triangle_lll
                 triangle_vl_c
@@ -1174,6 +1339,41 @@ BEGIN_SCOPE dim;
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter";
+
+    include --path "${INCLUDE_PATH}" script_std.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE manifest;
+  BEGIN_OPENSCAD;
+    include <shapes2d.scad>;
+
+    $fn = 72;
+
+    st_cartesian_copy( grid=5, incr=60, center=true )
+    {
+      rectangle( size=[25,40], vr=[0,10,10,5], center=true );
+      rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, co=[0,5], center=true );
+      rhombus( size=[40,25], vr=[2,4,2,4], center=true );
+      triangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], vr=2, centroid=true );
+      triangle_lll( s1=30, s2=40, s3=50, vr=2, centroid=true );
+      triangle_vl_c( vs=[30,50,50], vc=[20,40,40], co=[0,-4], vr1=[1,1,6], vr2=4, centroid=true );
+      triangle_lal( s1=50, a=60, s2=30, vr=2, centroid=true );
+      triangle_ala( a1=30, s=50, a2=60, vr=2, centroid=true );
+      triangle_aal( a1=60, a2=30, s=40, vr=2, centroid=true );
+      triangle_ll( x=30, y=40, vr=2, centroid=true );
+      triangle_la( x=40, aa=30, vr=2, centroid=true );
+      ngon( n=6, r=25, vr=6 );
+      ellipse( size=[25, 40] );
+      ellipse_c( size=[25,40], core=[16,10], co=[0,10], cr=45 );
+      ellipse_s( size=[25,40], a1=90, a2=180 );
+      ellipse_cs( size=[25,40], t=[10,5], a1=90, a2=180, co=[10,0], cr=45);
+      star2d( size=[40, 15], n=5, vr=2 );
+    }
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {config_base,config_svg}.mfs;
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;

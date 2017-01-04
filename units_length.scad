@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file   units_length.scad
   \author Roy Allen Sutton
-  \date   2015-2016
+  \date   2015-2017
 
   \copyright
 
@@ -72,10 +72,10 @@
       \skip include
       \until to="mm");
 
-    result (base_unit_length = \b mm):  \include units_length_example_mm.log
-    result (base_unit_length = \b cm):  \include units_length_example_cm.log
-    result (base_unit_length = \b mil): \include units_length_example_mil.log
-    result (base_unit_length = \b in):  \include units_length_example_in.log
+    \b Result (base_unit_length = \b mm):  \include units_length_example_mm.log
+    \b Result (base_unit_length = \b cm):  \include units_length_example_cm.log
+    \b Result (base_unit_length = \b mil): \include units_length_example_mil.log
+    \b Result (base_unit_length = \b in):  \include units_length_example_in.log
 
     \b Example (equivalent lengths)
 
@@ -275,9 +275,11 @@ BEGIN_SCOPE example;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_std,config_csg}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
+
     defines   name "units" define "base_unit_length" strings "mm cm mil in";
     variables add_opts_combine "units";
+
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;
@@ -314,9 +316,11 @@ BEGIN_SCOPE dim;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_std,config_png}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
+
     views     name "views" translate "0,60,0" distance "400" views "top";
     variables add_opts_combine "views";
+
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;

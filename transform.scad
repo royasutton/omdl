@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file   transform.scad
   \author Roy Allen Sutton
-  \date   2015-2016
+  \date   2015-2017
 
   \copyright
 
@@ -30,9 +30,36 @@
   \ingroup transforms transforms_extrude transforms_replicate
 *******************************************************************************/
 
+use <console.scad>;
 include <math.scad>;
 
 //----------------------------------------------------------------------------//
+/***************************************************************************//**
+  \addtogroup transforms
+
+    \amu_define caption (Extrusions and Replications)
+
+    \amu_make png_files (append=dim extension=png)
+    \amu_make eps_files (append=dim extension=png2eps)
+    \amu_shell file_cnt ("echo ${png_files} | wc -w")
+    \amu_shell cell_num ("seq -f '(%g)' -s '^' ${file_cnt}")
+
+    \htmlonly
+      \amu_image_table
+        (
+          type=html columns=4 image_width="200" cell_files="${png_files}"
+          table_caption="${caption}" cell_captions="${cell_num}"
+        )
+    \endhtmlonly
+    \latexonly
+      \amu_image_table
+        (
+          type=latex columns=4 image_width="1.25in" cell_files="${eps_files}"
+          table_caption="${caption}" cell_captions="${cell_num}"
+        )
+    \endlatexonly
+*******************************************************************************/
+
 /***************************************************************************//**
   \addtogroup transforms
   @{
@@ -176,13 +203,13 @@ module st_linear_extrude_scale
   center = false
 )
 {
-  if (h == undef)
+  if ( not_defined(h) )
   {
     children();
   }
-  else if (len(h) == undef)
+  else if ( is_scalar(h) )
   {
-    translate(center==true ? [0, 0, -h/2] : [0,0,0])
+    translate(center==true ? [0, 0, -h/2] : origin3d)
     linear_extrude(height=h)
     children();
   }
@@ -204,7 +231,7 @@ module st_linear_extrude_scale
     h2 = (n2>0) ? z2 * z : 0;
     h0 = z - h1 - h2;
 
-    translate(center==true ? [0, 0, -z/2] : [0,0,0])
+    translate(center==true ? [0, 0, -z/2] : origin3d)
     {
       if (h1 > 0)
       {
@@ -245,12 +272,12 @@ module st_linear_extrude_scale
   @{
 
   \defgroup transforms_replicate Replications
-  \brief    Shape Replications.
+  \brief    Shape Replications and distribution.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Copy and radially distribute a 2D or 3D shape equally about the z-axis.
+//! Distribute copies of a 2D or 3D shape equally about a z-axis radius.
 /***************************************************************************//**
   \param    n <decimal> The number of equally spaced radii.
   \param    r <decimal> The shape move radius.
@@ -272,9 +299,94 @@ module st_radial_copy
 {
   for ( p = ngon_vp( r=r, n=n ) )
   {
-    translate(move==true ? p : [0,0])
-    rotate(angle==true ? [0, 0, angle_p2p ( x_axis2d_uv, p )] : [0, 0, 0])
+    translate(move==true ? p : origin2d)
+    rotate(angle==true ? [0, 0, angle_vv( v1t=x_axis2d_uv, v2t=p )] : origin3d)
     children();
+  }
+}
+
+//! Distribute copies of 2D or 3D shapes about Cartesian grid.
+/***************************************************************************//**
+  \param    grid <vector|decimal> A vector [x, y, z] of decimals or a
+            single decimal for (x=y=z).
+  \param    incr <vector|decimal> A vector [x, y, z] of decimals or a
+            single decimal for (x=y=z).
+  \param    copy <decimal> Number of times to iterate over children.
+  \param    center <boolean> Center distribution about origin.
+
+  \details
+
+    \b Example
+    \amu_eval ( function=st_cartesian_copy ${example_dim} )
+*******************************************************************************/
+module st_cartesian_copy
+(
+  grid,
+  incr,
+  copy = 1,
+  center = false
+)
+{
+  gridx = edefined_or(grid, 0, grid);
+  gridy = edefined_or(grid, 1, gridx);
+  gridz = edefined_or(grid, 2, gridx);
+
+  incrx = edefined_or(incr, 0, incr);
+  incry = edefined_or(incr, 1, incrx);
+  incrz = edefined_or(incr, 2, incrx);
+
+  if ( ( $children * copy ) > ( gridx * gridy * gridz ) )
+  {
+    log_warn("more objects than grid capacity, shapes will overlap.");
+    log_info
+    (
+      str
+      (
+        "children=", $children,
+        ", copies=", copy,
+        ", objects=", $children * copy
+      )
+    );
+    log_info
+    (
+      str
+      (
+        "grid[x,y,z]=[", gridx, ", ", gridy, ", ", gridz, "]",
+        ", capacity=", gridx * gridy * gridz
+      )
+    );
+  }
+
+  translate
+  (
+    center==true
+    ? [
+        -( min($children * copy, gridx) -1 )                   * incrx / 2,
+        -( min(ceil($children * copy/gridx), gridy) -1 )       * incry / 2,
+        -( min(ceil($children * copy/gridx/gridy), gridz) -1 ) * incrz / 2
+      ]
+    : origin3d
+  )
+  if ( copy > 0 )
+  {
+    for
+    (
+      y = [0 : (copy-1)],
+      x = [0 : ($children-1)]
+    )
+    {
+      i = y * $children + x;
+
+      translate
+      (
+        [
+          incrx * (i%gridx),
+          incry * (floor(i/gridx)%gridy),
+          incrz * (floor(floor(i/gridx)/gridy)%gridz)
+        ]
+      )
+      children([x]);
+    }
   }
 }
 
@@ -301,10 +413,13 @@ BEGIN_SCOPE dim;
       st_linear_extrude_scale( [5,10,15,-5], center=true ) square( [20,15], center=true );
     else if (shape == "st_radial_copy")
       st_radial_copy( n=7, r=6, move=true ) square( [20,1], center=true );
+    else if (shape == "st_cartesian_copy")
+      st_cartesian_copy( grid=[5,5,4], incr=10, copy=50, center=true ) {cube(10, center=true); sphere(10);}
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_std,config_png}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
+
     views     name "views" views "diag";
     defines   name "shapes" define "shape"
               strings "
@@ -312,9 +427,11 @@ BEGIN_SCOPE dim;
                 st_rotate_extrude_elongate
                 st_linear_extrude_scale
                 st_radial_copy
+                st_cartesian_copy
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter";
+
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;

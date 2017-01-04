@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file   console.scad
   \author Roy Allen Sutton
-  \date   2015-2016
+  \date   2015-2017
 
   \copyright
 
@@ -48,7 +48,7 @@ use <utilities.scad>;
       \skip use
       \until log_error( message );
 
-    result:  \include console_example_na.log
+    \b Result \include console_example.log
 
   @{
 *******************************************************************************/
@@ -56,31 +56,31 @@ use <utilities.scad>;
 
 //! Output message to console.
 /***************************************************************************//**
-  \param    message <string> The message to output.
+  \param    m <string> An output message.
 *******************************************************************************/
-module log_echo( message )
+module log_echo( m )
 {
-  um = (message==undef) ? "" : message;
+  um = (m==undef) ? "" : m;
 
   echo ( um );
 }
 
 //! Output diagnostic message to console.
 /***************************************************************************//**
-  \param    message <string> The message to output.
+  \param    m <string> An output message.
 
   \details
 
-    When \p $log_debug == \p true, message are written to the console. When
+    When \p $log_debug == \p true, message is written to the console. When
     \p false, output is not generated.
 *******************************************************************************/
-module log_debug( message )
+module log_debug( m )
 {
-  um = (message==undef) ? "" : message;
+  um = (m==undef) ? "" : m;
 
   mt = "[ DEBUG ]";
   sp = chr( 32 );
-  cs = stack( idx_e = 1 );
+  cs = stack( t = 1 );
 
   if ( $log_debug == true )
     echo ( str(mt, sp, cs, ";", sp, um) );
@@ -89,31 +89,31 @@ module log_debug( message )
 
 //! Output information message to console.
 /***************************************************************************//**
-  \param    message <string> The message to output.
+  \param    m <string> An output message.
 *******************************************************************************/
-module log_info( message )
+module log_info( m )
 {
-  um = (message==undef) ? "" : message;
+  um = (m==undef) ? "" : m;
 
   mt = "[ INFO ]";
   sp = chr( 32 );
-  cs = stack( idx_e = 1 );
+  cs = stack( t = 1 );
 
   echo ( str(mt, sp, cs, ";", sp, um) );
 }
 
 //! Output warning message to console.
 /***************************************************************************//**
-  \param    message <string> The message to output.
+  \param    m <string> An output message.
 *******************************************************************************/
-module log_warn( message )
+module log_warn( m )
 {
-  um = (message==undef) ? "" : message;
+  um = (m==undef) ? "" : m;
 
   mt = "[ WARNING ]";
   bc = 35;
   sp = chr( 32 );
-  cs = stack( idx_e = 1 );
+  cs = stack( t = 1 );
   hb = chr( [for (i=[0:1:len(um)+len(mt)+4]) bc] );
   ms = str(chr(bc), sp, mt, sp, um, sp, chr(bc));
 
@@ -126,7 +126,7 @@ module log_warn( message )
 
 //! Output error message to console.
 /***************************************************************************//**
-  \param    message <string> The message to output.
+  \param    m <string> An output message.
 
   \details
 
@@ -135,14 +135,14 @@ module log_warn( message )
     To alert of the critical error, the error message is also rendered
     graphically.
 *******************************************************************************/
-module log_error( message )
+module log_error( m )
 {
-  um = (message==undef) ? "" : message;
+  um = (m==undef) ? "" : m;
 
   mt = "[ ERROR ]";
   bc = 35;
   sp = chr( 32 );
-  cs = stack( idx_e = 1 );
+  cs = stack( t = 1 );
   hb = chr( [for (i=[0:1:len(um)+len(mt)+6]) bc] );
   hs = chr( concat([bc, bc],[for (i=[0:1:len(um)+len(mt)+2]) 32],[bc, bc]) );
   ms = str(chr(bc), chr(bc), sp, mt, sp, um, sp, chr(bc), chr(bc));
@@ -171,6 +171,7 @@ BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     use <console.scad>;
 
+    $log_debug = true;
     message = "console log message";
 
     // general
@@ -178,6 +179,7 @@ BEGIN_SCOPE example;
 
     // debugging
     log_debug( message );
+    log_debug( message, $log_debug = false );
 
     // information
     log_info( message );
@@ -190,9 +192,7 @@ BEGIN_SCOPE example;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_std,config_csg}.mfs;
-    defines   name "na" define "na" strings "na";
-    variables add_opts_combine "na";
+    include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;

@@ -1,18 +1,16 @@
 ###############################################################################
 #
-# standard configuration
+# configuration: Scalable Vector Graphics (svg)
 #
 ###############################################################################
 
 variables \
-  set_makefile "${__MAKE_FILE__}" \
-  set_source "${__SCOPE_FILE__}" \
-  set_prefix "${__PREFIX__}" \
+  set_ext "svg" \
   \
-  add_depend "${__MAKE_FILE__}" \
-  add_depend "${__AMU_INCLUDE_PATH__}/parallel_jobs.mk" \
+  clear_convert \
   \
-  set_opts "--preview --projection=o --colorscheme=Cornfield"
+  set_opts "--render" \
+  clear_opts_combine
 
 ###############################################################################
 # eof

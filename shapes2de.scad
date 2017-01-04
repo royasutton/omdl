@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file   shapes2de.scad
   \author Roy Allen Sutton
-  \date   2015-2016
+  \date   2015-2017
 
   \copyright
 
@@ -37,6 +37,28 @@ include <shapes2d.scad>;
   \addtogroup shapes
   @{
 
+    \amu_define caption (2D Extrusions)
+
+    \amu_make png_files (append=dim extension=png)
+    \amu_make eps_files (append=dim extension=png2eps)
+    \amu_shell file_cnt ("echo ${png_files} | wc -w")
+    \amu_shell cell_num ("seq -f '(%g)' -s '^' ${file_cnt}")
+
+    \htmlonly
+      \amu_image_table
+        (
+          type=html columns=4 image_width="200" cell_files="${png_files}"
+          table_caption="${caption}" cell_captions="${cell_num}"
+        )
+    \endhtmlonly
+    \latexonly
+      \amu_image_table
+        (
+          type=latex columns=4 image_width="1.25in" cell_files="${eps_files}"
+          table_caption="${caption}" cell_captions="${cell_num}"
+        )
+    \endlatexonly
+
   \defgroup shapes_2de 2D Extrusions
   \brief    Extruded two dimensional geometric shapes.
   @{
@@ -67,7 +89,9 @@ include <shapes2d.scad>;
   \param    h <vector|decimal> A vector of decimals or a single decimal to
             specify simple extrusion height.
 
-  \param    vr <decimal> The corner rounding radius.
+  \param    vr <vector|decimal> The corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
   \param    center <boolean> Center about origin.
 
@@ -106,9 +130,15 @@ module erectangle
   \param    co <vector> Core offset. A vector [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
-  \param    vr <decimal> The default corner rounding radius.
-  \param    vr1 <decimal> The outer corner rounding radius.
-  \param    vr2 <decimal> The core corner rounding radius.
+  \param    vr <vector|decimal> The default corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
+  \param    vr1 <vector|decimal> The outer corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
+  \param    vr2 <vector|decimal> The core corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
   \param    center <boolean> Center about origin.
 
@@ -145,6 +175,39 @@ module erectangle_c
     vr=vr, vr1=vr1, vr2=vr2,
     center=center
   );
+}
+
+//! An extruded rhombus.
+/***************************************************************************//**
+  \param    size <vector|decimal> A vector [w, h] of decimals
+            or a single decimal for (w=h).
+
+  \param    h <vector|decimal> A vector of decimals or a single decimal to
+            specify simple extrusion height.
+
+  \param    vr <vector|decimal> The corner rounding radius.
+            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
+
+  \param    center <boolean> Center about origin.
+
+  \details
+
+    \sa st_linear_extrude_scale for a description on specifying \p h.
+
+    \b Example
+    \amu_eval ( function=erhombus ${example_dim} )
+*******************************************************************************/
+module erhombus
+(
+  size,
+  h,
+  vr,
+  center = false
+)
+{
+  st_linear_extrude_scale(h=h, center=center)
+  rhombus(size=size, vr=vr, center=center);
 }
 
 //! An extruded general triangle specified by three vertices.
@@ -882,6 +945,8 @@ BEGIN_SCOPE dim;
       erectangle( size=[25,40], vr=5, h=20, center=true );
     else if (shape == "erectangle_c")
       erectangle_c(size=[40,20], t=[10,1], co=[0,-6], cr=10, vr=5, h=30, center=true);
+    else if (shape == "erhombus")
+      erhombus( size=[40,25], h=10, vr=[3,0,3,9], center=true );
     else if (shape == "etriangle_ppp")
       etriangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], h=20, vr=2, centroid=true, center=true );
     else if (shape == "etriangle_lll")
@@ -913,12 +978,14 @@ BEGIN_SCOPE dim;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_std,config_png}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
+
     views     name "views" views "diag";
     defines   name "shapes" define "shape"
               strings "
                 erectangle
                 erectangle_c
+                erhombus
                 etriangle_ppp
                 etriangle_lll
                 etriangle_vl_c
@@ -936,6 +1003,41 @@ BEGIN_SCOPE dim;
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter";
+
+    include --path "${INCLUDE_PATH}" script_std.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE manifest;
+  BEGIN_OPENSCAD;
+    include <shapes2de.scad>;
+
+    $fn = 72;
+
+    st_cartesian_copy( grid=5, incr=60, center=true )
+    {
+      erectangle( size=[25,40], vr=5, h=20, center=true );
+      erectangle_c(size=[40,20], t=[10,1], co=[0,-6], cr=10, vr=5, h=30, center=true);
+      erhombus( size=[40,25], h=10, vr=[3,0,3,9], center=true );
+      etriangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], h=20, vr=2, centroid=true, center=true );
+      etriangle_lll( s1=30, s2=40, s3=50, h=20, vr=2, centroid=true, center=true );
+      etriangle_vl_c(vs=50, vc=30, h=15, co=[0,-10], cr=180, vr=[2,2,8], centroid=true, center=true);
+      etriangle_lal( s1=50, a=60, s2=30, h=20, vr=2, centroid=true, center=true );
+      etriangle_ala( a1=30, s=50, a2=60, h=20, vr=2, centroid=true, center=true );
+      etriangle_aal( a1=60, a2=30, s=40, h=20, vr=2, centroid=true, center=true );
+      etriangle_ll( x=30, y=40, h=20, vr=2, centroid=true, center=true );
+      etriangle_la( x=40, aa=30, h=20, vr=2, centroid=true, center=true );
+      engon( n=6, r=25, h=20, vr=6, center=true );
+      eellipse( size=[25, 40], h=20, center=true );
+      eellipse_c( size=[25,40], core=[16,10], co=[0,10], cr=45, h=20, center=true );
+      eellipse_s( size=[25,40], h=20, a1=90, a2=180, center=true );
+      eellipse_cs( size=[25,40], t=[10,5], a1=90, a2=180, co=[10,0], cr=45, h=20, center=true );
+      estar2d( size=[40, 15], h=15, n=5, vr=2, center=true );
+    }
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {config_base,config_stl}.mfs;
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;

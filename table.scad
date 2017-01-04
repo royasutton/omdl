@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file   table.scad
   \author Roy Allen Sutton
-  \date   2015-2016
+  \date   2015-2017
 
   \copyright
 
@@ -31,7 +31,7 @@
 *******************************************************************************/
 
 use <console.scad>;
-include <math.scad>;
+include <primitives.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -49,7 +49,7 @@ include <math.scad>;
       \skip use
       \until ( tsum=tsum );
 
-    result:  \include table_example_na.log
+    \b Result \include table_example.log
 
   @{
 *******************************************************************************/
@@ -61,13 +61,13 @@ include <math.scad>;
             containing the table rows.
   \param    row_id <string> The row identifier string to locate.
   \returns  <decimal> The row index where the identifier is located. If the
-            identifier does not exists, returns \b [].
+            identifier does not exists, returns \b empty_v.
 *******************************************************************************/
 function table_get_row_idx
 (
   rows,
   row_id
-) = search( [row_id], rows, 1, 0 )[0];
+) = first( search( [row_id], rows, 1, 0 ) );
 
 //! Get the row for a table row identifier.
 /***************************************************************************//**
@@ -83,43 +83,19 @@ function table_get_row
   row_id
 ) = rows[ table_get_row_idx(rows, row_id) ];
 
-//! Get the first table row.
-/***************************************************************************//**
-  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
-            containing the table rows.
-  \returns  <vector> The first table row. If the table is empty,
-            returns \b undef.
-*******************************************************************************/
-function table_first_row
-(
-  rows
-) = rows[ 0 ];
-
-//! Get the last table row.
-/***************************************************************************//**
-  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
-            containing the table rows.
-  \returns  <vector> The last table row. If the table is empty,
-            returns \b undef.
-*******************************************************************************/
-function table_last_row
-(
-  rows
-) = rows[ len( rows ) - 1 ];
-
 //! Get the index for a table column identifier.
 /***************************************************************************//**
   \param    cols <2d-vector> A two dimensional vector (c-tuple x 1-tuple)
             containing the table columns.
   \param    col_id <string> The column identifier string to locate.
   \returns  <decimal> The column index where the identifier is located. If the
-            identifier does not exists, returns \b [].
+            identifier does not exists, returns \b empty_v.
 *******************************************************************************/
 function table_get_col_idx
 (
   cols,
   col_id
-) = search( [col_id], cols, 1, 0 )[0];
+) = first( search( [col_id], cols, 1, 0 ) );
 
 //! Get the column for a table column identifier.
 /***************************************************************************//**
@@ -134,30 +110,6 @@ function table_get_col
   cols,
   col_id
 ) = cols[ table_get_col_idx(cols, col_id) ];
-
-//! Get the first table column.
-/***************************************************************************//**
-  \param    cols <2d-vector> A two dimensional vector (c-tuple x 1-tuple)
-            containing the table columns.
-  \returns  <vector> The first table column. If the table is empty,
-            returns \b undef.
-*******************************************************************************/
-function table_first_col
-(
-  cols
-) = cols[ 0 ];
-
-//! Get the last table column.
-/***************************************************************************//**
-  \param    cols <2d-vector> A two dimensional vector (c-tuple x 1-tuple)
-            containing the table columns.
-  \returns  <vector> The last table column. If the table is empty,
-            returns \b undef.
-*******************************************************************************/
-function table_last_col
-(
-  cols
-) = cols[ len( cols ) - 1];
 
 //! Get the value for a table row and column identifier.
 /***************************************************************************//**
@@ -178,6 +130,46 @@ function table_get
   col_id
 ) = rows[table_get_row_idx(rows,row_id)][table_get_col_idx(cols,col_id)];
 
+//! Form a vector from the specified column of each table row.
+/***************************************************************************//**
+  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
+            containing the table rows.
+  \param    cols <2d-vector> A two dimensional vector (c-tuple x 1-tuple)
+            containing the table columns.
+  \param    col_id <string> The column identifier string.
+  \returns  <vector> The vector formed by selecting the \p col_id for
+            each row in the table.
+            If column does not exists, returns \b undef.
+*******************************************************************************/
+function table_get_row_cols
+(
+  rows,
+  cols,
+  col_id
+) = table_exists(rows,cols,col_id=col_id) ?
+    eselect(table_copy(rows,cols,cols_sel=[col_id]),f=true)
+  : undef;
+
+//! Form a vector of each table row identifier.
+/***************************************************************************//**
+  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
+            containing the table rows.
+  \returns  <vector> The vector of table row identifiers.
+            If column \c "id" does not exists, returns \b undef.
+
+  \details
+
+  \note     This functions assumes the first element of each table row to
+            be the row identifier, as enforced by the table_check(). As
+            an alternative, the function table_get_row_cols(), of the form
+            table_get_row_cols(rows, cols, "id"), may be used without this
+            assumption.
+*******************************************************************************/
+function table_get_row_ids
+(
+  rows
+) = eselect(rows,f=true);
+
 //! Test the existence of a table row and column identifier.
 /***************************************************************************//**
   \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
@@ -195,12 +187,12 @@ function table_exists
   cols,
   row_id,
   col_id
-) = ( (row_id != undef) && (col_id != undef) ) ?
-      ( table_get(trows, tcols, row_id, col_id) != undef )
-  : ( (row_id != undef) && (col_id == undef) ) ?
-      ( table_get_row_idx(rows,row_id) != [] )
-  : ( (row_id == undef) && (col_id != undef) ) ?
-      ( table_get_col_idx(cols,col_id) != [] )
+) = ( is_defined(row_id) && is_defined(col_id) ) ?
+      is_defined(table_get(trows, tcols, row_id, col_id))
+  : ( is_defined(row_id) && not_defined(col_id) ) ?
+      !is_empty(table_get_row_idx(rows,row_id))
+  : ( not_defined(row_id) && is_defined(col_id) ) ?
+      !is_empty(table_get_col_idx(cols,col_id))
   : false;
 
 //! Get the size of a table.
@@ -222,8 +214,8 @@ function table_size
 (
   rows,
   cols
-) = ( (rows != undef) && (cols == undef) ) ? len( rows )
-  : ( (rows == undef) && (cols != undef) ) ? len( cols )
+) = ( is_defined(rows) && not_defined(cols) ) ? len( rows )
+  : ( not_defined(rows) && is_defined(cols) ) ? len( cols )
   : len( rows ) * len( cols );
 
 //! Perform some basic validation/checks on a table.
@@ -250,8 +242,8 @@ module table_check
 {
   if (verbose) log_info("begin table check");
 
-  // column one should be 'id'
-  if ( cols[0][0] != "id")
+  // first word of first column should be 'id'
+  if ( first( first(cols) ) != "id")
   {
     log_warn ("table column 0 should be 'id'");
   }
@@ -270,7 +262,7 @@ module table_check
       log_error (
         str (
           "row ", table_get_row_idx(rows, r),
-          ", id=[", r[0], "]",
+          ", id=[", first(r), "]",
           ", has incorrect column count=[", len ( r ),"]"
         )
       );
@@ -280,14 +272,14 @@ module table_check
   // no repeat column identifiers
   if (verbose) log_info ("checking for repeat column identifiers.");
   for (c = cols)
-    if ( len(search( [c[0]] , cols, 0, 0 )[0]) > 1 )
-      log_warn ( str("repeating column identifier [", c[0], "]") );
+    if ( len(first(search([first(c)], cols, 0, 0))) > 1 )
+      log_warn ( str("repeating column identifier [", first(c), "]") );
 
   // no repeat row identifiers
   if (verbose) log_info ("checking for repeat row identifiers.");
   for (r = rows)
-    if ( len(search( [r[0]] , rows, 0, 0 )[0]) > 1 )
-      log_warn ( str("repeating row identifier [", r[0], "]") );
+    if ( len(first(search([first(r)], rows, 0, 0))) > 1 )
+      log_warn ( str("repeating row identifier [", first(r), "]") );
 
   if (verbose)
   {
@@ -329,17 +321,16 @@ module table_dump
   number=true
 )
 {
-  maxr0 = max( [for (r = rows) (len(r[0]))] ) + 1;
-  maxc0 = max( [for (c = cols) (len(c[0]))] ) + 1;
-  maxc1 = max( [for (c = cols) (len(c[1]))] ) + 1;
+  maxr0 = max( [for (r = rows) len( first(r) )] ) + 1;
+  maxc0 = max( [for (c = cols) len( first(c) )] ) + 1;
+  maxc1 = max( [for (c = cols) len( c[1] )] ) + 1;
 
   for ( r = rows )
   {
     if
     (
-      ( search( r, rows_sel, 1, 0 )[0] != [] ) ||
-      ( len( rows_sel ) == 0 ) ||
-      ( len( rows_sel ) == undef )
+      not_defined( rows_sel ) || is_empty( rows_sel ) ||
+      !is_empty( first( search( r, rows_sel, 1, 0 ) ) )
     )
     {
       if ( number )
@@ -351,16 +342,16 @@ module table_dump
       {
         if
         (
-          ( search( c, cols_sel, 1, 0 )[0] != [] ) ||
-          ( len( cols_sel ) == 0 ) ||
-          ( len( cols_sel ) == undef )
+          not_defined( cols_sel ) || is_empty( cols_sel ) ||
+          !is_empty( first( search( c, cols_sel, 1, 0 ) ) )
         )
         {
-          log_echo (
+          log_echo
+          (
             str (
-              "[", r[0], "]", chr([for (i=[0:1:maxr0-len(r[0])]) 32]),
-              "[", c[0], "]", chr([for (i=[0:1:maxc0-len(c[0])]) 32]),
-              "(", c[1], ")", chr([for (i=[0:1:maxc1-len(c[1])]) 32]),
+              "[", first(r), "]", chr(consts(maxr0-len(first(r)), 32)),
+              "[", first(c), "]", chr(consts(maxc0-len(first(c)), 32)),
+              "(", c[1], ")", chr(consts(maxc1-len(c[1]), 32)),
               "= [", table_get(rows, cols, r, c), "]"
             )
           );
@@ -371,7 +362,8 @@ module table_dump
 
   if ( number ) {
     log_echo();
-    log_echo (
+    log_echo
+    (
       str (
         "table size: ",
         table_size(rows=rows), " rows by ",
@@ -402,17 +394,15 @@ function table_copy
   for ( r = rows )
     if
     (
-      ( search( r, rows_sel, 1, 0 )[0] != [] ) ||
-      ( len( rows_sel ) == 0 ) ||
-      ( len( rows_sel ) == undef )
+      not_defined( rows_sel ) || is_empty( rows_sel ) ||
+      !is_empty( first( search( r, rows_sel, 1, 0 ) ) )
     )
     [
       for ( c = cols )
         if
         (
-          ( search( c, cols_sel, 1, 0 )[0] != [] ) ||
-          ( len( cols_sel ) == 0 ) ||
-          ( len( cols_sel ) == undef )
+          not_defined( cols_sel ) || is_empty( cols_sel ) ||
+          !is_empty( first( search( c, cols_sel, 1, 0 ) ) )
         )
           table_get(rows, cols, r, c)
     ]
@@ -434,7 +424,7 @@ function table_sum
   cols,
   rows_sel,
   cols_sel
-) = sum_v ( table_copy(rows, cols, rows_sel, cols_sel) );
+) = sum( table_copy(rows, cols, rows_sel, cols_sel) );
 
 //! @}
 //! @}
@@ -452,7 +442,7 @@ BEGIN_SCOPE example;
     base_unit_length = "mm";
 
     table_cols =
-     [// id,  description
+    [ // id,  description
       ["id",  "row identifier"],
       ["ht",  "head type [r|h|s]"],
       ["td",  "thread diameter"],
@@ -479,6 +469,12 @@ BEGIN_SCOPE example;
     if ( table_exists( cols=table_cols, col_id="nl" ) )
       echo ( "metric 'nl' available" );
 
+    table_ids = table_get_row_ids( table_rows );
+    table_cols_tl = table_get_row_cols( table_rows, table_cols, "tl" );
+
+    echo ( table_ids=table_ids );
+    echo ( table_cols_tl=table_cols_tl );
+
     tnew = table_copy( table_rows, table_cols, cols_sel=["tl", "nl"] );
     tsum = table_sum( table_rows, table_cols, cols_sel=["tl", "nl"] );
 
@@ -488,9 +484,7 @@ BEGIN_SCOPE example;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_std,config_csg}.mfs;
-    defines   name "na" define "na" strings "na";
-    variables add_opts_combine "na";
+    include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;
