@@ -1036,7 +1036,7 @@ function reverse
 
 //! Sort the numeric or string elements of a vector using quick sort.
 /***************************************************************************//**
-  \param    v \<value> A vector of values.
+  \param    v <vector> A vector of values.
   \param    r <boolean> Reverse sort order.
 
   \returns  <vector> With elements sorted in ascending order.
@@ -1076,7 +1076,7 @@ function qsort
 
 //! Hierarchically sort all elements of a vector using quick sort.
 /***************************************************************************//**
-  \param    v \<value> A vector of values.
+  \param    v <vector> A vector of values.
   \param    d <integer> Recursive sort depth.
   \param    r <boolean> Reverse sort order.
   \param    s <boolean> Order ranges by their numerical sum.
@@ -1211,10 +1211,10 @@ function append
 //! Insert a new value into an iterable value.
 /***************************************************************************//**
   \param    nv \<value> A new value to insert.
-  \param    v <vector> A vector of values.
+  \param    v \<value> An iterable value.
   \param    i <integer> An index insert position.
-  \param    mv \<vector|value> A vector of match values candidates
-            (or a single match value).
+  \param    mv <vector|string|value> Match value candidates
+            (a vector of values, a string of characters, or a single value).
   \param    mi <integer> A match index.
 
   \returns  <vector> With \p nv inserted into \p v at the specified position.
@@ -1253,7 +1253,7 @@ function insert
   : ((i<0) || (i>len(v))) ? undef
   : let
     (
-      m = is_vector(mv) ? mv : [mv],
+      m = is_string(v) ? mv : is_vector(mv) ? mv : [mv],
       p = is_defined(mv) ? first(strip(search(m, v, 0, 0)))[mi] : i,
       h = (p>0) ? [for (i = [0 : p-1]) v[i]] : empty_v,
       t = (p>len(v)-1) ? empty_v : [for (i = [p : len(v)-1]) v[i]]
@@ -1262,10 +1262,10 @@ function insert
 
 //! Delete elements from an iterable value.
 /***************************************************************************//**
-  \param    v <vector> A vector of values.
+  \param    v \<value> An iterable value.
   \param    i <range|vector|integer> Deletion Indexes.
-  \param    mv \<vector|value> A vector of deletion match values
-            (or a single match values).
+  \param    mv <vector|string|value> Match value candidates
+            (a vector of values, a string of characters, or a single value).
   \param    mc <integer> A match count.
 
   \returns  <vector> \p v with all specified element removed.
@@ -1298,7 +1298,7 @@ function delete
   : is_range(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
   : let
     (
-      m = is_vector(mv) ? mv : [mv],
+      m = is_string(v) ? mv : is_vector(mv) ? mv : [mv],
       p = is_defined(mv) ?
         (
           (mc == 1) ? smerge(search(m, v, mc, 0), false)
