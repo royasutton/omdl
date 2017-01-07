@@ -827,6 +827,20 @@ function first
 ) = !is_iterable(v) ? undef
   : v[0];
 
+//! Return the second element of an iterable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+
+  \returns  \<value> The second element of \p v.
+            Returns \b undef when \p v is not defined, is not iterable,
+            or is empty.
+*******************************************************************************/
+function second
+(
+  v
+) = !is_iterable(v) ? undef
+  : v[1];
+
 //! Return the last element of an iterable value.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
@@ -1718,6 +1732,19 @@ BEGIN_SCOPE validate;
           [1,2,3],                                            // t10
           0                                                   // t11
         ],
+        ["second",
+          undef,                                              // t01
+          undef,                                              // t02
+          undef,                                              // t03
+          " ",                                                // t04
+          "apple",                                            // t05
+          "a",                                                // t06
+          undef,                                              // t07
+          [2,3],                                              // t08
+          [1,2],                                              // t09
+          [4,5,6],                                            // t10
+          1                                                   // t11
+        ],
         ["last",
           undef,                                              // t01
           undef,                                              // t02
@@ -1977,6 +2004,7 @@ BEGIN_SCOPE validate;
       for (vid=test_ids) run_test( "defined_or_D", defined_or(get_value(vid),"default"), vid );
       for (vid=test_ids) run_test( "edefined_or_DE3", edefined_or(get_value(vid),3,"default"), vid );
       for (vid=test_ids) run_test( "first", first(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "second", second(get_value(vid)), vid );
       for (vid=test_ids) run_test( "last", last(get_value(vid)), vid );
       for (vid=test_ids) run_test( "head", head(get_value(vid)), vid );
       for (vid=test_ids) run_test( "tail", tail(get_value(vid)), vid );
