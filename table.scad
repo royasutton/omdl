@@ -254,7 +254,7 @@ module table_check
 (
   rows,
   cols,
-  verbose=false
+  verbose = false
 )
 {
   if (verbose) log_info("begin table check");
@@ -276,7 +276,8 @@ module table_check
   {
     if ( col_cnt !=  len ( r ) )
     {
-      log_error (
+      log_error
+      (
         str (
           "row ", table_get_row_idx(rows, r),
           ", id=[", first(r), "]",
@@ -300,7 +301,8 @@ module table_check
 
   if (verbose)
   {
-    log_info (
+    log_info
+    (
       str (
         "table size: ",
         table_size(rows=rows), " rows by ",
@@ -337,7 +339,7 @@ module table_dump
   cols,
   rows_sel,
   cols_sel,
-  number=true
+  number = true
 )
 {
   maxr0 = max( [for (r = rows) len( first(r) )] ) + 1;
