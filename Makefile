@@ -66,6 +66,7 @@ library             := mainpage \
                        units_angle \
                        units_length \
                        resolution \
+                       map \
                        table \
                        transform \
                        shapes2d \
