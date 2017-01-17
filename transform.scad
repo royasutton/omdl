@@ -336,13 +336,17 @@ module st_cartesian_copy
   center = false
 )
 {
-  gridx = edefined_or(grid, 0, grid);
-  gridy = edefined_or(grid, 1, gridx);
-  gridz = edefined_or(grid, 2, gridx);
+  gridd = is_scalar(grid) ? grid : 1;
 
-  incrx = edefined_or(incr, 0, incr);
-  incry = edefined_or(incr, 1, incrx);
-  incrz = edefined_or(incr, 2, incrx);
+  gridx = edefined_or(grid, 0, gridd);
+  gridy = edefined_or(grid, 1, gridd);
+  gridz = edefined_or(grid, 2, gridd);
+
+  incrd = is_scalar(incr) ? incr : 0;
+
+  incrx = edefined_or(incr, 0, incrd);
+  incry = edefined_or(incr, 1, incrd);
+  incrz = edefined_or(incr, 2, incrd);
 
   if ( ( $children * copy ) > ( gridx * gridy * gridz ) )
   {
