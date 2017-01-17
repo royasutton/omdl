@@ -118,6 +118,10 @@ module st_rotate_extrude
   \param    l <decimal> The elongation length.
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.
+  \param    m <vector> The section render mode. A 4-tuple vector of
+            integers that indicates the revolution sections to render.
+            A value \b 1 enables the corresponding section and
+            anything else disables it (default = [1, 1, 1, 1]).
   \param    profile <boolean> Show profile only (do not extrude).
 
   \details
@@ -125,8 +129,8 @@ module st_rotate_extrude
     \b Example
     \amu_eval ( function=st_rotate_extrude_elongate ${example_dim} )
 
-  \note When elongating (\p l > 0), parameter \p pa is ignored in order to
-        complete the circuit.
+  \note When elongating <tt>(l > 0)</tt>, \p ra is ignored. However, \p m
+        may be used to control which complete revolution section to render.
 *******************************************************************************/
 module st_rotate_extrude_elongate
 (
@@ -134,6 +138,7 @@ module st_rotate_extrude_elongate
   l = 0,
   pa = 0,
   ra = 360,
+  m,
   profile = false
 )
 {
@@ -144,7 +149,10 @@ module st_rotate_extrude_elongate
   }
   else
   {
-    for (y = [[+l/2, 0], [-l/2, 180]])
+    rm = defined_or(m, [1, 1, 1, 1]);
+
+    for (y = [[+l/2, 0, 0], [-l/2, 180, 2]])
+    if ( rm[y[2]] == 1 )
     {
       translate([0, y[0], 0])
       rotate([0, 0, y[1]])
@@ -152,7 +160,8 @@ module st_rotate_extrude_elongate
       children();
     }
 
-    for (x = [[+r, 0], [-r, 180]])
+    for (x = [[+r, 0, 1], [-r, 180, 3]])
+    if ( rm[x[2]] == 1 )
     {
       translate([x[0], 0, 0])
       rotate([90, 0, x[1]])
