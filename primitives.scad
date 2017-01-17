@@ -948,6 +948,79 @@ function eselect
   : (f == true) ? concat( [first(first(v))], eselect(tail(v), f, l, i) )
   : undef;
 
+//! Case-like select a value from a vector of ordered options by index.
+/***************************************************************************//**
+  \param    v <vector> A vector of values.
+  \param    i <integer> Element selection index.
+
+  \returns  \<value> The value of the vector element at the specified index.
+            Returns the default value when \p i does not map to an element
+            of \p v or when \p i is undefined.
+
+  \details
+
+    Behaves like a case statement for selecting values from a list of
+    <em>ordered options</em>.
+    The default value is: <tt>last(v)<tt>.
+
+    \b Example
+    \code{.C}
+    ov = [ "value1", "value2", "default" ];
+
+    ciselect( ov );     // "default"
+    ciselect( ov, 4 );  // "default"
+    ciselect( ov, 0 );  // "value1"
+    \endcode
+*******************************************************************************/
+function ciselect
+(
+  v,
+  i
+) = not_defined(i) ? last(v)
+  : !is_integer(i) ? last(v)
+  : (i < 0) ? last(v)
+  : (i > len(v)-1) ? last(v)
+  : v[i];
+
+//! Case-like select a value from a vector of identified options by match-value.
+/***************************************************************************//**
+  \param    v <vector> A two dimensional vector of one or more identified
+            values [[identifier, value], ...].
+  \param    mv \<value> Element selection match value.
+
+  \returns  \<value> The value from the vector of identified elements
+            with an identifier matching \p mv.
+            Returns the default value when \p mv does not match any of
+            the element identifiers of \p v or when \p mv is undefined.
+
+  \details
+
+    Behaves like a case statement for selecting values from a list of
+    <em>identified options</em>.
+    The default value is: <tt>second(last(v))<tt>.
+
+    \b Example
+    \code{.C}
+    ov = [ [0,"value0"], ["a","value1"], ["b","value2"], ["c","default"] ];
+
+    cmvselect( ov );      // "default"
+    cmvselect( ov, "x" ); // "default"
+    cmvselect( ov, 0 );   // "value0"
+    cmvselect( ov, "b" ); // "value2"
+    \endcode
+*******************************************************************************/
+function cmvselect
+(
+  v,
+  mv
+) = !is_defined(mv) ? second(last(v))
+  : let
+    (
+      i = first(search([mv], v, 1, 0))
+    )
+    is_empty(i) ? second(last(v))
+  : second(v[i]);
+
 //----------------------------------------------------------------------------//
 // reorder
 //----------------------------------------------------------------------------//
