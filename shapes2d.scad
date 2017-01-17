@@ -356,6 +356,13 @@ module rhombus
 
     \b Example
     \amu_eval ( function=triangle_ppp ${example_dim} )
+
+  \warning  Currently, in order to round any vertex, all must be given
+            a rounding radius, either via \p vr or individually.
+
+  \todo     Replace the hull() operation with calculated tangential
+            intersection of the rounded vertexes.
+  \todo     Remove the all or nothing requirement for vertex rounding.
 *******************************************************************************/
 module triangle_ppp
 (
