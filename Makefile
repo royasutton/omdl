@@ -60,6 +60,7 @@ library             := mainpage \
                        constants \
                        primitives \
                        math \
+                       math_bitwise \
                        utilities \
                        validation \
                        console \
