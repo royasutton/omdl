@@ -38,6 +38,7 @@ include <primitives.scad>;
 /***************************************************************************//**
   \page tv_math Computations Validation
     \li \subpage tv_math_vector
+    \li \subpage tv_math_bitwise
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
@@ -347,7 +348,7 @@ function angle_vvn
     When specified by head coordinate only, the tail is assumed to
     be at origin.
 *******************************************************************************/
-function norm_v
+function unit_v
 (
   vt,
   vi
@@ -434,7 +435,7 @@ function ngon_vp
 [
   for ( a = [0:(360/n):359] )
     let( v = [r*cos(a), r*sin(a)] )
-    (vr == undef) ? v : v - vr/cos(180/n) * norm_v(vt=v)
+    (vr == undef) ? v : v - vr/cos(180/n) * unit_v(vt=v)
 ];
 
 //! @}
@@ -802,7 +803,7 @@ BEGIN_SCOPE validate;
           90,                                                 // t08
           0                                                   // t09
         ],
-        ["norm_v",
+        ["unit_v",
           2,                                                  // fac
           4,                                                  // crp
           undef,                                              // t01
@@ -876,7 +877,7 @@ BEGIN_SCOPE validate;
       for (vid=run_ids) run("striple_vvv",vid) test( "striple_vvv", striple_vvv(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
       for (vid=run_ids) run("angle_vv",vid) test( "angle_vv", angle_vv(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
       for (vid=run_ids) run("angle_vvn",vid) test( "angle_vvn", angle_vvn(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
-      for (vid=run_ids) run("norm_v",vid) test( "norm_v", norm_v(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
+      for (vid=run_ids) run("unit_v",vid) test( "unit_v", unit_v(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
       for (vid=run_ids) run("are_coplanar_vvv",vid) test( "are_coplanar_vvv", are_coplanar_vvv(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
 
       // end-of-tests

@@ -32,6 +32,7 @@
 
 use <console.scad>;
 include <math.scad>;
+include <math_bitwise.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -115,9 +116,15 @@ module st_rotate_extrude
 //! Revolve the 2D shape about the z-axis with linear elongation.
 /***************************************************************************//**
   \param    r <decimal> The rotation radius.
-  \param    l <decimal> The elongation length.
+  \param    l <vector|decimal> The elongation length.
+            A vector [x, y] of decimals or a single decimal for (x=y)
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.
+  \param    m <integer> The section render mode. An 8-bit encoded integer
+            value that indicates the revolution sections to render.
+            Bit values \b 1 enables the corresponding section and bit values
+            \b 0 are disabled. Sections are assigned to the bit position in
+            counter-clockwise order.
   \param    profile <boolean> Show profile only (do not extrude).
 
   \details
@@ -125,39 +132,61 @@ module st_rotate_extrude
     \b Example
     \amu_eval ( function=st_rotate_extrude_elongate ${example_dim} )
 
-  \note When elongating (\p l > 0), parameter \p pa is ignored in order to
-        complete the circuit.
+  \note When elongating <tt>(l > 0)</tt>, \p ra is ignored. However, \p m
+        may be used to control which complete revolution section to render.
 *******************************************************************************/
 module st_rotate_extrude_elongate
 (
   r,
-  l = 0,
+  l,
   pa = 0,
   ra = 360,
+  m = 255,
   profile = false
 )
 {
-  if ( (l == 0) || (profile==true) )
+  if ( not_defined(l) || (profile==true) )
   {
     st_rotate_extrude(r=r, pa=pa, ra=ra, profile=profile)
     children();
   }
   else
   {
-    for (y = [[+l/2, 0], [-l/2, 180]])
+    ld = is_scalar(l) ? l : 0;
+    lx = edefined_or(l, 0, ld);
+    ly = edefined_or(l, 1, ld);
+
+    for
+    (
+      i = [
+             [+lx/2, +ly/2,   0, 1],
+             [-lx/2, +ly/2,  90, 3],
+             [-lx/2, -ly/2, 180, 5],
+             [+lx/2, -ly/2, 270, 7]
+          ]
+    )
+    if ( bitwise_is_equal(m, i[3], 1) )
     {
-      translate([0, y[0], 0])
-      rotate([0, 0, y[1]])
-      st_rotate_extrude(r=r, pa=pa, ra=180, profile=profile)
+      translate([i[0], i[1], 0])
+      rotate([0, 0, i[2]])
+      st_rotate_extrude(r=r, pa=pa, ra=90, profile=profile)
       children();
     }
 
-    for (x = [[+r, 0], [-r, 180]])
+    for
+    (
+      i = [
+            [ +r +lx/2,    +ly/2,   0, ly, 0],
+            [    -lx/2, +r +ly/2,  90, lx, 2],
+            [ -r -lx/2,    -ly/2, 180, ly, 4],
+            [     lx/2, -r -ly/2, 270, lx, 6]
+          ]
+    )
+    if ( bitwise_is_equal(m, i[4], 1) )
     {
-      translate([x[0], 0, 0])
-      rotate([90, 0, x[1]])
-      translate([0, 0, -l/2])
-      linear_extrude(height=l)
+      translate([i[0], i[1], 0])
+      rotate([90, 0, i[2]])
+      linear_extrude(height=i[3])
       rotate([0, 0, pa])
       children();
     }
@@ -327,13 +356,17 @@ module st_cartesian_copy
   center = false
 )
 {
-  gridx = edefined_or(grid, 0, grid);
-  gridy = edefined_or(grid, 1, gridx);
-  gridz = edefined_or(grid, 2, gridx);
+  gridd = is_scalar(grid) ? grid : 1;
 
-  incrx = edefined_or(incr, 0, incr);
-  incry = edefined_or(incr, 1, incrx);
-  incrz = edefined_or(incr, 2, incrx);
+  gridx = edefined_or(grid, 0, gridd);
+  gridy = edefined_or(grid, 1, gridd);
+  gridz = edefined_or(grid, 2, gridd);
+
+  incrd = is_scalar(incr) ? incr : 0;
+
+  incrx = edefined_or(incr, 0, incrd);
+  incry = edefined_or(incr, 1, incrd);
+  incrz = edefined_or(incr, 2, incrd);
 
   if ( ( $children * copy ) > ( gridx * gridy * gridz ) )
   {
@@ -406,9 +439,9 @@ BEGIN_SCOPE dim;
     $fn = 72;
 
     if (shape == "st_rotate_extrude")
-      st_rotate_extrude( r=50, pa=45 ) square( [10,5], center=true );
+      st_rotate_extrude( r=50, pa=45, ra=270 ) square( [10,5], center=true );
     else if (shape == "st_rotate_extrude_elongate")
-      st_rotate_extrude_elongate( r=25, l=50, pa=45 ) square( [10,5], center=true );
+      st_rotate_extrude_elongate( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
     else if (shape == "st_linear_extrude_scale")
       st_linear_extrude_scale( [5,10,15,-5], center=true ) square( [20,15], center=true );
     else if (shape == "st_radial_copy")

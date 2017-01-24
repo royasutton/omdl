@@ -435,7 +435,8 @@ module star3d
             or a single decimal for (x=y).
 
   \param    r <decimal> The rotation radius.
-  \param    l <decimal> The elongation length.
+  \param    l <vector|decimal> The elongation length.
+            A vector [x, y] of decimals or a single decimal for (x=y)
 
   \param    t <vector|decimal> The profile thickness. A vector [x, y] of decimals
             or a single decimal for (x=y).
@@ -459,11 +460,15 @@ module star3d
 
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.
+  \param    m <integer> The section render mode. An 8-bit encoded integer
+            value that indicates the revolution sections to render.
 
   \param    center <boolean> Rotate about profile center.
   \param    profile <boolean> Show profile only (do not extrude).
 
   \details
+
+    \sa st_rotate_extrude_elongate for description of extrude parameters.
 
     Thickness \p t
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
@@ -477,7 +482,7 @@ module torus_rp
   size,
   core,
   r,
-  l = 0,
+  l,
   t,
   co,
   cr = 0,
@@ -486,11 +491,12 @@ module torus_rp
   vr2,
   pa = 0,
   ra = 360,
+  m = 255,
   center = false,
   profile = false
 )
 {
-  st_rotate_extrude_elongate( r=r, l=l, pa=pa, ra=ra, profile=profile )
+  st_rotate_extrude_elongate( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
   rectangle_c
   (
     size=size, core=core, t=t,
@@ -508,7 +514,8 @@ module torus_rp
             or a single decimal for (s1=s2=s3).
 
   \param    r <decimal> The rotation radius.
-  \param    l <decimal> The elongation length.
+  \param    l <vector|decimal> The elongation length.
+            A vector [x, y] of decimals or a single decimal for (x=y)
 
   \param    co <vector> Core offset. A vector [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
@@ -522,12 +529,16 @@ module torus_rp
 
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.
+  \param    m <integer> The section render mode. An 8-bit encoded integer
+            value that indicates the revolution sections to render.
 
   \param    centroid <boolean> Rotate about profile centroid.
   \param    incenter <boolean> Rotate about profile incenter.
   \param    profile <boolean> Show profile only (do not extrude).
 
   \details
+
+    \sa st_rotate_extrude_elongate for description of extrude parameters.
 
     \b Example
     \amu_eval ( function=torus_tp ${example_dim} )
@@ -540,7 +551,7 @@ module torus_tp
   vs,
   vc,
   r,
-  l = 0,
+  l,
   co,
   cr = 0,
   vr,
@@ -548,12 +559,13 @@ module torus_tp
   vr2,
   pa = 0,
   ra = 360,
+  m = 255,
   centroid = false,
   incenter = false,
   profile = false,
 )
 {
-  st_rotate_extrude_elongate( r=r, l=l, pa=pa, ra=ra, profile=profile )
+  st_rotate_extrude_elongate( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
   triangle_vl_c
   (
     vs=vs, vc=vc,
@@ -571,7 +583,8 @@ module torus_tp
             or a single decimal for (x=y).
 
   \param    r <decimal> The rotation radius.
-  \param    l <decimal> The elongation length.
+  \param    l <vector|decimal> The elongation length.
+            A vector [x, y] of decimals or a single decimal for (x=y)
 
   \param    t <vector|decimal> The profile thickness. A vector [x, y] of decimals
             or a single decimal for (x=y).
@@ -584,10 +597,14 @@ module torus_tp
 
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.
+  \param    m <integer> The section render mode. An 8-bit encoded integer
+            value that indicates the revolution sections to render.
 
   \param    profile <boolean> Show profile only (do not extrude).
 
   \details
+
+    \sa st_rotate_extrude_elongate for description of extrude parameters.
 
     Thickness \p t
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
@@ -601,7 +618,7 @@ module torus_ep
   size,
   core,
   r,
-  l = 0,
+  l,
   t,
   a1 = 0,
   a2 = 0,
@@ -609,10 +626,11 @@ module torus_ep
   cr = 0,
   pa = 0,
   ra = 360,
+  m = 255,
   profile = false
 )
 {
-  st_rotate_extrude_elongate( r=r, l=l, pa=pa, ra=ra, profile=profile )
+  st_rotate_extrude_elongate( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
   ellipse_cs
   (
     size=size, core=core, t=t,
@@ -651,7 +669,7 @@ BEGIN_SCOPE dim;
     else if (shape == "star3d")
       star3d(size=40, n=5, half=true);
     else if (shape == "torus_rp")
-      torus_rp( size=[40,20], core=[35,20], r=40, l=60, co=[0,2.5], vr=2, center=true );
+      torus_rp( size=[40,20], core=[35,20], r=40, l=[90,60], co=[0,2.5], vr=2, center=true );
     else if (shape == "torus_tp")
       torus_tp( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
     else if (shape == "torus_ep")

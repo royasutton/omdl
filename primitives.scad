@@ -827,6 +827,20 @@ function first
 ) = !is_iterable(v) ? undef
   : v[0];
 
+//! Return the second element of an iterable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+
+  \returns  \<value> The second element of \p v.
+            Returns \b undef when \p v is not defined, is not iterable,
+            or is empty.
+*******************************************************************************/
+function second
+(
+  v
+) = !is_iterable(v) ? undef
+  : v[1];
+
 //! Return the last element of an iterable value.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
@@ -934,6 +948,79 @@ function eselect
   : (f == true) ? concat( [first(first(v))], eselect(tail(v), f, l, i) )
   : undef;
 
+//! Case-like select a value from a vector of ordered options by index.
+/***************************************************************************//**
+  \param    v <vector> A vector of values.
+  \param    i <integer> Element selection index.
+
+  \returns  \<value> The value of the vector element at the specified index.
+            Returns the default value when \p i does not map to an element
+            of \p v or when \p i is undefined.
+
+  \details
+
+    Behaves like a case statement for selecting values from a list of
+    <em>ordered options</em>.
+    The default value is: <tt>last(v)<tt>.
+
+    \b Example
+    \code{.C}
+    ov = [ "value1", "value2", "default" ];
+
+    ciselect( ov );     // "default"
+    ciselect( ov, 4 );  // "default"
+    ciselect( ov, 0 );  // "value1"
+    \endcode
+*******************************************************************************/
+function ciselect
+(
+  v,
+  i
+) = not_defined(i) ? last(v)
+  : !is_integer(i) ? last(v)
+  : (i < 0) ? last(v)
+  : (i > len(v)-1) ? last(v)
+  : v[i];
+
+//! Case-like select a value from a vector of identified options by match-value.
+/***************************************************************************//**
+  \param    v <vector> A two dimensional vector of one or more identified
+            values [[identifier, value], ...].
+  \param    mv \<value> Element selection match value.
+
+  \returns  \<value> The value from the vector of identified elements
+            with an identifier matching \p mv.
+            Returns the default value when \p mv does not match any of
+            the element identifiers of \p v or when \p mv is undefined.
+
+  \details
+
+    Behaves like a case statement for selecting values from a list of
+    <em>identified options</em>.
+    The default value is: <tt>second(last(v))<tt>.
+
+    \b Example
+    \code{.C}
+    ov = [ [0,"value0"], ["a","value1"], ["b","value2"], ["c","default"] ];
+
+    cmvselect( ov );      // "default"
+    cmvselect( ov, "x" ); // "default"
+    cmvselect( ov, 0 );   // "value0"
+    cmvselect( ov, "b" ); // "value2"
+    \endcode
+*******************************************************************************/
+function cmvselect
+(
+  v,
+  mv
+) = !is_defined(mv) ? second(last(v))
+  : let
+    (
+      i = first(search([mv], v, 1, 0))
+    )
+    is_empty(i) ? second(last(v))
+  : second(v[i]);
+
 //----------------------------------------------------------------------------//
 // reorder
 //----------------------------------------------------------------------------//
@@ -957,9 +1044,9 @@ function smerge
   v,
   r = false
 ) = not_defined(v) ? undef
+  : !is_iterable(v) ? [v]
   : is_empty(v) ? empty_v
   : is_string(v) ? [v]
-  : !is_iterable(v) ? [v]
   : ((r == true) && is_iterable(first(v))) ?
     concat(smerge(first(v), r), smerge(tail(v), r))
   : concat(first(v), smerge(tail(v), r));
@@ -1034,14 +1121,14 @@ function reverse
   : is_empty(v) ? empty_v
   : [for (i = [len(v)-1 : -1 : 0]) v[i]];
 
-//! Sort the numeric or string elements of an iterable value using quick sort.
+//! Sort the numeric or string elements of a vector using quick sort.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <vector> A vector of values.
   \param    r <boolean> Reverse sort order.
 
   \returns  <vector> With elements sorted in ascending order.
             Returns \b undef when \p v is not all strings or all numbers.
-            Returns \b undef when \p v is not defined or is not iterable.
+            Returns \b undef when \p v is not defined or is not a vector.
 
   \details
 
@@ -1059,7 +1146,7 @@ function qsort
   v,
   r = false
 ) = not_defined(v) ? undef
-  : !is_iterable(v) ? undef
+  : !is_vector(v) ? undef
   : is_empty(v) ? empty_v
   : !(all_strings(v) || all_numbers(v)) ? undef  // not all numbers or strings
   : let
@@ -1074,15 +1161,15 @@ function qsort
     (r == true) ? concat(qsort(gt, r), eq, qsort(lt, r))
   : concat(qsort(lt, r), eq, qsort(gt, r));
 
-//! Hierarchically sort all elements of an iterable value using quick sort.
+//! Hierarchically sort all elements of a vector using quick sort.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <vector> A vector of values.
   \param    d <integer> Recursive sort depth.
   \param    r <boolean> Reverse sort order.
   \param    s <boolean> Order ranges by their numerical sum.
 
   \returns  <vector> With all elements sorted in ascending order.
-            Returns \b undef when \p v is not defined or is not iterable.
+            Returns \b undef when \p v is not defined or is not a vector.
 
   \details
 
@@ -1101,7 +1188,7 @@ function qsort2
   r = false,
   s = true
 ) = not_defined(v) ? undef
-  : !is_iterable(v) ? undef
+  : !is_vector(v) ? undef
   : is_empty(v) ? empty_v
   : let
     (
@@ -1211,10 +1298,10 @@ function append
 //! Insert a new value into an iterable value.
 /***************************************************************************//**
   \param    nv \<value> A new value to insert.
-  \param    v <vector> A vector of values.
+  \param    v \<value> An iterable value.
   \param    i <integer> An index insert position.
-  \param    mv \<vector|value> A vector of match values candidates
-            (or a single match value).
+  \param    mv <vector|string|value> Match value candidates
+            (a vector of values, a string of characters, or a single value).
   \param    mi <integer> A match index.
 
   \returns  <vector> With \p nv inserted into \p v at the specified position.
@@ -1253,7 +1340,7 @@ function insert
   : ((i<0) || (i>len(v))) ? undef
   : let
     (
-      m = is_vector(mv) ? mv : [mv],
+      m = is_string(v) ? mv : is_vector(mv) ? mv : [mv],
       p = is_defined(mv) ? first(strip(search(m, v, 0, 0)))[mi] : i,
       h = (p>0) ? [for (i = [0 : p-1]) v[i]] : empty_v,
       t = (p>len(v)-1) ? empty_v : [for (i = [p : len(v)-1]) v[i]]
@@ -1262,10 +1349,10 @@ function insert
 
 //! Delete elements from an iterable value.
 /***************************************************************************//**
-  \param    v <vector> A vector of values.
+  \param    v \<value> An iterable value.
   \param    i <range|vector|integer> Deletion Indexes.
-  \param    mv \<vector|value> A vector of deletion match values
-            (or a single match values).
+  \param    mv <vector|string|value> Match value candidates
+            (a vector of values, a string of characters, or a single value).
   \param    mc <integer> A match count.
 
   \returns  <vector> \p v with all specified element removed.
@@ -1298,7 +1385,7 @@ function delete
   : is_range(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
   : let
     (
-      m = is_vector(mv) ? mv : [mv],
+      m = is_string(v) ? mv : is_vector(mv) ? mv : [mv],
       p = is_defined(mv) ?
         (
           (mc == 1) ? smerge(search(m, v, mc, 0), false)
@@ -1718,6 +1805,19 @@ BEGIN_SCOPE validate;
           [1,2,3],                                            // t10
           0                                                   // t11
         ],
+        ["second",
+          undef,                                              // t01
+          undef,                                              // t02
+          undef,                                              // t03
+          " ",                                                // t04
+          "apple",                                            // t05
+          "a",                                                // t06
+          undef,                                              // t07
+          [2,3],                                              // t08
+          [1,2],                                              // t09
+          [4,5,6],                                            // t10
+          1                                                   // t11
+        ],
         ["last",
           undef,                                              // t01
           undef,                                              // t02
@@ -1856,7 +1956,7 @@ BEGIN_SCOPE validate;
           undef,                                              // t01
           empty_v,                                            // t02
           undef,                                              // t03
-          ["A string"],                                       // t04
+          undef,                                              // t04
           ["apple","banana","grape","orange"],                // t05
           ["a","a","a","b","n","n","s"],                      // t06
           undef,                                              // t07
@@ -1869,7 +1969,7 @@ BEGIN_SCOPE validate;
           undef,                                              // t01
           empty_v,                                            // t02
           undef,                                              // t03
-          ["A string"],                                       // t04
+          undef,                                              // t04
           ["orange","grape","banana","apple"],                // t05
           ["s","n","n","b","a","a","a"],                      // t06
           [undef],                                            // t07
@@ -1977,6 +2077,7 @@ BEGIN_SCOPE validate;
       for (vid=test_ids) run_test( "defined_or_D", defined_or(get_value(vid),"default"), vid );
       for (vid=test_ids) run_test( "edefined_or_DE3", edefined_or(get_value(vid),3,"default"), vid );
       for (vid=test_ids) run_test( "first", first(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "second", second(get_value(vid)), vid );
       for (vid=test_ids) run_test( "last", last(get_value(vid)), vid );
       for (vid=test_ids) run_test( "head", head(get_value(vid)), vid );
       for (vid=test_ids) run_test( "tail", tail(get_value(vid)), vid );
