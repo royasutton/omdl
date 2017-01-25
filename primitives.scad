@@ -2141,9 +2141,13 @@ BEGIN_SCOPE validate;
       }
 
       // Indirect function calls would be very useful here!!!
+
+      // create / convert
       for (vid=test_ids) run_test( "consts", consts(get_value(vid)), vid );
       for (vid=test_ids) run_test( "vstr", vstr(get_value(vid)), vid );
       for (vid=test_ids) run_test( "sum", sum(get_value(vid)), vid );
+
+      // select
       for (vid=test_ids) run_test( "defined_or_D", defined_or(get_value(vid),"default"), vid );
       for (vid=test_ids) run_test( "edefined_or_DE3", edefined_or(get_value(vid),3,"default"), vid );
       for (vid=test_ids) run_test( "first", first(get_value(vid)), vid );
@@ -2157,11 +2161,17 @@ BEGIN_SCOPE validate;
       for (vid=test_ids) run_test( "eselect_F", eselect(get_value(vid),f=true), vid );
       for (vid=test_ids) run_test( "eselect_L", eselect(get_value(vid),l=true), vid );
       for (vid=test_ids) run_test( "eselect_1", eselect(get_value(vid),i=1), vid );
+      // not tested: ciselect()
+      // not tested: cmvselect()
+
+      // reorder
       for (vid=test_ids) run_test( "smerge", smerge(get_value(vid)), vid );
       for (vid=test_ids) run_test( "pmerge", pmerge(get_value(vid)), vid );
       for (vid=test_ids) run_test( "reverse", reverse(get_value(vid)), vid );
       for (vid=test_ids) run_test( "qsort", qsort(get_value(vid)), vid );
       for (vid=test_ids) run_test( "qsort2_HR", qsort2(get_value(vid), d=5, r=true), vid );
+
+      // grow / reduce
       for (vid=test_ids) run_test( "strip", strip(get_value(vid)), vid );
       for (vid=test_ids) run_test( "append_T0", append(0,get_value(vid)), vid );
       for (vid=test_ids) run_test( "insert_T0", insert(0,get_value(vid),mv=["x","r","apple","s",[2,3],5]), vid );
