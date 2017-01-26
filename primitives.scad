@@ -782,6 +782,52 @@ function sum
   : v[i] + sum(v, s, i-1);
 
 //----------------------------------------------------------------------------//
+// query
+//----------------------------------------------------------------------------//
+
+//! Count the occurrences of a match value in an iterable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+  \param    mv \<value> Element match value.
+  \param    i <integer> Search column index in the iterable value.
+
+  \returns  <integer> The number of times \p mv occurs in \p v.
+
+  \details
+
+  \note     When \p v is a string, only the first character of the \p mv
+            string is counted.
+*******************************************************************************/
+function count
+(
+  v,
+  mv,
+  i = 0
+) = all_strings([v, mv]) ? len(first(search(mv, v, 0, i)))
+  : is_vector(v) ? len(first(search([mv], v, 0, i)))
+  : 0;
+
+//! Check the existence of a match value in an iterable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+  \param    mv \<value> Element match value.
+  \param    i <integer> Search column index in the iterable value.
+
+  \returns  <boolean> \b true when \p mv exists in \p v and \b false otherwise.
+
+  \details
+
+  \note     When \p v is a string, only the first character of the \p mv
+            string is checked.
+*******************************************************************************/
+function exists
+(
+  v,
+  mv,
+  i = 0
+) = (count(v, mv, i) > 0);
+
+//----------------------------------------------------------------------------//
 // select
 //----------------------------------------------------------------------------//
 
@@ -1810,6 +1856,32 @@ BEGIN_SCOPE validate;
           [undef,undef,undef],                                // t10
           120                                                 // t11
         ],
+        ["count_1",
+          0,                                                  // t01
+          0,                                                  // t02
+          0,                                                  // t03
+          0,                                                  // t04
+          0,                                                  // t05
+          0,                                                  // t06
+          0,                                                  // t07
+          1,                                                  // t08
+          1,                                                  // t09
+          1,                                                  // t10
+          1                                                   // t11
+        ],
+        ["exists_1",
+          false,                                              // t01
+          false,                                              // t02
+          false,                                              // t03
+          false,                                              // t04
+          false,                                              // t05
+          false,                                              // t06
+          false,                                              // t07
+          true,                                               // t08
+          true,                                               // t09
+          true,                                               // t10
+          true                                                // t11
+        ],
         ["defined_or_D",
           "default",                                          // t01
           empty_v,                                            // t02
@@ -2146,6 +2218,10 @@ BEGIN_SCOPE validate;
       for (vid=test_ids) run_test( "consts", consts(get_value(vid)), vid );
       for (vid=test_ids) run_test( "vstr", vstr(get_value(vid)), vid );
       for (vid=test_ids) run_test( "sum", sum(get_value(vid)), vid );
+
+      // query
+      for (vid=test_ids) run_test( "count_1", count(get_value(vid),1), vid );
+      for (vid=test_ids) run_test( "exists_1", exists(get_value(vid),1), vid );
 
       // select
       for (vid=test_ids) run_test( "defined_or_D", defined_or(get_value(vid),"default"), vid );
