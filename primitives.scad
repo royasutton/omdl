@@ -826,21 +826,22 @@ function find
     )
   : find(v, mv, mc, i1+1, i2);
 
-//! Count the occurrences of a match value in an iterable value.
+//! Count all occurrences of a match value in an iterable value.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
   \param    mv \<value> A match value.
-  \param    s <boolean> Use search() for element matching.
-  \param    i <integer> The search() column index.
+  \param    s <boolean> Use search for element matching.
+  \param    i <integer> The search column index.
 
   \returns  <integer> The number of times \p mv occurs in \p v.
 
   \details
 
-    When using search() for element matching, \p i specifies the search
-    column index. When using search() and \p v is a string, only the first
-    character of the \p mv string is compared. By default, find() is used
-    for element matching.
+  \note     When using search() for element matching, \p i specifies the
+            search column index.
+  \note     When using search() and \p v is a string, only the first
+            character of the \p mv string is compared.
+  \note     By default, find() is used for element matching.
 *******************************************************************************/
 function count
 (
@@ -857,17 +858,18 @@ function count
 /***************************************************************************//**
   \param    v \<value> An iterable value.
   \param    mv \<value> A match value.
-  \param    s <boolean> Use search() for element matching.
-  \param    i <integer> The search() column index.
+  \param    s <boolean> Use search for element matching.
+  \param    i <integer> The search column index.
 
   \returns  <boolean> \b true when \p mv exists in \p v and \b false otherwise.
 
   \details
 
-    When using search() for element matching, \p i specifies the search
-    column index. When using search() and \p v is a string, only the first
-    character of the \p mv string is compared. By default, find() is used
-    for element matching.
+  \note     When using search() for element matching, \p i specifies the
+            search column index.
+  \note     When using search() and \p v is a string, only the first
+            character of the \p mv string is compared.
+  \note     By default, find() is used for element matching.
 *******************************************************************************/
 function exists
 (
