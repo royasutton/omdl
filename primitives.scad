@@ -787,9 +787,9 @@ function sum
 
 //! Find the occurrences of a match value in an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
   \param    mv \<value> A match value.
-  \param    mc <integer> A match count.
+  \param    v \<value> An iterable value.
+  \param    c <integer> A match count.
   \param    i1 <integer> The element index where find begins
             (first when not specified).
   \param    i2 <integer> The element index where find ends
@@ -801,8 +801,8 @@ function sum
 
   \details
 
-    When \p mc is zero or less, the index of all matching elements are returned.
-    When \p mc is one or greater, only the first \p mc matches are returned.
+    When \p c is zero or less, the index of all matching elements are returned.
+    When \p c is one or greater, only the first \p c matches are returned.
 
   \note     This function differs from \c search() in that only elements
             which \em exactly equal the match value are identified. The
@@ -811,9 +811,9 @@ function sum
 *******************************************************************************/
 function find
 (
-  v,
   mv,
-  mc = 0,
+  v,
+  c = 0,
   i1 = 0,
   i2
 ) = !is_iterable(v) ? empty_v
@@ -821,15 +821,15 @@ function find
   : (i1 > len(v)-1) ? empty_v
   : (v[i1] == mv) ?
     (
-      (mc == 1) ? [i1]
-    : concat(i1, find(v, mv, mc-1, i1+1, i2))
+      (c == 1) ? [i1]
+    : concat(i1, find(mv, v, c-1, i1+1, i2))
     )
-  : find(v, mv, mc, i1+1, i2);
+  : find(mv, v, c, i1+1, i2);
 
 //! Count all occurrences of a match value in an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
   \param    mv \<value> A match value.
+  \param    v \<value> An iterable value.
   \param    s <boolean> Use search for element matching.
   \param    i <integer> The search column index.
 
@@ -845,19 +845,19 @@ function find
 *******************************************************************************/
 function count
 (
-  v,
   mv,
+  v,
   s = false,
   i = 0
-) = (s == false) ? len(find(v, mv))
+) = (s == false) ? len(find(mv, v))
   : all_strings([v, mv]) ? len(first(search(mv, v, 0, i)))
   : is_vector(v) ? len(first(search([mv], v, 0, i)))
   : 0;
 
 //! Check the existence of a match value in an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
   \param    mv \<value> A match value.
+  \param    v \<value> An iterable value.
   \param    s <boolean> Use search for element matching.
   \param    i <integer> The search column index.
 
@@ -873,11 +873,11 @@ function count
 *******************************************************************************/
 function exists
 (
-  v,
   mv,
+  v,
   s = false,
   i = 0
-) = (s == false) ? (find(v, mv, 1) != empty_v)
+) = (s == false) ? (find(mv, v, 1) != empty_v)
   : all_strings([v, mv]) ? (first(search(mv, v, 1, i)) != empty_v)
   : is_vector(v) ? (first(search([mv], v, 1, i)) != empty_v)
   : false;
@@ -1565,7 +1565,7 @@ function unique
   : !is_iterable(v) ? undef
   : is_empty(v) ? empty_v
   : (len(v) < 1) ? v
-  : exists(nhead(v), last(v)) ? unique(nhead(v))
+  : exists(last(v), nhead(v)) ? unique(nhead(v))
   : concat(unique(nhead(v)), nlast(v));
 
 //! @}
@@ -2323,9 +2323,9 @@ BEGIN_SCOPE validate;
       for (vid=test_ids) run_test( "sum", sum(get_value(vid)), vid );
 
       // query
-      for (vid=test_ids) run_test( "find_12", find(get_value(vid),[1,2]), vid );
-      for (vid=test_ids) run_test( "count_S1", count(get_value(vid),1,true), vid );
-      for (vid=test_ids) run_test( "exists_S1", exists(get_value(vid),1,true), vid );
+      for (vid=test_ids) run_test( "find_12", find([1,2],get_value(vid)), vid );
+      for (vid=test_ids) run_test( "count_S1", count(1,get_value(vid),true), vid );
+      for (vid=test_ids) run_test( "exists_S1", exists(1,get_value(vid),true), vid );
 
       // select
       for (vid=test_ids) run_test( "defined_or_D", defined_or(get_value(vid),"default"), vid );
