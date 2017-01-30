@@ -790,97 +790,133 @@ function sum
   \param    mv \<value> A match value.
   \param    v \<value> An iterable value.
   \param    c <integer> A match count.
-  \param    i1 <integer> The element index where find begins
-            (first when not specified).
-  \param    i2 <integer> The element index where find ends
-            (last when not specified).
+            For <tt>(c>=1)</tt>, return the first \p c matches.
+            For <tt>(c<=0)</tt>, return all matches.
+  \param    i <integer> The element column index to match.
+  \param    i1 <integer> The element index where find begins (default: first).
+  \param    i2 <integer> The element index where find ends (default: last).
 
-  \returns  <vector> Of indexes with elements that equal \p mv.
-            Returns \b empty_v when \p mv does not exists in \p v or when
-            \p v is not iterable.
+  \returns  <vector> Of indexes where elements match \p mv.
+            Returns \b empty_v when no element of \p v matches \p mv
+            or when \p v is not iterable.
 
   \details
 
-    When \p c is zero or less, the index of all matching elements are returned.
-    When \p c is one or greater, only the first \p c matches are returned.
+    The use-cases for find() and [search()] are summarized in the
+    following tables.
 
-  \note     This function differs from \c search() in that only elements
-            which \em exactly equal the match value are identified. The
-            search() function tests for the \em existence of a match value
-            in the iterable value.
+    \b Find:
+
+    | mv / v              | string | vector of scalars | vector of iterables |
+    |---------------------|:------:|:-----------------:|:-------------------:|
+    | scalar              |        | (a)               | (b) see note 1      |
+    | string              | (c)    |                   | (b) see note 1      |
+    | vector of scalars   |        |                   | (b) see note 1      |
+    | vector of iterables |        |                   | (b) see note 1      |
+
+    \b Search:
+
+    | mv / v              | string | vector of scalars | vector of iterables |
+    |---------------------|:------:|:-----------------:|:-------------------:|
+    | scalar              |        | (a)               | (b)                 |
+    | string              | (d)    | invalid           | (e) see note 2      |
+    | vector of scalars   |        | (f)               | (g)                 |
+    | vector of iterables |        |                   | (g)                 |
+
+    \b Key:
+
+    \li (a) Identify each element of \p v that equals \p mv.
+    \li (b) Identify each element of \p v where \p mv equals the element at
+        the specified column index, \p i, of each iterable value in \p v.
+    \li (c) If, and only if, \p mv is a single character, identify each
+        character in \p v that equals \p mv.
+    \li (d) For each character of \p mv, identify where it exists in \p v.
+        \b empty_v is returned for each character of \p mv absent from \p v.
+    \li (e) For each character of \p mv, identify where it exists in \p v
+        either as a numeric value or as a character at the specified column
+        index, \p i.
+        \b empty_v is returned for each character of \p mv absent from \p v.
+    \li (f) For each scalar of \p mv, identify where it exists in \p v.
+        \b empty_v is returned for each scalar of \p mv absent from \p v.
+    \li (g) For each element of \p mv, identify where it equals the element
+        at the specified column index, \p i, of each iterable value in \p v.
+        \b empty_v is returned for each element of \p mv absent from \p v
+        in the specified column index.
+
+  \note     \b 1: When \p i is specified, that element column is compared.
+            Otherwise, the entire element is compared. Functions find()
+            and [search()] behave differently in this regard.
+
+  \note     \b 2: Invalid use combination when any element of \p v is a
+            string. However, an element that is a vector of one or more
+            strings is valid. In which case, only the first character of
+            each string element is considered.
+
+  [search()]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Other_Language_Features#Search
 *******************************************************************************/
 function find
 (
   mv,
   v,
-  c = 0,
+  c = 1,
+  i,
   i1 = 0,
   i2
 ) = !is_iterable(v) ? empty_v
   : (i1 > i2) ? empty_v
   : (i1 > len(v)-1) ? empty_v
-  : (v[i1] == mv) ?
+  : ((not_defined(i) && (v[i1] == mv)) || (v[i1][i] == mv)) ?
     (
       (c == 1) ? [i1]
-    : concat(i1, find(mv, v, c-1, i1+1, i2))
+    : concat(i1, find(mv, v, c-1, i, i1+1, i2))
     )
-  : find(mv, v, c, i1+1, i2);
+  : find(mv, v, c, i, i1+1, i2);
 
 //! Count all occurrences of a match value in an iterable value.
 /***************************************************************************//**
   \param    mv \<value> A match value.
   \param    v \<value> An iterable value.
-  \param    s <boolean> Use search for element matching.
-  \param    i <integer> The search column index.
+  \param    s <boolean> Use search for element matching (default: find).
+  \param    i <integer> The element column index to match.
 
   \returns  <integer> The number of times \p mv occurs in \p v.
 
   \details
 
-  \note     When using search() for element matching, \p i specifies the
-            search column index.
-  \note     When using search() and \p v is a string, only the first
-            character of the \p mv string is compared.
-  \note     By default, find() is used for element matching.
+    See find() for information on value matching.
 *******************************************************************************/
 function count
 (
   mv,
   v,
   s = false,
-  i = 0
-) = (s == false) ? len(find(mv, v))
-  : all_strings([v, mv]) ? len(first(search(mv, v, 0, i)))
-  : is_vector(v) ? len(first(search([mv], v, 0, i)))
-  : 0;
+  i
+) = (s == false) ?
+    len(find(mv, v, 0, i))
+  : len(smerge(search(mv, v, 0, i)));
 
 //! Check the existence of a match value in an iterable value.
 /***************************************************************************//**
   \param    mv \<value> A match value.
   \param    v \<value> An iterable value.
-  \param    s <boolean> Use search for element matching.
-  \param    i <integer> The search column index.
+  \param    s <boolean> Use search for element matching (default: find).
+  \param    i <integer> The element column index to match.
 
   \returns  <boolean> \b true when \p mv exists in \p v and \b false otherwise.
 
   \details
 
-  \note     When using search() for element matching, \p i specifies the
-            search column index.
-  \note     When using search() and \p v is a string, only the first
-            character of the \p mv string is compared.
-  \note     By default, find() is used for element matching.
+    See find() for information on value matching.
 *******************************************************************************/
 function exists
 (
   mv,
   v,
   s = false,
-  i = 0
-) = (s == false) ? (find(mv, v, 1) != empty_v)
-  : all_strings([v, mv]) ? (first(search(mv, v, 1, i)) != empty_v)
-  : is_vector(v) ? (first(search([mv], v, 1, i)) != empty_v)
-  : false;
+  i
+) = (s == false) ?
+    (find(mv, v, 1, i) != empty_v)
+  : (strip(search(mv, v, 1, i)) != empty_v);
 
 //----------------------------------------------------------------------------//
 // select
@@ -1401,9 +1437,9 @@ function strip
     v1=[["a"], ["b"], ["c"], ["d"]];
     v2=[1, 2, 3];
 
-    echo( append( v2, v1 ) );
-    echo( append( v2, v1, r=false ) );
-    echo( append( v2, v1, j=false, l=false ) );
+    echo( eappend( v2, v1 ) );
+    echo( eappend( v2, v1, r=false ) );
+    echo( eappend( v2, v1, j=false, l=false ) );
     \endcode
 
     \b Result
@@ -1418,7 +1454,7 @@ function strip
             \p nv is appended to the \e vector itself of each value of
             \p v that is a vector.
 *******************************************************************************/
-function append
+function eappend
 (
   nv,
   v,
@@ -1437,38 +1473,38 @@ function append
       (j == true) ? (l == true) ? [concat(ce, nv)] : [ce]
       : (l == true) ? concat(ce, nv) : ce
     )
-  : (j == true) ? concat([concat(ce, nv)], append(nv, ntail(v), r, j, l))
-  : concat(concat(ce, nv), append(nv, ntail(v), r, j, l));
+  : (j == true) ? concat([concat(ce, nv)], eappend(nv, ntail(v), r, j, l))
+  : concat(concat(ce, nv), eappend(nv, ntail(v), r, j, l));
 
 //! Insert a new value into an iterable value.
 /***************************************************************************//**
   \param    nv \<value> A new value to insert.
   \param    v \<value> An iterable value.
-  \param    i <integer> An index insert position.
-  \param    mv <vector|string|value> Match value candidates
-            (a vector of values, a string of characters, or a single value).
+
+  \param    i <integer> An insert position index.
+
+  \param    mv <vector|string|value> Match value candidates.
   \param    mi <integer> A match index.
+
+  \param    s <boolean> Use search for element matching (default: find).
+  \param    si <integer> The element column index when matching.
 
   \returns  <vector> With \p nv inserted into \p v at the specified position.
             Returns \b undef when no value of \p mv exists in \p v.
-            Returns \b undef when <tt>(mi + 1)</tt> exceeds the match count
-            of the first matching element of \p mv.
+            Returns \b undef when <tt>(mi + 1)</tt> exceeds the matched
+            element count.
             Returns \b undef when \p i does not map to an element of \p v.
             Returns \b undef when \p v is not defined or is not iterable.
 
-
   \details
 
-  \note     The insert position can be specified by an index, an element
-            match value, or vector of potential match values.
-  \note     When \p mv is a vector of potential match values, the
-            first matching value from \p mv that exists in \p v is selected.
-  \note     When the selected matching value repeats in \p v, \p mi
-            indicates which match is use as the insert position.
-  \note     When more than one insert position criteria is specified, the
-            order of precedence is: \p mv, \p i.
+    The insert position can be specified by an index, an element match value,
+    or vector of potential match values (when using search). When multiple
+    matches exists, \p mi indicates the insert position. When more than one
+    insert position criteria is specified, the order of precedence
+    is: \p mv, \p i.
 
-  \todo     Should search() be replaced by find()?
+    See find() for information on value matching.
 *******************************************************************************/
 function insert
 (
@@ -1476,7 +1512,9 @@ function insert
   v,
   i = 0,
   mv,
-  mi = 0
+  mi = 0,
+  s = false,
+  si
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? undef
   : is_empty(v) ?
@@ -1487,46 +1525,57 @@ function insert
   : ((i<0) || (i>len(v))) ? undef
   : let
     (
-      m = is_string(v) ? mv : is_vector(mv) ? mv : [mv],
-      p = is_defined(mv) ? first(strip(search(m, v, 0, 0)))[mi] : i,
-      h = (p>0) ? [for (i = [0 : p-1]) v[i]] : empty_v,
-      t = (p>len(v)-1) ? empty_v : [for (i = [p : len(v)-1]) v[i]]
+      p = is_defined(mv) ?
+        (
+          (s == false) ?
+            find(mv, v, 0, si)[mi]
+          : smerge(search(mv, v, 0, si), false)[mi]
+        )
+        : is_number(i) ? i
+        : undef,
+      h = (p>0) ? [for (j = [0 : p-1]) v[j]] : empty_v,
+      t = (p>len(v)-1) ? empty_v : [for (j = [p : len(v)-1]) v[j]]
     )
     all_equal([h, t], empty_v) ? undef : concat(h, nv, t);
 
 //! Delete elements from an iterable value.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
-  \param    i <range|vector|integer> Deletion Indexes.
-  \param    mv <vector|string|value> Match value candidates
-            (a vector of values, a string of characters, or a single value).
-  \param    mc <integer> A match count.
 
-  \returns  <vector> \p v with all specified element removed.
+  \param    i <range|vector|integer> Deletion Indexes.
+
+  \param    mv <vector|string|value> Match value candidates.
+  \param    mc <integer> A match count.
+            For <tt>(mc>=1)</tt>, remove the first \p mc matches.
+            For <tt>(mc<=0)</tt>, remove all matches.
+
+  \param    s <boolean> Use search for element matching (default: find).
+  \param    si <integer> The element column index when matching.
+
+  \returns  <vector> \p v with all specified elements removed.
             Returns \b undef when \p i does not map to an element of \p v.
             Returns \b undef when \p v is not defined or is not iterable.
 
   \details
 
-  \note     The elements to delete can be specified by an index position,
-            a vector of index positions, an index range, an element match
-            value, or a vector of element match values.
-  \note     When \p mv is a vector of match values, all matching values
-            from \p mv that exists in \p v are candidates for deletion.
-            For each matching candidate, \p mc indicates the quantity to
-            remove. If <tt>(mc == 0)</tt> all candidates are removed.
-  \note     When more than one deletion criteria is specified, the
-            order of precedence is: \p mv, \p i.
+    The elements to delete can be specified by an index position, a vector
+    of index positions, an index range, an element match value, or a vector
+    of element match values (when using search). When \p mv is a vector of
+    match values, all values of \p mv that exists in \p v are candidates
+    for deletion. For each matching candidate, \p mc indicates the quantity
+    to remove. When more than one deletion criteria is specified, the order
+    of precedence is: \p mv, \p i.
 
-  \todo     Should search() be replaced by find()?
-  \todo     Debug assignment to \v p at smerge().
+    See find() for information on value matching.
 *******************************************************************************/
 function delete
 (
   v,
   i,
   mv,
-  mc = 0
+  mc = 1,
+  s = false,
+  si
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? undef
   : is_empty(v) ? empty_v
@@ -1535,11 +1584,11 @@ function delete
   : is_range(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
   : let
     (
-      m = is_string(v) ? mv : is_vector(mv) ? mv : [mv],
       p = is_defined(mv) ?
         (
-          (mc == 1) ? smerge(search(m, v, mc, 0), false)
-          : smerge(search(m, v, mc, 0), false)
+          (s == false) ?
+            find(mv, v, mc, si)
+          : smerge(search(mv, v, mc, si), false)
         )
         : is_number(i) ? [i]
         : is_vector(i) ? i
@@ -1547,8 +1596,8 @@ function delete
         : undef
     )
     [
-      for (i = [0 : len(v)-1])
-        if ( is_empty(first(search([i], p, 1, 0))) ) v[i]
+      for (j = [0 : len(v)-1])
+        if (is_empty(find(j, p))) v[j]
     ];
 
 //! Return the unique elements of an iterable value.
@@ -2223,7 +2272,7 @@ BEGIN_SCOPE validate;
           [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]],            // t10
           [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
         ],
-        ["append_T0",
+        ["eappend_T0",
           undef,                                              // t01
           [[0]],                                              // t02
           undef,                                              // t03
@@ -2353,9 +2402,9 @@ BEGIN_SCOPE validate;
 
       // grow / reduce
       for (vid=test_ids) run_test( "strip", strip(get_value(vid)), vid );
-      for (vid=test_ids) run_test( "append_T0", append(0,get_value(vid)), vid );
-      for (vid=test_ids) run_test( "insert_T0", insert(0,get_value(vid),mv=["x","r","apple","s",[2,3],5]), vid );
-      for (vid=test_ids) run_test( "delete_T0", delete(get_value(vid),mv=["x","r","apple","s",[2,3],5]), vid );
+      for (vid=test_ids) run_test( "eappend_T0", eappend(0,get_value(vid)), vid );
+      for (vid=test_ids) run_test( "insert_T0", insert(0,get_value(vid),mv=["x","r","apple","s",[2,3],5],s=true), vid );
+      for (vid=test_ids) run_test( "delete_T0", delete(get_value(vid),mv=["x","r","apple","s",[2,3],5],s=true), vid );
       for (vid=test_ids) run_test( "unique", unique(get_value(vid)), vid );
 
       // end-of-tests

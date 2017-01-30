@@ -526,7 +526,7 @@ BEGIN_SCOPE validate;
       pass_value = table_get(good_r, good_c, fname, vid);
 
       test_pass = validate(cv=fresult, t="equals", ev=pass_value, pf=true);
-      farg_text = vstr(append(", ", rselect(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
+      farg_text = vstr(eappend(", ", rselect(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
       test_text = validate(str(fname, "(", farg_text, ")=", pass_value), fresult, "equals", pass_value);
 
       if ( pass_value != skip )
