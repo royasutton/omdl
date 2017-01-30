@@ -876,7 +876,7 @@ function find
 /***************************************************************************//**
   \param    mv \<value> A match value.
   \param    v \<value> An iterable value.
-  \param    s <boolean> Use search for element matching (default: find).
+  \param    s <boolean> Use search for element matching (\b false uses find).
   \param    i <integer> The element column index to match.
 
   \returns  <integer> The number of times \p mv occurs in \p v.
@@ -889,7 +889,7 @@ function count
 (
   mv,
   v,
-  s = false,
+  s = true,
   i
 ) = (s == false) ?
     len(find(mv, v, 0, i))
@@ -899,7 +899,7 @@ function count
 /***************************************************************************//**
   \param    mv \<value> A match value.
   \param    v \<value> An iterable value.
-  \param    s <boolean> Use search for element matching (default: find).
+  \param    s <boolean> Use search for element matching (\b false uses find).
   \param    i <integer> The element column index to match.
 
   \returns  <boolean> \b true when \p mv exists in \p v and \b false otherwise.
@@ -912,7 +912,7 @@ function exists
 (
   mv,
   v,
-  s = false,
+  s = true,
   i
 ) = (s == false) ?
     (find(mv, v, 1, i) != empty_v)
@@ -1486,7 +1486,7 @@ function eappend
   \param    mv <vector|string|value> Match value candidates.
   \param    mi <integer> A match index.
 
-  \param    s <boolean> Use search for element matching (default: find).
+  \param    s <boolean> Use search for element matching (\b false uses find).
   \param    si <integer> The element column index when matching.
 
   \returns  <vector> With \p nv inserted into \p v at the specified position.
@@ -1513,7 +1513,7 @@ function insert
   i = 0,
   mv,
   mi = 0,
-  s = false,
+  s = true,
   si
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? undef
@@ -1549,7 +1549,7 @@ function insert
             For <tt>(mc>=1)</tt>, remove the first \p mc matches.
             For <tt>(mc<=0)</tt>, remove all matches.
 
-  \param    s <boolean> Use search for element matching (default: find).
+  \param    s <boolean> Use search for element matching (\b false uses find).
   \param    si <integer> The element column index when matching.
 
   \returns  <vector> \p v with all specified elements removed.
@@ -1574,7 +1574,7 @@ function delete
   i,
   mv,
   mc = 1,
-  s = false,
+  s = true,
   si
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? undef
@@ -1614,7 +1614,8 @@ function unique
   : !is_iterable(v) ? undef
   : is_empty(v) ? empty_v
   : (len(v) < 1) ? v
-  : exists(last(v), nhead(v)) ? unique(nhead(v))
+    // use exact element matching via s=false for find().
+  : exists(last(v), nhead(v), s=false) ? unique(nhead(v))
   : concat(unique(nhead(v)), nlast(v));
 
 //! @}
@@ -2403,8 +2404,8 @@ BEGIN_SCOPE validate;
       // grow / reduce
       for (vid=test_ids) run_test( "strip", strip(get_value(vid)), vid );
       for (vid=test_ids) run_test( "eappend_T0", eappend(0,get_value(vid)), vid );
-      for (vid=test_ids) run_test( "insert_T0", insert(0,get_value(vid),mv=["x","r","apple","s",[2,3],5],s=true), vid );
-      for (vid=test_ids) run_test( "delete_T0", delete(get_value(vid),mv=["x","r","apple","s",[2,3],5],s=true), vid );
+      for (vid=test_ids) run_test( "insert_T0", insert(0,get_value(vid),mv=["x","r","apple","s",[2,3],5]), vid );
+      for (vid=test_ids) run_test( "delete_T0", delete(get_value(vid),mv=["x","r","apple","s",[2,3],5]), vid );
       for (vid=test_ids) run_test( "unique", unique(get_value(vid)), vid );
 
       // end-of-tests
