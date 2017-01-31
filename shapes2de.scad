@@ -81,7 +81,7 @@ include <shapes2d.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! An extruded rectangle.
+//! An extruded rectangle with edge, chamfer, and/or fillet corners.
 /***************************************************************************//**
   \param    size <vector|decimal> A vector [x, y] of decimals
             or a single decimal for (x=y).
@@ -92,6 +92,10 @@ include <shapes2d.scad>;
   \param    vr <vector|decimal> The corner rounding radius.
             A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
+
+  \param    vrm <integer> The corner radius mode.
+            An 4-bit encoded integer that indicates each corner finish.
+            Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
 
   \param    center <boolean> Center about origin.
 
@@ -107,11 +111,12 @@ module erectangle
   size,
   h,
   vr,
+  vrm = 0,
   center = false
 )
 {
   st_linear_extrude_scale(h=h, center=center)
-  rectangle(size=size, vr=vr, center=center);
+  rectangle(size=size, vr=vr, vrm=vrm, center=center);
 }
 
 //! An extruded rectangle with a removed rectangular core.
@@ -140,6 +145,16 @@ module erectangle
             A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
+  \param    vrm <integer> The default corner radius mode.
+            An 4-bit encoded integer that indicates each corner finish.
+            Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
+  \param    vrm1 <integer> The outer corner radius mode.
+            An 4-bit encoded integer that indicates each corner finish.
+            Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
+  \param    vrm2 <integer> The core corner radius mode.
+            An 4-bit encoded integer that indicates each corner finish.
+            Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
+
   \param    center <boolean> Center about origin.
 
   \details
@@ -164,6 +179,9 @@ module erectangle_c
   vr,
   vr1,
   vr2,
+  vrm = 0,
+  vrm1,
+  vrm2,
   center = false
 )
 {
@@ -173,6 +191,7 @@ module erectangle_c
     size=size, core=core, t=t,
     co=co, cr=cr,
     vr=vr, vr1=vr1, vr2=vr2,
+    vrm=vrm, vrm1=vrm1, vrm2=vrm2,
     center=center
   );
 }
@@ -942,9 +961,9 @@ BEGIN_SCOPE dim;
     $fn = 72;
 
     if (shape == "erectangle")
-      erectangle( size=[25,40], vr=5, h=20, center=true );
+      erectangle( size=[25,40], vr=5, vrm=3, h=20, center=true );
     else if (shape == "erectangle_c")
-      erectangle_c(size=[40,20], t=[10,1], co=[0,-6], cr=10, vr=5, h=30, center=true);
+      erectangle_c( size=[40,20], t=[10,1], co=[0,-6], cr=10, vr=5, vrm1=12, h=30, center=true );
     else if (shape == "erhombus")
       erhombus( size=[40,25], h=10, vr=[3,0,3,9], center=true );
     else if (shape == "etriangle_ppp")
@@ -1016,12 +1035,12 @@ BEGIN_SCOPE manifest;
 
     st_cartesian_copy( grid=5, incr=60, center=true )
     {
-      erectangle( size=[25,40], vr=5, h=20, center=true );
-      erectangle_c(size=[40,20], t=[10,1], co=[0,-6], cr=10, vr=5, h=30, center=true);
+      erectangle( size=[25,40], vr=5, vrm=3, h=20, center=true );
+      erectangle_c( size=[40,20], t=[10,1], co=[0,-6], cr=10, vr=5, vrm1=12, h=30, center=true );
       erhombus( size=[40,25], h=10, vr=[3,0,3,9], center=true );
       etriangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], h=20, vr=2, centroid=true, center=true );
       etriangle_lll( s1=30, s2=40, s3=50, h=20, vr=2, centroid=true, center=true );
-      etriangle_vl_c(vs=50, vc=30, h=15, co=[0,-10], cr=180, vr=[2,2,8], centroid=true, center=true);
+      etriangle_vl_c( vs=50, vc=30, h=15, co=[0,-10], cr=180, vr=[2,2,8], centroid=true, center=true );
       etriangle_lal( s1=50, a=60, s2=30, h=20, vr=2, centroid=true, center=true );
       etriangle_ala( a1=30, s=50, a2=60, h=20, vr=2, centroid=true, center=true );
       etriangle_aal( a1=60, a2=30, s=40, h=20, vr=2, centroid=true, center=true );

@@ -458,6 +458,16 @@ module star3d
             A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
+  \param    vrm <integer> The default corner radius mode.
+            An 4-bit encoded integer that indicates each corner finish.
+            Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
+  \param    vrm1 <integer> The outer corner radius mode.
+            An 4-bit encoded integer that indicates each corner finish.
+            Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
+  \param    vrm2 <integer> The core corner radius mode.
+            An 4-bit encoded integer that indicates each corner finish.
+            Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
+
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.
   \param    m <integer> The section render mode. An 8-bit encoded integer
@@ -489,6 +499,9 @@ module torus_rp
   vr,
   vr1,
   vr2,
+  vrm = 0,
+  vrm1,
+  vrm2,
   pa = 0,
   ra = 360,
   m = 255,
@@ -502,6 +515,7 @@ module torus_rp
     size=size, core=core, t=t,
     co=co, cr=cr,
     vr=vr, vr1=vr1, vr2=vr2,
+    vrm=vrm, vrm1=vrm1, vrm2=vrm2,
     center=center
   );
 }
@@ -667,13 +681,13 @@ BEGIN_SCOPE dim;
     else if (shape == "pyramid_q")
       pyramid_q( x=35, y=20, z=5, center=true );
     else if (shape == "star3d")
-      star3d(size=40, n=5, half=true);
+      star3d( size=40, n=5, half=true );
     else if (shape == "torus_rp")
-      torus_rp( size=[40,20], core=[35,20], r=40, l=[90,60], co=[0,2.5], vr=2, center=true );
+      torus_rp( size=[40,20], core=[35,20], r=40, l=[90,60], co=[0,2.5], vr=4, vrm=15, center=true );
     else if (shape == "torus_tp")
       torus_tp( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
     else if (shape == "torus_ep")
-      torus_ep(size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2]);
+      torus_ep( size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -722,9 +736,9 @@ BEGIN_SCOPE manifest;
     if (group == 2)
     st_cartesian_copy( grid=4, incr=150, center=true )
     {
-      torus_rp( size=[40,20], core=[35,20], r=40, l=[25,60], co=[0,2.5], vr=2, center=true );
+      torus_rp( size=[40,20], core=[35,20], r=40, l=[25,60], co=[0,2.5], vr=4, vrm=15, center=true );
       torus_tp( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
-      torus_ep(size=[20,15], t=[2,4], r=60, a1=0, a2=180, pa=90, ra=270, co=[0,2]);
+      torus_ep( size=[20,15], t=[2,4], r=60, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
     }
   END_OPENSCAD;
 
