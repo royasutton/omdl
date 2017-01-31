@@ -1315,7 +1315,7 @@ BEGIN_SCOPE dim;
     if (shape == "rectangle")
       rectangle( size=[25,40], vr=[0,10,10,5], vrm=4, center=true );
     else if (shape == "rectangle_c")
-      rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, co=[0,5], center=true );
+      rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, vrm2=3, co=[0,5], center=true );
     else if (shape == "rhombus")
       rhombus( size=[40,25], vr=[2,4,2,4], center=true );
     else if (shape == "triangle_ppp")
