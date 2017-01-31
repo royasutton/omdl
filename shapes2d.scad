@@ -81,7 +81,7 @@ include <transform.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! A rectangle with edge, chamfer, and/or fillet corners.
+//! A rectangle with edge, fillet, and/or chamfer corners.
 /***************************************************************************//**
   \param    size <vector|decimal> A vector [x, y] of decimals
             or a single decimal for (x=y).
@@ -92,7 +92,7 @@ include <transform.scad>;
 
   \param    vrm <integer> The corner radius mode.
             A 4-bit encoded integer that indicates each corner finish.
-            Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
+            Use bit value \b 0 for \em fillet and \b 1 for \em chamfer.
 
   \param    center <boolean> Center about origin.
 
@@ -101,12 +101,12 @@ include <transform.scad>;
     \b Example
     \amu_eval ( function=rectangle ${example_dim} )
 
+  \note     A corner \em fillet replaces an edge with a quarter circle of
+            radius \p vr, inset <tt>[vr, vr]</tt> from the corner vertex.
   \note     A corner \em chamfer replaces an edge with an isosceles right
             triangle with side lengths equal to the corresponding corner
             rounding radius \p vr. Therefore the chamfer length will be
             <tt>vr*sqrt(2)</tt> at 45 degree angles.
-  \note     A corner \em fillet replaces an edge with a quarter circle of
-            radius \p vr, inset <tt>[vr, vr]</tt> from the corner vertex.
 *******************************************************************************/
 module rectangle
 (
@@ -213,7 +213,7 @@ module rectangle
 
   \param    vrm <integer> The default corner radius mode.
             A 4-bit encoded integer that indicates each corner finish.
-            Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
+            Use bit value \b 0 for \em fillet and \b 1 for \em chamfer.
   \param    vrm1 <integer> The outer corner radius mode.
   \param    vrm2 <integer> The core corner radius mode.
 

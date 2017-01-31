@@ -81,7 +81,7 @@ include <shapes2d.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! An extruded rectangle with edge, chamfer, and/or fillet corners.
+//! An extruded rectangle with edge, fillet, and/or chamfer corners.
 /***************************************************************************//**
   \param    size <vector|decimal> A vector [x, y] of decimals
             or a single decimal for (x=y).
@@ -95,7 +95,7 @@ include <shapes2d.scad>;
 
   \param    vrm <integer> The corner radius mode.
             A 4-bit encoded integer that indicates each corner finish.
-            Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
+            Use bit value \b 0 for \em fillet and \b 1 for \em chamfer.
 
   \param    center <boolean> Center about origin.
 
@@ -143,7 +143,7 @@ module erectangle
 
   \param    vrm <integer> The default corner radius mode.
             A 4-bit encoded integer that indicates each corner finish.
-            Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
+            Use bit value \b 0 for \em fillet and \b 1 for \em chamfer.
   \param    vrm1 <integer> The outer corner radius mode.
   \param    vrm2 <integer> The core corner radius mode.
 

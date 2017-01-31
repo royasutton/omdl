@@ -452,7 +452,7 @@ module star3d
 
   \param    vrm <integer> The default corner radius mode.
             A 4-bit encoded integer that indicates each corner finish.
-            Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
+            Use bit value \b 0 for \em fillet and \b 1 for \em chamfer.
   \param    vrm1 <integer> The outer corner radius mode.
   \param    vrm2 <integer> The core corner radius mode.
 
