@@ -461,7 +461,7 @@ module star3d
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.
   \param    m <integer> The section render mode. An 8-bit encoded integer
-            value that indicates the revolution sections to render.
+            that indicates the revolution sections to render.
 
   \param    center <boolean> Rotate about profile center.
   \param    profile <boolean> Show profile only (do not extrude).
@@ -530,7 +530,7 @@ module torus_rp
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.
   \param    m <integer> The section render mode. An 8-bit encoded integer
-            value that indicates the revolution sections to render.
+            that indicates the revolution sections to render.
 
   \param    centroid <boolean> Rotate about profile centroid.
   \param    incenter <boolean> Rotate about profile incenter.
@@ -598,7 +598,7 @@ module torus_tp
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.
   \param    m <integer> The section render mode. An 8-bit encoded integer
-            value that indicates the revolution sections to render.
+            that indicates the revolution sections to render.
 
   \param    profile <boolean> Show profile only (do not extrude).
 
