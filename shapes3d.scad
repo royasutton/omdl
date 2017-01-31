@@ -444,29 +444,17 @@ module star3d
   \param    co <vector> Core offset. A vector [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
-  \param    vr <decimal> The profile default corner rounding radius.
-  \param    vr1 <decimal> The profile outer corner rounding radius.
-  \param    vr2 <decimal> The profile core corner rounding radius.
-
   \param    vr <vector|decimal> The profile default corner rounding radius.
             A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
   \param    vr1 <vector|decimal> The profile outer corner rounding radius.
-            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
-            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
   \param    vr2 <vector|decimal> The profile core corner rounding radius.
-            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
-            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
   \param    vrm <integer> The default corner radius mode.
-            An 4-bit encoded integer that indicates each corner finish.
+            A 4-bit encoded integer that indicates each corner finish.
             Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
   \param    vrm1 <integer> The outer corner radius mode.
-            An 4-bit encoded integer that indicates each corner finish.
-            Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
   \param    vrm2 <integer> The core corner radius mode.
-            An 4-bit encoded integer that indicates each corner finish.
-            Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
 
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.
@@ -536,10 +524,8 @@ module torus_rp
 
   \param    vr <vector|decimal> The default vertex rounding radius. A vector
             [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
-  \param    vr1 <vector|decimal> The outer vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
-  \param    vr2 <vector|decimal> The core vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
+  \param    vr1 <vector|decimal> The outer vertex rounding radius.
+  \param    vr2 <vector|decimal> The core vertex rounding radius.
 
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.

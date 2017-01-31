@@ -91,7 +91,7 @@ include <transform.scad>;
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
   \param    vrm <integer> The corner radius mode.
-            An 4-bit encoded integer that indicates each corner finish.
+            A 4-bit encoded integer that indicates each corner finish.
             Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
 
   \param    center <boolean> Center about origin.
@@ -209,21 +209,13 @@ module rectangle
             A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
   \param    vr1 <vector|decimal> The outer corner rounding radius.
-            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
-            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
   \param    vr2 <vector|decimal> The core corner rounding radius.
-            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
-            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
   \param    vrm <integer> The default corner radius mode.
-            An 4-bit encoded integer that indicates each corner finish.
+            A 4-bit encoded integer that indicates each corner finish.
             Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
   \param    vrm1 <integer> The outer corner radius mode.
-            An 4-bit encoded integer that indicates each corner finish.
-            Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
   \param    vrm2 <integer> The core corner radius mode.
-            An 4-bit encoded integer that indicates each corner finish.
-            Use bit value \b 0 for \em chamfer and \b 1 for \em fillet.
 
   \param    center <boolean> Center about origin.
 
@@ -628,10 +620,8 @@ module triangle_vl
 
   \param    vr <vector|decimal> The default vertex rounding radius. A vector
             [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
-  \param    vr1 <vector|decimal> The outer vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
-  \param    vr2 <vector|decimal> The core vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
+  \param    vr1 <vector|decimal> The outer vertex rounding radius.
+  \param    vr2 <vector|decimal> The core vertex rounding radius.
 
   \param    centroid <boolean> Center centroid at origin.
   \param    incenter <boolean> Center incenter at origin.
