@@ -132,12 +132,16 @@ module cone
   }
 }
 
-//! A cuboid.
+//! A cuboid with edge, fillet, or chamfer corners.
 /***************************************************************************//**
   \param    size <vector|decimal> A vector [x, y, z] of decimals or a
             single decimal for (x=y=z).
 
-  \param    vr <decimal> The corner rounding radius.
+  \param    vr <decimal> The rounding radius.
+
+  \param    vrm <integer> The radius mode.
+            A 2-bit encoded integer that indicates edge and vertex finish.
+            \em B0 controls edge and \em B1 controls vertex.
 
   \param    center <boolean> Center about origin.
 
@@ -145,17 +149,35 @@ module cone
 
     \b Example
     \amu_eval ( function=cuboid ${example_dim} )
+
+    | vrm | B1  | B0  | Description                                 |
+    |:---:|:---:|:---:|:--------------------------------------------|
+    |  0  |  0  |  0  | \em fillet edges with \em fillet vertexes   |
+    |  1  |  0  |  1  | \em chamfer edges with \em sphere vertexes  |
+    |  2  |  1  |  0  | \em fillet edges with \em chamfer vertexes  |
+    |  3  |  1  |  1  | \em chamfer edges with \em chamfer vertexes |
+
+  \note     Using \em fillet replaces all edges with a quarter circle
+            of radius \p vr, inset <tt>[vr, vr]</tt> from the each edge.
+  \note     Using \em chamfer replaces all edges with isosceles right
+            triangles with side lengths equal to the corner rounding
+            radius \p vr. Therefore the chamfer length will be
+            <tt>vr*sqrt(2)</tt> at 45 degree angles.
 *******************************************************************************/
 module cuboid
 (
   size,
   vr,
+  vrm = 0,
   center = false
 )
 {
   bx = edefined_or(size, 0, size);
   by = edefined_or(size, 1, bx);
   bz = edefined_or(size, 2, by);
+
+  ef = bitwise_is_equal(vrm, 0, 0);
+  vf = bitwise_is_equal(vrm, 1, 0);
 
   translate(center==true ? origin3d : [bx/2, by/2, bz/2])
   if ( not_defined(vr) )
@@ -169,31 +191,50 @@ module cuboid
     cube([bx-vr*2, by-vr*2, bz     ], center=true);
 
     bv  = [bx, by, bz];
-    rot = [ [0,0,0], [90,0,90], [90,90,0] ];
+    rot = [[0,0,0], [90,0,90], [90,90,0]];
 
-    for (axis = [0:2])
+    for ( axis = [0:2] )
     {
-      for
-      (
-        x = [vr-bv[axis]/2,       -vr+bv[axis]/2      ],
-        y = [vr-bv[(axis+1)%3]/2, -vr+bv[(axis+1)%3]/2]
-      )
+      zo = bv[(axis+2)%3]/2 - vr;
+
+      for ( x = [1,-1], y = [1,-1] )
       {
         rotate( rot[axis] )
-        translate( [x, y, 0] )
-        cylinder( h=bv[(axis+2)%3]-2*vr, r=vr, center=true );
+        translate( [x*(bv[axis]/2-vr), y*(bv[(axis+1)%3]/2-vr), 0] )
+        if ( ef )
+        {
+          cylinder( h=zo*2, r=vr, center=true );
+        }
+        else
+        {
+          polyhedron
+          (
+            points =
+            [
+              [-eps,-eps,+zo], [(vr+eps)*x,-eps,+zo], [-eps,(vr+eps)*y,+zo],
+              [-eps,-eps,-zo], [(vr+eps)*x,-eps,-zo], [-eps,(vr+eps)*y,-zo],
+            ],
+            faces = [[0,2,1], [0,1,4,3], [1,2,5,4], [2,0,3,5], [3,4,5]]
+          );
+        }
       }
     }
 
-    for
-    (
-      x = [vr-bx/2, -vr+bx/2],
-      y = [vr-by/2, -vr+by/2],
-      z = [vr-bz/2, -vr+bz/2]
-    )
+    for ( x = [1,-1], y = [1,-1], z = [1,-1] )
     {
-      translate([x,y,z])
-      sphere(vr);
+      translate([x*(bx/2-vr), y*(by/2-vr), z*(bz/2-vr)])
+      if ( vf )
+      {
+        sphere(vr);
+      }
+      else
+      {
+        polyhedron
+        (
+          points = [[0,0,0], [vr*x,0,0], [0,vr*y,0], [0,0,vr*z]],
+          faces = [[1,2,3], [0,2,1], [0,3,2], [0,1,3]]
+        );
+      }
     }
   }
 }
