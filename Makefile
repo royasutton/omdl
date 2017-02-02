@@ -72,7 +72,8 @@ library             := mainpage \
                        transform \
                        shapes2d \
                        shapes2de \
-                       shapes3d
+                       shapes3d \
+                       tool_edge
 
 backup_files_add    := README.md \
                        lgpl-2.1.txt
@@ -85,7 +86,8 @@ release_files_add    = $(backup_files_add) \
                        $(output_path)svg/shapes2d_manifest.svg \
                        $(output_path)stl/shapes2de_manifest.stl \
                        $(output_path)stl/shapes3d_manifest_1.stl \
-                       $(output_path)stl/shapes3d_manifest_2.stl
+                       $(output_path)stl/shapes3d_manifest_2.stl \
+                       $(output_path)stl/tool_edge_manifest.stl
 
 release_archive_files_add = $(backup_files_add)
 
