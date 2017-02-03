@@ -1,0 +1,670 @@
+.TH "prim_test" 3 "Thu Feb 2 2017" "Version v0.4" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+prim_test \- Variable Tests
+.PP
+Variable property test primitives\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBprimitives\&.scad\fP"
+.br
+.RI "\fIMathematical primitive functions\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBis_defined\fP (v)"
+.br
+.RI "\fITest if a value is defined\&. \fP"
+.ti -1c
+.RI "function \fBnot_defined\fP (v)"
+.br
+.RI "\fITest if a value is not defined\&. \fP"
+.ti -1c
+.RI "function \fBis_empty\fP (v)"
+.br
+.RI "\fITest if an iterable value is empty\&. \fP"
+.ti -1c
+.RI "function \fBis_scalar\fP (v)"
+.br
+.RI "\fITest if a value is a single non-iterable value\&. \fP"
+.ti -1c
+.RI "function \fBis_iterable\fP (v)"
+.br
+.RI "\fITest if a value has multiple parts and is iterable\&. \fP"
+.ti -1c
+.RI "function \fBis_string\fP (v)"
+.br
+.RI "\fITest if a value is a string\&. \fP"
+.ti -1c
+.RI "function \fBis_vector\fP (v)"
+.br
+.RI "\fITest if a value is a vector\&. \fP"
+.ti -1c
+.RI "function \fBis_boolean\fP (v)"
+.br
+.RI "\fITest if a value is a boolean constant\&. \fP"
+.ti -1c
+.RI "function \fBis_integer\fP (v)"
+.br
+.RI "\fITest if a value is an integer\&. \fP"
+.ti -1c
+.RI "function \fBis_decimal\fP (v)"
+.br
+.RI "\fITest if a value is a decimal\&. \fP"
+.ti -1c
+.RI "function \fBis_number\fP (v)"
+.br
+.RI "\fITest if a value is a number\&. \fP"
+.ti -1c
+.RI "function \fBis_range\fP (v)"
+.br
+.RI "\fITest if a value is a range definition\&. \fP"
+.ti -1c
+.RI "function \fBis_nan\fP (v)"
+.br
+.RI "\fITest if a numerical value is invalid\&. \fP"
+.ti -1c
+.RI "function \fBis_inf\fP (v)"
+.br
+.RI "\fITest if a numerical value is infinite\&. \fP"
+.ti -1c
+.RI "function \fBis_even\fP (v)"
+.br
+.RI "\fITest if a numerical value is even\&. \fP"
+.ti -1c
+.RI "function \fBis_odd\fP (v)"
+.br
+.RI "\fITest if a numerical value is odd\&. \fP"
+.ti -1c
+.RI "function \fBall_equal\fP (v, cv)"
+.br
+.RI "\fITest if all elements of a value equal a comparison value\&. \fP"
+.ti -1c
+.RI "function \fBany_equal\fP (v, cv)"
+.br
+.RI "\fITest if any element of a value equals a comparison value\&. \fP"
+.ti -1c
+.RI "function \fBall_defined\fP (v)"
+.br
+.RI "\fITest if no element of a value is undefined\&. \fP"
+.ti -1c
+.RI "function \fBany_undefined\fP (v)"
+.br
+.RI "\fITest if any element of a value is undefined\&. \fP"
+.ti -1c
+.RI "function \fBall_scalars\fP (v)"
+.br
+.RI "\fITest if all elements of a value are scalars\&. \fP"
+.ti -1c
+.RI "function \fBall_vectors\fP (v)"
+.br
+.RI "\fITest if all elements of a value are vectors\&. \fP"
+.ti -1c
+.RI "function \fBall_strings\fP (v)"
+.br
+.RI "\fITest if all elements of a value are strings\&. \fP"
+.ti -1c
+.RI "function \fBall_numbers\fP (v)"
+.br
+.RI "\fITest if all elements of a value are numbers\&. \fP"
+.ti -1c
+.RI "function \fBall_len\fP (v, l)"
+.br
+.RI "\fITest if all elements of a value have a given length\&. \fP"
+.ti -1c
+.RI "function \fBalmost_equal\fP (v1, v2, p=4)"
+.br
+.RI "\fITest if all elements of two values are approximately equal\&. \fP"
+.ti -1c
+.RI "function \fBcompare\fP (v1, v2, s=true)"
+.br
+.RI "\fICompare any two values (may be iterable and/or of different types)\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Variable property test primitives\&. 
+
+See validation results \fBgroup1\fP and \fBgroup2\fP\&. 
+.SH "Function Documentation"
+.PP 
+.SS "function all_defined (v)"
+
+.PP
+Test if no element of a value is undefined\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value or an iterable value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when no element is undefined and \fBfalse\fP otherwise\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBtrue\fP when \fCv\fP is empty\&. 
+.RE
+.PP
+
+.SS "function all_equal (v, cv)"
+
+.PP
+Test if all elements of a value equal a comparison value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value or an iterable value\&. 
+.br
+\fIcv\fP <value> A comparison value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when all elements equal the value \fCcv\fP and \fBfalse\fP otherwise\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBtrue\fP when \fCv\fP is empty\&. 
+.RE
+.PP
+
+.SS "function all_len (v, l)"
+
+.PP
+Test if all elements of a value have a given length\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value or an iterable value\&. 
+.br
+\fIl\fP <integer> The length\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when all elements have length equal to \fCl\fP and \fBfalse\fP otherwise\&. Returns the value of \fCv\fP when it is not defined\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBtrue\fP when \fCv\fP is empty\&. 
+.RE
+.PP
+
+.SS "function all_numbers (v)"
+
+.PP
+Test if all elements of a value are numbers\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value or an iterable value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when all elements are numerical values and \fBfalse\fP otherwise\&. Returns \fBtrue\fP when \fCv\fP is a single numerical value\&. Returns the value of \fCv\fP when it is not defined\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBtrue\fP when \fCv\fP is empty\&. 
+.RE
+.PP
+
+.SS "function all_scalars (v)"
+
+.PP
+Test if all elements of a value are scalars\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value or an iterable value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when all elements are scalar values and \fBfalse\fP otherwise\&. Returns \fBtrue\fP when \fCv\fP is a single scalar value\&. Returns the value of \fCv\fP when it is not defined\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBtrue\fP when \fCv\fP is empty\&. 
+.RE
+.PP
+
+.SS "function all_strings (v)"
+
+.PP
+Test if all elements of a value are strings\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value or an iterable value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when all elements are string values and \fBfalse\fP otherwise\&. Returns \fBtrue\fP when \fCv\fP is a single string value\&. Returns the value of \fCv\fP when it is not defined\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBtrue\fP when \fCv\fP is empty\&. 
+.RE
+.PP
+
+.SS "function all_vectors (v)"
+
+.PP
+Test if all elements of a value are vectors\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value or an iterable value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when all elements are vector values and \fBfalse\fP otherwise\&. Returns \fBtrue\fP when \fCv\fP is a single vector value\&. Returns the value of \fCv\fP when it is not defined\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBtrue\fP when \fCv\fP is empty\&. 
+.RE
+.PP
+
+.SS "function almost_equal (v1, v2, p = \fC4\fP)"
+
+.PP
+Test if all elements of two values are approximately equal\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv1\fP <value> A value or an iterable value 1\&. 
+.br
+\fIv2\fP <value> A value or an iterable value 2\&. 
+.br
+\fIp\fP <number> A numerical precision\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when all elements of each values are sufficiently equal and \fBfalse\fP otherwise\&. All numerical comparisons are performed with precision limited by \fCp\fP\&. All non-numeric comparisons test for exact equality\&.
+.RE
+.PP
+\fBNote:\fP
+.RS 4
+The parameter \fCp\fP indicated the number of digits of precision for each numerical comparison\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBtrue\fP when \fCv\fP is empty\&. 
+.RE
+.PP
+
+.SS "function any_equal (v, cv)"
+
+.PP
+Test if any element of a value equals a comparison value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value or an iterable value\&. 
+.br
+\fIcv\fP <value> A comparison value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when any element equals the value \fCcv\fP and \fBfalse\fP otherwise\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBfalse\fP when \fCv\fP is empty\&. 
+.RE
+.PP
+
+.SS "function any_undefined (v)"
+
+.PP
+Test if any element of a value is undefined\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value or an iterable value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when any element is undefined and \fBfalse\fP otherwise\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBfalse\fP when \fCv\fP is empty\&. 
+.RE
+.PP
+
+.SS "function compare (v1, v2, s = \fCtrue\fP)"
+
+.PP
+Compare any two values (may be iterable and/or of different types)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv1\fP <value> A value or an iterable value 1\&. 
+.br
+\fIv2\fP <value> A value or an iterable value 2\&. 
+.br
+\fIs\fP <boolean> Order ranges by their numerical sum\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<integer> \fB-1\fP when \fC(v2 < v1)\fP, \fB+1\fP when \fC(v2 > v1)\fP, and \fB0\fP when \fC(v2 == v1)\fP\&.
+.RE
+.PP
+The following table summarizes how values are ordered\&.
+.PP
+order type \fCs\fP intra-type ordering  1 \fBundef\fP (singular) 2 number numerical comparison 3 string lexical comparison 4 boolean \fBfalse\fP < \fBtrue\fP 5 vector lengths then element-wise comparison 6 range \fBtrue\fP compare sum of range elements 6 range \fBfalse\fP lengths then element-wise comparison 
+.PP
+\fBNote:\fP
+.RS 4
+When comparing two vectors of equal length, the comparison continue element-by-element until an ordering can be determined\&. Two vectors are declared equal when all elements have been compared and no ordering has been determined\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+The performance of element-wise comparisons of vectors degrades exponentially with vector size\&. 
+.PP
+The sum of a range may quickly exceeded the intermediate variable storage capacity for long ranges\&. 
+.RE
+.PP
+
+.SS "function is_boolean (v)"
+
+.PP
+Test if a value is a boolean constant\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is one of the predefined boolean constants \fC[true|false]\fP and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function is_decimal (v)"
+
+.PP
+Test if a value is a decimal\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is a decimal and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function is_defined (v)"
+
+.PP
+Test if a value is defined\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is defined and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function is_empty (v)"
+
+.PP
+Test if an iterable value is empty\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> An iterable value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the iterable value has zero elements and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function is_even (v)"
+
+.PP
+Test if a numerical value is even\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A numerical value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is determined to be \fIeven\fP and \fBfalse\fP otherwise\&.
+.RE
+.PP
+\fBNote:\fP
+.RS 4
+The value must be valid and defined but may be positive or negative\&. Any value that is not an integer returns \fBfalse\fP\&. 
+.RE
+.PP
+
+.SS "function is_inf (v)"
+
+.PP
+Test if a numerical value is infinite\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A numerical value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is determined to be \fBinf\fP (greater than the largest representable number) and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function is_integer (v)"
+
+.PP
+Test if a value is an integer\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is an integer and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function is_iterable (v)"
+
+.PP
+Test if a value has multiple parts and is iterable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is an iterable multi-part value and \fBfalse\fP otherwise\&.
+.RE
+.PP
+value is defined result  \fBundef\fP \fBfalse\fP \fBinf\fP \fBfalse\fP \fBnan\fP \fBfalse\fP integer \fBfalse\fP decimal \fBfalse\fP boolean \fBfalse\fP string \fBtrue\fP vector \fBtrue\fP range not defined 
+.SS "function is_nan (v)"
+
+.PP
+Test if a numerical value is invalid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A numerical value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is determined to be \fBnan\fP (Not A Number) and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function is_number (v)"
+
+.PP
+Test if a value is a number\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is a number and \fBfalse\fP otherwise\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Returns \fBtrue\fP even for numerical values that are considered infinite and invalid\&. 
+.RE
+.PP
+
+.SS "function is_odd (v)"
+
+.PP
+Test if a numerical value is odd\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A numerical value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is determined to be \fIodd\fP and \fBfalse\fP otherwise\&.
+.RE
+.PP
+\fBNote:\fP
+.RS 4
+The value must be valid and defined but may be positive or negative\&. Any value that is not an integer returns \fBfalse\fP\&. 
+.RE
+.PP
+
+.SS "function is_range (v)"
+
+.PP
+Test if a value is a range definition\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is a range definition and \fBfalse\fP otherwise\&.
+.RE
+.PP
+
+.SS "function is_scalar (v)"
+
+.PP
+Test if a value is a single non-iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is a single non-iterable value and \fBfalse\fP otherwise\&.
+.RE
+.PP
+value is defined result  \fBundef\fP \fBtrue\fP \fBinf\fP \fBtrue\fP \fBnan\fP \fBtrue\fP integer \fBtrue\fP decimal \fBtrue\fP boolean \fBtrue\fP string \fBfalse\fP vector \fBfalse\fP range not defined 
+.SS "function is_string (v)"
+
+.PP
+Test if a value is a string\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is a string and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function is_vector (v)"
+
+.PP
+Test if a value is a vector\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is a vector and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function not_defined (v)"
+
+.PP
+Test if a value is not defined\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is not defined and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

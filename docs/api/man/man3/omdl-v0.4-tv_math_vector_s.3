@@ -1,0 +1,227 @@
+.TH "tv_math_vector_s" 3 "Thu Feb 2 2017" "Version v0.4" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tv_math_vector_s \- Validation Script 
+ 
+.PP
+.nf
+      include <math\&.scad>;
+      use <table\&.scad>;
+      use <console\&.scad>;
+      use <validation\&.scad>;
+
+      show_passing = true;    // show passing tests
+      show_skipped = true;    // show skipped tests
+
+      echo( str("OpenSCAD Version ", version()) );
+
+      // test-values columns
+      test_c =
+      [
+        ["id", "identifier"],
+        ["td", "description"],
+        ["tv", "test value"]
+      ];
+
+      // test-values rows
+      test_r =
+      [
+        ["fac", "Function argument count",    undef],
+        ["crp", "Result precision",           undef],
+        ["t01", "All undefined",              [undef,undef,undef,undef,undef,undef]],
+        ["t02", "All empty vector",           [empty_v,empty_v,empty_v,empty_v,empty_v,empty_v]],
+        ["t03", "All scalars",                [60, 50, 40, 30, 20, 10]],
+        ["t04", "All 1D vectors",             [[99], [58], [12], [42], [15], [1]]],
+        ["t05", "All 2D vectors",             [
+                                                [99,2], [58,16], [12,43],
+                                                [42,13], [15,59], [1,85]
+                                              ]],
+        ["t06", "All 3D vectors",             [
+                                                [199,20,55], [158,116,75], [12,43,90],
+                                                [42,13,34], [15,59,45], [62,33,69]
+                                              ]],
+        ["t07", "All 4D vectors",             [
+                                                [169,27,35,10], [178,016,25,20], [12,43,90,30],
+                                                [42,13,34,60], [15,059,45,50], [62,33,69,40]
+                                              ]],
+        ["t08", "Orthogonal vectors",         [
+                                                +x_axis3d_uv, +y_axis3d_uv, +z_axis3d_uv,
+                                                -x_axis3d_uv, -y_axis3d_uv, -z_axis3d_uv,
+                                              ]],
+        ["t09", "Coplanar vectors",           [
+                                                +x_axis3d_uv, +y_axis3d_uv, [2,2,0],
+                                                origin3d, origin3d, origin3d,
+                                              ]]
+      ];
+
+      test_ids = table_get_row_ids( test_r );
+
+      // expected columns: ("id" + one column for each test)
+      good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
+
+      // expected rows: ("golden" test results), use 'skip' to skip test
+      skip = -1;  // skip test
+
+      good_r =
+      [ // function
+        ["distance_pp",
+          2,                                                  // fac
+          4,                                                  // crp
+          undef,                                              // t01
+          undef,                                              // t02
+          undef,                                              // t03
+          41,                                                 // t04
+          43\&.3244,                                            // t05
+          106\&.2873,                                           // t06
+          undef,                                              // t07
+          1\&.4142,                                             // t08
+          1\&.4142                                              // t09
+        ],
+        ["dot_vv",
+          4,                                                  // fac
+          4,                                                  // crp
+          undef,                                              // t01
+          undef,                                              // t02
+          400,                                                // t03
+          1392,                                               // t04
+          1269,                                               // t05
+          17888,                                              // t06
+          22599,                                              // t07
+          1,                                                  // t08
+          -2                                                  // t09
+        ],
+        ["cross_vv",
+          4,                                                  // fac
+          4,                                                  // crp
+          skip,                                               // t01
+          skip,                                               // t02
+          skip,                                               // t03
+          skip,                                               // t04
+          917,                                                // t05
+          [2662,-11727,21929],                                // t06
+          skip,                                               // t07
+          [1,-1,1],                                           // t08
+          [0,0,-1]                                            // t09
+        ],
+        ["striple_vvv",
+          6,                                                  // fac
+          4,                                                  // crp
+          skip,                                               // t01
+          skip,                                               // t02
+          skip,                                               // t03
+          skip,                                               // t04
+          [-75981,14663],                                     // t05
+          199188,                                             // t06
+          skip,                                               // t07
+          8,                                                  // t08
+          0                                                   // t09
+        ],
+        ["angle_vv",
+          4,                                                  // fac
+          4,                                                  // crp
+          undef,                                              // t01
+          undef,                                              // t02
+          undef,                                              // t03
+          undef,                                              // t04
+          35\&.8525,                                            // t05
+          54\&.4261,                                            // t06
+          undef,                                              // t07
+          60,                                                 // t08
+          153\&.4350                                            // t09
+        ],
+        ["angle_vvn",
+          6,                                                  // fac
+          4,                                                  // crp
+          skip,                                               // t01
+          skip,                                               // t02
+          skip,                                               // t03
+          skip,                                               // t04
+          skip,                                               // t05
+          83\&.2771,                                            // t06 (verify)
+          skip,                                               // t07
+          90,                                                 // t08
+          0                                                   // t09
+        ],
+        ["unit_v",
+          2,                                                  // fac
+          4,                                                  // crp
+          undef,                                              // t01
+          undef,                                              // t02
+          undef,                                              // t03
+          [1],                                                // t04
+          [0\&.9464,-0\&.3231],                                   // t05
+          [0\&.3857,-0\&.9032,-0\&.1882],                           // t06
+          undef,                                              // t07
+          [0\&.7071,-0\&.7071,0],                                 // t08
+          [0\&.7071,-0\&.7071,0]                                  // t09
+        ],
+        ["are_coplanar_vvv",
+          6,                                                  // fac
+          4,                                                  // crp
+          skip,                                               // t01
+          skip,                                               // t02
+          skip,                                               // t03
+          skip,                                               // t04
+          skip,                                               // t05
+          false,                                              // t06
+          skip,                                               // t07
+          false,                                              // t08
+          true                                                // t09
+        ]
+      ];
+
+      // sanity-test tables
+      table_check( test_r, test_c, false );
+      table_check( good_r, good_c, false );
+
+      // validate helper function and module
+      function get_value( vid ) = table_get(test_r, test_c, vid, "tv");
+      function gv( vid, e ) = get_value( vid )[e];
+      module run( fname, vid )
+      {
+        value_text = table_get(test_r, test_c, vid, "td");
+
+        if ( table_get(good_r, good_c, fname, vid) != skip )
+          children();
+        else if ( show_skipped )
+          log_info( str("*skip*: ", vid, " '", fname, "(", value_text, ")'") );
+      }
+      module test( fname, fresult, vid )
+      {
+        value_text = table_get(test_r, test_c, vid, "td");
+        fname_argc = table_get(good_r, good_c, fname, "fac");
+        comp_prcsn = table_get(good_r, good_c, fname, "crp");
+        pass_value = table_get(good_r, good_c, fname, vid);
+
+        test_pass = validate(cv=fresult, t="almost", ev=pass_value, p=comp_prcsn, pf=true);
+        farg_text = vstr(append(", ", rselect(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
+        test_text = validate(str(fname, "(", farg_text, ")=~", pass_value), fresult, "almost", pass_value, comp_prcsn);
+
+        if ( pass_value != skip )
+        {
+          if ( !test_pass )
+            log_warn( str(vid, "(", value_text, ") ", test_text) );
+          else if ( show_passing )
+            log_info( str(vid, " ", test_text) );
+        }
+        else if ( show_skipped )
+          log_info( str(vid, " *skip*: '", fname, "(", value_text, ")'") );
+      }
+
+      // Indirect function calls would be very useful here!!!
+      run_ids = delete( test_ids, mv=["fac", "crp"] );
+      for (vid=run_ids) run("distance_pp",vid) test( "distance_pp", distance_pp(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
+      for (vid=run_ids) run("dot_vv",vid) test( "dot_vv", dot_vv(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
+      for (vid=run_ids) run("cross_vv",vid) test( "cross_vv", cross_vv(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
+      for (vid=run_ids) run("striple_vvv",vid) test( "striple_vvv", striple_vvv(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
+      for (vid=run_ids) run("angle_vv",vid) test( "angle_vv", angle_vv(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
+      for (vid=run_ids) run("angle_vvn",vid) test( "angle_vvn", angle_vvn(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
+      for (vid=run_ids) run("unit_v",vid) test( "unit_v", unit_v(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
+      for (vid=run_ids) run("are_coplanar_vvv",vid) test( "are_coplanar_vvv", are_coplanar_vvv(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
+
+      // end-of-tests
+
+.fi
+.PP
+ 

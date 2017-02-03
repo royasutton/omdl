@@ -1,0 +1,8 @@
+<map id="Math" name="Math">
+<area shape="rect" id="node2" href="$group__prim__vector.html" title="Vector operation primitives. " alt="" coords="230,17,357,44"/>
+<area shape="rect" id="node3" href="$group__math__ngon.html" title="Regular n&#45;sided polygon computations. " alt="" coords="237,96,349,122"/>
+<area shape="rect" id="node4" href="$group__math__bitwise.html" title="Bitwise binary (base&#45;two) operations. " alt="" coords="227,174,359,201"/>
+<area shape="rect" id="node5" href="$group__math__vector.html" title="Point, vector, and plane computations. " alt="" coords="213,253,373,280"/>
+<area shape="rect" id="node6" href="$group__prim__test.html" title="Variable property test primitives. " alt="" coords="240,340,347,366"/>
+<area shape="rect" id="node7" href="$group__math__triangle.html" title="Triangle computations. " alt="" coords="230,404,357,430"/>
+</map>

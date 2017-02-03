@@ -1,0 +1,150 @@
+.TH "units_angle" 3 "Thu Feb 2 2017" "Version v0.4" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+units_angle \- Angle
+.PP
+Angle units and conversions\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBunits_angle\&.scad\fP"
+.br
+.RI "\fIAngle units and conversions\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBunit_angle_name\fP (units=\fBbase_unit_angle\fP)"
+.br
+.RI "\fIReturn the name of the given angle \fCunit\fP identifier\&. \fP"
+.ti -1c
+.RI "function \fBconvert_angle\fP (angle, from=\fBbase_unit_angle\fP, to=\fBbase_unit_angle\fP)"
+.br
+.RI "\fIConvert the \fCangle\fP from \fCfrom\fP units to \fCto\fP units\&. \fP"
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "\fBbase_unit_angle\fP = 'd'"
+.br
+.RI "\fI<string> Base unit for angle measurements\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Angle units and conversions\&. 
+
+These functions allow for angles to be specified with units\&. Angles specified with units are independent of (\fBbase_unit_angle\fP)\&. There are also unit conversion functions for converting from one unit to another\&.
+.PP
+The table below enumerates the supported unit identifiers and their descriptions\&.
+.PP
+units id description  r radian d degree dms degree, minute, second \fBExample\fP 
+.PP
+ 
+.PP
+.nf
+    include <units_angle\&.scad>;
+
+    base_unit_angle = "d";
+
+    // get base unit name
+    un = unit_angle_name();
+
+    // absolute angle measurements in base unit\&.
+    c1 = convert_angle(pi/6, "r");
+    c2 = convert_angle(pi/4, "r");
+    c3 = convert_angle(180, "d");
+    c4 = convert_angle([30, 15, 50], "dms");
+
+    // convert between units\&.
+    c5 = convert_angle([30, 15, 50], from="dms", to="r");
+    c6 = convert_angle(0\&.528205, from="r", to="dms");
+
+.fi
+.PP
+.PP
+\fBResult\fP (base_angle_length = \fBr\fP): 
+.PP
+.nf
+1 ECHO: un = "radian"
+2 ECHO: c1 = 0\&.523599
+3 ECHO: c2 = 0\&.785398
+4 ECHO: c3 = 3\&.14159
+5 ECHO: c4 = 0\&.528205
+6 ECHO: c5 = 0\&.528205
+7 ECHO: c6 = [30, 15, 50\&.102]
+
+.fi
+.PP
+ \fBResult\fP (base_angle_length = \fBd\fP): 
+.PP
+.nf
+1 ECHO: un = "degree"
+2 ECHO: c1 = 30
+3 ECHO: c2 = 45
+4 ECHO: c3 = 180
+5 ECHO: c4 = 30\&.2639
+6 ECHO: c5 = 0\&.528205
+7 ECHO: c6 = [30, 15, 50\&.102]
+
+.fi
+.PP
+ \fBResult\fP (base_angle_length = \fBdms\fP): 
+.PP
+.nf
+1 ECHO: un = "degree, minute, second"
+2 ECHO: c1 = [29, 59, 60]
+3 ECHO: c2 = [45, 0, 0]
+4 ECHO: c3 = [180, 0, 0]
+5 ECHO: c4 = [30, 15, 50]
+6 ECHO: c5 = 0\&.528205
+7 ECHO: c6 = [30, 15, 50\&.102]
+
+.fi
+.PP
+ 
+.SH "Function Documentation"
+.PP 
+.SS "function convert_angle (angle, from = \fC\fBbase_unit_angle\fP\fP, to = \fC\fBbase_unit_angle\fP\fP)"
+
+.PP
+Convert the \fCangle\fP from \fCfrom\fP units to \fCto\fP units\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIangle\fP <decimal|vector> An angle to convert (dms angles are 3-tuple vector [d, m, s])\&. 
+.br
+\fIfrom\fP <string> The units of the angle to be converted\&. 
+.br
+\fIto\fP <string> A units to which the angle should be converted\&. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal|vector> The conversion result (dms angles are 3-tuple vector [d, m, s])\&. Returns \fB'undef'\fP for identifiers that are not defined\&. 
+.RE
+.PP
+
+.SS "function unit_angle_name (units = \fC\fBbase_unit_angle\fP\fP)"
+
+.PP
+Return the name of the given angle \fCunit\fP identifier\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIunits\fP <string> An angle unit identifier\&. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<string> The units name for the given angle unit identifier\&. Returns \fB'undef'\fP for identifiers that are not defined\&. 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.
