@@ -328,7 +328,7 @@ module ellipsoid_s
 
 //! A pyramid with trilateral base formed by four equilateral triangles.
 /***************************************************************************//**
-  \param    r <decimal> The face radius.
+  \param    size <decimal> The face radius.
 
   \param    center <boolean> Center about origin.
 
@@ -341,12 +341,12 @@ module ellipsoid_s
 *******************************************************************************/
 module tetrahedron
 (
-  r,
+  size,
   center = false
 )
 {
-  o = r/2;
-  a = r*sqrt(3)/2;
+  o = size/2;
+  a = size*sqrt(3)/2;
 
   translate(center==true ? origin3d : [0,0,o])
 
@@ -354,10 +354,10 @@ module tetrahedron
   (
     points =
     [
-      [-a, -o, -o],
-      [ a, -o, -o],
-      [ 0,  r, -o],
-      [ 0,  0,  r]
+      [-a,    -o,    -o],
+      [ a,    -o,    -o],
+      [ 0,  size,    -o],
+      [ 0,     0,  size]
     ],
     faces =
     [
@@ -371,9 +371,8 @@ module tetrahedron
 
 //! A pyramid with quadrilateral base.
 /***************************************************************************//**
-  \param    x <decimal> The base x-length.
-  \param    y <decimal> The base y-length.
-  \param    z <decimal> The z-height.
+  \param    size <vector|decimal> A vector [x, y, z] of decimals or a
+            single decimal for (x=y=z).
 
   \param    center <boolean> Center about origin.
 
@@ -386,15 +385,13 @@ module tetrahedron
 *******************************************************************************/
 module pyramid_q
 (
-  x,
-  y,
-  z,
+  size,
   center = false
 )
 {
-  tw = x/2;
-  th = y/2;
-  ph = z;
+  tw = edefined_or(size, 0, size)/2;
+  th = edefined_or(size, 1, tw*2)/2;
+  ph = edefined_or(size, 2, th*2);
 
   translate(center==true ? [0,0,-ph/2] : origin3d)
   polyhedron
@@ -451,7 +448,7 @@ module star3d
       scale([1, 1, h/w])
       rotate([45, 0, 0])
       rotate([0, 90, 0])
-      pyramid_q(x=w, y=w, z=l, center=false);
+      pyramid_q(size=[w, w, l], center=false);
 
       translate([0,0,-h/2])
       cylinder(r=l, h=h, center=true);
@@ -463,7 +460,7 @@ module star3d
     scale([1, 1, h/w])
     rotate([45, 0, 0])
     rotate([0, 90, 0])
-    pyramid_q(x=w, y=w, z=l, center=false);
+    pyramid_q(size=[w, w, l], center=false);
   }
 }
 
@@ -550,9 +547,9 @@ module torus_rp
 
 //! A triangular cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
-  \param    vs <vector|decimal> The size. A vector [s1, s2, s3] of decimals
+  \param    size <vector|decimal> The size. A vector [s1, s2, s3] of decimals
             or a single decimal for (s1=s2=s3).
-  \param    vc <vector|decimal> The core. A vector [s1, s2, s3] of decimals
+  \param    core <vector|decimal> The core. A vector [s1, s2, s3] of decimals
             or a single decimal for (s1=s2=s3).
 
   \param    r <decimal> The rotation radius.
@@ -588,8 +585,8 @@ module torus_rp
 *******************************************************************************/
 module torus_tp
 (
-  vs,
-  vc,
+  size,
+  core,
   r,
   l,
   co,
@@ -608,7 +605,7 @@ module torus_tp
   st_rotate_extrude_elongate( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
   triangle_vl_c
   (
-    vs=vs, vc=vc,
+    vs=size, vc=core,
     co=co, cr=cr,
     vr=vr, vr1=vr1, vr2=vr2,
     centroid=centroid, incenter=incenter
@@ -703,15 +700,15 @@ BEGIN_SCOPE dim;
     else if (shape == "ellipsoid_s")
       ellipsoid_s( size=[60,15], a1=0, a2=270 );
     else if (shape == "tetrahedron")
-      tetrahedron( r = 20, center=true );
+      tetrahedron( size=20, center=true );
     else if (shape == "pyramid_q")
-      pyramid_q( x=35, y=20, z=5, center=true );
+      pyramid_q( size=[35,20,5], center=true );
     else if (shape == "star3d")
       star3d( size=40, n=5, half=true );
     else if (shape == "torus_rp")
       torus_rp( size=[40,20], core=[35,20], r=40, l=[90,60], co=[0,2.5], vr=4, vrm=15, center=true );
     else if (shape == "torus_tp")
-      torus_tp( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
+      torus_tp( size=40, core=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
     else if (shape == "torus_ep")
       torus_ep( size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
   END_OPENSCAD;
@@ -754,8 +751,8 @@ BEGIN_SCOPE manifest;
       cuboid( size=[25,40,20], vr=5, center=true );
       ellipsoid( size=[40,25] );
       ellipsoid_s( size=[60,15], a1=0, a2=270 );
-      tetrahedron( r = 15, center=true );
-      pyramid_q( x=35, y=40, z=25, center=true );
+      tetrahedron( size=15, center=true );
+      pyramid_q( size=[35,40,25], center=true );
       star3d(size=40, n=5, half=false);
     }
 
@@ -763,7 +760,7 @@ BEGIN_SCOPE manifest;
     st_cartesian_copy( grid=4, incr=150, center=true )
     {
       torus_rp( size=[40,20], core=[35,20], r=40, l=[25,60], co=[0,2.5], vr=4, vrm=15, center=true );
-      torus_tp( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
+      torus_tp( size=40, core=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
       torus_ep( size=[20,15], t=[2,4], r=60, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
     }
   END_OPENSCAD;
