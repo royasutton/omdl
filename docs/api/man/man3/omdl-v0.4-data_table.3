@@ -1,0 +1,453 @@
+.TH "data_table" 3 "Thu Feb 2 2017" "Version v0.4" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+data_table \- Datatable
+.PP
+Data table encoding and lookup\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBtable\&.scad\fP"
+.br
+.RI "\fIData table encoding and lookup\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBtable_get_row_idx\fP (rows, row_id)"
+.br
+.RI "\fIGet the index for a table row identifier\&. \fP"
+.ti -1c
+.RI "function \fBtable_get_row\fP (rows, row_id)"
+.br
+.RI "\fIGet the row for a table row identifier\&. \fP"
+.ti -1c
+.RI "function \fBtable_get_col_idx\fP (cols, col_id)"
+.br
+.RI "\fIGet the index for a table column identifier\&. \fP"
+.ti -1c
+.RI "function \fBtable_get_col\fP (cols, col_id)"
+.br
+.RI "\fIGet the column for a table column identifier\&. \fP"
+.ti -1c
+.RI "function \fBtable_get\fP (rows, cols, row_id, col_id)"
+.br
+.RI "\fIGet the value for a table row and column identifier\&. \fP"
+.ti -1c
+.RI "function \fBtable_get_row_cols\fP (rows, cols, col_id)"
+.br
+.RI "\fIForm a vector from the specified column of each table row\&. \fP"
+.ti -1c
+.RI "function \fBtable_get_row_ids\fP (rows)"
+.br
+.RI "\fIForm a vector of each table row identifier\&. \fP"
+.ti -1c
+.RI "function \fBtable_exists\fP (rows, cols, row_id, col_id)"
+.br
+.RI "\fITest the existence of a table row and column identifier\&. \fP"
+.ti -1c
+.RI "function \fBtable_size\fP (rows, cols)"
+.br
+.RI "\fIGet the size of a table\&. \fP"
+.ti -1c
+.RI "module \fBtable_check\fP (rows, cols, verbose=false)"
+.br
+.RI "\fIPerform some basic validation/checks on a table\&. \fP"
+.ti -1c
+.RI "module \fBtable_dump\fP (rows, cols, rows_sel, cols_sel, number=true)"
+.br
+.RI "\fIDump a table to the console\&. \fP"
+.ti -1c
+.RI "function \fBtable_copy\fP (rows, cols, rows_sel, cols_sel)"
+.br
+.RI "\fICreate a copy of select rows and columns of a table\&. \fP"
+.ti -1c
+.RI "function \fBtable_sum\fP (rows, cols, rows_sel, cols_sel)"
+.br
+.RI "\fISum select rows and columns of a table\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Data table encoding and lookup\&. 
+
+\fBExample\fP 
+.PP
+ 
+.PP
+.nf
+    use     <table\&.scad>;
+
+    base_unit_length = "mm";
+
+    table_cols =
+    [ // id,  description
+      ["id",  "row identifier"],
+      ["ht",  "head type [r|h|s]"],
+      ["td",  "thread diameter"],
+      ["tl",  "thread length"],
+      ["hd",  "head diameter"],
+      ["hl",  "head length"],
+      ["nd",  "hex nut flat-to-flat width"],
+      ["nl",  "hex nut length"]
+    ];
+
+    table_rows =
+    [ //     id,  ht,     td,     tl,   hd,    hl,    nd,                  nl
+      ["m3r08r", "r",  3\&.000,   8\&.00, 5\&.50, 3\&.000,  5\&.50, convert_length(1\&.00, "in")],
+      ["m3r14r", "r",  3\&.000,  14\&.00, 5\&.50, 3\&.000,  5\&.50, convert_length(1\&.25, "in")],
+      ["m3r16r", "r",  3\&.000,  16\&.00, 5\&.50, 3\&.000,  5\&.50, convert_length(1\&.50, "in")],
+      ["m3r20r", "r",  3\&.000,  20\&.00, 5\&.50, 3\&.000,  5\&.50, convert_length(1\&.75, "in")]
+    ];
+
+    table_check( table_rows, table_cols, true );
+    table_dump( table_rows, table_cols );
+
+    m3r16r_tl = table_get( table_rows, table_cols, "m3r16r", "tl" );
+
+    if ( table_exists( cols=table_cols, col_id="nl" ) )
+      echo ( "metric 'nl' available" );
+
+    table_ids = table_get_row_ids( table_rows );
+    table_cols_tl = table_get_row_cols( table_rows, table_cols, "tl" );
+
+    echo ( table_ids=table_ids );
+    echo ( table_cols_tl=table_cols_tl );
+
+    tnew = table_copy( table_rows, table_cols, cols_sel=["tl", "nl"] );
+    tsum = table_sum( table_rows, table_cols, cols_sel=["tl", "nl"] );
+
+    echo ( m3r16r_tl=m3r16r_tl );
+    echo ( tnew=tnew );
+    echo ( tsum=tsum );
+
+.fi
+.PP
+.PP
+\fBResult\fP 
+.PP
+.nf
+1 ECHO: "[ INFO ] table_check(); begin table check"
+2 ECHO: "[ INFO ] table_check(); row identifier found at column zero\&."
+3 ECHO: "[ INFO ] table_check(); checking row column counts\&."
+4 ECHO: "[ INFO ] table_check(); checking for repeat column identifiers\&."
+5 ECHO: "[ INFO ] table_check(); checking for repeat row identifiers\&."
+6 ECHO: "[ INFO ] table_check(); table size: 4 rows by 8 columns\&."
+7 ECHO: "[ INFO ] table_check(); end table check"
+8 ECHO: ""
+9 ECHO: "row: 0"
+10 ECHO: "[m3r08r] [id] (row identifier)             = [m3r08r]"
+11 ECHO: "[m3r08r] [ht] (head type [r|h|s])          = [r]"
+12 ECHO: "[m3r08r] [td] (thread diameter)            = [3]"
+13 ECHO: "[m3r08r] [tl] (thread length)              = [8]"
+14 ECHO: "[m3r08r] [hd] (head diameter)              = [5\&.5]"
+15 ECHO: "[m3r08r] [hl] (head length)                = [3]"
+16 ECHO: "[m3r08r] [nd] (hex nut flat-to-flat width) = [5\&.5]"
+17 ECHO: "[m3r08r] [nl] (hex nut length)             = [25\&.4]"
+18 ECHO: ""
+19 ECHO: "row: 1"
+20 ECHO: "[m3r14r] [id] (row identifier)             = [m3r14r]"
+21 ECHO: "[m3r14r] [ht] (head type [r|h|s])          = [r]"
+22 ECHO: "[m3r14r] [td] (thread diameter)            = [3]"
+23 ECHO: "[m3r14r] [tl] (thread length)              = [14]"
+24 ECHO: "[m3r14r] [hd] (head diameter)              = [5\&.5]"
+25 ECHO: "[m3r14r] [hl] (head length)                = [3]"
+26 ECHO: "[m3r14r] [nd] (hex nut flat-to-flat width) = [5\&.5]"
+27 ECHO: "[m3r14r] [nl] (hex nut length)             = [31\&.75]"
+28 ECHO: ""
+29 ECHO: "row: 2"
+30 ECHO: "[m3r16r] [id] (row identifier)             = [m3r16r]"
+31 ECHO: "[m3r16r] [ht] (head type [r|h|s])          = [r]"
+32 ECHO: "[m3r16r] [td] (thread diameter)            = [3]"
+33 ECHO: "[m3r16r] [tl] (thread length)              = [16]"
+34 ECHO: "[m3r16r] [hd] (head diameter)              = [5\&.5]"
+35 ECHO: "[m3r16r] [hl] (head length)                = [3]"
+36 ECHO: "[m3r16r] [nd] (hex nut flat-to-flat width) = [5\&.5]"
+37 ECHO: "[m3r16r] [nl] (hex nut length)             = [38\&.1]"
+38 ECHO: ""
+39 ECHO: "row: 3"
+40 ECHO: "[m3r20r] [id] (row identifier)             = [m3r20r]"
+41 ECHO: "[m3r20r] [ht] (head type [r|h|s])          = [r]"
+42 ECHO: "[m3r20r] [td] (thread diameter)            = [3]"
+43 ECHO: "[m3r20r] [tl] (thread length)              = [20]"
+44 ECHO: "[m3r20r] [hd] (head diameter)              = [5\&.5]"
+45 ECHO: "[m3r20r] [hl] (head length)                = [3]"
+46 ECHO: "[m3r20r] [nd] (hex nut flat-to-flat width) = [5\&.5]"
+47 ECHO: "[m3r20r] [nl] (hex nut length)             = [44\&.45]"
+48 ECHO: ""
+49 ECHO: "table size: 4 rows by 8 columns\&."
+50 ECHO: "metric 'nl' available"
+51 ECHO: table_ids = ["m3r08r", "m3r14r", "m3r16r", "m3r20r"]
+52 ECHO: table_cols_tl = [8, 14, 16, 20]
+53 ECHO: m3r16r_tl = 16
+54 ECHO: tnew = [[8, 25\&.4], [14, 31\&.75], [16, 38\&.1], [20, 44\&.45]]
+55 ECHO: tsum = [58, 139\&.7]
+
+.fi
+.PP
+ 
+.SH "Function Documentation"
+.PP 
+.SS "module table_check (rows, cols, verbose = \fCfalse\fP)"
+
+.PP
+Perform some basic validation/checks on a table\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrows\fP <2d-vector> A two dimensional vector (r-tuple x c-tuple) containing the table rows\&. 
+.br
+\fIcols\fP <2d-vector> A two dimensional vector (c-tuple x 1-tuple) containing the table columns\&.
+.br
+\fIverbose\fP <boolean> Be verbose during check\&.
+.RE
+.PP
+Check that: (1) the first table column identifier is 'id'\&. (2) Make sure that each row has the same number of columns as defined in the columns vector\&. (3) Make sure that there are no repeating column identifiers\&. (4) Make sure that there are no repeating row identifiers\&. 
+.PP
+Definition at line 254 of file table\&.scad\&.
+.SS "function table_copy (rows, cols, rows_sel, cols_sel)"
+
+.PP
+Create a copy of select rows and columns of a table\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrows\fP <2d-vector> A two dimensional vector (r-tuple x c-tuple) containing the table rows\&. 
+.br
+\fIcols\fP <2d-vector> A two dimensional vector (c-tuple x 1-tuple) containing the table columns\&.
+.br
+\fIrows_sel\fP <1d-vector> A n-tuple vector of row identifier to select\&. 
+.br
+\fIcols_sel\fP <1d-vector> A n-tuple vector of column identifier to select\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<2d-vector> The selected rows and columns of the table\&. 
+.RE
+.PP
+
+.SS "module table_dump (rows, cols, rows_sel, cols_sel, number = \fCtrue\fP)"
+
+.PP
+Dump a table to the console\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrows\fP <2d-vector> A two dimensional vector (r-tuple x c-tuple) containing the table rows\&. 
+.br
+\fIcols\fP <2d-vector> A two dimensional vector (c-tuple x 1-tuple) containing the table columns\&.
+.br
+\fIrows_sel\fP <1d-vector> A n-tuple vector of row identifier to select\&. 
+.br
+\fIcols_sel\fP <1d-vector> A n-tuple vector of column identifier to select\&.
+.br
+\fInumber\fP <boolean> Number the table rows\&.
+.RE
+.PP
+Output each table row to the console\&. To output only select rows and columns, assign the desired identifiers to \fCrows_sel\fP and \fCcols_sel\fP\&. For example to output only the column identifiers 'c1' and 'c2', assign \fCcols_sel = ['c1', 'c2']\fP\&. 
+.PP
+Definition at line 337 of file table\&.scad\&.
+.SS "function table_exists (rows, cols, row_id, col_id)"
+
+.PP
+Test the existence of a table row and column identifier\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrows\fP <2d-vector> A two dimensional vector (r-tuple x c-tuple) containing the table rows\&. 
+.br
+\fIcols\fP <2d-vector> A two dimensional vector (c-tuple x 1-tuple) containing the table columns\&.
+.br
+\fIrow_id\fP <string> The row identifier string to locate\&. 
+.br
+\fIcol_id\fP <string> The column identifier string to locate\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+\fBtrue\fP if the row and column identifier exists, otherwise returns \fBfalse\fP\&. 
+.RE
+.PP
+
+.SS "function table_get (rows, cols, row_id, col_id)"
+
+.PP
+Get the value for a table row and column identifier\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrows\fP <2d-vector> A two dimensional vector (r-tuple x c-tuple) containing the table rows\&. 
+.br
+\fIcols\fP <2d-vector> A two dimensional vector (c-tuple x 1-tuple) containing the table columns\&.
+.br
+\fIrow_id\fP <string> The row identifier string to locate\&. 
+.br
+\fIcol_id\fP <string> The column identifier string to locate\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal|string> The value at the located \fCrow_id\fP and \fCcol_id\fP\&. If it does not exists, returns \fBundef\fP\&. 
+.RE
+.PP
+
+.SS "function table_get_col (cols, col_id)"
+
+.PP
+Get the column for a table column identifier\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcols\fP <2d-vector> A two dimensional vector (c-tuple x 1-tuple) containing the table columns\&.
+.br
+\fIcol_id\fP <string> The column identifier string to locate\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> The column where the row identifier is located\&. If the identifier does not exists, returns \fBundef\fP\&. 
+.RE
+.PP
+
+.SS "function table_get_col_idx (cols, col_id)"
+
+.PP
+Get the index for a table column identifier\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIcols\fP <2d-vector> A two dimensional vector (c-tuple x 1-tuple) containing the table columns\&.
+.br
+\fIcol_id\fP <string> The column identifier string to locate\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> The column index where the identifier is located\&. If the identifier does not exists, returns \fBempty_v\fP\&. 
+.RE
+.PP
+
+.SS "function table_get_row (rows, row_id)"
+
+.PP
+Get the row for a table row identifier\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrows\fP <2d-vector> A two dimensional vector (r-tuple x c-tuple) containing the table rows\&.
+.br
+\fIrow_id\fP <string> The row identifier string to locate\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> The row where the row identifier is located\&. If the identifier does not exists, returns \fBundef\fP\&. 
+.RE
+.PP
+
+.SS "function table_get_row_cols (rows, cols, col_id)"
+
+.PP
+Form a vector from the specified column of each table row\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrows\fP <2d-vector> A two dimensional vector (r-tuple x c-tuple) containing the table rows\&. 
+.br
+\fIcols\fP <2d-vector> A two dimensional vector (c-tuple x 1-tuple) containing the table columns\&.
+.br
+\fIcol_id\fP <string> The column identifier string\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> The vector formed by selecting the \fCcol_id\fP for each row in the table\&. If column does not exists, returns \fBundef\fP\&. 
+.RE
+.PP
+
+.SS "function table_get_row_ids (rows)"
+
+.PP
+Form a vector of each table row identifier\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrows\fP <2d-vector> A two dimensional vector (r-tuple x c-tuple) containing the table rows\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> The vector of table row identifiers\&. If column \fC'id'\fP does not exists, returns \fBundef\fP\&.
+.RE
+.PP
+\fBNote:\fP
+.RS 4
+This functions assumes the first element of each table row to be the row identifier, as enforced by the \fBtable_check()\fP\&. As an alternative, the function \fBtable_get_row_cols()\fP, of the form table_get_row_cols(rows, cols, 'id'), may be used without this assumption\&. 
+.RE
+.PP
+
+.SS "function table_get_row_idx (rows, row_id)"
+
+.PP
+Get the index for a table row identifier\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrows\fP <2d-vector> A two dimensional vector (r-tuple x c-tuple) containing the table rows\&.
+.br
+\fIrow_id\fP <string> The row identifier string to locate\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> The row index where the identifier is located\&. If the identifier does not exists, returns \fBempty_v\fP\&. 
+.RE
+.PP
+
+.SS "function table_size (rows, cols)"
+
+.PP
+Get the size of a table\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrows\fP <2d-vector> A two dimensional vector (r-tuple x c-tuple) containing the table rows\&. 
+.br
+\fIcols\fP <2d-vector> A two dimensional vector (c-tuple x 1-tuple) containing the table columns\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> The table size\&.
+.RE
+.PP
+The size is reported as: (1) The number of rows when only the \fCrows\fP parameter is specified\&. (2) The number of columns when only the \fCcols\fP parameter is specified\&. (3) The (rows * columns) when both parameters are specified\&. 
+.SS "function table_sum (rows, cols, rows_sel, cols_sel)"
+
+.PP
+Sum select rows and columns of a table\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIrows\fP <2d-vector> A two dimensional vector (r-tuple x c-tuple) containing the table rows\&. 
+.br
+\fIcols\fP <2d-vector> A two dimensional vector (c-tuple x 1-tuple) containing the table columns\&.
+.br
+\fIrows_sel\fP <1d-vector> A vector n-tuple of row identifier to select\&. 
+.br
+\fIcols_sel\fP <1d-vector> A vector n-tuple of column identifier to select\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<1d-vector> The sum of the selected rows and columns of the table\&. 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

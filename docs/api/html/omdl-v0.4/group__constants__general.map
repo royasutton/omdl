@@ -1,0 +1,5 @@
+<map id="General" name="General">
+<area shape="rect" id="node1" href="$group__constants__euclidean.html" title="Euclidean 2D/3D space mapping. " alt="" coords="211,5,290,32"/>
+<area shape="rect" id="node2" href="$group__constants__system.html" title="System/Program limits. " alt="" coords="217,56,284,83"/>
+<area shape="rect" id="node4" href="$group__constants.html" title="General design constants. " alt="" coords="209,125,292,152"/>
+</map>

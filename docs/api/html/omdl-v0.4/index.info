@@ -1,0 +1,9 @@
+
+    docs_install_id = omdl-v0.4
+    docs_group_id = primitives
+    library_install_subdir = omdl-v0.4/
+    date = 170202
+    project_name = omdl
+    project_version = v0.4
+    project_brief = OpenSCAD Mechanical Design Library
+  

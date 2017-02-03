@@ -1,0 +1,11 @@
+<map id="primitives.scad" name="primitives.scad">
+<area shape="rect" id="node2" href="$math_8scad.html" title="Mathematical functions. " alt="" coords="27,80,109,107"/>
+<area shape="rect" id="node7" href="$math__bitwise_8scad.html" title="Mathematical bitwise binary (base&#45;two) functions. " alt="" coords="133,80,264,107"/>
+<area shape="rect" id="node8" href="$validation_8scad.html" title="Result validation functions. " alt="" coords="288,80,397,107"/>
+<area shape="rect" id="node9" href="$map_8scad.html" title="Mapped key&#45;value pair data access. " alt="" coords="422,80,501,107"/>
+<area shape="rect" id="node10" href="$table_8scad.html" title="Data table encoding and lookup. " alt="" coords="525,80,608,107"/>
+<area shape="rect" id="node3" href="$transform_8scad.html" title="Shape transformation functions. " alt="" coords="79,155,188,181"/>
+<area shape="rect" id="node4" href="$shapes2d_8scad.html" title="Two&#45;dimensional basic shapes. " alt="" coords="78,229,189,256"/>
+<area shape="rect" id="node5" href="$shapes2de_8scad.html" title="Linearly extruded two&#45;dimensional basic shapes. " alt="" coords="5,304,123,331"/>
+<area shape="rect" id="node6" href="$shapes3d_8scad.html" title="Three&#45;dimensional basic shapes. " alt="" coords="147,304,258,331"/>
+</map>

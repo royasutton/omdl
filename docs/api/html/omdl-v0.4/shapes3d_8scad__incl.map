@@ -1,0 +1,10 @@
+<map id="shapes3d.scad" name="shapes3d.scad">
+<area shape="rect" id="node2" href="$shapes2d_8scad.html" title="Two&#45;dimensional basic shapes. " alt="" coords="114,80,225,107"/>
+<area shape="rect" id="node3" href="$transform_8scad.html" title="Shape transformation functions. " alt="" coords="115,155,224,181"/>
+<area shape="rect" id="node4" href="$console_8scad.html" title="Message logging functions. " alt="" coords="5,229,104,256"/>
+<area shape="rect" id="node6" href="$math_8scad.html" title="Mathematical functions. " alt="" coords="128,229,211,256"/>
+<area shape="rect" id="node9" href="$math__bitwise_8scad.html" title="Mathematical bitwise binary (base&#45;two) functions. " alt="" coords="235,229,365,256"/>
+<area shape="rect" id="node5" href="$utilities_8scad.html" title="Miscellaneous utilities. " alt="" coords="7,304,102,331"/>
+<area shape="rect" id="node7" href="$primitives_8scad.html" title="Mathematical primitive functions. " alt="" coords="185,304,295,331"/>
+<area shape="rect" id="node8" href="$constants_8scad.html" title="Mechanical design constants. " alt="" coords="185,379,295,405"/>
+</map>
