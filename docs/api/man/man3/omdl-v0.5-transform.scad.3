@@ -1,0 +1,72 @@
+.TH "transform.scad" 3 "Sat Feb 4 2017" "Version v0.5" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+transform.scad \- Shape transformation functions\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <console\&.scad>\fP
+.br
+\fC#include <math\&.scad>\fP
+.br
+\fC#include <math_bitwise\&.scad>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "module \fBst_rotate_extrude\fP (r, pa=0, ra=360, profile=false)"
+.br
+.RI "\fIRevolve the 2D shape about the z-axis\&. \fP"
+.ti -1c
+.RI "module \fBst_rotate_extrude_elongate\fP (r, l, pa=0, ra=360, m=255, profile=false)"
+.br
+.RI "\fIRevolve the 2D shape about the z-axis with linear elongation\&. \fP"
+.ti -1c
+.RI "module \fBst_linear_extrude_scale\fP (h, center=false)"
+.br
+.RI "\fILinearly extrude 2D shape with extrusion upper and lower scaling\&. \fP"
+.ti -1c
+.RI "module \fBst_radial_copy\fP (n, r=1, angle=true, move=false)"
+.br
+.RI "\fIDistribute copies of a 2D or 3D shape equally about a z-axis radius\&. \fP"
+.ti -1c
+.RI "module \fBst_cartesian_copy\fP (grid, incr, copy=1, center=false)"
+.br
+.RI "\fIDistribute copies of 2D or 3D shapes about Cartesian grid\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Shape transformation functions\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy Allen Sutton 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2015-2017
+.RE
+.PP
+\fBCopyright:\fP
+.RS 4
+.RE
+.PP
+This file is part of \fComdl\fP, an OpenSCAD mechanical design library\&.
+.PP
+The \fIomdl\fP is free software; you can redistribute it and/or modify it under the terms of the \fCGNU Lesser General Public License\fP as published by the Free Software Foundation; either version 2\&.1 of the License, or (at your option) any later version\&.
+.PP
+The \fIomdl\fP is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE\&. See the GNU Lesser General Public License for more details\&.
+.PP
+You should have received a copy of the GNU Lesser General Public License along with the \fIomdl\fP; if not, write to the Free Software Foundation, Inc\&., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA; or see http://www.gnu.org/licenses/\&. 
+.PP
+Definition in file \fBtransform\&.scad\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

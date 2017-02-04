@@ -1,0 +1,866 @@
+.TH "prim_vector" 3 "Sat Feb 4 2017" "Version v0.5" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+prim_vector \- Vector Operations
+.PP
+Vector operation primitives\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBprimitives\&.scad\fP"
+.br
+.RI "\fIMathematical primitive functions\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBconsts\fP (l, v)"
+.br
+.RI "\fICreate a vector of constant elements\&. \fP"
+.ti -1c
+.RI "function \fBvstr\fP (v)"
+.br
+.RI "\fIConvert all vector elements to strings and concatenate\&. \fP"
+.ti -1c
+.RI "function \fBsum\fP (v, i1, i2)"
+.br
+.RI "\fICompute the sum of a vector of numbers\&. \fP"
+.ti -1c
+.RI "function \fBfind\fP (mv, v, c=1, i, i1=0, i2)"
+.br
+.RI "\fIFind the occurrences of a match value in an iterable value\&. \fP"
+.ti -1c
+.RI "function \fBcount\fP (mv, v, s=true, i)"
+.br
+.RI "\fICount all occurrences of a match value in an iterable value\&. \fP"
+.ti -1c
+.RI "function \fBexists\fP (mv, v, s=true, i)"
+.br
+.RI "\fICheck the existence of a match value in an iterable value\&. \fP"
+.ti -1c
+.RI "function \fBdefined_or\fP (v, d)"
+.br
+.RI "\fIReturn a defined or default value\&. \fP"
+.ti -1c
+.RI "function \fBedefined_or\fP (v, i, d)"
+.br
+.RI "\fIReturn a defined vector element or default value\&. \fP"
+.ti -1c
+.RI "function \fBfirst\fP (v)"
+.br
+.RI "\fIReturn the first element of an iterable value\&. \fP"
+.ti -1c
+.RI "function \fBsecond\fP (v)"
+.br
+.RI "\fIReturn the second element of an iterable value\&. \fP"
+.ti -1c
+.RI "function \fBlast\fP (v)"
+.br
+.RI "\fIReturn the last element of an iterable value\&. \fP"
+.ti -1c
+.RI "function \fBnfirst\fP (v, n=1)"
+.br
+.RI "\fIReturn a vector containing the first n elements of an iterable value\&. \fP"
+.ti -1c
+.RI "function \fBnlast\fP (v, n=1)"
+.br
+.RI "\fIReturn a vector containing the last n elements of an iterable value\&. \fP"
+.ti -1c
+.RI "function \fBnhead\fP (v, n=1)"
+.br
+.RI "\fIReturn a vector containing all but the last n elements of an iterable value\&. \fP"
+.ti -1c
+.RI "function \fBntail\fP (v, n=1)"
+.br
+.RI "\fIReturn a vector containing all but the first n elements of an iterable value\&. \fP"
+.ti -1c
+.RI "function \fBrselect\fP (v, i)"
+.br
+.RI "\fISelect a range of elements from an iterable value\&. \fP"
+.ti -1c
+.RI "function \fBeselect\fP (v, f=true, l=false, i)"
+.br
+.RI "\fISelect an element from each iterable value\&. \fP"
+.ti -1c
+.RI "function \fBciselect\fP (v, i)"
+.br
+.RI "\fICase-like select a value from a vector of ordered options by index\&. \fP"
+.ti -1c
+.RI "function \fBcmvselect\fP (v, mv)"
+.br
+.RI "\fICase-like select a value from a vector of identified options by match-value\&. \fP"
+.ti -1c
+.RI "function \fBsmerge\fP (v, r=false)"
+.br
+.RI "\fISerial-merge vectors of iterable values\&. \fP"
+.ti -1c
+.RI "function \fBpmerge\fP (v, j=true)"
+.br
+.RI "\fIParallel-merge vectors of iterable values\&. \fP"
+.ti -1c
+.RI "function \fBreverse\fP (v)"
+.br
+.RI "\fIReverse the elements of an iterable value\&. \fP"
+.ti -1c
+.RI "function \fBqsort\fP (v, r=false)"
+.br
+.RI "\fISort the numeric or string elements of a vector using quick sort\&. \fP"
+.ti -1c
+.RI "function \fBqsort2\fP (v, d=0, r=false, s=true)"
+.br
+.RI "\fIHierarchically sort all elements of a vector using quick sort\&. \fP"
+.ti -1c
+.RI "function \fBstrip\fP (v, mv=\fBempty_v\fP)"
+.br
+.RI "\fIStrip all matching values from an iterable value\&. \fP"
+.ti -1c
+.RI "function \fBeappend\fP (nv, v, r=true, j=true, l=true)"
+.br
+.RI "\fIAppend a value to each element of an iterable value\&. \fP"
+.ti -1c
+.RI "function \fBinsert\fP (nv, v, i=0, mv, mi=0, s=true, si)"
+.br
+.RI "\fIInsert a new value into an iterable value\&. \fP"
+.ti -1c
+.RI "function \fBdelete\fP (v, i, mv, mc=1, s=true, si)"
+.br
+.RI "\fIDelete elements from an iterable value\&. \fP"
+.ti -1c
+.RI "function \fBunique\fP (v)"
+.br
+.RI "\fIReturn the unique elements of an iterable value\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Vector operation primitives\&. 
+
+See validation \fBresults\fP\&. 
+.SH "Function Documentation"
+.PP 
+.SS "function ciselect (v, i)"
+
+.PP
+Case-like select a value from a vector of ordered options by index\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <vector> A vector of values\&. 
+.br
+\fIi\fP <integer> Element selection index\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<value> The value of the vector element at the specified index\&. Returns the default value when \fCi\fP does not map to an element of \fCv\fP or when \fCi\fP is undefined\&.
+.RE
+.PP
+Behaves like a case statement for selecting values from a list of \fIordered options\fP\&. The default value is: \fC\fBlast(v)\fP\fC\&.\fP\fP
+.PP
+\fC\fC \fBExample\fP 
+.PP
+.nf
+ov = [ "value1", "value2", "default" ];
+
+ciselect( ov );     // "default"
+ciselect( ov, 4 );  // "default"
+ciselect( ov, 0 );  // "value1"
+
+.fi
+.PP
+ \fP\fP
+.SS "function cmvselect (v, mv)"
+
+.PP
+Case-like select a value from a vector of identified options by match-value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <vector> A two dimensional vector of one or more identified values [[identifier, value], \&.\&.\&.]\&. 
+.br
+\fImv\fP <value> Element selection match value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<value> The value from the vector of identified elements with an identifier matching \fCmv\fP\&. Returns the default value when \fCmv\fP does not match any of the element identifiers of \fCv\fP or when \fCmv\fP is undefined\&.
+.RE
+.PP
+Behaves like a case statement for selecting values from a list of \fIidentified options\fP\&. The default value is: \fCsecond(last(v))\fC\&.\fP\fP
+.PP
+\fC\fC \fBExample\fP 
+.PP
+.nf
+ov = [ [0,"value0"], ["a","value1"], ["b","value2"], ["c","default"] ];
+
+cmvselect( ov );      // "default"
+cmvselect( ov, "x" ); // "default"
+cmvselect( ov, 0 );   // "value0"
+cmvselect( ov, "b" ); // "value2"
+
+.fi
+.PP
+ \fP\fP
+.SS "function consts (l, v)"
+
+.PP
+Create a vector of constant elements\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIl\fP <integer> The vector length\&. 
+.br
+\fIv\fP <value> The element value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> With \fCl\fP copies of the element value \fCv\fP\&. Returns \fBempty_v\fP when \fCl\fP is not a number or if \fC(l < 1)\fP\&.
+.RE
+.PP
+\fBNote:\fP
+.RS 4
+When \fCv\fP is not specified, each element is assigned the value of its index position\&. 
+.RE
+.PP
+
+.SS "function count (mv, v, s = \fCtrue\fP, i)"
+
+.PP
+Count all occurrences of a match value in an iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fImv\fP <value> A match value\&. 
+.br
+\fIv\fP <value> An iterable value\&. 
+.br
+\fIs\fP <boolean> Use search for element matching (\fBfalse\fP uses find)\&. 
+.br
+\fIi\fP <integer> The element column index to match\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<integer> The number of times \fCmv\fP occurs in \fCv\fP\&.
+.RE
+.PP
+See \fBfind()\fP for information on value matching\&. 
+.SS "function defined_or (v, d)"
+
+.PP
+Return a defined or default value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&. 
+.br
+\fId\fP <value> A default value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<value> \fCv\fP when it is defined or \fCd\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function delete (v, i, mv, mc = \fC1\fP, s = \fCtrue\fP, si)"
+
+.PP
+Delete elements from an iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> An iterable value\&.
+.br
+\fIi\fP <range|vector|integer> Deletion Indexes\&.
+.br
+\fImv\fP <vector|string|value> Match value candidates\&. 
+.br
+\fImc\fP <integer> A match count\&. For \fC(mc>=1)\fP, remove the first \fCmc\fP matches\&. For \fC(mc<=0)\fP, remove all matches\&.
+.br
+\fIs\fP <boolean> Use search for element matching (\fBfalse\fP uses find)\&. 
+.br
+\fIsi\fP <integer> The element column index when matching\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> \fCv\fP with all specified elements removed\&. Returns \fBundef\fP when \fCi\fP does not map to an element of \fCv\fP\&. Returns \fBundef\fP when \fCv\fP is not defined or is not iterable\&.
+.RE
+.PP
+The elements to delete can be specified by an index position, a vector of index positions, an index range, an element match value, or a vector of element match values (when using search)\&. When \fCmv\fP is a vector of match values, all values of \fCmv\fP that exists in \fCv\fP are candidates for deletion\&. For each matching candidate, \fCmc\fP indicates the quantity to remove\&. When more than one deletion criteria is specified, the order of precedence is: \fCmv\fP, \fCi\fP\&.
+.PP
+See \fBfind()\fP for information on value matching\&. 
+.SS "function eappend (nv, v, r = \fCtrue\fP, j = \fCtrue\fP, l = \fCtrue\fP)"
+
+.PP
+Append a value to each element of an iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fInv\fP <value> A new value to append\&. 
+.br
+\fIv\fP <vector> A vector of values\&. 
+.br
+\fIr\fP <boolean> Reduce vector element value before appending\&. 
+.br
+\fIj\fP <boolean> Join each appendage as a vector\&. 
+.br
+\fIl\fP <boolean> Append to last element\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> With \fCnv\fP appended to each element of \fCv\fP\&. Returns \fBundef\fP when \fCv\fP is not defined or is not iterable\&.
+.RE
+.PP
+\fBExample\fP 
+.PP
+.nf
+v1=[["a"], ["b"], ["c"], ["d"]];
+v2=[1, 2, 3];
+
+echo( eappend( v2, v1 ) );
+echo( eappend( v2, v1, r=false ) );
+echo( eappend( v2, v1, j=false, l=false ) );
+
+.fi
+.PP
+.PP
+\fBResult\fP 
+.PP
+.nf
+ECHO: [["a", 1, 2, 3], ["b", 1, 2, 3], ["c", 1, 2, 3], ["d", 1, 2, 3]]
+ECHO: [[["a"], 1, 2, 3], [["b"], 1, 2, 3], [["c"], 1, 2, 3], [["d"], 1, 2, 3]]
+ECHO: ["a", 1, 2, 3, "b", 1, 2, 3, "c", 1, 2, 3, "d"]
+
+.fi
+.PP
+.PP
+\fBNote:\fP
+.RS 4
+Appending with reduction causes \fCnv\fP to be appended to the \fIelements\fP of each value of \fCv\fP that is a vector\&. Otherwise, \fCnv\fP is appended to the \fIvector\fP itself of each value of \fCv\fP that is a vector\&. 
+.RE
+.PP
+
+.SS "function edefined_or (v, i, d)"
+
+.PP
+Return a defined vector element or default value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <vector> A vector\&. 
+.br
+\fIi\fP <integer> An element index\&. 
+.br
+\fId\fP <value> A default value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<value> \fCv[i]\fP when it is defined or \fCd\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function eselect (v, f = \fCtrue\fP, l = \fCfalse\fP, i)"
+
+.PP
+Select an element from each iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <vector> A vector of iterable values\&. 
+.br
+\fIf\fP <boolean> Select the first element\&. 
+.br
+\fIl\fP <boolean> Select the last element\&. 
+.br
+\fIi\fP <integer> Select a numeric element index position\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> Containing the selected element of each iterable value of \fCv\fP\&. Returns \fBempty_v\fP when \fCv\fP is empty\&. Returns \fBundef\fP when \fCv\fP is not defined or is not iterable\&.
+.RE
+.PP
+\fBNote:\fP
+.RS 4
+When more than one selection criteria is specified, the order of precedence is: \fCi\fP, \fCl\fP, \fCf\fP\&. 
+.RE
+.PP
+
+.SS "function exists (mv, v, s = \fCtrue\fP, i)"
+
+.PP
+Check the existence of a match value in an iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fImv\fP <value> A match value\&. 
+.br
+\fIv\fP <value> An iterable value\&. 
+.br
+\fIs\fP <boolean> Use search for element matching (\fBfalse\fP uses find)\&. 
+.br
+\fIi\fP <integer> The element column index to match\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when \fCmv\fP exists in \fCv\fP and \fBfalse\fP otherwise\&.
+.RE
+.PP
+See \fBfind()\fP for information on value matching\&. 
+.SS "function find (mv, v, c = \fC1\fP, i, i1 = \fC0\fP, i2)"
+
+.PP
+Find the occurrences of a match value in an iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fImv\fP <value> A match value\&. 
+.br
+\fIv\fP <value> An iterable value\&. 
+.br
+\fIc\fP <integer> A match count\&. For \fC(c>=1)\fP, return the first \fCc\fP matches\&. For \fC(c<=0)\fP, return all matches\&. 
+.br
+\fIi\fP <integer> The element column index to match\&. 
+.br
+\fIi1\fP <integer> The element index where find begins (default: first)\&. 
+.br
+\fIi2\fP <integer> The element index where find ends (default: last)\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> Of indexes where elements match \fCmv\fP\&. Returns \fBempty_v\fP when no element of \fCv\fP matches \fCmv\fP or when \fCv\fP is not iterable\&.
+.RE
+.PP
+The use-cases for \fBfind()\fP and \fCsearch()\fP are summarized in the following tables\&.
+.PP
+\fBFind:\fP 
+.PP
+mv / v string vector of scalars vector of iterables  scalar (a) (b) see note 1 string (c) (b) see note 1 vector of scalars (b) see note 1 vector of iterables (b) see note 1 \fBSearch:\fP 
+.PP
+mv / v string vector of scalars vector of iterables  scalar (a) (b) string (d) invalid (e) see note 2 vector of scalars (f) (g) vector of iterables (g) \fBKey:\fP 
+.PP
+.PD 0
+.IP "\(bu" 2
+(a) Identify each element of \fCv\fP that equals \fCmv\fP\&. 
+.IP "\(bu" 2
+(b) Identify each element of \fCv\fP where \fCmv\fP equals the element at the specified column index, \fCi\fP, of each iterable value in \fCv\fP\&. 
+.IP "\(bu" 2
+(c) If, and only if, \fCmv\fP is a single character, identify each character in \fCv\fP that equals \fCmv\fP\&. 
+.IP "\(bu" 2
+(d) For each character of \fCmv\fP, identify where it exists in \fCv\fP\&. \fBempty_v\fP is returned for each character of \fCmv\fP absent from \fCv\fP\&. 
+.IP "\(bu" 2
+(e) For each character of \fCmv\fP, identify where it exists in \fCv\fP either as a numeric value or as a character at the specified column index, \fCi\fP\&. \fBempty_v\fP is returned for each character of \fCmv\fP absent from \fCv\fP\&. 
+.IP "\(bu" 2
+(f) For each scalar of \fCmv\fP, identify where it exists in \fCv\fP\&. \fBempty_v\fP is returned for each scalar of \fCmv\fP absent from \fCv\fP\&. 
+.IP "\(bu" 2
+(g) For each element of \fCmv\fP, identify where it equals the element at the specified column index, \fCi\fP, of each iterable value in \fCv\fP\&. \fBempty_v\fP is returned for each element of \fCmv\fP absent from \fCv\fP in the specified column index\&.
+.PP
+\fBNote:\fP
+.RS 4
+\fB1\fP: When \fCi\fP is specified, that element column is compared\&. Otherwise, the entire element is compared\&. Functions \fBfind()\fP and \fCsearch()\fP behave differently in this regard\&.
+.PP
+\fB2\fP: Invalid use combination when any element of \fCv\fP is a string\&. However, an element that is a vector of one or more strings is valid\&. In which case, only the first character of each string element is considered\&. 
+.RE
+.PP
+
+.SS "function first (v)"
+
+.PP
+Return the first element of an iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> An iterable value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<value> The first element of \fCv\fP\&. Returns \fBundef\fP when \fCv\fP is not defined, is not iterable, or is empty\&. 
+.RE
+.PP
+
+.SS "function insert (nv, v, i = \fC0\fP, mv, mi = \fC0\fP, s = \fCtrue\fP, si)"
+
+.PP
+Insert a new value into an iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fInv\fP <value> A new value to insert\&. 
+.br
+\fIv\fP <value> An iterable value\&.
+.br
+\fIi\fP <integer> An insert position index\&.
+.br
+\fImv\fP <vector|string|value> Match value candidates\&. 
+.br
+\fImi\fP <integer> A match index\&.
+.br
+\fIs\fP <boolean> Use search for element matching (\fBfalse\fP uses find)\&. 
+.br
+\fIsi\fP <integer> The element column index when matching\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> With \fCnv\fP inserted into \fCv\fP at the specified position\&. Returns \fBundef\fP when no value of \fCmv\fP exists in \fCv\fP\&. Returns \fBundef\fP when \fC(mi + 1)\fP exceeds the matched element count\&. Returns \fBundef\fP when \fCi\fP does not map to an element of \fCv\fP\&. Returns \fBundef\fP when \fCv\fP is not defined or is not iterable\&.
+.RE
+.PP
+The insert position can be specified by an index, an element match value, or vector of potential match values (when using search)\&. When multiple matches exists, \fCmi\fP indicates the insert position\&. When more than one insert position criteria is specified, the order of precedence is: \fCmv\fP, \fCi\fP\&.
+.PP
+See \fBfind()\fP for information on value matching\&. 
+.SS "function last (v)"
+
+.PP
+Return the last element of an iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> An iterable value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<value> The last element of \fCv\fP\&. Returns \fBundef\fP when \fCv\fP is not defined, is not iterable, or is empty\&. 
+.RE
+.PP
+
+.SS "function nfirst (v, n = \fC1\fP)"
+
+.PP
+Return a vector containing the first n elements of an iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> An iterable value\&. 
+.br
+\fIn\fP <integer> An element count\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> Containing the first \fCn\fP elements of \fCv\fP\&. Returns \fBundef\fP when \fCv\fP is not defined, is not iterable, or is empty\&. 
+.RE
+.PP
+
+.SS "function nhead (v, n = \fC1\fP)"
+
+.PP
+Return a vector containing all but the last n elements of an iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> An iterable value\&. 
+.br
+\fIn\fP <integer> An element count\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> Containing all but the last \fCn\fP elements of \fCv\fP\&. Returns \fBempty_v\fP when \fCv\fP contains fewer than \fCn\fP elements\&. Returns \fBundef\fP when \fCv\fP is not defined, is not iterable, or is empty\&. 
+.RE
+.PP
+
+.SS "function nlast (v, n = \fC1\fP)"
+
+.PP
+Return a vector containing the last n elements of an iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> An iterable value\&. 
+.br
+\fIn\fP <integer> An element count\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> Containing the last \fCn\fP elements of \fCv\fP\&. Returns \fBundef\fP when \fCv\fP is not defined, is not iterable, or is empty\&. 
+.RE
+.PP
+
+.SS "function ntail (v, n = \fC1\fP)"
+
+.PP
+Return a vector containing all but the first n elements of an iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> An iterable value\&. 
+.br
+\fIn\fP <integer> An element count\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> Containing all but the first n elements of \fCv\fP\&. Returns \fBempty_v\fP when \fCv\fP contains fewer than \fCn\fP elements\&. Returns \fBundef\fP when \fCv\fP is not defined, is not iterable, or is empty\&. 
+.RE
+.PP
+
+.SS "function pmerge (v, j = \fCtrue\fP)"
+
+.PP
+Parallel-merge vectors of iterable values\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <vector> A vector of iterable values\&. 
+.br
+\fIj\fP <boolean> Join each merge as a vector\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> Containing the parallel-wise element concatenation of each iterable value in \fCv\fP\&. Returns \fBempty_v\fP when any element value in \fCv\fP is empty\&. Returns \fBundef\fP when \fCv\fP is not defined or when any element value in \fCv\fP is not iterable\&.
+.RE
+.PP
+\fBExample\fP 
+.PP
+.nf
+v1=["a", "b", "c", "d"];
+v2=[1, 2, 3];
+
+echo( pmerge( [v1, v2], true ) );
+echo( pmerge( [v1, v2], false ) );
+
+.fi
+.PP
+.PP
+\fBResult\fP 
+.PP
+.nf
+ECHO: [["a", 1], ["b", 2], ["c", 3]]
+ECHO: ["a", 1, "b", 2, "c", 3]
+
+.fi
+.PP
+.PP
+\fBNote:\fP
+.RS 4
+The resulting vector length will be limited by the iterable value with the shortest length\&. 
+.PP
+A string, although iterable, is treated as a merged unit\&. 
+.RE
+.PP
+
+.SS "function qsort (v, r = \fCfalse\fP)"
+
+.PP
+Sort the numeric or string elements of a vector using quick sort\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <vector> A vector of values\&. 
+.br
+\fIr\fP <boolean> Reverse sort order\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> With elements sorted in ascending order\&. Returns \fBundef\fP when \fCv\fP is not all strings or all numbers\&. Returns \fBundef\fP when \fCv\fP is not defined or is not a vector\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+This implementation relies on the comparison operators '<' and '>' which expect the operands to be either two scalar numbers or two strings\&. Therefore, this function returns \fBundef\fP for vectors containing anything other than all scalar numbers or all strings\&.
+.RE
+.PP
+See \fCWikipedia\fP for more information\&. 
+.SS "function qsort2 (v, d = \fC0\fP, r = \fCfalse\fP, s = \fCtrue\fP)"
+
+.PP
+Hierarchically sort all elements of a vector using quick sort\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <vector> A vector of values\&. 
+.br
+\fId\fP <integer> Recursive sort depth\&. 
+.br
+\fIr\fP <boolean> Reverse sort order\&. 
+.br
+\fIs\fP <boolean> Order ranges by their numerical sum\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> With all elements sorted in ascending order\&. Returns \fBundef\fP when \fCv\fP is not defined or is not a vector\&.
+.RE
+.PP
+Elements are sorted using the \fBcompare\fP function\&. See its documentation for a description of the parameter \fCs\fP\&. To recursively sort all elements, set \fCd\fP greater than, or equal to, the maximum level of hierarchy in \fCv\fP\&.
+.PP
+See \fCWikipedia\fP for more information\&. 
+.SS "function reverse (v)"
+
+.PP
+Reverse the elements of an iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> An iterable value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> Containing the elements of \fCv\fP in reversed order\&. Returns \fBempty_v\fP when \fCv\fP is empty\&. Returns \fBundef\fP when \fCv\fP is not defined or is not iterable\&. 
+.RE
+.PP
+
+.SS "function rselect (v, i)"
+
+.PP
+Select a range of elements from an iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> An iterable value\&. 
+.br
+\fIi\fP <range|vector|integer> Index selection\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> Containing the vector element indexes selected in \fCi\fP\&. Returns \fBundef\fP when \fCi\fP does not map to an element of \fCv\fP\&. Returns \fBempty_v\fP when \fCv\fP is empty\&. Returns \fBundef\fP when \fCv\fP is not defined or is not iterable\&. 
+.RE
+.PP
+
+.SS "function second (v)"
+
+.PP
+Return the second element of an iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> An iterable value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<value> The second element of \fCv\fP\&. Returns \fBundef\fP when \fCv\fP is not defined, is not iterable, or is empty\&. 
+.RE
+.PP
+
+.SS "function smerge (v, r = \fCfalse\fP)"
+
+.PP
+Serial-merge vectors of iterable values\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <vector> A vector of iterable values\&. 
+.br
+\fIr\fP <boolean> Recursively merge iterable elements\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> Containing the serial-wise element concatenation of each element in \fCv\fP\&. Returns \fBempty_v\fP when \fCv\fP is empty\&. Returns \fBundef\fP when \fCv\fP is not defined\&.
+.RE
+.PP
+\fBNote:\fP
+.RS 4
+A string, although iterable, is treated as a merged unit\&. 
+.RE
+.PP
+
+.SS "function strip (v, mv = \fC\fBempty_v\fP\fP)"
+
+.PP
+Strip all matching values from an iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <vector> A vector of values\&. 
+.br
+\fImv\fP <value> A match value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> \fCv\fP with all elements equal to \fCmv\fP removed\&. Returns \fBundef\fP when \fCv\fP is not defined or is not iterable\&. 
+.RE
+.PP
+
+.SS "function sum (v, i1, i2)"
+
+.PP
+Compute the sum of a vector of numbers\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <range|vector> A vector of numerical values\&. 
+.br
+\fIi1\fP <integer> The element index at which to begin summation (first when not specified)\&. 
+.br
+\fIi2\fP <integer> The element index at which to end summation (last when not specified)\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> The summation of elements over the index range\&. Returns \fBv\fP when it is a scalar number\&. Returns 0 when \fCv\fP is empty\&. Returns \fBundef\fP when \fCv\fP is not defined or is not iterable and not a number\&. 
+.RE
+.PP
+
+.SS "function unique (v)"
+
+.PP
+Return the unique elements of an iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> An iterable value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> Of unique elements of \fCv\fP with order preserved\&. Returns \fBundef\fP when \fCv\fP is not defined or is not iterable\&. 
+.RE
+.PP
+
+.SS "function vstr (v)"
+
+.PP
+Convert all vector elements to strings and concatenate\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <vector> A vector of values\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<string> Constructed by converting each element of the vector to a string and concatenating together\&. Returns \fBundef\fP when \fCv\fP is not defined\&.
+.RE
+.PP
+\fBExample\fP 
+.PP
+.nf
+v1=["a", "b", "c", "d"];
+v2=[1, 2, 3];
+
+echo( vstr(concat(v1, v2)) );
+
+.fi
+.PP
+.PP
+\fBResult\fP 
+.PP
+.nf
+ECHO: "abcd123"
+
+.fi
+.PP
+ 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

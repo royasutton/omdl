@@ -1,0 +1,141 @@
+.TH "tv_prim_test_g2_s" 3 "Sat Feb 4 2017" "Version v0.5" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tv_prim_test_g2_s \- Validation Script (group2) 
+ 
+.PP
+.nf
+        include <primitives\&.scad>;
+        use <table\&.scad>;
+        use <console\&.scad>;
+        use <validation\&.scad>;
+
+        show_passing = true;    // show passing tests
+        show_skipped = true;    // show skipped tests
+
+        echo( str("OpenSCAD Version ", version()) );
+
+        // test-values columns
+        test_c =
+        [
+          ["id", "identifier"],
+          ["td", "description"],
+          ["tv", "test value"]
+        ];
+
+        // test-values rows
+        test_r =
+        [
+          ["t01", "The undefined value",        undef],
+          ["t02", "An odd integer",             1],
+          ["t03", "The boolean true",           true],
+          ["t04", "The boolean false",          false],
+          ["t05", "A character string",         "a"],
+          ["t06", "A string",                   "This is a longer string"],
+          ["t07", "The empty string",           empty_str],
+          ["t08", "The empty vector",           empty_v],
+          ["t09", "A shorthand range",          [0:9]],
+          ["t10", "A range",                    [0:0\&.5:9]],
+          ["t11", "Test vector 01",             [undef]],
+          ["t12", "Test vector 02",             [1]],
+          ["t13", "Test vector 03",             [1, 2, 3]],
+          ["t14", "Test vector 04",             [[1], [2], [3], [4], [5]]],
+          ["t15", "Test vector 05",             [[1,2], [2,3]]],
+          ["t16", "Test vector 06",             [[1,2], [2,3], [4,5], "ab"]],
+          ["t17", "Test vector 07",             [[1,2,3], [4,5,6], [7,8,9], ["a", "b", "c"]]],
+          ["t18", "Test vector 08",             [1, 2, 3, undef]],
+          ["t19", "Test vector 09",             [undef, undef, undef, undef]],
+          ["t20", "Test vector 10",             [[undef], [undef], [undef]]],
+          ["t21", "Test vector 11",             [true, true, true, true, false]],
+          ["t22", "Test vector 12",             [true, false, false, false, false]],
+          ["t23", "Test vector 13",             [true, true, true, true]]
+        ];
+
+        test_ids = table_get_row_ids( test_r );
+
+        // expected columns: ("id" + one column for each test)
+        good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
+
+        // expected rows: ("golden" test results), use 's' to skip test
+        t = true;   // shortcuts
+        f = false;
+        u = undef;
+        s = -1;     // skip test
+
+        good_r =
+        [ // function         01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+          ["all_equal_T",     f, f, t, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t],
+          ["all_equal_F",     f, f, f, t, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+          ["all_equal_U",     t, f, f, f, f, f, t, t, f, f, t, f, f, f, f, f, f, f, t, f, f, f, f],
+          ["any_equal_T",     f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t],
+          ["any_equal_F",     f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f],
+          ["any_equal_U",     t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
+          ["all_defined",     f, t, t, t, t, t, t, t, t, t, f, t, t, t, t, t, t, f, f, t, t, t, t],
+          ["any_undefined",   t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
+          ["all_scalars",     u, t, t, t, f, f, s, s, s, s, t, t, t, f, f, f, f, t, t, f, t, t, t],
+          ["all_vectors",     u, f, f, f, f, f, t, t, f, f, f, f, f, t, t, f, t, f, f, t, f, f, f],
+          ["all_strings",     u, f, f, f, t, t, t, s, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+          ["all_numbers",     u, t, f, f, f, f, s, s, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
+          ["all_len_1",       u, f, f, f, t, t, s, s, f, f, f, f, f, t, f, f, f, f, f, t, f, f, f],
+          ["all_len_2",       u, f, f, f, f, f, s, s, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f],
+          ["all_len_3",       u, f, f, f, f, f, s, s, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f],
+          ["almost_equal_AA", t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t],
+          ["almost_equal_T",  f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+          ["almost_equal_F",  f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+          ["almost_equal_U",  t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+          ["compare_AA",      t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t]
+        ];
+
+        // sanity-test tables
+        table_check( test_r, test_c, false );
+        table_check( good_r, good_c, false );
+
+        // validate helper function and module
+        function get_value( vid ) = table_get(test_r, test_c, vid, "tv");
+        module run_test( fname, fresult, vid )
+        {
+          value_text = table_get(test_r, test_c, vid, "td");
+          pass_value = table_get(good_r, good_c, fname, vid);
+
+          test_pass = validate( cv=fresult, t="equals", ev=pass_value, pf=true );
+          test_text = validate( str(fname, "(", get_value(vid), ")=", pass_value), fresult, "equals", pass_value );
+
+          if ( pass_value != s )
+          {
+            if ( !test_pass )
+              log_warn( str(vid, "(", value_text, ") ", test_text) );
+            else if ( show_passing )
+              log_info( str(vid, " ", test_text) );
+          }
+          else if ( show_skipped )
+            log_info( str(vid, " *skip*: '", fname, "(", value_text, ")'") );
+        }
+
+        // Indirect function calls would be very useful here!!!
+        for (vid=test_ids) run_test( "all_equal_T", all_equal(get_value(vid),t), vid );
+        for (vid=test_ids) run_test( "all_equal_F", all_equal(get_value(vid),f), vid );
+        for (vid=test_ids) run_test( "all_equal_U", all_equal(get_value(vid),u), vid );
+        for (vid=test_ids) run_test( "any_equal_T", any_equal(get_value(vid),t), vid );
+        for (vid=test_ids) run_test( "any_equal_F", any_equal(get_value(vid),f), vid );
+        for (vid=test_ids) run_test( "any_equal_U", any_equal(get_value(vid),u), vid );
+        for (vid=test_ids) run_test( "all_defined", all_defined(get_value(vid)), vid );
+        for (vid=test_ids) run_test( "any_undefined", any_undefined(get_value(vid)), vid );
+        for (vid=test_ids) run_test( "all_scalars", all_scalars(get_value(vid)), vid );
+        for (vid=test_ids) run_test( "all_vectors", all_vectors(get_value(vid)), vid );
+        for (vid=test_ids) run_test( "all_strings", all_strings(get_value(vid)), vid );
+        for (vid=test_ids) run_test( "all_numbers", all_numbers(get_value(vid)), vid );
+        for (vid=test_ids) run_test( "all_len_1", all_len(get_value(vid),1), vid );
+        for (vid=test_ids) run_test( "all_len_2", all_len(get_value(vid),2), vid );
+        for (vid=test_ids) run_test( "all_len_3", all_len(get_value(vid),3), vid );
+        for (vid=test_ids) run_test( "almost_equal_AA", almost_equal(get_value(vid),get_value(vid)), vid );
+        for (vid=test_ids) run_test( "almost_equal_T", almost_equal(get_value(vid),t), vid );
+        for (vid=test_ids) run_test( "almost_equal_F", almost_equal(get_value(vid),f), vid );
+        for (vid=test_ids) run_test( "almost_equal_U", almost_equal(get_value(vid),u), vid );
+        for (vid=test_ids) run_test( "compare_AA", compare(get_value(vid),get_value(vid)) == 0, vid );
+
+        // end-of-tests
+
+.fi
+.PP
+ 

@@ -1,0 +1,256 @@
+.TH "units_resolution" 3 "Sat Feb 4 2017" "Version v0.5" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+units_resolution \- Resolution
+.PP
+Arch rendering resolution management\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBresolution\&.scad\fP"
+.br
+.RI "\fIArc rendering resolution abstraction\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBresolution_fn\fP (radius)"
+.br
+.RI "\fIReturn facets number for the given arc radius\&. \fP"
+.ti -1c
+.RI "function \fBresolution_fs\fP ()"
+.br
+.RI "\fIReturn minimum facets size\&. \fP"
+.ti -1c
+.RI "function \fBresolution_fa\fP (radius)"
+.br
+.RI "\fIReturn the minimum facets angle\&. \fP"
+.ti -1c
+.RI "function \fBresolution_reduced\fP ()"
+.br
+.RI "\fIReturn the radius at which arc resolution will begin to degrade\&. \fP"
+.ti -1c
+.RI "module \fBresolution_info\fP (radius)"
+.br
+.RI "\fIEcho resolution information to the console for given radius\&. \fP"
+.ti -1c
+.RI "function \fBresolution_facets\fP (radius)"
+.br
+.RI "\fIReturn facet count used to render a radius\&. \fP"
+.ti -1c
+.RI "function \fBresolution_facetsv\fP (radius)"
+.br
+.RI "\fIReturn facet count used to render a radius as vector triple\&. \fP"
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "\fB$resolution_mode\fP = 'fast'"
+.br
+.RI "\fI<string> Global special variable that configures the arc resolution mode\&. \fP"
+.ti -1c
+.RI "\fB$resolution_value\fP = 0"
+.br
+.RI "\fI<decimal> Global special variable for modes that use custom resolutions\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Arch rendering resolution management\&. 
+
+Functions, global variables, and configuration presets to provide a common mechanism for managing arc rendering resolution\&. Specifically, the number of fragments/facets with which arcs (circles, spheres, and cylinders, etc\&.) are rendered in OpenSCAD\&.
+.PP
+\fBExample\fP 
+.PP
+ 
+.PP
+.nf
+    include <resolution\&.scad>;
+
+    base_unit_length = "in";
+
+    // set resolution to 25 fpi
+    $resolution_mode  = "fpi";
+    $resolution_value = 25;
+
+    // use radius length of 1 inch
+    r = convert_length(1, "in");
+
+    $fs=resolution_fs();
+    $fa=resolution_fa( r );
+
+    resolution_info( r );
+
+    f = resolution_facets( r );
+    echo(str("for r = ", r, " ", unit_length_name(), ", facets = ", f));
+
+.fi
+.PP
+.PP
+\fBResult\fP (base_unit_length = \fBmm\fP): 
+.PP
+.nf
+1 ECHO: "$resolution_mode = [fpi], $resolution_value = 25, base_unit_length = millimeter"
+2 ECHO: "$fn = 0, $fa = 2\&.29183, $fs = 1\&.016"
+3 ECHO: "resolution reduction at radius > 25\&.4 millimeter"
+4 ECHO: "for radius = 25\&.4 millimeter facets limited to 158 by $fs=1\&.016 millimeter"
+5 ECHO: "for r = 25\&.4 millimeter, facets = 158"
+
+.fi
+.PP
+ \fBResult\fP (base_unit_length = \fBcm\fP): 
+.PP
+.nf
+1 ECHO: "$resolution_mode = [fpi], $resolution_value = 25, base_unit_length = centimeter"
+2 ECHO: "$fn = 0, $fa = 2\&.29183, $fs = 0\&.1016"
+3 ECHO: "resolution reduction at radius > 2\&.54 centimeter"
+4 ECHO: "for radius = 2\&.54 centimeter facets limited to 158 by $fs=0\&.1016 centimeter"
+5 ECHO: "for r = 2\&.54 centimeter, facets = 158"
+
+.fi
+.PP
+ \fBResult\fP (base_unit_length = \fBmil\fP): 
+.PP
+.nf
+1 ECHO: "$resolution_mode = [fpi], $resolution_value = 25, base_unit_length = thousandth"
+2 ECHO: "$fn = 0, $fa = 2\&.29183, $fs = 40"
+3 ECHO: "resolution reduction at radius > 1000 thousandth"
+4 ECHO: "for radius = 1000 thousandth facets limited to 158 by $fs=40 thousandth"
+5 ECHO: "for r = 1000 thousandth, facets = 158"
+
+.fi
+.PP
+ \fBResult\fP (base_unit_length = \fBin\fP): 
+.PP
+.nf
+1 ECHO: "$resolution_mode = [fpi], $resolution_value = 25, base_unit_length = inch"
+2 ECHO: "$fn = 0, $fa = 2\&.29183, $fs = 0\&.04"
+3 ECHO: "resolution reduction at radius > 1 inch"
+4 ECHO: "for radius = 1 inch facets limited to 158 by $fs=0\&.04 inch"
+5 ECHO: "for r = 1 inch, facets = 158"
+
+.fi
+.PP
+ 
+.SH "Function Documentation"
+.PP 
+.SS "function resolution_fa (radius)"
+
+.PP
+Return the minimum facets angle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIradius\fP <decimal> An arc radius\&. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> Minimum facet angle to be assigned to $fa\&.
+.RE
+.PP
+The return result of this function can be assigned to the OpenSCAD special variables \fC$fa\fP to render arcs\&. 
+.SS "function resolution_facets (radius)"
+
+.PP
+Return facet count used to render a radius\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIradius\fP <decimal> An arc radius\&. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> The number of fragments/facets that will be used to render a radius given the current values for \fC$fn\fP, \fC$fa\fP, and \fC$fs\fP\&. 
+.RE
+.PP
+
+.SS "function resolution_facetsv (radius)"
+
+.PP
+Return facet count used to render a radius as vector triple\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIradius\fP <decimal> An arc radius\&. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+A vector triple: [\fBfacets\fP <decimal>,\fBlimiter\fP <string>,\fBvalue\fP <decimal>]\&.
+.RE
+.PP
+Where \fCfacets\fP is the number of fragments/facets that will be used to render the \fCradius\fP given the current values for \fC$fn\fP, \fC$fa\fP, and \fC$fs\fP\&. \fClimiter\fP identifies the special variable that currently limits the facets, and \fCvalue\fP is the current value assigned to the limiter\&. 
+.SS "function resolution_fn (radius)"
+
+.PP
+Return facets number for the given arc radius\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIradius\fP <decimal> An arc radius\&. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> The number of facets to be assigned to $fn\&.
+.RE
+.PP
+The return result of this function can be assigned to the special variables \fC$fn\fP to render arcs according to the resolution mode set by \fB$resolution_mode\fP and \fB$resolution_value\fP\&.
+.PP
+The following table shows the modes that require \fB$resolution_value\fP to be set prior to specify the custom values used during resolution calculation\&.
+.PP
+$resolution_mode $resolution_value sets radius dependent  set fixed value no upf units per facet yes fpu facets per unit yes fpi facets per inch yes The following table has common resolution presets\&. Equivalent configuration can be obtained using \fBresolution_mode\fP and \fBresolution_value\fP as described in the preview table\&.
+.PP
+$resolution_mode preset description radius dependent  fast fast rendering mode no low low resolution yes medium medium resolution yes high high resolution yes 50um 50 micron per facets yes 100um 100 micron per facets yes 200um 200 micron per facets yes 300um 300 micron per facets yes 400um 400 micron per facets yes 500um 500 micron per facets yes 50mil 50 thousandth per facets yes 100mil 100 thousandth per facets yes 200mil 200 thousandth per facets yes 300mil 300 thousandth per facets yes 400mil 400 thousandth per facets yes 500mil 500 thousandth per facets yes 
+.SS "function resolution_fs ()"
+
+.PP
+Return minimum facets size\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> Minimum facet size to be assigned to $fs\&.
+.RE
+.PP
+The return result of this function can be assigned to the OpenSCAD special variables \fC$fs\fP to render arcs according to the resolution mode set by \fB$resolution_mode\fP and \fB$resolution_value\fP\&.
+.PP
+The following table shows the modes that require \fB$resolution_value\fP to be set prior to calling this function in order to specify the custom values used during resolution calculation\&.
+.PP
+$resolution_mode $resolution_value sets radius dependent  set fixed value no upf units per facet no fpu facets per unit no fpi facets per inch no The following table has common resolution presets\&. Equivalent configuration can be obtained using \fBresolution_mode\fP and \fBresolution_value\fP as described in the preview table\&.
+.PP
+$resolution_mode preset description radius dependent  fast fast rendering mode no low low resolution no medium medium resolution no high high resolution no 50um 50 micron per facets no 100um 100 micron per facets no 200um 200 micron per facets no 300um 300 micron per facets no 400um 400 micron per facets no 500um 500 micron per facets no 50mil 50 thousandth per facets no 100mil 100 thousandth per facets no 200mil 200 thousandth per facets no 300mil 300 thousandth per facets no 400mil 400 thousandth per facets no 500mil 500 thousandth per facets no 
+.SS "module resolution_info (radius)"
+
+.PP
+Echo resolution information to the console for given radius\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIradius\fP <decimal> An arc radius\&. 
+.RE
+.PP
+
+.PP
+Definition at line 319 of file resolution\&.scad\&.
+.SS "function resolution_reduced ()"
+
+.PP
+Return the radius at which arc resolution will begin to degrade\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> Transition radius where resolution reduction begins\&.
+.RE
+.PP
+The OpenSCAD special variables \fC$fs\fP and \fC$fa\fP work together when \fC$fn=0\fP\&. For a given \fC$fs\fP, the fragment angle of a drawn arc gets smaller with increasing radius\&. In other words, the fragment angle is inversely proportional to the arc radius for a given fragment size\&. The special variable \fC$fa\fP enforces a minimum fragment angle limit and at some radius, the fragment angle would becomes smaller than this limit\&. At this point, OpenSCAD limits further reduction in the facet angle which forces the use of increased fragment size\&. This in effect begins the gradual reduction of arc resolution with increasing radius\&.
+.PP
+The return result of this function indicates the radius at which this enforced limiting begins\&. When \fC$fn\fP != 0, returns \fB'undef'\fP\&. 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

@@ -23,7 +23,7 @@ use.
 Library API
 -----------
 
-* [omdl-v0.4](api/html/omdl-v0.4/index.html)
+* [omdl-v0.5](api/html/omdl-v0.5/index.html)
 
 * [Other releases](api/html/index.html)
 

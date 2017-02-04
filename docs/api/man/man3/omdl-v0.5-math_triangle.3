@@ -1,0 +1,278 @@
+.TH "math_triangle" 3 "Sat Feb 4 2017" "Version v0.5" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+math_triangle \- Triangle Solutions
+.PP
+Triangle computations\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBmath\&.scad\fP"
+.br
+.RI "\fIMathematical functions\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBtriangle_lll2vp\fP (s1, s2, s3)"
+.br
+.RI "\fICompute the vertices of a plane triangle given its side lengths\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_vl2vp\fP (v)"
+.br
+.RI "\fICompute the vertices of a plane triangle given its side lengths\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_ppp2vl\fP (v1, v2, v3)"
+.br
+.RI "\fICompute the side lengths of a triangle given its vertices\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_vp2vl\fP (v)"
+.br
+.RI "\fICompute the side lengths of a triangle given its vertices\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_centroid_ppp\fP (v1, v2, v3)"
+.br
+.RI "\fICompute the centroid (geometric center) of a triangle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_centroid_vp\fP (v)"
+.br
+.RI "\fICompute the centroid (geometric center) of a triangle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_incenter_ppp\fP (v1, v2, v3)"
+.br
+.RI "\fICompute the coordinate for the triangle's incircle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_incenter_vp\fP (v)"
+.br
+.RI "\fICompute the coordinate for the triangle's incircle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_inradius_ppp\fP (v1, v2, v3)"
+.br
+.RI "\fICompute the inradius of a triangle's incircle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_inradius_vp\fP (v)"
+.br
+.RI "\fICompute the inradius of a triangle's incircle\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Triangle computations\&. 
+
+See \fCWikipedia\fP for more information\&. 
+.SH "Function Documentation"
+.PP 
+.SS "function triangle_centroid_ppp (v1, v2, v3)"
+
+.PP
+Compute the centroid (geometric center) of a triangle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv1\fP <vector> A vector [x, y] for vertex 1 coordinates\&. 
+.br
+\fIv2\fP <vector> A vector [x, y] for vertex 2 coordinates\&. 
+.br
+\fIv3\fP <vector> A vector [x, y] for vertex 3 coordinates\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> A vector [x, y] of coordinates\&. 
+.RE
+.PP
+
+.SS "function triangle_centroid_vp (v)"
+
+.PP
+Compute the centroid (geometric center) of a triangle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> A vector [x, y] of coordinates\&. 
+.RE
+.PP
+
+.SS "function triangle_incenter_ppp (v1, v2, v3)"
+
+.PP
+Compute the coordinate for the triangle's incircle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv1\fP <vector> A vector [x, y] for vertex 1 coordinates\&. 
+.br
+\fIv2\fP <vector> A vector [x, y] for vertex 2 coordinates\&. 
+.br
+\fIv3\fP <vector> A vector [x, y] for vertex 3 coordinates\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> A vector [x, y] of coordinates\&.
+.RE
+.PP
+The interior point for which distances to the sides of the triangle are equal\&. 
+.SS "function triangle_incenter_vp (v)"
+
+.PP
+Compute the coordinate for the triangle's incircle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> A vector [x, y] of coordinates\&.
+.RE
+.PP
+The interior point for which distances to the sides of the triangle are equal\&. 
+.SS "function triangle_inradius_ppp (v1, v2, v3)"
+
+.PP
+Compute the inradius of a triangle's incircle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv1\fP <vector> A vector [x, y] for vertex 1 coordinates\&. 
+.br
+\fIv2\fP <vector> A vector [x, y] for vertex 2 coordinates\&. 
+.br
+\fIv3\fP <vector> A vector [x, y] for vertex 3 coordinates\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> The incircle radius\&. 
+.RE
+.PP
+
+.SS "function triangle_inradius_vp (v)"
+
+.PP
+Compute the inradius of a triangle's incircle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> The incircle radius\&. 
+.RE
+.PP
+
+.SS "function triangle_lll2vp (s1, s2, s3)"
+
+.PP
+Compute the vertices of a plane triangle given its side lengths\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs1\fP <decimal> The length of the side 1\&. 
+.br
+\fIs2\fP <decimal> The length of the side 2\&. 
+.br
+\fIs3\fP <decimal> The length of the side 3\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> A vector [v1, v2, v3] of vectors [x, y] of coordinates\&.
+.RE
+.PP
+Vertex \fCv1\fP at the origin\&. Geometry required that \fCs1\fP + \fCs2\fP is greater then \fCs3\fP\&. Coordinates \fCv3:\fP[x, y] will be \fB'nan'\fP when specified triangle does not exists\&.
+.PP
+\fBNote:\fP
+.RS 4
+Side length \fCs1\fP is measured along the positive x-axis\&. 
+.PP
+Sides are numbered counterclockwise\&. 
+.RE
+.PP
+
+.SS "function triangle_ppp2vl (v1, v2, v3)"
+
+.PP
+Compute the side lengths of a triangle given its vertices\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv1\fP <vector> A vector [x, y] for vertex 1 coordinates\&. 
+.br
+\fIv2\fP <vector> A vector [x, y] for vertex 2 coordinates\&. 
+.br
+\fIv3\fP <vector> A vector [x, y] for vertex 3 coordinates\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> A vector [s1, s2, s3] of lengths\&.
+.RE
+.PP
+\fBNote:\fP
+.RS 4
+Vertices are numbered counterclockwise\&. 
+.RE
+.PP
+
+.SS "function triangle_vl2vp (v)"
+
+.PP
+Compute the vertices of a plane triangle given its side lengths\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <vector> of decimal side lengths\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> A vector [v1, v2, v3] of vectors [x, y] of coordinates\&.
+.RE
+.PP
+Vertex \fCvs\fP[0] at the origin\&. Geometry required that \fCvs\fP[0] + \fCvs\fP[1] is greater then \fCvs\fP[2]\&. Coordinates \fCv3:\fP[x, y] will be \fB'nan'\fP when specified triangle does not exists\&.
+.PP
+\fBNote:\fP
+.RS 4
+Side length \fCvs\fP[0] is measured along the positive x-axis\&. 
+.PP
+Sides are numbered counterclockwise\&. 
+.RE
+.PP
+
+.SS "function triangle_vp2vl (v)"
+
+.PP
+Compute the side lengths of a triangle given its vertices\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> A vector [s1, s2, s3] of lengths\&.
+.RE
+.PP
+\fBNote:\fP
+.RS 4
+Vertices are numbered counterclockwise\&. 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.
