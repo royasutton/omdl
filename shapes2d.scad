@@ -81,7 +81,7 @@ include <transform.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! A rectangle.
+//! A rectangle with edge, fillet, and/or chamfer corners.
 /***************************************************************************//**
   \param    size <vector|decimal> A vector [x, y] of decimals
             or a single decimal for (x=y).
@@ -90,17 +90,29 @@ include <transform.scad>;
             A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
+  \param    vrm <integer> The corner radius mode.
+            A 4-bit encoded integer that indicates each corner finish.
+            Use bit value \b 0 for \em fillet and \b 1 for \em chamfer.
+
   \param    center <boolean> Center about origin.
 
   \details
 
     \b Example
     \amu_eval ( function=rectangle ${example_dim} )
+
+  \note     A corner \em fillet replaces an edge with a quarter circle of
+            radius \p vr, inset <tt>[vr, vr]</tt> from the corner vertex.
+  \note     A corner \em chamfer replaces an edge with an isosceles right
+            triangle with side lengths equal to the corresponding corner
+            rounding radius \p vr. Therefore the chamfer length will be
+            <tt>vr*sqrt(2)</tt> at 45 degree angles.
 *******************************************************************************/
 module rectangle
 (
   size,
   vr,
+  vrm = 0,
   center = false
 )
 {
@@ -115,11 +127,21 @@ module rectangle
     }
     else if ( is_scalar(vr) )           // equal rounding
     {
-      for (y = [ [0, 1], [1, -1] ],
-           x = [ [0, 1], [1, -1] ])
+      for ( i =  [ [0, 0,  1, 0,  1,   0],
+                   [1, 1, -1, 0,  1,  90],
+                   [2, 1, -1, 1, -1, 180],
+                   [3, 0,  1, 1, -1, 270] ] )
       {
-        translate([rx*x[0] + vr*x[1], ry*y[0] + vr*y[1]])
-        circle (r=vr);
+        translate([rx*i[1] + vr * i[2], ry*i[3] + vr * i[4]])
+        if ( bitwise_is_equal(vrm, i[0], 0) )
+        {
+          circle(r=vr);
+        }
+        else
+        {
+          rotate([0, 0, i[5]])
+          polygon(points=[[eps,-vr], [eps,eps], [-vr,eps]], paths=[[0,1,2]]);
+        }
       }
 
       translate([0, vr])
@@ -140,10 +162,10 @@ module rectangle
                    [2, 1, -1, 1, -1],
                    [3, 0,  1, 1, -1] ] )
       {
-        if ( crv[i[0]] > 0 )
+        if ( (crv[i[0]] > 0) && bitwise_is_equal(vrm, i[0], 0) )
         {
          translate([rx*i[1] + crv[i[0]] * i[2], ry*i[3] + crv[i[0]] * i[4]])
-         circle (r=crv[i[0]]);
+         circle(r=crv[i[0]]);
         }
       }
 
@@ -187,11 +209,13 @@ module rectangle
             A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
   \param    vr1 <vector|decimal> The outer corner rounding radius.
-            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
-            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
   \param    vr2 <vector|decimal> The core corner rounding radius.
-            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
-            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
+
+  \param    vrm <integer> The default corner radius mode.
+            A 4-bit encoded integer that indicates each corner finish.
+            Use bit value \b 0 for \em fillet and \b 1 for \em chamfer.
+  \param    vrm1 <integer> The outer corner radius mode.
+  \param    vrm2 <integer> The core corner radius mode.
 
   \param    center <boolean> Center about origin.
 
@@ -214,6 +238,9 @@ module rectangle_c
   vr,
   vr1,
   vr2,
+  vrm = 0,
+  vrm1,
+  vrm2,
   center = false
 )
 {
@@ -226,21 +253,24 @@ module rectangle_c
   or = defined_or(vr1, vr);
   ir = defined_or(vr2, vr);
 
+  om = defined_or(vrm1, vrm);
+  im = defined_or(vrm2, vrm);
+
   if ( is_defined(id) )
   {
     translate(center==true ? origin2d : [rx/2, ry/2])
     difference()
     {
-      rectangle(size=od, vr=or, center=true);
+      rectangle(size=od, vr=or, vrm=om, center=true);
 
       translate(is_defined(co) ? co : origin2d)
       rotate([0, 0, cr])
-      rectangle(size=id, vr=ir, center=true);
+      rectangle(size=id, vr=ir, vrm=im, center=true);
     }
   }
   else
   {
-    rectangle(size=od, vr=or, center=center);
+    rectangle(size=od, vr=or, vrm=om, center=center);
   }
 }
 
@@ -590,10 +620,8 @@ module triangle_vl
 
   \param    vr <vector|decimal> The default vertex rounding radius. A vector
             [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
-  \param    vr1 <vector|decimal> The outer vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
-  \param    vr2 <vector|decimal> The core vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
+  \param    vr1 <vector|decimal> The outer vertex rounding radius.
+  \param    vr2 <vector|decimal> The core vertex rounding radius.
 
   \param    centroid <boolean> Center centroid at origin.
   \param    incenter <boolean> Center incenter at origin.
@@ -603,8 +631,8 @@ module triangle_vl
     \b Example
     \amu_eval ( function=triangle_vl_c ${example_dim} )
 
-  \note The outer and inner triangles centroids are aligned prior to the
-        core removal.
+  \note     The outer and inner triangles centroids are aligned prior to
+            the core removal.
 *******************************************************************************/
 module triangle_vl_c
 (
@@ -1285,9 +1313,9 @@ BEGIN_SCOPE dim;
     $fn = 72;
 
     if (shape == "rectangle")
-      rectangle( size=[25,40], vr=[0,10,10,5], center=true );
+      rectangle( size=[25,40], vr=[0,10,10,5], vrm=4, center=true );
     else if (shape == "rectangle_c")
-      rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, co=[0,5], center=true );
+      rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, vrm2=3, co=[0,5], center=true );
     else if (shape == "rhombus")
       rhombus( size=[40,25], vr=[2,4,2,4], center=true );
     else if (shape == "triangle_ppp")
@@ -1359,8 +1387,8 @@ BEGIN_SCOPE manifest;
 
     st_cartesian_copy( grid=5, incr=60, center=true )
     {
-      rectangle( size=[25,40], vr=[0,10,10,5], center=true );
-      rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, co=[0,5], center=true );
+      rectangle( size=[25,40], vr=[0,10,10,5], vrm=4, center=true );
+      rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, vrm2=3, co=[0,5], center=true );
       rhombus( size=[40,25], vr=[2,4,2,4], center=true );
       triangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], vr=2, centroid=true );
       triangle_lll( s1=30, s2=40, s3=50, vr=2, centroid=true );

@@ -855,7 +855,7 @@ BEGIN_SCOPE validate;
         pass_value = table_get(good_r, good_c, fname, vid);
 
         test_pass = validate(cv=fresult, t="almost", ev=pass_value, p=comp_prcsn, pf=true);
-        farg_text = vstr(append(", ", rselect(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
+        farg_text = vstr(eappend(", ", rselect(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
         test_text = validate(str(fname, "(", farg_text, ")=~", pass_value), fresult, "almost", pass_value, comp_prcsn);
 
         if ( pass_value != skip )

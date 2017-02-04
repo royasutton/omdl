@@ -115,8 +115,8 @@ function bitwise_v2i
 (
   v
 ) = is_empty(v) ? 0
-  : (first(v) == 1) ? bitwise_v2i(tail(v)) + pow(2, len(v)-1)
-  : (first(v) == 0) ? bitwise_v2i(tail(v))
+  : (first(v) == 1) ? bitwise_v2i(ntail(v)) + pow(2, len(v)-1)
+  : (first(v) == 0) ? bitwise_v2i(ntail(v))
   : undef;
 
 //! Encode an integer value as a base-two string of bits.
@@ -146,8 +146,8 @@ function bitwise_s2i
 (
   v
 ) = is_empty(v) ? 0
-  : (first(v) == "1") ? bitwise_s2i(tail(v)) + pow(2, len(v)-1)
-  : (first(v) == "0") ? bitwise_s2i(tail(v))
+  : (first(v) == "1") ? bitwise_s2i(ntail(v)) + pow(2, len(v)-1)
+  : (first(v) == "0") ? bitwise_s2i(ntail(v))
   : undef;
 
 //! Base-two bitwise AND operation for integers.
@@ -526,7 +526,7 @@ BEGIN_SCOPE validate;
       pass_value = table_get(good_r, good_c, fname, vid);
 
       test_pass = validate(cv=fresult, t="equals", ev=pass_value, pf=true);
-      farg_text = vstr(append(", ", rselect(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
+      farg_text = vstr(eappend(", ", rselect(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
       test_text = validate(str(fname, "(", farg_text, ")=", pass_value), fresult, "equals", pass_value);
 
       if ( pass_value != skip )

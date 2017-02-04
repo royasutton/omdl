@@ -132,12 +132,16 @@ module cone
   }
 }
 
-//! A cuboid.
+//! A cuboid with edge, fillet, or chamfer corners.
 /***************************************************************************//**
   \param    size <vector|decimal> A vector [x, y, z] of decimals or a
             single decimal for (x=y=z).
 
-  \param    vr <decimal> The corner rounding radius.
+  \param    vr <decimal> The rounding radius.
+
+  \param    vrm <integer> The radius mode.
+            A 2-bit encoded integer that indicates edge and vertex finish.
+            \em B0 controls edge and \em B1 controls vertex.
 
   \param    center <boolean> Center about origin.
 
@@ -145,17 +149,35 @@ module cone
 
     \b Example
     \amu_eval ( function=cuboid ${example_dim} )
+
+    | vrm | B1  | B0  | Description                                 |
+    |:---:|:---:|:---:|:--------------------------------------------|
+    |  0  |  0  |  0  | \em fillet edges with \em fillet vertexes   |
+    |  1  |  0  |  1  | \em chamfer edges with \em sphere vertexes  |
+    |  2  |  1  |  0  | \em fillet edges with \em chamfer vertexes  |
+    |  3  |  1  |  1  | \em chamfer edges with \em chamfer vertexes |
+
+  \note     Using \em fillet replaces all edges with a quarter circle
+            of radius \p vr, inset <tt>[vr, vr]</tt> from the each edge.
+  \note     Using \em chamfer replaces all edges with isosceles right
+            triangles with side lengths equal to the corner rounding
+            radius \p vr. Therefore the chamfer length will be
+            <tt>vr*sqrt(2)</tt> at 45 degree angles.
 *******************************************************************************/
 module cuboid
 (
   size,
   vr,
+  vrm = 0,
   center = false
 )
 {
   bx = edefined_or(size, 0, size);
   by = edefined_or(size, 1, bx);
   bz = edefined_or(size, 2, by);
+
+  ef = bitwise_is_equal(vrm, 0, 0);
+  vf = bitwise_is_equal(vrm, 1, 0);
 
   translate(center==true ? origin3d : [bx/2, by/2, bz/2])
   if ( not_defined(vr) )
@@ -169,31 +191,50 @@ module cuboid
     cube([bx-vr*2, by-vr*2, bz     ], center=true);
 
     bv  = [bx, by, bz];
-    rot = [ [0,0,0], [90,0,90], [90,90,0] ];
+    rot = [[0,0,0], [90,0,90], [90,90,0]];
 
-    for (axis = [0:2])
+    for ( axis = [0:2] )
     {
-      for
-      (
-        x = [vr-bv[axis]/2,       -vr+bv[axis]/2      ],
-        y = [vr-bv[(axis+1)%3]/2, -vr+bv[(axis+1)%3]/2]
-      )
+      zo = bv[(axis+2)%3]/2 - vr;
+
+      for ( x = [1,-1], y = [1,-1] )
       {
         rotate( rot[axis] )
-        translate( [x, y, 0] )
-        cylinder( h=bv[(axis+2)%3]-2*vr, r=vr, center=true );
+        translate( [x*(bv[axis]/2-vr), y*(bv[(axis+1)%3]/2-vr), 0] )
+        if ( ef )
+        {
+          cylinder( h=zo*2, r=vr, center=true );
+        }
+        else
+        {
+          polyhedron
+          (
+            points =
+            [
+              [-eps,-eps,+zo], [(vr+eps)*x,-eps,+zo], [-eps,(vr+eps)*y,+zo],
+              [-eps,-eps,-zo], [(vr+eps)*x,-eps,-zo], [-eps,(vr+eps)*y,-zo],
+            ],
+            faces = [[0,2,1], [0,1,4,3], [1,2,5,4], [2,0,3,5], [3,4,5]]
+          );
+        }
       }
     }
 
-    for
-    (
-      x = [vr-bx/2, -vr+bx/2],
-      y = [vr-by/2, -vr+by/2],
-      z = [vr-bz/2, -vr+bz/2]
-    )
+    for ( x = [1,-1], y = [1,-1], z = [1,-1] )
     {
-      translate([x,y,z])
-      sphere(vr);
+      translate([x*(bx/2-vr), y*(by/2-vr), z*(bz/2-vr)])
+      if ( vf )
+      {
+        sphere(vr);
+      }
+      else
+      {
+        polyhedron
+        (
+          points = [[0,0,0], [vr*x,0,0], [0,vr*y,0], [0,0,vr*z]],
+          faces = [[1,2,3], [0,2,1], [0,3,2], [0,1,3]]
+        );
+      }
     }
   }
 }
@@ -287,7 +328,7 @@ module ellipsoid_s
 
 //! A pyramid with trilateral base formed by four equilateral triangles.
 /***************************************************************************//**
-  \param    r <decimal> The face radius.
+  \param    size <decimal> The face radius.
 
   \param    center <boolean> Center about origin.
 
@@ -297,43 +338,41 @@ module ellipsoid_s
     \amu_eval ( function=tetrahedron ${example_dim} )
 
   \todo Support vertex rounding radius.
-  \todo Identify cause of missing face. Using hull() as a workaround.
 *******************************************************************************/
 module tetrahedron
 (
-  r,
+  size,
   center = false
 )
 {
-  o = r/2;
-  a = r*sqrt(3)/2;
+  o = size/2;
+  a = size*sqrt(3)/2;
 
   translate(center==true ? origin3d : [0,0,o])
-  hull()
+
   polyhedron
   (
     points =
     [
-      [-a, -o, -o],
-      [ a, -o, -o],
-      [ 0,  r, -o],
-      [ 0,  0,  r]
+      [-a,    -o,    -o],
+      [ a,    -o,    -o],
+      [ 0,  size,    -o],
+      [ 0,     0,  size]
     ],
     faces =
     [
-      [0, 1, 2],
+      [0, 2, 1],
       [1, 2, 3],
       [0, 1, 3],
-      [0, 2, 3]
+      [0, 3, 2]
     ]
   );
 }
 
 //! A pyramid with quadrilateral base.
 /***************************************************************************//**
-  \param    x <decimal> The base x-length.
-  \param    y <decimal> The base y-length.
-  \param    z <decimal> The z-height.
+  \param    size <vector|decimal> A vector [x, y, z] of decimals or a
+            single decimal for (x=y=z).
 
   \param    center <boolean> Center about origin.
 
@@ -346,15 +385,13 @@ module tetrahedron
 *******************************************************************************/
 module pyramid_q
 (
-  x,
-  y,
-  z,
+  size,
   center = false
 )
 {
-  tw = x/2;
-  th = y/2;
-  ph = z;
+  tw = edefined_or(size, 0, size)/2;
+  th = edefined_or(size, 1, tw*2)/2;
+  ph = edefined_or(size, 2, th*2);
 
   translate(center==true ? [0,0,-ph/2] : origin3d)
   polyhedron
@@ -411,7 +448,7 @@ module star3d
       scale([1, 1, h/w])
       rotate([45, 0, 0])
       rotate([0, 90, 0])
-      pyramid_q(x=w, y=w, z=l, center=false);
+      pyramid_q(size=[w, w, l], center=false);
 
       translate([0,0,-h/2])
       cylinder(r=l, h=h, center=true);
@@ -423,7 +460,7 @@ module star3d
     scale([1, 1, h/w])
     rotate([45, 0, 0])
     rotate([0, 90, 0])
-    pyramid_q(x=w, y=w, z=l, center=false);
+    pyramid_q(size=[w, w, l], center=false);
   }
 }
 
@@ -444,24 +481,22 @@ module star3d
   \param    co <vector> Core offset. A vector [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
-  \param    vr <decimal> The profile default corner rounding radius.
-  \param    vr1 <decimal> The profile outer corner rounding radius.
-  \param    vr2 <decimal> The profile core corner rounding radius.
-
   \param    vr <vector|decimal> The profile default corner rounding radius.
             A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
   \param    vr1 <vector|decimal> The profile outer corner rounding radius.
-            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
-            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
   \param    vr2 <vector|decimal> The profile core corner rounding radius.
-            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
-            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
+
+  \param    vrm <integer> The default corner radius mode.
+            A 4-bit encoded integer that indicates each corner finish.
+            Use bit value \b 0 for \em fillet and \b 1 for \em chamfer.
+  \param    vrm1 <integer> The outer corner radius mode.
+  \param    vrm2 <integer> The core corner radius mode.
 
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.
   \param    m <integer> The section render mode. An 8-bit encoded integer
-            value that indicates the revolution sections to render.
+            that indicates the revolution sections to render.
 
   \param    center <boolean> Rotate about profile center.
   \param    profile <boolean> Show profile only (do not extrude).
@@ -489,6 +524,9 @@ module torus_rp
   vr,
   vr1,
   vr2,
+  vrm = 0,
+  vrm1,
+  vrm2,
   pa = 0,
   ra = 360,
   m = 255,
@@ -502,15 +540,16 @@ module torus_rp
     size=size, core=core, t=t,
     co=co, cr=cr,
     vr=vr, vr1=vr1, vr2=vr2,
+    vrm=vrm, vrm1=vrm1, vrm2=vrm2,
     center=center
   );
 }
 
 //! A triangular cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
-  \param    vs <vector|decimal> The size. A vector [s1, s2, s3] of decimals
+  \param    size <vector|decimal> The size. A vector [s1, s2, s3] of decimals
             or a single decimal for (s1=s2=s3).
-  \param    vc <vector|decimal> The core. A vector [s1, s2, s3] of decimals
+  \param    core <vector|decimal> The core. A vector [s1, s2, s3] of decimals
             or a single decimal for (s1=s2=s3).
 
   \param    r <decimal> The rotation radius.
@@ -522,15 +561,13 @@ module torus_rp
 
   \param    vr <vector|decimal> The default vertex rounding radius. A vector
             [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
-  \param    vr1 <vector|decimal> The outer vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
-  \param    vr2 <vector|decimal> The core vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
+  \param    vr1 <vector|decimal> The outer vertex rounding radius.
+  \param    vr2 <vector|decimal> The core vertex rounding radius.
 
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.
   \param    m <integer> The section render mode. An 8-bit encoded integer
-            value that indicates the revolution sections to render.
+            that indicates the revolution sections to render.
 
   \param    centroid <boolean> Rotate about profile centroid.
   \param    incenter <boolean> Rotate about profile incenter.
@@ -548,8 +585,8 @@ module torus_rp
 *******************************************************************************/
 module torus_tp
 (
-  vs,
-  vc,
+  size,
+  core,
   r,
   l,
   co,
@@ -568,7 +605,7 @@ module torus_tp
   st_rotate_extrude_elongate( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
   triangle_vl_c
   (
-    vs=vs, vc=vc,
+    vs=size, vc=core,
     co=co, cr=cr,
     vr=vr, vr1=vr1, vr2=vr2,
     centroid=centroid, incenter=incenter
@@ -598,7 +635,7 @@ module torus_tp
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.
   \param    m <integer> The section render mode. An 8-bit encoded integer
-            value that indicates the revolution sections to render.
+            that indicates the revolution sections to render.
 
   \param    profile <boolean> Show profile only (do not extrude).
 
@@ -663,17 +700,17 @@ BEGIN_SCOPE dim;
     else if (shape == "ellipsoid_s")
       ellipsoid_s( size=[60,15], a1=0, a2=270 );
     else if (shape == "tetrahedron")
-      tetrahedron( r = 20, center=true );
+      tetrahedron( size=20, center=true );
     else if (shape == "pyramid_q")
-      pyramid_q( x=35, y=20, z=5, center=true );
+      pyramid_q( size=[35,20,5], center=true );
     else if (shape == "star3d")
-      star3d(size=40, n=5, half=true);
+      star3d( size=40, n=5, half=true );
     else if (shape == "torus_rp")
-      torus_rp( size=[40,20], core=[35,20], r=40, l=[90,60], co=[0,2.5], vr=2, center=true );
+      torus_rp( size=[40,20], core=[35,20], r=40, l=[90,60], co=[0,2.5], vr=4, vrm=15, center=true );
     else if (shape == "torus_tp")
-      torus_tp( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
+      torus_tp( size=40, core=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
     else if (shape == "torus_ep")
-      torus_ep(size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2]);
+      torus_ep( size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -714,17 +751,17 @@ BEGIN_SCOPE manifest;
       cuboid( size=[25,40,20], vr=5, center=true );
       ellipsoid( size=[40,25] );
       ellipsoid_s( size=[60,15], a1=0, a2=270 );
-      tetrahedron( r = 15, center=true );
-      pyramid_q( x=35, y=40, z=25, center=true );
+      tetrahedron( size=15, center=true );
+      pyramid_q( size=[35,40,25], center=true );
       star3d(size=40, n=5, half=false);
     }
 
     if (group == 2)
-    st_cartesian_copy( grid=4, incr=140, center=true )
+    st_cartesian_copy( grid=4, incr=150, center=true )
     {
-      torus_rp( size=[40,20], core=[35,20], r=40, l=60, co=[0,2.5], vr=2, center=true );
-      torus_tp( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
-      torus_ep(size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2]);
+      torus_rp( size=[40,20], core=[35,20], r=40, l=[25,60], co=[0,2.5], vr=4, vrm=15, center=true );
+      torus_tp( size=40, core=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
+      torus_ep( size=[20,15], t=[2,4], r=60, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
     }
   END_OPENSCAD;
 
