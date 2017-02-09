@@ -43,14 +43,17 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! <decimal> Epsilon, small distance to deal with overlaping shapes
+//! <decimal> Epsilon, small distance to deal with overlapping shapes.
 eps = 0.01;
 
-//! <decimal> The ratio of a circle's circumference to its diameter
+//! <decimal> The ratio of a circle's circumference to its diameter.
 pi  = 3.1415926535897932384626433832795;
 
-//! <decimal> The ratio of a circle's circumference to its radius
+//! <decimal> The ratio of a circle's circumference to its radius.
 tau = 2*pi;
+
+//! <decimal> The golden ratio.
+phi = (1 + sqrt(5)) / 2;
 
 //! @}
 //! @}
