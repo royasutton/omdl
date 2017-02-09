@@ -67,6 +67,7 @@ library             := mainpage \
                        units_angle \
                        units_length \
                        resolution \
+                       coordinates \
                        map \
                        table \
                        transform \
