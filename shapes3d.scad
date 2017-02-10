@@ -335,11 +335,11 @@ module ellipsoid_s
   \details
 
     \b Example
-    \amu_eval ( function=tetrahedron ${example_dim} )
+    \amu_eval ( function=pyramid_t ${example_dim} )
 
   \todo Support vertex rounding radius.
 *******************************************************************************/
-module tetrahedron
+module pyramid_t
 (
   size,
   center = false
@@ -699,8 +699,8 @@ BEGIN_SCOPE dim;
       ellipsoid( size=[40,25] );
     else if (shape == "ellipsoid_s")
       ellipsoid_s( size=[60,15], a1=0, a2=270 );
-    else if (shape == "tetrahedron")
-      tetrahedron( size=20, center=true );
+    else if (shape == "pyramid_t")
+      pyramid_t( size=20, center=true );
     else if (shape == "pyramid_q")
       pyramid_q( size=[35,20,5], center=true );
     else if (shape == "star3d")
@@ -723,7 +723,7 @@ BEGIN_SCOPE dim;
                 cuboid
                 ellipsoid
                 ellipsoid_s
-                tetrahedron
+                pyramid_t
                 pyramid_q
                 torus_rp
                 torus_tp
@@ -751,7 +751,7 @@ BEGIN_SCOPE manifest;
       cuboid( size=[25,40,20], vr=5, center=true );
       ellipsoid( size=[40,25] );
       ellipsoid_s( size=[60,15], a1=0, a2=270 );
-      tetrahedron( size=15, center=true );
+      pyramid_t( size=15, center=true );
       pyramid_q( size=[35,40,25], center=true );
       star3d(size=40, n=5, half=false);
     }
