@@ -27,17 +27,17 @@
 
   \details
 
-  \ingroup data data_console
+  \ingroup utilities utilities_console
 *******************************************************************************/
 
 use <utilities.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup data
+  \addtogroup utilities
   @{
 
-  \defgroup data_console Console
+  \defgroup utilities_console Console
   \brief    Console message logging.
 
   \details
