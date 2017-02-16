@@ -508,7 +508,7 @@ function almost_equal
 (
   v1,
   v2,
-  p = 4
+  p = 6
 ) = all_scalars([v1, v2]) ?
     (
       all_numbers([v1, v2]) ? ( (abs(v1-v2) * pow(10, p)) < 1 )
@@ -540,7 +540,7 @@ function n_almost_equal
 (
   v1,
   v2,
-  d = 0.0001
+  d = 0.000001
 ) = (len(v1) != len(v2)) ? false
   : (sqrt((v1-v2)*(v1-v2)) < d);
 
