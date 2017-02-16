@@ -366,6 +366,8 @@ function unit_v
   \param    v2i <vector> Vector 2 tail. A 3-tuple of coordinates.
   \param    v3i <vector> Vector 3 tail. A 3-tuple of coordinates.
 
+  \param    d \<number> A positive numerical distance, proximity, or tolerance.
+
   \returns  <boolean> \b true when all three vectors are coplanar,
             and \b false otherwise.
   \details
@@ -388,8 +390,9 @@ function are_coplanar_vvv
   v3t,
   v1i,
   v2i,
-  v3i
-) = ( striple_vvv( v1t, v2t, v3t, v1i, v2i, v3i ) == 0 );
+  v3i,
+  d = 0.000001
+) = n_almost_equal(striple_vvv( v1t, v2t, v3t, v1i, v2i, v3i ), 0, d);
 
 //! @}
 //! @}
