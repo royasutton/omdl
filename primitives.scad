@@ -1419,10 +1419,12 @@ function qsort2
         for (i = v)
           if (compare(mp, i, s) == +1)
             ((d > 0) && is_vector(i)) ? qsort2(i, d-1, r, s) : i
-      ]
+      ],
+      sp = (r == true) ?
+           concat(qsort2(gt, d, r, s), eq, qsort2(lt, d, r, s))
+         : concat(qsort2(lt, d, r, s), eq, qsort2(gt, d, r, s))
     )
-    (r == true) ? concat(qsort2(gt, d, r, s), eq, qsort2(lt, d, r, s))
-  : concat(qsort2(lt, d, r, s), eq, qsort2(gt, d, r, s));
+    (d > 0) ? qsort2(sp, d-1, r, s) : sp;
 
 //----------------------------------------------------------------------------//
 // grow / reduce
