@@ -1229,6 +1229,42 @@ function cmvselect
     is_empty(i) ? second(last(v))
   : second(v[i]);
 
+//! Select all n-element sequential-subsets of an iterable value.
+/***************************************************************************//**
+  \param    v <vector> A vector of iterable values.
+  \param    n <integer> The number of elements in each subset.
+  \param    s <integer> The iterable value selection step size.
+  \param    w <boolean> Use wrap-at-end circular subset selection.
+
+  \returns  <vector> of all n-element sequential-subsets of \p v skipping
+            \p s elements between each subset selection.
+            Returns \b empty_v when \p v is empty, is not defined or is
+            not iterable.
+
+  \details
+
+    \b Example
+    \code{.C}
+    v = [1, 2, 3, 4];
+
+    nssequence( v, 3, 1, false ); // [ [1,2,3], [2,3,4] ]
+    nssequence( v, 3, 1, true );  // [ [1,2,3], [2,3,4], [3,4,1], [4,1,2] ]
+    \endcode
+*******************************************************************************/
+function nssequence
+(
+  v,
+  n = 1,
+  s = 1,
+  w = false
+) = [
+      for (i=[0 : s : (len(v)-((w == true) ? 1 : n)) ])
+      [
+        for (j=[i : (i+n-1)])
+          v[j % len(v)]
+      ]
+    ];
+
 //----------------------------------------------------------------------------//
 // reorder
 //----------------------------------------------------------------------------//
@@ -2222,6 +2258,35 @@ BEGIN_SCOPE validate;
           [2,5,8,"b"],                                        // t10
           skip                                                // t11
         ],
+        ["nssequence_31",
+          empty_v,                                            // t01
+          empty_v,                                            // t02
+          empty_v,                                            // t03
+          [
+            ["A"," ","s"],[" ","s","t"],["s","t","r"],
+            ["t","r","i"],["r","i","n"],["i","n","g"]
+          ],                                                  // t04
+          [
+            ["orange","apple","grape"],
+            ["apple","grape","banana"]
+          ],                                                  // t05
+          [
+            ["b","a","n"],["a","n","a"],["n","a","n"],
+            ["a","n","a"],["n","a","s"]
+          ],                                                  // t06
+          empty_v,                                            // t07
+          empty_v,                                            // t08
+          [["ab",[1,2],[2,3]],[[1,2],[2,3],[4,5]]],           // t09
+          [
+            [[1,2,3],[4,5,6],[7,8,9]],
+            [[4,5,6],[7,8,9],["a","b","c"]]
+          ],                                                  // t10
+          [
+            [0,1,2],[1,2,3],[2,3,4],[3,4,5],[4,5,6],[5,6,7],
+            [6,7,8],[7,8,9],[8,9,10],[9,10,11],[10,11,12],
+            [11,12,13],[12,13,14],[13,14,15]
+          ]                                                   // t11
+        ],
         ["smerge",
           undef,                                              // t01
           empty_v,                                            // t02
@@ -2424,6 +2489,7 @@ BEGIN_SCOPE validate;
       for (vid=test_ids) run_test( "eselect_1", eselect(get_value(vid),i=1), vid );
       // not tested: ciselect()
       // not tested: cmvselect()
+      for (vid=test_ids) run_test( "nssequence_31", nssequence(get_value(vid),n=3,s=1), vid );
 
       // reorder
       for (vid=test_ids) run_test( "smerge", smerge(get_value(vid)), vid );
