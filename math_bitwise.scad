@@ -150,6 +150,22 @@ function bitwise_s2i
   : (first(v) == "0") ? bitwise_s2i(ntail(v))
   : undef;
 
+//! Decode the integer in a value at a shifted base-two bit mask of width-w.
+/***************************************************************************//**
+  \param    v <integer> An integer value.
+  \param    w <integer> The bit mask width.
+  \param    s <integer> The bit mask shift offset.
+
+  \returns  <integer> value of the \p w bits of \p v starting at bit position
+            \p s up to bit <tt>(w+s-1)</tt>.
+*******************************************************************************/
+function bitwise_imi
+(
+  v,
+  w,
+  s
+) = bitwise_rsh(bitwise_and(v, bitwise_lsh(pow(2,w)-1, s)), s);
+
 //! Base-two bitwise AND operation for integers.
 /***************************************************************************//**
   \param    v1 <integer> An integer value.
@@ -417,6 +433,20 @@ BEGIN_SCOPE validate;
         835,                            // t11
         856                             // t12
       ],
+      ["bitwise_imi_32", 1,
+        undef,                          // t01
+        undef,                          // t02
+        7,                              // t03
+        7,                              // t04
+        7,                              // t05
+        0,                              // t06
+        7,                              // t07
+        6,                              // t08
+        0,                              // t09
+        7,                              // t10
+        0,                              // t11
+        6                               // t12
+      ],
       ["bitwise_and", 2,
         undef,                          // t01
         undef,                          // t02
@@ -548,6 +578,7 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("bitwise_i2v_v2i",vid) test( "bitwise_i2v_v2i", bitwise_v2i(bitwise_i2v(gv(vid,0))), vid );
     for (vid=run_ids) run("bitwise_i2s",vid) test( "bitwise_i2s", bitwise_i2s(gv(vid,0)), vid );
     for (vid=run_ids) run("bitwise_i2s_s2i",vid) test( "bitwise_i2s_s2i", bitwise_s2i(bitwise_i2s(gv(vid,0))), vid );
+    for (vid=run_ids) run("bitwise_imi_32",vid) test( "bitwise_imi_32", bitwise_imi(gv(vid,0),3,2), vid );
     for (vid=run_ids) run("bitwise_and",vid) test( "bitwise_and", bitwise_and(gv(vid,0),gv(vid,1)), vid );
     for (vid=run_ids) run("bitwise_or",vid) test( "bitwise_or", bitwise_or(gv(vid,0),gv(vid,1)), vid );
     for (vid=run_ids) run("bitwise_xor",vid) test( "bitwise_xor", bitwise_xor(gv(vid,0),gv(vid,1)), vid );
