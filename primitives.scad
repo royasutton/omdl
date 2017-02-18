@@ -747,9 +747,9 @@ function consts
   : (u == false) ? [for (i=[0:1:l-1]) i]
   : [for (i=[0:1:l-1]) undef];
 
-//! Convert all vector elements to strings and concatenate.
+//! Convert a value or vector of values to a concatenated string(s).
 /***************************************************************************//**
-  \param    v <vector> A vector of values.
+  \param    v \<value> A value or vector of values.
 
   \returns  <string> Constructed by converting each element of the vector
             to a string and concatenating together.
@@ -778,6 +778,106 @@ function vstr
   : is_empty(v) ? empty_str
   : (len(v) == 1) ? str(first(v))
   : str(first(v), vstr(ntail(v)));
+
+//! Convert a value or vector of values to a HTML formatted concatenated string(s).
+/***************************************************************************//**
+  \param    v \<value> A value or vector of values.
+
+  \param    b <tag|vector> A tag or vector of tags.
+            \em Unpaired html [tag(s)] to add before the value.
+  \param    p <tag|vector> A tag or vector of tags.
+            \em Paired html [tag(s)] to enclose the value.
+  \param    a <tag|vector> A tag or vector of tags.
+            \em Unpaired html [tag(s)] to add after the value.
+
+  \param    f <vector> A vector \c fs or a vector of vectors \c fs,
+            where <tt>fs=["color","size","face"]</tt>. The font
+            [tag(s)] to enclose the value. Not all terms of \c fs are
+            required, but term order is significant.
+
+  \param    d <boolean> Debug. When \b true angle brackets are replaced
+            with curly brackets to prevent console decoding.
+
+  \returns  <string> Constructed by converting each element of the vector
+            to a string with specified html markup and concatenating together.
+            Returns \b undef when \p v is not defined.
+
+  \details
+    When there are fewer tag elements in \p b, \p p, \p a, or \p f,
+    than there are value elements in \p v, the last specified tag
+    element is used for each subsequent value element.
+
+    For a list of the \em paired and \em unpaired html tags supported by
+    the console see: [html subset].
+
+    \b Example
+    \code{.C}
+    echo( vstr_html(v="bold text", p="b", d=true) );
+    echo( vstr_html(v=[1,"x",3], f=[["red",6,"helvetica"],undef,["blue",10,"courier"]], d=true) );
+
+    v = ["result", "=", "mc", "2"];
+    b = ["hr", undef];
+    p = ["i", undef, ["b", "i"], ["b","sup"]];
+    a = concat(consts(3, u=true), "hr");
+    f = [undef, ["red"], undef, ["blue",4]];
+
+    echo( vstr_html(v=v, b=b, p=p, a=a, f=f, d=true) );
+    \endcode
+
+    \b Result
+    \code{.C}
+    ECHO: "{b}bold text{/b}"
+    ECHO: "{font color="red" size="6" face="helvetica"}1{/font}x{font color="blue" size="10" face="courier"}3{/font}"
+    ECHO: "{hr}{i}result{/i}{font color="red"}={/font}{b}{i}mc{/i}{/b}{b}{sup}{font color="blue" size="4"}2{/font}{/sup}{/b}{hr}"
+    \endcode
+
+    [tag(s)]: http://doc.qt.io/qt-5/richtext-html-subset.html
+    [html subset]: http://doc.qt.io/qt-5/richtext-html-subset.html
+*******************************************************************************/
+function vstr_html
+(
+  v,
+  b,
+  p,
+  a,
+  f,
+  d = false
+) = is_empty(v) ? empty_str
+  : let
+    (
+      bb = (d == true) ? "{" : "<",
+      ba = (d == true) ? "}" : ">",
+
+      cv = is_vector(v) ? nfirst(v) : v,
+      cb = is_vector(b) ?  first(b) : b,
+      cp = is_vector(p) ?  first(p) : p,
+      ca = is_vector(a) ?  first(a) : a,
+      cf = is_vector(f) ?  first(f) : f,
+
+      f0 = (len(cf) > 0) ? str(" color=\"", cf[0], "\"") : empty_str,
+      f1 = (len(cf) > 1) ? str(" size=\"",  cf[1], "\"") : empty_str,
+      f2 = (len(cf) > 2) ? str(" face=\"",  cf[2], "\"") : empty_str,
+
+      fb = not_defined(cf) ? empty_str : str(bb, "font", f0, f1, f2, ba),
+      fa = not_defined(cf) ? empty_str : str(bb, "/font", ba),
+
+      cs =
+      concat
+      (
+        [for (i=cb) str(bb, i, ba)],
+        [for (i=cp) str(bb, i, ba)],
+        fb, cv, fa,
+        [for (i=reverse(cp)) str(bb, "/", i, ba)],
+        [for (i=ca) str(bb, i, ba)]
+      ),
+
+      nv = is_vector(v) ? ntail(v) : empty_str,
+      nb = is_vector(b) ? (len(b) > 1) ? ntail(b) : nlast(b) : b,
+      np = is_vector(p) ? (len(p) > 1) ? ntail(p) : nlast(p) : p,
+      na = is_vector(a) ? (len(a) > 1) ? ntail(a) : nlast(a) : a,
+      nf = is_vector(f) ? (len(f) > 1) ? ntail(f) : nlast(f) : f
+    )
+    vstr(concat(cs, vstr_html(nv, nb, np, na, nf, d)));
 
 //! Compute the sum of a vector of numbers.
 /***************************************************************************//**
@@ -2040,6 +2140,19 @@ BEGIN_SCOPE validate;
           "[1, 2, 3][4, 5, 6][7, 8, 9][\"a\", \"b\", \"c\"]", // t10
           "0123456789101112131415"                            // t11
         ],
+        ["vstr_html_B",
+          "<b>undef</b>",                                     // t01
+          empty_str,                                          // t02
+          "<b>[0 : 0.5 : 9]</b>",                             // t03
+          "<b>A string</b>",                                  // t04
+          "<b>orange</b><b>apple</b><b>grape</b><b>banana</b>",
+          "<b>b</b><b>a</b><b>n</b><b>a</b><b>n</b><b>a</b><b>s</b>",
+          "<b>undef</b>",                                     // t07
+          "<b>[1, 2]</b><b>[2, 3]</b>",                       // t08
+          "<b>ab</b><b>[1, 2]</b><b>[2, 3]</b><b>[4, 5]</b>", // t09
+          "<b>[1, 2, 3]</b><b>[4, 5, 6]</b><b>[7, 8, 9]</b><b>[\"a\", \"b\", \"c\"]</b>",
+          "<b>0</b><b>1</b><b>2</b><b>3</b><b>4</b><b>5</b><b>6</b><b>7</b><b>8</b><b>9</b><b>10</b><b>11</b><b>12</b><b>13</b><b>14</b><b>15</b>"
+        ],
         ["sum",
           undef,                                              // t01
           0,                                                  // t02
@@ -2469,6 +2582,7 @@ BEGIN_SCOPE validate;
       // create / convert
       for (vid=test_ids) run_test( "consts", consts(get_value(vid)), vid );
       for (vid=test_ids) run_test( "vstr", vstr(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "vstr_html_B", vstr_html(get_value(vid),p="b"), vid );
       for (vid=test_ids) run_test( "sum", sum(get_value(vid)), vid );
 
       // query
