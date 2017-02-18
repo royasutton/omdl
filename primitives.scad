@@ -725,24 +725,27 @@ function compare
 /***************************************************************************//**
   \param    l <integer> The vector length.
   \param    v \<value> The element value.
+  \param    u <boolean> Use element value = \b undef.
 
-  \returns  <vector> With \p l copies of the element value \p v.
+  \returns  <vector> With \p l copies of the element value.
             Returns \b empty_v when \p l is not a number or if
             <tt>(l < 1)</tt>.
 
   \details
 
   \note     When \p v is not specified, each element is assigned the value
-            of its index position.
+            of its index position when \p u is \b false.
 *******************************************************************************/
 function consts
 (
   l,
-  v
+  v,
+  u = false
 ) = (l<1) ? empty_v
   : !is_number(l) ? empty_v
   : is_defined(v) ? [for (i=[0:1:l-1]) v]
-  : [for (i=[0:1:l-1]) i];
+  : (u == false) ? [for (i=[0:1:l-1]) i]
+  : [for (i=[0:1:l-1]) undef];
 
 //! Convert all vector elements to strings and concatenate.
 /***************************************************************************//**
