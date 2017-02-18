@@ -854,6 +854,8 @@ function vstr_html
       ca = is_vector(a) ?  first(a) : a,
       cf = is_vector(f) ?  first(f) : f,
 
+      rp = is_vector(cp) ? reverse(cp) : cp,
+
       f0 = (len(cf) > 0) ? str(" color=\"", cf[0], "\"") : empty_str,
       f1 = (len(cf) > 1) ? str(" size=\"",  cf[1], "\"") : empty_str,
       f2 = (len(cf) > 2) ? str(" face=\"",  cf[2], "\"") : empty_str,
@@ -867,7 +869,7 @@ function vstr_html
         [for (i=cb) str(bb, i, ba)],
         [for (i=cp) str(bb, i, ba)],
         fb, cv, fa,
-        [for (i=reverse(cp)) str(bb, "/", i, ba)],
+        [for (i=rp) str(bb, "/", i, ba)],
         [for (i=ca) str(bb, i, ba)]
       ),
 
