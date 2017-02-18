@@ -61,6 +61,7 @@ library             := mainpage \
                        primitives \
                        math \
                        math_bitwise \
+                       math_utility \
                        utilities \
                        validation \
                        console \
