@@ -1,0 +1,575 @@
+//! Table of polyhedra data group: \c pyramids
+/***************************************************************************//**
+  \file   pyramids.scad
+  \author Roy Allen Sutton
+  \date   2017
+
+  \copyright
+
+    This file is part of [omdl] (https://github.com/royasutton/omdl),
+    an OpenSCAD mechanical design library.
+
+    The \em omdl is free software; you can redistribute it and/or modify
+    it under the terms of the [GNU Lesser General Public License]
+    (http://www.gnu.org/licenses/lgpl.html) as published by the Free
+    Software Foundation; either version 2.1 of the License, or (at
+    your option) any later version.
+
+    The \em omdl is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with the \em omdl; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+    02110-1301, USA; or see <http://www.gnu.org/licenses/>.
+
+  \details
+
+    This [omdl] formatted data table has been assembled using a script
+    that converts the polyhedra data obtained from [Anthony Thyssen]'s
+    [Studies into Polyhedra]. The vertices are tabulated in both their
+    original Cartesian as well as their converted spherical coordinate
+    form, which is convenient when scaling. The data originates from
+    one of three sources, in order of decreasing accuracy:
+
+      \li [Exact Mathematics] as presented by [Anthony Thyssen],
+      \li the [Polyhedron Database] maintained by [Netlib], and
+      \li an [Encyclopedia of Polyhedra] by [George W. Hart].
+
+  \note Include this library file using the \b include statement.
+
+  [omdl]: https://github.com/royasutton/omdl
+
+  [Anthony Thyssen]: http://www.ict.griffith.edu.au/anthony/anthony.html
+  [Studies into Polyhedra]: http://www.ict.griffith.edu.au/anthony/graphics/polyhedra
+  [Exact Mathematics]: http://www.ict.griffith.edu.au/anthony/graphics/polyhedra/maths.shtml
+
+  [George W. Hart]: http://www.georgehart.com
+  [Encyclopedia of Polyhedra]: http://www.georgehart.com/virtual-polyhedra/vp.html
+
+  [Netlib]: http://www.netlib.org
+  [Polyhedron Database]: http://www.netlib.org/polyhedra
+
+  \ingroup database_polyhedra
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+/***************************************************************************//**
+  \addtogroup database
+  @{
+
+  \addtogroup database_polyhedra
+  @{
+    <br>
+    ### Group: pyramids ###
+
+    \amu_define caption (pyramids)
+    \amu_make png_files (append=db_dim extension=png)
+    \amu_make stl_files (append=db_dim extension=stl)
+
+    \amu_shell file_cnt ("echo ${png_files} | wc -w")
+    \amu_shell cell_num ("seq -f '(%g)' -s '^' ${file_cnt}")
+
+    \amu_shell html_cell_titles
+      (
+        "echo ${stl_files} | grep -Po 'db_dim_\K[^.]*' | tr '\n' '^'"
+      )
+
+    \htmlonly
+      \amu_image_table
+        (
+          type=html columns=4 image_width="200" cell_files="${png_files}"
+          table_caption="${caption}" cell_captions="${cell_num}"
+          cell_titles="${html_cell_titles}" cell_urls="${stl_files}"
+        )
+    \endhtmlonly
+
+    \amu_define caption (pyramids)
+    \amu_make eps_files (append=db_dim extension=png2eps)
+
+    \latexonly
+      \amu_image_table
+        (
+          type=latex columns=4 image_width="1.25in" cell_files="${eps_files}"
+          table_caption="${caption}" cell_captions="${cell_num}"
+        )
+    \endlatexonly
+
+    \amu_shell data
+      (
+        "grep -Po 'ECHO: \"\K[^\"]*' build/csg/pyramids_db_autostat.log" --rmnl
+      )
+    \amu_shell columns ("echo '${data}' | awk -F '^' 'NR==1 {print NF;exit}'")
+    \amu_shell heading ("echo '${data}' | awk -F '^' 'NR==1 {print;exit}'")
+    \amu_shell texts   ("echo '${data}' | awk -F '^' 'NR>1 {print}'")
+
+    \amu_table
+      (
+        columns=${columns} column_headings="${heading}" cell_texts="${texts}"
+      )
+*******************************************************************************/
+//----------------------------------------------------------------------------//
+
+//! \<table> \c pyramids polyhedra data table columns definition.
+dtc_polyhedra_pyramids =
+[
+  ["id", "identifier"],
+  ["n", "name"],
+  ["o", "other name"],
+  ["g", "group"],
+  ["d", "data source"],
+  ["c", "cartesian vertices"],
+  ["s", "spherical vertices"],
+  ["f", "faces"],
+  ["e", "edges"]
+];
+
+//! \<table> \c pyramids polyhedra data table rows.
+dtr_polyhedra_pyramids =
+[
+  [
+    "pentagonal_dipyramid",
+    "Pentagonal Dipyramid",
+    "J13",
+    "pyramids",
+    "Polyhedron Database #57",
+    [
+      [ 0.00000000000,  0.61803398875,  0.00000000000],
+      [ 0.00000000000, -0.00000000000,  1.00000000000],
+      [ 0.95105651630, -0.00000000000,  0.30901699437],
+      [-0.95105651630, -0.00000000000,  0.30901699437],
+      [ 0.58778525229,  0.00000000000, -0.80901699437],
+      [-0.58778525229, -0.00000000000, -0.80901699437],
+      [ 0.00000000000, -0.61803398875,  0.00000000000]
+    ],
+    [
+      [0.61803398875,   89.99999999999,  89.99999999999],
+      [1.00000000000,   -0.00000000000,   0.00000000000],
+      [1.00000000000,   -0.00000000000,  72.00000000000],
+      [1.00000000000, -179.99999999999,  72.00000000000],
+      [1.00000000000,    0.00000000000, 143.99999999999],
+      [1.00000000000, -179.99999999999, 143.99999999999],
+      [0.61803398875,  -89.99999999999,  89.99999999999]
+    ],
+    [
+      [0,2,1],
+      [0,5,4],
+      [0,4,2],
+      [0,1,3],
+      [0,3,5],
+      [6,1,2],
+      [6,4,5],
+      [6,2,4],
+      [6,3,1],
+      [6,5,3]
+    ],
+    [
+      [0,1],
+      [0,2],
+      [0,3],
+      [0,4],
+      [0,5],
+      [1,2],
+      [1,3],
+      [1,6],
+      [2,4],
+      [2,6],
+      [3,5],
+      [3,6],
+      [4,5],
+      [4,6],
+      [5,6]
+    ]
+  ],
+  [
+    "pentagonal_pyramid",
+    "Pentagonal Pyramid",
+    "J2",
+    "pyramids",
+    "Polyhedron Database #46",
+    [
+      [ 0.00000000000,  0.51231760759,  0.00000000000],
+      [ 0.00000000000, -0.10246352152,  0.99473676254],
+      [ 0.94605088002, -0.10246352152,  0.30739056456],
+      [-0.94605088002, -0.10246352152,  0.30739056456],
+      [ 0.58469159894, -0.10246352152, -0.80475894583],
+      [-0.58469159894, -0.10246352152, -0.80475894583]
+    ],
+    [
+      [0.51231760759,   89.99999999999,  89.99999999999],
+      [1.00000000000,  -89.99999999999,   5.88104874729],
+      [1.00000000000,   -6.18141426337,  72.09795604403],
+      [1.00000000000, -173.81858573661,  72.09795604404],
+      [1.00000000000,   -9.93979324212, 143.58698182134],
+      [1.00000000000, -170.06020675786, 143.58698182134]
+    ],
+    [
+      [0,2,1],
+      [0,5,4],
+      [0,4,2],
+      [0,1,3],
+      [0,3,5],
+      [1,2,4,5,3]
+    ],
+    [
+      [0,1],
+      [0,2],
+      [0,3],
+      [0,4],
+      [0,5],
+      [1,2],
+      [1,3],
+      [2,4],
+      [3,5],
+      [4,5]
+    ]
+  ],
+  [
+    "square_dipryamid",
+    "Square Dipryamid",
+    "Octahedron",
+    "pyramids",
+    "Exact Mathematics",
+    [
+      [ 0.00000000000,  1.00000000000,  0.00000000000],
+      [-1.00000000000,  0.00000000000,  0.00000000000],
+      [ 0.00000000000,  0.00000000000, -1.00000000000],
+      [ 1.00000000000,  0.00000000000,  0.00000000000],
+      [ 0.00000000000,  0.00000000000,  1.00000000000],
+      [ 0.00000000000, -1.00000000000,  0.00000000000]
+    ],
+    [
+      [1.00000000000,   89.99999999999,  89.99999999999],
+      [1.00000000000,  179.99999999999,  89.99999999999],
+      [1.00000000000,    0.00000000000, 179.99999999999],
+      [1.00000000000,    0.00000000000,  89.99999999999],
+      [1.00000000000,    0.00000000000,   0.00000000000],
+      [1.00000000000,  -89.99999999999,  89.99999999999]
+    ],
+    [
+      [0,1,2],
+      [0,2,3],
+      [0,3,4],
+      [0,4,1],
+      [5,2,1],
+      [5,3,2],
+      [5,4,3],
+      [5,1,4]
+    ],
+    [
+      [0,1],
+      [0,2],
+      [0,3],
+      [0,4],
+      [1,2],
+      [1,4],
+      [1,5],
+      [2,3],
+      [2,5],
+      [3,4],
+      [3,5],
+      [4,5]
+    ]
+  ],
+  [
+    "square_pyramid",
+    "Square Pyramid",
+    "J1",
+    "pyramids",
+    "Exact Mathematics",
+    [
+      [ 0.00000000000,  1.00000000000,  0.00000000000],
+      [-1.00000000000,  0.00000000000,  0.00000000000],
+      [ 0.00000000000,  0.00000000000, -1.00000000000],
+      [ 1.00000000000,  0.00000000000,  0.00000000000],
+      [ 0.00000000000,  0.00000000000,  1.00000000000]
+    ],
+    [
+      [1.00000000000,   89.99999999999,  89.99999999999],
+      [1.00000000000,  179.99999999999,  89.99999999999],
+      [1.00000000000,    0.00000000000, 179.99999999999],
+      [1.00000000000,    0.00000000000,  89.99999999999],
+      [1.00000000000,    0.00000000000,   0.00000000000]
+    ],
+    [
+      [0,1,2],
+      [0,2,3],
+      [0,3,4],
+      [0,4,1],
+      [4,3,2,1]
+    ],
+    [
+      [0,1],
+      [0,2],
+      [0,3],
+      [0,4],
+      [1,2],
+      [1,4],
+      [2,3],
+      [3,4]
+    ]
+  ],
+  [
+    "triangular_dipyramid",
+    "Triangular Dipyramid",
+    "J12",
+    "pyramids",
+    "Exact Mathematics",
+    [
+      [ 0.00000000000,  1.00000000000,  0.00000000000],
+      [-0.61237243570,  0.00000000000,  0.35355339059],
+      [ 0.61237243570,  0.00000000000,  0.35355339059],
+      [ 0.00000000000,  0.00000000000, -0.70710678119],
+      [ 0.00000000000, -1.00000000000,  0.00000000000]
+    ],
+    [
+      [1.00000000000,   89.99999999999,  89.99999999999],
+      [0.70710678119,  179.99999999999,  59.99999999999],
+      [0.70710678119,    0.00000000000,  59.99999999999],
+      [0.70710678119,    0.00000000000, 179.99999999999],
+      [1.00000000000,  -89.99999999999,  89.99999999999]
+    ],
+    [
+      [0,2,1],
+      [0,1,3],
+      [0,3,2],
+      [4,1,2],
+      [4,3,1],
+      [4,2,3]
+    ],
+    [
+      [0,1],
+      [0,2],
+      [0,3],
+      [1,2],
+      [1,3],
+      [1,4],
+      [2,3],
+      [2,4],
+      [3,4]
+    ]
+  ],
+  [
+    "triangular_pyramid",
+    "Triangular Pyramid",
+    "Tetrahedron",
+    "pyramids",
+    "Exact Mathematics",
+    [
+      [ 0.00000000000,  1.00000000000,  0.00000000000],
+      [-0.81649658093, -0.33333333333,  0.47140452079],
+      [ 0.81649658093, -0.33333333333,  0.47140452079],
+      [-0.00000000000, -0.33333333333, -0.94280904158]
+    ],
+    [
+      [1.00000000000,   89.99999999999,  89.99999999999],
+      [1.00000000000, -157.79234570139,  61.87449429794],
+      [1.00000000000,  -22.20765429859,  61.87449429794],
+      [1.00000000000,  -89.99999999999, 160.52877936550]
+    ],
+    [
+      [0,2,1],
+      [0,1,3],
+      [0,3,2],
+      [1,2,3]
+    ],
+    [
+      [0,1],
+      [0,2],
+      [0,3],
+      [1,2],
+      [1,3],
+      [2,3]
+    ]
+  ]
+];
+
+//! @}
+//! @}
+
+//----------------------------------------------------------------------------//
+// openscad-amu auxiliary scripts
+//----------------------------------------------------------------------------//
+
+/*
+BEGIN_SCOPE db;
+BEGIN_SCOPE autostat;
+  BEGIN_OPENSCAD;
+    include <math.scad>;
+    include <math_utility.scad>;
+    include <coordinates.scad>;
+    include <table.scad>;
+    include <database/polyhedra/pyramids.scad>;
+
+    fs  = "^";
+
+    fad = 1;
+    eld = 3;
+    ead = 1;
+
+    tc = dtc_polyhedra_pyramids;
+    tr = dtr_polyhedra_pyramids;
+
+    ids = table_get_row_ids(tr);
+
+    echo
+    (
+      str
+      (
+        "no.", fs, "table id", fs, "other name", fs,
+        "vertices", fs, "faces", fs, "edges",
+
+        fs, "face-facets",
+        fs, "face-angles",
+        fs, "edge-lengths",
+        fs, "edge-angles"
+      )
+    );
+
+    for ( id = ids )
+    {
+      i = first(find(id, ids, c=1))+1;
+
+      n = table_get(tr, tc, id, "n");
+      o = table_get(tr, tc, id, "o");
+      g = table_get(tr, tc, id, "g");
+      d = table_get(tr, tc, id, "d");
+
+      c = table_get(tr, tc, id, "c");
+      s = table_get(tr, tc, id, "s");
+      f = table_get(tr, tc, id, "f");
+      e = table_get(tr, tc, id, "e");
+
+      fo = is_empty(o) ? "-" : o;
+
+      echo
+      (
+        str
+        (
+          i, fs, id, fs, fo, fs,
+          len(c), fs, len(f), fs, len(e),
+
+          fs, hist([for (i=f) len(i)], m=9),
+          fs, hist
+              (
+                [
+                  for(i=[0 : len(f)-1])
+                  let
+                  (
+                    n1 = cross_vv(c[f[i][1]], c[f[i][2]], c[f[i][0]], c[f[i][0]]),
+                    af = [for(v=f[i]) for(j=[0 : len(f)-1]) if( j != i && exists(v, f[j]) ) j]
+                  )
+                    for(u=unique(af))
+                    let
+                    (
+                      n2 = cross_vv(c[f[u][1]], c[f[u][2]], c[f[u][0]], c[f[u][0]])
+                    )
+                      dround(angle_vv(n1, n2), d=fad)
+                ], m=9
+              ),
+          fs, hist([for (i=e) dround(distance_pp(c[first(i)], c[second(i)]), d=eld)], m=9),
+          fs, hist
+              (
+                [
+                  for (k=[for(j=f) for(i=nssequence(j, n=3, s=1, w=true)) i])
+                    dround(angle_vv( c[k[1]], c[k[2]], c[k[0]], c[k[1]] ), d=ead)
+                ], m=9
+              ),
+          fs
+        )
+      );
+    }
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
+    include --path "${INCLUDE_PATH}" script_std.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+END_SCOPE;
+*/
+
+/*
+BEGIN_SCOPE db;
+BEGIN_SCOPE dim;
+  BEGIN_OPENSCAD;
+    include <constants.scad>;
+    include <table.scad>;
+    include <database/polyhedra/pyramids.scad>;
+
+    tc = dtc_polyhedra_pyramids;
+    tr = dtr_polyhedra_pyramids;
+
+    id = "default";
+    ct = 1/25;
+
+    config = 0;
+    rp = config == 0 ? true : false;
+    rs = config == 0 ? true : false;
+    rc = config == 0 ? true : false;
+
+    pv = table_get(tr, tc, id, "c");
+    pf = table_get(tr, tc, id, "f");
+    pe = table_get(tr, tc, id, "e");
+
+    if( rp )
+    %polyhedron(points=pv, faces=pf);
+    else
+    polyhedron(points=pv, faces=pf);
+
+    if ( rs )
+    color("lightblue")
+    for(p=pv)
+      translate(p)
+        sphere(r=ct*(1+1/2), $fn=25);
+
+    if ( rc )
+    for(e=pe)
+    {
+      p1 = pv[first(e)];
+      p2 = pv[second(e)];
+
+      el = norm(p1-p2);
+      ax = -acos((p2[2]-p1[2]) / el);
+      az = -atan2(p2[0]-p1[0], p2[1]-p1[1]);
+
+      translate((p1+p2) / 2)
+      rotate([ax, 0, az])
+      cylinder(r=ct, h=el, center=true);
+    }
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
+
+    views     name "views" views "diag";
+    defines   name "ids" define "id"
+              strings
+              "
+                pentagonal_dipyramid
+                pentagonal_pyramid
+                square_dipryamid
+                square_pyramid
+                triangular_dipyramid
+                triangular_pyramid
+              ";
+    variables add_opts_combine "views ids";
+    variables add_opts "-D config=0 --viewall --autocenter";
+
+    include --path "${INCLUDE_PATH}" script_new.mfs;
+
+    include --path "${INCLUDE_PATH}" config_stl.mfs;
+    variables add_opts_combine "ids";
+    variables add_opts "-D config=1";
+
+    include --path "${INCLUDE_PATH}" script_app.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+END_SCOPE;
+*/
+
+//----------------------------------------------------------------------------//
+// end of file
+//----------------------------------------------------------------------------//

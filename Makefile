@@ -56,7 +56,33 @@ seam_defines        := INCLUDE_PATH=include
 doxygen_config      := Doxyfile
 project_files_add   := $(wildcard include/*.mfs)
 
-library             := mainpage \
+library_info        := README.md \
+                       lgpl-2.1.txt
+
+# Polyhedra
+library_db01        := database/polyhedra/anti_prisms \
+                       database/polyhedra/archimedean_duals \
+                       database/polyhedra/archimedean \
+                       database/polyhedra/cupolas \
+                       database/polyhedra/dipyramids \
+                       database/polyhedra/johnson \
+                       database/polyhedra/platonic \
+                       database/polyhedra/prisms \
+                       database/polyhedra/pyramids \
+                       database/polyhedra/trapezohedron \
+                       database/polyhedra/polyhedra_all
+
+library_db01_src    := database_src/polyhedra/Makefile \
+                       database_src/polyhedra/src/Makefile \
+                       database_src/polyhedra/src/convert \
+                       database_src/polyhedra/src/convert.conf \
+                       database_src/polyhedra/src/convert.text \
+                       database_src/polyhedra/src/dist/fetch.bash \
+                       database_src/polyhedra/src/dist/rename
+
+library             := $(library_db01) \
+                       \
+                       mainpage \
                        constants \
                        primitives \
                        math \
@@ -77,10 +103,23 @@ library             := mainpage \
                        shapes3d \
                        tool_edge
 
-backup_files_add    := README.md \
-                       lgpl-2.1.txt
+#------------------------------------------------------------------------------#
+# Scope excludes
+#------------------------------------------------------------------------------#
 
-release_files_add    = $(backup_files_add) \
+# shape manifests: only requred when doing a release
+scopes_exclude      := manifest
+
+# database: normally pre-built and released by database makefiles
+scopes_exclude      += db_autotest db_autostat
+
+#------------------------------------------------------------------------------#
+# Release and backup additions
+#------------------------------------------------------------------------------#
+# use recursive assignment '=' for references that use derived paths
+# such as: $(output_path), $(release_path), etc.
+
+release_files_add    = $(library_info) \
                        \
                        $(output_path)latex/refman.pdf \
                        \
@@ -91,13 +130,11 @@ release_files_add    = $(backup_files_add) \
                        $(output_path)stl/shapes3d_manifest_2.stl \
                        $(output_path)stl/tool_edge_manifest.stl
 
-release_archive_files_add = $(backup_files_add)
+release_archive_files_add := $(library_info)
 
-# comment out to build shape manifest release files
-scopes_exclude_filter := %manifest.bash
-
-# temp
-edit: ; geany Makefile $(src_files)
+backup_files_add    := $(library_info) \
+                       \
+                       $(library_db01_src)
 
 #------------------------------------------------------------------------------#
 include $(AMU_PM_PREFIX)amu_pm_rules
