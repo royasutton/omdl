@@ -57,9 +57,6 @@
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup database
-  @{
-
   \addtogroup database_polyhedra
   @{
     <br>
@@ -921,7 +918,6 @@ dtr_polyhedra_cupolas =
 ];
 
 //! @}
-//! @}
 
 //----------------------------------------------------------------------------//
 // openscad-amu auxiliary scripts
@@ -935,7 +931,7 @@ BEGIN_SCOPE autostat;
     include <math_utility.scad>;
     include <coordinates.scad>;
     include <table.scad>;
-    include <database/polyhedra/cupolas.scad>;
+    include <database/geometry/polyhedra/cupolas.scad>;
 
     fs  = "^";
 
@@ -1031,7 +1027,7 @@ BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
     include <constants.scad>;
     include <table.scad>;
-    include <database/polyhedra/cupolas.scad>;
+    include <database/geometry/polyhedra/cupolas.scad>;
 
     tc = dtc_polyhedra_cupolas;
     tr = dtr_polyhedra_cupolas;

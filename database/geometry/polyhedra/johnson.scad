@@ -57,9 +57,6 @@
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup database
-  @{
-
   \addtogroup database_polyhedra
   @{
     <br>
@@ -12842,7 +12839,6 @@ dtr_polyhedra_johnson =
 ];
 
 //! @}
-//! @}
 
 //----------------------------------------------------------------------------//
 // openscad-amu auxiliary scripts
@@ -12856,7 +12852,7 @@ BEGIN_SCOPE autostat;
     include <math_utility.scad>;
     include <coordinates.scad>;
     include <table.scad>;
-    include <database/polyhedra/johnson.scad>;
+    include <database/geometry/polyhedra/johnson.scad>;
 
     fs  = "^";
 
@@ -12952,7 +12948,7 @@ BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
     include <constants.scad>;
     include <table.scad>;
-    include <database/polyhedra/johnson.scad>;
+    include <database/geometry/polyhedra/johnson.scad>;
 
     tc = dtc_polyhedra_johnson;
     tr = dtr_polyhedra_johnson;

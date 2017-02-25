@@ -57,9 +57,6 @@
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup database
-  @{
-
   \addtogroup database_polyhedra
   @{
     <br>
@@ -447,7 +444,6 @@ dtr_polyhedra_platonic =
 ];
 
 //! @}
-//! @}
 
 //----------------------------------------------------------------------------//
 // openscad-amu auxiliary scripts
@@ -461,7 +457,7 @@ BEGIN_SCOPE autostat;
     include <math_utility.scad>;
     include <coordinates.scad>;
     include <table.scad>;
-    include <database/polyhedra/platonic.scad>;
+    include <database/geometry/polyhedra/platonic.scad>;
 
     fs  = "^";
 
@@ -557,7 +553,7 @@ BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
     include <constants.scad>;
     include <table.scad>;
-    include <database/polyhedra/platonic.scad>;
+    include <database/geometry/polyhedra/platonic.scad>;
 
     tc = dtc_polyhedra_platonic;
     tr = dtr_polyhedra_platonic;

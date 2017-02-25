@@ -60,25 +60,25 @@ library_info        := README.md \
                        lgpl-2.1.txt
 
 # Polyhedra
-library_db01        := database/shapes/polyhedra/anti_prisms \
-                       database/shapes/polyhedra/archimedean_duals \
-                       database/shapes/polyhedra/archimedean \
-                       database/shapes/polyhedra/cupolas \
-                       database/shapes/polyhedra/dipyramids \
-                       database/shapes/polyhedra/johnson \
-                       database/shapes/polyhedra/platonic \
-                       database/shapes/polyhedra/prisms \
-                       database/shapes/polyhedra/pyramids \
-                       database/shapes/polyhedra/trapezohedron \
-                       database/shapes/polyhedra/polyhedra_all
+library_db01        := database/geometry/polyhedra/anti_prisms \
+                       database/geometry/polyhedra/archimedean_duals \
+                       database/geometry/polyhedra/archimedean \
+                       database/geometry/polyhedra/cupolas \
+                       database/geometry/polyhedra/dipyramids \
+                       database/geometry/polyhedra/johnson \
+                       database/geometry/polyhedra/platonic \
+                       database/geometry/polyhedra/prisms \
+                       database/geometry/polyhedra/pyramids \
+                       database/geometry/polyhedra/trapezohedron \
+                       database/geometry/polyhedra/polyhedra_all
 
-library_db01_src    := database_src/shapes/polyhedra/Makefile \
-                       database_src/shapes/polyhedra/src/Makefile \
-                       database_src/shapes/polyhedra/src/convert \
-                       database_src/shapes/polyhedra/src/convert.conf \
-                       database_src/shapes/polyhedra/src/convert.text \
-                       database_src/shapes/polyhedra/src/dist/fetch.bash \
-                       database_src/shapes/polyhedra/src/dist/rename
+library_db01_src    := database_src/geometry/polyhedra/Makefile \
+                       database_src/geometry/polyhedra/src/Makefile \
+                       database_src/geometry/polyhedra/src/convert \
+                       database_src/geometry/polyhedra/src/convert.conf \
+                       database_src/geometry/polyhedra/src/convert.text \
+                       database_src/geometry/polyhedra/src/dist/fetch.bash \
+                       database_src/geometry/polyhedra/src/dist/rename
 
 library             := $(library_db01) \
                        \

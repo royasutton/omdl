@@ -57,9 +57,6 @@
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup database
-  @{
-
   \addtogroup database_polyhedra
   @{
     <br>
@@ -387,7 +384,6 @@ dtr_polyhedra_pyramids =
 ];
 
 //! @}
-//! @}
 
 //----------------------------------------------------------------------------//
 // openscad-amu auxiliary scripts
@@ -401,7 +397,7 @@ BEGIN_SCOPE autostat;
     include <math_utility.scad>;
     include <coordinates.scad>;
     include <table.scad>;
-    include <database/polyhedra/pyramids.scad>;
+    include <database/geometry/polyhedra/pyramids.scad>;
 
     fs  = "^";
 
@@ -497,7 +493,7 @@ BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
     include <constants.scad>;
     include <table.scad>;
-    include <database/polyhedra/pyramids.scad>;
+    include <database/geometry/polyhedra/pyramids.scad>;
 
     tc = dtc_polyhedra_pyramids;
     tr = dtr_polyhedra_pyramids;

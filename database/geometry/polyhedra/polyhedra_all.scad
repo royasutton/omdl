@@ -57,7 +57,7 @@
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup database
+  \addtogroup database_geometry
   @{
 
   \defgroup database_polyhedra Polyhedra
@@ -69,7 +69,7 @@
     \code{.C}
     include <constants.scad>;
     include <table.scad>;
-    include <database/polyhedra/platonic.scad>;
+    include <database/geometry/polyhedra/platonic.scad>;
 
     tc = dtc_polyhedra_platonic;
     tr = dtr_polyhedra_platonic;
@@ -21471,7 +21471,7 @@ BEGIN_SCOPE autotest;
   BEGIN_OPENSCAD;
     include <coordinates.scad>;
     include <table.scad>;
-    include <database/polyhedra/polyhedra_all.scad>;
+    include <database/geometry/polyhedra/polyhedra_all.scad>;
 
     coordinates_positive_angles = false;
 

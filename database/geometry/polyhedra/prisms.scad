@@ -57,9 +57,6 @@
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup database
-  @{
-
   \addtogroup database_polyhedra
   @{
     <br>
@@ -522,7 +519,6 @@ dtr_polyhedra_prisms =
 ];
 
 //! @}
-//! @}
 
 //----------------------------------------------------------------------------//
 // openscad-amu auxiliary scripts
@@ -536,7 +532,7 @@ BEGIN_SCOPE autostat;
     include <math_utility.scad>;
     include <coordinates.scad>;
     include <table.scad>;
-    include <database/polyhedra/prisms.scad>;
+    include <database/geometry/polyhedra/prisms.scad>;
 
     fs  = "^";
 
@@ -632,7 +628,7 @@ BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
     include <constants.scad>;
     include <table.scad>;
-    include <database/polyhedra/prisms.scad>;
+    include <database/geometry/polyhedra/prisms.scad>;
 
     tc = dtc_polyhedra_prisms;
     tr = dtr_polyhedra_prisms;

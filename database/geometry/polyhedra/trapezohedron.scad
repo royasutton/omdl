@@ -57,9 +57,6 @@
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup database
-  @{
-
   \addtogroup database_polyhedra
   @{
     <br>
@@ -804,7 +801,6 @@ dtr_polyhedra_trapezohedron =
 ];
 
 //! @}
-//! @}
 
 //----------------------------------------------------------------------------//
 // openscad-amu auxiliary scripts
@@ -818,7 +814,7 @@ BEGIN_SCOPE autostat;
     include <math_utility.scad>;
     include <coordinates.scad>;
     include <table.scad>;
-    include <database/polyhedra/trapezohedron.scad>;
+    include <database/geometry/polyhedra/trapezohedron.scad>;
 
     fs  = "^";
 
@@ -914,7 +910,7 @@ BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
     include <constants.scad>;
     include <table.scad>;
-    include <database/polyhedra/trapezohedron.scad>;
+    include <database/geometry/polyhedra/trapezohedron.scad>;
 
     tc = dtc_polyhedra_trapezohedron;
     tr = dtr_polyhedra_trapezohedron;

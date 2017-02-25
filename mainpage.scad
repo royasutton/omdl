@@ -228,6 +228,23 @@
 /***************************************************************************//**
   \defgroup database Database
   \brief    Design specifications stored in data containers.
+
+  \addtogroup database
+  @{
+
+  \defgroup database_components Components
+  \brief    Components specifications.
+
+  \defgroup database_electrical Electrical
+  \brief    Electrical specifications.
+
+  \defgroup database_geometry Geometry
+  \brief    Predefined geometry.
+
+  \defgroup database_materials Materials
+  \brief    Material specifications.
+
+  @}
 *******************************************************************************/
 
 /***************************************************************************//**
@@ -237,7 +254,7 @@
 
 /***************************************************************************//**
   \defgroup parts Parts
-  \brief    Parametric parts/components.
+  \brief    Parametric parts and assemblies.
 *******************************************************************************/
 
 /***************************************************************************//**
