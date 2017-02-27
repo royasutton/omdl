@@ -1583,11 +1583,13 @@ function qsort
 
       lt = [for (i = v) if (i  < mp) i],
       eq = [for (i = v) if (i == mp) i],
-      gt = [for (i = v) if (i  > mp) i]
+      gt = [for (i = v) if (i  > mp) i],
 
+      sp = (r == true) ?
+           concat(qsort(gt, r), eq, qsort(lt, r))
+         : concat(qsort(lt, r), eq, qsort(gt, r))
     )
-    (r == true) ? concat(qsort(gt, r), eq, qsort(lt, r))
-  : concat(qsort(lt, r), eq, qsort(gt, r));
+    sp;
 
 //! Hierarchically sort all elements of a vector using quick sort.
 /***************************************************************************//**
