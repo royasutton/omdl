@@ -889,7 +889,7 @@ function vstr_html
   \param    i2 <integer> The element index at which to end summation
             (last when not specified).
 
-  \returns  <decimal> The summation of elements over the index range.
+  \returns  <vector|decimal> The summation of elements over the index range.
             Returns \b v when it is a scalar number.
             Returns 0 when \p v is empty.
             Returns \b undef when \p v is not defined or is not iterable
@@ -912,6 +912,33 @@ function sum
     )
     (i == s) ? v[i]
   : v[i] + sum(v, s, i-1);
+
+//! Compute the mean/average of a vector of numbers.
+/***************************************************************************//**
+  \param    v <range|vector> A vector of numerical values.
+
+  \returns  <vector|decimal> The sum of all the elements divided by the
+            total number of elements.
+            Returns \b v when it is a scalar number.
+            Returns 0 when \p v is empty.
+            Returns \b undef when \p v is not defined or is not iterable
+            and not a number.
+
+  \details
+
+    See [Wikipedia] for more information.
+
+    [Wikipedia]: https://en.wikipedia.org/wiki/Mean
+*******************************************************************************/
+function mean
+(
+  v
+) = not_defined(v) ? undef
+  : is_empty(v) ? 0
+  : is_number(v) ? v
+  : is_range(v) ? mean([for (i=v) i])
+  : !is_iterable(v) ? undef
+  : sum(v) / len(v);
 
 //----------------------------------------------------------------------------//
 // query
@@ -2168,6 +2195,19 @@ BEGIN_SCOPE validate;
           [undef,undef,undef],                                // t10
           120                                                 // t11
         ],
+        ["mean",
+          undef,                                              // t01
+          0,                                                  // t02
+          4.5,                                                // t03
+          undef,                                              // t04
+          undef,                                              // t05
+          undef,                                              // t06
+          undef,                                              // t07
+          [1.5,2.5],                                          // t08
+          undef,                                              // t09
+          [undef,undef,undef],                                // t10
+          7.5                                                 // t11
+        ],
         ["find_12",
           empty_v,                                            // t01
           empty_v,                                            // t02
@@ -2586,6 +2626,7 @@ BEGIN_SCOPE validate;
       for (vid=test_ids) run_test( "vstr", vstr(get_value(vid)), vid );
       for (vid=test_ids) run_test( "vstr_html_B", vstr_html(get_value(vid),p="b"), vid );
       for (vid=test_ids) run_test( "sum", sum(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "mean", mean(get_value(vid)), vid );
 
       // query
       for (vid=test_ids) run_test( "find_12", find([1,2],get_value(vid)), vid );
