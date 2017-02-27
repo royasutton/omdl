@@ -46,62 +46,6 @@ include <math_bitwise.scad>;
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
-// general / miscellaneous
-//----------------------------------------------------------------------------//
-
-//! Round a number to a specified number of digits after the decimal point.
-/***************************************************************************//**
-  \param    v <number> A numeric value.
-  \param    d <integer> The maximum number of decimals.
-
-  \returns  <decimal> \p v with a most \p d decimal digits truncated and
-            rounded-up if the following digit is 5 or greater.
-            Returns \b undef when \p v is not defined or is not a number.
-*******************************************************************************/
-function dround
-(
-  v,
-  d = 6
-) = round(v * pow(10, d)) / pow(10, d);
-
-//! Round a number to a specified number of significant figures.
-/***************************************************************************//**
-  \param    v <number> A numeric value.
-  \param    d <integer> The number of significant figures.
-
-  \returns  <number> \p v rounded-up to \p d significant figures.
-            Returns \b undef when \p v is not defined or is not a number.
-
-  \details
-
-    See [Wikipedia](https://en.wikipedia.org/wiki/Significant_figures)
-    for more information.
-*******************************************************************************/
-function sround
-(
-  v,
-  d = 6
-) = (v == 0) ? 0
-  : let(n = floor(log(abs(v))) + 1 - d)
-    round(v * pow(10, -n)) * pow(10, n);
-
-//! Limit a number between upper and lower bounds.
-/***************************************************************************//**
-  \param    v <decimal> A numeric value.
-  \param    l <decimal> The minimum value.
-  \param    u <decimal> The maximum value.
-
-  \returns  <decimal> \p v when it is within <tt>[l : u]</tt>.
-            Returns \p l when <tt>(v<l)</tt> and \p u when <tt>(v>u)</tt>.
-*******************************************************************************/
-function limit
-(
-  v,
-  l,
-  u
-) = min(max(v,l),u);
-
-//----------------------------------------------------------------------------//
 // statistical / informational
 //----------------------------------------------------------------------------//
 
