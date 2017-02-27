@@ -959,8 +959,8 @@ function sum
   : !is_iterable(v) ? undef
   : let
     (
-      s = is_defined(i1) ? min(max(i1,0),len(v)-1) : 0,
-      i = is_defined(i2) ? max(min(i2,len(v)-1),0) : len(v)-1
+      s = is_defined(i1) ? limit(i1, 0, len(v)-1) : 0,
+      i = is_defined(i2) ? limit(i2, s, len(v)-1) : len(v)-1
     )
     (i == s) ? v[i]
   : v[i] + sum(v, s, i-1);
