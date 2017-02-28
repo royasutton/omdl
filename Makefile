@@ -101,7 +101,7 @@ library             := $(library_db01) \
                        shapes2d \
                        shapes2de \
                        shapes3d \
-                       tool_edge
+                       tools_edge
 
 #------------------------------------------------------------------------------#
 # Scope excludes
