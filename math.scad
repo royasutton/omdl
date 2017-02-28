@@ -438,7 +438,7 @@ function rpolygon_vp
 [
   for ( a = [0:(360/n):359] )
     let( v = [r*cos(a), r*sin(a)] )
-    (vr == undef) ? v : v - vr/cos(180/n) * unit_v(vt=v)
+    not_defined(vr) ? v : v - vr/cos(180/n) * unit_v(vt=v)
 ];
 
 //! @}
