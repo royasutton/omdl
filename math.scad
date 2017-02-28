@@ -29,7 +29,7 @@
 
   \note Include this library file using the \b include statement.
 
-  \ingroup math math_vector math_ngon math_triangle
+  \ingroup math math_vector math_rpolygon math_triangle
 *******************************************************************************/
 
 include <primitives.scad>;
@@ -402,13 +402,13 @@ function are_coplanar_vvv
   \addtogroup math
   @{
 
-  \defgroup math_ngon n-gon Solutions
-  \brief    Regular n-sided polygon computations.
+  \defgroup math_rpolygon Regular polygons
+  \brief    Equiangular/equilateral polygon computations.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Compute the vertices for an n-sided equiangular/equilateral regular polygon.
+//! Compute the vertices for an n-sided regular polygon.
 /***************************************************************************//**
   \param    n <decimal> The number of sides.
   \param    r <decimal> The ngon vertex radius.
@@ -423,13 +423,13 @@ function are_coplanar_vvv
 
     hull()
     {
-      for ( p = ngon_vp( r=20, n=5, vr=vr ) )
+      for ( p = rpolygon_vp( r=20, n=5, vr=vr ) )
         translate( p )
         circle( r=vr );
     }
     \endcode
 *******************************************************************************/
-function ngon_vp
+function rpolygon_vp
 (
   n,
   r,

@@ -326,7 +326,7 @@ module st_radial_copy
   move = false
 )
 {
-  for ( p = ngon_vp( r=r, n=n ) )
+  for ( p = rpolygon_vp( r=r, n=n ) )
   {
     translate(move==true ? p : origin2d)
     rotate(angle==true ? [0, 0, angle_vv( v1t=x_axis2d_uv, v2t=p )] : origin3d)

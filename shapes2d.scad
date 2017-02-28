@@ -1065,7 +1065,7 @@ module ngon
   {
     hull()
     {
-      for ( c = ngon_vp( r=r, n=n, vr=vr ) )
+      for ( c = rpolygon_vp( r=r, n=n, vr=vr ) )
       {
         translate( c )
         circle( r=vr );
