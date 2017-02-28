@@ -29,7 +29,7 @@
 
   \note Include this library file using the \b include statement.
 
-  \ingroup math math_vector math_rpolygon math_triangle
+  \ingroup math math_vector math_oshapes math_triangle
 *******************************************************************************/
 
 include <primitives.scad>;
@@ -402,8 +402,8 @@ function are_coplanar_vvv
   \addtogroup math
   @{
 
-  \defgroup math_rpolygon Regular polygons
-  \brief    Equiangular/equilateral polygon computations.
+  \defgroup math_oshapes Other Shapes
+  \brief    Other general shape computations.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -462,7 +462,7 @@ function rpolygon_area
   \addtogroup math
   @{
 
-  \defgroup math_triangle Triangle Solutions
+  \defgroup math_triangle Triangles
   \brief    Triangle computations.
 
   \details
