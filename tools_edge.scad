@@ -1,6 +1,6 @@
 //! Shape edge finishing tools.
 /***************************************************************************//**
-  \file   tool_edge.scad
+  \file   tools_edge.scad
   \author Roy Allen Sutton
   \date   2017
 
@@ -69,7 +69,7 @@ include <shapes2d.scad>;
 // amu macros
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \amu_define scope (tool_edge_dim)
+  \amu_define scope (tools_edge_dim)
   \amu_define size  (qvga)
   \amu_define view  (diag)
 
@@ -265,7 +265,7 @@ module edge_add_r
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <tool_edge.scad>;
+    include <tools_edge.scad>;
 
     shape = "edge_profile_r";
     $fn = 72;
@@ -294,7 +294,7 @@ END_SCOPE;
 
 BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
-    include <tool_edge.scad>;
+    include <tools_edge.scad>;
 
     $fn = 72;
 
