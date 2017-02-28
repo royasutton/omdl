@@ -411,7 +411,7 @@ function are_coplanar_vvv
 //! Compute the vertices for an n-sided regular polygon.
 /***************************************************************************//**
   \param    n <decimal> The number of sides.
-  \param    r <decimal> The ngon vertex radius.
+  \param    r <decimal> The regular polygon vertex radius (circum-radius).
   \param    vr <decimal> The vertex rounding radius.
 
   \returns  <vector> A vector [v1, v2, ..., vn] of vectors [x, y] of
@@ -440,6 +440,19 @@ function rpolygon_vp
     let( v = [r*cos(a), r*sin(a)] )
     not_defined(vr) ? v : v - vr/cos(180/n) * unit_v(vt=v)
 ];
+
+//! Compute the area of an n-sided regular polygon.
+/***************************************************************************//**
+  \param    n <decimal> The number of sides.
+  \param    r <decimal> The regular polygon vertex radius (circum-radius).
+
+  \returns  <decimal> Area of the n-sided regular polygon.
+*******************************************************************************/
+function rpolygon_area
+(
+  n,
+  r
+) = pow(r, 2) * n * sin(360/n) / 2;
 
 //! @}
 //! @}
