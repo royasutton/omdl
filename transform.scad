@@ -225,6 +225,8 @@ module st_rotate_extrude_elongate
 
   \note When symmetrical scaling is desired, shape must be centered about
         origin.
+  \todo This function should be re-written to use the built-in scaling
+        provided by linear_extrude() in the upper and lower scaling zones.
 *******************************************************************************/
 module st_linear_extrude_scale
 (
