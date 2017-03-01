@@ -411,11 +411,14 @@ function are_coplanar_vvv
 //! Compute the vertices for an n-sided regular polygon.
 /***************************************************************************//**
   \param    n <decimal> The number of sides.
-  \param    r <decimal> The regular polygon vertex radius (circum-radius).
+  \param    r <decimal> The vertex circumradius of the circumcircle.
+  \param    a <decimal> The inradius of the incircle.
   \param    vr <decimal> The vertex rounding radius.
 
   \returns  <vector> A vector [v1, v2, ..., vn] of vectors [x, y] of
             coordinates.
+
+  \details
 
     \b Example
     \code{.C}
@@ -428,44 +431,71 @@ function are_coplanar_vvv
         circle( r=vr );
     }
     \endcode
+
+  \note     The radius can be specified by either the circumradius \p r
+            or the inradius \p a. If both are specified, \p r is used.
 *******************************************************************************/
 function rpolygon_vp
 (
   n,
   r,
+  a,
   vr
 ) =
 [
+  let
+  (
+    s = is_defined(r) ? r
+      : is_defined(a) ? a / cos(180/n)
+      : 0
+  )
   for ( a = [0:(360/n):359] )
-    let( v = [r*cos(a), r*sin(a)] )
+    let( v = [s*cos(a), s*sin(a)] )
     not_defined(vr) ? v : v - vr/cos(180/n) * unit_v(vt=v)
 ];
 
 //! Compute the area of an n-sided regular polygon.
 /***************************************************************************//**
   \param    n <decimal> The number of sides.
-  \param    r <decimal> The regular polygon vertex radius (circum-radius).
+  \param    r <decimal> The vertex circumradius of the circumcircle.
+  \param    a <decimal> The inradius of the incircle.
 
   \returns  <decimal> Area of the n-sided regular polygon.
+
+  \details
+
+  \note     The radius can be specified by either the circumradius \p r
+            or the inradius \p a. If both are specified, \p r is used.
 *******************************************************************************/
 function rpolygon_area
 (
   n,
-  r
-) = pow(r, 2) * n * sin(360/n) / 2;
+  r,
+  a
+) = is_defined(r) ? pow(r, 2) * n * sin(360/n) / 2
+  : is_defined(a) ? pow(a, 2) * n * tan(180/n)
+  : 0;
 
 //! Compute the perimeter of an n-sided regular polygon.
 /***************************************************************************//**
   \param    n <decimal> The number of sides.
-  \param    r <decimal> The regular polygon vertex radius (circum-radius).
+  \param    r <decimal> The vertex circumradius of the circumcircle.
+  \param    a <decimal> The inradius of the incircle.
 
-  \returns  <decimal> Perimeter of the n-sided regular polygon.
+  \returns  <decimal> Perimeter length of the n-sided regular polygon.
+
+  \details
+
+  \note     The radius can be specified by either the circumradius \p r
+            or the inradius \p a. If both are specified, \p r is used.
 *******************************************************************************/
 function rpolygon_perimeter
 (
   n,
   r
-) = 2 * n * r * sin(180/n);
+) = is_defined(r) ? 2 * n * r * sin(180/n)
+  : is_defined(a) ? 2 * n * a * tan(180/n)
+  : 0;
 
 //! @}
 //! @}
