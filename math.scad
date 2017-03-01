@@ -492,7 +492,8 @@ function rpolygon_area
 function rpolygon_perimeter
 (
   n,
-  r
+  r,
+  a
 ) = is_defined(r) ? 2 * n * r * sin(180/n)
   : is_defined(a) ? 2 * n * a * tan(180/n)
   : 0;
