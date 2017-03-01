@@ -101,7 +101,7 @@ include <shapes2d.scad>;
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=erectangle ${example_dim} )
@@ -115,7 +115,7 @@ module erectangle
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   rectangle(size=size, vr=vr, vrm=vrm, center=center);
 }
 
@@ -151,7 +151,7 @@ module erectangle
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     Thickness \p t
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
@@ -177,7 +177,7 @@ module erectangle_c
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   rectangle_c
   (
     size=size, core=core, t=t,
@@ -204,7 +204,7 @@ module erectangle_c
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=erhombus ${example_dim} )
@@ -217,7 +217,7 @@ module erhombus
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   rhombus(size=size, vr=vr, center=center);
 }
 
@@ -241,7 +241,7 @@ module erhombus
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=etriangle_ppp ${example_dim} )
@@ -261,7 +261,7 @@ module etriangle_ppp
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   triangle_ppp
   (
     v1=v1, v2=v2, v3=v3,
@@ -286,7 +286,7 @@ module etriangle_ppp
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \code{.C}
@@ -305,7 +305,7 @@ module etriangle_vp
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   triangle_vp(v=v, vr=vr, centroid=centroid, incenter=incenter);
 }
 
@@ -329,7 +329,7 @@ module etriangle_vp
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=etriangle_lll ${example_dim} )
@@ -349,7 +349,7 @@ module etriangle_lll
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   triangle_lll
   (
     s1=s1, s2=s2, s3=s3,
@@ -374,7 +374,7 @@ module etriangle_lll
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \code{.C}
@@ -393,7 +393,7 @@ module etriangle_vl
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   triangle_vl(v=v, vr=vr, centroid=centroid, incenter=incenter);
 }
 
@@ -421,7 +421,7 @@ module etriangle_vl
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=etriangle_vl_c ${example_dim} )
@@ -444,7 +444,7 @@ module etriangle_vl_c
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   triangle_vl_c
   (
     vs=vs, vc=vc,
@@ -476,7 +476,7 @@ module etriangle_vl_c
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=etriangle_lal ${example_dim} )
@@ -497,7 +497,7 @@ module etriangle_lal
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   triangle_lal
   (
     s1=s1, a=a, s2=s2, x=x,
@@ -528,7 +528,7 @@ module etriangle_lal
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=etriangle_ala ${example_dim} )
@@ -549,7 +549,7 @@ module etriangle_ala
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   triangle_ala
   (
     a1=a1, s=s, a2=a2, x=x,
@@ -580,7 +580,7 @@ module etriangle_ala
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=etriangle_aal ${example_dim} )
@@ -601,7 +601,7 @@ module etriangle_aal
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   triangle_aal
   (
     a1=a1, a2=a2, s=s, x=x,
@@ -629,7 +629,7 @@ module etriangle_aal
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=etriangle_ll ${example_dim} )
@@ -648,7 +648,7 @@ module etriangle_ll
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   triangle_ll
   (
     x=x, y=y,
@@ -678,7 +678,7 @@ module etriangle_ll
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=etriangle_la ${example_dim} )
@@ -702,7 +702,7 @@ module etriangle_la
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   triangle_la
   (
     x=x, y=y, aa=aa, oa=oa,
@@ -725,7 +725,7 @@ module etriangle_la
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=engon ${example_dim} )
@@ -742,7 +742,7 @@ module engon
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   ngon(n=n, r=r, vr=vr);
 }
 
@@ -758,7 +758,7 @@ module engon
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=eellipse ${example_dim} )
@@ -770,7 +770,7 @@ module eellipse
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   ellipse(size=size);
 }
 
@@ -794,7 +794,7 @@ module eellipse
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     Thickness \p t
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
@@ -814,7 +814,7 @@ module eellipse_c
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   ellipse_c(size=size, core=core, t=t, co=co, cr=cr);
 }
 
@@ -833,7 +833,7 @@ module eellipse_c
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=eellipse_s ${example_dim} )
@@ -847,7 +847,7 @@ module eellipse_s
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   ellipse_s(size=size, a1=a1, a2=a2);
 }
 
@@ -874,7 +874,7 @@ module eellipse_s
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     Thickness \p t
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
@@ -896,7 +896,7 @@ module eellipse_cs
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   ellipse_cs(a1=a1, a2=a2, size=size, core=core, t=t, co=co, cr=cr);
 }
 
@@ -917,7 +917,7 @@ module eellipse_cs
 
   \details
 
-    \sa st_linear_extrude_scale for a description on specifying \p h.
+    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=estar2d ${example_dim} )
@@ -931,7 +931,7 @@ module estar2d
   center = false
 )
 {
-  st_linear_extrude_scale(h=h, center=center)
+  linear_extrude_uls(h=h, center=center)
   star2d(size=size, n=n, vr=vr);
 }
 
@@ -1023,7 +1023,7 @@ BEGIN_SCOPE manifest;
 
     $fn = 72;
 
-    st_cartesian_copy( grid=5, incr=60, center=true )
+    grid_repeat( grid=5, incr=60, center=true )
     {
       erectangle( size=[25,40], vr=5, vrm=3, h=20, center=true );
       erectangle_c( size=[40,20], t=[10,1], co=[0,-6], cr=10, vr=5, vrm1=12, h=30, center=true );

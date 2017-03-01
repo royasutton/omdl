@@ -87,7 +87,7 @@ include <math_bitwise.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Revolve the 2D shape about the z-axis.
+//! Translate, rotate, and revolve the 2D shape about the z-axis.
 /***************************************************************************//**
   \param    r <decimal> The rotation radius.
   \param    pa <decimal> The profile pitch angle in degrees.
@@ -97,9 +97,9 @@ include <math_bitwise.scad>;
   \details
 
     \b Example
-    \amu_eval ( function=st_rotate_extrude ${example_dim} )
+    \amu_eval ( function=rotate_extrude_tr ${example_dim} )
 *******************************************************************************/
-module st_rotate_extrude
+module rotate_extrude_tr
 (
   r,
   pa = 0,
@@ -113,7 +113,7 @@ module st_rotate_extrude
   children();
 }
 
-//! Revolve the 2D shape about the z-axis with linear elongation.
+//! Translate, rotate, and revolve the 2D shape about the z-axis with linear elongation.
 /***************************************************************************//**
   \param    r <decimal> The rotation radius.
   \param    l <vector|decimal> The elongation length.
@@ -130,12 +130,12 @@ module st_rotate_extrude
   \details
 
     \b Example
-    \amu_eval ( function=st_rotate_extrude_elongate ${example_dim} )
+    \amu_eval ( function=rotate_extrude_tre ${example_dim} )
 
   \note When elongating <tt>(l > 0)</tt>, \p ra is ignored. However, \p m
         may be used to control which complete revolution section to render.
 *******************************************************************************/
-module st_rotate_extrude_elongate
+module rotate_extrude_tre
 (
   r,
   l,
@@ -147,7 +147,7 @@ module st_rotate_extrude_elongate
 {
   if ( not_defined(l) || (profile==true) )
   {
-    st_rotate_extrude(r=r, pa=pa, ra=ra, profile=profile)
+    rotate_extrude_tr(r=r, pa=pa, ra=ra, profile=profile)
     children();
   }
   else
@@ -169,7 +169,7 @@ module st_rotate_extrude_elongate
     {
       translate([i[0], i[1], 0])
       rotate([0, 0, i[2]])
-      st_rotate_extrude(r=r, pa=pa, ra=90, profile=profile)
+      rotate_extrude_tr(r=r, pa=pa, ra=90, profile=profile)
       children();
     }
 
@@ -221,14 +221,14 @@ module st_rotate_extrude_elongate
   \details
 
     \b Example
-    \amu_eval ( function=st_linear_extrude_scale ${example_dim} )
+    \amu_eval ( function=linear_extrude_uls ${example_dim} )
 
   \note When symmetrical scaling is desired, shape must be centered about
         origin.
   \todo This function should be re-written to use the built-in scaling
         provided by linear_extrude() in the upper and lower scaling zones.
 *******************************************************************************/
-module st_linear_extrude_scale
+module linear_extrude_uls
 (
   h,
   center = false
@@ -318,9 +318,9 @@ module st_linear_extrude_scale
   \details
 
     \b Example
-    \amu_eval ( function=st_radial_copy ${example_dim} )
+    \amu_eval ( function=radial_repeat ${example_dim} )
 *******************************************************************************/
-module st_radial_copy
+module radial_repeat
 (
   n,
   r = 1,
@@ -348,9 +348,9 @@ module st_radial_copy
   \details
 
     \b Example
-    \amu_eval ( function=st_cartesian_copy ${example_dim} )
+    \amu_eval ( function=grid_repeat ${example_dim} )
 *******************************************************************************/
-module st_cartesian_copy
+module grid_repeat
 (
   grid,
   incr,
@@ -437,19 +437,19 @@ BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
     include <transform.scad>;
 
-    shape = "st_rotate_extrude";
+    shape = "rotate_extrude_tr";
     $fn = 72;
 
-    if (shape == "st_rotate_extrude")
-      st_rotate_extrude( r=50, pa=45, ra=270 ) square( [10,5], center=true );
-    else if (shape == "st_rotate_extrude_elongate")
-      st_rotate_extrude_elongate( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
-    else if (shape == "st_linear_extrude_scale")
-      st_linear_extrude_scale( [5,10,15,-5], center=true ) square( [20,15], center=true );
-    else if (shape == "st_radial_copy")
-      st_radial_copy( n=7, r=6, move=true ) square( [20,1], center=true );
-    else if (shape == "st_cartesian_copy")
-      st_cartesian_copy( grid=[5,5,4], incr=10, copy=50, center=true ) {cube(10, center=true); sphere(10);}
+    if (shape == "rotate_extrude_tr")
+      rotate_extrude_tr( r=50, pa=45, ra=270 ) square( [10,5], center=true );
+    else if (shape == "rotate_extrude_tre")
+      rotate_extrude_tre( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
+    else if (shape == "linear_extrude_uls")
+      linear_extrude_uls( [5,10,15,-5], center=true ) square( [20,15], center=true );
+    else if (shape == "radial_repeat")
+      radial_repeat( n=7, r=6, move=true ) square( [20,1], center=true );
+    else if (shape == "grid_repeat")
+      grid_repeat( grid=[5,5,4], incr=10, copy=50, center=true ) {cube(10, center=true); sphere(10);}
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -458,11 +458,11 @@ BEGIN_SCOPE dim;
     views     name "views" views "diag";
     defines   name "shapes" define "shape"
               strings "
-                st_rotate_extrude
-                st_rotate_extrude_elongate
-                st_linear_extrude_scale
-                st_radial_copy
-                st_cartesian_copy
+                rotate_extrude_tr
+                rotate_extrude_tre
+                linear_extrude_uls
+                radial_repeat
+                grid_repeat
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter";

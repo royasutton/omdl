@@ -444,7 +444,7 @@ module star3d
   {
     difference()
     {
-      st_radial_copy(n=n, angle=true, move=false)
+      radial_repeat(n=n, angle=true, move=false)
       scale([1, 1, h/w])
       rotate([45, 0, 0])
       rotate([0, 90, 0])
@@ -456,7 +456,7 @@ module star3d
   }
   else
   {
-    st_radial_copy(n=n, angle=true, move=false)
+    radial_repeat(n=n, angle=true, move=false)
     scale([1, 1, h/w])
     rotate([45, 0, 0])
     rotate([0, 90, 0])
@@ -503,7 +503,7 @@ module star3d
 
   \details
 
-    \sa st_rotate_extrude_elongate for description of extrude parameters.
+    \sa rotate_extrude_tre for description of extrude parameters.
 
     Thickness \p t
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
@@ -534,7 +534,7 @@ module torus_rp
   profile = false
 )
 {
-  st_rotate_extrude_elongate( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
+  rotate_extrude_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
   rectangle_c
   (
     size=size, core=core, t=t,
@@ -575,7 +575,7 @@ module torus_rp
 
   \details
 
-    \sa st_rotate_extrude_elongate for description of extrude parameters.
+    \sa rotate_extrude_tre for description of extrude parameters.
 
     \b Example
     \amu_eval ( function=torus_tp ${example_dim} )
@@ -602,7 +602,7 @@ module torus_tp
   profile = false,
 )
 {
-  st_rotate_extrude_elongate( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
+  rotate_extrude_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
   triangle_vl_c
   (
     vs=size, vc=core,
@@ -641,7 +641,7 @@ module torus_tp
 
   \details
 
-    \sa st_rotate_extrude_elongate for description of extrude parameters.
+    \sa rotate_extrude_tre for description of extrude parameters.
 
     Thickness \p t
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
@@ -667,7 +667,7 @@ module torus_ep
   profile = false
 )
 {
-  st_rotate_extrude_elongate( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
+  rotate_extrude_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
   ellipse_cs
   (
     size=size, core=core, t=t,
@@ -745,7 +745,7 @@ BEGIN_SCOPE manifest;
     $fn = 72;
 
     if (group == 1)
-    st_cartesian_copy( grid=4, incr=60, center=true )
+    grid_repeat( grid=4, incr=60, center=true )
     {
       translate([0,0,-12.5]) cone( h=25, r=15, vr=2 );
       cuboid( size=[25,40,20], vr=5, center=true );
@@ -757,7 +757,7 @@ BEGIN_SCOPE manifest;
     }
 
     if (group == 2)
-    st_cartesian_copy( grid=4, incr=150, center=true )
+    grid_repeat( grid=4, incr=150, center=true )
     {
       torus_rp( size=[40,20], core=[35,20], r=40, l=[25,60], co=[0,2.5], vr=4, vrm=15, center=true );
       torus_tp( size=40, core=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );

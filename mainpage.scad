@@ -300,7 +300,7 @@ BEGIN_SCOPE logo;
 
     cone( h=20, r=10, vr=2 );
     rotate([0, 0, 360/20])
-    st_radial_copy( n=5, angle=true )
+    radial_repeat( n=5, angle=true )
       etriangle_vl_c( vs=frame, vc=core, vr=vrnd, h=10 );
   END_OPENSCAD;
 
@@ -328,7 +328,7 @@ BEGIN_SCOPE quickstart;
 
     cone( h=20, r=10, vr=2 );
     rotate([0, 0, 360/20])
-    st_radial_copy( n=5, angle=true )
+    radial_repeat( n=5, angle=true )
       etriangle_vl_c( vs=frame, vc=core, vr=vrnd, h=10 );
 
     translate([0, -50,0])
