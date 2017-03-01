@@ -414,9 +414,10 @@ function are_coplanar_vvv
   \param    r <decimal> The vertex circumradius of the circumcircle.
   \param    a <decimal> The inradius of the incircle.
   \param    vr <decimal> The vertex rounding radius.
+  \param    cw <boolean> Use clockwise point ordering.
 
   \returns  <vector> A vector [v1, v2, ..., vn] of vectors [x, y] of
-            coordinates.
+            coordinate points.
 
   \details
 
@@ -440,16 +441,19 @@ function rpolygon_vp
   n,
   r,
   a,
-  vr
+  vr,
+  cw = false
 ) =
 [
   let
   (
     s = is_defined(r) ? r
       : is_defined(a) ? a / cos(180/n)
-      : 0
+      : 0,
+
+    b = (cw == true) ? [360:-(360/n):1] : [0:(360/n):359]
   )
-  for ( a = [0:(360/n):359] )
+  for ( a = b )
     let( v = [s*cos(a), s*sin(a)] )
     not_defined(vr) ? v : v - vr/cos(180/n) * unit_v(vt=v)
 ];
