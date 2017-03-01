@@ -454,6 +454,19 @@ function rpolygon_area
   r
 ) = pow(r, 2) * n * sin(360/n) / 2;
 
+//! Compute the perimeter of an n-sided regular polygon.
+/***************************************************************************//**
+  \param    n <decimal> The number of sides.
+  \param    r <decimal> The regular polygon vertex radius (circum-radius).
+
+  \returns  <decimal> Perimeter of the n-sided regular polygon.
+*******************************************************************************/
+function rpolygon_perimeter
+(
+  n,
+  r
+) = 2 * n * r * sin(180/n);
+
 //! @}
 //! @}
 
