@@ -1,4 +1,4 @@
-//! Miscellaneous mathematical utility functions.
+//! Miscellaneous mathematical utilities.
 /***************************************************************************//**
   \file   math_utility.scad
   \author Roy Allen Sutton
@@ -40,7 +40,7 @@ include <math_bitwise.scad>;
   @{
 
   \defgroup math_utility Miscellaneous Utilities
-  \brief    Miscellaneous mathematical utility functions.
+  \brief    Miscellaneous mathematical utilities.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//

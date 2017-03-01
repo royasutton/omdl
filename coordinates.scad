@@ -29,7 +29,7 @@
 
   \note Include this library file using the \b include statement.
 
-  \ingroup units units_coordinates
+  \ingroup units units_coordinate
 *******************************************************************************/
 
 include <constants.scad>;
@@ -39,7 +39,7 @@ include <constants.scad>;
   \addtogroup units
   @{
 
-  \defgroup units_coordinates Coordinates
+  \defgroup units_coordinate Coordinate
   \brief    Coordinate systems and conversions.
 
   \details

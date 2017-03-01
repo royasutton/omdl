@@ -27,7 +27,7 @@
 
   \details
 
-  \ingroup transforms transforms_extrude transforms_replicate
+  \ingroup transforms transforms_extrude transforms_repeat
 *******************************************************************************/
 
 use <console.scad>;
@@ -38,7 +38,7 @@ include <math_bitwise.scad>;
 /***************************************************************************//**
   \addtogroup transforms
 
-    \amu_define caption (Extrusions and Replications)
+    \amu_define caption (Extrusions and Repetitions)
 
     \amu_make png_files (append=dim extension=png)
     \amu_make eps_files (append=dim extension=png2eps)
@@ -65,8 +65,8 @@ include <math_bitwise.scad>;
   \addtogroup transforms
   @{
 
-  \defgroup transforms_extrude Extrusions
-  \brief    Shape Extrusions.
+  \defgroup transforms_extrude Extrude
+  \brief    Shape extrusions.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -300,8 +300,8 @@ module st_linear_extrude_scale
   \addtogroup transforms
   @{
 
-  \defgroup transforms_replicate Replications
-  \brief    Shape Replications and distribution.
+  \defgroup transforms_repeat Repeat
+  \brief    Shape repetition and distribution.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//

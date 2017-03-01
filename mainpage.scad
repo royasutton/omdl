@@ -232,8 +232,8 @@
   \addtogroup database
   @{
 
-  \defgroup database_components Components
-  \brief    Components specifications.
+  \defgroup database_component Component
+  \brief    Component specifications.
 
   \defgroup database_electrical Electrical
   \brief    Electrical specifications.
@@ -241,7 +241,7 @@
   \defgroup database_geometry Geometry
   \brief    Predefined geometry.
 
-  \defgroup database_materials Materials
+  \defgroup database_material Material
   \brief    Material specifications.
 
   @}

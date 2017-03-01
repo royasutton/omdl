@@ -64,7 +64,7 @@ phi = (1 + sqrt(5)) / 2;
   @{
 
   \defgroup constants_system System
-  \brief    System/Program limits.
+  \brief    System and program limits.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//

@@ -72,7 +72,7 @@ include <constants.scad>;
   @{
 
   \defgroup prim_test Variable Tests
-  \brief    Variable property test primitives.
+  \brief    Variable-properties test primitives.
 
   \details
 
