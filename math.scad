@@ -73,8 +73,8 @@ include <primitives.scad>;
 
 //! Compute the distance between two points in a Euclidean 1, 2, or 3D-space.
 /***************************************************************************//**
-  \param    p1 <vector> A 1, 2, or 3-tuple of coordinates.
-  \param    p2 <vector> A 1, 2, or 3-tuple of coordinates.
+  \param    p1 <vector> A 1, 2, or 3-tuple coordinate.
+  \param    p2 <vector> A 1, 2, or 3-tuple coordinate.
 
   \returns  <decimal> The distance between the two points.
             Returns \b 'undef' when x and y do not have same number of terms
@@ -115,11 +115,11 @@ function distance_pp
 
 //! Compute the dot product of two vectors.
 /***************************************************************************//**
-  \param    v1t <vector> Vector 1 head. An n-tuple of coordinates.
-  \param    v2t <vector> Vector 2 head. An n-tuple of coordinates.
+  \param    v1t <vector> Vector 1 head. An n-tuple coordinate.
+  \param    v2t <vector> Vector 2 head. An n-tuple coordinate.
 
-  \param    v1i <vector> Vector 1 tail. An n-tuple of coordinates.
-  \param    v2i <vector> Vector 2 tail. An n-tuple of coordinates.
+  \param    v1i <vector> Vector 1 tail. An n-tuple coordinate.
+  \param    v2i <vector> Vector 2 tail. An n-tuple coordinate.
 
   \returns  <decimal> The dot product of the two vectors.
             Returns \b 'undef' when vector coordinates do not have same
@@ -144,11 +144,11 @@ function dot_vv
 
 //! Compute the cross product of two vectors in a Euclidean 3D-space (2D).
 /***************************************************************************//**
-  \param    v1t <vector> Vector 1 head. A 2 or 3-tuple of coordinates.
-  \param    v2t <vector> Vector 2 head. A 2 or 3-tuple of coordinates.
+  \param    v1t <vector> Vector 1 head. A 2 or 3-tuple coordinate.
+  \param    v2t <vector> Vector 2 head. A 2 or 3-tuple coordinate.
 
-  \param    v1i <vector> Vector 1 tail. A 2 or 3-tuple of coordinates.
-  \param    v2i <vector> Vector 2 tail. A 2 or 3-tuple of coordinates.
+  \param    v1i <vector> Vector 1 tail. A 2 or 3-tuple coordinate.
+  \param    v2i <vector> Vector 2 tail. A 2 or 3-tuple coordinate.
 
   \returns  <decimal> The cross product of the two vectors.
             Returns \b 'undef' when vector coordinates do not have same
@@ -184,13 +184,13 @@ function cross_vv
 
 //! Compute scalar triple product of two vectors in a Euclidean 3D-space.
 /***************************************************************************//**
-  \param    v1t <vector> Vector 1 head. A 2 or 3-tuple of coordinates.
-  \param    v2t <vector> Vector 2 head. A 2 or 3-tuple of coordinates.
-  \param    v3t <vector> Vector 3 head. A 2 or 3-tuple of coordinates.
+  \param    v1t <vector> Vector 1 head. A 2 or 3-tuple coordinate.
+  \param    v2t <vector> Vector 2 head. A 2 or 3-tuple coordinate.
+  \param    v3t <vector> Vector 3 head. A 2 or 3-tuple coordinate.
 
-  \param    v1i <vector> Vector 1 tail. A 2 or 3-tuple of coordinates.
-  \param    v2i <vector> Vector 2 tail. A 2 or 3-tuple of coordinates.
-  \param    v3i <vector> Vector 3 tail. A 2 or 3-tuple of coordinates.
+  \param    v1i <vector> Vector 1 tail. A 2 or 3-tuple coordinate.
+  \param    v2i <vector> Vector 2 tail. A 2 or 3-tuple coordinate.
+  \param    v3i <vector> Vector 3 tail. A 2 or 3-tuple coordinate.
 
   \returns  <decimal> The scalar triple product of the three vectors.
             Returns \b 'undef' when vector coordinates do not have same
@@ -236,11 +236,11 @@ function striple_vvv
 
 //! Compute the angle between two vectors in a Euclidean 2 or 3D-space.
 /***************************************************************************//**
-  \param    v1t <vector> Vector 1 head. A 2 or 3-tuple of coordinates.
-  \param    v2t <vector> Vector 2 head. A 2 or 3-tuple of coordinates.
+  \param    v1t <vector> Vector 1 head. A 2 or 3-tuple coordinate.
+  \param    v2t <vector> Vector 2 head. A 2 or 3-tuple coordinate.
 
-  \param    v1i <vector> Vector 1 tail. A 2 or 3-tuple of coordinates.
-  \param    v2i <vector> Vector 2 tail. A 2 or 3-tuple of coordinates.
+  \param    v1i <vector> Vector 1 tail. A 2 or 3-tuple coordinate.
+  \param    v2i <vector> Vector 2 tail. A 2 or 3-tuple coordinate.
 
   \returns  <decimal> The angle between the two vectors in degrees.
             Returns \b 'undef' when vector coordinates do not have same
@@ -294,13 +294,13 @@ function angle_vv
 
 //! Compute the angle between two vectors in a Euclidean 3D-space.
 /***************************************************************************//**
-  \param    v1t <vector> Vector 1 head. A 3-tuple of coordinates.
-  \param    v2t <vector> Vector 2 head. A 3-tuple of coordinates.
-  \param    nvt <vector> Normal vector head. A 3-tuple of coordinates.
+  \param    v1t <vector> Vector 1 head. A 3-tuple coordinate.
+  \param    v2t <vector> Vector 2 head. A 3-tuple coordinate.
+  \param    nvt <vector> Normal vector head. A 3-tuple coordinate.
 
-  \param    v1i <vector> Vector 1 tail. A 3-tuple of coordinates.
-  \param    v2i <vector> Vector 2 tail. A 3-tuple of coordinates.
-  \param    nvi <vector> Normal vector tail. A 3-tuple of coordinates.
+  \param    v1i <vector> Vector 1 tail. A 3-tuple coordinate.
+  \param    v2i <vector> Vector 2 tail. A 3-tuple coordinate.
+  \param    nvi <vector> Normal vector tail. A 3-tuple coordinate.
 
   \returns  <decimal> The angle between the two vectors in degrees.
             Returns \b 'undef' when vector coordinates do not have same
@@ -335,8 +335,8 @@ function angle_vvn
 
 //! Compute the normalized unit vector for a 1, 2, or 3 term vector.
 /***************************************************************************//**
-  \param    vt <vector> Vector head. A 1, 2, or 3-tuple of coordinates.
-  \param    vi <vector> Vector tail. A 1, 2, or 3-tuple of coordinates.
+  \param    vt <vector> Vector head. A 1, 2, or 3-tuple coordinate.
+  \param    vi <vector> Vector tail. A 1, 2, or 3-tuple coordinate.
 
   \returns  <vector> The vector normalized to its unit-vector.
             Returns \b 'undef' when vector coordinates do not have same
@@ -358,13 +358,13 @@ function unit_v
 
 //! Test if three vectors are coplanar in Euclidean 3D-space.
 /***************************************************************************//**
-  \param    v1t <vector> Vector 1 head. A 3-tuple of coordinates.
-  \param    v2t <vector> Vector 2 head. A 3-tuple of coordinates.
-  \param    v3t <vector> Vector 3 head. A 3-tuple of coordinates.
+  \param    v1t <vector> Vector 1 head. A 3-tuple coordinate.
+  \param    v2t <vector> Vector 2 head. A 3-tuple coordinate.
+  \param    v3t <vector> Vector 3 head. A 3-tuple coordinate.
 
-  \param    v1i <vector> Vector 1 tail. A 3-tuple of coordinates.
-  \param    v2i <vector> Vector 2 tail. A 3-tuple of coordinates.
-  \param    v3i <vector> Vector 3 tail. A 3-tuple of coordinates.
+  \param    v1i <vector> Vector 1 tail. A 3-tuple coordinate.
+  \param    v2i <vector> Vector 2 tail. A 3-tuple coordinate.
+  \param    v3i <vector> Vector 3 tail. A 3-tuple coordinate.
 
   \param    d \<number> A positive numerical distance, proximity, or tolerance.
 
@@ -550,7 +550,7 @@ function rpolygon_perimeter
   \param    s2 <decimal> The length of the side 2.
   \param    s3 <decimal> The length of the side 3.
 
-  \returns  <vector> A vector [v1, v2, v3] of vectors [x, y] of coordinates.
+  \returns  <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
 
   \details
 
@@ -580,7 +580,7 @@ function triangle_lll2vp
 /***************************************************************************//**
   \param    v <vector> of decimal side lengths.
 
-  \returns  <vector> A vector [v1, v2, v3] of vectors [x, y] of coordinates.
+  \returns  <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
 
   \details
 
@@ -598,9 +598,9 @@ function triangle_vl2vp
 
 //! Compute the side lengths of a triangle given its vertices.
 /***************************************************************************//**
-  \param    v1 <vector> A vector [x, y] for vertex 1 coordinates.
-  \param    v2 <vector> A vector [x, y] for vertex 2 coordinates.
-  \param    v3 <vector> A vector [x, y] for vertex 3 coordinates.
+  \param    v1 <vector> A vector [x, y] for vertex 1.
+  \param    v2 <vector> A vector [x, y] for vertex 2.
+  \param    v3 <vector> A vector [x, y] for vertex 3.
 
   \returns  <vector> A vector [s1, s2, s3] of lengths.
 
@@ -628,11 +628,11 @@ function triangle_vp2vl
 
 //! Compute the centroid (geometric center) of a triangle.
 /***************************************************************************//**
-  \param    v1 <vector> A vector [x, y] for vertex 1 coordinates.
-  \param    v2 <vector> A vector [x, y] for vertex 2 coordinates.
-  \param    v3 <vector> A vector [x, y] for vertex 3 coordinates.
+  \param    v1 <vector> A vector [x, y] for vertex 1.
+  \param    v2 <vector> A vector [x, y] for vertex 2.
+  \param    v3 <vector> A vector [x, y] for vertex 3.
 
-  \returns  <vector> A vector [x, y] of coordinates.
+  \returns  <vector> A vector [x, y] coordinate.
 *******************************************************************************/
 function triangle_centroid_ppp
 (
@@ -645,7 +645,7 @@ function triangle_centroid_ppp
 /***************************************************************************//**
   \param    v <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
 
-  \returns  <vector> A vector [x, y] of coordinates.
+  \returns  <vector> A vector [x, y] coordinate.
 *******************************************************************************/
 function triangle_centroid_vp
 (
@@ -654,11 +654,11 @@ function triangle_centroid_vp
 
 //! Compute the coordinate for the triangle's incircle.
 /***************************************************************************//**
-  \param    v1 <vector> A vector [x, y] for vertex 1 coordinates.
-  \param    v2 <vector> A vector [x, y] for vertex 2 coordinates.
-  \param    v3 <vector> A vector [x, y] for vertex 3 coordinates.
+  \param    v1 <vector> A vector [x, y] for vertex 1.
+  \param    v2 <vector> A vector [x, y] for vertex 2.
+  \param    v3 <vector> A vector [x, y] for vertex 3.
 
-  \returns  <vector> A vector [x, y] of coordinates.
+  \returns  <vector> A vector [x, y] coordinate.
 
   \details
 
@@ -694,7 +694,7 @@ function triangle_incenter_ppp
 /***************************************************************************//**
   \param    v <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
 
-  \returns  <vector> A vector [x, y] of coordinates.
+  \returns  <vector> A vector [x, y] coordinate.
 
   \details
 
@@ -708,9 +708,9 @@ function triangle_incenter_vp
 
 //! Compute the inradius of a triangle's incircle.
 /***************************************************************************//**
-  \param    v1 <vector> A vector [x, y] for vertex 1 coordinates.
-  \param    v2 <vector> A vector [x, y] for vertex 2 coordinates.
-  \param    v3 <vector> A vector [x, y] for vertex 3 coordinates.
+  \param    v1 <vector> A vector [x, y] for vertex 1.
+  \param    v2 <vector> A vector [x, y] for vertex 2.
+  \param    v3 <vector> A vector [x, y] for vertex 3.
 
   \returns  <decimal> The incircle radius.
 *******************************************************************************/
