@@ -396,13 +396,13 @@ function are_coplanar_vvv
 
 //! Test if a point is left|on|right of an infinite line in a Euclidean 2D-space.
 /***************************************************************************//**
-  \param    p0 <vector> A 2-tuple coordinate.
   \param    p1 <vector> A 2-tuple coordinate.
   \param    p2 <vector> A 2-tuple coordinate.
+  \param    p3 <vector> A 2-tuple coordinate.
 
-  \returns  <decimal> (\b > 0) for \p p2 \em left of the line through
-            \p p0 and \p p1, (\b = 0) for p2  \em on the line, and
-            (\b < 0) for p2  right of the line.
+  \returns  <decimal> (\b > 0) for \p p3 \em left of the line through
+            \p p1 and \p p2, (\b = 0) for p3  \em on the line, and
+            (\b < 0) for p3  right of the line.
 
   \details
     Function patterned after [Dan Sunday, 2012].
@@ -411,10 +411,10 @@ function are_coplanar_vvv
 *******************************************************************************/
 function is_left_ppp
 (
-  p0,
   p1,
-  p2
-) = ((p1[0]-p0[0]) * (p2[1]-p0[1]) - (p2[0]-p0[0]) * (p1[1]-p0[1]));
+  p2,
+  p3
+) = ((p2[0]-p1[0]) * (p3[1]-p1[1]) - (p3[0]-p1[0]) * (p2[1]-p1[1]));
 
 //! @}
 //! @}
