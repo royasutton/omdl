@@ -626,6 +626,40 @@ function triangle_vp2vl
   v
 ) = triangle_ppp2vl( v1=v[0], v2=v[1], v3=v[2]);
 
+//! Compute the signed area of a triangle given its vertices.
+/***************************************************************************//**
+  \param    v1 <vector> A 2-tuple coordinate.
+  \param    v2 <vector> A 2-tuple coordinate.
+  \param    v3 <vector> A 2-tuple coordinate.
+  \param    s <boolean> Return the vertex ordering sign.
+
+  \returns  <decimal> The area of the given triangle.
+*******************************************************************************/
+function triangle_area_ppp
+(
+  v1,
+  v2,
+  v3,
+  s = false
+) =
+  let( sa = is_left_ppp(p1=v1, p2=v2, p3=v3) / 2 )
+  (s == false) ? abs(sa) : sa;
+
+//! Compute the signed area of a triangle given its vertices.
+/***************************************************************************//**
+  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
+  \param    s <boolean> Return the vertex ordering sign.
+
+  \returns  <decimal> The area of the given triangle.
+*******************************************************************************/
+function triangle_area_vp
+(
+  v,
+  s = false
+) =
+  let( sa = is_left_ppp(p1=v[0], p2=v[1], p3=v[2]) / 2 )
+  (s == false) ? abs(sa) : sa;
+
 //! Compute the centroid (geometric center) of a triangle.
 /***************************************************************************//**
   \param    v1 <vector> A vector [x, y] for vertex 1.
