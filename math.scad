@@ -394,6 +394,28 @@ function are_coplanar_vvv
   d = 0.000001
 ) = n_almost_equal(striple_vvv( v1t, v2t, v3t, v1i, v2i, v3i ), 0, d);
 
+//! Test if a point is left|on|right of an infinite line in a Euclidean 2D-space.
+/***************************************************************************//**
+  \param    p0 <vector> A 2-tuple coordinate.
+  \param    p1 <vector> A 2-tuple coordinate.
+  \param    p2 <vector> A 2-tuple coordinate.
+
+  \returns  <decimal> (\b > 0) for \p p2 \em left of the line through
+            \p p0 and \p p1, (\b = 0) for p2  \em on the line, and
+            (\b < 0) for p2  right of the line.
+
+  \details
+    Function patterned after [Dan Sunday, 2012].
+
+    [Dan Sunday, 2012]: http://geomalgorithms.com/a01-_area.html
+*******************************************************************************/
+function is_left_ppp
+(
+  p0,
+  p1,
+  p2
+) = ((p1[0]-p0[0]) * (p2[1]-p0[1]) - (p2[0]-p0[0]) * (p1[1]-p0[1]));
+
 //! @}
 //! @}
 
@@ -943,6 +965,7 @@ BEGIN_SCOPE validate;
       for (vid=run_ids) run("angle_vvn",vid) test( "angle_vvn", angle_vvn(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
       for (vid=run_ids) run("unit_v",vid) test( "unit_v", unit_v(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
       for (vid=run_ids) run("are_coplanar_vvv",vid) test( "are_coplanar_vvv", are_coplanar_vvv(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
+      // not tested: is_left_ppp()
 
       // end-of-tests
     END_OPENSCAD;
