@@ -775,6 +775,50 @@ function triangle_inradius_vp
   v
 ) = triangle_inradius_ppp( v1=v[0], v2=v[1], v3=v[2]);
 
+//! Test the vertex ordering, or orientation, of a triangle.
+/***************************************************************************//**
+  \param    v1 <vector> A 2-tuple coordinate.
+  \param    v2 <vector> A 2-tuple coordinate.
+  \param    v3 <vector> A 2-tuple coordinate.
+
+  \returns  <boolean> \b true if the vertices are ordered clockwise,
+            \b false if the vertices are ordered counterclockwise, and
+            \b undef if the ordering can not be determined.
+*******************************************************************************/
+function triangle_is_cw_ppp
+(
+  v1,
+  v2,
+  v3
+) =
+  let
+  (
+    il = is_left_ppp(p1=v1, p2=v2, p3=v3)
+  )
+    (il < 0) ? true
+  : (il > 0) ? false
+  : undef;
+
+//! Test the vertex ordering, or orientation, of a triangle.
+/***************************************************************************//**
+  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
+
+  \returns  <boolean> \b true if the vertices are ordered clockwise,
+            \b false if the vertices are ordered counterclockwise, and
+            \b undef if the ordering can not be determined.
+*******************************************************************************/
+function triangle_is_cw_vp
+(
+  v
+) =
+  let
+  (
+    il = is_left_ppp(p1=v[0], p2=v[1], p3=v[2])
+  )
+    (il < 0) ? true
+  : (il > 0) ? false
+  : undef;
+
 //! @}
 //! @}
 
