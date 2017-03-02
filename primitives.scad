@@ -881,28 +881,30 @@ function vstr_html
     )
     vstr(concat(cs, vstr_html(nv, nb, np, na, nf, d)));
 
-//! Round a number to a specified number of digits after the decimal point.
+//! Round a numerical value to a fixed number of digits after the decimal point.
 /***************************************************************************//**
-  \param    v <number> A numeric value.
-  \param    d <integer> The maximum number of decimals.
+  \param    v <vector|value> A vector of values or a single value.
+  \param    d <integer> The (maximum) number of decimals.
 
-  \returns  <decimal> \p v with a most \p d decimal digits truncated and
-            rounded-up if the following digit is 5 or greater.
-            Returns \b undef when \p v is not defined or is not a number.
+  \returns  <vector|value> \p v with all numeric values truncated to
+            \p d decimal digits and rounded-up if the following digit
+            is 5 or greater. Non-numeric values are unchanged.
 *******************************************************************************/
 function dround
 (
   v,
   d = 6
-) = round(v * pow(10, d)) / pow(10, d);
+) = is_number(v) ? round(v * pow(10, d)) / pow(10, d)
+  : is_vector(v) ? [for (i=v) dround(i, d)]
+  : v;
 
-//! Round a number to a specified number of significant figures.
+//! Round a numerical value to a fixed number of significant figures.
 /***************************************************************************//**
-  \param    v <number> A numeric value.
-  \param    d <integer> The number of significant figures.
+  \param    v <vector|value> A vector of values or a single value.
+  \param    d <integer> The (maximum) number of significant figures.
 
-  \returns  <number> \p v rounded-up to \p d significant figures.
-            Returns \b undef when \p v is not defined or is not a number.
+  \returns  <vector|value> \p v with all numeric values rounded-up
+            to \p d significant figures. Non-numeric values are unchanged.
 
   \details
 
@@ -914,8 +916,11 @@ function sround
   v,
   d = 6
 ) = (v == 0) ? 0
-  : let(n = floor(log(abs(v))) + 1 - d)
-    round(v * pow(10, -n)) * pow(10, n);
+  : is_number(v) ?
+    let(n = floor(log(abs(v))) + 1 - d)
+    round(v * pow(10, -n)) * pow(10, n)
+  : is_vector(v) ? [for (i=v) sround(i, d)]
+  : v;
 
 //! Limit a number between upper and lower bounds.
 /***************************************************************************//**
