@@ -1,6 +1,6 @@
 //! Data table encoding and lookup.
 /***************************************************************************//**
-  \file   table.scad
+  \file   datatype_table.scad
   \author Roy Allen Sutton
   \date   2015-2017
 
@@ -31,7 +31,7 @@
 *******************************************************************************/
 
 use <console.scad>;
-include <primitives.scad>;
+include <datatype.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -462,7 +462,7 @@ function table_sum
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <units_length.scad>;
-    use     <table.scad>;
+    use     <datatype_table.scad>;
 
     base_unit_length = "mm";
 

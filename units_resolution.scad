@@ -1,6 +1,6 @@
 //! Arc rendering resolution abstraction.
 /***************************************************************************//**
-  \file   resolution.scad
+  \file   units_resolution.scad
   \author Roy Allen Sutton
   \date   2015-2017
 
@@ -423,7 +423,7 @@ function resolution_facetsv
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <resolution.scad>;
+    include <units_resolution.scad>;
 
     base_unit_length = "in";
 

@@ -32,7 +32,7 @@
   \ingroup math math_vecalg math_oshapes math_triangle
 *******************************************************************************/
 
-include <primitives.scad>;
+include <datatype.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -831,7 +831,7 @@ BEGIN_SCOPE validate;
   BEGIN_SCOPE vecalg;
     BEGIN_OPENSCAD;
       include <math.scad>;
-      use <table.scad>;
+      use <datatype_table.scad>;
       use <console.scad>;
       use <validation.scad>;
 

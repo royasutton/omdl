@@ -1,6 +1,6 @@
 //! Mathematical primitive functions.
 /***************************************************************************//**
-  \file   primitives.scad
+  \file   datatype.scad
   \author Roy Allen Sutton
   \date   2015-2017
 
@@ -51,18 +51,18 @@ include <constants.scad>;
     \li \subpage tv_datatype_id_g2_r
 
   \page tv_datatype_id_g1_s Script Group1
-    \dontinclude primitives_validate_id_g1.scad
+    \dontinclude datatype_validate_id_g1.scad
     \skip include
     \until end-of-tests
   \page tv_datatype_id_g1_r Results Group1
-    \include primitives_validate_id_g1.log
+    \include datatype_validate_id_g1.log
 
   \page tv_datatype_id_g2_s Script Group2
-    \dontinclude primitives_validate_id_g2.scad
+    \dontinclude datatype_validate_id_g2.scad
     \skip include
     \until end-of-tests
   \page tv_datatype_id_g2_r Results Group2
-    \include primitives_validate_id_g2.log
+    \include datatype_validate_id_g2.log
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
@@ -694,11 +694,11 @@ function compare
     \li \subpage tv_datatype_op_s
     \li \subpage tv_datatype_op_r
   \page tv_datatype_op_s Script
-    \dontinclude primitives_validate_op.scad
+    \dontinclude datatype_validate_op.scad
     \skip include
     \until end-of-tests
   \page tv_datatype_op_r Results
-    \include primitives_validate_op.log
+    \include datatype_validate_op.log
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
@@ -1887,8 +1887,8 @@ BEGIN_SCOPE validate;
   BEGIN_SCOPE id;
     BEGIN_SCOPE g1;
       BEGIN_OPENSCAD;
-        include <primitives.scad>;
-        use <table.scad>;
+        include <datatype.scad>;
+        use <datatype_table.scad>;
         use <console.scad>;
         use <validation.scad>;
 
@@ -2017,8 +2017,8 @@ BEGIN_SCOPE validate;
 
     BEGIN_SCOPE g2;
       BEGIN_OPENSCAD;
-        include <primitives.scad>;
-        use <table.scad>;
+        include <datatype.scad>;
+        use <datatype_table.scad>;
         use <console.scad>;
         use <validation.scad>;
 
@@ -2159,8 +2159,8 @@ BEGIN_SCOPE validate;
 
   BEGIN_SCOPE op;
     BEGIN_OPENSCAD;
-      include <primitives.scad>;
-      use <table.scad>;
+      include <datatype.scad>;
+      use <datatype_table.scad>;
       use <console.scad>;
       use <validation.scad>;
 

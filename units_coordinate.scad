@@ -1,6 +1,6 @@
 //! Coordinate systems and conversions.
 /***************************************************************************//**
-  \file   coordinates.scad
+  \file   units_coordinate.scad
   \author Roy Allen Sutton
   \date   2017
 
@@ -238,7 +238,7 @@ function convert_coordinates
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <coordinates.scad>;
+    include <units_coordinate.scad>;
 
     base_coordinates = "c";
 

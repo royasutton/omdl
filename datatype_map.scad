@@ -1,6 +1,6 @@
 //! Mapped key-value pair data access.
 /***************************************************************************//**
-  \file   map.scad
+  \file   datatype_map.scad
   \author Roy Allen Sutton
   \date   2015-2017
 
@@ -33,7 +33,7 @@
 *******************************************************************************/
 
 use <console.scad>;
-include <primitives.scad>;
+include <datatype.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -284,7 +284,7 @@ module map_dump
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    use <map.scad>;
+    use <datatype_map.scad>;
 
     map =
     [

@@ -84,7 +84,9 @@ library             := $(library_db01) \
                        \
                        mainpage \
                        constants \
-                       primitives \
+                       datatype \
+                       datatype_map \
+                       datatype_table \
                        math \
                        math_bitwise \
                        math_utility \
@@ -92,11 +94,9 @@ library             := $(library_db01) \
                        validation \
                        console \
                        units_angle \
+                       units_coordinate \
                        units_length \
-                       resolution \
-                       coordinates \
-                       map \
-                       table \
+                       units_resolution \
                        transform \
                        shapes2d \
                        shapes2de \
