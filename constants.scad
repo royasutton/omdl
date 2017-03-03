@@ -1,4 +1,4 @@
-//! Mechanical design constants.
+//! Design constant definitions.
 /***************************************************************************//**
   \file   constants.scad
   \author Roy Allen Sutton
@@ -90,7 +90,7 @@ empty_v = [];
   @{
 
   \defgroup constants_euclidean Euclidean
-  \brief    Euclidean 2D/3D space mapping.
+  \brief    Euclidean space axis mapping.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//

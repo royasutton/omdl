@@ -1,6 +1,5 @@
 
-> A collection of documented design primitives for [OpenSCAD] inspired
-> by *MCAD*.
+> An open mechanical design library for [OpenSCAD].
 
 [![LGPL licensed](https://img.shields.io/badge/license-LGPL-blue.svg?style=flat)](https://raw.githubusercontent.com/royasutton/omdl/master/lgpl-2.1.txt)
 

@@ -1,4 +1,4 @@
-//! Mathematical bitwise binary (base-two) functions.
+//! Mathematical base-two bitwise binary functions.
 /***************************************************************************//**
   \file   math_bitwise.scad
   \author Roy Allen Sutton
@@ -36,14 +36,14 @@ include <primitives.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \page tv_math_bitwise Bitwise Operations
+  \page tv_math_bitwise Bitwise
     \li \subpage tv_math_bitwise_s
     \li \subpage tv_math_bitwise_r
-  \page tv_math_bitwise_s Validation Script
+  \page tv_math_bitwise_s Script
     \dontinclude math_bitwise_validate.scad
     \skip include
     \until end-of-tests
-  \page tv_math_bitwise_r Validation Results
+  \page tv_math_bitwise_r Results
     \include math_bitwise_validate.log
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -53,8 +53,8 @@ include <primitives.scad>;
   \addtogroup math
   @{
 
-  \defgroup math_bitwise Bitwise Operations
-  \brief    Bitwise binary (base-two) operations.
+  \defgroup math_bitwise Bitwise
+  \brief    Base-two bitwise binary operations.
 
   \details
 

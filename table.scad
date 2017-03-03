@@ -27,7 +27,7 @@
 
   \details
 
-  \ingroup containers containers_table
+  \ingroup datatype datatype_table
 *******************************************************************************/
 
 use <console.scad>;
@@ -35,11 +35,11 @@ include <primitives.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup containers
+  \addtogroup datatype
   @{
 
-  \defgroup containers_table Table
-  \brief    Row and column data table encoding and lookup.
+  \defgroup datatype_table Table
+  \brief    Two-dimensional data encoding and access.
 
   \details
 

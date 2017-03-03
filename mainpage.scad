@@ -31,8 +31,7 @@
   \mainpage omdl
   \tableofcontents
 
-    A collection of documented design primitives for [OpenSCAD]
-    inspired by *MCAD*.
+    An open mechanical design library for [OpenSCAD].
 
   \section what_is_omdl What is omdl?
 
@@ -210,24 +209,19 @@
 // validation results root page.
 /***************************************************************************//**
   \page validation Validation
-    \li \subpage tv_prim
+    \li \subpage tv_datatype
     \li \subpage tv_math
 *******************************************************************************/
 
 // base group categories.
 /***************************************************************************//**
   \defgroup constants Constants
-  \brief    General design constants.
-*******************************************************************************/
-
-/***************************************************************************//**
-  \defgroup containers Containers
-  \brief    Data container storage and reference.
+  \brief    Design constant definitions.
 *******************************************************************************/
 
 /***************************************************************************//**
   \defgroup database Database
-  \brief    Design specifications stored in data containers.
+  \brief    Design specification data.
 
   \addtogroup database
   @{
@@ -245,6 +239,11 @@
   \brief    Material specifications.
 
   @}
+*******************************************************************************/
+
+/***************************************************************************//**
+  \defgroup datatype Datatype
+  \brief    Data type definitions and operators.
 *******************************************************************************/
 
 /***************************************************************************//**

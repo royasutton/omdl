@@ -29,30 +29,30 @@
 
   \note Include this library file using the \b include statement.
 
-  \ingroup math math_vector math_oshapes math_triangle
+  \ingroup math math_vecalg math_oshapes math_triangle
 *******************************************************************************/
 
 include <primitives.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \page tv_math Computations Validation
-    \li \subpage tv_math_vector
+  \page tv_math Math
+    \li \subpage tv_math_vecalg
     \li \subpage tv_math_bitwise
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \page tv_math_vector Point, Vector and Plane
-    \li \subpage tv_math_vector_s
-    \li \subpage tv_math_vector_r
-  \page tv_math_vector_s Validation Script
-    \dontinclude math_validate_vector.scad
+  \page tv_math_vecalg Vector Algebra
+    \li \subpage tv_math_vecalg_s
+    \li \subpage tv_math_vecalg_r
+  \page tv_math_vecalg_s Script
+    \dontinclude math_validate_vecalg.scad
     \skip include
     \until end-of-tests
-  \page tv_math_vector_r Validation Results
-    \include math_validate_vector.log
+  \page tv_math_vecalg_r Results
+    \include math_validate_vecalg.log
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
@@ -61,12 +61,12 @@ include <primitives.scad>;
   \addtogroup math
   @{
 
-  \defgroup math_vector Point, Vector and Plane
-  \brief    Point, vector, and plane computations.
+  \defgroup math_vecalg Vector Algebra
+  \brief    Algebraic operations on Euclidean vectors.
 
   \details
 
-    See validation \ref tv_math_vector_r "results".
+    See validation \ref tv_math_vecalg_r "results".
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -425,7 +425,7 @@ function is_left_ppp
   @{
 
   \defgroup math_oshapes Other Shapes
-  \brief    Other general shape computations.
+  \brief    Mathematical functions for other shapes.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -533,7 +533,7 @@ function rpolygon_perimeter
   @{
 
   \defgroup math_triangle Triangles
-  \brief    Triangle computations.
+  \brief    Triangle mathematical functions.
 
   \details
 
@@ -828,7 +828,7 @@ function triangle_is_cw_vp
 
 /*
 BEGIN_SCOPE validate;
-  BEGIN_SCOPE vector;
+  BEGIN_SCOPE vecalg;
     BEGIN_OPENSCAD;
       include <math.scad>;
       use <table.scad>;

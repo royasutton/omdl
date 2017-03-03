@@ -60,7 +60,7 @@ include <transform.scad>;
     \endlatexonly
 
   \defgroup shapes_2d 2D Shapes
-  \brief    Two dimensional geometric shapes.
+  \brief    Two-dimensional geometric shapes.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -1266,7 +1266,7 @@ module ellipse_cs
   }
 }
 
-//! A two dimensional star.
+//! A two-dimensional star.
 /***************************************************************************//**
   \param    size <vector|decimal> A vector [l, w] of decimals
             or a single decimal for (size=l=2*w).

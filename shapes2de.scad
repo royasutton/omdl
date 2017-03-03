@@ -60,7 +60,7 @@ include <shapes2d.scad>;
     \endlatexonly
 
   \defgroup shapes_2de 2D Extrusions
-  \brief    Extruded two dimensional geometric shapes.
+  \brief    Extruded two-dimensional geometric shapes.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -900,7 +900,7 @@ module eellipse_cs
   ellipse_cs(a1=a1, a2=a2, size=size, core=core, t=t, co=co, cr=cr);
 }
 
-//! An extruded two dimensional star.
+//! An extruded two-dimensional star.
 /***************************************************************************//**
   \param    size <vector|decimal> A vector [l, w] of decimals
             or a single decimal for (size=l=2*w).

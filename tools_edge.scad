@@ -37,7 +37,7 @@ include <shapes2d.scad>;
   \addtogroup tools
   @{
 
-    \amu_define caption (Edge Finishing)
+    \amu_define caption (Edge)
 
     \amu_make png_files (append=dim extension=png)
     \amu_make eps_files (append=dim extension=png2eps)
@@ -59,7 +59,7 @@ include <shapes2d.scad>;
         )
     \endlatexonly
 
-  \defgroup tools_edge Edge Finishing
+  \defgroup tools_edge Edge
   \brief    Shape edge finishing tools.
   @{
 *******************************************************************************/

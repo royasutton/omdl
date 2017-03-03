@@ -62,7 +62,7 @@ include <shapes2d.scad>;
     \endlatexonly
 
   \defgroup shapes_3d 3D Shapes
-  \brief    Three dimensional geometric shapes.
+  \brief    Three-dimensional geometric shapes.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -415,7 +415,7 @@ module pyramid_q
   );
 }
 
-//! A three dimensional star.
+//! A three-dimensional star.
 /***************************************************************************//**
   \param    size <vector|decimal> A vector [l, w, h] of decimals
             or a single decimal for (size=l=2*w=4*h).

@@ -39,7 +39,7 @@ include <math_bitwise.scad>;
   \addtogroup math
   @{
 
-  \defgroup math_utility Miscellaneous Utilities
+  \defgroup math_utility Utilities
   \brief    Miscellaneous mathematical utilities.
   @{
 *******************************************************************************/

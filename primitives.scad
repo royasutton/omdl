@@ -29,55 +29,55 @@
 
   \note Include this library file using the \b include statement.
 
-  \ingroup math prim_test prim_vector
+  \ingroup datatype datatype_id datatype_op
 *******************************************************************************/
 
 include <constants.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \page tv_prim Primitives Validation
-    \li \subpage tv_prim_test
-    \li \subpage tv_prim_vector
+  \page tv_datatype Datatype
+    \li \subpage tv_datatype_id
+    \li \subpage tv_datatype_op
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \page tv_prim_test Variable Tests
-    \li \subpage tv_prim_test_g1_s
-    \li \subpage tv_prim_test_g1_r
-    \li \subpage tv_prim_test_g2_s
-    \li \subpage tv_prim_test_g2_r
+  \page tv_datatype_id Identification
+    \li \subpage tv_datatype_id_g1_s
+    \li \subpage tv_datatype_id_g1_r
+    \li \subpage tv_datatype_id_g2_s
+    \li \subpage tv_datatype_id_g2_r
 
-  \page tv_prim_test_g1_s Validation Script (group1)
-    \dontinclude primitives_validate_test_g1.scad
+  \page tv_datatype_id_g1_s Script Group1
+    \dontinclude primitives_validate_id_g1.scad
     \skip include
     \until end-of-tests
-  \page tv_prim_test_g1_r Validation Results (group1)
-    \include primitives_validate_test_g1.log
+  \page tv_datatype_id_g1_r Results Group1
+    \include primitives_validate_id_g1.log
 
-  \page tv_prim_test_g2_s Validation Script (group2)
-    \dontinclude primitives_validate_test_g2.scad
+  \page tv_datatype_id_g2_s Script Group2
+    \dontinclude primitives_validate_id_g2.scad
     \skip include
     \until end-of-tests
-  \page tv_prim_test_g2_r Validation Results (group2)
-    \include primitives_validate_test_g2.log
+  \page tv_datatype_id_g2_r Results Group2
+    \include primitives_validate_id_g2.log
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup math
+  \addtogroup datatype
   @{
 
-  \defgroup prim_test Variable Tests
-  \brief    Variable-properties test primitives.
+  \defgroup datatype_id Identification
+  \brief    Data test and type identification primitives.
 
   \details
 
     See validation results
-    \ref tv_prim_test_g1_r "group1" and \ref tv_prim_test_g2_r "group2".
+    \ref tv_datatype_id_g1_r "group1" and \ref tv_datatype_id_g2_r "group2".
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -690,29 +690,29 @@ function compare
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \page tv_prim_vector Vector Operations
-    \li \subpage tv_prim_vector_s
-    \li \subpage tv_prim_vector_r
-  \page tv_prim_vector_s Validation Script
-    \dontinclude primitives_validate_vector.scad
+  \page tv_datatype_op Operators
+    \li \subpage tv_datatype_op_s
+    \li \subpage tv_datatype_op_r
+  \page tv_datatype_op_s Script
+    \dontinclude primitives_validate_op.scad
     \skip include
     \until end-of-tests
-  \page tv_prim_vector_r Validation Results
-    \include primitives_validate_vector.log
+  \page tv_datatype_op_r Results
+    \include primitives_validate_op.log
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup math
+  \addtogroup datatype
   @{
 
-  \defgroup prim_vector Vector Operations
-  \brief    Vector operation primitives.
+  \defgroup datatype_op Operators
+  \brief    Data type operation primitives.
 
   \details
 
-    See validation \ref tv_prim_vector_r "results".
+    See validation \ref tv_datatype_op_r "results".
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -1884,7 +1884,7 @@ function unique
 
 /*
 BEGIN_SCOPE validate;
-  BEGIN_SCOPE test;
+  BEGIN_SCOPE id;
     BEGIN_SCOPE g1;
       BEGIN_OPENSCAD;
         include <primitives.scad>;
@@ -2157,7 +2157,7 @@ BEGIN_SCOPE validate;
     END_SCOPE;
   END_SCOPE;
 
-  BEGIN_SCOPE vector;
+  BEGIN_SCOPE op;
     BEGIN_OPENSCAD;
       include <primitives.scad>;
       use <table.scad>;

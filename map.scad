@@ -29,7 +29,7 @@
 
     Manage a collection of key-value pairs where keys are unique.
 
-  \ingroup containers containers_map
+  \ingroup datatype datatype_map
 *******************************************************************************/
 
 use <console.scad>;
@@ -37,11 +37,11 @@ include <primitives.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup containers
+  \addtogroup datatype
   @{
 
-  \defgroup containers_map Map
-  \brief    Mapped data access via key-value pairs.
+  \defgroup datatype_map Map
+  \brief    Key-value mapped pair data encoding and access.
 
   \details
 
