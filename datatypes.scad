@@ -1558,19 +1558,20 @@ function reverse
 //! Sort the numeric or string elements of a vector using quick sort.
 /***************************************************************************//**
   \param    v <vector> A vector of values.
+  \param    i <integer> The element sort column index.
   \param    r <boolean> Reverse sort order.
 
   \returns  <vector> With elements sorted in ascending order.
-            Returns \b undef when \p v is not all strings or all numbers.
             Returns \b undef when \p v is not defined or is not a vector.
 
   \details
 
   \warning This implementation relies on the comparison operators
            '<' and '>' which expect the operands to be either two scalar
-           numbers or two strings. Therefore, this function returns \b undef
-           for vectors containing anything other than all scalar numbers
-           or all strings.
+           numbers or two strings. Therefore, this function will not
+           correctly sort vectors elements that are not numbers or
+           strings. Elements with unknown order are placed at the end
+           of the list.
 
     See [Wikipedia](https://en.wikipedia.org/wiki/Quicksort)
     for more information.
@@ -1578,22 +1579,29 @@ function reverse
 function qsort
 (
   v,
+  i,
   r = false
 ) = not_defined(v) ? undef
   : !is_vector(v) ? undef
   : is_empty(v) ? empty_v
-  : !(all_strings(v) || all_numbers(v)) ? undef  // not all numbers or strings
   : let
     (
       mp = v[floor(len(v)/2)],
+      me = not_defined(i) ? mp : mp[i],
 
-      lt = [for (i = v) if (i  < mp) i],
-      eq = [for (i = v) if (i == mp) i],
-      gt = [for (i = v) if (i  > mp) i],
+      lt = [for (j = v) let(k = not_defined(i) ? j : j[i]) if (k  < me) j],
+      eq = [for (j = v) let(k = not_defined(i) ? j : j[i]) if (k == me) j],
+      gt = [for (j = v) let(k = not_defined(i) ? j : j[i]) if (k  > me) j],
+
+      ou =
+      [
+        for (j = v) let(k = not_defined(i) ? j : j[i])
+          if ( !((k < me) || (k == me) || (k > me)) ) j
+      ],
 
       sp = (r == true) ?
-           concat(qsort(gt, r), eq, qsort(lt, r))
-         : concat(qsort(lt, r), eq, qsort(gt, r))
+           concat(qsort(gt, i, r), eq, qsort(lt, i, r), ou)
+         : concat(qsort(lt, i, r), eq, qsort(gt, i, r), ou)
     )
     sp;
 
@@ -2555,11 +2563,24 @@ BEGIN_SCOPE validate;
           undef,                                              // t04
           ["apple","banana","grape","orange"],                // t05
           ["a","a","a","b","n","n","s"],                      // t06
-          undef,                                              // t07
-          undef,                                              // t08
-          undef,                                              // t09
-          undef,                                              // t10
+          [undef],                                            // t07
+          skip,                                               // t08
+          skip,                                               // t09
+          skip,                                               // t10
           [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
+        ],
+        ["qsort_1R",
+          undef,                                              // t01
+          empty_v,                                            // t02
+          undef,                                              // t03
+          undef,                                              // t04
+          ["orange","grape","apple","banana"],                // t05
+          skip,                                               // t06
+          skip,                                               // t07
+          [[2,3],[1,2]],                                      // t08
+          [[4,5],[2,3],[1,2],"ab"],                           // t09
+          [[7,8,9],[4,5,6],[1,2,3],["a","b","c"]],            // t10
+          skip                                                // t11
         ],
         ["qsort2_HR",
           undef,                                              // t01
@@ -2719,6 +2740,7 @@ BEGIN_SCOPE validate;
       for (vid=test_ids) run_test( "pmerge", pmerge(get_value(vid)), vid );
       for (vid=test_ids) run_test( "reverse", reverse(get_value(vid)), vid );
       for (vid=test_ids) run_test( "qsort", qsort(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "qsort_1R", qsort(get_value(vid), i=1, r=true), vid );
       for (vid=test_ids) run_test( "qsort2_HR", qsort2(get_value(vid), d=5, r=true), vid );
 
       // grow / reduce
