@@ -1608,6 +1608,7 @@ function qsort
 //! Hierarchically sort all elements of a vector using quick sort.
 /***************************************************************************//**
   \param    v <vector> A vector of values.
+  \param    i <integer> The element sort column index.
   \param    d <integer> Recursive sort depth.
   \param    r <boolean> Reverse sort order.
   \param    s <boolean> Order ranges by their numerical sum.
@@ -1628,6 +1629,7 @@ function qsort
 function qsort2
 (
   v,
+  i,
   d = 0,
   r = false,
   s = true
@@ -1637,30 +1639,34 @@ function qsort2
   : let
     (
       mp = v[floor(len(v)/2)],
+      me = not_defined(i) ? mp : mp[i],
 
       lt =
       [
-        for (i = v)
-          if (compare(mp, i, s) == -1)
-            ((d > 0) && is_vector(i)) ? qsort2(i, d-1, r, s) : i
+        for (j = v)
+        let(k = not_defined(i) ? j : j[i])
+          if (compare(me, k, s) == -1)
+            ((d > 0) && is_vector(k)) ? qsort2(k, i, d-1, r, s) : j
       ],
       eq =
       [
-        for (i = v)
-          if (compare(mp, i, s) ==  0)
-            ((d > 0) && is_vector(i)) ? qsort2(i, d-1, r, s) : i
+        for (j = v)
+        let(k = not_defined(i) ? j : j[i])
+          if (compare(me, k, s) ==  0)
+            ((d > 0) && is_vector(k)) ? qsort2(k, i, d-1, r, s) : j
       ],
       gt =
       [
-        for (i = v)
-          if (compare(mp, i, s) == +1)
-            ((d > 0) && is_vector(i)) ? qsort2(i, d-1, r, s) : i
+        for (j = v)
+        let(k = not_defined(i) ? j : j[i])
+          if (compare(me, k, s) == +1)
+            ((d > 0) && is_vector(k)) ? qsort2(k, i, d-1, r, s) : j
       ],
       sp = (r == true) ?
-           concat(qsort2(gt, d, r, s), eq, qsort2(lt, d, r, s))
-         : concat(qsort2(lt, d, r, s), eq, qsort2(gt, d, r, s))
+           concat(qsort2(gt, i, d, r, s), eq, qsort2(lt, i, d, r, s))
+         : concat(qsort2(lt, i, d, r, s), eq, qsort2(gt, i, d, r, s))
     )
-    (d > 0) ? qsort2(sp, d-1, r, s) : sp;
+    (d > 0) ? qsort2(sp, i, d-1, r, s) : sp;
 
 //----------------------------------------------------------------------------//
 // grow / reduce
@@ -2582,6 +2588,19 @@ BEGIN_SCOPE validate;
           [[7,8,9],[4,5,6],[1,2,3],["a","b","c"]],            // t10
           skip                                                // t11
         ],
+        ["qsort2_1R",
+          undef,                                              // t01
+          empty_v,                                            // t02
+          undef,                                              // t03
+          undef,                                              // t04
+          ["orange","grape","apple","banana"],                // t05
+          skip,                                               // t06
+          skip,                                               // t07
+          [[2,3],[1,2]],                                      // t08
+          ["ab",[4,5],[2,3],[1,2]],                           // t09
+          [["a","b","c"],[7,8,9],[4,5,6],[1,2,3]],            // t10
+          skip                                                // t11
+        ],
         ["qsort2_HR",
           undef,                                              // t01
           empty_v,                                            // t02
@@ -2741,6 +2760,7 @@ BEGIN_SCOPE validate;
       for (vid=test_ids) run_test( "reverse", reverse(get_value(vid)), vid );
       for (vid=test_ids) run_test( "qsort", qsort(get_value(vid)), vid );
       for (vid=test_ids) run_test( "qsort_1R", qsort(get_value(vid), i=1, r=true), vid );
+      for (vid=test_ids) run_test( "qsort2_1R", qsort2(get_value(vid), i=1, r=true), vid );
       for (vid=test_ids) run_test( "qsort2_HR", qsort2(get_value(vid), d=5, r=true), vid );
 
       // grow / reduce
