@@ -84,9 +84,9 @@ library             := $(library_db01) \
                        \
                        mainpage \
                        constants \
-                       datatype \
-                       datatype_map \
-                       datatype_table \
+                       datatypes \
+                       datatypes_map \
+                       datatypes_table \
                        math \
                        math_bitwise \
                        math_utility \

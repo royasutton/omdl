@@ -32,7 +32,7 @@
   \ingroup math math_bitwise
 *******************************************************************************/
 
-include <datatype.scad>;
+include <datatypes.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -304,7 +304,7 @@ function bitwise_rsh
 BEGIN_SCOPE validate;
   BEGIN_OPENSCAD;
     include <math_bitwise.scad>;
-    use <datatype_table.scad>;
+    use <datatypes_table.scad>;
     use <console.scad>;
     use <validation.scad>;
 

@@ -1,6 +1,6 @@
 //! Data table encoding and lookup.
 /***************************************************************************//**
-  \file   datatype_table.scad
+  \file   datatypes_table.scad
   \author Roy Allen Sutton
   \date   2015-2017
 
@@ -27,18 +27,18 @@
 
   \details
 
-  \ingroup datatype datatype_table
+  \ingroup datatypes datatypes_table
 *******************************************************************************/
 
 use <console.scad>;
-include <datatype.scad>;
+include <datatypes.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup datatype
+  \addtogroup datatypes
   @{
 
-  \defgroup datatype_table Table
+  \defgroup datatypes_table Table
   \brief    Two-dimensional data encoding and access.
 
   \details
@@ -462,7 +462,7 @@ function table_sum
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <units_length.scad>;
-    use     <datatype_table.scad>;
+    use     <datatypes_table.scad>;
 
     base_unit_length = "mm";
 

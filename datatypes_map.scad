@@ -1,6 +1,6 @@
 //! Mapped key-value pair data access.
 /***************************************************************************//**
-  \file   datatype_map.scad
+  \file   datatypes_map.scad
   \author Roy Allen Sutton
   \date   2015-2017
 
@@ -29,18 +29,18 @@
 
     Manage a collection of key-value pairs where keys are unique.
 
-  \ingroup datatype datatype_map
+  \ingroup datatypes datatypes_map
 *******************************************************************************/
 
 use <console.scad>;
-include <datatype.scad>;
+include <datatypes.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup datatype
+  \addtogroup datatypes
   @{
 
-  \defgroup datatype_map Map
+  \defgroup datatypes_map Map
   \brief    Key-value mapped pair data encoding and access.
 
   \details
@@ -284,7 +284,7 @@ module map_dump
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    use <datatype_map.scad>;
+    use <datatypes_map.scad>;
 
     map =
     [

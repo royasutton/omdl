@@ -1,6 +1,6 @@
 //! Mathematical primitive functions.
 /***************************************************************************//**
-  \file   datatype.scad
+  \file   datatypes.scad
   \author Roy Allen Sutton
   \date   2015-2017
 
@@ -29,55 +29,55 @@
 
   \note Include this library file using the \b include statement.
 
-  \ingroup datatype datatype_id datatype_op
+  \ingroup datatypes datatypes_id datatypes_op
 *******************************************************************************/
 
 include <constants.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \page tv_datatype Datatype
-    \li \subpage tv_datatype_id
-    \li \subpage tv_datatype_op
+  \page tv_datatypes Datatypes
+    \li \subpage tv_datatypes_id
+    \li \subpage tv_datatypes_op
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \page tv_datatype_id Identification
-    \li \subpage tv_datatype_id_g1_s
-    \li \subpage tv_datatype_id_g1_r
-    \li \subpage tv_datatype_id_g2_s
-    \li \subpage tv_datatype_id_g2_r
+  \page tv_datatypes_id Identification
+    \li \subpage tv_datatypes_id_g1_s
+    \li \subpage tv_datatypes_id_g1_r
+    \li \subpage tv_datatypes_id_g2_s
+    \li \subpage tv_datatypes_id_g2_r
 
-  \page tv_datatype_id_g1_s Script Group1
-    \dontinclude datatype_validate_id_g1.scad
+  \page tv_datatypes_id_g1_s Script Group1
+    \dontinclude datatypes_validate_id_g1.scad
     \skip include
     \until end-of-tests
-  \page tv_datatype_id_g1_r Results Group1
-    \include datatype_validate_id_g1.log
+  \page tv_datatypes_id_g1_r Results Group1
+    \include datatypes_validate_id_g1.log
 
-  \page tv_datatype_id_g2_s Script Group2
-    \dontinclude datatype_validate_id_g2.scad
+  \page tv_datatypes_id_g2_s Script Group2
+    \dontinclude datatypes_validate_id_g2.scad
     \skip include
     \until end-of-tests
-  \page tv_datatype_id_g2_r Results Group2
-    \include datatype_validate_id_g2.log
+  \page tv_datatypes_id_g2_r Results Group2
+    \include datatypes_validate_id_g2.log
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup datatype
+  \addtogroup datatypes
   @{
 
-  \defgroup datatype_id Identification
+  \defgroup datatypes_id Identification
   \brief    Data test and type identification primitives.
 
   \details
 
     See validation results
-    \ref tv_datatype_id_g1_r "group1" and \ref tv_datatype_id_g2_r "group2".
+    \ref tv_datatypes_id_g1_r "group1" and \ref tv_datatypes_id_g2_r "group2".
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -690,29 +690,29 @@ function compare
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \page tv_datatype_op Operators
-    \li \subpage tv_datatype_op_s
-    \li \subpage tv_datatype_op_r
-  \page tv_datatype_op_s Script
-    \dontinclude datatype_validate_op.scad
+  \page tv_datatypes_op Operators
+    \li \subpage tv_datatypes_op_s
+    \li \subpage tv_datatypes_op_r
+  \page tv_datatypes_op_s Script
+    \dontinclude datatypes_validate_op.scad
     \skip include
     \until end-of-tests
-  \page tv_datatype_op_r Results
-    \include datatype_validate_op.log
+  \page tv_datatypes_op_r Results
+    \include datatypes_validate_op.log
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup datatype
+  \addtogroup datatypes
   @{
 
-  \defgroup datatype_op Operators
+  \defgroup datatypes_op Operators
   \brief    Data type operation primitives.
 
   \details
 
-    See validation \ref tv_datatype_op_r "results".
+    See validation \ref tv_datatypes_op_r "results".
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -1887,8 +1887,8 @@ BEGIN_SCOPE validate;
   BEGIN_SCOPE id;
     BEGIN_SCOPE g1;
       BEGIN_OPENSCAD;
-        include <datatype.scad>;
-        use <datatype_table.scad>;
+        include <datatypes.scad>;
+        use <datatypes_table.scad>;
         use <console.scad>;
         use <validation.scad>;
 
@@ -2017,8 +2017,8 @@ BEGIN_SCOPE validate;
 
     BEGIN_SCOPE g2;
       BEGIN_OPENSCAD;
-        include <datatype.scad>;
-        use <datatype_table.scad>;
+        include <datatypes.scad>;
+        use <datatypes_table.scad>;
         use <console.scad>;
         use <validation.scad>;
 
@@ -2159,8 +2159,8 @@ BEGIN_SCOPE validate;
 
   BEGIN_SCOPE op;
     BEGIN_OPENSCAD;
-      include <datatype.scad>;
-      use <datatype_table.scad>;
+      include <datatypes.scad>;
+      use <datatypes_table.scad>;
       use <console.scad>;
       use <validation.scad>;
 
