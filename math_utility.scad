@@ -52,7 +52,7 @@ include <math_bitwise.scad>;
 //! Generate a histogram for the elements of an iterable value.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
-  \param    m <integer> The output mode (a 8-bit encoded integer).
+  \param    m <integer> The output mode (a 5-bit encoded integer).
 
   \param    cs <vector> A vector of strings [s1, s2, s3, fs]
             (for custom field formatting).
@@ -62,29 +62,32 @@ include <math_bitwise.scad>;
 
   \details
 
-    The custom formatting strings are inserted in the output as
-    follows: <tt>'s1, value, s2, frequency, s3, fs'</tt>. See vstr_html()
-    for description of html formatting tags \p cb, \p cp, \p ca, \p cf.
+    The custom formatting strings are inserted in the output stream as
+    follows:
 
-    Output mode:
+    \verbatim
+    s1, value, s2, value-frequency, s3, fs
+    \endverbatim
 
-    | bit | Description             |  0        |  1          |
-    |:---:|:------------------------|:----------|:------------|
-    |  0  | output mode             | numerical | string      |
-    | 1-3 | string mode format      | see table | see table   |
-    |  4  | sort data elements      | yes       | no          |
-    |  5  | sort function selection | qsort2    | qsort       |
-    |  6  | sort order              | ascending | descending  |
-    |  7  | field separator mode    | skip last | all         |
+    See vstr_html() for description of the html formatting parameters
+    \p cb, \p cp, \p ca, \p cf, and \p d.
 
-    String format:
+    Output mode selection:
 
-    |     | B3  | B2  | B1  | Description       |
-    |:---:|:---:|:---:|:---:|:------------------|
-    |  0  |  0  |  0  |  0  | vector of strings |
-    |  1  |  0  |  0  |  1  | text format 1     |
-    |  4  |  1  |  0  |  0  | html format 1     |
-    |  7  |  1  |  1  |  1  | custom            |
+    | bit | Description             |  0          |  1          |
+    |:---:|:------------------------|:------------|:------------|
+    |  0  | output mode             | numerical   | string      |
+    | 1-3 | string mode format      | see table   | see table   |
+    |  4  | field separator mode    | not at end  | all         |
+
+    String output modes:
+
+    |     | B3  | B2  | B1  | B0  | Description       |
+    |:---:|:---:|:---:|:---:|:---:|:------------------|
+    |  1  |  0  |  0  |  0  |  1  | vector of strings |
+    |  3  |  0  |  0  |  1  |  1  | text format 1     |
+    |  9  |  1  |  0  |  0  |  1  | html format 1     |
+    | 15  |  1  |  1  |  1  |  1  | custom formating  |
 
 *******************************************************************************/
 function hist
@@ -99,17 +102,13 @@ function hist
   d = false
 ) = let
     (
-      fm = bitwise_is_equal(m, 7, 1) ? true : false,
-      so = bitwise_is_equal(m, 6, 1) ? true : false,
-      sv = bitwise_is_equal(m, 4, 1) ? v
-         : bitwise_is_equal(m, 5, 1) ? qsort(v, r=so) : qsort2(v, r=so),
-
-      hv = [for (i=unique(sv)) [i, len(find(i, sv, 0))]]
+      hv = [for (i=unique(v)) [i, len(find(i, v, 0))]]
     )
     bitwise_is_equal(m, 0, 0) ? hv
   : let
     (
-      sm = bitwise_imi(m, 3, 1)
+      sm = bitwise_imi(m, 3, 1),
+      fm = bitwise_is_equal(m, 4, 1) ? true : false
     )
     (sm == 0) ? [for (i=hv) str(first(i), "x", second(i))]
   : let
