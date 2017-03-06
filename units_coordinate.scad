@@ -77,14 +77,14 @@ include <constants.scad>;
 
     \b Example
 
-      \dontinclude coordinates_example.scad
+      \dontinclude units_coordinate_example.scad
       \skip include
       \until to="c");
 
-    \b Result (base_coordinates = \b c): \include coordinates_example_c.log
-    \b Result (base_coordinates = \b p): \include coordinates_example_p.log
-    \b Result (base_coordinates = \b y): \include coordinates_example_y.log
-    \b Result (base_coordinates = \b s): \include coordinates_example_s.log
+    \b Result (base_coordinates = \b c): \include units_coordinate_example_c.log
+    \b Result (base_coordinates = \b p): \include units_coordinate_example_p.log
+    \b Result (base_coordinates = \b y): \include units_coordinate_example_y.log
+    \b Result (base_coordinates = \b s): \include units_coordinate_example_s.log
 
     [coordinate system]: https://en.wikipedia.org/wiki/Coordinate_system
     [cartesian]: https://en.wikipedia.org/wiki/Cartesian_coordinate_system

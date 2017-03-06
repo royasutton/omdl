@@ -45,11 +45,11 @@ include <datatypes.scad>;
 
     \b Example
 
-      \dontinclude table_example.scad
+      \dontinclude datatypes_table_example.scad
       \skip use
       \until ( tsum=tsum );
 
-    \b Result \include table_example.log
+    \b Result \include datatypes_table_example.log
 
   @{
 *******************************************************************************/

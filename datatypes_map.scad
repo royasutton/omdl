@@ -47,11 +47,11 @@ include <datatypes.scad>;
 
     \b Example
 
-      \dontinclude map_example.scad
+      \dontinclude datatypes_map_example.scad
       \skip use
       \until map_dump(map);
 
-    \b Result \include map_example.log
+    \b Result \include datatypes_map_example.log
 
   @{
 *******************************************************************************/
