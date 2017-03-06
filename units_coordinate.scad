@@ -57,9 +57,9 @@ include <constants.scad>;
     | system id  | description    | dimensions  | convention          |
     |:----------:|:--------------:|:-----------:|:-------------------:|
     |  c         | [cartesian]    | 2D or 3D    | [x, y] or [x, y, z] |
-    |  p         | [polar]        | 2D          | [r, aa ]            |
+    |  p         | [polar]        | 2D          | [r, aa]             |
     |  y         | [cylindrical]  | 3D          | [r, aa, z]          |
-    |  s         | [spherical]    | 3D          | [r, aa, pa ]        |
+    |  s         | [spherical]    | 3D          | [r, aa, pa]         |
 
     The symbols used in the convention column are as follows:
 
@@ -227,6 +227,108 @@ function convert_coordinate
   from = base_coordinates,
   to   = base_coordinates
 ) = coordinate_c_to( coordinate_to_c( c, from ), to );
+
+//! Radially scale a vector of 2-tuple cartesian coordinates.
+/***************************************************************************//**
+  \param    c <vector> A vector of cartesian coordinates [[x, y], ...].
+  \param    r <decimal> A polar radius.
+  \param    t <boolean> Translate or scale radius.
+
+  \returns  <vector> A vector of scaled cartesian coordinates.
+
+  \details
+
+    When \p t is \b true, all coordinates will terminate on a circle of
+    radius \p r. When \p t is \b false, the radius of each coordinate
+    is scaled by \p r.
+*******************************************************************************/
+function coordinates_cpc
+(
+  c,
+  r,
+  t = false
+) =
+  [
+    for (i = c)
+    let (p = convert_coordinate(i, from="c", to="p"))
+      convert_coordinate([(t == true) ? r : r*p[0], p[1]], from="p", to="c")
+  ];
+
+//! Radially scale and convert a vector of polar coordinates to cartesian.
+/***************************************************************************//**
+  \param    c <vector> A vector of polar coordinates [[r, aa], ...].
+  \param    r <decimal> A polar radius.
+  \param    t <boolean> Translate or scale radius.
+
+  \returns  <vector> A vector of scaled cartesian coordinates.
+
+  \details
+
+    When \p t is \b true, all coordinates will terminate on a circle of
+    radius \p r. When \p t is \b false, the radius of each coordinate
+    is scaled by \p r.
+*******************************************************************************/
+function coordinates_pc
+(
+  p,
+  r,
+  t = false
+) =
+  [
+    for (i = p)
+      convert_coordinate([(t == true) ? r : r*i[0], i[1]], from="p", to="c")
+  ];
+
+//! Radially scale a vector of 3-tuple cartesian coordinates.
+/***************************************************************************//**
+  \param    c <vector> A vector of cartesian coordinates [[x, y, z], ...].
+  \param    r <decimal> A spherical radius.
+  \param    t <boolean> Translate or scale radius.
+
+  \returns  <vector> A vector of scaled cartesian coordinates.
+
+  \details
+
+    When \p t is \b true, all coordinates will terminate on a sphere of
+    radius \p r. When \p t is \b false, the radius of each coordinate
+    is scaled by \p r.
+*******************************************************************************/
+function coordinates_csc
+(
+  c,
+  r,
+  t = false
+) =
+  [
+    for (i = c)
+    let (s = convert_coordinate(i, from="c", to="s"))
+      convert_coordinate([(t == true) ? r : r*s[0], s[1], s[2]], from="s", to="c")
+  ];
+
+//! Radially scale and convert a vector of spherical coordinates to cartesian.
+/***************************************************************************//**
+  \param    c <vector> A vector of spherical coordinates [[r, aa, pa], ...].
+  \param    r <decimal> A spherical radius.
+  \param    t <boolean> Translate or scale radius.
+
+  \returns  <vector> A vector of scaled cartesian coordinates.
+
+  \details
+
+    When \p t is \b true, all coordinates will terminate on a sphere of
+    radius \p r. When \p t is \b false, the radius of each coordinate
+    is scaled by \p r.
+*******************************************************************************/
+function coordinates_sc
+(
+  s,
+  r,
+  t = false
+) =
+  [
+    for (i = s)
+      convert_coordinate([(t == true) ? r : r*i[0], i[1], i[2]], from="s", to="c")
+  ];
 
 //! @}
 //! @}
