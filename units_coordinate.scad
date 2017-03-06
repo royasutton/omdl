@@ -127,7 +127,7 @@ function coordinates_name
             Returns \b 'undef' for identifiers that are not defined.
   \private
 *******************************************************************************/
-function coordinates_c_to
+function coordinate_c_to
 (
   c,
   to
@@ -175,7 +175,7 @@ function coordinates_c_to
             Returns \b 'undef' for identifiers that are not defined.
   \private
 *******************************************************************************/
-function coordinates_to_c
+function coordinate_to_c
 (
   c,
   from
@@ -221,12 +221,12 @@ function coordinates_to_c
   \returns  <vector> The converted result.
             Returns \b 'undef' for identifiers that are not defined.
 *******************************************************************************/
-function convert_coordinates
+function convert_coordinate
 (
   c,
   from = base_coordinates,
   to   = base_coordinates
-) = coordinates_c_to( coordinates_to_c( c, from ), to );
+) = coordinate_c_to( coordinate_to_c( c, from ), to );
 
 //! @}
 //! @}
@@ -246,14 +246,14 @@ BEGIN_SCOPE example;
     cs = coordinates_name();
 
     // absolute coordinates in a specified coordinate system.
-    c1 = convert_coordinates([1, 1, 1], "c");
-    c2 = convert_coordinates([1, 180], "p");
-    c3 = convert_coordinates([1, 90, -1], "y");
-    c4 = convert_coordinates([1, 5, 50], "s");
+    c1 = convert_coordinate([1, 1, 1], "c");
+    c2 = convert_coordinate([1, 180], "p");
+    c3 = convert_coordinate([1, 90, -1], "y");
+    c4 = convert_coordinate([1, 5, 50], "s");
 
     // convert between system.
-    c5 = convert_coordinates([10*sqrt(2), 45, 45], from="s", to="y");
-    c6 = convert_coordinates([sqrt(2), 45], from="p", to="c");
+    c5 = convert_coordinate([10*sqrt(2), 45, 45], from="s", to="y");
+    c6 = convert_coordinate([sqrt(2), 45], from="p", to="c");
 
     echo( cs=cs );
     echo( c1=c1 );
