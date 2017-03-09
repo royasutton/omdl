@@ -819,6 +819,50 @@ function triangle_is_cw_vp
   : (il > 0) ? false
   : undef;
 
+//! Test if a point is inside a triangle in a Euclidean 2D-space using Barycentric.
+/***************************************************************************//**
+  \param    v1 <vector> A 2-tuple coordinate.
+  \param    v2 <vector> A 2-tuple coordinate.
+  \param    v3 <vector> A 2-tuple coordinate.
+  \param    t <vector> A test point 2-tuple coordinate [x, y].
+
+  \returns  <boolean> \b true when the point is inside the polygon and
+            \b false otherwise.
+
+  \details
+
+    See [Wikipedia] for more information.
+
+    [Wikipedia]: https://en.wikipedia.org/wiki/Barycentric_coordinate_system
+*******************************************************************************/
+function triangle_is_pit_ppp
+(
+  v1,
+  v2,
+  v3,
+  t
+) = let (d = ((v2[1]-v3[1]) * (v1[0]-v3[0]) + (v3[0]-v2[0]) * (v1[1]-v3[1])))
+    (d == 0) ? true
+  : let (a = ((v2[1]-v3[1]) * ( t[0]-v3[0]) + (v3[0]-v2[0]) * ( t[1]-v3[1])) / d)
+    (a < 0) ? false
+  : let (b = ((v3[1]-v1[1]) * ( t[0]-v3[0]) + (v1[0]-v3[0]) * ( t[1]-v3[1])) / d)
+    (b < 0) ? false
+  : ((a + b) < 1);
+
+//! Test if a point is inside a triangle in a Euclidean 2D-space using Barycentric.
+/***************************************************************************//**
+  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
+  \param    t <vector> A test point 2-tuple coordinate [x, y].
+
+  \returns  <boolean> \b true when the point is inside the polygon and
+            \b false otherwise.
+*******************************************************************************/
+function triangle_is_pit_vp
+(
+  v,
+  t
+) = triangle_is_pit_ppp(v1=v[0], v2=v[1], v3=v[2], t=t);
+
 //! @}
 //! @}
 
