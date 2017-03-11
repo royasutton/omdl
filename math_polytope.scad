@@ -788,12 +788,13 @@ function polyhedron_volume_tf
     vv =
     [
       for (fi = f)
-      let
-      (
-        a = c[fi[1]],
-        b = c[fi[0]],
-        c = c[fi[2]]
-      )
+      (len(fi) != 3) ? undef
+      : let
+        (
+          a = c[fi[1]],
+          b = c[fi[0]],
+          c = c[fi[2]]
+        )
         a * cross_vv(b, c, a, a)
     ],
 
