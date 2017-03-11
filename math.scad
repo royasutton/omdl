@@ -544,57 +544,61 @@ function rpolygon_perimeter
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Compute the vertices of a plane triangle given its side lengths.
+//! Compute the vertices of a triangle given its side lengths.
 /***************************************************************************//**
   \param    s1 <decimal> The length of the side 1.
   \param    s2 <decimal> The length of the side 2.
   \param    s3 <decimal> The length of the side 3.
+  \param    cw <boolean> Order vertices clockwise.
 
   \returns  <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
 
   \details
 
-    Vertex \p v1 at the origin. Geometry required that \p s1 + \p s2 is greater
-    then \p s3. Coordinates \p v3:[x, y] will be \b 'nan' when specified
-    triangle does not exists.
+    Geometry requires that \p s1 + \p s2 is greater then \p s3. A
+    coordinates will be \b 'nan' when specified triangle does not
+    exists.
 
-  \note     Side length \p s1 is measured along the positive x-axis.
-  \note     Sides are numbered counterclockwise.
+  \note     Vertex \p v1 at the origin. Side length \p s1 is measured
+            along the positive x-axis.
 *******************************************************************************/
 function triangle_lll2vp
 (
   s1,
   s2,
-  s3
+  s3,
+  cw = true
 ) =
-[
-  origin2d,
-  [s1, 0],
-  [
-    ( s1*s1 + s3*s3 - (s2*s2) ) / ( 2*s1 ),
-    sqrt( s3*s3 - pow( ( s1*s1 + s3*s3 - (s2*s2) ) / ( 2*s1 ), 2 ) )
-  ]
-];
+  let
+  (
+    v1 = origin2d,
+    v2 = [s1, 0],
+    v3 = [(s1*s1 + s3*s3 - (s2*s2)) / (2*s1),
+          sqrt(s3*s3 - pow((s1*s1 + s3*s3 - (s2*s2)) / (2*s1), 2))]
+  )
+  (cw == true) ? [v1, v3, v2] : [v1, v2, v3];
 
-//! Compute the vertices of a plane triangle given its side lengths.
+//! Compute the vertices of a triangle given its side lengths.
 /***************************************************************************//**
   \param    v <vector> of decimal side lengths.
+  \param    cw <boolean> Order vertices clockwise.
 
   \returns  <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
 
   \details
 
-    Vertex \p vs[0] at the origin. Geometry required that \p vs[0] + \p vs[1]
-    is greater then \p vs[2]. Coordinates \p v3:[x, y] will be \b 'nan' when
-    specified triangle does not exists.
+    Geometry requires that \p s1 + \p s2 is greater then \p s3. A
+    coordinates will be \b 'nan' when specified triangle does not
+    exists.
 
-  \note     Side length \p vs[0] is measured along the positive x-axis.
-  \note     Sides are numbered counterclockwise.
+  \note     Vertex \p v1 at the origin. Side length \p s1 is measured
+            along the positive x-axis.
 *******************************************************************************/
 function triangle_vl2vp
 (
-  v
-) = triangle_lll2vp( s1=v[0], s2=v[1], s3=v[2] );
+  v,
+  cw = true
+) = triangle_lll2vp( s1=v[0], s2=v[1], s3=v[2], cw=cw );
 
 //! Compute the side lengths of a triangle given its vertices.
 /***************************************************************************//**
@@ -604,7 +608,7 @@ function triangle_vl2vp
 
   \returns  <vector> A vector [s1, s2, s3] of lengths.
 
-  \note     Vertices are numbered counterclockwise.
+  \note     Side lengths ordered according to vertex ordering.
 *******************************************************************************/
 function triangle_ppp2vl
 (
@@ -619,7 +623,7 @@ function triangle_ppp2vl
 
   \returns  <vector> A vector [s1, s2, s3] of lengths.
 
-  \note     Vertices are numbered counterclockwise.
+  \note     Side lengths ordered according to vertex ordering.
 *******************************************************************************/
 function triangle_vp2vl
 (
