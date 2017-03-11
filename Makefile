@@ -89,6 +89,7 @@ library             := $(library_db01) \
                        datatypes_table \
                        math \
                        math_bitwise \
+                       math_polytope \
                        math_utility \
                        utilities \
                        validation \
