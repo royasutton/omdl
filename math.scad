@@ -464,7 +464,7 @@ function rpolygon_vp
   r,
   a,
   vr,
-  cw = false
+  cw = true
 ) =
 [
   let
