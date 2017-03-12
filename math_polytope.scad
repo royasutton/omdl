@@ -849,6 +849,60 @@ function polyhedron_centroid_tf
   )
   ws/(24*tv);
 
+//----------------------------------------------------------------------------//
+// other: polygon to polyhedron
+//----------------------------------------------------------------------------//
+
+//! Convert a polygon to a polyhedron by adding a height dimension.
+/***************************************************************************//**
+  \param    c <vector> A vector of vertices where each is a 2-tuple
+            coordinate vector.
+  \param    p <vector> An \em optional vector of paths that define one
+            or more closed shapes where each is a vector of coordinate
+            indexes.
+  \param    h <decimal> The polyhedron height.
+  \param    centroid <boolean> Center polygon centroid at z-axis.
+  \param    center <boolean> Center polyhedron height about xy-plane.
+
+  \returns  <vector> A vector [\c points, \c faces] that define the
+            resulting polyhedron.
+
+  \details
+
+  \note     When \p p is not given, the listed order of the coordinates
+            \p c establishes the path.
+*******************************************************************************/
+function linear_extrude_pp2pf
+(
+  c,
+  p,
+  h = 1,
+  centroid = false,
+  center = false
+) =
+  let
+  (
+    pm = defined_or(p, [consts(len(c))]),
+    pn = len([for (pi = pm) for (ci = pi) 1]),
+
+    po = (centroid == true) ? polygon2d_centroid(c, p) : origin2d,
+    zr = (center == true) ? [-h/2, h/2] : [0, h],
+
+    cw = polygon2d_is_cw (c, p),
+
+    pp = [for (zi = zr) for (pi = pm) for (ci = pi) concat(c[ci] - po, zi)],
+    pf =
+    [
+      [for (pi = pm) for (ci = pi) ci],
+      [for (pi = pm) for (cn = [len(pi)-1 : -1 : 0]) pi[cn] + pn],
+      for (pi = pm) for (ci = pi)
+        (cw == true)
+        ? [ci, ci+pn, (ci+1)%pn+pn, (ci+1)%pn]
+        : [ci, (ci+1)%pn, (ci+1)%pn+pn, ci+pn]
+    ]
+  )
+  [pp, pf];
+
 //! @}
 //! @}
 
