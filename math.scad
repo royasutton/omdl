@@ -29,7 +29,7 @@
 
   \note Include this library file using the \b include statement.
 
-  \ingroup math math_vecalg math_oshapes math_triangle
+  \ingroup math math_vecalg math_linalg math_oshapes math_triangle
 *******************************************************************************/
 
 include <datatypes.scad>;
@@ -415,6 +415,142 @@ function is_left_ppp
   p2,
   p3
 ) = ((p2[0]-p1[0]) * (p3[1]-p1[1]) - (p3[0]-p1[0]) * (p2[1]-p1[1]));
+
+//! @}
+//! @}
+
+//----------------------------------------------------------------------------//
+/***************************************************************************//**
+  \addtogroup math
+  @{
+
+  \defgroup math_linalg Linear Algebra
+  \brief    Linear algebra transformations on Euclidean coordinates.
+  @{
+*******************************************************************************/
+//----------------------------------------------------------------------------//
+
+//! Translate all coordinates by a constant.
+/***************************************************************************//**
+  \param    c <vector> A vector of vertices where each is a n-tuple
+            coordinate vector.
+  \param    v <vector> An n-tuple translation constant.
+
+  \returns  <vector> The vector of vertices with the constant \p v added
+            to each coordinate.
+
+  \details
+
+    See [Wikipedia] for more information and [transformation matrix].
+
+    [Wikipedia]: https://en.wikipedia.org/wiki/Translation_(geometry)
+    [transformation matrix]: https://en.wikipedia.org/wiki/Transformation_matrix
+*******************************************************************************/
+function translate_vp
+(
+  c,
+  v
+) =
+  let
+  (
+    d = len(first(c)),
+    w = [for (i=[0 : d-1]) edefined_or(v, i, 0)]
+  )
+  [for (ci=c) [for (di=[0 : d-1]) ci[di] + w[di]]];
+
+//! Rotate all coordinates about one or more coordinate axes.
+/***************************************************************************//**
+  \param    c <vector> A vector of vertices where each is a 3 or 2-tuple
+            coordinate vector.
+  \param    a <vector|scalar> An 3-tuple rotation vector [ax, ay, az],
+            or a single scalar value to specify only az.
+
+  \returns  <vector> The vector of vertices rotated as specified by \p a.
+            Rotation order is rz, ry, rx.
+
+  \details
+
+    See [Wikipedia] for more information on [transformation matrix]
+    and [axis rotation].
+
+    [Wikipedia]: https://en.wikipedia.org/wiki/Rotation_matrix
+    [transformation matrix]: https://en.wikipedia.org/wiki/Transformation_matrix
+    [axis rotation]: http://inside.mines.edu/fs_home/gmurray/ArbitraryAxisRotation
+*******************************************************************************/
+function rotate_vp
+(
+  c,
+  a
+) =
+  let
+  (
+    d = len(first(c)),
+
+    ax = edefined_or(a, 0, 0),
+    ay = edefined_or(a, 1, 0),
+    az = edefined_or(a, 2, is_scalar(a) ? a : 0),
+
+    cg = cos(az), sg = sin(az),
+
+    rc = (d == 2) ? [for (ci=c) [cg*ci[0]-sg*ci[1], sg*ci[0]+cg*ci[1]]]
+       : (d == 3) ?
+          [
+            let(ca = cos(ax), cb = cos(ay), sa = sin(ax), sb = sin(ay))
+
+            for (ci=c)
+            [
+              cb*cg*ci[0] + (cg*sa*sb-ca*sg)*ci[1] + ( ca*cg*sb+sa*sg)*ci[2],
+              cb*sg*ci[0] + (ca*cg+sa*sb*sg)*ci[1] + (-cg*sa+ca*sb*sg)*ci[2],
+                -sb*ci[0] +            cb*sa*ci[1] +             ca*cb*ci[2]
+            ]
+          ]
+        : undef
+  )
+  rc;
+
+//! Scale all coordinates by a constant.
+/***************************************************************************//**
+  \param    c <vector> A vector of vertices where each is a n-tuple
+            coordinate vector.
+  \param    v <vector> An n-tuple scale constant.
+
+  \returns  <vector> The vector of vertices with each coordinate scaled
+            by the constant \p v.
+*******************************************************************************/
+function scale_vp
+(
+  c,
+  v
+) =
+  let
+  (
+    d = len(first(c)),
+    w = [for (i=[0 : d-1]) edefined_or(v, i, 1)]
+  )
+  [for (ci=c) [for (di=[0 : d-1]) ci[di] * w[di]]];
+
+//! Scale all coordinates proportionately to fit inside a region.
+/***************************************************************************//**
+  \param    c <vector> A vector of vertices where each is a n-tuple
+            coordinate vector.
+  \param    v <vector> An n-tuple region constant.
+
+  \returns  <vector> The vector of vertices with each coordinate scaled
+            proportionately to fit inside the given region.
+*******************************************************************************/
+function resize_vp
+(
+  c,
+  v
+) =
+  let
+  (
+    d = len(first(c)),
+    w = [for (i=[0 : d-1]) edefined_or(v, i, 1)],
+    m = [for (i=[0 : d-1]) let (cv = [for (ci=c) (ci[i])]) [min(cv), max(cv)]],
+    s = [for (i=[0 : d-1]) second(m[i]) - first(m[i])]
+  )
+  [for (ci=c) [for (di=[0 : d-1]) ci[di]/s[di] * w[di]]];
 
 //! @}
 //! @}
