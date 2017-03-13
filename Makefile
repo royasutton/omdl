@@ -102,7 +102,9 @@ library             := $(library_db01) \
                        shapes2d \
                        shapes2de \
                        shapes3d \
-                       tools_edge
+                       tools_align \
+                       tools_edge \
+                       tools_polytope
 
 #------------------------------------------------------------------------------#
 # Scope excludes
