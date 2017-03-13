@@ -430,6 +430,42 @@ function is_left_ppp
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
+//! Multiply all coordinates by a 4x4 3D-transformation matrix.
+/***************************************************************************//**
+  \param    c <vector> A vector of vertices where each is a n-tuple
+            coordinate vector.
+  \param    m <vector> An 4-tuple by 4-tuple transformation matrix.
+
+  \returns  <vector> The vector of vertices with all coordinates multiplied
+            by the 4x4 transformation matrix.
+
+  \details
+
+    See [Wikipedia] and [multmatrix] for more information.
+
+    [Wikipedia]: https://en.wikipedia.org/wiki/Transformation_matrix
+    [multmatrix]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Transformations#multmatrix
+*******************************************************************************/
+function multmatrix_vp
+(
+  c,
+  m
+) =
+  let
+  (
+    m11=m[0][0], m12=m[0][1], m13=m[0][2], m14=m[0][3],
+    m21=m[1][0], m22=m[1][1], m23=m[1][2], m24=m[1][3],
+    m31=m[2][0], m32=m[2][1], m33=m[2][2], m34=m[2][3]
+  )
+  [
+    for (ci=c)
+    let
+    (
+      x = ci[0], y = ci[1], z = ci[2]
+    )
+      [m11*x+m12*y+m13*z+m14, m21*x+m22*y+m23*z+m24, m31*x+m32*y+m33*z+m34]
+  ];
+
 //! Translate all coordinates by a constant.
 /***************************************************************************//**
   \param    c <vector> A vector of vertices where each is a n-tuple
