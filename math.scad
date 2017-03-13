@@ -486,14 +486,14 @@ function translate_vp
 (
   c,
   v
-) =
-  let
-  (
-    d = len(first(c)),
-    u = is_scalar(v) ? v : 0,
-    w = [for (i=[0 : d-1]) edefined_or(v, i, u)]
-  )
-  [for (ci=c) [for (di=[0 : d-1]) ci[di] + w[di]]];
+) = not_defined(v) ? c
+  : let
+    (
+      d = len(first(c)),
+      u = is_scalar(v) ? v : 0,
+      w = [for (i=[0 : d-1]) edefined_or(v, i, u)]
+    )
+    [for (ci=c) [for (di=[0 : d-1]) ci[di] + w[di]]];
 
 //! Rotate all coordinates about one or more coordinate axes.
 /***************************************************************************//**
@@ -602,14 +602,14 @@ function scale_vp
 (
   c,
   v
-) =
-  let
-  (
-    d = len(first(c)),
-    u = is_scalar(v) ? v : 1,
-    w = [for (i=[0 : d-1]) edefined_or(v, i, u)]
-  )
-  [for (ci=c) [for (di=[0 : d-1]) ci[di] * w[di]]];
+) = not_defined(v) ? c
+  : let
+    (
+      d = len(first(c)),
+      u = is_scalar(v) ? v : 1,
+      w = [for (i=[0 : d-1]) edefined_or(v, i, u)]
+    )
+    [for (ci=c) [for (di=[0 : d-1]) ci[di] * w[di]]];
 
 //! Scale all coordinates proportionately to fit inside a region.
 /***************************************************************************//**
@@ -624,16 +624,16 @@ function resize_vp
 (
   c,
   v
-) =
-  let
-  (
-    d = len(first(c)),
-    u = is_scalar(v) ? v : 1,
-    w = [for (i=[0 : d-1]) edefined_or(v, i, u)],
-    m = [for (i=[0 : d-1]) let (cv = [for (ci=c) (ci[i])]) [min(cv), max(cv)]],
-    s = [for (i=[0 : d-1]) second(m[i]) - first(m[i])]
-  )
-  [for (ci=c) [for (di=[0 : d-1]) ci[di]/s[di] * w[di]]];
+) = not_defined(v) ? c
+  : let
+    (
+      d = len(first(c)),
+      u = is_scalar(v) ? v : 1,
+      w = [for (i=[0 : d-1]) edefined_or(v, i, u)],
+      m = [for (i=[0 : d-1]) let (cv = [for (ci=c) (ci[i])]) [min(cv), max(cv)]],
+      s = [for (i=[0 : d-1]) second(m[i]) - first(m[i])]
+    )
+    [for (ci=c) [for (di=[0 : d-1]) ci[di]/s[di] * w[di]]];
 
 //! @}
 //! @}
