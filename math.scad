@@ -524,69 +524,69 @@ function rotate_vp
   a,
   v,
   o = origin3d
-) =
-  let
-  (
-    d  = len(first(c)),
-    az = edefined_or(a, 2, is_scalar(a) ? a : 0),
+) = not_defined(a) ? c
+  : let
+    (
+      d  = len(first(c)),
+      az = edefined_or(a, 2, is_scalar(a) ? a : 0),
 
-    cg = cos(az), sg = sin(az),
+      cg = cos(az), sg = sin(az),
 
-    rc = (d == 2) ? [for (ci=c) [cg*ci[0]-sg*ci[1], sg*ci[0]+cg*ci[1]]]
-       : (d != 3) ? c
-       : not_defined(v) ?
-          let
-          (
-            ax = edefined_or(a, 0, 0),
-            ay = edefined_or(a, 1, 0),
+      rc = (d == 2) ? [for (ci=c) [cg*ci[0]-sg*ci[1], sg*ci[0]+cg*ci[1]]]
+         : (d != 3) ? c
+         : not_defined(v) ?
+            let
+            (
+              ax = edefined_or(a, 0, 0),
+              ay = edefined_or(a, 1, 0),
 
-            ca = cos(ax), cb = cos(ay),
-            sa = sin(ax), sb = sin(ay),
+              ca = cos(ax), cb = cos(ay),
+              sa = sin(ax), sb = sin(ay),
 
-            m11 = cb*cg,
-            m12 = cg*sa*sb-ca*sg,
-            m13 = ca*cg*sb+sa*sg,
+              m11 = cb*cg,
+              m12 = cg*sa*sb-ca*sg,
+              m13 = ca*cg*sb+sa*sg,
 
-            m21 = cb*sg,
-            m22 = ca*cg+sa*sb*sg,
-            m23 = -cg*sa+ca*sb*sg,
+              m21 = cb*sg,
+              m22 = ca*cg+sa*sb*sg,
+              m23 = -cg*sa+ca*sb*sg,
 
-            m31 = -sb,
-            m32 = cb*sa,
-            m33 = ca*cb
-          )
-          multmatrix_vp(c, [[m11,m12,m13,0], [m21,m22,m23,0], [m31,m32,m33,0]])
-       :  let
-          (
-            vx  = v[0],  vy  = v[1],  vz  = v[2],
-            vx2 = vx*vx, vy2 = vy*vy, vz2 = vz*vz,
-            l2  = vx2 + vy2 + vz2
-          )
-          (l2 == 0) ? c
-       :  let
-          (
-            ox = o[0], oy = o[1], oz = o[2],
-            ll = sqrt(l2),
-            oc = 1 - cg,
+              m31 = -sb,
+              m32 = cb*sa,
+              m33 = ca*cb
+            )
+            multmatrix_vp(c, [[m11,m12,m13,0], [m21,m22,m23,0], [m31,m32,m33,0]])
+         :  let
+            (
+              vx  = v[0],  vy  = v[1],  vz  = v[2],
+              vx2 = vx*vx, vy2 = vy*vy, vz2 = vz*vz,
+              l2  = vx2 + vy2 + vz2
+            )
+            (l2 == 0) ? c
+         :  let
+            (
+              ox = o[0], oy = o[1], oz = o[2],
+              ll = sqrt(l2),
+              oc = 1 - cg,
 
-            m11 = vx2+(vy2+vz2)*cg,
-            m12 = vx*vy*oc-vz*ll*sg,
-            m13 = vx*vz*oc+vy*ll*sg,
-            m14 = (ox*(vy2+vz2)-vx*(oy*vy+oz*vz))*oc+(oy*vz-oz*vy)*ll*sg,
+              m11 = vx2+(vy2+vz2)*cg,
+              m12 = vx*vy*oc-vz*ll*sg,
+              m13 = vx*vz*oc+vy*ll*sg,
+              m14 = (ox*(vy2+vz2)-vx*(oy*vy+oz*vz))*oc+(oy*vz-oz*vy)*ll*sg,
 
-            m21 = vx*vy*oc+vz*ll*sg,
-            m22 = vy2+(vx2+vz2)*cg,
-            m23 = vy*vz*oc-vx*ll*sg,
-            m24 = (oy*(vx2+vz2)-vy*(ox*vx+oz*vz))*oc+(oz*vx-ox*vz)*ll*sg,
+              m21 = vx*vy*oc+vz*ll*sg,
+              m22 = vy2+(vx2+vz2)*cg,
+              m23 = vy*vz*oc-vx*ll*sg,
+              m24 = (oy*(vx2+vz2)-vy*(ox*vx+oz*vz))*oc+(oz*vx-ox*vz)*ll*sg,
 
-            m31 = vx*vz*oc-vy*ll*sg,
-            m32 = vy*vz*oc+vx*ll*sg,
-            m33 = vz2+(vx2+vy2)*cg,
-            m34 = (oz*(vx2+vy2)-vz*(ox*vx+oy*vy))*oc+(ox*vy-oy*vx)*ll*sg
-          )
-          multmatrix_vp(c, [[m11,m12,m13,m14], [m21,m22,m23,m24], [m31,m32,m33,m34]])/l2
-  )
-  rc;
+              m31 = vx*vz*oc-vy*ll*sg,
+              m32 = vy*vz*oc+vx*ll*sg,
+              m33 = vz2+(vx2+vy2)*cg,
+              m34 = (oz*(vx2+vy2)-vz*(ox*vx+oy*vy))*oc+(ox*vy-oy*vx)*ll*sg
+            )
+            multmatrix_vp(c, [[m11,m12,m13,m14], [m21,m22,m23,m24], [m31,m32,m33,m34]])/l2
+    )
+    rc;
 
 //! Scale all coordinates by a constant.
 /***************************************************************************//**
