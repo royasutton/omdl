@@ -75,11 +75,13 @@ module polygon_number
   tr = 0
 )
 {
-  fs = defined_or(ts, mean(polytope_bboxlimits (c, p, d=[0:1], s=true))/50);
+  pm = defined_or(p, [consts(len(c))]);
+
+  fs = defined_or(ts, mean(polytope_bboxlimits (c, pm, d=[0:1], s=true))/50);
   fo = defined_or(to, [0, 0, fs/2]);
 
   np = (lp == true) ?
-       consts(len(p))
+       consts(len(pm))
      : is_number(lp) ? [lp]
      : is_range(lp) ? [for (i=lp) i]
      : all_numbers(lp) ? lp
@@ -99,7 +101,7 @@ module polygon_number
      : all_numbers(le) ? le
      : undef;
 
-  el = not_defined(ne) ? undef : polytope_faces2edges(p);
+  el = not_defined(ne) ? undef : polytope_faces2edges(pm);
 
   // paths
   if (is_defined(np))
@@ -107,8 +109,8 @@ module polygon_number
   for (i = np)
   {
     t = (pc == true) ?
-        polygon2d_centroid(c, [p[i]])
-      : mean([for (j=p[i]) c[j]]);
+        polygon2d_centroid(c, [pm[i]])
+      : mean([for (j=pm[i]) c[j]]);
 
     translate(t) translate(fo) rotate(tr)
     text(str(i), size=fs, halign="center", valign="center");
