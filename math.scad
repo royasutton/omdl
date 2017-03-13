@@ -462,8 +462,13 @@ function translate_vp
 /***************************************************************************//**
   \param    c <vector> A vector of vertices where each is a 3 or 2-tuple
             coordinate vector.
-  \param    a <vector|scalar> An 3-tuple rotation vector [ax, ay, az],
+  \param    a <vector|scalar> A 3-tuple rotation vector [ax, ay, az],
             or a single scalar value to specify only az.
+  \param    v <vector> A 3-tuple arbitrary axis for the rotation. When
+            specified, the rotation angle will be the scalar \p a or az
+            about the line \p v that passes through \p o.
+  \param    o <vector> A 3-tuple arbitrary origin for the rotation.
+            Ignored when \p v is not specified.
 
   \returns  <vector> The vector of vertices rotated as specified by \p a.
             Rotation order is rz, ry, rx.
@@ -480,31 +485,83 @@ function translate_vp
 function rotate_vp
 (
   c,
-  a
+  a,
+  v,
+  o = origin3d
 ) =
   let
   (
-    d = len(first(c)),
-
-    ax = edefined_or(a, 0, 0),
-    ay = edefined_or(a, 1, 0),
+    d  = len(first(c)),
     az = edefined_or(a, 2, is_scalar(a) ? a : 0),
 
     cg = cos(az), sg = sin(az),
 
     rc = (d == 2) ? [for (ci=c) [cg*ci[0]-sg*ci[1], sg*ci[0]+cg*ci[1]]]
-       : (d == 3) ?
+       : (d != 3) ? undef
+       : not_defined(v) ?
           [
-            let(ca = cos(ax), cb = cos(ay), sa = sin(ax), sb = sin(ay))
+            let
+            (
+              ax = edefined_or(a, 0, 0),
+              ay = edefined_or(a, 1, 0),
 
+              ca = cos(ax), cb = cos(ay), sa = sin(ax), sb = sin(ay),
+
+              m11 = cb*cg,
+              m12 = cg*sa*sb-ca*sg,
+              m13 = ca*cg*sb+sa*sg,
+
+              m21 = cb*sg,
+              m22 = ca*cg+sa*sb*sg,
+              m23 = -cg*sa+ca*sb*sg,
+
+              m31 = -sb,
+              m32 = cb*sa,
+              m33 = ca*cb
+            )
             for (ci=c)
-            [
-              cb*cg*ci[0] + (cg*sa*sb-ca*sg)*ci[1] + ( ca*cg*sb+sa*sg)*ci[2],
-              cb*sg*ci[0] + (ca*cg+sa*sb*sg)*ci[1] + (-cg*sa+ca*sb*sg)*ci[2],
-                -sb*ci[0] +            cb*sa*ci[1] +             ca*cb*ci[2]
-            ]
+            let
+            (
+              x = ci[0], y = ci[1], z = ci[2]
+            )
+            [m11*x+m12*y+m13*z, m21*x+m22*y+m23*z, m31*x+m32*y+m33*z]
           ]
-        : undef
+       :  let
+          (
+            vx  = v[0],  vy  = v[1],  vz  = v[2],
+            vx2 = vx*vx, vy2 = vy*vy, vz2 = vz*vz,
+            l2  = vx2 + vy2 + vz2
+          )
+          (l2 == 0) ? c
+       :  [
+            let
+            (
+              ox = o[0], oy = o[1], oz = o[2],
+              ll = sqrt(l2),
+              oc = 1 - cg,
+
+              m11 = vx2+(vy2+vz2)*cg,
+              m12 = vx*vy*oc-vz*ll*sg,
+              m13 = vx*vz*oc+vy*ll*sg,
+              m14 = (ox*(vy2+vz2)-vx*(oy*vy+oz*vz))*oc+(oy*vz-oz*vy)*ll*sg,
+
+              m21 = vx*vy*oc+vz*ll*sg,
+              m22 = vy2+(vx2+vz2)*cg,
+              m23 = vy*vz*oc-vx*ll*sg,
+              m24 = (oy*(vx2+vz2)-vy*(ox*vx+oz*vz))*oc+(oz*vx-ox*vz)*ll*sg,
+
+              m31 = vx*vz*oc-vy*ll*sg,
+              m32 = vy*vz*oc+vx*ll*sg,
+              m33 = vz2+(vx2+vy2)*cg,
+              m34 = (oz*(vx2+vy2)-vz*(ox*vx+oy*vy))*oc+(ox*vy-oy*vx)*ll*sg
+            )
+            for (ci=c)
+            let
+            (
+              x = ci[0], y = ci[1], z = ci[2]
+            )
+            [m11*x+m12*y+m13*z+m14, m21*x+m22*y+m23*z+m24, m31*x+m32*y+m33*z+m34]/l2
+          ]
   )
   rc;
 
