@@ -490,7 +490,8 @@ function translate_vp
   let
   (
     d = len(first(c)),
-    w = [for (i=[0 : d-1]) edefined_or(v, i, 0)]
+    u = is_scalar(v) ? v : 0,
+    w = [for (i=[0 : d-1]) edefined_or(v, i, u)]
   )
   [for (ci=c) [for (di=[0 : d-1]) ci[di] + w[di]]];
 
@@ -605,7 +606,8 @@ function scale_vp
   let
   (
     d = len(first(c)),
-    w = [for (i=[0 : d-1]) edefined_or(v, i, 1)]
+    u = is_scalar(v) ? v : 1,
+    w = [for (i=[0 : d-1]) edefined_or(v, i, u)]
   )
   [for (ci=c) [for (di=[0 : d-1]) ci[di] * w[di]]];
 
@@ -626,7 +628,8 @@ function resize_vp
   let
   (
     d = len(first(c)),
-    w = [for (i=[0 : d-1]) edefined_or(v, i, 1)],
+    u = is_scalar(v) ? v : 1,
+    w = [for (i=[0 : d-1]) edefined_or(v, i, u)],
     m = [for (i=[0 : d-1]) let (cv = [for (ci=c) (ci[i])]) [min(cv), max(cv)]],
     s = [for (i=[0 : d-1]) second(m[i]) - first(m[i])]
   )
