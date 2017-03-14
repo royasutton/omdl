@@ -71,14 +71,13 @@ include <datatypes.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Compute the distance between two points in a Euclidean 1, 2, or 3D-space.
+//! Compute the distance between two points in a Euclidean space.
 /***************************************************************************//**
-  \param    p1 <vector> A 1, 2, or 3-tuple coordinate.
-  \param    p2 <vector> A 1, 2, or 3-tuple coordinate.
+  \param    p1 <vector> An n-tuple coordinate.
+  \param    p2 <vector> An n-tuple coordinate.
 
   \returns  <decimal> The distance between the two points.
-            Returns \b 'undef' when x and y do not have same number of terms
-            or for n-tuple where n>3.
+            Returns \b 'undef' when points do not have equal dimensions.
 
   \details
 
@@ -88,30 +87,11 @@ function distance_pp
 (
   p1,
   p2
-) = let
-    (
-      x=p1,
-      y=defined_or( p2, consts(len(p1), 0) )
-    )
-    all_len([x, y], 1) ?
-      abs
-      (
-        x[0] - y[0]
-      )
-  : all_len([x, y], 2) ?
-      sqrt
-      (
-          (x[0] - y[0]) * (x[0] - y[0])
-        + (x[1] - y[1]) * (x[1] - y[1])
-      )
-  : all_len([x, y], 3) ?
-      sqrt
-      (
-          (x[0] - y[0]) * (x[0] - y[0])
-        + (x[1] - y[1]) * (x[1] - y[1])
-        + (x[2] - y[2]) * (x[2] - y[2])
-      )
-  : undef ;
+) = let(d = len(p1))
+    !(d > 0) ? abs(p1 - defined_or(p2, 0))
+  : is_defined(p2) ?
+    sqrt(sum([for (i=[0:d-1]) (p1[i]-p2[i])*(p1[i]-p2[i])]))
+  : sqrt(sum([for (i=[0:d-1]) p1[i]*p1[i]]));
 
 //! Compute the dot product of two vectors.
 /***************************************************************************//**
@@ -1161,11 +1141,11 @@ BEGIN_SCOPE validate;
           4,                                                  // crp
           undef,                                              // t01
           undef,                                              // t02
-          undef,                                              // t03
+          10,                                                 // t03
           41,                                                 // t04
           43.3244,                                            // t05
           106.2873,                                           // t06
-          undef,                                              // t07
+          20.0499,                                            // t07
           1.4142,                                             // t08
           1.4142                                              // t09
         ],
@@ -1239,11 +1219,11 @@ BEGIN_SCOPE validate;
           4,                                                  // crp
           undef,                                              // t01
           undef,                                              // t02
-          undef,                                              // t03
+          1,                                                  // t03
           [1],                                                // t04
           [0.9464,-0.3231],                                   // t05
           [0.3857,-0.9032,-0.1882],                           // t06
-          undef,                                              // t07
+          [-0.4489,0.5486,0.4988,-0.4988],                    // t07
           [0.7071,-0.7071,0],                                 // t08
           [0.7071,-0.7071,0]                                  // t09
         ],
