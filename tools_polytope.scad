@@ -31,6 +31,7 @@
 *******************************************************************************/
 
 include <math_polytope.scad>;
+include <tools_align.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -69,6 +70,7 @@ module polygon_number
   lp = true,
   lc = true,
   le = true,
+  sp = false,
   pc = false,
   ts,
   to,
@@ -137,6 +139,10 @@ module polygon_number
     translate(t) translate(fo) rotate(tr)
     text(str(i), size=fs, halign="center", valign="center");
   }
+
+  // polygon
+  if (sp == true)
+    polygon(c, p);
 }
 
 //----------------------------------------------------------------------------//
