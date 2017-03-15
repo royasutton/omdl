@@ -32,7 +32,7 @@
     [Studies into Polyhedra]. The vertices are tabulated in both their
     original Cartesian as well as their converted spherical coordinate
     form, which is convenient when scaling. The data originates from
-    one of three sources, in order of decreasing accuracy:
+    one of three sources:
 
       \li [Exact Mathematics] as presented by [Anthony Thyssen],
       \li the [Polyhedron Database] maintained by [Netlib], and
@@ -12848,17 +12848,12 @@ dtr_polyhedra_johnson =
 BEGIN_SCOPE db;
 BEGIN_SCOPE autostat;
   BEGIN_OPENSCAD;
-    include <math.scad>;
+    include <math_polytope.scad>;
     include <math_utility.scad>;
-    include <coordinates.scad>;
-    include <table.scad>;
+    include <datatypes_table.scad>;
     include <database/geometry/polyhedra/johnson.scad>;
 
     fs  = "^";
-
-    fad = 1;
-    eld = 3;
-    ead = 1;
 
     tc = dtc_polyhedra_johnson;
     tr = dtr_polyhedra_johnson;
@@ -12872,7 +12867,7 @@ BEGIN_SCOPE autostat;
         "no.", fs, "table id", fs, "other name", fs,
         "vertices", fs, "faces", fs, "edges",
 
-        fs, "face-facets",
+        fs, "face-verticies",
         fs, "face-angles",
         fs, "edge-lengths",
         fs, "edge-angles"
@@ -12902,32 +12897,11 @@ BEGIN_SCOPE autostat;
           i, fs, id, fs, fo, fs,
           len(c), fs, len(f), fs, len(e),
 
-          fs, hist([for (i=f) len(i)], m=9),
-          fs, hist
-              (
-                [
-                  for(i=[0 : len(f)-1])
-                  let
-                  (
-                    n1 = cross_vv(c[f[i][1]], c[f[i][2]], c[f[i][0]], c[f[i][0]]),
-                    af = [for(v=f[i]) for(j=[0 : len(f)-1]) if( j != i && exists(v, f[j]) ) j]
-                  )
-                    for(u=unique(af))
-                    let
-                    (
-                      n2 = cross_vv(c[f[u][1]], c[f[u][2]], c[f[u][0]], c[f[u][0]])
-                    )
-                      dround(angle_vv(n1, n2), d=fad)
-                ], m=9
-              ),
-          fs, hist([for (i=e) dround(distance_pp(c[first(i)], c[second(i)]), d=eld)], m=9),
-          fs, hist
-              (
-                [
-                  for (k=[for(j=f) for(i=nssequence(j, n=3, s=1, w=true)) i])
-                    dround(angle_vv( c[k[1]], c[k[2]], c[k[0]], c[k[1]] ), d=ead)
-                ], m=9
-              ),
+          fs, hist(qsort(polytope_faceverticies(f)), m=9),
+          fs, hist(qsort(dround(polytope_faceangles(c, f), d=1)), m=9),
+          fs, hist(qsort(sround(polytope_edgelengths(c, e), d=3)), m=9),
+          fs, hist(qsort(dround(polytope_edgeangles(c, f), d=1)), m=9),
+
           fs
         )
       );
@@ -12947,7 +12921,8 @@ BEGIN_SCOPE db;
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
     include <constants.scad>;
-    include <table.scad>;
+    include <tools_polytope.scad>;
+    include <datatypes_table.scad>;
     include <database/geometry/polyhedra/johnson.scad>;
 
     tc = dtc_polyhedra_johnson;
@@ -12978,18 +12953,8 @@ BEGIN_SCOPE dim;
 
     if ( rc )
     for(e=pe)
-    {
-      p1 = pv[first(e)];
-      p2 = pv[second(e)];
-
-      el = norm(p1-p2);
-      ax = -acos((p2[2]-p1[2]) / el);
-      az = -atan2(p2[0]-p1[0], p2[1]-p1[1]);
-
-      translate((p1+p2) / 2)
-      rotate([ax, 0, az])
-      cylinder(r=ct, h=el, center=true);
-    }
+      align_axis2v([pv[first(e)], pv[second(e)]], t=2, a=2)
+      cylinder(r=ct, h=norm(pv[first(e)]-pv[second(e)]), center=true);
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;

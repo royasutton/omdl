@@ -32,7 +32,7 @@
     [Studies into Polyhedra]. The vertices are tabulated in both their
     original Cartesian as well as their converted spherical coordinate
     form, which is convenient when scaling. The data originates from
-    one of three sources, in order of decreasing accuracy:
+    one of three sources:
 
       \li [Exact Mathematics] as presented by [Anthony Thyssen],
       \li the [Polyhedron Database] maintained by [Netlib], and
@@ -67,8 +67,8 @@
 
     \b Example
     \code{.C}
-    include <constants.scad>;
-    include <table.scad>;
+    include <units_coordinate.scad>;
+    include <datatypes_table.scad>;
     include <database/geometry/polyhedra/platonic.scad>;
 
     tc = dtc_polyhedra_platonic;
@@ -79,7 +79,9 @@
     pv = table_get(tr, tc, id, "c");
     pf = table_get(tr, tc, id, "f");
 
-    polyhedron(points=pv, faces=pf);
+    sv = coordinates_csc(pv, 100);
+
+    polyhedron(points=sv, faces=pf);
     \endcode
 
     \b Autotests \include polyhedra_all_db_autotest.log
@@ -21469,8 +21471,9 @@ dtr_polyhedra_polyhedra_all =
 BEGIN_SCOPE db;
 BEGIN_SCOPE autotest;
   BEGIN_OPENSCAD;
-    include <coordinates.scad>;
-    include <table.scad>;
+    include <math_polytope.scad>;
+    include <units_coordinate.scad>;
+    include <datatypes_table.scad>;
     include <database/geometry/polyhedra/polyhedra_all.scad>;
 
     coordinates_positive_angles = false;
@@ -21498,11 +21501,11 @@ BEGIN_SCOPE autotest;
       // convert stored spherical and compare with cartesian coordinates.
       for( i = [0 : len(c)-1] )
       {
-        cc = convert_coordinates(s[i], from="s");
+        cc = convert_coordinate(s[i], from="s");
 
         if ( !n_almost_equal(c[i], cc) )
         {
-          cs = convert_coordinates(c[i], to="s");
+          cs = convert_coordinate(c[i], to="s");
 
           n = table_get(tr, tc, id, "n");
           o = table_get(tr, tc, id, "o");
@@ -21516,7 +21519,7 @@ BEGIN_SCOPE autotest;
       }
 
       // re-create sorted edge list and compare with stored.
-      ce = unique(qsort2([for(j=f) for(i=nssequence(j, n=2, s=1, w=true)) i], d=1));
+      ce = qsort2(polytope_faces2edges(f, d=1), d=1);
 
       if ( e != ce )
       {
