@@ -48,23 +48,24 @@ include <math.scad>;
 //----------------------------------------------------------------------------//
 module align_axis2v
 (
-  vt,
-  vi,
+  v,
   t = 0,
   a = 2,
   r = 0
 )
 {
-  vj = defined_or(vi, origin3d);
+  vt = is_iterable(v[0]) ? (len(v)>1) ? v[1] : v[0] : v;
+  vi = is_iterable(v[0]) ? (len(v)>1) ? v[0] : consts(len(v[0]), 0)
+     : is_iterable(v) ? consts(len(v), 0) : 0;
 
-  pa = acos((vt[2]-vj[2]) / distance_pp(vj, vt));
-  aa = atan2(vt[1]-vj[1], vt[0]-vj[0]);
+  pa = acos((vt[2]-vi[2]) / distance_pp(vt, vi));
+  aa = atan2(vt[1]-vi[1], vt[0]-vi[0]);
 
   tv  = (t == 0) ? origin3d
-      : (t == 1) ? vj
-      : (t == 2) ? (vt+vj)/2
+      : (t == 1) ? vi
+      : (t == 2) ? (vt+vi)/2
       : (t == 3) ? vt
-      : (t == 4) ? vt+vj
+      : (t == 4) ? vt+vi
       : origin3d;
 
   rv = (a == 0) ? [[ 0, -90, r], [0, pa, aa]]
