@@ -446,7 +446,7 @@ function multmatrix_vp
       [m11*x+m12*y+m13*z+m14, m21*x+m22*y+m23*z+m24, m31*x+m32*y+m33*z+m34]
   ];
 
-//! Translate all coordinates by a constant.
+//! Translate all coordinates by a constant vector.
 /***************************************************************************//**
   \param    c <vector> A vector of vertices where each is a n-tuple
             coordinate vector.
@@ -569,7 +569,7 @@ function rotate_vp
     )
     rc;
 
-//! Scale all coordinates by a constant.
+//! Scale all coordinates by a constant vector.
 /***************************************************************************//**
   \param    c <vector> A vector of vertices where each is a n-tuple
             coordinate vector.
