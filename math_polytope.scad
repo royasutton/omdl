@@ -85,13 +85,13 @@ function polytope_faceangles
     for (i=[0 : len(f)-1])
     let
     (
-      n1 = cross_vv(c[f[i][1]], c[f[i][2]], c[f[i][0]], c[f[i][0]]),
+      n1 = cross_vv([c[f[i][0]], c[f[i][1]]], [c[f[i][0]], c[f[i][2]]]),
       af = [for (v=f[i]) for (j=[0 : len(f)-1]) if (j != i && exists(v, f[j])) j]
     )
       for (u=unique(af))
       let
       (
-        n2 = cross_vv(c[f[u][1]], c[f[u][2]], c[f[u][0]], c[f[u][0]])
+        n2 = cross_vv([c[f[u][0]], c[f[u][1]]], [c[f[u][0]], c[f[u][2]]])
       )
         angle_vv(n1, n2)
   ];
@@ -127,7 +127,7 @@ function polytope_edgeangles
 ) =
   [
     for (k=[for (j=f) for (i=nssequence(j, n=3, s=1, w=true)) i])
-      angle_vv(c[k[1]], c[k[2]], c[k[0]], c[k[1]])
+      angle_vv([c[k[0]], c[k[1]]], [c[k[1]], c[k[2]]])
   ];
 
 //! Test if the faces of a polytope are all regular.
@@ -423,7 +423,7 @@ function polygon3d_area
   let
   (
     pm = defined_or(p, [consts(len(c))]),
-    nv = defined_or(n, cross_vv(c[pm[0][1]], c[pm[0][2]], c[pm[0][0]], c[pm[0][0]])),
+    nv = defined_or(n, cross_vv([c[pm[0][0]], c[pm[0][1]]], [c[pm[0][0]], c[pm[0][2]]])),
 
     ac = [abs(nv[0]), abs(nv[1]), abs(nv[2])],
     am = max(ac),
@@ -554,7 +554,7 @@ function polygon2d_is_convex
       [
         for (k = pm) let (n = len(k))
           for (i=[0 : n-1])
-            sign(cross_vv(c[k[(i+1)%n]], c[k[(i+2)%n]], c[k[i]], c[k[(i+1)%n]]))
+            sign(cross_vv([c[k[i]], c[k[(i+1)%n]]], [c[k[(i+1)%n]], c[k[(i+2)%n]]]))
       ],
 
       us = unique(sv)
@@ -696,7 +696,7 @@ function polygon2d_is_pip_as
         (
           j = (i == 0) ? n-1 : i-1
         )
-          angle_vv(c[k[i]] - t, c[k[j]] - t)
+          angle_vv([t, c[k[i]]], [t, c[k[j]]])
     ],
 
     sa = abs(sum(av))
@@ -795,7 +795,7 @@ function polyhedron_volume_tf
           b = c[fi[0]],
           c = c[fi[2]]
         )
-        a * cross_vv(b, c, a, a)
+        a * cross_vv([a, b], [a, c])
     ],
 
     sv = sum(vv)
@@ -839,7 +839,7 @@ function polyhedron_centroid_tf
         b = c[fi[0]],
         c = c[fi[2]],
 
-        r = a * cross_vv(b, c, a, a)
+        r = a * cross_vv([a, b], [a, c])
       )
         (a+b+c) * r
     ],
