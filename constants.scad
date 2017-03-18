@@ -47,7 +47,7 @@
 eps = 0.01;
 
 //! <decimal> The ratio of a circle's circumference to its diameter.
-pi  = 3.1415926535897932384626433832795;
+pi  = 3.14159265358979323;
 
 //! <decimal> The ratio of a circle's circumference to its radius.
 tau = 2*pi;

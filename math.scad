@@ -71,10 +71,14 @@ include <datatypes.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Compute the distance between two points in a Euclidean space.
+//----------------------------------------------------------------------------//
+// group 1: points
+//----------------------------------------------------------------------------//
+
+//! Compute the distance between two Euclidean points.
 /***************************************************************************//**
-  \param    p1 <vector> An n-tuple coordinate.
-  \param    p2 <vector> An n-tuple coordinate.
+  \param    p1 <point> A n-tuple coordinate.
+  \param    p2 <point> A n-tuple coordinate.
 
   \returns  <decimal> The distance between the two points.
             Returns \b 'undef' when points do not have equal dimensions.
@@ -93,292 +97,11 @@ function distance_pp
     sqrt(sum([for (i=[0:d-1]) (p1[i]-p2[i])*(p1[i]-p2[i])]))
   : sqrt(sum([for (i=[0:d-1]) p1[i]*p1[i]]));
 
-//! Compute the dot product of two vectors.
+//! Test if a point is left, on, or right of an infinite line in a Euclidean 2D-space.
 /***************************************************************************//**
-  \param    v1t <vector> Vector 1 head. An n-tuple coordinate.
-  \param    v2t <vector> Vector 2 head. An n-tuple coordinate.
-
-  \param    v1i <vector> Vector 1 tail. An n-tuple coordinate.
-  \param    v2i <vector> Vector 2 tail. An n-tuple coordinate.
-
-  \returns  <decimal> The dot product of the two vectors.
-            Returns \b 'undef' when vector coordinates do not have same
-            number of terms, n.
-
-  \details
-
-    Each vector may be specified by both its head and tail coordinates.
-    When specified by head coordinate only, the tail is assumed to
-    be at origin.
-
-    See [Wikipedia](https://en.wikipedia.org/wiki/Dot_product)
-    for more information.
-*******************************************************************************/
-function dot_vv
-(
-  v1t,
-  v2t,
-  v1i,
-  v2i
-) = all_defined([v1i, v2i]) ? ((v1t-v1i) * (v2t-v2i)) : (v1t * v2t);
-
-//! Compute the cross product of two vectors in a Euclidean 3D-space (2D).
-/***************************************************************************//**
-  \param    v1t <vector> Vector 1 head. A 2 or 3-tuple coordinate.
-  \param    v2t <vector> Vector 2 head. A 2 or 3-tuple coordinate.
-
-  \param    v1i <vector> Vector 1 tail. A 2 or 3-tuple coordinate.
-  \param    v2i <vector> Vector 2 tail. A 2 or 3-tuple coordinate.
-
-  \returns  <decimal> The cross product of the two vectors.
-            Returns \b 'undef' when vector coordinates do not have same
-            number of terms, n.
-
-  \details
-
-    Each vector may be specified by both its head and tail coordinates.
-    When specified by head coordinate only, the tail is assumed to
-    be at origin.
-
-    See Wikipedia [cross](https://en.wikipedia.org/wiki/Cross_product)
-    and [determinant] (https://en.wikipedia.org/wiki/Determinant)
-    for more information.
-
-  \note Although the cross product of two vectors is defined only in 3D
-        space, this function will return the 2x2 determinant for a 2D
-        vector.
-
-  \internal
-    The support of 2D vectors by the OpenSCAD \c cross() functions is not
-    documented in the OpenSCAD manual. Its behavior could change in the
-    future.
-  \endinternal
-*******************************************************************************/
-function cross_vv
-(
-  v1t,
-  v2t,
-  v1i,
-  v2i
-) = all_defined([v1i, v2i]) ? cross((v1t-v1i), (v2t-v2i)) : cross(v1t, v2t);
-
-//! Compute scalar triple product of two vectors in a Euclidean 3D-space.
-/***************************************************************************//**
-  \param    v1t <vector> Vector 1 head. A 2 or 3-tuple coordinate.
-  \param    v2t <vector> Vector 2 head. A 2 or 3-tuple coordinate.
-  \param    v3t <vector> Vector 3 head. A 2 or 3-tuple coordinate.
-
-  \param    v1i <vector> Vector 1 tail. A 2 or 3-tuple coordinate.
-  \param    v2i <vector> Vector 2 tail. A 2 or 3-tuple coordinate.
-  \param    v3i <vector> Vector 3 tail. A 2 or 3-tuple coordinate.
-
-  \returns  <decimal> The scalar triple product of the three vectors.
-            Returns \b 'undef' when vector coordinates do not have same
-            number of terms, n.
-
-  \details
-
-    Each vector may be specified by both its head and tail coordinates.
-    When specified by head coordinate only, the tail is assumed to
-    be at origin.
-
-    [v1, v2, v3] = v1 * (v2 x v3)
-
-    See [Wikipedia] (https://en.wikipedia.org/wiki/Triple_product)
-    for more information.
-
-  \warning  For 2D vectors, this function produces a 2D \e non-scalar
-            vector result. The cross produce function computes the 2x2
-            determinant of the 2D vectors <tt>(v2 x v3)</tt>, which is
-            a scalar value, and this value is \e multiplied by \c v1,
-            which results in a 2D vector.
-*******************************************************************************/
-function striple_vvv
-(
-  v1t,
-  v2t,
-  v3t,
-  v1i,
-  v2i,
-  v3i
-) = all_defined([v1i, v2i, v3i]) ?      // tails specified
-    dot_vv
-    (
-      v1t=v1t,
-      v2t=cross_vv( v1t=v2t, v2t=v3t, v1i=v2i, v2i=v3i ),
-      v1i=v1i,
-      v2i=all_len([v1t, v2t, v3t, v1i, v2i, v3i], 3) ? origin3d : 0
-    )
-  : dot_vv                              // heads only
-    (
-      v1t=v1t, v2t=cross_vv( v1t=v2t, v2t=v3t )
-    );
-
-//! Compute the angle between two vectors in a Euclidean 2 or 3D-space.
-/***************************************************************************//**
-  \param    v1t <vector> Vector 1 head. A 2 or 3-tuple coordinate.
-  \param    v2t <vector> Vector 2 head. A 2 or 3-tuple coordinate.
-
-  \param    v1i <vector> Vector 1 tail. A 2 or 3-tuple coordinate.
-  \param    v2i <vector> Vector 2 tail. A 2 or 3-tuple coordinate.
-
-  \returns  <decimal> The angle between the two vectors in degrees.
-            Returns \b 'undef' when vector coordinates do not have same
-            number of terms or when the vectors do not intersect.
-
-  \details
-
-    Each vector may be specified by both its head and tail coordinates.
-    When specified by head coordinate only, the tail is assumed to
-    be at origin.
-
-  \note For 3D vectors, a normal vector is required to uniquely
-        identify the perpendicular plane and axis of rotation for the
-        two vectors. This function calculates the positive angle, and
-        the plane and axis of rotation will be that which fits this
-        assumed positive angle.
-
-  \sa angle_vvn().
-*******************************************************************************/
-function angle_vv
-(
-  v1t,
-  v2t,
-  v1i,
-  v2i
-) = all_len([v1t, v2t, v1i, v2i], 2) ?  // 2D, tails specified
-    atan2
-    (
-      cross_vv( v1t=v1t, v2t=v2t, v1i=v1i, v2i=v2i ),
-      dot_vv( v1t=v1t, v2t=v2t, v1i=v1i, v2i=v2i )
-    )
-  : all_len([v1t, v2t, v1i, v2i], 3) ?  // 3D, tails specified
-    atan2
-    (
-      distance_pp( cross_vv( v1t=v1t, v2t=v2t, v1i=v1i, v2i=v2i ) ),
-      dot_vv( v1t=v1t, v2t=v2t, v1i=v1i, v2i=v2i )
-    )
-  : all_len([v1t, v2t], 2) ?            // 2D, heads only
-    atan2
-    (
-      cross_vv( v1t=v1t, v2t=v2t ),
-      dot_vv( v1t=v1t, v2t=v2t )
-    )
-  : all_len([v1t, v2t], 3) ?            // 3D, heads only
-    atan2
-    (
-      distance_pp( cross_vv( v1t=v1t, v2t=v2t ) ),
-      dot_vv( v1t=v1t, v2t=v2t )
-    )
-  : undef ;
-
-//! Compute the angle between two vectors in a Euclidean 3D-space.
-/***************************************************************************//**
-  \param    v1t <vector> Vector 1 head. A 3-tuple coordinate.
-  \param    v2t <vector> Vector 2 head. A 3-tuple coordinate.
-  \param    nvt <vector> Normal vector head. A 3-tuple coordinate.
-
-  \param    v1i <vector> Vector 1 tail. A 3-tuple coordinate.
-  \param    v2i <vector> Vector 2 tail. A 3-tuple coordinate.
-  \param    nvi <vector> Normal vector tail. A 3-tuple coordinate.
-
-  \returns  <decimal> The angle between the two vectors in degrees.
-            Returns \b 'undef' when vector coordinates do not have same
-            number of terms or when the vectors do not intersect.
-
-  \details
-
-    Each vector may be specified by both its head and tail coordinates.
-    When specified by head coordinate only, the tail is assumed to
-    be at origin.
-
-  \sa angle_vv().
-*******************************************************************************/
-function angle_vvn
-(
-  v1t,
-  v2t,
-  nvt,
-  v1i,
-  v2i,
-  nvi
-) = all_len([v1t, v2t, nvt, v1i, v2i, nvi], 3) ?
-    atan2
-    (
-      striple_vvv
-      (
-        v1t=nvt, v2t=v1t, v3t=v2t, v1i=nvi, v2i=v1i, v3i=v2i
-      ),
-      dot_vv( v1t=v1t, v2t=v2t, v1i=v1i, v2i=v2i )
-    )
-  : undef ;
-
-//! Compute the normalized unit vector for a 1, 2, or 3 term vector.
-/***************************************************************************//**
-  \param    vt <vector> Vector head. A 1, 2, or 3-tuple coordinate.
-  \param    vi <vector> Vector tail. A 1, 2, or 3-tuple coordinate.
-
-  \returns  <vector> The vector normalized to its unit-vector.
-            Returns \b 'undef' when vector coordinates do not have same
-            number of terms or for n-tuple where n>3.
-
-  \details
-
-    The vector may be specified by both its head and tail coordinates.
-    When specified by head coordinate only, the tail is assumed to
-    be at origin.
-*******************************************************************************/
-function unit_v
-(
-  vt,
-  vi
-) = all_defined([vt, vi]) ? (vt-vi) / distance_pp(vt, vi)
-  : any_equal([1, 2, 3], len(vt)) ? vt / distance_pp(vt)
-  : undef ;
-
-//! Test if three vectors are coplanar in Euclidean 3D-space.
-/***************************************************************************//**
-  \param    v1t <vector> Vector 1 head. A 3-tuple coordinate.
-  \param    v2t <vector> Vector 2 head. A 3-tuple coordinate.
-  \param    v3t <vector> Vector 3 head. A 3-tuple coordinate.
-
-  \param    v1i <vector> Vector 1 tail. A 3-tuple coordinate.
-  \param    v2i <vector> Vector 2 tail. A 3-tuple coordinate.
-  \param    v3i <vector> Vector 3 tail. A 3-tuple coordinate.
-
-  \param    d \<number> A positive numerical distance, proximity, or tolerance.
-
-  \returns  <boolean> \b true when all three vectors are coplanar,
-            and \b false otherwise.
-  \details
-
-    Each vector may be specified by both its head and tail coordinates.
-    When specified by head coordinate only, the tail is assumed to
-    be at origin.
-
-    See [Wikipedia] (https://en.wikipedia.org/wiki/Coplanarity)
-    for more information.
-
-  \note Coplanar vectors must all be within the same plane. However,
-        this function can test if vectors are in a plane that is
-        parallel to a coplanar plane by using non-zero vector tails.
-*******************************************************************************/
-function are_coplanar_vvv
-(
-  v1t,
-  v2t,
-  v3t,
-  v1i,
-  v2i,
-  v3i,
-  d = 0.000001
-) = n_almost_equal(striple_vvv( v1t, v2t, v3t, v1i, v2i, v3i ), 0, d);
-
-//! Test if a point is left|on|right of an infinite line in a Euclidean 2D-space.
-/***************************************************************************//**
-  \param    p1 <vector> A 2-tuple coordinate.
-  \param    p2 <vector> A 2-tuple coordinate.
-  \param    p3 <vector> A 2-tuple coordinate.
+  \param    p1 <point> A 2-tuple coordinate.
+  \param    p2 <point> A 2-tuple coordinate.
+  \param    p3 <point> A 2-tuple coordinate.
 
   \returns  <decimal> (\b > 0) for \p p3 \em left of the line through
             \p p1 and \p p2, (\b = 0) for p3  \em on the line, and
@@ -395,6 +118,201 @@ function is_left_ppp
   p2,
   p3
 ) = ((p2[0]-p1[0]) * (p3[1]-p1[1]) - (p3[0]-p1[0]) * (p2[1]-p1[1]));
+
+//----------------------------------------------------------------------------//
+// group 2: vectors
+//----------------------------------------------------------------------------//
+
+//! Return the number of dimensions of a Euclidean vector or line.
+/***************************************************************************//**
+  \param    v <vector> A vector or a line.
+
+  \returns  <integer> The number of dimensions.
+*******************************************************************************/
+function dimensions_v
+(
+  v
+) = is_defined(len(v[0])) ? len(v[0]) : len(v);
+
+//! Shift a Euclidean vector or line to the origin.
+/***************************************************************************//**
+  \param    v <vector> A vector or a line.
+
+  \returns  <integer> The vector or line shifted to the origin.
+*******************************************************************************/
+function to_origin_v
+(
+  v
+) = not_defined(len(v[0])) ? v
+  : (len(v) == 1) ? v[0]
+  : (len(v) == 2) ? (v[1]-v[0])
+  : undef;
+
+//! Compute the dot product of two vectors.
+/***************************************************************************//**
+  \param    v1 <vector> A n-dimensional vector 1.
+  \param    v2 <vector> A n-dimensional vector 2.
+
+  \returns  <decimal> The dot product of \p v1 with \p v2.
+            Returns \b 'undef' when vector do not have the same
+            dimensions.
+
+  \details
+
+    See [Wikipedia] for more information.
+
+    [Wikipedia]: https://en.wikipedia.org/wiki/Dot_product
+*******************************************************************************/
+function dot_vv
+(
+  v1,
+  v2
+) = (to_origin_v(v1) * to_origin_v(v2));
+
+//! Compute the cross product of two vectors in a Euclidean 3D-space (2D).
+/***************************************************************************//**
+  \param    v1 <vector> A 2 or 3-dimensional vector 1.
+  \param    v2 <vector> A 2 or 3-dimensional vector 2.
+
+  \returns  <decimal> The cross product of \p v1 with \p v2.
+            Returns \b 'undef' when vector do not have the same
+            dimensions.
+
+  \details
+
+    See Wikipedia [cross] and [determinant] for more information.
+
+  \note     Although the cross product of two vectors is defined only
+            in 3D space, this function will return the 2x2 determinant
+            for 2D vectors.
+
+  [cross]: https://en.wikipedia.org/wiki/Cross_product
+  [determinant]: https://en.wikipedia.org/wiki/Determinant
+*******************************************************************************/
+function cross_vv
+(
+  v1,
+  v2
+) = cross(to_origin_v(v1), to_origin_v(v2));
+
+//! Compute the scalar triple product of three vectors in a Euclidean 3D-space (2D).
+/***************************************************************************//**
+  \param    v1 <vector> A 2 or 3-dimensional vector 1.
+  \param    v2 <vector> A 2 or 3-dimensional vector 2.
+  \param    v3 <vector> A 2 or 3-dimensional vector 2.
+
+  \returns  <decimal> The scalar triple product of the three vectors.
+            Returns \b 'undef' when vector do not have the same
+            dimensions.
+
+  \details
+
+    [v1, v2, v3] = v1 * (v2 x v3)
+
+    See [Wikipedia] for more information.
+
+  \warning  For 2D vectors, this function produces a 2D vector result.
+            The cross product computes the 2x2 determinant of the
+            vectors <tt>(v2 x v3)</tt>, a scalar value, which is then
+            \e multiplied by vector \c v1.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Triple_product
+*******************************************************************************/
+function striple_vvv
+(
+  v1,
+  v2,
+  v3
+) = dot_vv(to_origin_v(v1), cross_vv(v2, v3));
+
+//! Compute the angle between two vectors in a Euclidean 2 or 3D-space.
+/***************************************************************************//**
+  \param    v1 <vector> A 2 or 3-dimensional vector 1.
+  \param    v2 <vector> A 2 or 3-dimensional vector 2.
+
+  \returns  <decimal> The angle between the two vectors in degrees.
+            Returns \b 'undef' when vector do not have the same
+            dimensions or when the vectors do not intersect.
+
+  \details
+
+  \note     For 3D vectors, a normal vector is required to uniquely
+            identify the perpendicular plane and axis of rotation for
+            the two vectors. This function calculates the positive
+            angle, and the plane and axis of rotation will be that
+            which fits this assumed positive angle.
+
+  \sa angle_vvn().
+*******************************************************************************/
+function angle_vv
+(
+  v1,
+  v2
+) = let(d = dimensions_v(v1))
+    (d == 2) ? atan2(cross_vv(v1, v2), dot_vv(v1, v2))
+  : (d == 3) ? atan2(distance_pp(cross_vv(v1, v2)), dot_vv(v1, v2))
+  : undef;
+
+//! Compute the angle between two vectors in a Euclidean 3D-space.
+/***************************************************************************//**
+  \param    v1 <vector> A 3-dimensional vector 1.
+  \param    v2 <vector> A 3-dimensional vector 2.
+  \param    nv <vector> A 3-dimensional normal vector.
+
+  \returns  <decimal> The angle between the two vectors in degrees.
+            Returns \b 'undef' when vector do not have the same
+            dimensions or when the vectors do not intersect.
+
+  \details
+
+  \sa angle_vv().
+*******************************************************************************/
+function angle_vvn
+(
+  v1,
+  v2,
+  nv
+) = atan2(striple_vvv(nv, v1, v2), dot_vv(v1, v2));
+
+//! Compute the normalized unit vector of a Euclidean vector.
+/***************************************************************************//**
+  \param    v <vector> A vector or a line.
+
+  \returns  <vector> The normalized unit vector.
+*******************************************************************************/
+function unit_v
+(
+  v
+) = to_origin_v(v) / distance_pp(to_origin_v(v));
+
+//! Test if three vectors are coplanar in Euclidean 3D-space.
+/***************************************************************************//**
+  \param    v1 <vector> A 3-dimensional vector 1.
+  \param    v2 <vector> A 3-dimensional vector 2.
+  \param    v3 <vector> A 3-dimensional vector 3.
+
+  \param    d <integer> A positive numerical distance, proximity, or
+            tolerance. The number of decimal places to check.
+
+  \returns  <boolean> \b true when all three vectors are coplanar,
+            and \b false otherwise.
+  \details
+
+    See [Wikipedia] for more information.
+
+  \note     When vectors are specified with start and end points, this
+            function tests if vectors are in a planes parallel to the
+            coplanar.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Coplanarity
+*******************************************************************************/
+function are_coplanar_vvv
+(
+  v1,
+  v2,
+  v3,
+  d = 6
+) = (dround(striple_vvv(v1, v2, v3), d) ==  0);
 
 //! @}
 //! @}
@@ -446,7 +364,7 @@ function multmatrix_vp
       [m11*x+m12*y+m13*z+m14, m21*x+m22*y+m23*z+m24, m31*x+m32*y+m33*z+m34]
   ];
 
-//! Translate all coordinates by a constant.
+//! Translate all coordinates by a constant vector.
 /***************************************************************************//**
   \param    c <vector> A vector of vertices where each is a n-tuple
             coordinate vector.
@@ -515,7 +433,7 @@ function rotate_vp
 
       rc = (d == 2) ? [for (ci=c) [cg*ci[0]-sg*ci[1], sg*ci[0]+cg*ci[1]]]
          : (d != 3) ? c
-         : (not_defined(v) || is_vector(a)) ?
+         : (not_defined(v) || is_list(a)) ?
             let
             (
               ax = edefined_or(a, 0, 0),
@@ -569,7 +487,7 @@ function rotate_vp
     )
     rc;
 
-//! Scale all coordinates by a constant.
+//! Scale all coordinates by a constant vector.
 /***************************************************************************//**
   \param    c <vector> A vector of vertices where each is a n-tuple
             coordinate vector.
@@ -676,7 +594,7 @@ function rpolygon_vp
   )
   for ( a = b )
     let( v = [s*cos(a), s*sin(a)] )
-    not_defined(vr) ? v : v - vr/cos(180/n) * unit_v(vt=v)
+    not_defined(vr) ? v : v - vr/cos(180/n) * unit_v(v)
 ];
 
 //! Compute the area of an n-sided regular polygon.
@@ -1149,18 +1067,44 @@ BEGIN_SCOPE validate;
           1.4142,                                             // t08
           1.4142                                              // t09
         ],
+        ["dimensions_v",
+          2,                                                  // fac
+          4,                                                  // crp
+          2,                                                  // t01
+          0,                                                  // t02
+          2,                                                  // t03
+          1,                                                  // t04
+          2,                                                  // t05
+          3,                                                  // t06
+          4,                                                  // t07
+          3,                                                  // t08
+          3                                                   // t09
+        ],
+        ["to_origin_v",
+          2,                                                  // fac
+          4,                                                  // crp
+          [undef, undef],                                     // t01
+          empty_v,                                            // t02
+          [60,50],                                            // t03
+          [-41],                                              // t04
+          [-41,14],                                           // t05
+          [-41,96,20],                                        // t06
+          [9,-11,-10,10],                                     // t07
+          [-1,1,0],                                           // t08
+          [-1,1,0]                                            // t09
+        ],
         ["dot_vv",
           4,                                                  // fac
           4,                                                  // crp
           undef,                                              // t01
           undef,                                              // t02
-          400,                                                // t03
-          1392,                                               // t04
-          1269,                                               // t05
-          17888,                                              // t06
-          22599,                                              // t07
+          3900,                                               // t03
+          -1230,                                              // t04
+          -1650,                                              // t05
+          -5230,                                              // t06
+          1460,                                               // t07
           1,                                                  // t08
-          -2                                                  // t09
+          0                                                   // t09
         ],
         ["cross_vv",
           4,                                                  // fac
@@ -1169,11 +1113,11 @@ BEGIN_SCOPE validate;
           skip,                                               // t02
           skip,                                               // t03
           skip,                                               // t04
-          917,                                                // t05
-          [2662,-11727,21929],                                // t06
+          810,                                                // t05
+          [-4776,-1696,-1650],                                // t06
           skip,                                               // t07
-          [1,-1,1],                                           // t08
-          [0,0,-1]                                            // t09
+          [-1,-1,1],                                          // t08
+          [0,0,4]                                             // t09
         ],
         ["striple_vvv",
           6,                                                  // fac
@@ -1182,10 +1126,10 @@ BEGIN_SCOPE validate;
           skip,                                               // t02
           skip,                                               // t03
           skip,                                               // t04
-          [-75981,14663],                                     // t05
-          199188,                                             // t06
+          [-14760,5040],                                      // t05
+          -219976,                                            // t06
           skip,                                               // t07
-          8,                                                  // t08
+          -2,                                                 // t08
           0                                                   // t09
         ],
         ["angle_vv",
@@ -1193,13 +1137,13 @@ BEGIN_SCOPE validate;
           4,                                                  // crp
           undef,                                              // t01
           undef,                                              // t02
-          undef,                                              // t03
+          -2.9357,                                            // t03
           undef,                                              // t04
-          35.8525,                                            // t05
-          54.4261,                                            // t06
+          153.8532,                                           // t05
+          134.4573,                                           // t06
           undef,                                              // t07
           60,                                                 // t08
-          153.4350                                            // t09
+          90                                                  // t09
         ],
         ["angle_vvn",
           6,                                                  // fac
@@ -1209,9 +1153,9 @@ BEGIN_SCOPE validate;
           skip,                                               // t03
           skip,                                               // t04
           skip,                                               // t05
-          83.2771,                                            // t06 (verify)
+          -91.362,                                            // t06
           skip,                                               // t07
-          90,                                                 // t08
+          -63.4349,                                           // t08
           0                                                   // t09
         ],
         ["unit_v",
@@ -1219,13 +1163,13 @@ BEGIN_SCOPE validate;
           4,                                                  // crp
           undef,                                              // t01
           undef,                                              // t02
-          1,                                                  // t03
-          [1],                                                // t04
-          [0.9464,-0.3231],                                   // t05
-          [0.3857,-0.9032,-0.1882],                           // t06
-          [-0.4489,0.5486,0.4988,-0.4988],                    // t07
-          [0.7071,-0.7071,0],                                 // t08
-          [0.7071,-0.7071,0]                                  // t09
+          [.7682,0.6402],                                     // t03
+          [-1],                                               // t04
+          [-0.9464,0.3231],                                   // t05
+          [-0.3857,0.9032,0.1882],                            // t06
+          [0.44888,-0.5486,-0.4988,0.4988],                   // t07
+          [-0.7071,0.7071,0],                                 // t08
+          [-0.7071,0.7071,0]                                  // t09
         ],
         ["are_coplanar_vvv",
           6,                                                  // fac
@@ -1258,7 +1202,7 @@ BEGIN_SCOPE validate;
         else if ( show_skipped )
           log_info( str("*skip*: ", vid, " '", fname, "(", value_text, ")'") );
       }
-      module test( fname, fresult, vid )
+      module test( fname, fresult, vid, pair )
       {
         value_text = table_get(test_r, test_c, vid, "td");
         fname_argc = table_get(good_r, good_c, fname, "fac");
@@ -1266,7 +1210,9 @@ BEGIN_SCOPE validate;
         pass_value = table_get(good_r, good_c, fname, vid);
 
         test_pass = validate(cv=fresult, t="almost", ev=pass_value, p=comp_prcsn, pf=true);
-        farg_text = vstr(eappend(", ", rselect(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
+        farg_text = (pair == true)
+                  ? vstr(eappend(", ", nssequence(rselect(get_value(vid), [0:fname_argc-1]), n=2, s=2), r=false, j=false, l=false))
+                  : vstr(eappend(", ", rselect(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
         test_text = validate(str(fname, "(", farg_text, ")=~", pass_value), fresult, "almost", pass_value, comp_prcsn);
 
         if ( pass_value != skip )
@@ -1282,15 +1228,21 @@ BEGIN_SCOPE validate;
 
       // Indirect function calls would be very useful here!!!
       run_ids = delete( test_ids, mv=["fac", "crp"] );
-      for (vid=run_ids) run("distance_pp",vid) test( "distance_pp", distance_pp(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
-      for (vid=run_ids) run("dot_vv",vid) test( "dot_vv", dot_vv(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
-      for (vid=run_ids) run("cross_vv",vid) test( "cross_vv", cross_vv(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
-      for (vid=run_ids) run("striple_vvv",vid) test( "striple_vvv", striple_vvv(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
-      for (vid=run_ids) run("angle_vv",vid) test( "angle_vv", angle_vv(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
-      for (vid=run_ids) run("angle_vvn",vid) test( "angle_vvn", angle_vvn(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
-      for (vid=run_ids) run("unit_v",vid) test( "unit_v", unit_v(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
-      for (vid=run_ids) run("are_coplanar_vvv",vid) test( "are_coplanar_vvv", are_coplanar_vvv(gv(vid,0),gv(vid,1),gv(vid,2),gv(vid,3),gv(vid,4),gv(vid,5)), vid );
+
+      // group 1: points
+      for (vid=run_ids) run("distance_pp",vid) test( "distance_pp", distance_pp(gv(vid,0),gv(vid,1)), vid, false );
       // not tested: is_left_ppp()
+
+      // group 2: vectors
+      for (vid=run_ids) run("dimensions_v",vid) test( "dimensions_v", dimensions_v([gv(vid,0),gv(vid,1)]), vid, true );
+      for (vid=run_ids) run("to_origin_v",vid) test( "to_origin_v", to_origin_v([gv(vid,0),gv(vid,1)]), vid, true );
+      for (vid=run_ids) run("dot_vv",vid) test( "dot_vv", dot_vv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
+      for (vid=run_ids) run("cross_vv",vid) test( "cross_vv", cross_vv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
+      for (vid=run_ids) run("striple_vvv",vid) test( "striple_vvv", striple_vvv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
+      for (vid=run_ids) run("angle_vv",vid) test( "angle_vv", angle_vv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
+      for (vid=run_ids) run("angle_vvn",vid) test( "angle_vvn", angle_vvn([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
+      for (vid=run_ids) run("unit_v",vid) test( "unit_v", unit_v([gv(vid,0),gv(vid,1)]), vid, true );
+      for (vid=run_ids) run("are_coplanar_vvv",vid) test( "are_coplanar_vvv", are_coplanar_vvv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
 
       // end-of-tests
     END_OPENSCAD;

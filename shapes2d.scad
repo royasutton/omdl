@@ -322,7 +322,7 @@ module rhombus
               edefined_or(vr, 2, erc),
               edefined_or(vr, 3, erc) ];
 
-      a1 = angle_vv(v1t=[0,ry], v1i=[rx,0], v2t=[0,-ry], v2i=[rx,0]) / 2;
+      a1 = angle_vv([[rx,0], [0,ry]], [[rx,0], [0,-ry]]) / 2;
       a2 = 90 - a1;
 
       for ( i = [ [0,  1, -1,  0,  0],
@@ -431,13 +431,13 @@ module triangle_ppp
   {
     ic = triangle_incenter_ppp( v1=v1, v2=v2, v3=v3 );
 
-    a1 = angle_vv(v1t=v2, v1i=v1, v2t=ic, v2i=v1);
-    a2 = angle_vv(v1t=v3, v1i=v2, v2t=ic, v2i=v2);
-    a3 = angle_vv(v1t=v1, v1i=v3, v2t=ic, v2i=v3);
+    a1 = angle_vv([v1, v2], [v1, ic]);
+    a2 = angle_vv([v2, v3], [v2, ic]);
+    a3 = angle_vv([v3, v1], [v3, ic]);
 
-    c1 = v1 + cr1/sin(a1) * unit_v(vt=ic, vi=v1);
-    c2 = v2 + cr2/sin(a2) * unit_v(vt=ic, vi=v2);
-    c3 = v3 + cr3/sin(a3) * unit_v(vt=ic, vi=v3);
+    c1 = v1 + cr1/sin(a1) * unit_v([v1, ic]);
+    c2 = v2 + cr2/sin(a2) * unit_v([v2, ic]);
+    c3 = v3 + cr3/sin(a3) * unit_v([v3, ic]);
 
     hull()
     {

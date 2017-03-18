@@ -131,7 +131,7 @@ function is_empty( v ) = (len(v) == 0);
      decimal       | \b true
      boolean       | \b true
      string        | \b false
-     vector        | \b false
+     list          | \b false
      range         | not defined
 *******************************************************************************/
 function is_scalar( v ) = (len(v) == undef);
@@ -154,7 +154,7 @@ function is_scalar( v ) = (len(v) == undef);
      decimal       | \b false
      boolean       | \b false
      string        | \b true
-     vector        | \b true
+     list          | \b true
      range         | not defined
 *******************************************************************************/
 function is_iterable( v ) = (len(v) != undef);
@@ -168,14 +168,14 @@ function is_iterable( v ) = (len(v) != undef);
 *******************************************************************************/
 function is_string( v ) = (str(v) == v);
 
-//! Test if a value is a vector.
+//! Test if a value is a list.
 /***************************************************************************//**
   \param    v \<value> A value.
 
   \returns  <boolean> \b true when the value is a vector
             and \b false otherwise.
 *******************************************************************************/
-function is_vector( v ) =  is_iterable(v) && !is_string(v);
+function is_list( v ) =  is_iterable(v) && !is_string(v);
 
 //! Test if a value is a boolean constant.
 /***************************************************************************//**
@@ -394,7 +394,7 @@ function all_scalars
   : !is_scalar(first(v)) ? false
   : all_scalars(ntail(v));
 
-//! Test if all elements of a value are vectors.
+//! Test if all elements of a value are lists.
 /***************************************************************************//**
   \param    v \<value> A value or an iterable value.
 
@@ -407,14 +407,14 @@ function all_scalars
 
   \warning  Always returns \b true when \p v is empty.
 *******************************************************************************/
-function all_vectors
+function all_lists
 (
   v
 ) = not_defined(v) ? v
   : is_scalar(v) ? false
   : is_empty(v) ? true
-  : !is_vector(first(v)) ? false
-  : all_vectors(ntail(v));
+  : !is_list(first(v)) ? false
+  : all_lists(ntail(v));
 
 //! Test if all elements of a value are strings.
 /***************************************************************************//**
@@ -629,8 +629,8 @@ function compare
     : 1 // others are greater
     )
   // v1 a vector
-  : let( v2_iv = is_vector(v2) )
-    is_vector(v1) ?
+  : let( v2_iv = is_list(v2) )
+    is_list(v1) ?
     (
       (v2_nd || v2_in || v2_is || v2_ib) ? -1
     : v2_iv ?
@@ -848,13 +848,13 @@ function vstr_html
       bb = (d == true) ? "{" : "<",
       ba = (d == true) ? "}" : ">",
 
-      cv = is_vector(v) ? nfirst(v) : v,
-      cb = is_vector(b) ?  first(b) : b,
-      cp = is_vector(p) ?  first(p) : p,
-      ca = is_vector(a) ?  first(a) : a,
-      cf = is_vector(f) ?  first(f) : f,
+      cv = is_list(v) ? nfirst(v) : v,
+      cb = is_list(b) ?  first(b) : b,
+      cp = is_list(p) ?  first(p) : p,
+      ca = is_list(a) ?  first(a) : a,
+      cf = is_list(f) ?  first(f) : f,
 
-      rp = is_vector(cp) ? reverse(cp) : cp,
+      rp = is_list(cp) ? reverse(cp) : cp,
 
       f0 = (len(cf) > 0) ? str(" color=\"", cf[0], "\"") : empty_str,
       f1 = (len(cf) > 1) ? str(" size=\"",  cf[1], "\"") : empty_str,
@@ -873,11 +873,11 @@ function vstr_html
         [for (i=ca) str(bb, i, ba)]
       ),
 
-      nv = is_vector(v) ? ntail(v) : empty_str,
-      nb = is_vector(b) ? (len(b) > 1) ? ntail(b) : nlast(b) : b,
-      np = is_vector(p) ? (len(p) > 1) ? ntail(p) : nlast(p) : p,
-      na = is_vector(a) ? (len(a) > 1) ? ntail(a) : nlast(a) : a,
-      nf = is_vector(f) ? (len(f) > 1) ? ntail(f) : nlast(f) : f
+      nv = is_list(v) ? ntail(v) : empty_str,
+      nb = is_list(b) ? (len(b) > 1) ? ntail(b) : nlast(b) : b,
+      np = is_list(p) ? (len(p) > 1) ? ntail(p) : nlast(p) : p,
+      na = is_list(a) ? (len(a) > 1) ? ntail(a) : nlast(a) : a,
+      nf = is_list(f) ? (len(f) > 1) ? ntail(f) : nlast(f) : f
     )
     vstr(concat(cs, vstr_html(nv, nb, np, na, nf, d)));
 
@@ -895,7 +895,7 @@ function dround
   v,
   d = 6
 ) = is_number(v) ? round(v * pow(10, d)) / pow(10, d)
-  : is_vector(v) ? [for (i=v) dround(i, d)]
+  : is_list(v) ? [for (i=v) dround(i, d)]
   : v;
 
 //! Round a numerical value to a fixed number of significant figures.
@@ -919,7 +919,7 @@ function sround
   : is_number(v) ?
     let(n = floor(log(abs(v))) + 1 - d)
     round(v * pow(10, -n)) * pow(10, n)
-  : is_vector(v) ? [for (i=v) sround(i, d)]
+  : is_list(v) ? [for (i=v) sround(i, d)]
   : v;
 
 //! Limit a number between upper and lower bounds.
@@ -1306,7 +1306,7 @@ function rselect
   : !is_iterable(v) ? undef
   : is_empty(v) ? empty_v
   : is_number(i) && ((i<0) || (i>(len(v)-1))) ? undef
-  : is_vector(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
+  : is_list(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
   : is_range(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
   : let
     (
@@ -1582,7 +1582,7 @@ function qsort
   i,
   r = false
 ) = not_defined(v) ? undef
-  : !is_vector(v) ? undef
+  : !is_list(v) ? undef
   : is_empty(v) ? empty_v
   : let
     (
@@ -1634,7 +1634,7 @@ function qsort2
   r = false,
   s = true
 ) = not_defined(v) ? undef
-  : !is_vector(v) ? undef
+  : !is_list(v) ? undef
   : is_empty(v) ? empty_v
   : let
     (
@@ -1646,21 +1646,21 @@ function qsort2
         for (j = v)
         let(k = not_defined(i) ? j : j[i])
           if (compare(me, k, s) == -1)
-            ((d > 0) && is_vector(k)) ? qsort2(k, i, d-1, r, s) : j
+            ((d > 0) && is_list(k)) ? qsort2(k, i, d-1, r, s) : j
       ],
       eq =
       [
         for (j = v)
         let(k = not_defined(i) ? j : j[i])
           if (compare(me, k, s) ==  0)
-            ((d > 0) && is_vector(k)) ? qsort2(k, i, d-1, r, s) : j
+            ((d > 0) && is_list(k)) ? qsort2(k, i, d-1, r, s) : j
       ],
       gt =
       [
         for (j = v)
         let(k = not_defined(i) ? j : j[i])
           if (compare(me, k, s) == +1)
-            ((d > 0) && is_vector(k)) ? qsort2(k, i, d-1, r, s) : j
+            ((d > 0) && is_list(k)) ? qsort2(k, i, d-1, r, s) : j
       ],
       sp = (r == true) ?
            concat(qsort2(gt, i, d, r, s), eq, qsort2(lt, i, d, r, s))
@@ -1851,7 +1851,7 @@ function delete
   : !is_iterable(v) ? undef
   : is_empty(v) ? empty_v
   : is_number(i) && ((i<0) || (i>(len(v)-1))) ? undef
-  : is_vector(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
+  : is_list(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
   : is_range(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
   : let
     (
@@ -1862,7 +1862,7 @@ function delete
           : smerge(search(mv, v, mc, si), false)
         )
         : is_number(i) ? [i]
-        : is_vector(i) ? i
+        : is_list(i) ? i
         : is_range(i) ? [for (y=i) y]
         : undef
     )
@@ -1964,7 +1964,7 @@ BEGIN_SCOPE validate;
           ["is_scalar",   t, t, t, t, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, s, s],
           ["is_iterable", f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, t, t, t, s, s],
           ["is_string",   f, f, f, f, f, f, f, f, f, f, f, t, t, t, f, f, f, f, f, f, f],
-          ["is_vector",   f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, s, s],
+          ["is_list",   f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, s, s],
           ["is_boolean",  f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
           ["is_integer",  f, t, t, t, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
           ["is_decimal",  f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
@@ -2009,7 +2009,7 @@ BEGIN_SCOPE validate;
         for (vid=test_ids) run_test( "is_scalar", is_scalar(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_iterable", is_iterable(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_string", is_string(get_value(vid)), vid );
-        for (vid=test_ids) run_test( "is_vector", is_vector(get_value(vid)), vid );
+        for (vid=test_ids) run_test( "is_list", is_list(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_boolean", is_boolean(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_integer", is_integer(get_value(vid)), vid );
         for (vid=test_ids) run_test( "is_decimal", is_decimal(get_value(vid)), vid );
@@ -2099,7 +2099,7 @@ BEGIN_SCOPE validate;
           ["all_defined",       f, t, t, t, t, t, t, t, t, t, f, t, t, t, t, t, t, f, f, t, t, t, t],
           ["any_undefined",     t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
           ["all_scalars",       u, t, t, t, f, f, s, s, s, s, t, t, t, f, f, f, f, t, t, f, t, t, t],
-          ["all_vectors",       u, f, f, f, f, f, t, t, f, f, f, f, f, t, t, f, t, f, f, t, f, f, f],
+          ["all_lists",       u, f, f, f, f, f, t, t, f, f, f, f, f, t, t, f, t, f, f, t, f, f, f],
           ["all_strings",       u, f, f, f, t, t, t, s, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
           ["all_numbers",       u, t, f, f, f, f, s, s, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
           ["all_len_1",         u, f, f, f, t, t, s, s, f, f, f, f, f, t, f, f, f, f, f, t, f, f, f],
@@ -2148,7 +2148,7 @@ BEGIN_SCOPE validate;
         for (vid=test_ids) run_test( "all_defined", all_defined(get_value(vid)), vid );
         for (vid=test_ids) run_test( "any_undefined", any_undefined(get_value(vid)), vid );
         for (vid=test_ids) run_test( "all_scalars", all_scalars(get_value(vid)), vid );
-        for (vid=test_ids) run_test( "all_vectors", all_vectors(get_value(vid)), vid );
+        for (vid=test_ids) run_test( "all_lists", all_lists(get_value(vid)), vid );
         for (vid=test_ids) run_test( "all_strings", all_strings(get_value(vid)), vid );
         for (vid=test_ids) run_test( "all_numbers", all_numbers(get_value(vid)), vid );
         for (vid=test_ids) run_test( "all_len_1", all_len(get_value(vid),1), vid );
