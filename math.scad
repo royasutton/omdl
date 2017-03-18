@@ -433,7 +433,7 @@ function rotate_vp
 
       rc = (d == 2) ? [for (ci=c) [cg*ci[0]-sg*ci[1], sg*ci[0]+cg*ci[1]]]
          : (d != 3) ? c
-         : (not_defined(v) || is_vector(a)) ?
+         : (not_defined(v) || is_list(a)) ?
             let
             (
               ax = edefined_or(a, 0, 0),

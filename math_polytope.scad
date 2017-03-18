@@ -227,7 +227,7 @@ function polytope_bboxlimits
     let
     (
       ax = is_range(d) ? [for (di=d) di]
-         : is_vector(d) ? d
+         : is_list(d) ? d
          : is_integer(d) ? [d]
          : undef,
 
