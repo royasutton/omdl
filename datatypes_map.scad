@@ -1,4 +1,4 @@
-//! Mapped key-value pair data access.
+//! Map data type operation primitives.
 /***************************************************************************//**
   \file   datatypes_map.scad
   \author Roy Allen Sutton
@@ -40,8 +40,8 @@ include <datatypes.scad>;
   \addtogroup datatypes
   @{
 
-  \defgroup datatypes_map Map
-  \brief    Key-value mapped pair data encoding and access.
+  \defgroup datatypes_map Maps
+  \brief    Map data type operation primitives.
 
   \details
 

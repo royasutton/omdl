@@ -1,4 +1,4 @@
-//! Mathematical functions.
+//! Mathematical function primitives.
 /***************************************************************************//**
   \file   math.scad
   \author Roy Allen Sutton

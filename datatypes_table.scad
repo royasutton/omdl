@@ -1,4 +1,4 @@
-//! Data table encoding and lookup.
+//! Table data type operation primitives.
 /***************************************************************************//**
   \file   datatypes_table.scad
   \author Roy Allen Sutton
@@ -38,8 +38,8 @@ include <datatypes.scad>;
   \addtogroup datatypes
   @{
 
-  \defgroup datatypes_table Table
-  \brief    Two-dimensional data encoding and access.
+  \defgroup datatypes_table Tables
+  \brief    Table data type operation primitives.
 
   \details
 
