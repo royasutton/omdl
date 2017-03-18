@@ -48,8 +48,10 @@
     evolving [OpenSCAD] versions. These validation are performed
     automatically when rebuilding the documentation.
 
-    The library is divided into individual components of functionality
-    that may be \c used or \c included as desired.
+    The library use a common set of assumptions and conventions for the
+    specification of \ref dt "data types" and is divided into
+    individual components of functionality that may be \c used or \c
+    included as desired.
 
     \b Example:
 
@@ -204,24 +206,180 @@
 
 /***************************************************************************//**
   \page conventions Conventions
-    \li \subpage sc_pvl
+    \li \subpage dt
 *******************************************************************************/
 
 /***************************************************************************//**
-  \page sc_pvl Points, Vectors, and Lines
+  \page dt Data types
 
-    The library operations make use of a common scheme for specifying
-    Euclidean points, vectors, and straight lines as summarized in the
-    following table:
+  \section dt_builtin Built-in
 
-    | form               | use                                          |
-    :--------------------|:---------------------------------------------|
-    | [a]                | a 1-dimensional point                        |
-    | [a,b]              | a 2-dimensional point                        |
-    | [a,b,c]            | a dimensional point (3D)                     |
-    | [a,b,c]            | a vector or line from the origin to [a,b,c]  |
-    | [[a,b,c]]          | a vector or line from the origin to [a,b,c]  |
-    | [[x,y,z], [a,b,c]] | vector or line from point [x,y,z] to [a,b,c] |
+    [omdl] assumes a [value] is either a number, a boolean, a string, a
+    list, a range, or the undefined value. What is called a vector in
+    the [OpenSCAD types] documentation is refereed to as a list here in
+    order to distinguish between sequential lists of values and
+    [Euclidean vectors].
+
+    | type      | description                             |
+    |:---------:|:----------------------------------------|
+    | [value]   | any valid OpenSCAD storable datum       |
+    | number    | an arithmetic value                     |
+    | boolean   | a binary logic value (true or false)    |
+    | string    | a value with a sequence of characters   |
+    | list      | a sequential list of arbitrary values   |
+    | range     | an arithmetic sequence                  |
+    | undef     | the undefined value                     |
+
+  \subsection dt_special Special numerical values
+
+    | value     | description                             |
+    |:---------:|:----------------------------------------|
+    | [nan]     | a numerical value which is not a number |
+    | [inf]     | a numerical value which is infinite     |
+
+  \section dt_additions Additional conventions
+
+  \subsection dt_distinctions Distinctions
+
+    [omdl] make the following distinctions on variable types.
+
+    | name        | description                           |
+    |:-----------:|:--------------------------------------|
+    | [scalar]    | a single non-iterable value           |
+    | [iterable]  | a multi-part sequence of values       |
+    | [empty]     | an iterable value with zero elements  |
+    | [even]      | an even numerical value               |
+    | [odd]       | an odd numerical value                |
+
+  \subsection dt_general General
+
+    From the fixed built-in set of [data types], [omdl] adds the
+    following general type specification conventions.
+
+    | name        | description                                   |
+    |:-----------:|:----------------------------------------------|
+    | [bit]       | a binary numerical value (0 or 1)             |
+    | [integer]   | a positive, negative, or zero whole number    |
+    | [decimal]   | integer numbers with a fractional part        |
+    | [datalist]  | a list of arbitrary data values               |
+
+  \subsection dt_geometric Geometric
+
+    For [geometric] specifications and [geometric algebra], [omdl] adds
+    the following type specification conventions.
+
+    | name        | description                                   |
+    |:-----------:|:----------------------------------------------|
+    | [point]     | a unique location in space                    |
+    | [vector]    | a direction and magnitude in space            |
+    | [line]      | a start and end point in space                |
+    | [plane]     | a flat two-dimensional infinite surface       |
+    | [coords]    | a list of points in space                     |
+    | [matrix]    | a rectangular array of values                 |
+
+    When a particular dimension is expected, the dimensional
+    expectation is appended to the end of the name after a '-' dash as
+    in the following table.
+
+    | name        | description                                   |
+    |:-----------:|:----------------------------------------------|
+    | vector-Nd   | a vector in an 'N' dimensional space          |
+    | line-Nd     | a line in an 'N' dimensional space            |
+    | coords-Nd   | a coordinate list in an 'N' dimensional space |
+    | matrix-MxN  | a 'M' by 'N' matrix of values                 |
+
+  \subsubsection dt_vectors Vectors and lines
+
+    A [vector] is a direction and magnitude in space. A [line], too,
+    has direction and magnitude, but also has location, as it starts at
+    one point in space and ends at another. Operators in [omdl] make
+    use of a common convention for specifying Euclidean vectors and
+    straight lines as summarized in the following table:
+
+    Given two points \c 'p1' and \c 'p2', in space:
+
+    | no. | form      | description                               |
+    |:---:|:---------:|:------------------------------------------|
+    |  1  | p2        | a vector or line from the origin to 'p2'  |
+    |  2  | [p2]      | a vector or line from the origin to 'p2'  |
+    |  3  | [p1, p2]  | vector or line from 'p1' to 'p2'          |
+
+    \b Example: Vector specifications for \c'v1', \c'v2', and \c'v3'.
+
+    \code{.c}
+    p1 = [a,b,c]
+    p2 = [d,e,f]
+
+    v1 = p2       = [d,e,f]
+    v2 = [p2]     = [[d,e,f]]
+    v3 = [p1, p2] = [[a,b,c], [d,e,f]]
+
+    v1 == v2
+    \endcode
+
+  \subsubsection dt_planes Planes
+
+    A [plane] is a flat, two-dimensional doubly-ruled surface that
+    extends infinitely along independent, often orthogonal, vectors.
+    Operators in [omdl] make use of a common convention for specifying
+    planes as summarized in the following table:
+
+    Given three points \c 'p1', \c 'p2', \c 'p3', and two vectors
+    \c 'v1' and \c 'v2' in space with vn = cross(v1, v2):
+
+    | no. | form          | description                           |
+    |:---:|:-------------:|:--------------------------------------|
+    |  1  | vn            | the normal vector to the plane        |
+    |  2  | [v1, v2]      | two distinct but intersecting vectors |
+    |  3  | [p1, p2, p3]  | three non-collinear points            |
+
+    \b Example: Plane specifications for \c'n1', \c'n2', and \c'n3'.
+
+    \code{.c}
+    p1 = [a,b,c];
+    p2 = [d,e,f];
+    p3 = [g,h,i];
+
+    v1 = [p1, p2] = [[a,b,c], [d,e,f]]
+    v2 = [p1, p3] = [[a,b,c], [g,h,i]]
+    vn = cross(v1, v2)
+
+    n1 = vn           = cross(v1, v2)
+    n2 = [v1, v2]     = [[[a,b,c],[d,e,f]], [[a,b,c],[g,h,i]]]
+    n3 = [p1, p2, p3] = [[a,b,c], [d,e,f], [g,h,i]]
+
+    n1 == n2 == n3
+    \endcode
+
+  [omdl]: https://royasutton.github.io/omdl
+  [Data types]: https://en.wikipedia.org/wiki/Data_type
+  [value]: https://en.wikipedia.org/wiki/Value_(computer_science)
+  [Euclidean vectors]: https://en.wikipedia.org/wiki/Euclidean_vector
+
+  [OpenSCAD types]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Values_and_Data_Types
+  [nan]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Infinities_and_NaNs
+  [inf]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Infinities_and_NaNs
+
+  [scalar]: https://en.wikipedia.org/wiki/Variable_(computer_science)
+  [iterable]: https://en.wikipedia.org/wiki/Iterator
+  [empty]: https://en.wikipedia.org/wiki/Empty_set
+  [even]: https://en.wikipedia.org/wiki/Parity_(mathematics)
+  [odd]: https://en.wikipedia.org/wiki/Parity_(mathematics)
+
+  [bit]: https://en.wikipedia.org/wiki/Bit
+  [integer]: https://en.wikipedia.org/wiki/Integer
+  [decimal]: https://en.wikipedia.org/wiki/Decimal
+  [datalist]: https://en.wikipedia.org/wiki/Data
+
+  [geometric]: https://en.wikipedia.org/wiki/Geometry
+  [geometric algebra]: https://en.wikipedia.org/wiki/Geometric_algebra
+
+  [point]: https://en.wikipedia.org/wiki/Point_(geometry)
+  [vector]: https://en.wikipedia.org/wiki/Euclidean_vector
+  [line]: https://en.wikipedia.org/wiki/Line_(geometry)
+  [plane]: https://en.wikipedia.org/wiki/Plane_(geometry)
+  [coords]: https://en.wikipedia.org/wiki/Coordinate_system
+  [matrix]: https://en.wikipedia.org/wiki/Matrix_(mathematics)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
