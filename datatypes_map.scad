@@ -59,84 +59,84 @@ include <datatypes.scad>;
 
 //! Return the index for the location of a key-value pair.
 /***************************************************************************//**
-  \param    map <matrix-2xN> A list of N key-value map pairs.
-  \param    key <string> A map key.
+  \param    m <matrix-2xN> A list of N key-value map pairs.
+  \param    k <string> A map key.
 
   \returns  <integer> The index of the map entry if it exists.
             Returns \b undef if \p key is not a string or does not exists.
 *******************************************************************************/
-function map_get_idxthe
+function map_get_idx
 (
-  map,
-  key
-) = !is_string(key) ? undef
-  : let(i = first(search([key], map, 1, 0 )))
+  m,
+  k
+) = !is_string(k) ? undef
+  : let(i = first(search([k], m, 1, 0 )))
     (i == empty_v) ? undef
   : i;
 
 //! Test if a key exists.
 /***************************************************************************//**
-  \param    map <matrix-2xN> A list of N key-value map pairs.
-  \param    key <string> A map key.
+  \param    m <matrix-2xN> A list of N key-value map pairs.
+  \param    k <string> A map key.
 
   \returns  <boolean> \b true when the key exists and \b false otherwise.
 *******************************************************************************/
 function map_exists
 (
-  map,
-  key
-) = (map_get_idx(map, key) != undef);
+  m,
+  k
+) = is_defined(map_get_idx(m, k));
 
 //! Get the value associated with a key.
 /***************************************************************************//**
-  \param    map <matrix-2xN> A list of N key-value map pairs.
-  \param    key <string> A map key.
+  \param    m <matrix-2xN> A list of N key-value map pairs.
+  \param    k <string> A map key.
 
   \returns  \<value> The value associated  with \p key.
             Returns \b undef if \p key does not exists.
 *******************************************************************************/
 function map_get
 (
-  map,
-  key
-) = second(map[map_get_idx(map, key)]);
+  m,
+  k
+) = second(m[map_get_idx(m, k)]);
 
 //! Get a list of all map keys.
 /***************************************************************************//**
-  \param    map <matrix-2xN> A list of N key-value map pairs.
+  \param    m <matrix-2xN> A list of N key-value map pairs.
 
   \returns  <string-list-N> A list of key strings for all N map entries.
 *******************************************************************************/
 function map_get_keys
 (
-  map
-) = eselect(map, f=true);
+  m
+) = eselect(m, f=true);
 
 //! Get a list of all map values.
 /***************************************************************************//**
-  \param    map <matrix-2xN> A list of N key-value map pairs.
+  \param    m <matrix-2xN> A list of N key-value map pairs.
 
   \returns  <list-N> A list of values for all N map entries.
 *******************************************************************************/
 function map_get_values
 (
-  map
-) = eselect(map, l=true);
+  m
+) = eselect(m, l=true);
 
 //! Get the number of map entries.
 /***************************************************************************//**
-  \param    map <matrix-2xN> A list of N key-value map pairs.
+  \param    m <matrix-2xN> A list of N key-value map pairs.
 
   \returns  <integer> The number of map entries.
 *******************************************************************************/
 function map_size
 (
-  map
-) = len(map);
+  m
+) = len(m);
 
 //! Perform some basic validation/checks on a map.
 /***************************************************************************//**
-  \param    map <matrix-2xN> A list of N key-value map pairs.
+  \param    m <matrix-2xN> A list of N key-value map pairs.
 
   \param    verbose <boolean> Be verbose during check.
 
@@ -147,7 +147,7 @@ function map_size
 *******************************************************************************/
 module map_check
 (
-  map,
+  m,
   verbose = false
 )
 {
@@ -155,10 +155,10 @@ module map_check
 
   if (verbose) log_info ("checking map format and keys.");
 
-  if ( map_size(map) > 0 )
-  for ( i = [0:map_size(map)-1] )
+  if ( map_size(m) > 0 )
+  for ( i = [0:map_size(m)-1] )
   {
-    entry = map[i];
+    entry = m[i];
     key = first(entry);
 
     // each entry has key-value 2-tuple.
@@ -188,7 +188,7 @@ module map_check
     }
 
     // no repeat key identifiers
-    if ( len(first(search([key], map, 0, 0))) > 1 )
+    if ( len(first(search([key], m, 0, 0))) > 1 )
       log_warn
       (
         str(
@@ -204,7 +204,7 @@ module map_check
     (
       str (
         "map size: ",
-        map_size(map), " entries."
+        map_size(m), " entries."
       )
     );
 
@@ -214,27 +214,27 @@ module map_check
 
 //! Dump each map entry to the console.
 /***************************************************************************//**
-  \param    map <matrix-2xN> A list of N key-value map pairs.
+  \param    m <matrix-2xN> A list of N key-value map pairs.
   \param    sort <boolean> Sort the output by key.
   \param    number <boolean> Output index number.
   \param    p <integer> Number of places for zero-padded numbering.
 *******************************************************************************/
 module map_dump
 (
-  map,
+  m,
   sort = true,
   number = true,
   p = 3
 )
 {
-  if ( map_size(map) > 0 )
+  if ( map_size(m) > 0 )
   {
-    keys = map_get_keys(map);
+    keys = map_get_keys(m);
     maxl = max( [for (i = keys) len(i)] ) + 1;
 
     for (key = sort ? qsort(keys) : keys)
     {
-      idx = map_get_idx(map, key);
+      idx = map_get_idx(m, key);
 
       log_echo
       (
@@ -242,14 +242,14 @@ module map_dump
           number ? chr(consts(p-len(str(idx)), 48)) : empty_str,
           number ? str(idx, ": ") : empty_str,
           chr(consts(maxl-len(key), 32)), "'", key, "' = ",
-          "'", map_get(map, key), "'"
+          "'", map_get(m, key), "'"
         )
       );
     }
   }
 
   if ( number )
-    log_echo(str("map size: ", map_size(map), " entries."));
+    log_echo(str("map size: ", map_size(m), " entries."));
 }
 
 //! @}
