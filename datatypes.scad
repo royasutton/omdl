@@ -558,8 +558,8 @@ function n_almost_equal
     :-----:|:--------:|:---------:|:--------------------------------------
       1    | \b undef |           | (singular)
       2    | number   |           | numerical comparison
-      3    | string   |           | lexical comparison
-      4    | boolean  |           | \b false \< \b true
+      3    | boolean  |           | \b false \< \b true
+      4    | string   |           | lexical comparison
       5    | list     |           | lengths then element-wise comparison
       6    | range    | \b true   | compare sum of range elements
       6    | range    | \b false  | lengths then element-wise comparison
@@ -598,24 +598,11 @@ function compare
       )
     : 1 // others are greater
     )
-  // v1 a string
-  : let( v2_is = is_string(v2) )
-    is_string(v1) ?
-    (
-      (v2_nd || v2_in) ? -1
-    : v2_is ?
-      (
-        (v1 > v2) ? -1
-      : (v2 > v1) ? +1
-      : 0
-      )
-    : 1 // others are greater
-    )
   // v1 a boolean
   : let( v2_ib = is_boolean(v2) )
     is_boolean(v1) ?
     (
-      (v2_nd || v2_in || v2_is) ? -1
+      (v2_nd || v2_in) ? -1
     : v2_ib ?
       (
         ((v1 == true)  && (v2 == false)) ? -1   // defined: true > false
@@ -624,12 +611,25 @@ function compare
       )
     : 1 // others are greater
     )
+  // v1 a string
+  : let( v2_is = is_string(v2) )
+    is_string(v1) ?
+    (
+      (v2_nd || v2_in || v2_ib) ? -1
+    : v2_is ?
+      (
+        (v1 > v2) ? -1
+      : (v2 > v1) ? +1
+      : 0
+      )
+    : 1 // others are greater
+    )
   // v1 a list
-  : let( v2_iv = is_list(v2) )
+  : let( v2_il = is_list(v2) )
     is_list(v1) ?
     (
-      (v2_nd || v2_in || v2_is || v2_ib) ? -1
-    : v2_iv ?
+      (v2_nd || v2_in || v2_ib || v2_is) ? -1
+    : v2_il ?
       (
         let
         (
