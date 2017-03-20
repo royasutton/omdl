@@ -338,11 +338,11 @@ module radial_repeat
 
 //! Distribute copies of 2d or 3d shapes about Cartesian grid.
 /***************************************************************************//**
-  \param    grid <decimal-list-3|decimal> A list [x, y, z] of decimals
-            or a single decimal for (x=y=z).
-  \param    incr <decimal-list-3|decimal> A list [x, y, z] of decimals
-            or a single decimal for (x=y=z).
-  \param    copy <decimal> Number of times to iterate over children.
+  \param    g <decimal-list-3|decimal> The grid. A list [x, y, z] of
+            decimals or a single decimal for (x=y=z).
+  \param    i <decimal-list-3|decimal> The grid increment A list [x, y, z]
+            of decimals or a single decimal for (x=y=z).
+  \param    c <decimal> Number of times to iterate over children.
   \param    center <boolean> Center distribution about origin.
 
   \details
@@ -352,25 +352,25 @@ module radial_repeat
 *******************************************************************************/
 module grid_repeat
 (
-  grid,
-  incr,
-  copy = 1,
+  g,
+  i,
+  c = 1,
   center = false
 )
 {
-  gridd = is_scalar(grid) ? grid : 1;
+  gridd = is_scalar(g) ? g : 1;
 
-  gridx = edefined_or(grid, 0, gridd);
-  gridy = edefined_or(grid, 1, gridd);
-  gridz = edefined_or(grid, 2, gridd);
+  gridx = edefined_or(g, 0, gridd);
+  gridy = edefined_or(g, 1, gridd);
+  gridz = edefined_or(g, 2, gridd);
 
-  incrd = is_scalar(incr) ? incr : 0;
+  incrd = is_scalar(i) ? i : 0;
 
-  incrx = edefined_or(incr, 0, incrd);
-  incry = edefined_or(incr, 1, incrd);
-  incrz = edefined_or(incr, 2, incrd);
+  incrx = edefined_or(i, 0, incrd);
+  incry = edefined_or(i, 1, incrd);
+  incrz = edefined_or(i, 2, incrd);
 
-  if ( ( $children * copy ) > ( gridx * gridy * gridz ) )
+  if ( ( $children * c ) > ( gridx * gridy * gridz ) )
   {
     log_warn("more objects than grid capacity, shapes will overlap.");
     log_info
@@ -378,8 +378,8 @@ module grid_repeat
       str
       (
         "children=", $children,
-        ", copies=", copy,
-        ", objects=", $children * copy
+        ", copies=", c,
+        ", objects=", $children * c
       )
     );
     log_info
@@ -396,28 +396,28 @@ module grid_repeat
   (
     center==true
     ? [
-        -( min($children * copy, gridx) -1 )                   * incrx / 2,
-        -( min(ceil($children * copy/gridx), gridy) -1 )       * incry / 2,
-        -( min(ceil($children * copy/gridx/gridy), gridz) -1 ) * incrz / 2
+        -( min($children * c, gridx) -1 )                   * incrx / 2,
+        -( min(ceil($children * c/gridx), gridy) -1 )       * incry / 2,
+        -( min(ceil($children * c/gridx/gridy), gridz) -1 ) * incrz / 2
       ]
     : origin3d
   )
-  if ( copy > 0 )
+  if ( c > 0 )
   {
     for
     (
-      y = [0 : (copy-1)],
+      y = [0 : (c-1)],
       x = [0 : ($children-1)]
     )
     {
-      i = y * $children + x;
+      j = y * $children + x;
 
       translate
       (
         [
-          incrx * (i%gridx),
-          incry * (floor(i/gridx)%gridy),
-          incrz * (floor(floor(i/gridx)/gridy)%gridz)
+          incrx * (j%gridx),
+          incry * (floor(j/gridx)%gridy),
+          incrz * (floor(floor(j/gridx)/gridy)%gridz)
         ]
       )
       children([x]);
@@ -449,7 +449,7 @@ BEGIN_SCOPE dim;
     else if (shape == "radial_repeat")
       radial_repeat( n=7, r=6, move=true ) square( [20,1], center=true );
     else if (shape == "grid_repeat")
-      grid_repeat( grid=[5,5,4], incr=10, copy=50, center=true ) {cube(10, center=true); sphere(10);}
+      grid_repeat( g=[5,5,4], i=10, c=50, center=true ) {cube(10, center=true); sphere(10);}
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;

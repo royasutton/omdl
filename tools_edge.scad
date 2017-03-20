@@ -298,7 +298,7 @@ BEGIN_SCOPE manifest;
 
     $fn = 72;
 
-    grid_repeat( grid=5, incr=10, center=true )
+    grid_repeat( g=5, i=10, center=true )
     {
       linear_extrude(1) edge_profile_r( r=5, p=1, f=1+10/100, a=75 );
       edge_add_r( r=5, l=20, f=5/8, center=true );

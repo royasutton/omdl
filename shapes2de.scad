@@ -1030,7 +1030,7 @@ BEGIN_SCOPE manifest;
 
     $fn = 72;
 
-    grid_repeat( grid=5, incr=60, center=true )
+    grid_repeat( g=5, i=60, center=true )
     {
       erectangle( size=[25,40], vr=5, vrm=3, h=20, center=true );
       erectangle_c( size=[40,20], t=[10,1], co=[0,-6], cr=10, vr=5, vrm1=12, h=30, center=true );

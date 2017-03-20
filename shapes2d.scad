@@ -1396,7 +1396,7 @@ BEGIN_SCOPE manifest;
 
     $fn = 72;
 
-    grid_repeat( grid=5, incr=60, center=true )
+    grid_repeat( g=5, i=60, center=true )
     {
       rectangle( size=[25,40], vr=[0,10,10,5], vrm=4, center=true );
       rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, vrm2=3, co=[0,5], center=true );

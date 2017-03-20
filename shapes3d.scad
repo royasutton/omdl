@@ -746,7 +746,7 @@ BEGIN_SCOPE manifest;
     $fn = 72;
 
     if (group == 1)
-    grid_repeat( grid=4, incr=60, center=true )
+    grid_repeat( g=4, i=60, center=true )
     {
       translate([0,0,-12.5]) cone( h=25, r=15, vr=2 );
       cuboid( size=[25,40,20], vr=5, center=true );
@@ -758,7 +758,7 @@ BEGIN_SCOPE manifest;
     }
 
     if (group == 2)
-    grid_repeat( grid=4, incr=150, center=true )
+    grid_repeat( g=4, i=150, center=true )
     {
       torus_rp( size=[40,20], core=[35,20], r=40, l=[25,60], co=[0,2.5], vr=4, vrm=15, center=true );
       torus_tp( size=40, core=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
