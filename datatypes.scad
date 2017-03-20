@@ -1166,6 +1166,10 @@ function edefined_or
   \returns  \<value> The first element of \p v.
             Returns \b undef when \p v is not defined, is not iterable,
             or is empty.
+
+  \details
+
+  \note     Value may also be a range.
 *******************************************************************************/
 function first( v ) = v[0];
 
@@ -1176,8 +1180,26 @@ function first( v ) = v[0];
   \returns  \<value> The second element of \p v.
             Returns \b undef when \p v is not defined, is not iterable,
             or is empty.
+
+  \details
+
+  \note     Value may also be a range.
 *******************************************************************************/
 function second( v ) = v[1];
+
+//! Return the third element of an iterable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+
+  \returns  \<value> The second element of \p v.
+            Returns \b undef when \p v is not defined, is not iterable,
+            or is empty.
+
+  \details
+
+  \note     Value may also be a range.
+*******************************************************************************/
+function third( v ) = v[2];
 
 //! Return the last element of an iterable value.
 /***************************************************************************//**
@@ -2367,6 +2389,19 @@ BEGIN_SCOPE validate;
           [4,5,6],                                            // t10
           1                                                   // t11
         ],
+        ["third",
+          undef,                                              // t01
+          undef,                                              // t02
+          9,                                                  // t03
+          "s",                                                // t04
+          "grape",                                            // t05
+          "n",                                                // t06
+          undef,                                              // t07
+          undef,                                              // t08
+          [2,3],                                              // t09
+          [7,8,9],                                            // t10
+          2                                                   // t11
+        ],
         ["last",
           undef,                                              // t01
           undef,                                              // t02
@@ -2735,6 +2770,7 @@ BEGIN_SCOPE validate;
       for (vid=test_ids) run_test( "edefined_or_DE3", edefined_or(get_value(vid),3,"default"), vid );
       for (vid=test_ids) run_test( "first", first(get_value(vid)), vid );
       for (vid=test_ids) run_test( "second", second(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "third", third(get_value(vid)), vid );
       for (vid=test_ids) run_test( "last", last(get_value(vid)), vid );
       for (vid=test_ids) run_test( "nfirst_1", nfirst(get_value(vid),n=1), vid );
       for (vid=test_ids) run_test( "nlast_1", nlast(get_value(vid),n=1), vid );
