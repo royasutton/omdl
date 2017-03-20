@@ -1167,11 +1167,7 @@ function edefined_or
             Returns \b undef when \p v is not defined, is not iterable,
             or is empty.
 *******************************************************************************/
-function first
-(
-  v
-) = !is_iterable(v) ? undef
-  : v[0];
+function first( v ) = v[0];
 
 //! Return the second element of an iterable value.
 /***************************************************************************//**
@@ -1181,11 +1177,7 @@ function first
             Returns \b undef when \p v is not defined, is not iterable,
             or is empty.
 *******************************************************************************/
-function second
-(
-  v
-) = !is_iterable(v) ? undef
-  : v[1];
+function second( v ) = v[1];
 
 //! Return the last element of an iterable value.
 /***************************************************************************//**
@@ -1195,13 +1187,7 @@ function second
             Returns \b undef when \p v is not defined, is not iterable,
             or is empty.
 *******************************************************************************/
-function last
-(
-  v
-) = not_defined(v) ? undef
-  : !is_iterable(v) ? undef
-  : is_empty(v) ? undef
-  : v[len(v)-1];
+function last( v ) = v[len(v)-1];
 
 //! Return a list containing the first n elements of an iterable value.
 /***************************************************************************//**
@@ -2358,7 +2344,7 @@ BEGIN_SCOPE validate;
         ["first",
           undef,                                              // t01
           undef,                                              // t02
-          undef,                                              // t03
+          0,                                                  // t03
           "A",                                                // t04
           "orange",                                           // t05
           "b",                                                // t06
@@ -2371,7 +2357,7 @@ BEGIN_SCOPE validate;
         ["second",
           undef,                                              // t01
           undef,                                              // t02
-          undef,                                              // t03
+          0.5,                                                // t03
           " ",                                                // t04
           "apple",                                            // t05
           "a",                                                // t06
