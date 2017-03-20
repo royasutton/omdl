@@ -933,7 +933,10 @@ function limit
   v,
   l,
   u
-) = min(max(v,l),u);
+) = is_empty(v) ? empty_v
+  : is_number(v) ? min(max(v,l),u)
+  : is_list(v) ? [for (i=v) limit(i,l,u)]
+  : v;
 
 //! Compute the sum of a list of numbers.
 /***************************************************************************//**
@@ -2248,6 +2251,19 @@ BEGIN_SCOPE validate;
           "<b>[1, 2, 3]</b><b>[4, 5, 6]</b><b>[7, 8, 9]</b><b>[\"a\", \"b\", \"c\"]</b>",
           "<b>0</b><b>1</b><b>2</b><b>3</b><b>4</b><b>5</b><b>6</b><b>7</b><b>8</b><b>9</b><b>10</b><b>11</b><b>12</b><b>13</b><b>14</b><b>15</b>"
         ],
+        ["limit_12",
+          undef,                                              // t01
+          empty_v,                                            // t02
+          [0:0.5:9],                                          // t03
+          "A string",                                         // t04
+          ["orange","apple","grape","banana"],                // t05
+          ["b","a","n","a","n","a","s"],                      // t06
+          [undef],                                            // t07
+          [[1,2],[2,2]],                                      // t08
+          ["ab",[1,2],[2,2],[2,2]],                           // t09
+          [[1,2,2],[2,2,2],[2,2,2],["a","b","c"]],            // t10
+          [1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2]                   // t11
+        ],
         ["sum",
           undef,                                              // t01
           0,                                                  // t02
@@ -2719,7 +2735,7 @@ BEGIN_SCOPE validate;
       for (vid=test_ids) run_test( "vstr_html_B", vstr_html(get_value(vid),p="b"), vid );
       // not tested: dround()
       // not tested: sround()
-      // not tested: limit()
+      for (vid=test_ids) run_test( "limit_12", limit(get_value(vid),1,2), vid );
       for (vid=test_ids) run_test( "sum", sum(get_value(vid)), vid );
       for (vid=test_ids) run_test( "mean", mean(get_value(vid)), vid );
 
