@@ -92,8 +92,10 @@ base_unit_length = "mm";
 //! Return the name of the given length \p unit identifier.
 /***************************************************************************//**
   \param    units <string> A length unit identifier.
+
   \returns  <string> The units name for the given length unit identifier.
             Returns \b 'undef' for identifiers that are not defined.
+
   \private
 *******************************************************************************/
 function unit_length_name_id_lookup
@@ -115,13 +117,16 @@ function unit_length_name_id_lookup
   : units == "mi"   ? "mile"
   : undef;
 
-//! Return the name of the given \p unit identifier with dimension (symbol).
+//! Return the symbol name of the given \p unit identifier with dimension.
 /***************************************************************************//**
   \param    units <string> A length unit identifier.
-  \param    d <decimal> A dimension set to one of \p [1|2|3].
-  \returns  <string> The units name for the given length unit identifier with
-            is specified dimension. Returns \b 'undef' for identifiers or
-            dimensions that are not defined.
+  \param    d <integer> A dimension set to one of \p [1|2|3].
+
+  \returns  <string> The units name for the given length unit identifier
+            with is specified dimension.
+            Returns \b 'undef' for identifiers or dimensions that are
+            not defined.
+
   \private
 *******************************************************************************/
 function unit_length_name_symbol
@@ -133,9 +138,10 @@ function unit_length_name_symbol
   : d == 3 ? str( unit_length_name_id_lookup( units ), "^3" )
   : undef;
 
-//! Return the name of the given \p unit identifier with dimension (word).
+//! Return the word name of the given \p unit identifier with dimension.
 /***************************************************************************//**
   \copydetails unit_length_name_symbol()
+
   \private
 *******************************************************************************/
 function unit_length_name_word
@@ -149,7 +155,8 @@ function unit_length_name_word
 
 //! Return the name of the given \p unit identifier with dimension.
 /***************************************************************************//**
-  \param    w <boolean> \b true: use word format, \b false: use symbol format.
+  \param    w <boolean> \b true for word and \b false for symbol format.
+
   \copydetails unit_length_name_symbol()
 *******************************************************************************/
 function unit_length_name
@@ -164,8 +171,10 @@ function unit_length_name
 /***************************************************************************//**
   \param    value <decimal> A value to convert.
   \param    to <string> The units to which the value should be converted.
-  \returns  <decimal> The conversion result. Returns \b 'undef' for identifiers
-            that are not defined.
+
+  \returns  <decimal> The conversion result.
+            Returns \b 'undef' for identifiers that are not defined.
+
   \private
 *******************************************************************************/
 function unit_length_mm_to
@@ -192,8 +201,10 @@ function unit_length_mm_to
 /***************************************************************************//**
   \param    value <decimal> A value to convert.
   \param    from <string> The units of the value to be converted.
-  \returns  <decimal> The conversion result. Returns \b 'undef' for identifiers
-            that are not defined.
+
+  \returns  <decimal> The conversion result.
+            Returns \b 'undef' for identifiers that are not defined.
+
   \private
 *******************************************************************************/
 function unit_length_to_mm
@@ -207,8 +218,10 @@ function unit_length_to_mm
   \param    value <decimal> A value to convert.
   \param    from <string> The units of the value to be converted.
   \param    to <string> A units to which the value should be converted.
-  \returns  <decimal> The conversion result. Returns \b 'undef' for identifiers
-            that are not defined.
+
+  \returns  <decimal> The conversion result.
+            Returns \b 'undef' for identifiers that are not defined.
+
   \private
 *******************************************************************************/
 function unit_length_convert
@@ -224,8 +237,10 @@ function unit_length_convert
   \param    from <string> The units of the value to be converted.
   \param    to <string> A units to which the value should be converted.
   \param    d <decimal> The dimension set to one of \p [1|2|3].
-  \returns  <decimal> The conversion result. Returns \b 'undef' for identifiers or
-            dimensions that are not defined.
+
+  \returns  <decimal> The conversion result.
+            Returns \b 'undef' for identifiers or dimensions that are
+            not defined.
 *******************************************************************************/
 function convert_length
 (

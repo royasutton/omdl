@@ -165,7 +165,7 @@
     | [value]   | any valid OpenSCAD storable datum                   |
     | number    | an arithmetic value                                 |
     | boolean   | a binary logic value (true or false)                |
-    | string    | a value with a sequence of characters               |
+    | string    | a sequential list of of character values            |
     | list      | a sequential list of arbitrary values               |
     | range     | an arithmetic sequence                              |
     | undef     | the undefined value                                 |
@@ -178,6 +178,20 @@
     | [inf]     | a numerical value which is infinite                 |
 
   \section dt_additions Additional conventions
+
+    When a list has an expected number of elements 'n' the \em count is
+    appended following a '-'. Where there is a range of expected
+    elements, the lower and upper bounds are separated by a ':' and
+    appended. when the elements values are of an expected type, that
+    \em type is prepended. Combinations are used as needed as in
+    the following table:
+
+    | name        | description                                       |
+    |:-----------:|:--------------------------------------------------|
+    | list-n      | a list of of n elements                           |
+    | list-l:u    | a list of l to u elements                         |
+    | type-list   | a list of elements with an expected type          |
+    | type-list-n | a list of n elements with an expected type        |
 
   \subsection dt_distinctions Distinctions
 
@@ -210,7 +224,7 @@
 
     | name        | description                                       |
     |:-----------:|:--------------------------------------------------|
-    | [point]     | a unique location in space                        |
+    | [point]     | a list of numbers to identify a location in space |
     | [vector]    | a direction and magnitude in space                |
     | [line]      | a start and end point in space                    |
     | [plane]     | a flat two-dimensional infinite surface           |
@@ -223,6 +237,7 @@
 
     | name        | description                                       |
     |:-----------:|:--------------------------------------------------|
+    | point-Nd    | a point in an 'N' dimensional space               |
     | vector-Nd   | a vector in an 'N' dimensional space              |
     | line-Nd     | a line in an 'N' dimensional space                |
     | coords-Nd   | a coordinate list in an 'N' dimensional space     |
@@ -381,7 +396,7 @@
 
 /***************************************************************************//**
   \defgroup shapes Shapes
-  \brief    2D and 3D shapes.
+  \brief    2d and 3d shapes.
 *******************************************************************************/
 
 /***************************************************************************//**

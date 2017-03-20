@@ -77,8 +77,8 @@ include <datatypes.scad>;
 
 //! Compute the distance between two Euclidean points.
 /***************************************************************************//**
-  \param    p1 <point> A n-tuple coordinate.
-  \param    p2 <point> A n-tuple coordinate.
+  \param    p1 <point> A point coordinate.
+  \param    p2 <point> A point coordinate.
 
   \returns  <decimal> The distance between the two points.
             Returns \b 'undef' when points do not have equal dimensions.
@@ -97,11 +97,11 @@ function distance_pp
     sqrt(sum([for (i=[0:d-1]) (p1[i]-p2[i])*(p1[i]-p2[i])]))
   : sqrt(sum([for (i=[0:d-1]) p1[i]*p1[i]]));
 
-//! Test if a point is left, on, or right of an infinite line in a Euclidean 2D-space.
+//! Test if a point is left, on, or right of an infinite line in a Euclidean 2d-space.
 /***************************************************************************//**
-  \param    p1 <point> A 2-tuple coordinate.
-  \param    p2 <point> A 2-tuple coordinate.
-  \param    p3 <point> A 2-tuple coordinate.
+  \param    p1 <point-2d> A 2d point coordinate.
+  \param    p2 <point-2d> A 2d point coordinate.
+  \param    p3 <point-2d> A 2d point coordinate.
 
   \returns  <decimal> (\b > 0) for \p p3 \em left of the line through
             \p p1 and \p p2, (\b = 0) for p3  \em on the line, and
@@ -154,8 +154,7 @@ function to_origin_v
   \param    v2 <vector> A n-dimensional vector 2.
 
   \returns  <decimal> The dot product of \p v1 with \p v2.
-            Returns \b 'undef' when vector do not have the same
-            dimensions.
+            Returns \b 'undef' when vectors have different dimensions.
 
   \details
 
@@ -169,22 +168,19 @@ function dot_vv
   v2
 ) = (to_origin_v(v1) * to_origin_v(v2));
 
-//! Compute the cross product of two vectors in a Euclidean 3D-space (2D).
+//! Compute the cross product of two vectors in a Euclidean 3d-space (2d).
 /***************************************************************************//**
-  \param    v1 <vector> A 2 or 3-dimensional vector 1.
-  \param    v2 <vector> A 2 or 3-dimensional vector 2.
+  \param    v1 <vector-3d|vector-2d> A 3d or 2d vector 1.
+  \param    v2 <vector-3d|vector-2d> A 3d or 2d vector 2.
 
-  \returns  <decimal> The cross product of \p v1 with \p v2.
-            Returns \b 'undef' when vector do not have the same
-            dimensions.
+  \returns  <decimal|vector-2d> The cross product of \p v1 with \p v2.
+            Returns \b 'undef' when vectors have different dimensions.
 
   \details
 
     See Wikipedia [cross] and [determinant] for more information.
 
-  \note     Although the cross product of two vectors is defined only
-            in 3D space, this function will return the 2x2 determinant
-            for 2D vectors.
+  \note     This function returns the 2x2 determinant for 2d vectors.
 
   [cross]: https://en.wikipedia.org/wiki/Cross_product
   [determinant]: https://en.wikipedia.org/wiki/Determinant
@@ -195,15 +191,14 @@ function cross_vv
   v2
 ) = cross(to_origin_v(v1), to_origin_v(v2));
 
-//! Compute the scalar triple product of three vectors in a Euclidean 3D-space (2D).
+//! Compute the scalar triple product of three vectors in a Euclidean 3d-space (2d).
 /***************************************************************************//**
-  \param    v1 <vector> A 2 or 3-dimensional vector 1.
-  \param    v2 <vector> A 2 or 3-dimensional vector 2.
-  \param    v3 <vector> A 2 or 3-dimensional vector 2.
+  \param    v1 <vector-3d|vector-2d> A 3d or 2d vector 1.
+  \param    v2 <vector-3d|vector-2d> A 3d or 2d vector 2.
+  \param    v3 <vector-3d|vector-2d> A 3d or 2d vector 3.
 
-  \returns  <decimal> The scalar triple product of the three vectors.
-            Returns \b 'undef' when vector do not have the same
-            dimensions.
+  \returns  <decimal|vector-2d> The scalar triple product.
+            Returns \b 'undef' when vectors have different dimensions.
 
   \details
 
@@ -211,10 +206,9 @@ function cross_vv
 
     See [Wikipedia] for more information.
 
-  \warning  For 2D vectors, this function produces a 2D vector result.
-            The cross product computes the 2x2 determinant of the
-            vectors <tt>(v2 x v3)</tt>, a scalar value, which is then
-            \e multiplied by vector \c v1.
+  \warning  Returns a 2d vector result for 2d vectors. The cross product
+            computes the 2x2 determinant of the vectors <tt>(v2 x v3)</tt>,
+            a scalar value, which is then \e multiplied by vector \c v1.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Triple_product
 *******************************************************************************/
@@ -225,22 +219,22 @@ function striple_vvv
   v3
 ) = dot_vv(to_origin_v(v1), cross_vv(v2, v3));
 
-//! Compute the angle between two vectors in a Euclidean 2 or 3D-space.
+//! Compute the angle between two vectors in a Euclidean 2 or 3d-space.
 /***************************************************************************//**
-  \param    v1 <vector> A 2 or 3-dimensional vector 1.
-  \param    v2 <vector> A 2 or 3-dimensional vector 2.
+  \param    v1 <vector-3d|vector-2d> A 3d or 2d vector 1.
+  \param    v2 <vector-3d|vector-2d> A 3d or 2d vector 2.
 
   \returns  <decimal> The angle between the two vectors in degrees.
-            Returns \b 'undef' when vector do not have the same
-            dimensions or when the vectors do not intersect.
+            Returns \b 'undef' when vectors have different dimensions
+            or when they do not intersect.
 
   \details
 
-  \note     For 3D vectors, a normal vector is required to uniquely
-            identify the perpendicular plane and axis of rotation for
-            the two vectors. This function calculates the positive
-            angle, and the plane and axis of rotation will be that
-            which fits this assumed positive angle.
+  \note     For 3d vectors, a normal vector is required to uniquely
+            identify the perpendicular plane and axis of rotation. This
+            function calculates the positive angle, and the plane and
+            axis of rotation will be that which fits this assumed
+            positive angle.
 
   \sa angle_vvn().
 *******************************************************************************/
@@ -253,15 +247,15 @@ function angle_vv
   : (d == 3) ? atan2(distance_pp(cross_vv(v1, v2)), dot_vv(v1, v2))
   : undef;
 
-//! Compute the angle between two vectors in a Euclidean 3D-space.
+//! Compute the angle between two vectors in a Euclidean 3d-space.
 /***************************************************************************//**
-  \param    v1 <vector> A 3-dimensional vector 1.
-  \param    v2 <vector> A 3-dimensional vector 2.
-  \param    nv <vector> A 3-dimensional normal vector.
+  \param    v1 <vector-3d> A 3d vector 1.
+  \param    v2 <vector-3d> A 3d vector 2.
+  \param    nv <vector-3d> A 3d normal vector.
 
   \returns  <decimal> The angle between the two vectors in degrees.
-            Returns \b 'undef' when vector do not have the same
-            dimensions or when the vectors do not intersect.
+            Returns \b 'undef' when vectors have different dimensions
+            or when they do not intersect.
 
   \details
 
@@ -285,14 +279,13 @@ function unit_v
   v
 ) = to_origin_v(v) / distance_pp(to_origin_v(v));
 
-//! Test if three vectors are coplanar in Euclidean 3D-space.
+//! Test if three vectors are coplanar in Euclidean 3d-space.
 /***************************************************************************//**
-  \param    v1 <vector> A 3-dimensional vector 1.
-  \param    v2 <vector> A 3-dimensional vector 2.
-  \param    v3 <vector> A 3-dimensional vector 3.
-
+  \param    v1 <vector-3d> A 3d vector 1.
+  \param    v2 <vector-3d> A 3d vector 2.
+  \param    v3 <vector-3d> A 3d vector 3.
   \param    d <integer> A positive numerical distance, proximity, or
-            tolerance. The number of decimal places to check.
+            tolerance. The number of decimal places to consider.
 
   \returns  <boolean> \b true when all three vectors are coplanar,
             and \b false otherwise.
@@ -328,14 +321,13 @@ function are_coplanar_vvv
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Multiply all coordinates by a 4x4 3D-transformation matrix.
+//! Multiply all coordinates by a 4x4 3d-transformation matrix.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a n-tuple
-            coordinate vector.
-  \param    m <vector> An 4-tuple by 4-tuple transformation matrix.
+  \param    c <coords-3d> A list of 3d coordinate points.
+  \param    m <matrix-4x4> A 4x4 transformation matrix (decimal-list-4-list4).
 
-  \returns  <vector> The vector of vertices with all coordinates multiplied
-            by the 4x4 transformation matrix.
+  \returns  <coords-3d> A list of 3d coordinate points multiplied by the
+            transformation matrix.
 
   \details
 
@@ -364,14 +356,12 @@ function multmatrix_vp
       [m11*x+m12*y+m13*z+m14, m21*x+m22*y+m23*z+m24, m31*x+m32*y+m33*z+m34]
   ];
 
-//! Translate all coordinates by a constant vector.
+//! Translate all coordinates dimensions.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a n-tuple
-            coordinate vector.
-  \param    v <vector> An n-tuple translation constant.
+  \param    c <coords-nd> A list of nd coordinate points.
+  \param    v <decimal-list-n> A list of translations for each dimension.
 
-  \returns  <vector> The vector of vertices with the constant \p v added
-            to each coordinate.
+  \returns  <coords-nd> A list of translated coordinate points.
 
   \details
 
@@ -393,19 +383,18 @@ function translate_vp
     )
     [for (ci=c) [for (di=[0 : d-1]) ci[di] + w[di]]];
 
-//! Rotate all coordinates about one or more coordinate axes.
+//! Rotate all coordinates about one or more axes in Euclidean 2d or 3d space.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 3 or 2-tuple
-            coordinate vector.
-  \param    a <vector|scalar> A 3-tuple rotation vector [ax, ay, az],
-            or a single scalar value to specify only az.
-  \param    v <vector> A 3-tuple arbitrary axis for the rotation. When
-            specified, the rotation angle will be the scalar \p a or az
-            about the line \p v that passes through \p o.
-  \param    o <vector> A 3-tuple arbitrary origin for the rotation.
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
+  \param    a <decimal-list-3|decimal> The axis rotation angle.
+            A list [ax, ay, az] or a single decimal to specify az only.
+  \param    v <vector-3d> An arbitrary axis for the rotation. When
+            specified, the rotation angle will be \p a or az about the
+            line \p v that passes through point \p o.
+  \param    o <point-3d> A 3d point origin for the rotation.
             Ignored when \p v is not specified.
 
-  \returns  <vector> The vector of vertices rotated as specified by \p a.
+  \returns  <coords-3d|coords-2d> A list of 3d or 2d rotated coordinates.
             Rotation order is rz, ry, rx.
 
   \details
@@ -487,14 +476,12 @@ function rotate_vp
     )
     rc;
 
-//! Scale all coordinates by a constant vector.
+//! Scale all coordinates dimensions.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a n-tuple
-            coordinate vector.
-  \param    v <vector> An n-tuple scale constant.
+  \param    c <coords-nd> A list of nd coordinate points.
+  \param    v <decimal-list-n> A list of scalers for each dimension.
 
-  \returns  <vector> The vector of vertices with each coordinate scaled
-            by the constant \p v.
+  \returns  <coords-nd> A list of scaled coordinate points.
 *******************************************************************************/
 function scale_vp
 (
@@ -509,14 +496,13 @@ function scale_vp
     )
     [for (ci=c) [for (di=[0 : d-1]) ci[di] * w[di]]];
 
-//! Scale all coordinates proportionately to fit inside a region.
+//! Scale all coordinates dimensions proportionately to fit inside a region.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a n-tuple
-            coordinate vector.
-  \param    v <vector> An n-tuple region constant.
+  \param    c <coords-nd> A list of nd coordinate points.
+  \param    v <decimal-list-n> A list of bounds for each dimension.
 
-  \returns  <vector> The vector of vertices with each coordinate scaled
-            proportionately to fit inside the given region.
+  \returns  <coords-nd> A list of proportionately scaled coordinate
+            points which exactly fit the region bounds \p v.
 *******************************************************************************/
 function resize_vp
 (
@@ -547,18 +533,20 @@ function resize_vp
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Compute the vertices for an n-sided regular polygon.
+//! Compute the coordinates for an n-sided regular polygon.
 /***************************************************************************//**
-  \param    n <decimal> The number of sides.
+  \param    n <integer> The number of sides.
   \param    r <decimal> The vertex circumradius of the circumcircle.
   \param    a <decimal> The inradius of the incircle.
   \param    vr <decimal> The vertex rounding radius.
   \param    cw <boolean> Use clockwise point ordering.
 
-  \returns  <vector> A vector [v1, v2, ..., vn] of vectors [x, y] of
-            coordinate points.
+  \returns  <coords-2d> A list of coordinates points [[x, y], ...].
 
   \details
+
+    The radius can be specified by either the circumradius \p r or the
+    inradius \p a. If both are specified, \p r is used.
 
     \b Example
     \code{.C}
@@ -571,9 +559,6 @@ function resize_vp
         circle( r=vr );
     }
     \endcode
-
-  \note     The radius can be specified by either the circumradius \p r
-            or the inradius \p a. If both are specified, \p r is used.
 *******************************************************************************/
 function rpolygon_vp
 (
@@ -599,7 +584,7 @@ function rpolygon_vp
 
 //! Compute the area of an n-sided regular polygon.
 /***************************************************************************//**
-  \param    n <decimal> The number of sides.
+  \param    n <integer> The number of sides.
   \param    r <decimal> The vertex circumradius of the circumcircle.
   \param    a <decimal> The inradius of the incircle.
 
@@ -607,8 +592,8 @@ function rpolygon_vp
 
   \details
 
-  \note     The radius can be specified by either the circumradius \p r
-            or the inradius \p a. If both are specified, \p r is used.
+    The radius can be specified by either the circumradius \p r or the
+    inradius \p a. If both are specified, \p r is used.
 *******************************************************************************/
 function rpolygon_area
 (
@@ -621,7 +606,7 @@ function rpolygon_area
 
 //! Compute the perimeter of an n-sided regular polygon.
 /***************************************************************************//**
-  \param    n <decimal> The number of sides.
+  \param    n <integer> The number of sides.
   \param    r <decimal> The vertex circumradius of the circumcircle.
   \param    a <decimal> The inradius of the incircle.
 
@@ -629,8 +614,8 @@ function rpolygon_area
 
   \details
 
-  \note     The radius can be specified by either the circumradius \p r
-            or the inradius \p a. If both are specified, \p r is used.
+    The radius can be specified by either the circumradius \p r or the
+    inradius \p a. If both are specified, \p r is used.
 *******************************************************************************/
 function rpolygon_perimeter
 (
@@ -661,14 +646,14 @@ function rpolygon_perimeter
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Compute the vertices of a triangle given its side lengths.
+//! Compute the vertex coordinates of a triangle given its side lengths.
 /***************************************************************************//**
   \param    s1 <decimal> The length of the side 1.
   \param    s2 <decimal> The length of the side 2.
   \param    s3 <decimal> The length of the side 3.
   \param    cw <boolean> Order vertices clockwise.
 
-  \returns  <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
+  \returns  <coords-2d> A list of vertex coordinates [v1, v2, v3].
 
   \details
 
@@ -695,12 +680,12 @@ function triangle_lll2vp
   )
   (cw == true) ? [v1, v3, v2] : [v1, v2, v3];
 
-//! Compute the vertices of a triangle given its side lengths.
+//! Compute the vertex coordinates of a triangle given its side lengths.
 /***************************************************************************//**
-  \param    v <vector> of decimal side lengths.
+  \param    v <decimal-list-3> The list of side lengths [s1, s2, s3].
   \param    cw <boolean> Order vertices clockwise.
 
-  \returns  <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
+  \returns  <coords-2d> A list of vertex coordinates [v1, v2, v3].
 
   \details
 
@@ -717,13 +702,13 @@ function triangle_vl2vp
   cw = true
 ) = triangle_lll2vp( s1=v[0], s2=v[1], s3=v[2], cw=cw );
 
-//! Compute the side lengths of a triangle given its vertices.
+//! Compute the side lengths of a triangle given its vertex coordinates.
 /***************************************************************************//**
-  \param    v1 <vector> A vector [x, y] for vertex 1.
-  \param    v2 <vector> A vector [x, y] for vertex 2.
-  \param    v3 <vector> A vector [x, y] for vertex 3.
+  \param    v1 <point-2d> A vertex coordinate [x, y] for vertex 1.
+  \param    v2 <point-2d> A vertex coordinate [x, y] for vertex 2.
+  \param    v3 <point-2d> A vertex coordinate [x, y] for vertex 3.
 
-  \returns  <vector> A vector [s1, s2, s3] of lengths.
+  \returns  <decimal-list-3> A list of side lengths [s1, s2, s3].
 
   \note     Side lengths ordered according to vertex ordering.
 *******************************************************************************/
@@ -734,11 +719,11 @@ function triangle_ppp2vl
   v3
 ) = [ distance_pp(v1, v2), distance_pp(v2, v3), distance_pp(v3, v1) ];
 
-//! Compute the side lengths of a triangle given its vertices.
+//! Compute the side lengths of a triangle given its vertex coordinates.
 /***************************************************************************//**
-  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
+  \param    v <coords-2d> A list of vertex coordinates [v1, v2, v3].
 
-  \returns  <vector> A vector [s1, s2, s3] of lengths.
+  \returns  <decimal-list-3> A list of side lengths [s1, s2, s3].
 
   \note     Side lengths ordered according to vertex ordering.
 *******************************************************************************/
@@ -747,11 +732,11 @@ function triangle_vp2vl
   v
 ) = triangle_ppp2vl( v1=v[0], v2=v[1], v3=v[2]);
 
-//! Compute the signed area of a triangle given its vertices.
+//! Compute the signed area of a triangle given its vertex coordinates.
 /***************************************************************************//**
-  \param    v1 <vector> A 2-tuple coordinate.
-  \param    v2 <vector> A 2-tuple coordinate.
-  \param    v3 <vector> A 2-tuple coordinate.
+  \param    v1 <point-2d> A vertex coordinate [x, y] for vertex 1.
+  \param    v2 <point-2d> A vertex coordinate [x, y] for vertex 2.
+  \param    v3 <point-2d> A vertex coordinate [x, y] for vertex 3.
   \param    s <boolean> Return the vertex ordering sign.
 
   \returns  <decimal> The area of the given triangle.
@@ -766,9 +751,9 @@ function triangle_area_ppp
   let( sa = is_left_ppp(p1=v1, p2=v2, p3=v3) / 2 )
   (s == false) ? abs(sa) : sa;
 
-//! Compute the signed area of a triangle given its vertices.
+//! Compute the signed area of a triangle given its vertex coordinates.
 /***************************************************************************//**
-  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
+  \param    v <coords-2d> A list of vertex coordinates [v1, v2, v3].
   \param    s <boolean> Return the vertex ordering sign.
 
   \returns  <decimal> The area of the given triangle.
@@ -783,11 +768,11 @@ function triangle_area_vp
 
 //! Compute the centroid (geometric center) of a triangle.
 /***************************************************************************//**
-  \param    v1 <vector> A vector [x, y] for vertex 1.
-  \param    v2 <vector> A vector [x, y] for vertex 2.
-  \param    v3 <vector> A vector [x, y] for vertex 3.
+  \param    v1 <point-2d> A vertex coordinate [x, y] for vertex 1.
+  \param    v2 <point-2d> A vertex coordinate [x, y] for vertex 2.
+  \param    v3 <point-2d> A vertex coordinate [x, y] for vertex 3.
 
-  \returns  <vector> A vector [x, y] coordinate.
+  \returns  <point-2d> The centroid coordinate point [x, y].
 *******************************************************************************/
 function triangle_centroid_ppp
 (
@@ -798,9 +783,9 @@ function triangle_centroid_ppp
 
 //! Compute the centroid (geometric center) of a triangle.
 /***************************************************************************//**
-  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
+  \param    v <coords-2d> A list of vertex coordinates [v1, v2, v3].
 
-  \returns  <vector> A vector [x, y] coordinate.
+  \returns  <point-2d> The centroid coordinate point [x, y].
 *******************************************************************************/
 function triangle_centroid_vp
 (
@@ -809,11 +794,11 @@ function triangle_centroid_vp
 
 //! Compute the coordinate for the triangle's incircle.
 /***************************************************************************//**
-  \param    v1 <vector> A vector [x, y] for vertex 1.
-  \param    v2 <vector> A vector [x, y] for vertex 2.
-  \param    v3 <vector> A vector [x, y] for vertex 3.
+  \param    v1 <point-2d> A vertex coordinate [x, y] for vertex 1.
+  \param    v2 <point-2d> A vertex coordinate [x, y] for vertex 2.
+  \param    v3 <point-2d> A vertex coordinate [x, y] for vertex 3.
 
-  \returns  <vector> A vector [x, y] coordinate.
+  \returns  <point-2d> The incircle coordinate point [x, y].
 
   \details
 
@@ -847,9 +832,9 @@ function triangle_incenter_ppp
 
 //! Compute the coordinate for the triangle's incircle.
 /***************************************************************************//**
-  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
+  \param    v <coords-2d> A list of vertex coordinates [v1, v2, v3].
 
-  \returns  <vector> A vector [x, y] coordinate.
+  \returns  <point-2d> The incircle coordinate point [x, y].
 
   \details
 
@@ -863,9 +848,9 @@ function triangle_incenter_vp
 
 //! Compute the inradius of a triangle's incircle.
 /***************************************************************************//**
-  \param    v1 <vector> A vector [x, y] for vertex 1.
-  \param    v2 <vector> A vector [x, y] for vertex 2.
-  \param    v3 <vector> A vector [x, y] for vertex 3.
+  \param    v1 <point-2d> A vertex coordinate [x, y] for vertex 1.
+  \param    v2 <point-2d> A vertex coordinate [x, y] for vertex 2.
+  \param    v3 <point-2d> A vertex coordinate [x, y] for vertex 3.
 
   \returns  <decimal> The incircle radius.
 *******************************************************************************/
@@ -887,7 +872,7 @@ sqrt
 
 //! Compute the inradius of a triangle's incircle.
 /***************************************************************************//**
-  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
+  \param    v <coords-2d> A list of vertex coordinates [v1, v2, v3].
 
   \returns  <decimal> The incircle radius.
 *******************************************************************************/
@@ -898,9 +883,9 @@ function triangle_inradius_vp
 
 //! Test the vertex ordering, or orientation, of a triangle.
 /***************************************************************************//**
-  \param    v1 <vector> A 2-tuple coordinate.
-  \param    v2 <vector> A 2-tuple coordinate.
-  \param    v3 <vector> A 2-tuple coordinate.
+  \param    v1 <point-2d> A vertex coordinate [x, y] for vertex 1.
+  \param    v2 <point-2d> A vertex coordinate [x, y] for vertex 2.
+  \param    v3 <point-2d> A vertex coordinate [x, y] for vertex 3.
 
   \returns  <boolean> \b true if the vertices are ordered clockwise,
             \b false if the vertices are ordered counterclockwise, and
@@ -922,7 +907,7 @@ function triangle_is_cw_ppp
 
 //! Test the vertex ordering, or orientation, of a triangle.
 /***************************************************************************//**
-  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
+  \param    v <coords-2d> A list of vertex coordinates [v1, v2, v3].
 
   \returns  <boolean> \b true if the vertices are ordered clockwise,
             \b false if the vertices are ordered counterclockwise, and
@@ -940,12 +925,12 @@ function triangle_is_cw_vp
   : (il > 0) ? false
   : undef;
 
-//! Test if a point is inside a triangle in a Euclidean 2D-space using Barycentric.
+//! Test if a point is inside a triangle in a Euclidean 2d-space using Barycentric.
 /***************************************************************************//**
-  \param    v1 <vector> A 2-tuple coordinate.
-  \param    v2 <vector> A 2-tuple coordinate.
-  \param    v3 <vector> A 2-tuple coordinate.
-  \param    t <vector> A test point 2-tuple coordinate [x, y].
+  \param    v1 <point-2d> A vertex coordinate [x, y] for vertex 1.
+  \param    v2 <point-2d> A vertex coordinate [x, y] for vertex 2.
+  \param    v3 <point-2d> A vertex coordinate [x, y] for vertex 3.
+  \param    t <point-2d> A test point coordinate [x, y].
 
   \returns  <boolean> \b true when the point is inside the polygon and
             \b false otherwise.
@@ -970,10 +955,10 @@ function triangle_is_pit_ppp
     (b < 0) ? false
   : ((a + b) < 1);
 
-//! Test if a point is inside a triangle in a Euclidean 2D-space using Barycentric.
+//! Test if a point is inside a triangle in a Euclidean 2d-space using Barycentric.
 /***************************************************************************//**
-  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y] coordinates.
-  \param    t <vector> A test point 2-tuple coordinate [x, y].
+  \param    v <coords-2d> A list of vertex coordinates [v1, v2, v3].
+  \param    t <point-2d> A test point coordinate [x, y].
 
   \returns  <boolean> \b true when the point is inside the polygon and
             \b false otherwise.
@@ -1021,16 +1006,16 @@ BEGIN_SCOPE validate;
         ["t01", "All undefined",              [undef,undef,undef,undef,undef,undef]],
         ["t02", "All empty vector",           [empty_v,empty_v,empty_v,empty_v,empty_v,empty_v]],
         ["t03", "All scalars",                [60, 50, 40, 30, 20, 10]],
-        ["t04", "All 1D vectors",             [[99], [58], [12], [42], [15], [1]]],
-        ["t05", "All 2D vectors",             [
+        ["t04", "All 1d vectors",             [[99], [58], [12], [42], [15], [1]]],
+        ["t05", "All 2d vectors",             [
                                                 [99,2], [58,16], [12,43],
                                                 [42,13], [15,59], [1,85]
                                               ]],
-        ["t06", "All 3D vectors",             [
+        ["t06", "All 3d vectors",             [
                                                 [199,20,55], [158,116,75], [12,43,90],
                                                 [42,13,34], [15,59,45], [62,33,69]
                                               ]],
-        ["t07", "All 4D vectors",             [
+        ["t07", "All 4d vectors",             [
                                                 [169,27,35,10], [178,016,25,20], [12,43,90,30],
                                                 [42,13,34,60], [15,059,45,50], [62,33,69,40]
                                               ]],

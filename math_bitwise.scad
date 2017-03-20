@@ -83,13 +83,13 @@ function bitwise_is_equal
   t = 1
 ) = ((floor(v / pow(2, b)) % 2) == t);
 
-//! Encode an integer value as a base-two vector of bits.
+//! Encode an integer value as a base-two list of bits.
 /***************************************************************************//**
   \param    v <integer> An integer value.
   \param    w <integer> The minimum bit width.
   \param    bv (an internal recursion loop variable).
 
-  \returns  <vector> of bits base-two encoding of the integer value.
+  \returns  <bit-list> of bits base-two encoding of the integer value.
             Returns \b undef when \p v or \p w is not an integer.
 *******************************************************************************/
 function bitwise_i2v
@@ -104,12 +104,12 @@ function bitwise_i2v
     concat(bitwise_i2v(floor(v/2), w, bv*2), 1)
   : concat(bitwise_i2v(floor(v/2), w, bv*2), 0);
 
-//! Decode a base-two vector of bits to an integer value.
+//! Decode a base-two list of bits to an integer value.
 /***************************************************************************//**
-  \param    v <vector> A value encoded as a base-two vector of bits.
+  \param    v <bit-list> A value encoded as a base-two list of bits.
 
-  \returns  <integer> value encoding of the base-two vector of bits.
-            Returns \b undef when \p v is not a vector of bit values.
+  \returns  <integer> value encoding of the base-two list of bits.
+            Returns \b undef when \p v is not a list of bit values.
 *******************************************************************************/
 function bitwise_v2i
 (
@@ -124,7 +124,7 @@ function bitwise_v2i
   \param    v <integer> An integer value.
   \param    w <integer> The minimum bit width.
 
-  \returns  <string> of bits base-two encoding of the integer value.
+  \returns  <bit-string> of bits base-two encoding of the integer value.
             Returns \b undef when \p v or \p w is not an integer.
 *******************************************************************************/
 function bitwise_i2s
@@ -137,7 +137,7 @@ function bitwise_i2s
 
 //! Decode a base-two string of bits to an integer value.
 /***************************************************************************//**
-  \param    v <string> A value encoded as a base-two string of bits.
+  \param    v <bit-string> A value encoded as a base-two string of bits.
 
   \returns  <integer> value encoding of the base-two string of bits.
             Returns \b undef when \p v is not a string of bit values.
@@ -156,8 +156,8 @@ function bitwise_s2i
   \param    w <integer> The bit mask width.
   \param    s <integer> The bit mask shift offset.
 
-  \returns  <integer> value of the \p w bits of \p v starting at bit position
-            \p s up to bit <tt>(w+s-1)</tt>.
+  \returns  <integer> value of the \p w bits of \p v starting at bit
+            position \p s up to bit <tt>(w+s-1)</tt>.
 *******************************************************************************/
 function bitwise_imi
 (

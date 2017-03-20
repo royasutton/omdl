@@ -1,4 +1,4 @@
-//! Map data type operation primitives.
+//! Map data type operations.
 /***************************************************************************//**
   \file   datatypes_map.scad
   \author Roy Allen Sutton
@@ -41,7 +41,7 @@ include <datatypes.scad>;
   @{
 
   \defgroup datatypes_map Maps
-  \brief    Map data type operation primitives.
+  \brief    Map data type operations.
 
   \details
 
@@ -57,32 +57,27 @@ include <datatypes.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Return the index for the storage location of a map key-value pair.
+//! Return the index for the location of a key-value pair.
 /***************************************************************************//**
-  \param    map <2d-vector> A two dimensional vector (2-tuple x n-tuple)
-            containing an associative map with n elements.
-  \param    key <string> A map entry identifier.
+  \param    map <matrix-2xN> A list of N key-value map pairs.
+  \param    key <string> A map key.
 
-  \returns  <integer> The index of the value associated \p key in the map.
+  \returns  <integer> The index of the map entry if it exists.
             Returns \b undef if \p key is not a string or does not exists.
 *******************************************************************************/
-function map_get_idx
+function map_get_idxthe
 (
   map,
   key
 ) = !is_string(key) ? undef
-  : let
-    (
-      i = first(search([key], map, 1, 0 ))
-    )
+  : let(i = first(search([key], map, 1, 0 )))
     (i == empty_v) ? undef
   : i;
 
-//! Test if a key exists in a map.
+//! Test if a key exists.
 /***************************************************************************//**
-  \param    map <2d-vector> A two dimensional vector (2-tuple x n-tuple)
-            containing an associative map with n elements.
-  \param    key <string> A map entry identifier.
+  \param    map <matrix-2xN> A list of N key-value map pairs.
+  \param    key <string> A map key.
 
   \returns  <boolean> \b true when the key exists and \b false otherwise.
 *******************************************************************************/
@@ -92,13 +87,12 @@ function map_exists
   key
 ) = (map_get_idx(map, key) != undef);
 
-//! Get the value associated with a map key.
+//! Get the value associated with a key.
 /***************************************************************************//**
-  \param    map <2d-vector> A two dimensional vector (2-tuple x n-tuple)
-            containing an associative map with n elements.
-  \param    key <string> A map entry identifier.
+  \param    map <matrix-2xN> A list of N key-value map pairs.
+  \param    key <string> A map key.
 
-  \returns  <value> The map value associated  with \p key.
+  \returns  \<value> The value associated  with \p key.
             Returns \b undef if \p key does not exists.
 *******************************************************************************/
 function map_get
@@ -107,46 +101,33 @@ function map_get
   key
 ) = second(map[map_get_idx(map, key)]);
 
-//! Get a vector of the map entry identifier keys.
+//! Get a list of all map keys.
 /***************************************************************************//**
-  \param    map <2d-vector> A two dimensional vector (2-tuple x n-tuple)
-            containing an associative map with n elements.
+  \param    map <matrix-2xN> A list of N key-value map pairs.
 
-  \returns  <vector> A vector of keys that exist in the associative map.
-
-  \details
-
-  \note     Uses function \ref eselect to select the first column of the
-            vector defining the map.
+  \returns  <string-list-N> A list of key strings for all N map entries.
 *******************************************************************************/
 function map_get_keys
 (
   map
 ) = eselect(map, f=true);
 
-//! Get a vector of the map entry values.
+//! Get a list of all map values.
 /***************************************************************************//**
-  \param    map <2d-vector> A two dimensional vector (2-tuple x n-tuple)
-            containing an associative map with n elements.
+  \param    map <matrix-2xN> A list of N key-value map pairs.
 
-  \returns  <vector> A vector of values stored in the associative map.
-
-  \details
-
-  \note     Uses function \ref eselect to select the last column of the
-            vector defining the map.
+  \returns  <list-N> A list of values for all N map entries.
 *******************************************************************************/
 function map_get_values
 (
   map
 ) = eselect(map, l=true);
 
-//! Get the number of key-value pairs stored in a map.
+//! Get the number of map entries.
 /***************************************************************************//**
-  \param    map <2d-vector> A two dimensional vector (2-tuple x n-tuple)
-            containing an associative map with n elements.
+  \param    map <matrix-2xN> A list of N key-value map pairs.
 
-  \returns  <integer> The number of key-value pairs stored in the map.
+  \returns  <integer> The number of map entries.
 *******************************************************************************/
 function map_size
 (
@@ -155,8 +136,7 @@ function map_size
 
 //! Perform some basic validation/checks on a map.
 /***************************************************************************//**
-  \param    map <2d-vector> A two dimensional vector (2-tuple x n-tuple)
-            containing an associative map with n elements.
+  \param    map <matrix-2xN> A list of N key-value map pairs.
 
   \param    verbose <boolean> Be verbose during check.
 
@@ -232,11 +212,9 @@ module map_check
   }
 }
 
-//! Dump each map key-value pair to the console.
+//! Dump each map entry to the console.
 /***************************************************************************//**
-  \param    map <2d-vector> A two dimensional vector (2-tuple x n-tuple)
-            containing an associative map with n elements.
-
+  \param    map <matrix-2xN> A list of N key-value map pairs.
   \param    sort <boolean> Sort the output by key.
   \param    number <boolean> Output index number.
   \param    p <integer> Number of places for zero-padded numbering.

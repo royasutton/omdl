@@ -1,4 +1,4 @@
-//! Arc rendering resolution abstraction.
+//! An abstraction for arc rendering resolution control.
 /***************************************************************************//**
   \file   units_resolution.scad
   \author Roy Allen Sutton
@@ -71,19 +71,20 @@ include <units_length.scad>;
 //! <string> Global special variable that configures the arc resolution mode.
 $resolution_mode = "fast";
 
-//! <decimal> Global special variable for modes that use custom resolutions.
+//! \<number> Global special variable for modes that use custom resolutions.
 $resolution_value = 0;
 
 //! Return facets number for the given arc radius.
 /***************************************************************************//**
   \param    radius <decimal> An arc radius.
-  \returns  <decimal> The number of facets to be assigned to $fn.
+
+  \returns  <integer> The number of facets to be assigned to $fn.
 
   \details
 
     The return result of this function can be assigned to the special
-    variables \p $fn to render arcs according to the resolution mode set
-    by \ref $resolution_mode and \ref $resolution_value.
+    variables \p $fn to render arcs according to the resolution mode
+    set by \ref $resolution_mode and \ref $resolution_value.
 
     The following table shows the modes that require \ref $resolution_value
     to be set prior to specify the custom values used during resolution
@@ -176,7 +177,7 @@ function resolution_fn
 
 //! Return minimum facets size.
 /***************************************************************************//**
-  \returns  <decimal> Minimum facet size to be assigned to $fs.
+  \returns  <integer> Minimum facet size to be assigned to $fs.
 
   \details
 
@@ -275,6 +276,7 @@ function resolution_fs ( )
 //! Return the minimum facets angle.
 /***************************************************************************//**
   \param    radius <decimal> An arc radius.
+
   \returns  <decimal> Minimum facet angle to be assigned to $fa.
 
   \details
@@ -382,7 +384,8 @@ module resolution_info
 //! Return facet count used to render a radius.
 /***************************************************************************//**
   \param    radius <decimal> An arc radius.
-  \returns  <decimal> The number of fragments/facets that will be used to
+
+  \returns  <integer> The number of fragments/facets that will be used to
             render a radius given the current values for \p $fn, \p $fa,
             and \p $fs.
 *******************************************************************************/
@@ -396,8 +399,9 @@ function resolution_facets
 //! Return facet count used to render a radius as vector triple.
 /***************************************************************************//**
   \param    radius <decimal> An arc radius.
-  \returns  A vector triple:
-            [\b facets <decimal>,\b limiter <string>,\b value <decimal>].
+
+  \returns  <list-3> A 3-tuple list of the form:
+            [\b facets <integer>,\b limiter <string>,\b value <decimal>].
 
   \details
 

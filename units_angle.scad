@@ -52,11 +52,11 @@ include <constants.scad>;
     The table below enumerates the supported unit identifiers and their
     descriptions.
 
-     units id  | description
-    :---------:|:----------------------:
-     r         | radian
-     d         | degree
-     dms       | degree, minute, second
+     units id  | description            | type            |
+    :---------:|:----------------------:|:---------------:|
+     r         | radian                 | decimal         |
+     d         | degree                 | decimal         |
+     dms       | degree, minute, second | decimal-list-3  |
 
     \b Example
 
@@ -78,6 +78,7 @@ base_unit_angle = "d";
 //! Return the name of the given angle \p unit identifier.
 /***************************************************************************//**
   \param    units <string> An angle unit identifier.
+
   \returns  <string> The units name for the given angle unit identifier.
             Returns \b 'undef' for identifiers that are not defined.
 *******************************************************************************/
@@ -91,12 +92,12 @@ function unit_angle_name
 
 //! Convert the \p angle from degrees to \p to units.
 /***************************************************************************//**
-  \param    angle <decimal|vector> An angle to convert (dms angles are
-            3-tuple vector [d, m, s]).
+  \param    angle <decimal|decimal-list-3> An angle to convert.
   \param    to <string> The units to which the angle should be converted.
-  \returns  <decimal|vector> The conversion result (dms angles are
-            3-tuple vector [d, m, s]). Returns \b 'undef' for identifiers
-            that are not defined.
+
+  \returns  <decimal|decimal-list-3> The conversion result.
+            Returns \b 'undef' for identifiers that are not defined.
+
   \private
 *******************************************************************************/
 function unit_angle_d_to
@@ -115,12 +116,11 @@ function unit_angle_d_to
 
 //! Convert the \p angle from \p from units to degrees.
 /***************************************************************************//**
-  \param    angle <decimal|vector> An angle to convert (dms angles are
-            3-tuple vector [d, m, s]).
+  \param    angle <decimal|decimal-list-3> An angle to convert.
   \param    from <string> The units of the angle to be converted.
-  \returns  <decimal|vector> The conversion result (dms angles are
-            3-tuple vector [d, m, s]). Returns \b 'undef' for identifiers
-            that are not defined.
+
+  \returns  <decimal|decimal-list-3> The conversion result.
+            Returns \b 'undef' for identifiers that are not defined.
   \private
 *******************************************************************************/
 function unit_angle_to_d
@@ -134,13 +134,12 @@ function unit_angle_to_d
 
 //! Convert the \p angle from \p from units to \p to units.
 /***************************************************************************//**
-  \param    angle <decimal|vector> An angle to convert (dms angles are
-            3-tuple vector [d, m, s]).
+  \param    angle <decimal|decimal-list-3> An angle to convert.
   \param    from <string> The units of the angle to be converted.
   \param    to <string> A units to which the angle should be converted.
-  \returns  <decimal|vector> The conversion result (dms angles are
-            3-tuple vector [d, m, s]). Returns \b 'undef' for identifiers
-            that are not defined.
+
+  \returns  <decimal|decimal-list-3> The conversion result.
+            Returns \b 'undef' for identifiers that are not defined.
 *******************************************************************************/
 function convert_angle
 (

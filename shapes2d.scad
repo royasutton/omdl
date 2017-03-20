@@ -37,7 +37,7 @@ include <transform.scad>;
   \addtogroup shapes
   @{
 
-    \amu_define caption (2D Shapes)
+    \amu_define caption (2d Shapes)
 
     \amu_make png_files (append=dim extension=png)
     \amu_make eps_files (append=dim extension=png2eps)
@@ -59,7 +59,7 @@ include <transform.scad>;
         )
     \endlatexonly
 
-  \defgroup shapes_2d 2D Shapes
+  \defgroup shapes_2d 2d Shapes
   \brief    Two-dimensional geometric shapes.
   @{
 *******************************************************************************/
@@ -83,11 +83,11 @@ include <transform.scad>;
 
 //! A rectangle with edge, fillet, and/or chamfer corners.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [x, y] of decimals
+  \param    size <decimal-list-2|decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
 
-  \param    vr <vector|decimal> The corner rounding radius.
-            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+  \param    vr <decimal-list-4|decimal> The corner rounding radius.
+            A list [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
   \param    vrm <integer> The corner radius mode.
@@ -194,22 +194,22 @@ module rectangle
 
 //! A rectangle with a removed rectangular core.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [x, y] of decimals
+  \param    size <decimal-list-2|decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
-  \param    core <vector|decimal> A vector [x, y] of decimals
-            or a single decimal for (x=y).
-
-  \param    t <vector|decimal> A vector [x, y] of decimals
+  \param    core <decimal-list-2|decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
 
-  \param    co <vector> Core offset. A vector [x, y] of decimals.
+  \param    t <decimal-list-2|decimal> A list [x, y] of decimals
+            or a single decimal for (x=y).
+
+  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
-  \param    vr <vector|decimal> The default corner rounding radius.
-            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+  \param    vr <decimal-list-4|decimal> The default corner rounding radius.
+            A list [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
-  \param    vr1 <vector|decimal> The outer corner rounding radius.
-  \param    vr2 <vector|decimal> The core corner rounding radius.
+  \param    vr1 <decimal-list-4|decimal> The outer corner rounding radius.
+  \param    vr2 <decimal-list-4|decimal> The core corner rounding radius.
 
   \param    vrm <integer> The default corner radius mode.
             A 4-bit encoded integer that indicates each corner finish.
@@ -276,11 +276,11 @@ module rectangle_c
 
 //! A rhombus.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [w, h] of decimals
+  \param    size <decimal-list-2|decimal> A list [w, h] of decimals
             or a single decimal for (w=h).
 
-  \param    vr <vector|decimal> The corner rounding radius.
-            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+  \param    vr <decimal-list-4|decimal> The corner rounding radius.
+            A list [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
   \param    center <boolean> Center about origin.
@@ -370,9 +370,9 @@ module rhombus
 
 //! A general triangle specified by three vertices.
 /***************************************************************************//**
-  \param    v1 <vector> A vector [x, y] for vertex 1.
-  \param    v2 <vector> A vector [x, y] for vertex 2.
-  \param    v3 <vector> A vector [x, y] for vertex 3.
+  \param    v1 <point-2d> A point [x, y] for vertex 1.
+  \param    v2 <point-2d> A point [x, y] for vertex 2.
+  \param    v3 <point-2d> A point [x, y] for vertex 3.
 
   \param    vr <decimal> The default vertex rounding radius.
   \param    v1r <decimal> Vertex 1 rounding radius.
@@ -451,12 +451,13 @@ module triangle_ppp
   }
 }
 
-//! A general triangle specified by a vector of its three vertices.
+//! A general triangle specified by a list of its three vertices.
 /***************************************************************************//**
-  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y].
+  \param    v <point-2d-list-3> A list [v1, v2, v3] of points [x, y].
 
-  \param    vr <vector|decimal> The vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
+  \param    vr <decimal-list-3|decimal> The vertex rounding radius. A
+            list [v1r, v2r, v3r] of decimals or a single decimal for
+            (v1r=v2r=v3r).
 
   \param    centroid <boolean> Center centroid at origin.
   \param    incenter <boolean> Center incenter at origin.
@@ -561,12 +562,13 @@ module triangle_lll
   }
 }
 
-//! A general triangle specified by a vector of its three side lengths.
+//! A general triangle specified by a list of its three side lengths.
 /***************************************************************************//**
-  \param    v <vector> A vector [s1, s2, s3] of decimals.
+  \param    v <decimal-list-3> A list [s1, s2, s3] of decimals.
 
-  \param    vr <vector|decimal> The vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
+  \param    vr <decimal-list-3|decimal> The vertex rounding radius. A
+            list [v1r, v2r, v3r] of decimals or a single decimal for
+            (v1r=v2r=v3r).
 
   \param    centroid <boolean> Center centroid at origin.
   \param    incenter <boolean> Center incenter at origin.
@@ -610,18 +612,19 @@ module triangle_vl
 
 //! A general triangle specified by its sides with a removed triangular core.
 /***************************************************************************//**
-  \param    vs <vector|decimal> The size. A vector [s1, s2, s3] of decimals
-            or a single decimal for (s1=s2=s3).
-  \param    vc <vector|decimal> The core. A vector [s1, s2, s3] of decimals
-            or a single decimal for (s1=s2=s3).
+  \param    vs <decimal-list-3|decimal> The size. A list [s1, s2, s3] of
+            decimals or a single decimal for (s1=s2=s3).
+  \param    vc <decimal-list-3|decimal> The core. A list [s1, s2, s3] of
+            decimals or a single decimal for (s1=s2=s3).
 
-  \param    co <vector> Core offset. A vector [x, y] of decimals.
+  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
-  \param    vr <vector|decimal> The default vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
-  \param    vr1 <vector|decimal> The outer vertex rounding radius.
-  \param    vr2 <vector|decimal> The core vertex rounding radius.
+  \param    vr <decimal-list-3|decimal> The default vertex rounding radius.
+            A list [v1r, v2r, v3r] of decimals or a single decimal for
+            (v1r=v2r=v3r).
+  \param    vr1 <decimal-list-3|decimal> The outer vertex rounding radius.
+  \param    vr2 <decimal-list-3|decimal> The core vertex rounding radius.
 
   \param    centroid <boolean> Center centroid at origin.
   \param    incenter <boolean> Center incenter at origin.
@@ -708,7 +711,8 @@ module triangle_vl_c
   \param    a <decimal> The included angle in degrees.
   \param    s2 <decimal> The length of the side 2.
 
-  \param    x <decimal> The side to draw on the positive x-axis (\p x=1 for \p s1).
+  \param    x <integer> The side to draw on the positive x-axis
+            (\p x=1 for \p s1).
 
   \param    vr <decimal> The default vertex rounding radius.
   \param    v1r <decimal> Vertex 1 rounding radius.
@@ -723,8 +727,9 @@ module triangle_vl_c
     \b Example
     \amu_eval ( function=triangle_lal ${example_dim} )
 
-    See [Wikipedia](https://en.wikipedia.org/wiki/Solution_of_triangles)
-    for more information.
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
 *******************************************************************************/
 module triangle_lal
 (
@@ -777,7 +782,8 @@ module triangle_lal
   \param    s <decimal> The side length adjacent to the angles.
   \param    a2 <decimal> The adjacent angle 2 in degrees.
 
-  \param    x <decimal> The side to draw on the positive x-axis (\p x=1 for \p s).
+  \param    x <integer> The side to draw on the positive x-axis
+            (\p x=1 for \p s).
 
   \param    vr <decimal> The default vertex rounding radius.
   \param    v1r <decimal> Vertex 1 rounding radius.
@@ -792,8 +798,9 @@ module triangle_lal
     \b Example
     \amu_eval ( function=triangle_ala ${example_dim} )
 
-    See [Wikipedia](https://en.wikipedia.org/wiki/Solution_of_triangles)
-    for more information.
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
 *******************************************************************************/
 module triangle_ala
 (
@@ -860,7 +867,8 @@ module triangle_ala
   \param    a2 <decimal> The adjacent angle 2 in degrees.
   \param    s <decimal> The side length.
 
-  \param    x <decimal> The side to draw on the positive x-axis (\p x=1 for \p s).
+  \param    x <integer> The side to draw on the positive x-axis
+            (\p x=1 for \p s).
 
   \param    vr <decimal> The default vertex rounding radius.
   \param    v1r <decimal> Vertex 1 rounding radius.
@@ -875,8 +883,9 @@ module triangle_ala
     \b Example
     \amu_eval ( function=triangle_aal ${example_dim} )
 
-    See [Wikipedia](https://en.wikipedia.org/wiki/Solution_of_triangles)
-    for more information.
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
 *******************************************************************************/
 module triangle_aal
 (
@@ -1037,7 +1046,7 @@ module triangle_la
 
 //! An n-sided equiangular/equilateral regular polygon.
 /***************************************************************************//**
-  \param    n <decimal> The number of sides.
+  \param    n <integer> The number of sides.
   \param    r <decimal> The ngon vertex radius.
 
   \param    vr <decimal> The vertex rounding radius.
@@ -1047,8 +1056,9 @@ module triangle_la
     \b Example
     \amu_eval ( function=ngon ${example_dim} )
 
-    See [Wikipedia](https://en.wikipedia.org/wiki/Regular_polygon)
-    for more information.
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Regular_polygon
 *******************************************************************************/
 module ngon
 (
@@ -1076,7 +1086,7 @@ module ngon
 
 //! An ellipse.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [rx, ry] of decimals
+  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
 
   \details
@@ -1105,15 +1115,15 @@ module ellipse
 
 //! An ellipse with a removed elliptical core.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [rx, ry] of decimals
+  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
-  \param    core <vector|decimal> A vector [rx, ry] of decimals
+  \param    core <decimal-list-2|decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
 
-  \param    t <vector|decimal> A vector [x, y] of decimals
+  \param    t <decimal-list-2|decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
 
-  \param    co <vector> Core offset. A vector [x, y] of decimals.
+  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
   \details
@@ -1156,7 +1166,7 @@ module ellipse_c
 
 //! An ellipse sector.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [rx, ry] of decimals
+  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
 
   \param    a1 <decimal> The start angle in degrees.
@@ -1212,18 +1222,18 @@ module ellipse_s
 
 //! A sector of an ellipse with a removed elliptical core.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [rx, ry] of decimals
+  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
-  \param    core <vector|decimal> A vector [rx, ry] of decimals
+  \param    core <decimal-list-2|decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
 
-  \param    t <vector|decimal> A vector [x, y] of decimals
+  \param    t <decimal-list-2|decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
 
   \param    a1 <decimal> The start angle in degrees.
   \param    a2 <decimal> The stop angle in degrees.
 
-  \param    co <vector> Core offset. A vector [x, y] of decimals.
+  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
   \details
@@ -1268,13 +1278,14 @@ module ellipse_cs
 
 //! A two-dimensional star.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [l, w] of decimals
+  \param    size <decimal-list-2|decimal> A list [l, w] of decimals
             or a single decimal for (size=l=2*w).
 
   \param    n <decimal> The number of points.
 
-  \param    vr <vector|decimal> The vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
+  \param    vr <decimal-list-3|decimal> The vertex rounding radius.
+            A list [v1r, v2r, v3r] of decimals or a single decimal for
+            (v1r=v2r=v3r).
 
   \details
 

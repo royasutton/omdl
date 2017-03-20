@@ -39,7 +39,7 @@ include <shapes2d.scad>;
   \addtogroup shapes
   @{
 
-    \amu_define caption (3D Shapes)
+    \amu_define caption (3d Shapes)
 
     \amu_make png_files (append=dim extension=png)
     \amu_make eps_files (append=dim extension=png2eps)
@@ -61,7 +61,7 @@ include <shapes2d.scad>;
         )
     \endlatexonly
 
-  \defgroup shapes_3d 3D Shapes
+  \defgroup shapes_3d 3d Shapes
   \brief    Three-dimensional geometric shapes.
   @{
 *******************************************************************************/
@@ -134,8 +134,8 @@ module cone
 
 //! A cuboid with edge, fillet, or chamfer corners.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [x, y, z] of decimals or a
-            single decimal for (x=y=z).
+  \param    size <decimal-list-3|decimal> A list [x, y, z] of decimals
+            or a single decimal for (x=y=z).
 
   \param    vr <decimal> The rounding radius.
 
@@ -241,7 +241,7 @@ module cuboid
 
 //! An ellipsoid.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [w, h] of decimals or a
+  \param    size <decimal-list-2|decimal> A list [w, h] of decimals or a
             single decimal for (w=h).
 
   \details
@@ -270,7 +270,7 @@ module ellipsoid
 
 //! A sector of an ellipsoid.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [w, h] of decimals or a
+  \param    size <decimal-list-2|decimal> A list [w, h] of decimals or a
             single decimal for (w=h).
 
   \param    a1 <decimal> The start angle in degrees.
@@ -371,8 +371,8 @@ module pyramid_t
 
 //! A pyramid with quadrilateral base.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [x, y, z] of decimals or a
-            single decimal for (x=y=z).
+  \param    size <decimal-list-3|decimal> A list [x, y, z] of decimals
+            or a single decimal for (x=y=z).
 
   \param    center <boolean> Center about origin.
 
@@ -417,7 +417,7 @@ module pyramid_q
 
 //! A three-dimensional star.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [l, w, h] of decimals
+  \param    size <decimal-list-3|decimal> A list [l, w, h] of decimals
             or a single decimal for (size=l=2*w=4*h).
 
   \param    n <decimal> The number of points.
@@ -466,26 +466,26 @@ module star3d
 
 //! A rectangular cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
-  \param    size <vector|decimal> The profile size. A vector [x, y] of decimals
-            or a single decimal for (x=y).
-  \param    core <vector|decimal> The profile core. A vector [x, y] of decimals
-            or a single decimal for (x=y).
+  \param    size <decimal-list-2|decimal> The profile size. A list [x, y]
+            of decimals or a single decimal for (x=y).
+  \param    core <decimal-list-2|decimal> The profile core. A list [x, y]
+            of decimals or a single decimal for (x=y).
 
   \param    r <decimal> The rotation radius.
-  \param    l <vector|decimal> The elongation length.
-            A vector [x, y] of decimals or a single decimal for (x=y)
+  \param    l <decimal-list-2|decimal> The elongation length.
+            A list [x, y] of decimals or a single decimal for (x=y)
 
-  \param    t <vector|decimal> The profile thickness. A vector [x, y] of decimals
-            or a single decimal for (x=y).
+  \param    t <decimal-list-2|decimal> The profile thickness. A list [x, y]
+            of decimals or a single decimal for (x=y).
 
-  \param    co <vector> Core offset. A vector [x, y] of decimals.
+  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
-  \param    vr <vector|decimal> The profile default corner rounding radius.
-            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
-            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
-  \param    vr1 <vector|decimal> The profile outer corner rounding radius.
-  \param    vr2 <vector|decimal> The profile core corner rounding radius.
+  \param    vr <decimal-list-4|decimal> The profile default corner rounding
+            radius. A list [v1r, v2r, v3r, v4r] of decimals or a single
+            decimal for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
+  \param    vr1 <decimal-list-4|decimal> The profile outer corner rounding radius.
+  \param    vr2 <decimal-list-4|decimal> The profile core corner rounding radius.
 
   \param    vrm <integer> The default corner radius mode.
             A 4-bit encoded integer that indicates each corner finish.
@@ -547,22 +547,23 @@ module torus_rp
 
 //! A triangular cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
-  \param    size <vector|decimal> The size. A vector [s1, s2, s3] of decimals
-            or a single decimal for (s1=s2=s3).
-  \param    core <vector|decimal> The core. A vector [s1, s2, s3] of decimals
-            or a single decimal for (s1=s2=s3).
+  \param    size <decimal-list-3|decimal> The size. A list [s1, s2, s3]
+            of decimals or a single decimal for (s1=s2=s3).
+  \param    core <decimal-list-3|decimal> The core. A list [s1, s2, s3]
+            of decimals or a single decimal for (s1=s2=s3).
 
   \param    r <decimal> The rotation radius.
-  \param    l <vector|decimal> The elongation length.
-            A vector [x, y] of decimals or a single decimal for (x=y)
+  \param    l <decimal-list-2|decimal> The elongation length.
+            A list [x, y] of decimals or a single decimal for (x=y)
 
-  \param    co <vector> Core offset. A vector [x, y] of decimals.
+  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
-  \param    vr <vector|decimal> The default vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
-  \param    vr1 <vector|decimal> The outer vertex rounding radius.
-  \param    vr2 <vector|decimal> The core vertex rounding radius.
+  \param    vr <decimal-list-3|decimal> The default vertex rounding radius.
+            A list [v1r, v2r, v3r] of decimals or a single decimal for
+            (v1r=v2r=v3r).
+  \param    vr1 <decimal-list-3|decimal> The outer vertex rounding radius.
+  \param    vr2 <decimal-list-3|decimal> The core vertex rounding radius.
 
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.
@@ -614,22 +615,22 @@ module torus_tp
 
 //! An elliptical cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
-  \param    size <vector|decimal> The profile size. A vector [x, y] of decimals
-            or a single decimal for (x=y).
-  \param    core <vector|decimal> The profile core. A vector [x, y] of decimals
-            or a single decimal for (x=y).
+  \param    size <decimal-list-2|decimal> The profile size. A list [x, y]
+            of decimals or a single decimal for (x=y).
+  \param    core <decimal-list-2|decimal> The profile core. A list [x, y]
+            of decimals or a single decimal for (x=y).
 
   \param    r <decimal> The rotation radius.
-  \param    l <vector|decimal> The elongation length.
-            A vector [x, y] of decimals or a single decimal for (x=y)
+  \param    l <decimal-list-2|decimal> The elongation length.
+            A list [x, y] of decimals or a single decimal for (x=y)
 
-  \param    t <vector|decimal> The profile thickness. A vector [x, y] of decimals
-            or a single decimal for (x=y).
+  \param    t <decimal-list-2|decimal> The profile thickness. A list [x, y]
+            of decimals or a single decimal for (x=y).
 
   \param    a1 <decimal> The profile start angle in degrees.
   \param    a2 <decimal> The profile stop angle in degrees.
 
-  \param    co <vector> Core offset. A vector [x, y] of decimals.
+  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
   \param    pa <decimal> The profile pitch angle in degrees.

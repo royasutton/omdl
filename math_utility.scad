@@ -49,15 +49,15 @@ include <math_bitwise.scad>;
 // statistical / informational
 //----------------------------------------------------------------------------//
 
-//! Generate a histogram for the elements of an iterable value.
+//! Generate a histogram for the elements of a list of values.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <datalist> A list of values.
   \param    m <integer> The output mode (a 5-bit encoded integer).
 
-  \param    cs <vector> A vector of strings [s1, s2, s3, fs]
+  \param    cs <string-list-4> A vector of strings [s1, s2, s3, fs]
             (for custom field formatting).
 
-  \returns  <vector|string> with the occurrence frequency of all the elements
+  \returns  <list|string> with the occurrence frequency of the elements
             of \p v.
 
   \details

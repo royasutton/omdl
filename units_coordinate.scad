@@ -54,12 +54,12 @@ include <constants.scad>;
 
     The table below enumerates the supported coordinate systems.
 
-    | system id  | description    | dimensions  | convention          |
+    | system id  | description    | dimensions  | point convention    |
     |:----------:|:--------------:|:-----------:|:-------------------:|
-    |  c         | [cartesian]    | 2D or 3D    | [x, y] or [x, y, z] |
-    |  p         | [polar]        | 2D          | [r, aa]             |
-    |  y         | [cylindrical]  | 3D          | [r, aa, z]          |
-    |  s         | [spherical]    | 3D          | [r, aa, pa]         |
+    |  c         | [cartesian]    | 2d or 3d    | [x, y] or [x, y, z] |
+    |  p         | [polar]        | 2d          | [r, aa]             |
+    |  y         | [cylindrical]  | 3d          | [r, aa, z]          |
+    |  s         | [spherical]    | 3d          | [r, aa, pa]         |
 
     The symbols used in the convention column are as follows:
 
@@ -106,6 +106,7 @@ coordinates_positive_angles = true;
 //! Return the name of the given coordinate system identifier.
 /***************************************************************************//**
   \param    s <string> A coordinate system identifier.
+
   \returns  <string> The system name for the given identifier.
             Returns \b 'undef' for identifiers that are not defined.
 *******************************************************************************/
@@ -120,11 +121,13 @@ function coordinates_name
 
 //! Convert coordinate \p c from the Cartesian to the \p to coordinate system.
 /***************************************************************************//**
-  \param    c <vector> A value to convert.
+  \param    c <point> A value to convert.
   \param    to <string> The coordinate system identifier to which the value
             should be converted.
-  \returns  <vector> The converted result.
+
+  \returns  <point> The converted result.
             Returns \b 'undef' for identifiers that are not defined.
+
   \private
 *******************************************************************************/
 function coordinate_c_to
@@ -168,11 +171,13 @@ function coordinate_c_to
 
 //! Convert coordinate \p c from the \p from to the Cartesian coordinate system.
 /***************************************************************************//**
-  \param    c <vector> A value to convert.
+  \param    c <point> A value to convert.
   \param    from <string> The coordinate system identifier of the value
             to be converted.
-  \returns  <vector> The converted result.
+
+  \returns  <point> The converted result.
             Returns \b 'undef' for identifiers that are not defined.
+
   \private
 *******************************************************************************/
 function coordinate_to_c
@@ -213,12 +218,13 @@ function coordinate_to_c
 
 //! Convert coordinate \p c from the \p from to the \p to coordinate system.
 /***************************************************************************//**
-  \param    c <vector> A value to convert.
+  \param    c <point> A value to convert.
   \param    from <string> The coordinate system identifier of the value
             to be converted.
   \param    to <string> The coordinate system identifier to which the value
             should be converted.
-  \returns  <vector> The converted result.
+
+  \returns  <point> The converted result.
             Returns \b 'undef' for identifiers that are not defined.
 *******************************************************************************/
 function convert_coordinate
@@ -228,13 +234,13 @@ function convert_coordinate
   to   = base_coordinates
 ) = coordinate_c_to( coordinate_to_c( c, from ), to );
 
-//! Radially scale a vector of 2-tuple cartesian coordinates.
+//! Radially scale a list of 2d cartesian coordinates.
 /***************************************************************************//**
-  \param    c <vector> A vector of cartesian coordinates [[x, y], ...].
+  \param    c <coords-2d> A list of cartesian coordinates [[x, y], ...].
   \param    r <decimal> A polar radius.
   \param    t <boolean> Translate or scale radius.
 
-  \returns  <vector> A vector of scaled cartesian coordinates.
+  \returns  <coords-2d> A list of scaled cartesian coordinates.
 
   \details
 
@@ -254,13 +260,13 @@ function coordinates_cpc
       convert_coordinate([(t == true) ? r : r*p[0], p[1]], from="p", to="c")
   ];
 
-//! Radially scale and convert a vector of polar coordinates to cartesian.
+//! Radially scale and convert a list of 2d polar coordinates to cartesian.
 /***************************************************************************//**
-  \param    c <vector> A vector of polar coordinates [[r, aa], ...].
+  \param    c <coords-2d> A list of polar coordinates [[r, aa], ...].
   \param    r <decimal> A polar radius.
   \param    t <boolean> Translate or scale radius.
 
-  \returns  <vector> A vector of scaled cartesian coordinates.
+  \returns  <coords-2d> A list of scaled cartesian coordinates.
 
   \details
 
@@ -279,13 +285,13 @@ function coordinates_pc
       convert_coordinate([(t == true) ? r : r*i[0], i[1]], from="p", to="c")
   ];
 
-//! Radially scale a vector of 3-tuple cartesian coordinates.
+//! Radially scale a list of 3d cartesian coordinates.
 /***************************************************************************//**
-  \param    c <vector> A vector of cartesian coordinates [[x, y, z], ...].
+  \param    c <coords-3d> A list of cartesian coordinates [[x, y, z], ...].
   \param    r <decimal> A spherical radius.
   \param    t <boolean> Translate or scale radius.
 
-  \returns  <vector> A vector of scaled cartesian coordinates.
+  \returns  <coords-3d> A list of scaled cartesian coordinates.
 
   \details
 
@@ -305,13 +311,13 @@ function coordinates_csc
       convert_coordinate([(t == true) ? r : r*s[0], s[1], s[2]], from="s", to="c")
   ];
 
-//! Radially scale and convert a vector of spherical coordinates to cartesian.
+//! Radially scale and convert a list of 3d spherical coordinates to cartesian.
 /***************************************************************************//**
-  \param    c <vector> A vector of spherical coordinates [[r, aa, pa], ...].
+  \param    c <coords-3d> A list of spherical coordinates [[r, aa, pa], ...].
   \param    r <decimal> A spherical radius.
   \param    t <boolean> Translate or scale radius.
 
-  \returns  <vector> A vector of scaled cartesian coordinates.
+  \returns  <coords-3d> A list of scaled cartesian coordinates.
 
   \details
 

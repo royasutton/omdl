@@ -82,7 +82,7 @@ include <shapes2d.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! A 2D edge-finish profile specified by intersection radius.
+//! A 2d edge-finish profile specified by intersection radius.
 /***************************************************************************//**
   \param    r <decimal> The radius length.
   \param    p <integer> The profile identifier.
@@ -102,7 +102,7 @@ include <shapes2d.scad>;
     |  1  | A cove with cut-out offset            |
     |  2  | A quarter round with offset           |
 
-  \note     A offset factor greater than 1 moves the mid-point away
+  \note     An offset factor greater than 1 moves the mid-point away
             from the profile edge-vertex. A factor less than 1 move it
             inwards towards the edge-vertex.
 *******************************************************************************/
@@ -170,7 +170,7 @@ module edge_profile_r
   }
 }
 
-//! A 3D edge-finish additive shape specified by intersection radius.
+//! A 3d edge-finish additive shape specified by intersection radius.
 /***************************************************************************//**
   \param    r <decimal> The radius length.
   \param    l <decimal> The edge length.
@@ -181,8 +181,8 @@ module edge_profile_r
   \param    m <integer> The end finish mode: (B0: bottom, B1: top).
   \param    ba <decimal> The end bevel angle.
 
-  \param    a1 <decimal> The edge intersection start angle.
-  \param    a2 <decimal> The edge intersection end angle.
+  \param    a1 <decimal> The edge plane start angle.
+  \param    a2 <decimal> The edge plane end angle.
 
   \param    center <boolean> Center length about origin.
 

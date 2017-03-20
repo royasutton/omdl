@@ -87,7 +87,7 @@ include <math_bitwise.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Translate, rotate, and revolve the 2D shape about the z-axis.
+//! Translate, rotate, and revolve the 2d shape about the z-axis.
 /***************************************************************************//**
   \param    r <decimal> The rotation radius.
   \param    pa <decimal> The profile pitch angle in degrees.
@@ -113,11 +113,11 @@ module rotate_extrude_tr
   children();
 }
 
-//! Translate, rotate, and revolve the 2D shape about the z-axis with linear elongation.
+//! Translate, rotate, and revolve the 2d shape about the z-axis with linear elongation.
 /***************************************************************************//**
   \param    r <decimal> The rotation radius.
-  \param    l <vector|decimal> The elongation length.
-            A vector [x, y] of decimals or a single decimal for (x=y)
+  \param    l <decimal-list-2|decimal> The elongation length.
+            A list [x, y] of decimals or a single decimal for (x=y)
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.
   \param    m <integer> The section render mode. An 8-bit encoded integer
@@ -193,18 +193,18 @@ module rotate_extrude_tre
   }
 }
 
-//! Linearly extrude 2D shape with extrusion upper and lower scaling.
+//! Linearly extrude 2d shape with extrusion upper and lower scaling.
 /***************************************************************************//**
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
   \param    center <boolean> Center extrusion about origin.
 
   \details
 
-    When \p h is a decimal, the shape is extruded linearly as normal. To
-    scale the upper and lower slices of the extrusion, \p h must be
-    assigned a vector with a minimum of three decimal values as
-    described in the following table.
+    When \p h is a decimal, the shape is extruded linearly as normal.
+    To scale the upper and lower slices of the extrusion, \p h must be
+    assigned a list with a minimum of three decimal values as described
+    in the following table.
 
       sym | h[n] | default | description
     :----:|:----:|:-------:|:---------------------------------------
@@ -225,7 +225,7 @@ module rotate_extrude_tre
 
   \note When symmetrical scaling is desired, shape must be centered about
         origin.
-  \todo This function should be re-written to use the built-in scaling
+  \todo This function should be rewritten to use the built-in scaling
         provided by linear_extrude() in the upper and lower scaling zones.
 *******************************************************************************/
 module linear_extrude_uls
@@ -308,7 +308,7 @@ module linear_extrude_uls
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Distribute copies of a 2D or 3D shape equally about a z-axis radius.
+//! Distribute copies of a 2d or 3d shape equally about a z-axis radius.
 /***************************************************************************//**
   \param    n <decimal> The number of equally spaced radii.
   \param    r <decimal> The shape move radius.
@@ -336,12 +336,12 @@ module radial_repeat
   }
 }
 
-//! Distribute copies of 2D or 3D shapes about Cartesian grid.
+//! Distribute copies of 2d or 3d shapes about Cartesian grid.
 /***************************************************************************//**
-  \param    grid <vector|decimal> A vector [x, y, z] of decimals or a
-            single decimal for (x=y=z).
-  \param    incr <vector|decimal> A vector [x, y, z] of decimals or a
-            single decimal for (x=y=z).
+  \param    grid <decimal-list-3|decimal> A list [x, y, z] of decimals
+            or a single decimal for (x=y=z).
+  \param    incr <decimal-list-3|decimal> A list [x, y, z] of decimals
+            or a single decimal for (x=y=z).
   \param    copy <decimal> Number of times to iterate over children.
   \param    center <boolean> Center distribution about origin.
 

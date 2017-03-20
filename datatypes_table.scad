@@ -1,4 +1,4 @@
-//! Table data type operation primitives.
+//! Table data type operations.
 /***************************************************************************//**
   \file   datatypes_table.scad
   \author Roy Allen Sutton
@@ -39,7 +39,7 @@ include <datatypes.scad>;
   @{
 
   \defgroup datatypes_table Tables
-  \brief    Table data type operation primitives.
+  \brief    Table data type operations.
 
   \details
 
@@ -55,15 +55,13 @@ include <datatypes.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Get the index for a table row identifier.
+//! Get the index for a table row that matches an identifier.
 /***************************************************************************//**
-  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
-            containing the table rows.
+  \param    rows <matrix-CxR> The table data matrix (C-colummns x R-rows).
+  \param    row_id <string> The row identifier.
 
-  \param    row_id <string> The row identifier string to locate.
-
-  \returns  <decimal> The row index where the identifier is located. If the
-            identifier does not exists, returns \b empty_v.
+  \returns  <integer> The row index where the identifier exists.
+            If the identifier does not exists, returns \b empty_v.
 *******************************************************************************/
 function table_get_row_idx
 (
@@ -71,15 +69,13 @@ function table_get_row_idx
   row_id
 ) = first( search( [row_id], rows, 1, 0 ) );
 
-//! Get the row for a table row identifier.
+//! Get the table row that matches a table row identifier.
 /***************************************************************************//**
-  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
-            containing the table rows.
+  \param    rows <matrix-CxR> The table data matrix (C-colummns x R-rows).
+  \param    row_id <string> The row identifier.
 
-  \param    row_id <string> The row identifier string to locate.
-
-  \returns  <vector> The row where the row identifier is located. If the
-            identifier does not exists, returns \b undef.
+  \returns  <list-C> The table row where the row identifier exists.
+            If the identifier does not exists, returns \b undef.
 *******************************************************************************/
 function table_get_row
 (
@@ -87,15 +83,13 @@ function table_get_row
   row_id
 ) = rows[ table_get_row_idx(rows, row_id) ];
 
-//! Get the index for a table column identifier.
+//! Get the index for a table column that matches an identifier.
 /***************************************************************************//**
-  \param    cols <2d-vector> A two dimensional vector (c-tuple x 1-tuple)
-            containing the table columns.
+  \param    cols <matrix-2xC> The table column matrix (2 x C-colummns).
+  \param    col_id <string> The column identifier.
 
-  \param    col_id <string> The column identifier string to locate.
-
-  \returns  <decimal> The column index where the identifier is located. If the
-            identifier does not exists, returns \b empty_v.
+  \returns  <integer> The column index where the identifier exists.
+            If the identifier does not exists, returns \b empty_v.
 *******************************************************************************/
 function table_get_col_idx
 (
@@ -105,13 +99,11 @@ function table_get_col_idx
 
 //! Get the column for a table column identifier.
 /***************************************************************************//**
-  \param    cols <2d-vector> A two dimensional vector (c-tuple x 1-tuple)
-            containing the table columns.
+  \param    cols <matrix-2xC> The table column matrix (2 x C-colummns).
+  \param    col_id <string> The column identifier.
 
-  \param    col_id <string> The column identifier string to locate.
-
-  \returns  <vector> The column where the row identifier is located. If the
-            identifier does not exists, returns \b undef.
+  \returns  <list-2> The table column where the column identifier exists.
+            If the identifier does not exists, returns \b undef.
 *******************************************************************************/
 function table_get_col
 (
@@ -119,18 +111,15 @@ function table_get_col
   col_id
 ) = cols[ table_get_col_idx(cols, col_id) ];
 
-//! Get the value for a table row and column identifier.
+//! Get the table cell value for a column and row.
 /***************************************************************************//**
-  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
-            containing the table rows.
-  \param    cols <2d-vector> A two dimensional vector (c-tuple x 1-tuple)
-            containing the table columns.
+  \param    rows <matrix-CxR> The table data matrix (C-colummns x R-rows).
+  \param    cols <matrix-2xC> The table column matrix (2 x C-colummns).
+  \param    row_id <string> The row identifier.
+  \param    col_id <string> The column identifier.
 
-  \param    row_id <string> The row identifier string to locate.
-  \param    col_id <string> The column identifier string to locate.
-
-  \returns  <decimal|string> The value at the located \p row_id and \p col_id.
-            If it does not exists, returns \b undef.
+  \returns  \<value> The value at matrix cell [col_id, row_id].
+            If either identifier does not exists, returns \b undef.
 *******************************************************************************/
 function table_get
 (
@@ -140,18 +129,14 @@ function table_get
   col_id
 ) = rows[table_get_row_idx(rows,row_id)][table_get_col_idx(cols,col_id)];
 
-//! Form a vector from the specified column of each table row.
+//! Form a list of a select column across all rows.
 /***************************************************************************//**
-  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
-            containing the table rows.
-  \param    cols <2d-vector> A two dimensional vector (c-tuple x 1-tuple)
-            containing the table columns.
+  \param    rows <matrix-CxR> The table data matrix (C-colummns x R-rows).
+  \param    cols <matrix-2xC> The table column matrix (2 x C-colummns).
+  \param    col_id <string> The column identifier.
 
-  \param    col_id <string> The column identifier string.
-
-  \returns  <vector> The vector formed by selecting the \p col_id for
-            each row in the table.
-            If column does not exists, returns \b undef.
+  \returns  \<list> The list of a select column across all rows.
+            If the identifier does not exists, returns \b undef.
 *******************************************************************************/
 function table_get_row_cols
 (
@@ -162,13 +147,11 @@ function table_get_row_cols
     eselect(table_copy(rows,cols,cols_sel=[col_id]),f=true)
   : undef;
 
-//! Form a vector of each table row identifier.
+//! Form a list of a all row identifiers.
 /***************************************************************************//**
-  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
-            containing the table rows.
+  \param    rows <matrix-CxR> The table data matrix (C-colummns x R-rows).
 
-  \returns  <vector> The vector of table row identifiers.
-            If column \c "id" does not exists, returns \b undef.
+  \returns  \<list> The list of all row identifiers.
 
   \details
 
@@ -185,16 +168,13 @@ function table_get_row_ids
 
 //! Test the existence of a table row and column identifier.
 /***************************************************************************//**
-  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
-            containing the table rows.
-  \param    cols <2d-vector> A two dimensional vector (c-tuple x 1-tuple)
-            containing the table columns.
+  \param    rows <matrix-CxR> The table data matrix (C-colummns x R-rows).
+  \param    cols <matrix-2xC> The table column matrix (2 x C-colummns).
+  \param    row_id <string> The row identifier.
+  \param    col_id <string> The column identifier.
 
-  \param    row_id <string> The row identifier string to locate.
-  \param    col_id <string> The column identifier string to locate.
-
-  \returns  \b true if the row and column identifier exists, otherwise
-            returns \b false.
+  \returns  \b true if the row and column identifier exists, and
+            \b false otherwise.
 *******************************************************************************/
 function table_exists
 (
@@ -212,10 +192,8 @@ function table_exists
 
 //! Get the size of a table.
 /***************************************************************************//**
-  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
-            containing the table rows.
-  \param    cols <2d-vector> A two dimensional vector (c-tuple x 1-tuple)
-            containing the table columns.
+  \param    rows <matrix-CxR> The table data matrix (C-colummns x R-rows).
+  \param    cols <matrix-2xC> The table column matrix (2 x C-colummns).
 
   \returns  <decimal> The table size.
 
@@ -236,11 +214,8 @@ function table_size
 
 //! Perform some basic validation/checks on a table.
 /***************************************************************************//**
-  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
-            containing the table rows.
-  \param    cols <2d-vector> A two dimensional vector (c-tuple x 1-tuple)
-            containing the table columns.
-
+  \param    rows <matrix-CxR> The table data matrix (C-colummns x R-rows).
+  \param    cols <matrix-2xC> The table column matrix (2 x C-colummns).
   \param    verbose <boolean> Be verbose during check.
 
   \details
@@ -316,14 +291,10 @@ module table_check
 
 //! Dump a table to the console.
 /***************************************************************************//**
-  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
-            containing the table rows.
-  \param    cols <2d-vector> A two dimensional vector (c-tuple x 1-tuple)
-            containing the table columns.
-
-  \param    rows_sel <1d-vector> A n-tuple vector of row identifier to select.
-  \param    cols_sel <1d-vector> A n-tuple vector of column identifier to select.
-
+  \param    rows <matrix-CxR> The table data matrix (C-colummns x R-rows).
+  \param    cols <matrix-2xC> The table column matrix (2 x C-colummns).
+  \param    row_id <string> The row identifier.
+  \param    col_id <string> The column identifier.
   \param    number <boolean> Number the table rows.
 
   \details
@@ -394,17 +365,14 @@ module table_dump
   }
 }
 
-//! Create a copy of select rows and columns of a table.
+//! Create a matrix of select rows and columns of a table.
 /***************************************************************************//**
-  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
-            containing the table rows.
-  \param    cols <2d-vector> A two dimensional vector (c-tuple x 1-tuple)
-            containing the table columns.
+  \param    rows <matrix-CxR> The table data matrix (C-colummns x R-rows).
+  \param    cols <matrix-2xC> The table column matrix (2 x C-colummns).
+  \param    row_id <string> The row identifier.
+  \param    col_id <string> The column identifier.
 
-  \param    rows_sel <1d-vector> A n-tuple vector of row identifier to select.
-  \param    cols_sel <1d-vector> A n-tuple vector of column identifier to select.
-
-  \returns  <2d-vector> The selected rows and columns of the table.
+  \returns  <matrix> A matrix of the selected rows and columns.
 *******************************************************************************/
 function table_copy
 (
@@ -433,15 +401,12 @@ function table_copy
 
 //! Sum select rows and columns of a table.
 /***************************************************************************//**
-  \param    rows <2d-vector> A two dimensional vector (r-tuple x c-tuple)
-            containing the table rows.
-  \param    cols <2d-vector> A two dimensional vector (c-tuple x 1-tuple)
-            containing the table columns.
+  \param    rows <matrix-CxR> The table data matrix (C-colummns x R-rows).
+  \param    cols <matrix-2xC> The table column matrix (2 x C-colummns).
+  \param    row_id <string> The row identifier.
+  \param    col_id <string> The column identifier.
 
-  \param    rows_sel <1d-vector> A vector n-tuple of row identifier to select.
-  \param    cols_sel <1d-vector> A vector n-tuple of column identifier to select.
-
-  \returns  <1d-vector> The sum of the selected rows and columns of the table.
+  \returns  \<list> A list with the sum of each selected rows and columns.
 *******************************************************************************/
 function table_sum
 (

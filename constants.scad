@@ -69,16 +69,16 @@ phi = (1 + sqrt(5)) / 2;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! The largest representable number in OpenSCAD scripts.
+//! <decimal> The largest representable number in OpenSCAD scripts.
 number_max = 1e308;
 
-//! The smallest representable number in OpenSCAD scripts.
+//! <decimal> The smallest representable number in OpenSCAD scripts.
 number_min = -1e308;
 
-//! A string with no content (the empty string).
+//! <string> A string with no characters (the empty string).
 empty_str = "";
 
-//! A vector with no content (the empty vector).
+//! \<list> A list with no values (the empty list).
 empty_v = [];
 
 //! @}
@@ -95,34 +95,34 @@ empty_v = [];
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! The vector index for the x-coordinate of a vector.
+//! <integer> The mapping index for the x-axis in Euclidean space.
 x_axis_vi = 0;
 
-//! The vector index for the y-coordinate of a vector.
+//! <integer> The mapping index for the y-axis in Euclidean space.
 y_axis_vi = 1;
 
-//! The vector index for the z-coordinate of a vector.
+//! <integer> The mapping index for the z-axis in Euclidean space.
 z_axis_vi = 2;
 
-//! The origin coordinates in 2-dimensional Euclidean space.
+//! <point-2d> The origin point coordinate in 2d Euclidean space.
 origin2d = [0, 0];
 
-//! The unit vector of the positive x-axis in 2-dimensional Euclidean space.
+//! <vector-2d> The unit vector of the positive x-axis in 2d Euclidean space.
 x_axis2d_uv = [1, 0];
 
-//! The unit vector of the positive y-axis in 2-dimensional Euclidean space.
+//! <vector-2d> The unit vector of the positive y-axis in 2d Euclidean space.
 y_axis2d_uv = [0, 1];
 
-//! The origin coordinates in 3-dimensional Euclidean space.
+//! <point-3d> The origin point coordinate in 3-dimensional Euclidean space.
 origin3d = [0, 0, 0];
 
-//! The unit vector of the positive x-axis in 3-dimensional Euclidean space.
+//! <vector-3d> The unit vector of the positive x-axis in 3d Euclidean space.
 x_axis3d_uv = [1, 0, 0];
 
-//! The unit vector of the positive y-axis in 3-dimensional Euclidean space.
+//! <vector-3d> The unit vector of the positive y-axis in 3d Euclidean space.
 y_axis3d_uv = [0, 1, 0];
 
-//! The unit vector of the positive z-axis in 3-dimensional Euclidean space.
+//! <vector-3d> The unit vector of the positive z-axis in 3d Euclidean space.
 z_axis3d_uv = [0, 0, 1];
 
 //! @}

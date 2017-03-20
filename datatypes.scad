@@ -1,4 +1,4 @@
-//! Data type identification and list operation primitives.
+//! Data type identification and list operations.
 /***************************************************************************//**
   \file   datatypes.scad
   \author Roy Allen Sutton
@@ -72,7 +72,7 @@ include <constants.scad>;
   @{
 
   \defgroup datatypes_type Types
-  \brief    Compile-time data type identification primitives.
+  \brief    Compile-time data type identification functions.
 
   \details
 
@@ -83,7 +83,7 @@ include <constants.scad>;
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
-// group 1
+// group 1: type identification for scalar values
 //----------------------------------------------------------------------------//
 
 //! Test if a value is defined.
@@ -93,7 +93,11 @@ include <constants.scad>;
   \returns  <boolean> \b true when the value is defined
             and \b false otherwise.
 *******************************************************************************/
-function is_defined( v ) = (v == undef) ? false : true;
+function is_defined
+(
+  v
+) = (v == undef) ? false
+  : true;
 
 //! Test if a value is not defined.
 /***************************************************************************//**
@@ -102,16 +106,30 @@ function is_defined( v ) = (v == undef) ? false : true;
   \returns  <boolean> \b true when the value is not defined
             and \b false otherwise.
 *******************************************************************************/
-function not_defined( v ) = (v == undef) ? true : false;
+function not_defined
+(
+  v
+) = (v == undef) ? true
+  : false;
 
-//! Test if an iterable value is empty.
+//! Test if a numerical value is invalid.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v \<value> A numerical value.
 
-  \returns  <boolean> \b true when the iterable value has zero elements
+  \returns  <boolean> \b true when the value is determined to be
+            \b nan (Not A Number) and \b false otherwise.
+*******************************************************************************/
+function is_nan( v ) = ( v != v );
+
+//! Test if a numerical value is infinite.
+/***************************************************************************//**
+  \param    v \<value> A numerical value.
+
+  \returns  <boolean> \b true when the value is determined to be
+            \b inf (greater than the largest representable number)
             and \b false otherwise.
 *******************************************************************************/
-function is_empty( v ) = (len(v) == 0);
+function is_inf( v ) = ( v == (number_max * number_max) );
 
 //! Test if a value is a single non-iterable value.
 /***************************************************************************//**
@@ -122,17 +140,16 @@ function is_empty( v ) = (len(v) == 0);
 
   \details
 
-     value is      | defined result
+     data type     | defined
     :-------------:|:-----------------:
-     \b undef      | \b true
-     \b inf        | \b true
-     \b nan        | \b true
-     integer       | \b true
-     decimal       | \b true
+     number(s)     | \b true
      boolean       | \b true
      string        | \b false
      list          | \b false
      range         | not defined
+     \b undef      | \b true
+     \b inf        | \b true
+     \b nan        | \b true
 *******************************************************************************/
 function is_scalar( v ) = (len(v) == undef);
 
@@ -145,52 +162,38 @@ function is_scalar( v ) = (len(v) == undef);
 
   \details
 
-     value is      | defined result
+     data type     | defined
     :-------------:|:-----------------:
-     \b undef      | \b false
-     \b inf        | \b false
-     \b nan        | \b false
-     integer       | \b false
-     decimal       | \b false
+     number(s)     | \b false
      boolean       | \b false
      string        | \b true
      list          | \b true
      range         | not defined
+     \b undef      | \b false
+     \b inf        | \b false
+     \b nan        | \b false
 *******************************************************************************/
 function is_iterable( v ) = (len(v) != undef);
 
-//! Test if a value is a string.
+//! Test if an iterable value is empty.
 /***************************************************************************//**
-  \param    v \<value> A value.
+  \param    v \<value> An iterable value.
 
-  \returns  <boolean> \b true when the value is a string
+  \returns  <boolean> \b true when the iterable value has zero elements
             and \b false otherwise.
 *******************************************************************************/
-function is_string( v ) = (str(v) == v);
+function is_empty( v ) = (len(v) == 0);
 
-//! Test if a value is a list.
+//! Test if a value is a number.
 /***************************************************************************//**
   \param    v \<value> A value.
 
-  \returns  <boolean> \b true when the value is a vector
+  \returns  <boolean> \b true when the value is a number
             and \b false otherwise.
-*******************************************************************************/
-function is_list( v ) =  is_iterable(v) && !is_string(v);
 
-//! Test if a value is a boolean constant.
-/***************************************************************************//**
-  \param    v \<value> A value.
-
-  \returns  <boolean> \b true when the value is one of the predefined
-            boolean constants <tt>[true|false]</tt> and \b false otherwise.
+  \note     Returns \b true for \b inf and \b nan values.
 *******************************************************************************/
-function is_boolean
-(
-  v
-) = is_string(v) ? false
-  : (str(v) == "true") ? true
-  : (str(v) == "false") ? true
-  : false;
+function is_number( v ) = is_defined(v % 1);
 
 //! Test if a value is an integer.
 /***************************************************************************//**
@@ -214,17 +217,38 @@ function is_integer
 *******************************************************************************/
 function is_decimal( v ) = ((v % 1) > 0);
 
-//! Test if a value is a number.
+//! Test if a value is a predefined boolean constant.
 /***************************************************************************//**
   \param    v \<value> A value.
 
-  \returns  <boolean> \b true when the value is a number
-            and \b false otherwise.
-
-  \warning  Returns \b true even for numerical values that are considered
-            infinite and invalid.
+  \returns  <boolean> \b true when the value is one of the predefined
+            boolean constants <tt>[true|false]</tt> and \b false otherwise.
 *******************************************************************************/
-function is_number( v ) = is_defined(v % 1);
+function is_boolean
+(
+  v
+) = is_string(v) ? false
+  : (str(v) == "true") ? true
+  : (str(v) == "false") ? true
+  : false;
+
+//! Test if a value is a string.
+/***************************************************************************//**
+  \param    v \<value> A value.
+
+  \returns  <boolean> \b true when the value is a string
+            and \b false otherwise.
+*******************************************************************************/
+function is_string( v ) = (str(v) == v);
+
+//! Test if a value is an iterable list of values.
+/***************************************************************************//**
+  \param    v \<value> A value.
+
+  \returns  <boolean> \b true when the value is a list
+            and \b false otherwise.
+*******************************************************************************/
+function is_list( v ) =  is_iterable(v) && !is_string(v);
 
 //! Test if a value is a range definition.
 /***************************************************************************//**
@@ -253,60 +277,39 @@ function is_range
     !is_nan(v) &&
     !is_inf(v);
 
-//! Test if a numerical value is invalid.
-/***************************************************************************//**
-  \param    v \<value> A numerical value.
-
-  \returns  <boolean> \b true when the value is determined to be \b nan
-            (Not A Number) and \b false otherwise.
-*******************************************************************************/
-function is_nan( v ) = ( v != v );
-
-//! Test if a numerical value is infinite.
-/***************************************************************************//**
-  \param    v \<value> A numerical value.
-
-  \returns  <boolean> \b true when the value is determined to be
-            \b inf (greater than the largest representable number)
-            and \b false otherwise.
-*******************************************************************************/
-function is_inf( v ) = ( v == (number_max * number_max) );
-
 //! Test if a numerical value is even.
 /***************************************************************************//**
   \param    v \<value> A numerical value.
 
   \returns  <boolean> \b true when the value is determined to be \e even
-            and \b false otherwise.
-
-  \details
-
-  \note     The value must be valid and defined but may be positive or
-            negative. Any value that is not an integer returns \b false.
+            and \b false otherwise (The value may be positive or negative).
 *******************************************************************************/
-function is_even( v ) = !is_integer(v) ? false : ((v % 2) == 0);
+function is_even
+(
+  v
+) = !is_integer(v) ? false
+  : ((v % 2) == 0);
 
 //! Test if a numerical value is odd.
 /***************************************************************************//**
   \param    v \<value> A numerical value.
 
   \returns  <boolean> \b true when the value is determined to be \e odd
-            and \b false otherwise.
-
-  \details
-
-  \note     The value must be valid and defined but may be positive or
-            negative. Any value that is not an integer returns \b false.
+            and \b false otherwise (The value may be positive or negative).
 *******************************************************************************/
-function is_odd( v ) = !is_integer(v) ? false : ((v % 2) != 0);
+function is_odd
+(
+  v
+) = !is_integer(v) ? false
+  : ((v % 2) != 0);
 
 //----------------------------------------------------------------------------//
-// group 2
+// group 2: type identification for lists of values
 //----------------------------------------------------------------------------//
 
-//! Test if all elements of a value equal a comparison value.
+//! Test if a list of values equal a comparison value.
 /***************************************************************************//**
-  \param    v \<value> A value or an iterable value.
+  \param    v \<list> A list of values.
   \param    cv \<value> A comparison value.
 
   \returns  <boolean> \b true when all elements equal the value \p cv
@@ -314,7 +317,7 @@ function is_odd( v ) = !is_integer(v) ? false : ((v % 2) != 0);
 
   \details
 
-  \warning  Always returns \b true when \p v is empty.
+  \warning  Always returns \b true when the list is empty.
 *******************************************************************************/
 function all_equal
 (
@@ -325,9 +328,9 @@ function all_equal
   : (first(v) != cv) ? false
   : all_equal(ntail(v), cv);
 
-//! Test if any element of a value equals a comparison value.
+//! Test if any element of a list of values equal a comparison value.
 /***************************************************************************//**
-  \param    v \<value> A value or an iterable value.
+  \param    v \<list> A list of values.
   \param    cv \<value> A comparison value.
 
   \returns  <boolean> \b true when any element equals the value \p cv
@@ -335,7 +338,7 @@ function all_equal
 
   \details
 
-  \warning  Always returns \b false when \p v is empty.
+  \warning  Always returns \b false when the list is empty.
 *******************************************************************************/
 function any_equal
 (
@@ -346,128 +349,124 @@ function any_equal
   : (first(v) == cv) ? true
   : any_equal(ntail(v), cv);
 
-//! Test if no element of a value is undefined.
+//! Test if no element of a list of values is undefined.
 /***************************************************************************//**
-  \param    v \<value> A value or an iterable value.
+  \param    v \<list> A list of values.
 
   \returns  <boolean> \b true when no element is undefined
             and \b false otherwise.
 
   \details
 
-  \warning  Always returns \b true when \p v is empty.
+  \warning  Always returns \b true when the list is empty.
 *******************************************************************************/
 function all_defined(v) = !any_equal(v, undef);
 
-//! Test if any element of a value is undefined.
+//! Test if any element of a list of values is undefined.
 /***************************************************************************//**
-  \param    v \<value> A value or an iterable value.
+  \param    v \<list> A list of values.
 
   \returns  <boolean> \b true when any element is undefined
             and \b false otherwise.
 
   \details
 
-  \warning  Always returns \b false when \p v is empty.
+  \warning  Always returns \b false when the list is empty.
 *******************************************************************************/
 function any_undefined(v) = any_equal(v, undef);
 
-//! Test if all elements of a value are scalars.
+//! Test if all elements of a list of values are scalars.
 /***************************************************************************//**
-  \param    v \<value> A value or an iterable value.
+  \param    v \<list> A list of values.
 
   \returns  <boolean> \b true when all elements are scalar values
             and \b false otherwise.
-            Returns \b true when \p v is a single scalar value.
-            Returns the value of \p v when it is not defined.
+            Returns \b true when the list is a single scalar value.
 
   \details
 
-  \warning  Always returns \b true when \p v is empty.
+  \warning  Always returns \b true when the list is empty.
 *******************************************************************************/
 function all_scalars
 (
   v
-) = not_defined(v) ? v
+) = not_defined(v) ? undef
   : is_scalar(v) ? true
   : is_empty(v) ? true
   : !is_scalar(first(v)) ? false
   : all_scalars(ntail(v));
 
-//! Test if all elements of a value are lists.
+//! Test if all elements of a list of values are lists.
 /***************************************************************************//**
-  \param    v \<value> A value or an iterable value.
+  \param    v \<list> A list of values.
 
-  \returns  <boolean> \b true when all elements are vector values
+  \returns  <boolean> \b true when all elements are lists
             and \b false otherwise.
-            Returns \b true when \p v is a single vector value.
-            Returns the value of \p v when it is not defined.
+            Returns \b true when the list is a single list value.
 
   \details
 
-  \warning  Always returns \b true when \p v is empty.
+  \warning  Always returns \b true when the list is empty.
 *******************************************************************************/
 function all_lists
 (
   v
-) = not_defined(v) ? v
+) = not_defined(v) ? undef
   : is_scalar(v) ? false
   : is_empty(v) ? true
   : !is_list(first(v)) ? false
   : all_lists(ntail(v));
 
-//! Test if all elements of a value are strings.
+//! Test if all elements of a list of values are strings.
 /***************************************************************************//**
-  \param    v \<value> A value or an iterable value.
+  \param    v \<list> A list of values.
 
   \returns  <boolean> \b true when all elements are string values
             and \b false otherwise.
-            Returns \b true when \p v is a single string value.
-            Returns the value of \p v when it is not defined.
+            Returns \b true when the list is a single string value.
 
   \details
 
-  \warning  Always returns \b true when \p v is empty.
+  \warning  Always returns \b true when the list is empty.
 *******************************************************************************/
 function all_strings
 (
   v
-) = not_defined(v) ? v
+) = not_defined(v) ? undef
   : is_scalar(v) ? false
   : is_empty(v) ? true
   : !is_string(first(v)) ? false
   : all_strings(ntail(v));
 
-//! Test if all elements of a value are numbers.
+//! Test if all elements of a list of values are numbers.
 /***************************************************************************//**
-  \param    v \<value> A value or an iterable value.
+  \param    v \<list> A list of values.
 
   \returns  <boolean> \b true when all elements are numerical values
             and \b false otherwise.
-            Returns \b true when \p v is a single numerical value.
-            Returns the value of \p v when it is not defined.
+            Returns \b true when the list is a single numerical value.
 
   \details
 
-  \warning  Always returns \b true when \p v is empty.
+  \warning  Always returns \b true when the list is empty.
 *******************************************************************************/
 function all_numbers
 (
   v
-) = not_defined(v) ? v
+) = not_defined(v) ? undef
   : is_scalar(v) ? is_number(v)
   : is_empty(v) ? true
   : !is_number(first(v)) ? false
   : all_numbers(ntail(v));
 
-//! Test if all elements of a value have a given length.
+//! Test if all elements of a list of values are lists of a specified length.
 /***************************************************************************//**
-  \param    v \<value> A value or an iterable value.
-  \param    l <integer> The length.
+  \param    v \<list> A list of values.
+  \param    l <integer> The test length.
 
-  \returns  <boolean> \b true when all elements have length equal to \p l
-            and \b false otherwise.
-            Returns the value of \p v when it is not defined.
+  \returns  <boolean> \b true when all elements are lists of the specified
+            length and \b false otherwise.
+            Returns \b true when the list is a single list of length \p l.
 
   \details
 
@@ -477,32 +476,30 @@ function all_len
 (
   v,
   l
-) = not_defined(v) ? v
+) = not_defined(v) ? undef
   : is_scalar(v) ? false
   : is_empty(v) ? true
   : (len(first(v)) != l) ? false
   : all_len(ntail(v),l);
 
-//! Test if all elements of two values are approximately equal.
+//! Test if all elements of two lists of values are sufficiently equal.
 /***************************************************************************//**
-  \param    v1 \<value> A value or an iterable value 1.
-  \param    v2 \<value> A value or an iterable value 2.
-  \param    p \<number> A numerical precision.
+  \param    v1 \<list> A list of values 1.
+  \param    v2 \<list> A list of values 2.
+  \param    p \<number> The numerical precision.
 
-  \returns  <boolean> \b true when all elements of each values are
-            sufficiently equal and \b false otherwise. All numerical
-            comparisons are performed with precision limited by \p p. All
-            non-numeric comparisons test for exact equality.
+  \returns  <boolean> \b true when all elements of each lists are
+            sufficiently equal and \b false otherwise.
 
   \details
 
-  \note     The parameter \p p indicates the number of digits of precision
-            for each numerical comparison.
-  \note     If the values are, exclusively, vectors of numbers or single
-            numbers, n_almost_equal() provides more efficient numerical
-            comparisons.
+    All numerical comparisons are performed to the specified precision.
+    All non-numeric comparisons test for equality.
 
-  \warning  Always returns \b true when \p v is empty.
+  \note     If the lists are scalar numbers, the function n_almost_equal()
+            provides a more efficient test.
+
+  \warning  Always returns \b true when both lists are empty.
 *******************************************************************************/
 function almost_equal
 (
@@ -520,21 +517,20 @@ function almost_equal
   : !almost_equal(first(v1), first(v2), p) ? false
   : almost_equal(ntail(v1), ntail(v2), p);
 
-//! Test if the separation between two numerical values is within a proximity.
+//! Test if all elements of two lists of numbers are sufficiently equal.
 /***************************************************************************//**
-  \param    v1 <vector|number> A vector of numbers or a single number 1.
-  \param    v2 <vector|number> A vector of numbers or a single number 2.
-  \param    d \<number> A positive numerical distance, proximity, or tolerance.
+  \param    v1 <number-list> A list of numbers 1.
+  \param    v2 <number-list> A list of numbers 2.
+  \param    d \<number> A positive numerical distance.
 
   \returns  <boolean> \b true when the distance between \p v1 and \p v2
             is less than \p d and \b false otherwise.
-            Returns \b false when either \p v1 or \p v2 is not a number,
-            or when they are not of the same length.
+            Returns \b false when either list contains a non-numerica
+            values, or when the lists are not of the same length.
 
   \details
 
-  \note     To compare general vectors of iterable values with mixed
-            types see almost_equal().
+  \note     To compare general lists of values see almost_equal().
 *******************************************************************************/
 function n_almost_equal
 (
@@ -544,10 +540,10 @@ function n_almost_equal
 ) = (len(v1) != len(v2)) ? false
   : (sqrt((v1-v2)*(v1-v2)) < d);
 
-//! Compare any two values (may be iterable and/or of different types).
+//! Order to lists of arbitrary values.
 /***************************************************************************//**
-  \param    v1 \<value> A value or an iterable value 1.
-  \param    v2 \<value> A value or an iterable value 2.
+  \param    v1 \<list> A list of values 1.
+  \param    v2 \<list> A list of values 2.
   \param    s <boolean> Order ranges by their numerical sum.
 
   \returns  <integer> \b -1 when <tt>(v2 < v1)</tt>,
@@ -564,19 +560,19 @@ function n_almost_equal
       2    | number   |           | numerical comparison
       3    | string   |           | lexical comparison
       4    | boolean  |           | \b false \< \b true
-      5    | vector   |           | lengths then element-wise comparison
+      5    | list     |           | lengths then element-wise comparison
       6    | range    | \b true   | compare sum of range elements
       6    | range    | \b false  | lengths then element-wise comparison
 
-  \note     When comparing two vectors of equal length, the comparison
+  \note     When comparing two lists of equal length, the comparison
             continue element-by-element until an ordering can be
-            determined. Two vectors are declared equal when all elements
-            have been compared and no ordering has been determined.
+            determined. Two lists are equal when all elements have been
+            compared and no ordering has been determined.
 
-  \warning  The performance of element-wise comparisons of vectors
-            degrades exponentially with vector size.
-  \warning  The sum of a range may quickly exceeded the intermediate
-            variable storage capacity for long ranges.
+  \warning  The performance of element-wise comparisons of lists degrades
+            with list size.
+  \warning  The sum of a range may exceeded the intermediate variable
+            storage capacity for long ranges.
 *******************************************************************************/
 function compare
 (
@@ -628,7 +624,7 @@ function compare
       )
     : 1 // others are greater
     )
-  // v1 a vector
+  // v1 a list
   : let( v2_iv = is_list(v2) )
     is_list(v1) ?
     (
@@ -640,7 +636,7 @@ function compare
           l1 = len(smerge(v1, true)),           // get total element count
           l2 = len(smerge(v2, true))
         )
-        (l1 > l2) ? -1                          // longest vector is greater
+        (l1 > l2) ? -1                          // longest list is greater
       : (l2 > l1) ? +1
       : ((l1 == 0) && (l2 == 0)) ? 0            // reached end, are equal
       : let
@@ -708,7 +704,7 @@ function compare
   @{
 
   \defgroup datatypes_list Lists
-  \brief    List data type operation primitives.
+  \brief    List data type operations.
 
   \details
 
@@ -721,20 +717,20 @@ function compare
 // create / convert
 //----------------------------------------------------------------------------//
 
-//! Create a vector of constant elements.
+//! Create a list of constant elements.
 /***************************************************************************//**
-  \param    l <integer> The vector length.
+  \param    l <integer> The list length.
   \param    v \<value> The element value.
-  \param    u <boolean> Use element value = \b undef.
+  \param    u <boolean> Element values are \b undef.
 
-  \returns  <vector> With \p l copies of the element value.
+  \returns  \<list> A list of \p l copies of the element.
             Returns \b empty_v when \p l is not a number or if
             <tt>(l < 1)</tt>.
 
   \details
 
-  \note     When \p v is not specified, each element is assigned the value
-            of its index position when \p u is \b false.
+  \note     When \p v is not specified and \p u is \b false, each element
+            is assigned the value of its index position.
 *******************************************************************************/
 function consts
 (
@@ -747,13 +743,13 @@ function consts
   : (u == false) ? [for (i=[0:1:l-1]) i]
   : [for (i=[0:1:l-1]) undef];
 
-//! Convert a value or vector of values to a concatenated string(s).
+//! Convert a list of values to a concatenated string.
 /***************************************************************************//**
-  \param    v \<value> A value or vector of values.
+  \param    v \<list> A list of values.
 
-  \returns  <string> Constructed by converting each element of the vector
+  \returns  <string> Constructed by converting each element of the list
             to a string and concatenating together.
-            Returns \b undef when \p v is not defined.
+            Returns \b undef when the list is not defined.
 
   \details
 
@@ -779,36 +775,36 @@ function vstr
   : (len(v) == 1) ? str(first(v))
   : str(first(v), vstr(ntail(v)));
 
-//! Convert a value or vector of values to a HTML formatted concatenated string(s).
+//! Convert a list of values to a concatenated HTML-formatted string.
 /***************************************************************************//**
-  \param    v \<value> A value or vector of values.
+  \param    v \<list> A list of values.
 
-  \param    b <tag|vector> A tag or vector of tags.
-            \em Unpaired html [tag(s)] to add before the value.
-  \param    p <tag|vector> A tag or vector of tags.
-            \em Paired html [tag(s)] to enclose the value.
-  \param    a <tag|vector> A tag or vector of tags.
-            \em Unpaired html [tag(s)] to add after the value.
+  \param    b <tag-list-list> A list of tag lists.
+            \em Unpaired HTML [tag(s)] to add before the value.
+  \param    p <tag-list-list> A list of tag lists.
+            \em Paired HTML [tag(s)] to enclose the value.
+  \param    a <tag-list-list> A list of tag lists.
+            \em Unpaired HTML [tag(s)] to add after the value.
 
-  \param    f <vector> A vector \c fs or a vector of vectors \c fs,
-            where <tt>fs=["color","size","face"]</tt>. The font
-            [tag(s)] to enclose the value. Not all terms of \c fs are
-            required, but term order is significant.
+  \param    f <attr-list-list> A list of tag attribute lists for \c fs,
+            where  <tt>fs=["color","size","face"]</tt> is the font tag
+            to enclose the value. Not all attributes are required, but
+            the order is significant.
 
   \param    d <boolean> Debug. When \b true angle brackets are replaced
             with curly brackets to prevent console decoding.
 
-  \returns  <string> Constructed by converting each element of the vector
-            to a string with specified html markup and concatenating together.
-            Returns \b undef when \p v is not defined.
+  \returns  <string> Constructed by converting each element of the list
+            to a string with specified HTML markup and concatenating.
+            Returns \b undef when the list is not defined.
 
   \details
-    When there are fewer tag elements in \p b, \p p, \p a, or \p f,
-    than there are value elements in \p v, the last specified tag
-    element is used for each subsequent value element.
+    When there are fewer tag lists in \p b, \p p, \p a, or \p f,
+    than there are value elements in \p v, the last specified tag list
+    is used for all subsequent value elements.
 
-    For a list of the \em paired and \em unpaired html tags supported by
-    the console see: [html subset].
+    For a list of the \em paired and \em unpaired HTML tags supported by
+    the console see: [HTML subset].
 
     \b Example
     \code{.C}
@@ -832,7 +828,7 @@ function vstr
     \endcode
 
     [tag(s)]: http://doc.qt.io/qt-5/richtext-html-subset.html
-    [html subset]: http://doc.qt.io/qt-5/richtext-html-subset.html
+    [HTML subset]: http://doc.qt.io/qt-5/richtext-html-subset.html
 *******************************************************************************/
 function vstr_html
 (
@@ -881,12 +877,12 @@ function vstr_html
     )
     vstr(concat(cs, vstr_html(nv, nb, np, na, nf, d)));
 
-//! Round a numerical value to a fixed number of digits after the decimal point.
+//! Round all numerical values of a list to a fixed number of decimal point digits.
 /***************************************************************************//**
-  \param    v <vector|value> A vector of values or a single value.
+  \param    v \<list> A list of values.
   \param    d <integer> The (maximum) number of decimals.
 
-  \returns  <vector|value> \p v with all numeric values truncated to
+  \returns  \<list> The list with all numeric values truncated to
             \p d decimal digits and rounded-up if the following digit
             is 5 or greater. Non-numeric values are unchanged.
 *******************************************************************************/
@@ -898,18 +894,19 @@ function dround
   : is_list(v) ? [for (i=v) dround(i, d)]
   : v;
 
-//! Round a numerical value to a fixed number of significant figures.
+//! Round all numerical values of a list to a fixed number of significant figures.
 /***************************************************************************//**
-  \param    v <vector|value> A vector of values or a single value.
+  \param    v \<list> A list of values.
   \param    d <integer> The (maximum) number of significant figures.
 
-  \returns  <vector|value> \p v with all numeric values rounded-up
+  \returns  \<list> The list with all numeric values rounded-up
             to \p d significant figures. Non-numeric values are unchanged.
 
   \details
 
-    See [Wikipedia](https://en.wikipedia.org/wiki/Significant_figures)
-    for more information.
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Significant_figures
 *******************************************************************************/
 function sround
 (
@@ -938,19 +935,17 @@ function limit
   u
 ) = min(max(v,l),u);
 
-//! Compute the sum of a vector of numbers.
+//! Compute the sum of a list of numbers.
 /***************************************************************************//**
-  \param    v <range|vector> A vector of numerical values.
+  \param    v <number-list|range> A list of numerical values or a range.
   \param    i1 <integer> The element index at which to begin summation
             (first when not specified).
   \param    i2 <integer> The element index at which to end summation
             (last when not specified).
 
-  \returns  <vector|decimal> The summation of elements over the index range.
-            Returns \b v when it is a scalar number.
-            Returns 0 when \p v is empty.
-            Returns \b undef when \p v is not defined or is not iterable
-            and not a number.
+  \returns  <number|number-list> The sum over the index range.
+            Returns 0 when \p the list is empty.
+            Returns \b undef when list non-numerical.
 *******************************************************************************/
 function sum
 (
@@ -970,16 +965,13 @@ function sum
     (i == s) ? v[i]
   : v[i] + sum(v, s, i-1);
 
-//! Compute the mean/average of a vector of numbers.
+//! Compute the mean/average of a list of numbers.
 /***************************************************************************//**
-  \param    v <range|vector> A vector of numerical values.
+  \param    v <number-list|range> A list of numerical values or a range.
 
-  \returns  <vector|decimal> The sum of all the elements divided by the
-            total number of elements.
-            Returns \b v when it is a scalar number.
-            Returns 0 when \p v is empty.
-            Returns \b undef when \p v is not defined or is not iterable
-            and not a number.
+  \returns  <number|number-list> The sum divided by the number of elements.
+            Returns 0 when the list is empty.
+            Returns \b undef when list non-numerical.
 
   \details
 
@@ -1008,11 +1000,11 @@ function mean
   \param    c <integer> A match count.
             For <tt>(c>=1)</tt>, return the first \p c matches.
             For <tt>(c<=0)</tt>, return all matches.
-  \param    i <integer> The element column index to match.
+  \param    i <integer> The element index to consider for iterable elements.
   \param    i1 <integer> The element index where find begins (default: first).
   \param    i2 <integer> The element index where find ends (default: last).
 
-  \returns  <vector> Of indexes where elements match \p mv.
+  \returns  \<list> A list of indexes where elements match \p mv.
             Returns \b empty_v when no element of \p v matches \p mv
             or when \p v is not iterable.
 
@@ -1023,21 +1015,21 @@ function mean
 
     \b Find:
 
-    | mv / v              | string | vector of scalars | vector of iterables |
+    | mv / v              | string | list of scalars   | list of iterables   |
     |---------------------|:------:|:-----------------:|:-------------------:|
     | scalar              |        | (a)               | (b) see note 1      |
     | string              | (c)    |                   | (b) see note 1      |
-    | vector of scalars   |        |                   | (b) see note 1      |
-    | vector of iterables |        |                   | (b) see note 1      |
+    | list of scalars     |        |                   | (b) see note 1      |
+    | list of iterables   |        |                   | (b) see note 1      |
 
     \b Search:
 
-    | mv / v              | string | vector of scalars | vector of iterables |
+    | mv / v              | string | list of scalars   | list of iterables   |
     |---------------------|:------:|:-----------------:|:-------------------:|
     | scalar              |        | (a)               | (b)                 |
     | string              | (d)    | invalid           | (e) see note 2      |
-    | vector of scalars   |        | (f)               | (g)                 |
-    | vector of iterables |        |                   | (g)                 |
+    | list of scalars     |        | (f)               | (g)                 |
+    | list of iterables   |        |                   | (g)                 |
 
     \b Key:
 
@@ -1062,9 +1054,8 @@ function mean
   \note     \b 1: When \p i is specified, that element column is compared.
             Otherwise, the entire element is compared. Functions find()
             and [search()] behave differently in this regard.
-
   \note     \b 2: Invalid use combination when any element of \p v is a
-            string. However, an element that is a vector of one or more
+            string. However, an element that is a list of one or more
             strings is valid. In which case, only the first character of
             each string element is considered.
 
@@ -1092,14 +1083,13 @@ function find
 /***************************************************************************//**
   \param    mv \<value> A match value.
   \param    v \<value> An iterable value.
-  \param    s <boolean> Use search for element matching (\b false uses find).
-  \param    i <integer> The element column index to match.
+  \param    s <boolean> Use [search] for element matching
+            (assign \b false to use find()).
+  \param    i <integer> The element index to consider for iterable elements.
 
-  \returns  <integer> The number of times \p mv occurs in \p v.
+  \returns  <integer> The number of times \p mv occurs in the list.
 
-  \details
-
-    See find() for information on value matching.
+  [search]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Other_Language_Features#Search
 *******************************************************************************/
 function count
 (
@@ -1111,18 +1101,18 @@ function count
     len(find(mv, v, 0, i))
   : len(smerge(search(mv, v, 0, i)));
 
-//! Check the existence of a match value in an iterable value.
+//! Check for the existence of a match value in an iterable value.
 /***************************************************************************//**
   \param    mv \<value> A match value.
   \param    v \<value> An iterable value.
-  \param    s <boolean> Use search for element matching (\b false uses find).
-  \param    i <integer> The element column index to match.
+  \param    s <boolean> Use [search] for element matching
+            (assign \b false to use find()).
+  \param    i <integer> The element index to consider for iterable elements.
 
-  \returns  <boolean> \b true when \p mv exists in \p v and \b false otherwise.
+  \returns  <boolean> \b true when \p mv exists in the list and
+            \b false otherwise.
 
-  \details
-
-    See find() for information on value matching.
+  [search]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Other_Language_Features#Search
 *******************************************************************************/
 function exists
 (
@@ -1138,12 +1128,12 @@ function exists
 // select
 //----------------------------------------------------------------------------//
 
-//! Return a defined or default value.
+//! Return a value when it is defined or a default value when it is not.
 /***************************************************************************//**
   \param    v \<value> A value.
   \param    d \<value> A default value.
 
-  \returns  \<value> \p v when it is defined or \p d otherwise.
+  \returns  \<value> \p v when it is defined and \p d otherwise.
 *******************************************************************************/
 function defined_or
 (
@@ -1151,9 +1141,9 @@ function defined_or
   d
 ) = is_defined(v) ? v : d;
 
-//! Return a defined vector element or default value.
+//! Return an iterable element when it exists or a default value when it does not.
 /***************************************************************************//**
-  \param    v <vector> A vector.
+  \param    v \<value> An iterable value.
   \param    i <integer> An element index.
   \param    d \<value> A default value.
 
@@ -1210,12 +1200,12 @@ function last
   : is_empty(v) ? undef
   : v[len(v)-1];
 
-//! Return a vector containing the first n elements of an iterable value.
+//! Return a list containing the first n elements of an iterable value.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
-  \param    n <integer> An element count.
+  \param    n <integer> The element count.
 
-  \returns  <vector> Containing the first \p n elements of \p v.
+  \returns  \<list> A list containing the first \p n elements of \p v.
             Returns \b undef when \p v is not defined, is not iterable,
             or is empty.
 *******************************************************************************/
@@ -1229,12 +1219,12 @@ function nfirst
   : n < 1 ? empty_v
   : [for (i = [0 : min(n-1, len(v)-1)]) v[i]];
 
-//! Return a vector containing the last n elements of an iterable value.
+//! Return a list containing the last n elements of an iterable value.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
-  \param    n <integer> An element count.
+  \param    n <integer> The element count.
 
-  \returns  <vector> Containing the last \p n elements of \p v.
+  \returns  \<list> A list containing the last \p n elements of \p v.
             Returns \b undef when \p v is not defined, is not iterable,
             or is empty.
 *******************************************************************************/
@@ -1248,12 +1238,12 @@ function nlast
   : n < 1 ? empty_v
   : [for (i = [max(0, len(v)-n) : len(v)-1]) v[i]];
 
-//! Return a vector containing all but the last n elements of an iterable value.
+//! Return a list containing all but the last n elements of an iterable value.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
-  \param    n <integer> An element count.
+  \param    n <integer> The element count.
 
-  \returns  <vector> Containing all but the last \p n elements of \p v.
+  \returns  \<list> A list containing all but the last \p n elements of \p v.
             Returns \b empty_v when \p v contains fewer than \p n elements.
             Returns \b undef when \p v is not defined, is not iterable,
             or is empty.
@@ -1268,12 +1258,12 @@ function nhead
   : (n >= len(v)) ? empty_v
   : [for (i = [0 : min(len(v)-1, len(v)-1-n)]) v[i]];
 
-//! Return a vector containing all but the first n elements of an iterable value.
+//! Return a list containing all but the first n elements of an iterable value.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
-  \param    n <integer> An element count.
+  \param    n <integer> The element count.
 
-  \returns  <vector> Containing all but the first n elements of \p v.
+  \returns  \<list> A list containing all but the first n elements of \p v.
             Returns \b empty_v when \p v contains fewer than \p n elements.
             Returns \b undef when \p v is not defined, is not iterable,
             or is empty.
@@ -1291,9 +1281,9 @@ function ntail
 //! Select a range of elements from an iterable value.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
-  \param    i <range|vector|integer> Index selection.
+  \param    i <range|list|integer> The index selection.
 
-  \returns  <vector> Containing the vector element indexes selected in \p i.
+  \returns  \<list> A list containing the identified element(s).
             Returns \b undef when \p i does not map to an element of \p v.
             Returns \b empty_v when \p v is empty.
             Returns \b undef when \p v is not defined or is not iterable.
@@ -1314,15 +1304,15 @@ function rselect
     )
     [for (j = [for (k=s) k]) v[j]];
 
-//! Select an element from each iterable value.
+//! Select a specified element from each iterable value of a list.
 /***************************************************************************//**
-  \param    v <vector> A vector of iterable values.
+  \param    v \<list> A list of iterable values.
   \param    f <boolean> Select the first element.
   \param    l <boolean> Select the last element.
   \param    i <integer> Select a numeric element index position.
 
-  \returns  <vector> Containing the selected element of each iterable value
-            of \p v.
+  \returns  \<list> A list containing the selected element of each
+            iterable value of \p v.
             Returns \b empty_v when \p v is empty.
             Returns \b undef when \p v is not defined or is not iterable.
 
@@ -1345,20 +1335,18 @@ function eselect
   : (f == true) ? concat( [first(first(v))], eselect(ntail(v), f, l, i) )
   : undef;
 
-//! Case-like select a value from a vector of ordered options by index.
+//! Case-like select a value from a list of ordered value options.
 /***************************************************************************//**
-  \param    v <vector> A vector of values.
+  \param    v \<list> A list of values.
   \param    i <integer> Element selection index.
 
-  \returns  \<value> The value of the vector element at the specified index.
-            Returns the default value when \p i does not map to an element
-            of \p v or when \p i is undefined.
+  \returns  \<value> The value of the list element at the specified index.
+            Returns the default value when \p i does not map to an element.
 
   \details
 
     Behaves like a case statement for selecting values from a list of
-    <em>ordered options</em>.
-    The default value is: <tt>last(v)<tt>.
+    <em>ordered options</em>. The default value is: <tt>last(v)<tt>.
 
     \b Example
     \code{.C}
@@ -1379,22 +1367,20 @@ function ciselect
   : (i > len(v)-1) ? last(v)
   : v[i];
 
-//! Case-like select a value from a vector of identified options by match-value.
+//! Case-like select a value from a list of mapped key-value options.
 /***************************************************************************//**
-  \param    v <vector> A two dimensional vector of one or more identified
-            values [[identifier, value], ...].
-  \param    mv \<value> Element selection match value.
+  \param    v <matrix-2xN> A matrix of N key-value mapped pairs
+            [[key, value], ...].
+  \param    mv \<value> Element selection key match value.
 
-  \returns  \<value> The value from the vector of identified elements
-            with an identifier matching \p mv.
+  \returns  \<value> The value from the map that matches the key \p mv.
             Returns the default value when \p mv does not match any of
             the element identifiers of \p v or when \p mv is undefined.
 
   \details
 
     Behaves like a case statement for selecting values from a list of
-    <em>identified options</em>.
-    The default value is: <tt>second(last(v))<tt>.
+    <em>mapped options</em>. The default value is: <tt>second(last(v))<tt>.
 
     \b Example
     \code{.C}
@@ -1418,15 +1404,15 @@ function cmvselect
     is_empty(i) ? second(last(v))
   : second(v[i]);
 
-//! Select all n-element sequential-subsets of an iterable value.
+//! Return a list of all n-element sequential-subsets of an iterable value.
 /***************************************************************************//**
-  \param    v <vector> A vector of iterable values.
-  \param    n <integer> The number of elements in each subset.
-  \param    s <integer> The iterable value selection step size.
+  \param    v \<value> An iterable value.
+  \param    n <integer> The number of elements for each subset.
+  \param    s <integer> The iteration step size.
   \param    w <boolean> Use wrap-at-end circular subset selection.
 
-  \returns  <vector> of all n-element sequential-subsets of \p v skipping
-            \p s elements between each subset selection.
+  \returns  <list-list> A list of all n-element sequential-subsets of
+            \p v skipping \p s elements between each subset selection.
             Returns \b empty_v when \p v is empty, is not defined or is
             not iterable.
 
@@ -1459,19 +1445,19 @@ function nssequence
 // reorder
 //----------------------------------------------------------------------------//
 
-//! Serial-merge vectors of iterable values.
+//! Serial-merge lists of iterable values.
 /***************************************************************************//**
-  \param    v <vector> A vector of iterable values.
-  \param    r <boolean> Recursively merge iterable elements.
+  \param    v \<list> A list of iterable values.
+  \param    r <boolean> Recursively merge elements that are iterable.
 
-  \returns  <vector> Containing the serial-wise element concatenation
+  \returns  <list> A list containing the serial-wise element concatenation
             of each element in \p v.
             Returns \b empty_v when \p v is empty.
             Returns \b undef when \p v is not defined.
 
   \details
 
-  \note     A string, although iterable, is treated as a merged unit.
+  \note     A single string, although iterable, is treated as a merged unit.
 *******************************************************************************/
 function smerge
 (
@@ -1485,12 +1471,12 @@ function smerge
     concat(smerge(first(v), r), smerge(ntail(v), r))
   : concat(first(v), smerge(ntail(v), r));
 
-//! Parallel-merge vectors of iterable values.
+//! Parallel-merge lists of iterable values.
 /***************************************************************************//**
-  \param    v <vector> A vector of iterable values.
-  \param    j <boolean> Join each merge as a vector.
+  \param    v \<list> A list of iterable values.
+  \param    j <boolean> Join each merge as a separate list.
 
-  \returns  <vector> Containing the parallel-wise element concatenation
+  \returns  <list> A list containing the parallel-wise element concatenation
             of each iterable value in \p v.
             Returns \b empty_v when any element value in \p v is empty.
             Returns \b undef when \p v is not defined or when any element
@@ -1513,9 +1499,9 @@ function smerge
     ECHO: ["a", 1, "b", 2, "c", 3]
     \endcode
 
-  \note     The resulting vector length will be limited by the iterable
+  \note     The resulting list length will be limited by the iterable
             value with the shortest length.
-  \note     A string, although iterable, is treated as a merged unit.
+  \note     A single string, although iterable, is treated as a merged unit.
 *******************************************************************************/
 function pmerge
 (
@@ -1543,7 +1529,7 @@ function pmerge
 /***************************************************************************//**
   \param    v \<value> An iterable value.
 
-  \returns  <vector> Containing the elements of \p v in reversed order.
+  \returns  <list> A list containing the elements of \p v in reversed order.
             Returns \b empty_v when \p v is empty.
             Returns \b undef when \p v is not defined or is not iterable.
 *******************************************************************************/
@@ -1555,26 +1541,27 @@ function reverse
   : is_empty(v) ? empty_v
   : [for (i = [len(v)-1 : -1 : 0]) v[i]];
 
-//! Sort the numeric or string elements of a vector using quick sort.
+//! Sort the numeric or string elements of a list using quick sort.
 /***************************************************************************//**
-  \param    v <vector> A vector of values.
-  \param    i <integer> The element sort column index.
-  \param    r <boolean> Reverse sort order.
+  \param    v \<number-list|string-list> A list of values.
+  \param    i <integer> The sort column index for iterable elements.
+  \param    r <boolean> Reverse the sort order.
 
-  \returns  <vector> With elements sorted in ascending order.
-            Returns \b undef when \p v is not defined or is not a vector.
+  \returns  \<list> A list with elements sorted in ascending order.
+            Returns \b undef when \p v is not defined or is not a list.
 
   \details
 
   \warning This implementation relies on the comparison operators
            '<' and '>' which expect the operands to be either two scalar
            numbers or two strings. Therefore, this function will not
-           correctly sort vectors elements that are not numbers or
+           correctly sort lists elements that are not numbers or
            strings. Elements with unknown order are placed at the end
            of the list.
 
-    See [Wikipedia](https://en.wikipedia.org/wiki/Quicksort)
-    for more information.
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Quicksort
 *******************************************************************************/
 function qsort
 (
@@ -1605,26 +1592,27 @@ function qsort
     )
     sp;
 
-//! Hierarchically sort all elements of a vector using quick sort.
+//! Hierarchically sort an arbitrary data list using quick sort.
 /***************************************************************************//**
-  \param    v <vector> A vector of values.
-  \param    i <integer> The element sort column index.
-  \param    d <integer> Recursive sort depth.
-  \param    r <boolean> Reverse sort order.
+  \param    v <datalist> A list of values.
+  \param    i <integer> The sort column index for iterable elements.
+  \param    d <integer> The recursive sort depth.
+  \param    r <boolean> Reverse the sort order.
   \param    s <boolean> Order ranges by their numerical sum.
 
-  \returns  <vector> With all elements sorted in ascending order.
-            Returns \b undef when \p v is not defined or is not a vector.
+  \returns  \<list> With all elements sorted in ascending order.
+            Returns \b undef when \p v is not defined or is not a list.
 
   \details
 
-    Elements are sorted using the \ref compare function. See its documentation
-    for a description of the parameter \p s. To recursively sort all elements,
-    set \p d greater than, or equal to, the maximum level of hierarchy in
-    \p v.
+    Elements are ordered using compare(). See its documentation for a
+    description of the parameter \p s. To recursively sort all
+    elements, set \p d greater than, or equal to, the maximum level of
+    hierarchy in \p v.
 
-    See [Wikipedia](https://en.wikipedia.org/wiki/Quicksort)
-    for more information.
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Quicksort
 *******************************************************************************/
 function qsort2
 (
@@ -1674,10 +1662,10 @@ function qsort2
 
 //! Strip all matching values from an iterable value.
 /***************************************************************************//**
-  \param    v <vector> A vector of values.
-  \param    mv \<value> A match value.
+  \param    v \<value> An iterable value.
+  \param    mv \<value> The match value.
 
-  \returns  <vector> \p v with all elements equal to \p mv removed.
+  \returns  <list> A list with all elements equal to \p mv removed.
             Returns \b undef when \p v is not defined or is not iterable.
 *******************************************************************************/
 function strip
@@ -1693,12 +1681,14 @@ function strip
 //! Append a value to each element of an iterable value.
 /***************************************************************************//**
   \param    nv \<value> A new value to append.
-  \param    v <vector> A vector of values.
-  \param    r <boolean> Reduce vector element value before appending.
-  \param    j <boolean> Join each appendage as a vector.
-  \param    l <boolean> Append to last element.
+  \param    v \<value> An iterable value.
 
-  \returns  <vector> With \p nv appended to each element of \p v.
+  \param    r <boolean> Reduce list element value before appending.
+  \param    j <boolean> Join each appendage as a separate list.
+
+  \param    l <boolean> Append new value to last element.
+
+  \returns  <list> A list with \p nv appended to each element of \p v.
             Returns \b undef when \p v is not defined or is not iterable.
 
   \details
@@ -1721,9 +1711,8 @@ function strip
     \endcode
 
   \note     Appending with reduction causes \p nv to be appended to the
-            \e elements of each value of \p v that is a vector. Otherwise,
-            \p nv is appended to the \e vector itself of each value of
-            \p v that is a vector.
+            \e elements of each iterable value. Otherwise, \p nv is
+            appended to the iterable value itself.
 *******************************************************************************/
 function eappend
 (
@@ -1754,13 +1743,15 @@ function eappend
 
   \param    i <integer> An insert position index.
 
-  \param    mv <vector|string|value> Match value candidates.
+  \param    mv <list|string|value> Match value candidates.
   \param    mi <integer> A match index.
 
-  \param    s <boolean> Use search for element matching (\b false uses find).
+  \param    s <boolean> Use [search] for element matching
+            (assign \b false to use find()).
   \param    si <integer> The element column index when matching.
 
-  \returns  <vector> With \p nv inserted into \p v at the specified position.
+  \returns  <list> A list with \p nv inserted into \p v at the
+            specified position.
             Returns \b undef when no value of \p mv exists in \p v.
             Returns \b undef when <tt>(mi + 1)</tt> exceeds the matched
             element count.
@@ -1769,13 +1760,13 @@ function eappend
 
   \details
 
-    The insert position can be specified by an index, an element match value,
-    or vector of potential match values (when using search). When multiple
-    matches exists, \p mi indicates the insert position. When more than one
-    insert position criteria is specified, the order of precedence
-    is: \p mv, \p i.
+    The insert position can be specified by an index, an element match
+    value, or list of potential match values (when using [search]). When
+    multiple matches exists, \p mi indicates the insert position. When
+    more than one insert position criteria is specified, the order of
+    precedence is: \p mv, \p i.
 
-    See find() for information on value matching.
+  [search]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Other_Language_Features#Search
 *******************************************************************************/
 function insert
 (
@@ -1813,31 +1804,32 @@ function insert
 /***************************************************************************//**
   \param    v \<value> An iterable value.
 
-  \param    i <range|vector|integer> Deletion Indexes.
+  \param    i <range|list|integer> Deletion Indexes.
 
-  \param    mv <vector|string|value> Match value candidates.
+  \param    mv <list|string|value> Match value candidates.
   \param    mc <integer> A match count.
             For <tt>(mc>=1)</tt>, remove the first \p mc matches.
             For <tt>(mc<=0)</tt>, remove all matches.
 
-  \param    s <boolean> Use search for element matching (\b false uses find).
+  \param    s <boolean> Use [search] for element matching
+            (assign \b false to use find()).
   \param    si <integer> The element column index when matching.
 
-  \returns  <vector> \p v with all specified elements removed.
+  \returns  <list> A list with all specified elements removed.
             Returns \b undef when \p i does not map to an element of \p v.
             Returns \b undef when \p v is not defined or is not iterable.
 
   \details
 
-    The elements to delete can be specified by an index position, a vector
-    of index positions, an index range, an element match value, or a vector
-    of element match values (when using search). When \p mv is a vector of
-    match values, all values of \p mv that exists in \p v are candidates
-    for deletion. For each matching candidate, \p mc indicates the quantity
-    to remove. When more than one deletion criteria is specified, the order
-    of precedence is: \p mv, \p i.
+    The elements to delete can be specified by an index position, a
+    list of index positions, an index range, an element match value, or
+    a list of element match values (when using [search]). When \p mv is
+    a list of match values, all values of \p mv that exists in \p v are
+    candidates for deletion. For each matching candidate, \p mc
+    indicates the quantity to remove. When more than one deletion
+    criteria is specified, the order of precedence is: \p mv, \p i.
 
-    See find() for information on value matching.
+  [search]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Other_Language_Features#Search
 *******************************************************************************/
 function delete
 (
@@ -1875,7 +1867,7 @@ function delete
 /***************************************************************************//**
   \param    v \<value> An iterable value.
 
-  \returns  <vector> Of unique elements of \p v with order preserved.
+  \returns  <list> A list of unique elements with order preserved.
             Returns \b undef when \p v is not defined or is not iterable.
 *******************************************************************************/
 function unique

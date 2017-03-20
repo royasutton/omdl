@@ -71,12 +71,12 @@ include <datatypes.scad>;
 
     \b Result \include validation_example.log
 
-  \note     When performing an almost equal validation type, the
+  \note     When performing an \b 'almost' equal validation, the
             comparison precision is controlled by \p p. This specifies
-            the number of digits of precision for each numerical comparison.
-            A passing result indicates that \p cv equals \p ev to the
-            number of decimal digits specified by \p p. The comparison
-            is performed by the function \ref almost_equal.
+            the number of digits of precision for each numerical
+            comparison. A passing result indicates that \p cv equals
+            \p ev to the number of decimal digits specified by \p p. The
+            comparison is performed by the function \ref almost_equal.
 *******************************************************************************/
 function validate
 (

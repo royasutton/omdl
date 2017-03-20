@@ -71,8 +71,7 @@ module log_echo( m )
 
   \details
 
-    When \p $log_debug == \p true, message is written to the console. When
-    \p false, output is not generated.
+    Message is written if and only if \p $log_debug is \p true.
 *******************************************************************************/
 module log_debug( m )
 {

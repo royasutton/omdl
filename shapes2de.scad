@@ -37,7 +37,7 @@ include <shapes2d.scad>;
   \addtogroup shapes
   @{
 
-    \amu_define caption (2D Extrusions)
+    \amu_define caption (2d Extrusions)
 
     \amu_make png_files (append=dim extension=png)
     \amu_make eps_files (append=dim extension=png2eps)
@@ -59,7 +59,7 @@ include <shapes2d.scad>;
         )
     \endlatexonly
 
-  \defgroup shapes_2de 2D Extrusions
+  \defgroup shapes_2de 2d Extrusions
   \brief    Extruded two-dimensional geometric shapes.
   @{
 *******************************************************************************/
@@ -83,14 +83,14 @@ include <shapes2d.scad>;
 
 //! An extruded rectangle with edge, fillet, and/or chamfer corners.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [x, y] of decimals
+  \param    size <decimal-list-2|decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
 
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
 
-  \param    vr <vector|decimal> The corner rounding radius.
-            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+  \param    vr <decimal-list-4|decimal> The corner rounding radius.
+            A list [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
   \param    vrm <integer> The corner radius mode.
@@ -121,25 +121,25 @@ module erectangle
 
 //! An extruded rectangle with a removed rectangular core.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [x, y] of decimals
+  \param    size <decimal-list-2|decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
-  \param    core <vector|decimal> A vector [x, y] of decimals
-            or a single decimal for (x=y).
-
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
-
-  \param    t <vector|decimal> A vector [x, y] of decimals
+  \param    core <decimal-list-2|decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
 
-  \param    co <vector> Core offset. A vector [x, y] of decimals.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
+
+  \param    t <decimal-list-2|decimal> A list [x, y] of decimals
+            or a single decimal for (x=y).
+
+  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
-  \param    vr <vector|decimal> The default corner rounding radius.
-            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+  \param    vr <decimal-list-4|decimal> The default corner rounding radius.
+            A list [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
-  \param    vr1 <vector|decimal> The outer corner rounding radius.
-  \param    vr2 <vector|decimal> The core corner rounding radius.
+  \param    vr1 <decimal-list-4|decimal> The outer corner rounding radius.
+  \param    vr2 <decimal-list-4|decimal> The core corner rounding radius.
 
   \param    vrm <integer> The default corner radius mode.
             A 4-bit encoded integer that indicates each corner finish.
@@ -190,14 +190,14 @@ module erectangle_c
 
 //! An extruded rhombus.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [w, h] of decimals
+  \param    size <decimal-list-2|decimal> A list [w, h] of decimals
             or a single decimal for (w=h).
 
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
 
-  \param    vr <vector|decimal> The corner rounding radius.
-            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+  \param    vr <decimal-list-4|decimal> The corner rounding radius.
+            A list [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
   \param    center <boolean> Center about origin.
@@ -223,12 +223,12 @@ module erhombus
 
 //! An extruded general triangle specified by three vertices.
 /***************************************************************************//**
-  \param    v1 <vector> A vector [x, y] for vertex 1.
-  \param    v2 <vector> A vector [x, y] for vertex 2.
-  \param    v3 <vector> A vector [x, y] for vertex 3.
+  \param    v1 <point-2d> A point [x, y] for vertex 1.
+  \param    v2 <point-2d> A point [x, y] for vertex 2.
+  \param    v3 <point-2d> A point [x, y] for vertex 3.
 
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
 
   \param    vr <decimal> The default vertex rounding radius.
   \param    v1r <decimal> Vertex 1 rounding radius.
@@ -270,15 +270,16 @@ module etriangle_ppp
   );
 }
 
-//! An extruded general triangle specified by a vector of its three vertices.
+//! An extruded general triangle specified by a list of its three vertices.
 /***************************************************************************//**
-  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y].
+  \param    v <point-2d-list-3> A list [v1, v2, v3] of points [x, y].
 
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
 
-  \param    vr <vector|decimal> The vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
+  \param    vr <decimal-list-3|decimal> The vertex rounding radius. A
+            list [v1r, v2r, v3r] of decimals or a single decimal for
+            (v1r=v2r=v3r).
 
   \param    centroid <boolean> Center centroid at origin.
   \param    incenter <boolean> Center incenter at origin.
@@ -315,8 +316,8 @@ module etriangle_vp
   \param    s2 <decimal> The length of the side 2.
   \param    s3 <decimal> The length of the side 3.
 
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
 
   \param    vr <decimal> The default vertex rounding radius.
   \param    v1r <decimal> Vertex 1 rounding radius.
@@ -358,15 +359,16 @@ module etriangle_lll
   );
 }
 
-//! An extruded general triangle specified by a vector of its three side lengths.
+//! An extruded general triangle specified by a list of its three side lengths.
 /***************************************************************************//**
-  \param    v <vector> A vector [s1, s2, s3] of decimals.
+  \param    v <decimal-list-3> A list [s1, s2, s3] of decimals.
 
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
 
-  \param    vr <vector|decimal> The vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
+  \param    vr <decimal-list-3|decimal> The vertex rounding radius. A
+            list [v1r, v2r, v3r] of decimals or a single decimal for
+            (v1r=v2r=v3r).
 
   \param    centroid <boolean> Center centroid at origin.
   \param    incenter <boolean> Center incenter at origin.
@@ -399,21 +401,22 @@ module etriangle_vl
 
 //! A general triangle specified by its sides with a removed triangular core.
 /***************************************************************************//**
-  \param    vs <vector|decimal> The size. A vector [s1, s2, s3] of decimals
-            or a single decimal for (s1=s2=s3).
-  \param    vc <vector|decimal> The core. A vector [s1, s2, s3] of decimals
-            or a single decimal for (s1=s2=s3).
+  \param    vs <decimal-list-3|decimal> The size. A list [s1, s2, s3] of
+            decimals or a single decimal for (s1=s2=s3).
+  \param    vc <decimal-list-3|decimal> The core. A list [s1, s2, s3] of
+            decimals or a single decimal for (s1=s2=s3).
 
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
 
-  \param    co <vector> Core offset. A vector [x, y] of decimals.
+  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
-  \param    vr <vector|decimal> The default vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
-  \param    vr1 <vector|decimal> The outer vertex rounding radius.
-  \param    vr2 <vector|decimal> The core vertex rounding radius.
+  \param    vr <decimal-list-3|decimal> The default vertex rounding radius.
+            A list [v1r, v2r, v3r] of decimals or a single decimal for
+            (v1r=v2r=v3r).
+  \param    vr1 <decimal-list-3|decimal> The outer vertex rounding radius.
+  \param    vr2 <decimal-list-3|decimal> The core vertex rounding radius.
 
   \param    centroid <boolean> Center centroid at origin.
   \param    incenter <boolean> Center incenter at origin.
@@ -460,10 +463,11 @@ module etriangle_vl_c
   \param    a <decimal> The included angle in degrees.
   \param    s2 <decimal> The length of the side 2.
 
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
 
-  \param    x <decimal> The side to draw on the positive x-axis (\p x=1 for \p s1).
+  \param    x <decimal> The side to draw on the positive x-axis
+            (\p x=1 for \p s1).
 
   \param    vr <decimal> The default vertex rounding radius.
   \param    v1r <decimal> Vertex 1 rounding radius.
@@ -512,10 +516,11 @@ module etriangle_lal
   \param    s <decimal> The side length adjacent to the angles.
   \param    a2 <decimal> The adjacent angle 2 in degrees.
 
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
 
-  \param    x <decimal> The side to draw on the positive x-axis (\p x=1 for \p s).
+  \param    x <decimal> The side to draw on the positive x-axis
+            (\p x=1 for \p s).
 
   \param    vr <decimal> The default vertex rounding radius.
   \param    v1r <decimal> Vertex 1 rounding radius.
@@ -564,10 +569,11 @@ module etriangle_ala
   \param    a2 <decimal> The adjacent angle 2 in degrees.
   \param    s <decimal> The side length.
 
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
 
-  \param    x <decimal> The side to draw on the positive x-axis (\p x=1 for \p s).
+  \param    x <decimal> The side to draw on the positive x-axis
+            (\p x=1 for \p s).
 
   \param    vr <decimal> The default vertex rounding radius.
   \param    v1r <decimal> Vertex 1 rounding radius.
@@ -615,8 +621,8 @@ module etriangle_aal
   \param    x <decimal> The length of the side along the x-axis.
   \param    y <decimal> The length of the side along the y-axis.
 
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
 
   \param    vr <decimal> The default vertex rounding radius.
   \param    v1r <decimal> Vertex 1 rounding radius.
@@ -664,8 +670,8 @@ module etriangle_ll
   \param    aa <decimal> The adjacent angle in degrees.
   \param    oa <decimal> The opposite angle in degrees.
 
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
 
   \param    vr <decimal> The default vertex rounding radius.
   \param    v1r <decimal> Vertex 1 rounding radius.
@@ -716,8 +722,8 @@ module etriangle_la
   \param    n <decimal> The number of sides.
   \param    r <decimal> The ngon vertex radius.
 
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
 
   \param    vr <decimal> The vertex rounding radius.
 
@@ -748,11 +754,11 @@ module engon
 
 //! An extruded ellipse.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [rx, ry] of decimals
+  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
 
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
 
   \param    center <boolean> Center about origin.
 
@@ -776,18 +782,18 @@ module eellipse
 
 //! An extruded ellipse with a removed elliptical core.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [rx, ry] of decimals
+  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
-  \param    core <vector|decimal> A vector [rx, ry] of decimals
+  \param    core <decimal-list-2|decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
 
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
 
-  \param    t <vector|decimal> A vector [x, y] of decimals
+  \param    t <decimal-list-2|decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
 
-  \param    co <vector> Core offset. A vector [x, y] of decimals.
+  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
   \param    center <boolean> Center about origin.
@@ -820,11 +826,11 @@ module eellipse_c
 
 //! An extruded ellipse sector.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [rx, ry] of decimals
+  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
 
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
 
   \param    a1 <decimal> The start angle in degrees.
   \param    a2 <decimal> The stop angle in degrees.
@@ -853,21 +859,21 @@ module eellipse_s
 
 //! An extruded sector of an ellipse with a removed elliptical core.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [rx, ry] of decimals
+  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
-  \param    core <vector|decimal> A vector [rx, ry] of decimals
+  \param    core <decimal-list-2|decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
 
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
 
-  \param    t <vector|decimal> A vector [x, y] of decimals
+  \param    t <decimal-list-2|decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
 
   \param    a1 <decimal> The start angle in degrees.
   \param    a2 <decimal> The stop angle in degrees.
 
-  \param    co <vector> Core offset. A vector [x, y] of decimals.
+  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
   \param    center <boolean> Center about origin.
@@ -902,16 +908,17 @@ module eellipse_cs
 
 //! An extruded two-dimensional star.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [l, w] of decimals
+  \param    size <decimal-list-2|decimal> A list [l, w] of decimals
             or a single decimal for (size=l=2*w).
 
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
 
   \param    n <decimal> The number of points.
 
-  \param    vr <vector|decimal> The vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
+  \param    vr <decimal-list-3|decimal> The vertex rounding radius.
+            A list [v1r, v2r, v3r] of decimals or a single decimal for
+            (v1r=v2r=v3r).
 
   \param    center <boolean> Center about origin.
 

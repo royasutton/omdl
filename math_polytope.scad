@@ -51,10 +51,10 @@ include <math.scad>;
 
 //! List the vertex counts for all polytope faces.
 /***************************************************************************//**
-  \param    f <vector> A vector of faces (or paths) that enclose the
-            shape where each face is a vector of coordinate indexes.
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
 
-  \returns  <vector> A vector with vertex counts for each face.
+  \returns  \<list> A list with a vertex count of every face.
 *******************************************************************************/
 function polytope_faceverticies
 (
@@ -63,12 +63,12 @@ function polytope_faceverticies
 
 //! List the angles between all adjacent faces of a polyhedron.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 3-tuple
-            coordinate vector.
-  \param    f <vector> A vector of faces that enclose the shape where
-            each face is a vector of coordinate indexes.
+  \param    c <coords-3d> A list of 3d cartesian coordinates
+            [[x, y, z], ...].
+  \param    f <integer-list-list> A list of faces that enclose
+            the shape where each face is a list of coordinate indexes.
 
-  \returns  <vector> A vector of adjacent face angles in the polyhedron.
+  \returns  \<list> A list of the polyhedron adjacent face angles.
 
   \details
 
@@ -98,12 +98,12 @@ function polytope_faceangles
 
 //! List the edge lengths of a polytope.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 3 or 2-tuple
-            coordinate vector.
-  \param    e <vector> A vector of edges where each edge is a 2-tuple
-            pair vector of coordinate indexes.
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
+            coordinates [[x, y (, z)], ...].
+  \param    e <integer-list-2-list> A list of edges where each edge is
+            a list of two coordinate indexes.
 
-  \returns  <vector> A vector of polytope edge lengths.
+  \returns  \<list> A list of the polytope edge lengths.
 *******************************************************************************/
 function polytope_edgelengths
 (
@@ -113,12 +113,12 @@ function polytope_edgelengths
 
 //! List the adjacent edge angles for each polytope vertex.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 3 or 2-tuple
-            coordinate vector.
-  \param    f <vector> A vector of faces (or paths) that enclose the
-            shape where each face is a vector of coordinate indexes.
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
+            coordinates [[x, y (, z)], ...].
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
 
-  \returns  <vector> A vector of polytope adjacent edge angles.
+  \returns  \<list> A list of the polytope adjacent edge angles.
 *******************************************************************************/
 function polytope_edgeangles
 (
@@ -132,12 +132,12 @@ function polytope_edgeangles
 
 //! Test if the faces of a polytope are all regular.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 3 or 2-tuple
-            coordinate vector.
-  \param    f <vector> A vector of faces (or paths) that enclose the
-            shape where each face is a vector of coordinate indexes.
-  \param    e <vector> A vector of edges where each edge is a 2-tuple
-            pair vector of coordinate indexes.
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
+            coordinates [[x, y (, z)], ...].
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+  \param    e <integer-list-2-list> A list of edges where each edge is
+            a list of two coordinate indexes.
   \param    d <integer> The number of significant figures used when
             comparing lengths and angles.
 
@@ -167,16 +167,16 @@ function polytope_arefacesregular
 
 //! List the edge coordinate index pairs of a polytope.
 /***************************************************************************//**
-  \param    f <vector> A vector of faces (or paths) that enclose the
-            shape where each face is a vector of coordinate indexes.
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
 
-  \returns  <vector> A vector of edges where each edge is a vector
-            2-tuple coordinate index pair that form the shape.
+  \returns  <integer-list-2-list> A list of edges where each edge is
+            a list of two coordinate indexes that form the shape.
 
   \details
 
-  \note     Although the edge list is not sorted, each index pair is
-            sorted with the smallest index first.
+  \note     Although the edge list is not sorted, each pair is sorted
+            with the smallest index first.
 *******************************************************************************/
 function polytope_faces2edges
 (
@@ -194,24 +194,33 @@ function polytope_faces2edges
 
 //! Determine the bounding-box limits of a polytope.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 3 or 2-tuple
-            coordinate vector.
-  \param    f <vector> A vector of faces (or paths) that enclose the
-            shape where each face is a vector of coordinate indexes.
-  \param    a <vector> The box padding. A 3 or 2-tuple vector of lengths
-            to pad equally each box dimension.
-  \param    d <range|vector|integer> The dimensions to consider. A range
-            of dimensions, a vector of dimensions, or a single dimension.
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
+            coordinates [[x, y (, z)], ...].
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+  \param    a <decimal-list-3|decimal-list-2> The box padding.
+            A list of lengths to equally pad the box dimensions.
+  \param    d <range|list|integer> The dimensions to consider. A range
+            of dimensions, a list of dimensions, or a single dimension.
   \param    s <boolean> Return box size rather than coordinate limits.
 
-  \returns  <vector> A vector with the bounding-box limits.
+  \returns  \<list> A list with the bounding-box limits.
 
   \details
 
+  The returned list will be of the following form:
+
+  |     |  s    |     x     |     y     |     z     |  list form            |
+  |:---:|:-----:|:---------:|:---------:|:---------:|:---------------------:|
+  | 2d  | false | [min,max] | [min,max] | -         | decimal-list-2-list-2 |
+  | 2d  | true  |  max-min  |  max-min  | -         | decimal-list-list-2   |
+  | 3d  | false | [min,max] | [min,max] | [min,max] | decimal-list-2-list-3 |
+  | 3d  | true  |  max-min  |  max-min  |  max-min  | decimal-list-list-3   |
+
   \note     When \p f is not specified, all coordinates are used to
-            determine the geometric limits, which, simplifies th
-            e calculation. Parameter \p f is needed when a subset of
-            the coordinates should be considered.
+            determine the geometric limits, which, simplifies the
+            calculation. Parameter \p f is needed when a subset of the
+            coordinates should be considered.
   \warning  This function does not track secondary shapes subtraction as
             implemented by the polygon() function.
 *******************************************************************************/
@@ -246,12 +255,12 @@ function polytope_bboxlimits
 
 //! Triangulate the faces of a convex polytope via fan triangulation.
 /***************************************************************************//**
-  \param    f <vector> A vector of faces (or paths) that enclose the
-            shape where each face is a vector of coordinate indexes.
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
 
-  \returns  <vector> A vector of triangular faces that enclose the
-            polytope where each face is a vector of coordinate indexes.
-            Vertex ordering is maintained.
+  \returns  <integer-list-3-list> A list of triangular faces that enclose
+            the polytope where each face is a list of three coordinate
+            indexes with vertex ordering is maintained.
 
   \details
 
@@ -275,19 +284,19 @@ function polytope_triangulate_ft
 // polygon
 //----------------------------------------------------------------------------//
 
-//! Generate a polygon for the bounding box of another polygon in 2D.
+//! Generate a polygon for the bounding box of another polygon in 2d.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 2-tuple
-            coordinate vector.
-  \param    p <vector> An \em optional vector of paths that define one
-            or more closed shapes where each is a vector of coordinate
-            indexes.
-  \param    a <vector> The box padding. A 2-tuple vector of lengths to
-            pad each box dimension. The padding is divided equally in
-            each dimension.
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+  \param    a <decimal-list-2> The box padding.
+            A list of lengths to equally pad the box dimensions.
 
-  \returns  <vector> A vector [\c points, \c path] that define the
-            bounding box of the given polygon.
+  \returns  \<list> A list [points, path], where points are <coords-2d>
+            and path is a <integer-list-list>, that define the bounding
+            box of the given polygon.
 
   \details
 
@@ -313,21 +322,21 @@ function polygon2d_bbox_pp
   )
   [pp, pf];
 
-//! Calculate the perimeter length of a polygon in 2D.
+//! Calculate the perimeter length of a polygon in 2d.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 2-tuple
-            coordinate vector.
-  \param    p <vector> An \em optional vector of paths that define one
-            or more closed shapes where each is a vector of coordinate
-            indexes.
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
 
-  \returns  <vector> The sum of all of the polygon path lengths.
+  \returns  <decimal> The sum of all polygon primary and secondary
+            perimeter lengths.
 
   \details
 
   \note     When \p p is not given, the listed order of the coordinates
             \p c establishes the path.
-  \note     Perimeter lengths of secondary shapes are included in the sum.
 *******************************************************************************/
 function polygon2d_perimeter
 (
@@ -347,13 +356,13 @@ function polygon2d_perimeter
   )
   sum(lv);
 
-//! Compute the signed area of a polygon in a Euclidean 2D-space.
+//! Compute the signed area of a polygon in a Euclidean 2d-space.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 2-tuple
-            coordinate vector.
-  \param    p <vector> An \em optional vector of paths that define one
-            or more closed shapes where each is a vector of coordinate
-            indexes.
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
   \param    s <boolean> Return the vertex ordering sign.
 
   \returns  <decimal> The area of the given polygon.
@@ -390,14 +399,14 @@ function polygon2d_area
   )
   (s == false) ? abs(sa) : sa;
 
-//! Compute the area of a polygon in a Euclidean 3D-space.
+//! Compute the area of a polygon in a Euclidean 3d-space.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 3-tuple
-            coordinate vector.
-  \param    p <vector> An \em optional vector of paths that define one
-            or more closed shapes where each is a vector of coordinate
-            indexes.
-  \param    n <vector> An \em optional 3-tuple normal vector, [x, y, z],
+  \param    c <coords-3d> A list of 3d cartesian coordinates
+            [[x, y, z], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+  \param    n <vector-3d> An \em optional normal vector, [x, y, z],
             to the polygon plane. When not given, a normal vector is
             constructed from the first three points of the primary path.
 
@@ -439,15 +448,15 @@ function polygon3d_area
   )
   (sum(pv) * sf);
 
-//! Compute the center of mass of a polygon in a Euclidean 2D-space.
+//! Compute the center of mass of a polygon in a Euclidean 2d-space.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 2-tuple
-            coordinate vector.
-  \param    p <vector> An \em optional vector of paths that define one
-            or more closed shapes where each is a vector of coordinate
-            indexes.
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
 
-  \returns  <decimal> The center of mass of the given polygon.
+  \returns  <point-2d> The center of mass of the given polygon.
 
   \details
 
@@ -493,13 +502,13 @@ function polygon2d_centroid
   )
   sc/(6*sa);
 
-//! Test the vertex ordering of a polygon in a Euclidean 2D-space.
+//! Test the vertex ordering of a polygon in a Euclidean 2d-space.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 2-tuple
-            coordinate vector.
-  \param    p <vector> An \em optional vector of paths that define one
-            or more closed shapes where each is a vector of coordinate
-            indexes.
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
 
   \returns  <boolean> \b true if the vertex are ordered \em clockwise,
             \b false if the vertex are \em counterclockwise ordered, and
@@ -523,13 +532,13 @@ function polygon2d_is_cw
   : (sa > 0) ? false
   : undef;
 
-//! Test the convexity of a polygon in a Euclidean 2D-space.
+//! Test the convexity of a polygon in a Euclidean 2d-space.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 2-tuple
-            coordinate vector.
-  \param    p <vector> An \em optional vector of paths that define one
-            or more closed shapes where each is a vector of coordinate
-            indexes.
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
 
   \returns  <boolean> \b true if the polygon is \em convex, \b false
             otherwise.
@@ -561,14 +570,14 @@ function polygon2d_is_convex
     )
     (len(us) == 1);
 
-//! Compute the winding number of a polygon about a point in a Euclidean 2D-space.
+//! Compute the winding number of a polygon about a point in a Euclidean 2d-space.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 2-tuple
-            coordinate vector.
-  \param    p <vector> An \em optional vector of paths that define one
-            or more closed shapes where each is a vector of coordinate
-            indexes.
-  \param    t <vector> A test point 2-tuple coordinate [x, y].
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+  \param    t <point-2d> A test point coordinate [x, y].
 
   \returns  <integer> The winding number.
 
@@ -576,7 +585,7 @@ function polygon2d_is_convex
 
     Computes the [winding number], the total number of counterclockwise
     turns that the polygon paths makes around the test point in a
-    Euclidean 2D-space. Will be 0 \em iff the point is outside of the
+    Euclidean 2d-space. Will be 0 \em iff the point is outside of the
     polygon. Function patterned after [Dan Sunday, 2012].
 
   \copyright
@@ -629,14 +638,14 @@ function polygon2d_winding
   )
   sum(wv);
 
-//! Test if a point is inside a polygon in a Euclidean 2D-space using winding number.
+//! Test if a point is inside a polygon in a Euclidean 2d-space using winding number.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 2-tuple
-            coordinate vector.
-  \param    p <vector> An \em optional vector of paths that define one
-            or more closed shapes where each is a vector of coordinate
-            indexes.
-  \param    t <vector> A test point 2-tuple coordinate [x, y].
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+  \param    t <point-2d> A test point coordinate [x, y].
 
   \returns  <boolean> \b true when the point is \em inside the polygon and
             \b false otherwise.
@@ -655,14 +664,14 @@ function polygon2d_is_pip_wn
   t
 ) = (polygon2d_winding(c=c, p=p, t=t) != 0);
 
-//! Test if a point is inside a polygon in a Euclidean 2D-space using angle summation.
+//! Test if a point is inside a polygon in a Euclidean 2d-space using angle summation.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 2-tuple
-            coordinate vector.
-  \param    p <vector> An \em optional vector of paths that define one
-            or more closed shapes where each is a vector of coordinate
-            indexes.
-  \param    t <vector> A test point 2-tuple coordinate [x, y].
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+  \param    t <point-2d> A test point coordinate [x, y].
 
   \returns  <boolean> \b true when the point is \em inside the polygon and
             \b false otherwise.
@@ -703,23 +712,22 @@ function polygon2d_is_pip_as
   )
   (sa > 180);
 
-
 //----------------------------------------------------------------------------//
 // polyhedron
 //----------------------------------------------------------------------------//
 
-//! Generate a polyhedron for the bounding box of another polyhedron in 3D.
+//! Generate a polyhedron for the bounding box of another polyhedron in 3d.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 3-tuple
-            coordinate vector.
-  \param    f <vector> A vector of faces that enclose the shape
-            where each face is a vector of coordinate indexes.
-  \param    a <vector> The box padding. A 3-tuple vector of lengths to
-            pad each box dimension. The padding is divided equally in
-            each dimension.
+  \param    c <coords-3d> A list of 3d cartesian coordinates
+            [[x, y, z], ...].
+  \param    f <integer-list-list> A list of faces that enclose
+            the shape where each face is a list of coordinate indexes.
+  \param    a <decimal-list-3> The box padding.
+            A list of lengths to equally pad the box dimensions.
 
-  \returns  <vector> A vector [\c points, \c faces] that define the
-            bounding box of the given polyhedron.
+  \returns  \<list> A list [points, faces], where points are <coords-3d>
+            and faces are a <integer-list-list>, that define the bounding
+            box of the given polyhedron.
 
   \details
 
@@ -742,12 +750,12 @@ function polyhedron_bbox_pf
   )
   [pp, pf];
 
-//! Compute the surface area of a polyhedron in a Euclidean 3D-space.
+//! Compute the surface area of a polyhedron in a Euclidean 3d-space.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 3-tuple
-            coordinate vector.
-  \param    f <vector> A vector of faces that enclose the shape
-            where each face is a vector of coordinate indexes.
+  \param    c <coords-3d> A list of 3d cartesian coordinates
+            [[x, y, z], ...].
+  \param    f <integer-list-list> A list of faces that enclose
+            the shape where each face is a list of coordinate indexes.
 
   \returns  <decimal> The surface area of the given polyhedron.
 *******************************************************************************/
@@ -757,13 +765,13 @@ function polyhedron_area
   f
 ) = sum([for (fi = f) polygon3d_area(c, [fi])]);
 
-//! Compute the volume of a polyhedron with triangular faces in a Euclidean 3D-space.
+//! Compute the volume of a polyhedron with triangular faces in a Euclidean 3d-space.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 3-tuple
-            coordinate vector.
-  \param    f <vector> A vector of \em triangular faces that enclose the
-            shape where each face is a 3-tuple vector of coordinate
-            indexes.
+  \param    c <coords-3d> A list of 3d cartesian coordinates
+            [[x, y, z], ...].
+  \param    f <integer-list-3-list> A list of triangular faces that
+            enclose the polyhedron where each face is a list of three
+            coordinate indexes.
 
   \returns  <decimal> The volume of the given polyhedron.
 
@@ -802,15 +810,15 @@ function polyhedron_volume_tf
   )
   sv/6;
 
-//! Compute the center of mass of a polyhedron with triangular faces in a Euclidean 3D-space.
+//! Compute the center of mass of a polyhedron with triangular faces in a Euclidean 3d-space.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 3-tuple
-            coordinate vector.
-  \param    f <vector> A vector of \em triangular faces that enclose the
-            shape where each face is a 3-tuple vector of coordinate
-            indexes.
+  \param    c <coords-3d> A list of 3d cartesian coordinates
+            [[x, y, z], ...].
+  \param    f <integer-list-3-list> A list of triangular faces that
+            enclose the polyhedron where each face is a list of three
+            coordinate indexes.
 
-  \returns  <decimal> The center of mass of the given polyhedron.
+  \returns  <point-3d> The center of mass of the given polyhedron.
 
   \details
 
@@ -855,17 +863,18 @@ function polyhedron_centroid_tf
 
 //! Convert a polygon to a polyhedron by adding a height dimension.
 /***************************************************************************//**
-  \param    c <vector> A vector of vertices where each is a 2-tuple
-            coordinate vector.
-  \param    p <vector> An \em optional vector of paths that define one
-            or more closed shapes where each is a vector of coordinate
-            indexes.
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
   \param    h <decimal> The polyhedron height.
   \param    centroid <boolean> Center polygon centroid at z-axis.
   \param    center <boolean> Center polyhedron height about xy-plane.
 
-  \returns  <vector> A vector [\c points, \c faces] that define the
-            resulting polyhedron.
+  \returns  \<list> A list [points, faces], where points are <coords-3d>
+            and faces are a <integer-list-list>, that define the bounding
+            box of the given polyhedron.
 
   \details
 

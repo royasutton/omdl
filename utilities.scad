@@ -39,9 +39,9 @@
 
 //! Format the function call stack as a string.
 /***************************************************************************//**
-  \param    b <decimal> The stack index bottom offset.
+  \param    b <integer> The stack index bottom offset.
             Include function names above this offset.
-  \param    t <decimal> The stack index top offset.
+  \param    t <integer> The stack index top offset.
             Include function names below this offset.
 
   \returns  <string> A colon-separated list of functions names for the
