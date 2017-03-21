@@ -512,8 +512,8 @@ function almost_equal
     : (v1 == v2)
     )
   : (is_string(v1) || is_string(v2)) ? (v1 == v2)
-  : all_equal([v1, v2], empty_v) ? true
-  : any_equal([v1, v2], empty_v) ? false
+  : all_equal([v1, v2], empty_lst) ? true
+  : any_equal([v1, v2], empty_lst) ? false
   : !almost_equal(first(v1), first(v2), p) ? false
   : almost_equal(ntail(v1), ntail(v2), p);
 
@@ -664,18 +664,18 @@ function compare
       : (rs2 > rs1) ? +1
       : 0                                       // sums equal
       )
-      // compare range vectors
+      // compare range lists
     : (
         let
         (
-          rv1 = [for (i=v1) i],                 // convert to vectors
+          rv1 = [for (i=v1) i],                 // convert to lists
           rv2 = [for (i=v2) i],
           rl1 = len(rv1),                       // get lengths
           rl2 = len(rv2)
         )
         (rl1 > rl2) ? -1                        // longest range is greater
       : (rl2 > rl1) ? +1
-      : compare(rv1, rv2, s)                    // equal so compare as vectors
+      : compare(rv1, rv2, s)                    // equal so compare as lists
       )
     )
   // v2 not a range so v1 > v2
@@ -724,7 +724,7 @@ function compare
   \param    u <boolean> Element values are \b undef.
 
   \returns  \<list> A list of \p l copies of the element.
-            Returns \b empty_v when \p l is not a number or if
+            Returns \b empty_lst when \p l is not a number or if
             <tt>(l < 1)</tt>.
 
   \details
@@ -737,8 +737,8 @@ function consts
   l,
   v,
   u = false
-) = (l<1) ? empty_v
-  : !is_number(l) ? empty_v
+) = (l<1) ? empty_lst
+  : !is_number(l) ? empty_lst
   : is_defined(v) ? [for (i=[0:1:l-1]) v]
   : (u == false) ? [for (i=[0:1:l-1]) i]
   : [for (i=[0:1:l-1]) undef];
@@ -933,7 +933,7 @@ function limit
   v,
   l,
   u
-) = is_empty(v) ? empty_v
+) = is_empty(v) ? empty_lst
   : is_number(v) ? min(max(v,l),u)
   : is_list(v) ? [for (i=v) limit(i,l,u)]
   : v;
@@ -1008,7 +1008,7 @@ function mean
   \param    i2 <integer> The element index where find ends (default: last).
 
   \returns  \<list> A list of indexes where elements match \p mv.
-            Returns \b empty_v when no element of \p v matches \p mv
+            Returns \b empty_lst when no element of \p v matches \p mv
             or when \p v is not iterable.
 
   \details
@@ -1042,16 +1042,16 @@ function mean
     \li (c) If, and only if, \p mv is a single character, identify each
         character in \p v that equals \p mv.
     \li (d) For each character of \p mv, identify where it exists in \p v.
-        \b empty_v is returned for each character of \p mv absent from \p v.
+        \b empty_lst is returned for each character of \p mv absent from \p v.
     \li (e) For each character of \p mv, identify where it exists in \p v
         either as a numeric value or as a character at the specified column
         index, \p i.
-        \b empty_v is returned for each character of \p mv absent from \p v.
+        \b empty_lst is returned for each character of \p mv absent from \p v.
     \li (f) For each scalar of \p mv, identify where it exists in \p v.
-        \b empty_v is returned for each scalar of \p mv absent from \p v.
+        \b empty_lst is returned for each scalar of \p mv absent from \p v.
     \li (g) For each element of \p mv, identify where it equals the element
         at the specified column index, \p i, of each iterable value in \p v.
-        \b empty_v is returned for each element of \p mv absent from \p v
+        \b empty_lst is returned for each element of \p mv absent from \p v
         in the specified column index.
 
   \note     \b 1: When \p i is specified, that element column is compared.
@@ -1072,9 +1072,9 @@ function find
   i,
   i1 = 0,
   i2
-) = !is_iterable(v) ? empty_v
-  : (i1 > i2) ? empty_v
-  : (i1 > len(v)-1) ? empty_v
+) = !is_iterable(v) ? empty_lst
+  : (i1 > i2) ? empty_lst
+  : (i1 > len(v)-1) ? empty_lst
   : ((not_defined(i) && (v[i1] == mv)) || (v[i1][i] == mv)) ?
     (
       (c == 1) ? [i1]
@@ -1124,8 +1124,8 @@ function exists
   s = true,
   i
 ) = (s == false) ?
-    (find(mv, v, 1, i) != empty_v)
-  : (strip(search(mv, v, 1, i)) != empty_v);
+    (find(mv, v, 1, i) != empty_lst)
+  : (strip(search(mv, v, 1, i)) != empty_lst);
 
 //----------------------------------------------------------------------------//
 // select
@@ -1227,7 +1227,7 @@ function nfirst
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? undef
   : is_empty(v) ? undef
-  : n < 1 ? empty_v
+  : n < 1 ? empty_lst
   : [for (i = [0 : min(n-1, len(v)-1)]) v[i]];
 
 //! Return a list containing the last n elements of an iterable value.
@@ -1246,7 +1246,7 @@ function nlast
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? undef
   : is_empty(v) ? undef
-  : n < 1 ? empty_v
+  : n < 1 ? empty_lst
   : [for (i = [max(0, len(v)-n) : len(v)-1]) v[i]];
 
 //! Return a list containing all but the last n elements of an iterable value.
@@ -1255,7 +1255,7 @@ function nlast
   \param    n <integer> The element count.
 
   \returns  \<list> A list containing all but the last \p n elements of \p v.
-            Returns \b empty_v when \p v contains fewer than \p n elements.
+            Returns \b empty_lst when \p v contains fewer than \p n elements.
             Returns \b undef when \p v is not defined, is not iterable,
             or is empty.
 *******************************************************************************/
@@ -1266,7 +1266,7 @@ function nhead
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? undef
   : is_empty(v) ? undef
-  : (n >= len(v)) ? empty_v
+  : (n >= len(v)) ? empty_lst
   : [for (i = [0 : min(len(v)-1, len(v)-1-n)]) v[i]];
 
 //! Return a list containing all but the first n elements of an iterable value.
@@ -1275,7 +1275,7 @@ function nhead
   \param    n <integer> The element count.
 
   \returns  \<list> A list containing all but the first n elements of \p v.
-            Returns \b empty_v when \p v contains fewer than \p n elements.
+            Returns \b empty_lst when \p v contains fewer than \p n elements.
             Returns \b undef when \p v is not defined, is not iterable,
             or is empty.
 *******************************************************************************/
@@ -1286,7 +1286,7 @@ function ntail
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? undef
   : is_empty(v) ? undef
-  : (n >= len(v)) ? empty_v
+  : (n >= len(v)) ? empty_lst
   : [for (i = [max(0, n) : len(v)-1]) v[i]];
 
 //! Select a range of elements from an iterable value.
@@ -1296,7 +1296,7 @@ function ntail
 
   \returns  \<list> A list containing the identified element(s).
             Returns \b undef when \p i does not map to an element of \p v.
-            Returns \b empty_v when \p v is empty.
+            Returns \b empty_lst when \p v is empty.
             Returns \b undef when \p v is not defined or is not iterable.
 *******************************************************************************/
 function rselect
@@ -1305,7 +1305,7 @@ function rselect
   i
 ) = !all_defined([v, i]) ? undef
   : !is_iterable(v) ? undef
-  : is_empty(v) ? empty_v
+  : is_empty(v) ? empty_lst
   : is_number(i) && ((i<0) || (i>(len(v)-1))) ? undef
   : is_list(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
   : is_range(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
@@ -1324,7 +1324,7 @@ function rselect
 
   \returns  \<list> A list containing the selected element of each
             iterable value of \p v.
-            Returns \b empty_v when \p v is empty.
+            Returns \b empty_lst when \p v is empty.
             Returns \b undef when \p v is not defined or is not iterable.
 
   \details
@@ -1340,7 +1340,7 @@ function eselect
   i
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? undef
-  : is_empty(v) ? empty_v
+  : is_empty(v) ? empty_lst
   : is_defined(i) ? concat( [first(v)[i]], eselect(ntail(v), f, l, i) )
   : (l == true) ? concat( [last(first(v))], eselect(ntail(v), f, l, i) )
   : (f == true) ? concat( [first(first(v))], eselect(ntail(v), f, l, i) )
@@ -1424,7 +1424,7 @@ function cmvselect
 
   \returns  <list-list> A list of all n-element sequential-subsets of
             \p v skipping \p s elements between each subset selection.
-            Returns \b empty_v when \p v is empty, is not defined or is
+            Returns \b empty_lst when \p v is empty, is not defined or is
             not iterable.
 
   \details
@@ -1463,7 +1463,7 @@ function nssequence
 
   \returns  <list> A list containing the serial-wise element concatenation
             of each element in \p v.
-            Returns \b empty_v when \p v is empty.
+            Returns \b empty_lst when \p v is empty.
             Returns \b undef when \p v is not defined.
 
   \details
@@ -1476,7 +1476,7 @@ function smerge
   r = false
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? [v]
-  : is_empty(v) ? empty_v
+  : is_empty(v) ? empty_lst
   : is_string(v) ? [v]
   : ((r == true) && is_iterable(first(v))) ?
     concat(smerge(first(v), r), smerge(ntail(v), r))
@@ -1489,7 +1489,7 @@ function smerge
 
   \returns  <list> A list containing the parallel-wise element concatenation
             of each iterable value in \p v.
-            Returns \b empty_v when any element value in \p v is empty.
+            Returns \b empty_lst when any element value in \p v is empty.
             Returns \b undef when \p v is not defined or when any element
             value in \p v is not iterable.
 
@@ -1520,14 +1520,14 @@ function pmerge
   j = true
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? undef
-  : is_empty(v) ? empty_v
+  : is_empty(v) ? empty_lst
   : is_string(v) ? [v]
   : let
     (
       l = [for (i = v) len(i)]          // element lengths
     )
     any_undefined(l) ? undef            // any element not iterable?
-  : (min(l) == 0) ? empty_v             // any element empty?
+  : (min(l) == 0) ? empty_lst             // any element empty?
   : let
     (
       h = [for (i = v) first(i)],
@@ -1541,7 +1541,7 @@ function pmerge
   \param    v \<value> An iterable value.
 
   \returns  <list> A list containing the elements of \p v in reversed order.
-            Returns \b empty_v when \p v is empty.
+            Returns \b empty_lst when \p v is empty.
             Returns \b undef when \p v is not defined or is not iterable.
 *******************************************************************************/
 function reverse
@@ -1549,7 +1549,7 @@ function reverse
   v
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? undef
-  : is_empty(v) ? empty_v
+  : is_empty(v) ? empty_lst
   : [for (i = [len(v)-1 : -1 : 0]) v[i]];
 
 //! Sort the numeric or string elements of a list using quick sort.
@@ -1581,7 +1581,7 @@ function qsort
   r = false
 ) = not_defined(v) ? undef
   : !is_list(v) ? undef
-  : is_empty(v) ? empty_v
+  : is_empty(v) ? empty_lst
   : let
     (
       mp = v[floor(len(v)/2)],
@@ -1634,7 +1634,7 @@ function qsort2
   s = true
 ) = not_defined(v) ? undef
   : !is_list(v) ? undef
-  : is_empty(v) ? empty_v
+  : is_empty(v) ? empty_lst
   : let
     (
       mp = v[floor(len(v)/2)],
@@ -1682,10 +1682,10 @@ function qsort2
 function strip
 (
   v,
-  mv = empty_v
+  mv = empty_lst
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? undef
-  : is_empty(v) ? empty_v
+  : is_empty(v) ? empty_lst
   : (first(v) == mv) ? concat(strip(ntail(v), mv))
   : concat(nfirst(v), strip(ntail(v), mv));
 
@@ -1792,7 +1792,7 @@ function insert
   : !is_iterable(v) ? undef
   : is_empty(v) ?
     (
-      ( is_defined(mv) && any_equal(mv, empty_v)) ||
+      ( is_defined(mv) && any_equal(mv, empty_lst)) ||
       (not_defined(mv) && (i == 0))
     ) ? concat(nv) : undef
   : ((i<0) || (i>len(v))) ? undef
@@ -1806,10 +1806,10 @@ function insert
         )
         : is_number(i) ? i
         : undef,
-      h = (p>0) ? [for (j = [0 : p-1]) v[j]] : empty_v,
-      t = (p>len(v)-1) ? empty_v : [for (j = [p : len(v)-1]) v[j]]
+      h = (p>0) ? [for (j = [0 : p-1]) v[j]] : empty_lst,
+      t = (p>len(v)-1) ? empty_lst : [for (j = [p : len(v)-1]) v[j]]
     )
-    all_equal([h, t], empty_v) ? undef : concat(h, nv, t);
+    all_equal([h, t], empty_lst) ? undef : concat(h, nv, t);
 
 //! Delete elements from an iterable value.
 /***************************************************************************//**
@@ -1852,7 +1852,7 @@ function delete
   si
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? undef
-  : is_empty(v) ? empty_v
+  : is_empty(v) ? empty_lst
   : is_number(i) && ((i<0) || (i>(len(v)-1))) ? undef
   : is_list(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
   : is_range(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
@@ -1886,7 +1886,7 @@ function unique
   v
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? undef
-  : is_empty(v) ? empty_v
+  : is_empty(v) ? empty_lst
   : (len(v) < 1) ? v
     // use exact element matching via s=false for find().
   : exists(last(v), nhead(v), s=false) ? unique(nhead(v))
@@ -1939,11 +1939,11 @@ BEGIN_SCOPE validate;
           ["t12", "A character string",         "a"],
           ["t13", "A string",                   "This is a longer string"],
           ["t14", "The empty string",           empty_str],
-          ["t15", "The empty vector",           empty_v],
-          ["t16", "A 1-tuple vector of undef",  [undef]],
-          ["t17", "A 1-tuple vector",           [10]],
-          ["t18", "A 3-tuple vector",           [1, 2, 3]],
-          ["t19", "A vector of vectors",        [[1,2,3], [4,5,6], [7,8,9]]],
+          ["t15", "The empty list",             empty_lst],
+          ["t16", "A 1-tuple list of undef",    [undef]],
+          ["t17", "A 1-tuple list",             [10]],
+          ["t18", "A 3-tuple list",             [1, 2, 3]],
+          ["t19", "A list of lists",            [[1,2,3], [4,5,6], [7,8,9]]],
           ["t20", "A shorthand range",          [0:9]],
           ["t21", "A range",                    [0:0.5:9]]
         ];
@@ -2062,22 +2062,22 @@ BEGIN_SCOPE validate;
           ["t05", "A character string",         "a"],
           ["t06", "A string",                   "This is a longer string"],
           ["t07", "The empty string",           empty_str],
-          ["t08", "The empty vector",           empty_v],
+          ["t08", "The empty list",             empty_lst],
           ["t09", "A shorthand range",          [0:9]],
           ["t10", "A range",                    [0:0.5:9]],
-          ["t11", "Test vector 01",             [undef]],
-          ["t12", "Test vector 02",             [1]],
-          ["t13", "Test vector 03",             [1, 2, 3]],
-          ["t14", "Test vector 04",             [[1], [2], [3], [4], [5]]],
-          ["t15", "Test vector 05",             [[1,2], [2,3]]],
-          ["t16", "Test vector 06",             [[1,2], [2,3], [4,5], "ab"]],
-          ["t17", "Test vector 07",             [[1,2,3], [4,5,6], [7,8,9], ["a", "b", "c"]]],
-          ["t18", "Test vector 08",             [1, 2, 3, undef]],
-          ["t19", "Test vector 09",             [undef, undef, undef, undef]],
-          ["t20", "Test vector 10",             [[undef], [undef], [undef]]],
-          ["t21", "Test vector 11",             [true, true, true, true, false]],
-          ["t22", "Test vector 12",             [true, false, false, false, false]],
-          ["t23", "Test vector 13",             [true, true, true, true]]
+          ["t11", "Test list 01",               [undef]],
+          ["t12", "Test list 02",               [1]],
+          ["t13", "Test list 03",               [1, 2, 3]],
+          ["t14", "Test list 04",               [[1], [2], [3], [4], [5]]],
+          ["t15", "Test list 05",               [[1,2], [2,3]]],
+          ["t16", "Test list 06",               [[1,2], [2,3], [4,5], "ab"]],
+          ["t17", "Test list 07",               [[1,2,3], [4,5,6], [7,8,9], ["a", "b", "c"]]],
+          ["t18", "Test list 08",               [1, 2, 3, undef]],
+          ["t19", "Test list 09",               [undef, undef, undef, undef]],
+          ["t20", "Test list 10",               [[undef], [undef], [undef]]],
+          ["t21", "Test list 11",               [true, true, true, true, false]],
+          ["t22", "Test list 12",               [true, false, false, false, false]],
+          ["t23", "Test list 13",               [true, true, true, true]]
         ];
 
         test_ids = table_get_row_ids( test_r );
@@ -2198,15 +2198,15 @@ BEGIN_SCOPE validate;
       test_r =
       [
         ["t01", "The undefined value",        undef],
-        ["t02", "The empty vector",           empty_v],
+        ["t02", "The empty list",             empty_lst],
         ["t03", "A range",                    [0:0.5:9]],
         ["t04", "A string",                   "A string"],
-        ["t05", "Test vector 01",             ["orange","apple","grape","banana"]],
-        ["t06", "Test vector 02",             ["b","a","n","a","n","a","s"]],
-        ["t07", "Test vector 03",             [undef]],
-        ["t08", "Test vector 04",             [[1,2],[2,3]]],
-        ["t09", "Test vector 05",             ["ab",[1,2],[2,3],[4,5]]],
-        ["t10", "Test vector 06",             [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]]],
+        ["t05", "Test list 01",               ["orange","apple","grape","banana"]],
+        ["t06", "Test list 02",               ["b","a","n","a","n","a","s"]],
+        ["t07", "Test list 03",               [undef]],
+        ["t08", "Test list 04",               [[1,2],[2,3]]],
+        ["t09", "Test list 05",               ["ab",[1,2],[2,3],[4,5]]],
+        ["t10", "Test list 06",               [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]]],
         ["t11", "Vector of integers 0 to 15", [for (i=[0:15]) i]]
       ];
 
@@ -2221,17 +2221,17 @@ BEGIN_SCOPE validate;
       good_r =
       [ // function
         ["consts",
-          empty_v,                                            // t01
-          empty_v,                                            // t02
-          empty_v,                                            // t03
-          empty_v,                                            // t04
-          empty_v,                                            // t05
-          empty_v,                                            // t06
-          empty_v,                                            // t07
-          empty_v,                                            // t08
-          empty_v,                                            // t09
-          empty_v,                                            // t10
-          empty_v                                             // t11
+          empty_lst,                                          // t01
+          empty_lst,                                          // t02
+          empty_lst,                                          // t03
+          empty_lst,                                          // t04
+          empty_lst,                                          // t05
+          empty_lst,                                          // t06
+          empty_lst,                                          // t07
+          empty_lst,                                          // t08
+          empty_lst,                                          // t09
+          empty_lst,                                          // t10
+          empty_lst                                           // t11
         ],
         ["vstr",
           undef,                                              // t01
@@ -2261,7 +2261,7 @@ BEGIN_SCOPE validate;
         ],
         ["limit_12",
           undef,                                              // t01
-          empty_v,                                            // t02
+          empty_lst,                                          // t02
           [0:0.5:9],                                          // t03
           "A string",                                         // t04
           ["orange","apple","grape","banana"],                // t05
@@ -2299,17 +2299,17 @@ BEGIN_SCOPE validate;
           7.5                                                 // t11
         ],
         ["find_12",
-          empty_v,                                            // t01
-          empty_v,                                            // t02
-          empty_v,                                            // t03
-          empty_v,                                            // t04
-          empty_v,                                            // t05
-          empty_v,                                            // t06
-          empty_v,                                            // t07
+          empty_lst,                                          // t01
+          empty_lst,                                          // t02
+          empty_lst,                                          // t03
+          empty_lst,                                          // t04
+          empty_lst,                                          // t05
+          empty_lst,                                          // t06
+          empty_lst,                                          // t07
           [0],                                                // t08
           [1],                                                // t09
-          empty_v,                                            // t10
-          empty_v                                             // t11
+          empty_lst,                                          // t10
+          empty_lst                                           // t11
         ],
         ["count_S1",
           0,                                                  // t01
@@ -2339,7 +2339,7 @@ BEGIN_SCOPE validate;
         ],
         ["defined_or_D",
           "default",                                          // t01
-          empty_v,                                            // t02
+          empty_lst,                                          // t02
           [0:0.5:9],                                          // t03
           "A string",                                         // 04
           ["orange","apple","grape","banana"],                // t05
@@ -2448,7 +2448,7 @@ BEGIN_SCOPE validate;
           ["A"," ","s","t","r","i","n"],                      // t04
           ["orange","apple","grape"],                         // t05
           ["b","a","n","a","n","a"],                          // t06
-          empty_v,                                            // t07
+          empty_lst,                                          // t07
           [[1,2]],                                            // t08
           ["ab",[1,2],[2,3]],                                 // t09
           [[1,2,3],[4,5,6],[7,8,9]],                          // t10
@@ -2461,7 +2461,7 @@ BEGIN_SCOPE validate;
           [" ","s","t","r","i","n","g"],                      // t04
           ["apple","grape","banana"],                         // t05
           ["a","n","a","n","a","s"],                          // t06
-          empty_v,                                            // t07
+          empty_lst,                                          // t07
           [[2,3]],                                            // t08
           [[1,2],[2,3],[4,5]],                                // t09
           [[4,5,6],[7,8,9],["a","b","c"]],                    // t10
@@ -2469,7 +2469,7 @@ BEGIN_SCOPE validate;
         ],
         ["rselect_02",
           undef,                                              // t01
-          empty_v,                                            // t02
+          empty_lst,                                          // t02
           undef,                                              // t03
           ["A"," ","s"],                                      // t04
           ["orange","apple","grape"],                         // t05
@@ -2482,7 +2482,7 @@ BEGIN_SCOPE validate;
         ],
         ["eselect_F",
           undef,                                              // t01
-          empty_v,                                            // t02
+          empty_lst,                                          // t02
           undef,                                              // t03
           ["A"," ","s","t","r","i","n","g"],                  // t04
           ["o","a","g","b"],                                  // t05
@@ -2495,7 +2495,7 @@ BEGIN_SCOPE validate;
         ],
         ["eselect_L",
           undef,                                              // t01
-          empty_v,                                            // t02
+          empty_lst,                                          // t02
           undef,                                              // t03
           ["A"," ","s","t","r","i","n","g"],                  // t04
           ["e","e","e","a"],                                  // t05
@@ -2508,7 +2508,7 @@ BEGIN_SCOPE validate;
         ],
         ["eselect_1",
           undef,                                              // t01
-          empty_v,                                            // t02
+          empty_lst,                                          // t02
           undef,                                              // t03
           skip,                                               // t04
           ["r","p","r","a"],                                  // t05
@@ -2520,9 +2520,9 @@ BEGIN_SCOPE validate;
           skip                                                // t11
         ],
         ["nssequence_31",
-          empty_v,                                            // t01
-          empty_v,                                            // t02
-          empty_v,                                            // t03
+          empty_lst,                                          // t01
+          empty_lst,                                          // t02
+          empty_lst,                                          // t03
           [
             ["A"," ","s"],[" ","s","t"],["s","t","r"],
             ["t","r","i"],["r","i","n"],["i","n","g"]
@@ -2535,8 +2535,8 @@ BEGIN_SCOPE validate;
             ["b","a","n"],["a","n","a"],["n","a","n"],
             ["a","n","a"],["n","a","s"]
           ],                                                  // t06
-          empty_v,                                            // t07
-          empty_v,                                            // t08
+          empty_lst,                                          // t07
+          empty_lst,                                          // t08
           [["ab",[1,2],[2,3]],[[1,2],[2,3],[4,5]]],           // t09
           [
             [[1,2,3],[4,5,6],[7,8,9]],
@@ -2550,7 +2550,7 @@ BEGIN_SCOPE validate;
         ],
         ["smerge",
           undef,                                              // t01
-          empty_v,                                            // t02
+          empty_lst,                                          // t02
           [[0:0.5:9]],                                        // t03
           ["A string"],                                       // t04
           ["orange","apple","grape","banana"],                // t05
@@ -2563,7 +2563,7 @@ BEGIN_SCOPE validate;
         ],
         ["pmerge",
           undef,                                              // t01
-          empty_v,                                            // t02
+          empty_lst,                                          // t02
           undef,                                              // t03
           ["A string"],                                       // t04
           [
@@ -2580,7 +2580,7 @@ BEGIN_SCOPE validate;
         ],
         ["reverse",
           undef,                                              // t01
-          empty_v,                                            // t02
+          empty_lst,                                          // t02
           undef,                                              // t03
           ["g","n","i","r","t","s"," ","A"],                  // t04
           ["banana","grape","apple","orange"],                // t05
@@ -2593,7 +2593,7 @@ BEGIN_SCOPE validate;
         ],
         ["qsort",
           undef,                                              // t01
-          empty_v,                                            // t02
+          empty_lst,                                          // t02
           undef,                                              // t03
           undef,                                              // t04
           ["apple","banana","grape","orange"],                // t05
@@ -2606,7 +2606,7 @@ BEGIN_SCOPE validate;
         ],
         ["qsort_1R",
           undef,                                              // t01
-          empty_v,                                            // t02
+          empty_lst,                                          // t02
           undef,                                              // t03
           undef,                                              // t04
           ["orange","grape","apple","banana"],                // t05
@@ -2619,7 +2619,7 @@ BEGIN_SCOPE validate;
         ],
         ["qsort2_1R",
           undef,                                              // t01
-          empty_v,                                            // t02
+          empty_lst,                                          // t02
           undef,                                              // t03
           undef,                                              // t04
           ["orange","grape","apple","banana"],                // t05
@@ -2632,7 +2632,7 @@ BEGIN_SCOPE validate;
         ],
         ["qsort2_HR",
           undef,                                              // t01
-          empty_v,                                            // t02
+          empty_lst,                                          // t02
           undef,                                              // t03
           undef,                                              // t04
           ["orange","grape","banana","apple"],                // t05
@@ -2645,7 +2645,7 @@ BEGIN_SCOPE validate;
         ],
         ["strip",
           undef,                                              // t01
-          empty_v,                                            // t02
+          empty_lst,                                          // t02
           undef,                                              // t03
           ["A"," ","s","t","r","i","n","g"],                  // t04
           ["orange","apple","grape","banana"],                // t05
@@ -2697,7 +2697,7 @@ BEGIN_SCOPE validate;
         ],
         ["delete_T0",
           undef,                                              // t01
-          empty_v,                                            // t02
+          empty_lst,                                          // t02
           undef,                                              // t03
           ["A"," ","s","t","r","i","n","g"],                  // t04
           ["orange","grape","banana"],                        // t05
@@ -2710,7 +2710,7 @@ BEGIN_SCOPE validate;
         ],
         ["unique",
           undef,                                              // t01
-          empty_v,                                            // t02
+          empty_lst,                                          // t02
           undef,                                              // t03
           ["A"," ","s","t","r","i","n","g"],                  // t04
           ["orange","apple","grape","banana"],                // t05

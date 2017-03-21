@@ -71,7 +71,7 @@ function map_get_idx
   k
 ) = !is_string(k) ? undef
   : let(i = first(search([k], m, 1, 0 )))
-    (i == empty_v) ? undef
+    (i == empty_lst) ? undef
   : i;
 
 //! Test if a key exists.

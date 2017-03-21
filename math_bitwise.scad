@@ -99,7 +99,7 @@ function bitwise_i2v
   bv = 1    // iteration bit value
 ) = !is_integer(v) ? undef
   : !is_integer(w) ? undef
-  : ((v == 0) && (bv >= pow(2, w))) ? empty_v
+  : ((v == 0) && (bv >= pow(2, w))) ? empty_lst
   : ((v % 2) > 0) ?
     concat(bitwise_i2v(floor(v/2), w, bv*2), 1)
   : concat(bitwise_i2v(floor(v/2), w, bv*2), 0);
@@ -326,7 +326,7 @@ BEGIN_SCOPE validate;
     [
       ["fac", "Function argument count",    undef],
       ["t01", "All undefined",              [undef,undef]],
-      ["t02", "All empty vector",           [empty_v,empty_v]],
+      ["t02", "All empty lists",            [empty_lst,empty_lst]],
       ["t03", "test value 1",               [254, 0]],
       ["t04", "test value 2",               [254, 1]],
       ["t05", "test value 3",               [255, 0]],

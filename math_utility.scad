@@ -54,7 +54,7 @@ include <math_bitwise.scad>;
   \param    v <datalist> A list of values.
   \param    m <integer> The output mode (a 5-bit encoded integer).
 
-  \param    cs <string-list-4> A vector of strings [s1, s2, s3, fs]
+  \param    cs <string-list-4> A list of strings [s1, s2, s3, fs]
             (for custom field formatting).
 
   \returns  <list|string> with the occurrence frequency of the elements
@@ -84,7 +84,7 @@ include <math_bitwise.scad>;
 
     |     | B3  | B2  | B1  | B0  | Description       |
     |:---:|:---:|:---:|:---:|:---:|:------------------|
-    |  1  |  0  |  0  |  0  |  1  | vector of strings |
+    |  1  |  0  |  0  |  0  |  1  | list of strings   |
     |  3  |  0  |  0  |  1  |  1  | text format 1     |
     |  9  |  1  |  0  |  0  |  1  | html format 1     |
     | 15  |  1  |  1  |  1  |  1  | custom formating  |

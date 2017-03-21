@@ -61,7 +61,7 @@ include <datatypes.scad>;
   \param    ri <string> The row identifier.
 
   \returns  <integer> The row index where the identifier exists.
-            If the identifier does not exists, returns \b empty_v.
+            If the identifier does not exists, returns \b empty_lst.
 *******************************************************************************/
 function table_get_row_idx
 (
@@ -89,7 +89,7 @@ function table_get_row
   \param    ci <string> The column identifier.
 
   \returns  <integer> The column index where the identifier exists.
-            If the identifier does not exists, returns \b empty_v.
+            If the identifier does not exists, returns \b empty_lst.
 *******************************************************************************/
 function table_get_col_idx
 (

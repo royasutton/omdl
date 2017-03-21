@@ -79,7 +79,7 @@ number_min = -1e308;
 empty_str = "";
 
 //! \<list> A list with no values (the empty list).
-empty_v = [];
+empty_lst = [];
 
 //! @}
 //! @}

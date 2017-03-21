@@ -1004,7 +1004,7 @@ BEGIN_SCOPE validate;
         ["fac", "Function argument count",    undef],
         ["crp", "Result precision",           undef],
         ["t01", "All undefined",              [undef,undef,undef,undef,undef,undef]],
-        ["t02", "All empty vector",           [empty_v,empty_v,empty_v,empty_v,empty_v,empty_v]],
+        ["t02", "All empty lists",            [empty_lst,empty_lst,empty_lst,empty_lst,empty_lst,empty_lst]],
         ["t03", "All scalars",                [60, 50, 40, 30, 20, 10]],
         ["t04", "All 1d vectors",             [[99], [58], [12], [42], [15], [1]]],
         ["t05", "All 2d vectors",             [
@@ -1069,7 +1069,7 @@ BEGIN_SCOPE validate;
           2,                                                  // fac
           4,                                                  // crp
           [undef, undef],                                     // t01
-          empty_v,                                            // t02
+          empty_lst,                                          // t02
           [60,50],                                            // t03
           [-41],                                              // t04
           [-41,14],                                           // t05

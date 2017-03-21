@@ -396,7 +396,7 @@ function resolution_facets
   : (360.0/$fa < radius*tau/$fs) ? max(5, ceil(360.0/$fa))
   :                                max(5, ceil(radius*tau/$fs));
 
-//! Return facet count used to render a radius as vector triple.
+//! Return facet count used to render a radius as list-3.
 /***************************************************************************//**
   \param    radius <decimal> An arc radius.
 
