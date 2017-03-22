@@ -126,7 +126,7 @@ module cone
     translate([-cr, 0])
     difference()
     {
-      triangle_lll( s1=cr*2, s2=hl, s3=hl, v1r=br, v2r=br, v3r=pr );
+      triangle_sss( s1=cr*2, s2=hl, s3=hl, v1r=br, v2r=br, v3r=pr );
       square( size=[cr,h], center=false );
     }
   }
@@ -604,7 +604,7 @@ module torus_tp
 )
 {
   rotate_extrude_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
-  triangle_vl_c
+  triangle_ls_c
   (
     vs=size, vc=core,
     co=co, cr=cr,

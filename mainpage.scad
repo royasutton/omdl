@@ -501,14 +501,14 @@ BEGIN_SCOPE logo;
 
     $fn = 36;
 
-    frame = triangle_vp2vl( [ [30,0], [0,40], [30,40] ] );
+    frame = triangle_lp2ls( [ [30,0], [0,40], [30,40] ] );
     core  = 2 * frame / 3;
     vrnd  = [1, 2, 4];
 
     cone( h=20, r=10, vr=2 );
     rotate([0, 0, 360/20])
     radial_repeat( n=5, angle=true )
-      etriangle_vl_c( vs=frame, vc=core, vr=vrnd, h=10 );
+      etriangle_ls_c( vs=frame, vc=core, vr=vrnd, h=10 );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -529,14 +529,14 @@ BEGIN_SCOPE quickstart;
 
     $fn = 36;
 
-    frame = triangle_vp2vl( [ [30,0], [0,40], [30,40] ] );
+    frame = triangle_lp2ls( [ [30,0], [0,40], [30,40] ] );
     core  = 2 * frame / 3;
     vrnd  = [1, 2, 4];
 
     cone( h=20, r=10, vr=2 );
     rotate([0, 0, 360/20])
     radial_repeat( n=5, angle=true )
-      etriangle_vl_c( vs=frame, vc=core, vr=vrnd, h=10 );
+      etriangle_ls_c( vs=frame, vc=core, vr=vrnd, h=10 );
 
     translate([0, -50,0])
     linear_extrude(height=10)

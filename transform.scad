@@ -328,7 +328,7 @@ module radial_repeat
   move = false
 )
 {
-  for ( p = rpolygon_vp( r=r, n=n ) )
+  for ( p = rpolygon_lp( r=r, n=n ) )
   {
     translate(move==true ? p : origin2d)
     rotate(angle==true ? [0, 0, angle_vv(x_axis2d_uv, p)] : origin3d)

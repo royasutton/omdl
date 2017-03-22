@@ -466,12 +466,12 @@ module triangle_ppp
 
     \b Example
     \code{.C}
-    t = triangle_lll2vp( 30, 40, 50 );
+    t = triangle_sss2lp( 30, 40, 50 );
     r = [2, 4, 6];
-    triangle_vp( v=t, vr=r  );
+    triangle_lp( v=t, vr=r  );
     \endcode
 *******************************************************************************/
-module triangle_vp
+module triangle_lp
 (
   v,
   vr,
@@ -516,12 +516,12 @@ module triangle_vp
   \details
 
     \b Example
-    \amu_eval ( function=triangle_lll ${example_dim} )
+    \amu_eval ( function=triangle_sss ${example_dim} )
 
     See [Wikipedia](https://en.wikipedia.org/wiki/Solution_of_triangles)
     for more information.
 *******************************************************************************/
-module triangle_lll
+module triangle_sss
 (
   s1,
   s2,
@@ -577,12 +577,12 @@ module triangle_lll
 
     \b Example
     \code{.C}
-    t = triangle_lll2vp( 3, 4, 5 );
-    s = triangle_vp2vl( t );
-    triangle_vl( v=s, vr=2, centroid=true );
+    t = triangle_sss2lp( 3, 4, 5 );
+    s = triangle_lp2ls( t );
+    triangle_ls( v=s, vr=2, centroid=true );
     \endcode
 *******************************************************************************/
-module triangle_vl
+module triangle_ls
 (
   v,
   vr,
@@ -592,7 +592,7 @@ module triangle_vl
 {
   if ( is_scalar(vr) )
   {
-    triangle_lll
+    triangle_sss
     (
       s1=v[0], s2=v[1], s3=v[2],
       vr=vr,
@@ -601,7 +601,7 @@ module triangle_vl
   }
   else
   {
-    triangle_lll
+    triangle_sss
     (
       s1=v[0], s2=v[1], s3=v[2],
       v1r=vr[0], v2r=vr[1], v3r=vr[2],
@@ -632,12 +632,12 @@ module triangle_vl
   \details
 
     \b Example
-    \amu_eval ( function=triangle_vl_c ${example_dim} )
+    \amu_eval ( function=triangle_ls_c ${example_dim} )
 
   \note     The outer and inner triangles centroids are aligned prior to
             the core removal.
 *******************************************************************************/
-module triangle_vl_c
+module triangle_ls_c
 (
   vs,
   vc,
@@ -666,18 +666,18 @@ module triangle_vl_c
     translate
     (
       ( centroid==false ) && ( incenter==true )
-        ? -triangle_incenter_vp( triangle_lll2vp(s1=ts1, s2=ts2, s3=ts3) )
+        ? -triangle_incenter_lp( triangle_sss2lp(s1=ts1, s2=ts2, s3=ts3) )
         : origin2d
     )
     translate
     (
       ( centroid==true ) && ( incenter==false )
         ? origin2d
-        : triangle_centroid_vp( triangle_lll2vp(s1=ts1, s2=ts2, s3=ts3) )
+        : triangle_centroid_lp( triangle_sss2lp(s1=ts1, s2=ts2, s3=ts3) )
     )
     difference()
     {
-      triangle_vl
+      triangle_ls
       (
         v=[ts1, ts2, ts3],
         vr=vrs,
@@ -686,7 +686,7 @@ module triangle_vl_c
 
       translate(is_defined(co) ? co : origin2d)
       rotate([0, 0, cr])
-      triangle_vl
+      triangle_ls
       (
         v=[tc1, tc2, tc3],
         vr=vrc,
@@ -696,7 +696,7 @@ module triangle_vl_c
   }
   else
   {
-    triangle_vl
+    triangle_ls
     (
       v=[ts1, ts2, ts3],
       vr=vrs,
@@ -725,13 +725,13 @@ module triangle_vl_c
   \details
 
     \b Example
-    \amu_eval ( function=triangle_lal ${example_dim} )
+    \amu_eval ( function=triangle_sas ${example_dim} )
 
     See [Wikipedia] for more information.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
 *******************************************************************************/
-module triangle_lal
+module triangle_sas
 (
   s1,
   a,
@@ -749,7 +749,7 @@ module triangle_lal
 
   if ( x%4 == 1 )
   {
-    triangle_lll
+    triangle_sss
     (
       s1=s1, s2=s2, s3=s3,
       vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
@@ -758,7 +758,7 @@ module triangle_lal
   }
   else if ( x%4 == 2 )
   {
-    triangle_lll
+    triangle_sss
     (
       s1=s2, s2=s3, s3=s1,
       vr=vr, v1r=v2r, v2r=v3r, v3r=v1r,
@@ -767,7 +767,7 @@ module triangle_lal
   }
   else if ( x%4 == 3 )
   {
-    triangle_lll
+    triangle_sss
     (
       s1=s3, s2=s1, s3=s2,
       vr=vr, v1r=v3r, v2r=v1r, v3r=v2r,
@@ -796,13 +796,13 @@ module triangle_lal
   \details
 
     \b Example
-    \amu_eval ( function=triangle_ala ${example_dim} )
+    \amu_eval ( function=triangle_asa ${example_dim} )
 
     See [Wikipedia] for more information.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
 *******************************************************************************/
-module triangle_ala
+module triangle_asa
 (
   a1,
   s,
@@ -833,7 +833,7 @@ module triangle_ala
 
     if ( x%4 == 1 )
     {
-      triangle_lll
+      triangle_sss
       (
         s1=s3, s2=s1, s3=s2,
         vr=vr, v1r=v3r, v2r=v1r, v3r=v2r,
@@ -842,7 +842,7 @@ module triangle_ala
     }
     else if ( x%4 == 2 )
     {
-      triangle_lll
+      triangle_sss
       (
         s1=s1, s2=s2, s3=s3,
         vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
@@ -851,7 +851,7 @@ module triangle_ala
     }
     else if ( x%4 == 3 )
     {
-      triangle_lll
+      triangle_sss
       (
         s1=s2, s2=s3, s3=s1,
         vr=vr, v1r=v2r, v2r=v3r, v3r=v1r,
@@ -881,13 +881,13 @@ module triangle_ala
   \details
 
     \b Example
-    \amu_eval ( function=triangle_aal ${example_dim} )
+    \amu_eval ( function=triangle_aas ${example_dim} )
 
     See [Wikipedia] for more information.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
 *******************************************************************************/
-module triangle_aal
+module triangle_aas
 (
   a1,
   a2,
@@ -918,7 +918,7 @@ module triangle_aal
 
     if ( x%4 == 1 )
     {
-      triangle_lll
+      triangle_sss
       (
         s1=s1, s2=s2, s3=s3,
         vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
@@ -927,7 +927,7 @@ module triangle_aal
     }
     else if ( x%4 == 2 )
     {
-      triangle_lll
+      triangle_sss
       (
         s1=s2, s2=s3, s3=s1,
         vr=vr, v1r=v2r, v2r=v3r, v3r=v1r,
@@ -936,7 +936,7 @@ module triangle_aal
     }
     else if ( x%4 == 3 )
     {
-      triangle_lll
+      triangle_sss
       (
         s1=s3, s2=s1, s3=s2,
         vr=vr, v1r=v3r, v2r=v1r, v3r=v2r,
@@ -962,9 +962,9 @@ module triangle_aal
   \details
 
     \b Example
-    \amu_eval ( function=triangle_ll ${example_dim} )
+    \amu_eval ( function=triangle_ss ${example_dim} )
 *******************************************************************************/
-module triangle_ll
+module triangle_ss
 (
   x,
   y,
@@ -1002,12 +1002,12 @@ module triangle_ll
   \details
 
     \b Example
-    \amu_eval ( function=triangle_la ${example_dim} )
+    \amu_eval ( function=triangle_sa ${example_dim} )
 
   \note     When both \p x and \p y are given, both triangles are rendered.
   \note     When both \p aa and \p oa are given, \p aa is used.
 *******************************************************************************/
-module triangle_la
+module triangle_sa
 (
   x,
   y,
@@ -1075,7 +1075,7 @@ module ngon
   {
     hull()
     {
-      for ( c = rpolygon_vp( r=r, n=n, vr=vr ) )
+      for ( c = rpolygon_lp( r=r, n=n, vr=vr ) )
       {
         translate( c )
         circle( r=vr );
@@ -1305,7 +1305,7 @@ module star2d
   radial_repeat(n=n, angle=true, move=false)
   rotate([0, 0, -90])
   translate([-w/2, 0])
-  triangle_vl(v=[w, l, l], vr=vr);
+  triangle_ls(v=[w, l, l], vr=vr);
 }
 
 //! @}
@@ -1331,20 +1331,20 @@ BEGIN_SCOPE dim;
       rhombus( size=[40,25], vr=[2,4,2,4], center=true );
     else if (shape == "triangle_ppp")
       triangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], vr=2, centroid=true );
-    else if (shape == "triangle_lll")
-      triangle_lll( s1=30, s2=40, s3=50, vr=2, centroid=true );
-    else if (shape == "triangle_vl_c")
-      triangle_vl_c( vs=[30,50,50], vc=[20,40,40], co=[0,-4], vr1=[1,1,6], vr2=4, centroid=true );
-    else if (shape == "triangle_lal")
-      triangle_lal( s1=50, a=60, s2=30, vr=2, centroid=true );
-    else if (shape == "triangle_ala")
-      triangle_ala( a1=30, s=50, a2=60, vr=2, centroid=true );
-    else if (shape == "triangle_aal")
-      triangle_aal( a1=60, a2=30, s=40, vr=2, centroid=true );
-    else if (shape == "triangle_ll")
-      triangle_ll( x=30, y=40, vr=2, centroid=true );
-    else if (shape == "triangle_la")
-      triangle_la( x=40, aa=30, vr=2, centroid=true );
+    else if (shape == "triangle_sss")
+      triangle_sss( s1=30, s2=40, s3=50, vr=2, centroid=true );
+    else if (shape == "triangle_ls_c")
+      triangle_ls_c( vs=[30,50,50], vc=[20,40,40], co=[0,-4], vr1=[1,1,6], vr2=4, centroid=true );
+    else if (shape == "triangle_sas")
+      triangle_sas( s1=50, a=60, s2=30, vr=2, centroid=true );
+    else if (shape == "triangle_asa")
+      triangle_asa( a1=30, s=50, a2=60, vr=2, centroid=true );
+    else if (shape == "triangle_aas")
+      triangle_aas( a1=60, a2=30, s=40, vr=2, centroid=true );
+    else if (shape == "triangle_ss")
+      triangle_ss( x=30, y=40, vr=2, centroid=true );
+    else if (shape == "triangle_sa")
+      triangle_sa( x=40, aa=30, vr=2, centroid=true );
     else if (shape == "ngon")
       ngon( n=6, r=25, vr=6 );
     else if (shape == "ellipse")
@@ -1369,13 +1369,13 @@ BEGIN_SCOPE dim;
                 rectangle_c
                 rhombus
                 triangle_ppp
-                triangle_lll
-                triangle_vl_c
-                triangle_lal
-                triangle_ala
-                triangle_aal
-                triangle_ll
-                triangle_la
+                triangle_sss
+                triangle_ls_c
+                triangle_sas
+                triangle_asa
+                triangle_aas
+                triangle_ss
+                triangle_sa
                 ngon
                 ellipse
                 ellipse_c
@@ -1402,13 +1402,13 @@ BEGIN_SCOPE manifest;
       rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, vrm2=3, co=[0,5], center=true );
       rhombus( size=[40,25], vr=[2,4,2,4], center=true );
       triangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], vr=2, centroid=true );
-      triangle_lll( s1=30, s2=40, s3=50, vr=2, centroid=true );
-      triangle_vl_c( vs=[30,50,50], vc=[20,40,40], co=[0,-4], vr1=[1,1,6], vr2=4, centroid=true );
-      triangle_lal( s1=50, a=60, s2=30, vr=2, centroid=true );
-      triangle_ala( a1=30, s=50, a2=60, vr=2, centroid=true );
-      triangle_aal( a1=60, a2=30, s=40, vr=2, centroid=true );
-      triangle_ll( x=30, y=40, vr=2, centroid=true );
-      triangle_la( x=40, aa=30, vr=2, centroid=true );
+      triangle_sss( s1=30, s2=40, s3=50, vr=2, centroid=true );
+      triangle_ls_c( vs=[30,50,50], vc=[20,40,40], co=[0,-4], vr1=[1,1,6], vr2=4, centroid=true );
+      triangle_sas( s1=50, a=60, s2=30, vr=2, centroid=true );
+      triangle_asa( a1=30, s=50, a2=60, vr=2, centroid=true );
+      triangle_aas( a1=60, a2=30, s=40, vr=2, centroid=true );
+      triangle_ss( x=30, y=40, vr=2, centroid=true );
+      triangle_sa( x=40, aa=30, vr=2, centroid=true );
       ngon( n=6, r=25, vr=6 );
       ellipse( size=[25, 40] );
       ellipse_c( size=[25,40], core=[16,10], co=[0,10], cr=45 );

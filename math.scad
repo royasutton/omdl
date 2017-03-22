@@ -336,7 +336,7 @@ function are_coplanar_vvv
     [Wikipedia]: https://en.wikipedia.org/wiki/Transformation_matrix
     [multmatrix]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Transformations#multmatrix
 *******************************************************************************/
-function multmatrix_vp
+function multmatrix_lp
 (
   c,
   m
@@ -370,7 +370,7 @@ function multmatrix_vp
     [Wikipedia]: https://en.wikipedia.org/wiki/Translation_(geometry)
     [transformation matrix]: https://en.wikipedia.org/wiki/Transformation_matrix
 *******************************************************************************/
-function translate_vp
+function translate_lp
 (
   c,
   v
@@ -406,7 +406,7 @@ function translate_vp
     [transformation matrix]: https://en.wikipedia.org/wiki/Transformation_matrix
     [axis rotation]: http://inside.mines.edu/fs_home/gmurray/ArbitraryAxisRotation
 *******************************************************************************/
-function rotate_vp
+function rotate_lp
 (
   c,
   a,
@@ -443,7 +443,7 @@ function rotate_vp
               m32 = cb*sa,
               m33 = ca*cb
             )
-            multmatrix_vp(c, [[m11,m12,m13,0], [m21,m22,m23,0], [m31,m32,m33,0]])
+            multmatrix_lp(c, [[m11,m12,m13,0], [m21,m22,m23,0], [m31,m32,m33,0]])
          :  let
             (
               vx  = v[0],  vy  = v[1],  vz  = v[2],
@@ -472,7 +472,7 @@ function rotate_vp
               m33 = vz2+(vx2+vy2)*cg,
               m34 = (oz*(vx2+vy2)-vz*(ox*vx+oy*vy))*oc+(ox*vy-oy*vx)*ll*sg
             )
-            multmatrix_vp(c, [[m11,m12,m13,m14], [m21,m22,m23,m24], [m31,m32,m33,m34]])/l2
+            multmatrix_lp(c, [[m11,m12,m13,m14], [m21,m22,m23,m24], [m31,m32,m33,m34]])/l2
     )
     rc;
 
@@ -483,7 +483,7 @@ function rotate_vp
 
   \returns  <coords-nd> A list of scaled coordinate points.
 *******************************************************************************/
-function scale_vp
+function scale_lp
 (
   c,
   v
@@ -504,7 +504,7 @@ function scale_vp
   \returns  <coords-nd> A list of proportionately scaled coordinate
             points which exactly fit the region bounds \p v.
 *******************************************************************************/
-function resize_vp
+function resize_lp
 (
   c,
   v
@@ -554,13 +554,13 @@ function resize_vp
 
     hull()
     {
-      for ( p = rpolygon_vp( r=20, n=5, vr=vr ) )
+      for ( p = rpolygon_lp( r=20, n=5, vr=vr ) )
         translate( p )
         circle( r=vr );
     }
     \endcode
 *******************************************************************************/
-function rpolygon_vp
+function rpolygon_lp
 (
   n,
   r,
@@ -664,7 +664,7 @@ function rpolygon_perimeter
   \note     Vertex \p v1 at the origin. Side length \p s1 is measured
             along the positive x-axis.
 *******************************************************************************/
-function triangle_lll2vp
+function triangle_sss2lp
 (
   s1,
   s2,
@@ -696,11 +696,11 @@ function triangle_lll2vp
   \note     Vertex \p v1 at the origin. Side length \p s1 is measured
             along the positive x-axis.
 *******************************************************************************/
-function triangle_vl2vp
+function triangle_ls2lp
 (
   v,
   cw = true
-) = triangle_lll2vp( s1=v[0], s2=v[1], s3=v[2], cw=cw );
+) = triangle_sss2lp( s1=v[0], s2=v[1], s3=v[2], cw=cw );
 
 //! Compute the side lengths of a triangle given its vertex coordinates.
 /***************************************************************************//**
@@ -712,7 +712,7 @@ function triangle_vl2vp
 
   \note     Side lengths ordered according to vertex ordering.
 *******************************************************************************/
-function triangle_ppp2vl
+function triangle_ppp2ls
 (
   v1,
   v2,
@@ -727,10 +727,10 @@ function triangle_ppp2vl
 
   \note     Side lengths ordered according to vertex ordering.
 *******************************************************************************/
-function triangle_vp2vl
+function triangle_lp2ls
 (
   v
-) = triangle_ppp2vl( v1=v[0], v2=v[1], v3=v[2]);
+) = triangle_ppp2ls( v1=v[0], v2=v[1], v3=v[2]);
 
 //! Compute the signed area of a triangle given its vertex coordinates.
 /***************************************************************************//**
@@ -758,7 +758,7 @@ function triangle_area_ppp
 
   \returns  <decimal> The area of the given triangle.
 *******************************************************************************/
-function triangle_area_vp
+function triangle_area_lp
 (
   v,
   s = false
@@ -787,7 +787,7 @@ function triangle_centroid_ppp
 
   \returns  <point-2d> The centroid coordinate point [x, y].
 *******************************************************************************/
-function triangle_centroid_vp
+function triangle_centroid_lp
 (
   v
 ) = triangle_centroid_ppp( v1=v[0], v2=v[1], v3=v[2]);
@@ -841,7 +841,7 @@ function triangle_incenter_ppp
     The interior point for which distances to the sides of the triangle
     are equal.
 *******************************************************************************/
-function triangle_incenter_vp
+function triangle_incenter_lp
 (
   v
 ) = triangle_incenter_ppp( v1=v[0], v2=v[1], v3=v[2]);
@@ -876,7 +876,7 @@ sqrt
 
   \returns  <decimal> The incircle radius.
 *******************************************************************************/
-function triangle_inradius_vp
+function triangle_inradius_lp
 (
   v
 ) = triangle_inradius_ppp( v1=v[0], v2=v[1], v3=v[2]);
@@ -913,7 +913,7 @@ function triangle_is_cw_ppp
             \b false if the vertices are ordered counterclockwise, and
             \b undef if the ordering can not be determined.
 *******************************************************************************/
-function triangle_is_cw_vp
+function triangle_is_cw_lp
 (
   v
 ) =
@@ -963,7 +963,7 @@ function triangle_is_pit_ppp
   \returns  <boolean> \b true when the point is inside the polygon and
             \b false otherwise.
 *******************************************************************************/
-function triangle_is_pit_vp
+function triangle_is_pit_lp
 (
   v,
   t
