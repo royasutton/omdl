@@ -35,7 +35,6 @@ include <shapes2d.scad>;
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
   \addtogroup tools
-  @{
 
     \amu_define caption (Edge)
 
@@ -58,6 +57,11 @@ include <shapes2d.scad>;
           table_caption="${caption}" cell_captions="${cell_num}"
         )
     \endlatexonly
+*******************************************************************************/
+
+/***************************************************************************//**
+  \addtogroup tools
+  @{
 
   \defgroup tools_edge Edge
   \brief    Shape edge finishing tools.

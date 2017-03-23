@@ -37,7 +37,6 @@ include <shapes2d.scad>;
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
   \addtogroup shapes
-  @{
 
     \amu_define caption (3d Shapes)
 
@@ -60,6 +59,11 @@ include <shapes2d.scad>;
           table_caption="${caption}" cell_captions="${cell_num}"
         )
     \endlatexonly
+*******************************************************************************/
+
+/***************************************************************************//**
+  \addtogroup shapes
+  @{
 
   \defgroup shapes_3d 3d Shapes
   \brief    Three-dimensional geometric shapes.

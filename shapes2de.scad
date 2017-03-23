@@ -35,7 +35,6 @@ include <shapes2d.scad>;
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
   \addtogroup shapes
-  @{
 
     \amu_define caption (2d Extrusions)
 
@@ -58,6 +57,11 @@ include <shapes2d.scad>;
           table_caption="${caption}" cell_captions="${cell_num}"
         )
     \endlatexonly
+*******************************************************************************/
+
+/***************************************************************************//**
+  \addtogroup shapes
+  @{
 
   \defgroup shapes_2de 2d Extrusions
   \brief    Extruded two-dimensional geometric shapes.
