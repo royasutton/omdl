@@ -383,6 +383,9 @@
 /***************************************************************************//**
   \defgroup datatypes Datatypes
   \brief    Data type definitions and operators.
+
+    See \ref dt for nomenclature, assumptions, and conventions used to
+    specify values and data types throughout the library.
 *******************************************************************************/
 
 /***************************************************************************//**
@@ -412,7 +415,7 @@
 
 /***************************************************************************//**
   \defgroup utilities Utilities
-  \brief General utilities.
+  \brief    General utilities.
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
