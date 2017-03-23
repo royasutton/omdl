@@ -1929,7 +1929,7 @@ BEGIN_SCOPE validate;
           ["t02", "An odd integer",             1],
           ["t03", "An small even integer",      10],
           ["t04", "A large integer",            100000000],
-          ["t05", "A small decimal (epsilon)",  eps],
+          ["t05", "A small decimal (epsilon)",  aeps],
           ["t06", "The max number",             number_max],
           ["t07", "The min number",             number_min],
           ["t08", "The max number^2",           number_max * number_max],

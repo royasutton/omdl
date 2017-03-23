@@ -140,7 +140,7 @@ module rectangle
         else
         {
           rotate([0, 0, i[5]])
-          polygon(points=[[eps,-vr], [eps,eps], [-vr,eps]], paths=[[0,1,2]]);
+          polygon(points=[[aeps,-vr], [aeps,aeps], [-vr,aeps]], paths=[[0,1,2]]);
         }
       }
 

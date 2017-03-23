@@ -44,7 +44,7 @@
 //----------------------------------------------------------------------------//
 
 //! <decimal> Epsilon, small distance to deal with overlapping shapes.
-eps = 0.01;
+aeps = 0.001;
 
 //! <decimal> The ratio of a circle's circumference to its diameter.
 pi  = 3.14159265358979323;

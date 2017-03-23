@@ -242,12 +242,12 @@ module edge_add_r
       (
         points =
         [
-          [ 0, -wy, -(l/2+eps)],
-          [ 0, +wy, -(l/2+eps)],
-          [wx, +wy, -(l/2+eps)],
-          [wx, -wy, -(l/2+eps)],
-          [wx, -wy, -(l/2-eps-wz)],
-          [wx, +wy, -(l/2-eps-wz)]
+          [ 0, -wy, -(l/2+aeps)],
+          [ 0, +wy, -(l/2+aeps)],
+          [wx, +wy, -(l/2+aeps)],
+          [wx, -wy, -(l/2+aeps)],
+          [wx, -wy, -(l/2-aeps-wz)],
+          [wx, +wy, -(l/2-aeps-wz)]
         ],
         faces = [[1,5,4,0], [0,4,3], [1,2,5], [5,2,3,4], [2,1,0,3]]
       );
