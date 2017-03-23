@@ -339,7 +339,7 @@ BEGIN_SCOPE validate;
       ["t12", "test value 10",              [856, 625]]
     ];
 
-    test_ids = table_get_row_ids( test_r );
+    test_ids = table_get_allrow_ids( test_r );
 
     // expected columns: ("id" + one column for each test)
     good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);

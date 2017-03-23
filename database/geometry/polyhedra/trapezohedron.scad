@@ -820,7 +820,7 @@ BEGIN_SCOPE autostat;
     tc = dtc_polyhedra_trapezohedron;
     tr = dtr_polyhedra_trapezohedron;
 
-    ids = table_get_row_ids(tr);
+    ids = table_get_allrow_ids(tr);
 
     echo
     (

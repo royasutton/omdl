@@ -29,7 +29,7 @@
 
   \note Include this library file using the \b include statement.
 
-  \todo Review model for accuracy.
+  \test Review model for accuracy.
 
   \ingroup units units_resolution
 *******************************************************************************/
@@ -43,7 +43,7 @@ include <units_length.scad>;
   \addtogroup units
   @{
 
-  \defgroup units_resolution Resolution
+  \defgroup units_resolution Resolutions
   \brief    Arch rendering resolution management.
 
   \details
@@ -76,18 +76,18 @@ $resolution_value = 0;
 
 //! Return facets number for the given arc radius.
 /***************************************************************************//**
-  \param    radius <decimal> An arc radius.
+  \param    r <decimal> The arc radius.
 
   \returns  <integer> The number of facets to be assigned to $fn.
 
   \details
 
-    The return result of this function can be assigned to the special
+    The result of this function can be assigned to the special
     variables \p $fn to render arcs according to the resolution mode
     set by \ref $resolution_mode and \ref $resolution_value.
 
     The following table shows the modes that require \ref $resolution_value
-    to be set prior to specify the custom values used during resolution
+    to be set prior to specifying the custom values used during resolution
     calculation.
 
      $resolution_mode | $resolution_value sets | radius dependent
@@ -98,8 +98,8 @@ $resolution_value = 0;
       fpi             | facets per inch        | yes
 
     The following table has common resolution presets. Equivalent
-    configuration can be obtained using \ref resolution_mode and
-    \ref resolution_value as described in the preview table.
+    configuration can be obtained using \ref $resolution_mode and
+    \ref $resolution_value as described in the preview table.
 
      $resolution_mode | preset description        | radius dependent
     :----------------:|:--------------------------|:----------------:
@@ -122,55 +122,55 @@ $resolution_value = 0;
 *******************************************************************************/
 function resolution_fn
 (
-  radius
+  r
 ) = $resolution_mode == "set"
     ? ceil(max(3, $resolution_value))
 
   // custom resolutions
   : $resolution_mode == "upf"
-    ? ceil(max(3, radius*tau / $resolution_value))
+    ? ceil(max(3, r*tau / $resolution_value))
   : $resolution_mode == "fpu"
-    ? ceil(max(3, radius*tau * $resolution_value))
+    ? ceil(max(3, r*tau * $resolution_value))
   : $resolution_mode == "fpi"
-    ? ceil(max(3, unit_length_convert(radius, to="in")*tau * $resolution_value))
+    ? ceil(max(3, unit_length_convert(r, to="in")*tau * $resolution_value))
 
   // common resolutions per unit (base_units)
   : $resolution_mode == "fast"
     ? 18
   : $resolution_mode == "low"
-    ? ceil(max(3, radius*tau * 1))
+    ? ceil(max(3, r*tau * 1))
   : $resolution_mode == "medium"
-    ? ceil(max(3, radius*tau * 10))
+    ? ceil(max(3, r*tau * 10))
   : $resolution_mode == "high"
-    ? ceil(max(3, radius*tau * 100))
+    ? ceil(max(3, r*tau * 100))
 
   // common resolutions in microns
   : $resolution_mode == "50um"
-    ? ceil(max(3, radius*tau / unit_length_convert(  50, "um")))
+    ? ceil(max(3, r*tau / unit_length_convert(  50, "um")))
   : $resolution_mode == "100um"
-    ? ceil(max(3, radius*tau / unit_length_convert( 100, "um")))
+    ? ceil(max(3, r*tau / unit_length_convert( 100, "um")))
   : $resolution_mode == "200um"
-    ? ceil(max(3, radius*tau / unit_length_convert( 200, "um")))
+    ? ceil(max(3, r*tau / unit_length_convert( 200, "um")))
   : $resolution_mode == "300um"
-    ? ceil(max(3, radius*tau / unit_length_convert( 300, "um")))
+    ? ceil(max(3, r*tau / unit_length_convert( 300, "um")))
   : $resolution_mode == "400um"
-    ? ceil(max(3, radius*tau / unit_length_convert( 400, "um")))
+    ? ceil(max(3, r*tau / unit_length_convert( 400, "um")))
   : $resolution_mode == "500um"
-    ? ceil(max(3, radius*tau / unit_length_convert( 500, "um")))
+    ? ceil(max(3, r*tau / unit_length_convert( 500, "um")))
 
   // common resolutions in thousands
   : $resolution_mode == "50mil"
-    ? ceil(max(3, radius*tau / unit_length_convert(  50, "mil")))
+    ? ceil(max(3, r*tau / unit_length_convert(  50, "mil")))
   : $resolution_mode == "100mil"
-    ? ceil(max(3, radius*tau / unit_length_convert( 100, "mil")))
+    ? ceil(max(3, r*tau / unit_length_convert( 100, "mil")))
   : $resolution_mode == "200mil"
-    ? ceil(max(3, radius*tau / unit_length_convert( 200, "mil")))
+    ? ceil(max(3, r*tau / unit_length_convert( 200, "mil")))
   : $resolution_mode == "300mil"
-    ? ceil(max(3, radius*tau / unit_length_convert( 300, "mil")))
+    ? ceil(max(3, r*tau / unit_length_convert( 300, "mil")))
   : $resolution_mode == "400mil"
-    ? ceil(max(3, radius*tau / unit_length_convert( 400, "mil")))
+    ? ceil(max(3, r*tau / unit_length_convert( 400, "mil")))
   : $resolution_mode == "500mil"
-    ? ceil(max(3, radius*tau / unit_length_convert( 500, "mil")))
+    ? ceil(max(3, r*tau / unit_length_convert( 500, "mil")))
 
   // otherwise
   : undef;
@@ -181,9 +181,9 @@ function resolution_fn
 
   \details
 
-    The return result of this function can be assigned to the OpenSCAD
-    special variables \p $fs to render arcs according to the resolution
-    mode set by \ref $resolution_mode and \ref $resolution_value.
+    The result of this function can be assigned to the special
+    variables \p $fs to render arcs according to the resolution mode
+    set by \ref $resolution_mode and \ref $resolution_value.
 
     The following table shows the modes that require \ref $resolution_value
     to be set prior to calling this function in order to specify the
@@ -197,8 +197,8 @@ function resolution_fn
       fpi             | facets per inch        | no
 
     The following table has common resolution presets. Equivalent
-    configuration can be obtained using \ref resolution_mode and
-    \ref resolution_value as described in the preview table.
+    configuration can be obtained using \ref $resolution_mode and
+    \ref $resolution_value as described in the preview table.
 
      $resolution_mode | preset description        | radius dependent
     :----------------:|:--------------------------|:----------------:
@@ -275,19 +275,19 @@ function resolution_fs ( )
 
 //! Return the minimum facets angle.
 /***************************************************************************//**
-  \param    radius <decimal> An arc radius.
+  \param    r <decimal> The arc radius.
 
   \returns  <decimal> Minimum facet angle to be assigned to $fa.
 
   \details
 
-    The return result of this function can be assigned to the OpenSCAD
-    special variables \p $fa to render arcs.
+    The result of this function can be assigned to the special
+    variables \p $fa to render arcs.
 *******************************************************************************/
 function resolution_fa
 (
-  radius
-) = max(0.01, (360*$fs)/(tau*radius));
+  r
+) = max(0.01, (360*$fs)/(tau*r));
 
 //! Return the radius at which arc resolution will begin to degrade.
 /***************************************************************************//**
@@ -295,31 +295,34 @@ function resolution_fa
 
   \details
 
-    The OpenSCAD special variables \p $fs and \p $fa work together when
-    \p $fn=0. For a given \p $fs, the fragment angle of a drawn arc gets
-    smaller with increasing radius. In other words, the fragment angle is
+    The special variables \p $fs and \p $fa work together when \p $fn = 0.
+    For a given \p $fs, the fragment angle of a drawn arc gets smaller
+    with increasing radius. In other words, the fragment angle is
     inversely proportional to the arc radius for a given fragment size.
-    The special variable \p $fa enforces a minimum fragment angle limit
-    and at some radius, the fragment angle would becomes smaller than this
-    limit. At this point, OpenSCAD limits further reduction in the facet
-    angle which forces the use of increased fragment size. This in effect
-    begins the gradual reduction of arc resolution with increasing radius.
 
-    The return result of this function indicates the radius at which this
-    enforced limiting begins. When \p $fn != 0, returns \b 'undef'.
+    The special variable \p $fa enforces a minimum fragment angle limit
+    and at some radius, the fragment angle would becomes smaller than
+    this limit. At this point, OpenSCAD limits further reduction in the
+    facet angle which forces the use of increased fragment size. This
+    in effect begins the gradual reduction of arc resolution with
+    increasing radius.
+
+    The return result of this function indicates the radius at which
+    this enforced limiting begins. When \p $fn != 0, returns
+    \b undef.
 *******************************************************************************/
 function resolution_reduced ( )
   = ($fn == 0.0)
     ? (360*$fs)/(tau*$fa)
   : undef;
 
-//! Echo resolution information to the console for given radius.
+//! Output resolution information to the console for given radius.
 /***************************************************************************//**
-  \param    radius <decimal> An arc radius.
+  \param    r <decimal> The arc radius.
 *******************************************************************************/
 module resolution_info
 (
-  radius
+  r
 )
 {
   log_echo
@@ -357,16 +360,16 @@ module resolution_info
     (
       str
       (
-        "for radius = ", radius, " ", unit_length_name()," facets limited to ",
+        "for radius = ", r, " ", unit_length_name()," facets limited to ",
         max(3, $fn), " by $fn=", $fn
       )
     );
-  else if (360.0/$fa < radius*tau/$fs)
+  else if (360.0/$fa < r*tau/$fs)
     log_echo
     (
       str
       (
-        "for radius = ", radius, " ", unit_length_name()," facets limited to ",
+        "for radius = ", r, " ", unit_length_name()," facets limited to ",
         max(5, ceil(360.0/$fa)), " by $fa=", $fa
       )
     );
@@ -375,15 +378,15 @@ module resolution_info
     (
       str
       (
-        "for radius = ", radius, " ", unit_length_name()," facets limited to ",
-        max(5, ceil(radius*tau/$fs)), " by $fs=", $fs, " ", unit_length_name()
+        "for radius = ", r, " ", unit_length_name()," facets limited to ",
+        max(5, ceil(r*tau/$fs)), " by $fs=", $fs, " ", unit_length_name()
       )
     );
 }
 
 //! Return facet count used to render a radius.
 /***************************************************************************//**
-  \param    radius <decimal> An arc radius.
+  \param    r <decimal> The arc radius.
 
   \returns  <integer> The number of fragments/facets that will be used to
             render a radius given the current values for \p $fn, \p $fa,
@@ -391,14 +394,14 @@ module resolution_info
 *******************************************************************************/
 function resolution_facets
 (
-  radius
-) = ($fn > 0.0)                  ? max(3, $fn)
-  : (360.0/$fa < radius*tau/$fs) ? max(5, ceil(360.0/$fa))
-  :                                max(5, ceil(radius*tau/$fs));
+  r
+) = ($fn > 0.0)             ? max(3, $fn)
+  : (360.0/$fa < r*tau/$fs) ? max(5, ceil(360.0/$fa))
+  :                           max(5, ceil(r*tau/$fs));
 
-//! Return facet count used to render a radius as list-3.
+//! Return facet count information list used to render a radius.
 /***************************************************************************//**
-  \param    radius <decimal> An arc radius.
+  \param    r <decimal> The arc radius.
 
   \returns  <list-3> A 3-tuple list of the form:
             [\b facets <integer>,\b limiter <string>,\b value <decimal>].
@@ -412,10 +415,10 @@ function resolution_facets
 *******************************************************************************/
 function resolution_facetsv
 (
-  radius
-) = ($fn > 0.0)                  ? [max(3, $fn), "$fn", $fn]
-  : (360.0/$fa < radius*tau/$fs) ? [max(5, ceil(360.0/$fa)), "$fa", $fa]
-  :                                [max(5, ceil(radius*tau/$fs)), "$fs", $fs ];
+  r
+) = ($fn > 0.0)             ? [max(3, $fn), "$fn", $fn]
+  : (360.0/$fa < r*tau/$fs) ? [max(5, ceil(360.0/$fa)), "$fa", $fa]
+  :                           [max(5, ceil(r*tau/$fs)), "$fs", $fs ];
 
 //! @}
 //! @}

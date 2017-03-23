@@ -514,7 +514,7 @@ BEGIN_SCOPE autostat;
     tc = dtc_polyhedra_dipyramids;
     tr = dtr_polyhedra_dipyramids;
 
-    ids = table_get_row_ids(tr);
+    ids = table_get_allrow_ids(tr);
 
     echo
     (

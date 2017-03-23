@@ -39,12 +39,12 @@ include <constants.scad>;
   \addtogroup units
   @{
 
-  \defgroup units_coordinate Coordinate
+  \defgroup units_coordinate Coordinates
   \brief    Coordinate systems and conversions.
 
   \details
 
-    These functions allow for reference points in space to be specified
+    These functions allow for geometric points in space to be specified
     using multiple coordinate systems. Some geometric calculations are
     specified more naturally in one or another coordinate system. These
     conversion functions allow for the movement between the most
@@ -63,14 +63,14 @@ include <constants.scad>;
 
     The symbols used in the convention column are as follows:
 
-    | symbol  | description           | units   | reference           |
-    |:-------:|:----------------------|:-------:|:-------------------:|
-    | x, y, z | coordinate distance   | any     | xyz-axis            |
-    | r       | radial distance       | any     | z-axis / xyz-origin |
-    | aa      | azimuthal angle       | degrees | positive x-axis     |
-    | pa      | polar / zenith angle  | degrees | positive z-axis     |
+    | symbol  | description             | units   | reference           |
+    |:-------:|:------------------------|:-------:|:-------------------:|
+    | x, y, z | coordinate distance     | any     | xyz-axis            |
+    | r       | radial distance         | any     | z-axis / xyz-origin |
+    | aa      | [azimuthal] angle       | degrees | positive x-axis     |
+    | pa      | polar / [zenith] angle  | degrees | positive z-axis     |
 
-  \note The azimuthal angle is a measure of the radial vector orthogonal
+  \note The [azimuthal] angle is a measure of the radial vector orthogonal
         projection onto the xy-plane measured from the positive x-axis.
   \note The polar angle is measured from the z-axis ([zenith]) to the
         radial vector.
@@ -91,13 +91,14 @@ include <constants.scad>;
     [polar]: https://en.wikipedia.org/wiki/Polar_coordinate_system
     [cylindrical]: https://en.wikipedia.org/wiki/Cylindrical_coordinate_system
     [spherical]: https://en.wikipedia.org/wiki/Spherical_coordinate_system
+    [azimuthal]: https://en.wikipedia.org/wiki/Azimuth
     [zenith]: https://en.wikipedia.org/wiki/Zenith
 
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! <string> Base coordinate system.
+//! <string> The base coordinate system.
 base_coordinates = "c";
 
 //! <boolean> When converting to angular measures add 360 to negative angles.
@@ -108,7 +109,7 @@ coordinates_positive_angles = true;
   \param    s <string> A coordinate system identifier.
 
   \returns  <string> The system name for the given identifier.
-            Returns \b 'undef' for identifiers that are not defined.
+            Returns \b undef for identifiers that are not defined.
 *******************************************************************************/
 function coordinates_name
 (
@@ -119,14 +120,14 @@ function coordinates_name
   : (s == "s") ? "spherical"
   : undef;
 
-//! Convert coordinate \p c from the Cartesian to the \p to coordinate system.
+//! Convert a point from Cartesian to other coordinate systems.
 /***************************************************************************//**
-  \param    c <point> A value to convert.
-  \param    to <string> The coordinate system identifier to which the value
+  \param    c <point> A point to convert.
+  \param    to <string> The coordinate system identifier to which the point
             should be converted.
 
   \returns  <point> The converted result.
-            Returns \b 'undef' for identifiers that are not defined.
+            Returns \b undef for identifiers that are not defined.
 
   \private
 *******************************************************************************/
@@ -169,14 +170,14 @@ function coordinate_c_to
     )
   : undef;
 
-//! Convert coordinate \p c from the \p from to the Cartesian coordinate system.
+//! Convert a point from some coordinate system to the Cartesian coordinate system.
 /***************************************************************************//**
-  \param    c <point> A value to convert.
-  \param    from <string> The coordinate system identifier of the value
+  \param    c <point> A point to convert.
+  \param    from <string> The coordinate system identifier of the point
             to be converted.
 
   \returns  <point> The converted result.
-            Returns \b 'undef' for identifiers that are not defined.
+            Returns \b undef for identifiers that are not defined.
 
   \private
 *******************************************************************************/
@@ -216,16 +217,16 @@ function coordinate_to_c
     )
   : undef;
 
-//! Convert coordinate \p c from the \p from to the \p to coordinate system.
+//! Convert point from one coordinate system to another.
 /***************************************************************************//**
-  \param    c <point> A value to convert.
-  \param    from <string> The coordinate system identifier of the value
+  \param    c <point> A point to convert.
+  \param    from <string> The coordinate system identifier of the point
             to be converted.
-  \param    to <string> The coordinate system identifier to which the value
+  \param    to <string> The coordinate system identifier to which the point
             should be converted.
 
   \returns  <point> The converted result.
-            Returns \b 'undef' for identifiers that are not defined.
+            Returns \b undef for identifiers that are not defined.
 *******************************************************************************/
 function convert_coordinate
 (

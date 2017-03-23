@@ -2789,7 +2789,7 @@ BEGIN_SCOPE autostat;
     tc = dtc_polyhedra_archimedean_duals;
     tr = dtr_polyhedra_archimedean_duals;
 
-    ids = table_get_row_ids(tr);
+    ids = table_get_allrow_ids(tr);
 
     echo
     (

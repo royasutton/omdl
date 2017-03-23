@@ -55,9 +55,9 @@ include <datatypes.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Get the index for a table row that matches an identifier.
+//! Get the table row index that matches a table row identifier.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-colummns x R-rows).
+  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
   \param    ri <string> The row identifier.
 
   \returns  <integer> The row index where the identifier exists.
@@ -71,7 +71,7 @@ function table_get_row_idx
 
 //! Get the table row that matches a table row identifier.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-colummns x R-rows).
+  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
   \param    ri <string> The row identifier.
 
   \returns  <list-C> The table row where the row identifier exists.
@@ -83,9 +83,9 @@ function table_get_row
   ri
 ) = r[ table_get_row_idx(r, ri) ];
 
-//! Get the index for a table column that matches an identifier.
+//! Get the table column index that matches a table column identifier.
 /***************************************************************************//**
-  \param    c <matrix-2xC> The table column matrix (2 x C-colummns).
+  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
   \param    ci <string> The column identifier.
 
   \returns  <integer> The column index where the identifier exists.
@@ -97,9 +97,9 @@ function table_get_col_idx
   ci
 ) = first( search( [ci], c, 1, 0 ) );
 
-//! Get the column for a table column identifier.
+//! Get the table column that matches a table column identifier.
 /***************************************************************************//**
-  \param    c <matrix-2xC> The table column matrix (2 x C-colummns).
+  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
   \param    ci <string> The column identifier.
 
   \returns  <list-2> The table column where the column identifier exists.
@@ -111,14 +111,14 @@ function table_get_col
   ci
 ) = c[ table_get_col_idx(c, ci) ];
 
-//! Get the table cell value for a column and row.
+//! Get the table cell value for a specified row and column identifier.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-colummns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-colummns).
+  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
+  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
   \param    ri <string> The row identifier.
   \param    ci <string> The column identifier.
 
-  \returns  \<value> The value at matrix cell [ci, ri].
+  \returns  \<value> The value of the matrix cell [ri, ci].
             If either identifier does not exists, returns \b undef.
 *******************************************************************************/
 function table_get
@@ -129,47 +129,47 @@ function table_get
   ci
 ) = r[table_get_row_idx(r,ri)][table_get_col_idx(c,ci)];
 
-//! Form a list of a select column across all rows.
+//! Form a list of a select column across all table rows.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-colummns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-colummns).
+  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
+  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
   \param    ci <string> The column identifier.
 
   \returns  \<list> The list of a select column across all rows.
             If the identifier does not exists, returns \b undef.
 *******************************************************************************/
-function table_get_row_cols
+function table_get_allrow_cols
 (
   r,
   c,
   ci
 ) = table_exists(r,c,ci=ci) ?
-    eselect(table_copy(r,c,cs=[ci]),f=true)
+    eselect(table_copy(r,c,cl=[ci]),f=true)
   : undef;
 
-//! Form a list of a all row identifiers.
+//! Form a list of all table row identifiers.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-colummns x R-rows).
+  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
 
   \returns  \<list> The list of all row identifiers.
 
   \details
 
-  \note     This functions assumes the first element of each table row to
-            be the row identifier, as enforced by the table_check(). As
-            an alternative, the function table_get_row_cols(), of the form
-            table_get_row_cols(r, c, "id"), may be used without this
-            assumption.
+  \note     This functions assumes the first element of each table row
+            to be the row identifier, as enforced by the table_check().
+            As an alternative, the function table_get_allrow_cols(), of
+            the form table_get_allrow_cols(r, c, "id"), may be used
+            without this assumption.
 *******************************************************************************/
-function table_get_row_ids
+function table_get_allrow_ids
 (
   r
 ) = eselect(r,f=true);
 
 //! Test the existence of a table row and column identifier.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-colummns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-colummns).
+  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
+  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
   \param    ri <string> The row identifier.
   \param    ci <string> The column identifier.
 
@@ -192,8 +192,8 @@ function table_exists
 
 //! Get the size of a table.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-colummns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-colummns).
+  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
+  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
 
   \returns  <decimal> The table size.
 
@@ -214,8 +214,8 @@ function table_size
 
 //! Perform some basic validation/checks on a table.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-colummns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-colummns).
+  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
+  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
   \param    verbose <boolean> Be verbose during check.
 
   \details
@@ -223,7 +223,8 @@ function table_size
     Check that: (1) the first table column identifier is 'id'. (2) Make
     sure that each row has the same number of columns as defined in the
     columns vector. (3) Make sure that there are no repeating column
-    identifiers. (4) Make sure that there are no repeating row identifiers.
+    identifiers. (4) Make sure that there are no repeating row
+    identifiers.
 *******************************************************************************/
 module table_check
 (
@@ -253,7 +254,8 @@ module table_check
     {
       log_error
       (
-        str (
+        str
+        (
           "row ", table_get_row_idx(r, r_iter),
           ", id=[", first(r_iter), "]",
           ", has incorrect column count=[", len ( r_iter ),"]"
@@ -291,25 +293,25 @@ module table_check
 
 //! Dump a table to the console.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-colummns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-colummns).
-  \param    rs <string-list> A selection list of row identifier.
-  \param    cs <string-list> A selection list of column identifier.
+  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
+  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    rl <string-list> A list of selected row identifiers.
+  \param    cl <string-list> A list of selected column identifiers.
   \param    number <boolean> Number the table rows.
 
   \details
 
     Output each table row to the console. To output only select rows and
-    columns, assign the desired identifiers to \p rs and \p cs.
+    columns, assign the desired identifiers to \p rl and \p cl.
     For example to output only the column identifiers 'c1' and 'c2', assign
-    <tt>cs = ["c1", "c2"]</tt>.
+    <tt>cl = ["c1", "c2"]</tt>.
 *******************************************************************************/
 module table_dump
 (
   r,
   c,
-  rs,
-  cs,
+  rl,
+  cl,
   number = true
 )
 {
@@ -321,8 +323,8 @@ module table_dump
   {
     if
     (
-      not_defined( rs ) || is_empty( rs ) ||
-      !is_empty( first( search( r_iter, rs, 1, 0 ) ) )
+      not_defined( rl ) || is_empty( rl ) ||
+      !is_empty( first( search( r_iter, rl, 1, 0 ) ) )
     )
     {
       if ( number )
@@ -334,13 +336,14 @@ module table_dump
       {
         if
         (
-          not_defined( cs ) || is_empty( cs ) ||
-          !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
+          not_defined( cl ) || is_empty( cl ) ||
+          !is_empty( first( search( c_iter, cl, 1, 0 ) ) )
         )
         {
           log_echo
           (
-            str (
+            str
+            (
               "[", first(r_iter), "]", chr(consts(maxr0-len(first(r_iter)), 32)),
               "[", first(c_iter), "]", chr(consts(maxc0-len(first(c_iter)), 32)),
               "(", c_iter[1], ")", chr(consts(maxc1-len(c_iter[1]), 32)),
@@ -365,12 +368,12 @@ module table_dump
   }
 }
 
-//! Create a matrix of select rows and columns of a table.
+//! Create a new matrix from select rows and columns of a table.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-colummns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-colummns).
-  \param    rs <string-list> A selection list of row identifier.
-  \param    cs <string-list> A selection list of column identifier.
+  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
+  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    rl <string-list> A list of selected row identifiers.
+  \param    cl <string-list> A list of selected column identifiers.
 
   \returns  <matrix> A matrix of the selected rows and columns.
 *******************************************************************************/
@@ -378,22 +381,22 @@ function table_copy
 (
   r,
   c,
-  rs,
-  cs
+  rl,
+  cl
 ) =
 [
   for ( r_iter = r )
     if
     (
-      not_defined( rs ) || is_empty( rs ) ||
-      !is_empty( first( search( r_iter, rs, 1, 0 ) ) )
+      not_defined( rl ) || is_empty( rl ) ||
+      !is_empty( first( search( r_iter, rl, 1, 0 ) ) )
     )
     [
       for ( c_iter = c )
         if
         (
-          not_defined( cs ) || is_empty( cs ) ||
-          !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
+          not_defined( cl ) || is_empty( cl ) ||
+          !is_empty( first( search( c_iter, cl, 1, 0 ) ) )
         )
           table_get(r, c, r_iter, c_iter)
     ]
@@ -401,10 +404,10 @@ function table_copy
 
 //! Sum select rows and columns of a table.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-colummns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-colummns).
-  \param    rs <string-list> A selection list of row identifier.
-  \param    cs <string-list> A selection list of column identifier.
+  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
+  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    rl <string-list> A list of selected row identifiers.
+  \param    cl <string-list> A list of selected column identifiers.
 
   \returns  \<list> A list with the sum of each selected rows and columns.
 *******************************************************************************/
@@ -412,9 +415,9 @@ function table_sum
 (
   r,
   c,
-  rs,
-  cs
-) = sum( table_copy(r, c, rs, cs) );
+  rl,
+  cl
+) = sum( table_copy(r, c, rl, cl) );
 
 //! @}
 //! @}
@@ -459,14 +462,14 @@ BEGIN_SCOPE example;
     if ( table_exists( c=table_cols, ci="nl" ) )
       echo ( "metric 'nl' available" );
 
-    table_ids = table_get_row_ids( table_rows );
-    table_cols_tl = table_get_row_cols( table_rows, table_cols, "tl" );
+    table_ids = table_get_allrow_ids( table_rows );
+    table_cols_tl = table_get_allrow_cols( table_rows, table_cols, "tl" );
 
     echo ( table_ids=table_ids );
     echo ( table_cols_tl=table_cols_tl );
 
-    tnew = table_copy( table_rows, table_cols, cs=["tl", "nl"] );
-    tsum = table_sum( table_rows, table_cols, cs=["tl", "nl"] );
+    tnew = table_copy( table_rows, table_cols, cl=["tl", "nl"] );
+    tsum = table_sum( table_rows, table_cols, cl=["tl", "nl"] );
 
     echo ( m3r16r_tl=m3r16r_tl );
     echo ( tnew=tnew );

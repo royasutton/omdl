@@ -463,7 +463,7 @@ BEGIN_SCOPE autostat;
     tc = dtc_polyhedra_platonic;
     tr = dtr_polyhedra_platonic;
 
-    ids = table_get_row_ids(tr);
+    ids = table_get_allrow_ids(tr);
 
     echo
     (

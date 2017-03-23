@@ -39,7 +39,7 @@ include <constants.scad>;
   \addtogroup units
   @{
 
-  \defgroup units_angle Angle
+  \defgroup units_angle Angles
   \brief    Angle units and conversions.
 
   \details
@@ -49,8 +49,7 @@ include <constants.scad>;
     There are also unit conversion functions for converting from one unit
     to another.
 
-    The table below enumerates the supported unit identifiers and their
-    descriptions.
+    The table below enumerates the supported units.
 
      units id  | description            | type            |
     :---------:|:----------------------:|:---------------:|
@@ -72,81 +71,80 @@ include <constants.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! <string> Base unit for angle measurements.
+//! <string> The base units for angle measurements.
 base_unit_angle = "d";
 
-//! Return the name of the given angle \p unit identifier.
+//! Return the name of an angle unit identifier.
 /***************************************************************************//**
-  \param    units <string> An angle unit identifier.
+  \param    u <string> An angle unit identifier.
 
   \returns  <string> The units name for the given angle unit identifier.
-            Returns \b 'undef' for identifiers that are not defined.
+            Returns \b undef for identifiers that are not defined.
 *******************************************************************************/
 function unit_angle_name
 (
-  units = base_unit_angle
-) = units == "r"   ? "radian"
-  : units == "d"   ? "degree"
-  : units == "dms" ? "degree, minute, second"
+  u = base_unit_angle
+) = u == "r"   ? "radian"
+  : u == "d"   ? "degree"
+  : u == "dms" ? "degree, minute, second"
   : undef;
 
-//! Convert the \p angle from degrees to \p to units.
+//! Convert an angle from degrees to other units.
 /***************************************************************************//**
-  \param    angle <decimal|decimal-list-3> An angle to convert.
+  \param    a <decimal|decimal-list-3> An angle to convert.
   \param    to <string> The units to which the angle should be converted.
 
   \returns  <decimal|decimal-list-3> The conversion result.
-            Returns \b 'undef' for identifiers that are not defined.
+            Returns \b undef for identifiers that are not defined.
 
   \private
 *******************************************************************************/
 function unit_angle_d_to
 (
-  angle,
+  a,
   to
-) = to == "r"    ? ( angle * tau / 360 )
-  : to == "d"    ? ( angle )
-  : to == "dms"  ? ( [ floor(angle),
-                       floor( ( angle - floor(angle) ) * 60 ),
-                       ( angle
-                         - floor(angle)
-                         - floor( ( angle - floor(angle) ) * 60 ) / 60 ) * 3600
-                     ] )
+) = to == "r"    ? (a * tau / 360)
+  : to == "d"    ? (a)
+  : to == "dms"  ? ([
+                      floor(a),
+                      floor((a - floor(a)) * 60),
+                      (a - floor(a) - floor((a - floor(a)) * 60) / 60) * 3600
+                   ])
   : undef;
 
-//! Convert the \p angle from \p from units to degrees.
+//! Convert an angle from some units to degrees.
 /***************************************************************************//**
-  \param    angle <decimal|decimal-list-3> An angle to convert.
+  \param    a <decimal|decimal-list-3> An angle to convert.
   \param    from <string> The units of the angle to be converted.
 
   \returns  <decimal|decimal-list-3> The conversion result.
-            Returns \b 'undef' for identifiers that are not defined.
+            Returns \b undef for identifiers that are not defined.
   \private
 *******************************************************************************/
 function unit_angle_to_d
 (
-  angle,
+  a,
   from
-) = from == "r"    ? ( angle * 360 / tau )
-  : from == "d"    ? ( angle )
-  : from == "dms"  ? ( angle[0] + angle[1]/60 + angle[2]/3600 )
+) = from == "r"    ? (a * 360 / tau)
+  : from == "d"    ? (a)
+  : from == "dms"  ? (a[0] + a[1]/60 + a[2]/3600)
   : undef;
 
-//! Convert the \p angle from \p from units to \p to units.
+//! Convert an angle from some units to another.
 /***************************************************************************//**
-  \param    angle <decimal|decimal-list-3> An angle to convert.
+  \param    a <decimal|decimal-list-3> An angle to convert.
   \param    from <string> The units of the angle to be converted.
   \param    to <string> A units to which the angle should be converted.
 
   \returns  <decimal|decimal-list-3> The conversion result.
-            Returns \b 'undef' for identifiers that are not defined.
+            Returns \b undef for identifiers that are not defined.
 *******************************************************************************/
 function convert_angle
 (
-  angle,
+  a,
   from = base_unit_angle,
   to   = base_unit_angle
-) = unit_angle_d_to( unit_angle_to_d( angle, from ), to );
+) = unit_angle_d_to( unit_angle_to_d( a, from ), to );
 
 //! @}
 //! @}

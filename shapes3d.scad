@@ -68,7 +68,7 @@ include <shapes2d.scad>;
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
-// amu macros
+// openscad-amu macros
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
   \amu_define scope (shapes3d_dim)
@@ -137,7 +137,7 @@ module cone
   \param    size <decimal-list-3|decimal> A list [x, y, z] of decimals
             or a single decimal for (x=y=z).
 
-  \param    vr <decimal> The rounding radius.
+  \param    vr <decimal> The corner rounding radius.
 
   \param    vrm <integer> The radius mode.
             A 2-bit encoded integer that indicates edge and vertex finish.

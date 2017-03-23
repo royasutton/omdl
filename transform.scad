@@ -1,4 +1,4 @@
-//! Shape transformation functions.
+//! Shape transformations.
 /***************************************************************************//**
   \file   transform.scad
   \author Roy Allen Sutton
@@ -72,7 +72,7 @@ include <math_bitwise.scad>;
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
-// amu macros
+// openscad-amu macros
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
   \amu_define scope (transform_dim)
@@ -225,6 +225,7 @@ module rotate_extrude_tre
 
   \note When symmetrical scaling is desired, shape must be centered about
         origin.
+
   \todo This function should be rewritten to use the built-in scaling
         provided by linear_extrude() in the upper and lower scaling zones.
 *******************************************************************************/
@@ -342,7 +343,8 @@ module radial_repeat
             decimals or a single decimal for (x=y=z).
   \param    i <decimal-list-3|decimal> The grid increment A list [x, y, z]
             of decimals or a single decimal for (x=y=z).
-  \param    c <decimal> Number of times to iterate over children.
+  \param    c <integer> The number of copies. Number of times to iterate
+            over children.
   \param    center <boolean> Center distribution about origin.
 
   \details

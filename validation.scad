@@ -48,7 +48,7 @@ include <datatypes.scad>;
 
   \param    p \<number> A numerical precision for approximate comparisons.
 
-  \param    pf <boolean> Result reported as a pass or fail boolean value.
+  \param    pf <boolean> Report result as pass or fail boolean value.
 
   \returns  <string|boolean> Validation result indicating if the test
             passed or failed.
@@ -71,12 +71,12 @@ include <datatypes.scad>;
 
     \b Result \include validation_example.log
 
-  \note     When performing an \b 'almost' equal validation, the
+  \note     When performing an \b "almost" equal validation, the
             comparison precision is controlled by \p p. This specifies
             the number of digits of precision for each numerical
             comparison. A passing result indicates that \p cv equals
             \p ev to the number of decimal digits specified by \p p. The
-            comparison is performed by the function \ref almost_equal.
+            comparison is performed by the function almost_equal().
 *******************************************************************************/
 function validate
 (

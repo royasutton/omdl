@@ -610,7 +610,7 @@ BEGIN_SCOPE autostat;
     tc = dtc_polyhedra_anti_prisms;
     tr = dtr_polyhedra_anti_prisms;
 
-    ids = table_get_row_ids(tr);
+    ids = table_get_allrow_ids(tr);
 
     echo
     (

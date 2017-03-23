@@ -50,8 +50,8 @@ module align_axis2v
 (
   v,
   t = 0,
-  a = 2,
-  r = 0
+  r = 0,
+  a = 2
 )
 {
   vt = is_iterable(v[0]) ? (len(v)>1) ? v[1] : v[0] : v;

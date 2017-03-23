@@ -81,7 +81,7 @@ include <datatypes.scad>;
   \param    p2 <point> A point coordinate.
 
   \returns  <decimal> The distance between the two points.
-            Returns \b 'undef' when points do not have equal dimensions.
+            Returns \b undef when points do not have equal dimensions.
 
   \details
 
@@ -108,6 +108,7 @@ function distance_pp
             (\b < 0) for p3  right of the line.
 
   \details
+
     Function patterned after [Dan Sunday, 2012].
 
     [Dan Sunday, 2012]: http://geomalgorithms.com/a01-_area.html
@@ -128,6 +129,10 @@ function is_left_ppp
   \param    v <vector> A vector or a line.
 
   \returns  <integer> The number of dimensions.
+
+  \details
+
+    See \ref dt_vectors for argument specification and conventions.
 *******************************************************************************/
 function dimensions_v
 (
@@ -139,6 +144,10 @@ function dimensions_v
   \param    v <vector> A vector or a line.
 
   \returns  <integer> The vector or line shifted to the origin.
+
+  \details
+
+    See \ref dt_vectors for argument specification and conventions.
 *******************************************************************************/
 function to_origin_v
 (
@@ -154,10 +163,11 @@ function to_origin_v
   \param    v2 <vector> A n-dimensional vector 2.
 
   \returns  <decimal> The dot product of \p v1 with \p v2.
-            Returns \b 'undef' when vectors have different dimensions.
+            Returns \b undef when vectors have different dimensions.
 
   \details
 
+    See \ref dt_vectors for argument specification and conventions.
     See [Wikipedia] for more information.
 
     [Wikipedia]: https://en.wikipedia.org/wiki/Dot_product
@@ -174,10 +184,11 @@ function dot_vv
   \param    v2 <vector-3d|vector-2d> A 3d or 2d vector 2.
 
   \returns  <decimal|vector-2d> The cross product of \p v1 with \p v2.
-            Returns \b 'undef' when vectors have different dimensions.
+            Returns \b undef when vectors have different dimensions.
 
   \details
 
+    See \ref dt_vectors for argument specification and conventions.
     See Wikipedia [cross] and [determinant] for more information.
 
   \note     This function returns the 2x2 determinant for 2d vectors.
@@ -198,12 +209,13 @@ function cross_vv
   \param    v3 <vector-3d|vector-2d> A 3d or 2d vector 3.
 
   \returns  <decimal|vector-2d> The scalar triple product.
-            Returns \b 'undef' when vectors have different dimensions.
+            Returns \b undef when vectors have different dimensions.
 
   \details
 
     [v1, v2, v3] = v1 * (v2 x v3)
 
+    See \ref dt_vectors for argument specification and conventions.
     See [Wikipedia] for more information.
 
   \warning  Returns a 2d vector result for 2d vectors. The cross product
@@ -225,10 +237,12 @@ function striple_vvv
   \param    v2 <vector-3d|vector-2d> A 3d or 2d vector 2.
 
   \returns  <decimal> The angle between the two vectors in degrees.
-            Returns \b 'undef' when vectors have different dimensions
+            Returns \b undef when vectors have different dimensions
             or when they do not intersect.
 
   \details
+
+    See \ref dt_vectors for argument specification and conventions.
 
   \note     For 3d vectors, a normal vector is required to uniquely
             identify the perpendicular plane and axis of rotation. This
@@ -254,10 +268,12 @@ function angle_vv
   \param    nv <vector-3d> A 3d normal vector.
 
   \returns  <decimal> The angle between the two vectors in degrees.
-            Returns \b 'undef' when vectors have different dimensions
+            Returns \b undef when vectors have different dimensions
             or when they do not intersect.
 
   \details
+
+    See \ref dt_vectors for argument specification and conventions.
 
   \sa angle_vv().
 *******************************************************************************/
@@ -273,6 +289,10 @@ function angle_vvn
   \param    v <vector> A vector or a line.
 
   \returns  <vector> The normalized unit vector.
+
+  \details
+
+    See \ref dt_vectors for argument specification and conventions.
 *******************************************************************************/
 function unit_v
 (
@@ -291,6 +311,7 @@ function unit_v
             and \b false otherwise.
   \details
 
+    See \ref dt_vectors for argument specification and conventions.
     See [Wikipedia] for more information.
 
   \note     When vectors are specified with start and end points, this
@@ -399,6 +420,7 @@ function translate_lp
 
   \details
 
+    See \ref dt_vectors for argument specification and conventions.
     See [Wikipedia] for more information on [transformation matrix]
     and [axis rotation].
 
@@ -1029,7 +1051,7 @@ BEGIN_SCOPE validate;
                                               ]]
       ];
 
-      test_ids = table_get_row_ids( test_r );
+      test_ids = table_get_allrow_ids( test_r );
 
       // expected columns: ("id" + one column for each test)
       good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);

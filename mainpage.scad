@@ -91,11 +91,11 @@
     with the library source. A link to this documentation is also added
     to a browsable index of libraries, which greatly facilitates design
     reference access. Additionally, with [openscad-amu] installed, new
-    designs can be similarly documented. See the recommended
-    \ref install "installation method" for more information.
+    designs can be similarly documented.
 
-    Library releases are periodically made available in the
-    [omdl repository] under [snapshots].
+    See the recommended \ref install "installation method" for more
+    information. Library releases are periodically made available in
+    the [omdl repository] under [snapshots].
 
   \section contributing Contributing
 
@@ -270,6 +270,7 @@
     v3 = [p1, p2] = [[a,b,c], [d,e,f]]
 
     v1 == v2
+    v1 == v2 == v3, iff p1 == origin3d
     \endcode
 
   \subsubsection dt_planes Planes
@@ -297,13 +298,13 @@
 
     v1 = [p1, p2] = [[a,b,c], [d,e,f]]
     v2 = [p1, p3] = [[a,b,c], [g,h,i]]
-    vn = cross(v1, v2)
+    vn = cross_vv(v1, v2)
 
-    n1 = vn           = cross(v1, v2)
+    n1 = vn           = cross_vv(v1, v2)
     n2 = [v1, v2]     = [[[a,b,c],[d,e,f]], [[a,b,c],[g,h,i]]]
     n3 = [p1, p2, p3] = [[a,b,c], [d,e,f], [g,h,i]]
 
-    n1 == n2 == n3
+    n1 || n2 || n3
     \endcode
 
 

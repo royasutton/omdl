@@ -12858,7 +12858,7 @@ BEGIN_SCOPE autostat;
     tc = dtc_polyhedra_johnson;
     tr = dtr_polyhedra_johnson;
 
-    ids = table_get_row_ids(tr);
+    ids = table_get_allrow_ids(tr);
 
     echo
     (

@@ -40,17 +40,17 @@
 //! Format the function call stack as a string.
 /***************************************************************************//**
   \param    b <integer> The stack index bottom offset.
-            Include function names above this offset.
+            Return function names above this offset.
   \param    t <integer> The stack index top offset.
-            Include function names below this offset.
+            Return function names below this offset.
 
-  \returns  <string> A colon-separated list of functions names for the
-            current function call stack.
+  \returns  <string> A string-formatted colon-separated list of
+            functions names for the current function call stack.
 
   \note     Returns \b undef when \p b is greater than the current number
-            of function instances (ie: <tt>bo > $parent_modules-1</tt>).
+            of function instances (ie: <tt>b > $parent_modules-1</tt>).
   \note     Returns the string \c "root()" when the function call stack
-            is empty (ie: at the root of the script).
+            is empty (ie: at the root of a script).
 *******************************************************************************/
 function stack
 (

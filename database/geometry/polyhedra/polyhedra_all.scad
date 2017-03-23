@@ -21491,7 +21491,7 @@ BEGIN_SCOPE autotest;
     log_echo("  (1) spherical with converted cartesian coordinates:");
     log_echo("  (2) edge list from faces definition:");
 
-    for ( id = table_get_row_ids( tr ) )
+    for ( id = table_get_allrow_ids( tr ) )
     {
       c  = table_get(tr, tc, id, "c");
       s  = table_get(tr, tc, id, "s");

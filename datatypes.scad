@@ -1948,7 +1948,7 @@ BEGIN_SCOPE validate;
           ["t21", "A range",                    [0:0.5:9]]
         ];
 
-        test_ids = table_get_row_ids( test_r );
+        test_ids = table_get_allrow_ids( test_r );
 
         // expected columns: ("id" + one column for each test)
         good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
@@ -2080,7 +2080,7 @@ BEGIN_SCOPE validate;
           ["t23", "Test list 13",               [true, true, true, true]]
         ];
 
-        test_ids = table_get_row_ids( test_r );
+        test_ids = table_get_allrow_ids( test_r );
 
         // expected columns: ("id" + one column for each test)
         good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
@@ -2210,7 +2210,7 @@ BEGIN_SCOPE validate;
         ["t11", "Vector of integers 0 to 15", [for (i=[0:15]) i]]
       ];
 
-      test_ids = table_get_row_ids( test_r );
+      test_ids = table_get_allrow_ids( test_r );
 
       // expected columns: ("id" + one column for each test)
       good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);

@@ -107,7 +107,7 @@ function map_get
 
   \returns  <string-list-N> A list of key strings for all N map entries.
 *******************************************************************************/
-function map_get_keys
+function map_get_allkeys
 (
   m
 ) = eselect(m, f=true);
@@ -118,7 +118,7 @@ function map_get_keys
 
   \returns  <list-N> A list of values for all N map entries.
 *******************************************************************************/
-function map_get_values
+function map_get_allvalues
 (
   m
 ) = eselect(m, l=true);
@@ -229,7 +229,7 @@ module map_dump
 {
   if ( map_size(m) > 0 )
   {
-    keys = map_get_keys(m);
+    keys = map_get_allkeys(m);
     maxl = max( [for (i = keys) len(i)] ) + 1;
 
     for (key = sort ? qsort(keys) : keys)
@@ -282,7 +282,7 @@ BEGIN_SCOPE example;
     p1 = map_get(map, "part1");
     echo( c=second(p1) );
 
-    keys=map_get_keys(map);
+    keys = map_get_allkeys(map);
     parts = delete(keys, mv=["config", "version", "runid"]);
 
     for ( p = parts )

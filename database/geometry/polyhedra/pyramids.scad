@@ -403,7 +403,7 @@ BEGIN_SCOPE autostat;
     tc = dtc_polyhedra_pyramids;
     tr = dtr_polyhedra_pyramids;
 
-    ids = table_get_row_ids(tr);
+    ids = table_get_allrow_ids(tr);
 
     echo
     (
