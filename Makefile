@@ -98,13 +98,13 @@ library             := $(library_db01) \
                        units_coordinate \
                        units_length \
                        units_resolution \
-                       transform \
                        shapes2d \
                        shapes2de \
                        shapes3d \
                        tools_align \
                        tools_edge \
-                       tools_polytope
+                       tools_polytope \
+                       tools_utility
 
 #------------------------------------------------------------------------------#
 # Scope excludes

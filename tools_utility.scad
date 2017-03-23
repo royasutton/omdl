@@ -1,6 +1,6 @@
-//! Shape transformations.
+//! Shape transformation utility tools.
 /***************************************************************************//**
-  \file   transform.scad
+  \file   tools_utility.scad
   \author Roy Allen Sutton
   \date   2015-2017
 
@@ -27,7 +27,7 @@
 
   \details
 
-  \ingroup transforms transforms_extrude transforms_repeat
+  \ingroup tools tools_extrude tools_repeat
 *******************************************************************************/
 
 use <console.scad>;
@@ -36,9 +36,9 @@ include <math_bitwise.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup transforms
+  \addtogroup tools
 
-    \amu_define caption (Extrusions and Repetitions)
+    \amu_define caption (Transformation Utilities)
 
     \amu_make png_files (append=dim extension=png)
     \amu_make eps_files (append=dim extension=png2eps)
@@ -62,11 +62,11 @@ include <math_bitwise.scad>;
 *******************************************************************************/
 
 /***************************************************************************//**
-  \addtogroup transforms
+  \addtogroup tools
   @{
 
-  \defgroup transforms_extrude Extrude
-  \brief    Shape extrusions.
+  \defgroup tools_extrude Extrude
+  \brief    Shape extrusion tools.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -75,7 +75,7 @@ include <math_bitwise.scad>;
 // openscad-amu macros
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \amu_define scope (transform_dim)
+  \amu_define scope (tools_utility_dim)
   \amu_define tuple (qvga_diag)
 
   \amu_define example_dim
@@ -300,11 +300,11 @@ module linear_extrude_uls
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup transforms
+  \addtogroup tools
   @{
 
-  \defgroup transforms_repeat Repeat
-  \brief    Shape repetition and distribution.
+  \defgroup tools_repeat Repeat
+  \brief    Shape repetition and distribution tools.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -437,7 +437,7 @@ module grid_repeat
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <transform.scad>;
+    include <tools_utility.scad>;
 
     shape = "rotate_extrude_tr";
     $fn = 72;
