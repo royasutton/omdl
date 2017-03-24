@@ -30,7 +30,7 @@
   \ingroup shapes shapes_2d
 *******************************************************************************/
 
-include <tools_utility.scad>;
+include <tools/tools_utility.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -1322,7 +1322,7 @@ module star2d
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <shapes2d.scad>;
+    include <shapes/shapes2d.scad>;
 
     shape = "ellipse_cs";
     $fn = 72;
@@ -1396,7 +1396,7 @@ END_SCOPE;
 
 BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
-    include <shapes2d.scad>;
+    include <shapes/shapes2d.scad>;
 
     $fn = 72;
 

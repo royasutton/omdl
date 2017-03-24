@@ -67,8 +67,8 @@
 
     \b Example
     \code{.C}
-    include <units_coordinate.scad>;
-    include <datatypes_table.scad>;
+    include <units/units_coordinate.scad>;
+    include <datatypes/datatypes_table.scad>;
     include <database/geometry/polyhedra/platonic.scad>;
 
     tc = dtc_polyhedra_platonic;
@@ -21471,9 +21471,9 @@ dtr_polyhedra_polyhedra_all =
 BEGIN_SCOPE db;
 BEGIN_SCOPE autotest;
   BEGIN_OPENSCAD;
-    include <math_polytope.scad>;
-    include <units_coordinate.scad>;
-    include <datatypes_table.scad>;
+    include <math/math_polytope.scad>;
+    include <units/units_coordinate.scad>;
+    include <datatypes/datatypes_table.scad>;
     include <database/geometry/polyhedra/polyhedra_all.scad>;
 
     coordinates_positive_angles = false;

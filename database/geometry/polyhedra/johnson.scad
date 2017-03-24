@@ -12848,9 +12848,9 @@ dtr_polyhedra_johnson =
 BEGIN_SCOPE db;
 BEGIN_SCOPE autostat;
   BEGIN_OPENSCAD;
-    include <math_polytope.scad>;
-    include <math_utility.scad>;
-    include <datatypes_table.scad>;
+    include <math/math_polytope.scad>;
+    include <math/math_utility.scad>;
+    include <datatypes/datatypes_table.scad>;
     include <database/geometry/polyhedra/johnson.scad>;
 
     fs  = "^";
@@ -12921,8 +12921,8 @@ BEGIN_SCOPE db;
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
     include <constants.scad>;
-    include <tools_polytope.scad>;
-    include <datatypes_table.scad>;
+    include <tools/tools_polytope.scad>;
+    include <datatypes/datatypes_table.scad>;
     include <database/geometry/polyhedra/johnson.scad>;
 
     tc = dtc_polyhedra_johnson;

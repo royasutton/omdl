@@ -36,7 +36,7 @@
 
 use     <console.scad>;
 include <constants.scad>;
-include <units_length.scad>;
+include <units/units_length.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -430,7 +430,7 @@ function resolution_facetsv
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <units_resolution.scad>;
+    include <units/units_resolution.scad>;
 
     base_unit_length = "in";
 

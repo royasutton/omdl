@@ -32,7 +32,7 @@
 
 use <console.scad>;
 include <math.scad>;
-include <math_bitwise.scad>;
+include <math/math_bitwise.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -437,7 +437,7 @@ module grid_repeat
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <tools_utility.scad>;
+    include <tools/tools_utility.scad>;
 
     shape = "rotate_extrude_tr";
     $fn = 72;

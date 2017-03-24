@@ -495,8 +495,8 @@
 /*
 BEGIN_SCOPE logo;
   BEGIN_OPENSCAD;
-    include <shapes2de.scad>;
-    include <shapes3d.scad>;
+    include <shapes/shapes2de.scad>;
+    include <shapes/shapes3d.scad>;
 
     $fn = 36;
 
@@ -523,8 +523,8 @@ END_SCOPE;
 
 BEGIN_SCOPE quickstart;
   BEGIN_OPENSCAD;
-    include <shapes2de.scad>;
-    include <shapes3d.scad>;
+    include <shapes/shapes2de.scad>;
+    include <shapes/shapes3d.scad>;
 
     $fn = 36;
 

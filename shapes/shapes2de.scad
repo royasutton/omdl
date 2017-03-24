@@ -30,7 +30,7 @@
   \ingroup shapes shapes_2de
 *******************************************************************************/
 
-include <shapes2d.scad>;
+include <shapes/shapes2d.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -956,7 +956,7 @@ module estar2d
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <shapes2de.scad>;
+    include <shapes/shapes2de.scad>;
 
     shape = "eellipse_cs";
     $fn = 72;
@@ -1030,7 +1030,7 @@ END_SCOPE;
 
 BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
-    include <shapes2de.scad>;
+    include <shapes/shapes2de.scad>;
 
     $fn = 72;
 

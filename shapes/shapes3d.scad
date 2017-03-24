@@ -32,7 +32,7 @@
   \ingroup shapes shapes_3d
 *******************************************************************************/
 
-include <shapes2d.scad>;
+include <shapes/shapes2d.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -691,7 +691,7 @@ module torus_ep
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <shapes3d.scad>;
+    include <shapes/shapes3d.scad>;
 
     shape = "cuboid";
     $fn = 72;
@@ -744,7 +744,7 @@ END_SCOPE;
 
 BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
-    include <shapes3d.scad>;
+    include <shapes/shapes3d.scad>;
 
     group = 1;
     $fn = 72;

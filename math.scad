@@ -1003,7 +1003,7 @@ BEGIN_SCOPE validate;
   BEGIN_SCOPE vecalg;
     BEGIN_OPENSCAD;
       include <math.scad>;
-      use <datatypes_table.scad>;
+      use <datatypes/datatypes_table.scad>;
       use <console.scad>;
       use <validation.scad>;
 

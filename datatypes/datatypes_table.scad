@@ -429,8 +429,8 @@ function table_sum
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <units_length.scad>;
-    use     <datatypes_table.scad>;
+    include <units/units_length.scad>;
+    use     <datatypes/datatypes_table.scad>;
 
     base_unit_length = "mm";
 

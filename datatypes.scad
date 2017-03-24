@@ -1905,7 +1905,7 @@ BEGIN_SCOPE validate;
     BEGIN_SCOPE g1;
       BEGIN_OPENSCAD;
         include <datatypes.scad>;
-        use <datatypes_table.scad>;
+        use <datatypes/datatypes_table.scad>;
         use <console.scad>;
         use <validation.scad>;
 
@@ -2035,7 +2035,7 @@ BEGIN_SCOPE validate;
     BEGIN_SCOPE g2;
       BEGIN_OPENSCAD;
         include <datatypes.scad>;
-        use <datatypes_table.scad>;
+        use <datatypes/datatypes_table.scad>;
         use <console.scad>;
         use <validation.scad>;
 
@@ -2177,7 +2177,7 @@ BEGIN_SCOPE validate;
   BEGIN_SCOPE list;
     BEGIN_OPENSCAD;
       include <datatypes.scad>;
-      use <datatypes_table.scad>;
+      use <datatypes/datatypes_table.scad>;
       use <console.scad>;
       use <validation.scad>;
 

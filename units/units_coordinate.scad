@@ -347,7 +347,7 @@ function coordinates_sc
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <units_coordinate.scad>;
+    include <units/units_coordinate.scad>;
 
     base_coordinates = "c";
 

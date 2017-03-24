@@ -156,7 +156,7 @@ function convert_angle
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <units_angle.scad>;
+    include <units/units_angle.scad>;
 
     base_unit_angle = "d";
 

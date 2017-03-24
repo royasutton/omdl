@@ -30,7 +30,7 @@
   \ingroup tools tools_edge
 *******************************************************************************/
 
-include <shapes2d.scad>;
+include <shapes/shapes2d.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -269,7 +269,7 @@ module edge_add_r
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <tools_edge.scad>;
+    include <tools/tools_edge.scad>;
 
     shape = "edge_profile_r";
     $fn = 72;

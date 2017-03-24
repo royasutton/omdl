@@ -303,8 +303,8 @@ function bitwise_rsh
 /*
 BEGIN_SCOPE validate;
   BEGIN_OPENSCAD;
-    include <math_bitwise.scad>;
-    use <datatypes_table.scad>;
+    include <math/math_bitwise.scad>;
+    use <datatypes/datatypes_table.scad>;
     use <console.scad>;
     use <validation.scad>;
 

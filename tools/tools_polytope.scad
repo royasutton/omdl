@@ -30,8 +30,8 @@
   \ingroup tools tools_polytope
 *******************************************************************************/
 
-include <math_polytope.scad>;
-include <tools_align.scad>;
+include <math/math_polytope.scad>;
+include <tools/tools_align.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**

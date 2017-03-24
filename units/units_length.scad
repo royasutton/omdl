@@ -262,7 +262,7 @@ function convert_length
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <units_length.scad>;
+    include <units/units_length.scad>;
 
     base_unit_length = "mm";
 

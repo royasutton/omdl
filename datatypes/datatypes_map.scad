@@ -262,7 +262,7 @@ module map_dump
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    use <datatypes_map.scad>;
+    use <datatypes/datatypes_map.scad>;
 
     map =
     [

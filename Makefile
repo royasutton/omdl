@@ -83,27 +83,33 @@ library_db01_src    := database_src/geometry/polyhedra/Makefile \
 library             := $(library_db01) \
                        \
                        mainpage \
-                       constants \
-                       datatypes \
-                       datatypes_map \
-                       datatypes_table \
-                       math \
-                       math_bitwise \
-                       math_polytope \
-                       math_utility \
-                       validation \
+                       \
                        console \
-                       units_angle \
-                       units_coordinate \
-                       units_length \
-                       units_resolution \
-                       shapes2d \
-                       shapes2de \
-                       shapes3d \
-                       tools_align \
-                       tools_edge \
-                       tools_polytope \
-                       tools_utility
+                       constants \
+                       validation \
+                       \
+                       datatypes \
+                       datatypes/datatypes_map \
+                       datatypes/datatypes_table \
+                       \
+                       math \
+                       math/math_bitwise \
+                       math/math_polytope \
+                       math/math_utility \
+                       \
+                       shapes/shapes2d \
+                       shapes/shapes2de \
+                       shapes/shapes3d \
+                       \
+                       tools/tools_align \
+                       tools/tools_edge \
+                       tools/tools_polytope \
+                       tools/tools_utility \
+                       \
+                       units/units_angle \
+                       units/units_coordinate \
+                       units/units_length \
+                       units/units_resolution
 
 #------------------------------------------------------------------------------#
 # Scope excludes
