@@ -1,4 +1,4 @@
-//! Result validation functions.
+//! Function validation methods.
 /***************************************************************************//**
   \file   validation.scad
   \author Roy Allen Sutton
@@ -27,14 +27,29 @@
 
   \details
 
-  \ingroup utilities
+  \ingroup utilities utilities_validate
 *******************************************************************************/
 
 include <datatypes.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \ingroup utilities
+  \addtogroup utilities
+  @{
+
+  \defgroup utilities_validate Validation
+  \brief    Function validation methods.
+
+  \details
+
+    \b Example
+
+      \dontinclude validation_example.scad
+      \skip use
+      \until tvae2, 4) );
+
+    \b Result \include validation_example.log
+
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -62,14 +77,6 @@ include <datatypes.scad>;
      "not"                | \p cv not equal to \p ev
      "true" \| \b true    | \p cv is \b true
      "false" \| \b false  | \p cv is \b false
-
-    \b Example
-
-      \dontinclude validation_example.scad
-      \skip use
-      \until tvae2, 4) );
-
-    \b Result \include validation_example.log
 
   \note     When performing an \b "almost" equal validation, the
             comparison precision is controlled by \p p. This specifies
@@ -125,6 +132,7 @@ function validate
     )
   : (pf?false : str("FAILED: '", d, "'.  Unknown test '", t, "'"));
 
+//! @}
 //! @}
 
 //----------------------------------------------------------------------------//
