@@ -133,7 +133,7 @@ function bitwise_i2s
   w = 1
 ) = !is_integer(v) ? undef
   : !is_integer(w) ? undef
-  : vstr(bitwise_i2v(v, w));
+  : lstr(bitwise_i2v(v, w));
 
 //! Decode a base-two string of bits to an integer value.
 /***************************************************************************//**
@@ -556,7 +556,7 @@ BEGIN_SCOPE validate;
       pass_value = table_get(good_r, good_c, fname, vid);
 
       test_pass = validate(cv=fresult, t="equals", ev=pass_value, pf=true);
-      farg_text = vstr(eappend(", ", rselect(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
+      farg_text = lstr(eappend(", ", rselect(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
       test_text = validate(str(fname, "(", farg_text, ")=", pass_value), fresult, "equals", pass_value);
 
       if ( pass_value != skip )

@@ -758,7 +758,7 @@ function consts
     v1=["a", "b", "c", "d"];
     v2=[1, 2, 3];
 
-    echo( vstr(concat(v1, v2)) );
+    echo( lstr(concat(v1, v2)) );
     \endcode
 
     \b Result
@@ -766,14 +766,14 @@ function consts
     ECHO: "abcd123"
     \endcode
 *******************************************************************************/
-function vstr
+function lstr
 (
   v
 ) = not_defined(v) ? undef
   : !is_iterable(v) ? str(v)
   : is_empty(v) ? empty_str
   : (len(v) == 1) ? str(first(v))
-  : str(first(v), vstr(ntail(v)));
+  : str(first(v), lstr(ntail(v)));
 
 //! Convert a list of values to a concatenated HTML-formatted string.
 /***************************************************************************//**
@@ -808,8 +808,8 @@ function vstr
 
     \b Example
     \code{.C}
-    echo( vstr_html(v="bold text", p="b", d=true) );
-    echo( vstr_html(v=[1,"x",3], f=[["red",6,"helvetica"],undef,["blue",10,"courier"]], d=true) );
+    echo( lstr_html(v="bold text", p="b", d=true) );
+    echo( lstr_html(v=[1,"x",3], f=[["red",6,"helvetica"],undef,["blue",10,"courier"]], d=true) );
 
     v = ["result", "=", "mc", "2"];
     b = ["hr", undef];
@@ -817,7 +817,7 @@ function vstr
     a = concat(consts(3, u=true), "hr");
     f = [undef, ["red"], undef, ["blue",4]];
 
-    echo( vstr_html(v=v, b=b, p=p, a=a, f=f, d=true) );
+    echo( lstr_html(v=v, b=b, p=p, a=a, f=f, d=true) );
     \endcode
 
     \b Result
@@ -830,7 +830,7 @@ function vstr
     [tag(s)]: http://doc.qt.io/qt-5/richtext-html-subset.html
     [HTML subset]: http://doc.qt.io/qt-5/richtext-html-subset.html
 *******************************************************************************/
-function vstr_html
+function lstr_html
 (
   v,
   b,
@@ -875,7 +875,7 @@ function vstr_html
       na = is_list(a) ? (len(a) > 1) ? ntail(a) : nlast(a) : a,
       nf = is_list(f) ? (len(f) > 1) ? ntail(f) : nlast(f) : f
     )
-    vstr(concat(cs, vstr_html(nv, nb, np, na, nf, d)));
+    lstr(concat(cs, lstr_html(nv, nb, np, na, nf, d)));
 
 //! Round all numerical values of a list to a fixed number of decimal point digits.
 /***************************************************************************//**
@@ -2233,7 +2233,7 @@ BEGIN_SCOPE validate;
           empty_lst,                                          // t10
           empty_lst                                           // t11
         ],
-        ["vstr",
+        ["lstr",
           undef,                                              // t01
           empty_str,                                          // t02
           "[0 : 0.5 : 9]",                                    // t03
@@ -2246,7 +2246,7 @@ BEGIN_SCOPE validate;
           "[1, 2, 3][4, 5, 6][7, 8, 9][\"a\", \"b\", \"c\"]", // t10
           "0123456789101112131415"                            // t11
         ],
-        ["vstr_html_B",
+        ["lstr_html_B",
           "<b>undef</b>",                                     // t01
           empty_str,                                          // t02
           "<b>[0 : 0.5 : 9]</b>",                             // t03
@@ -2752,8 +2752,8 @@ BEGIN_SCOPE validate;
 
       // create / convert
       for (vid=test_ids) run_test( "consts", consts(get_value(vid)), vid );
-      for (vid=test_ids) run_test( "vstr", vstr(get_value(vid)), vid );
-      for (vid=test_ids) run_test( "vstr_html_B", vstr_html(get_value(vid),p="b"), vid );
+      for (vid=test_ids) run_test( "lstr", lstr(get_value(vid)), vid );
+      for (vid=test_ids) run_test( "lstr_html_B", lstr_html(get_value(vid),p="b"), vid );
       // not tested: dround()
       // not tested: sround()
       for (vid=test_ids) run_test( "limit_12", limit(get_value(vid),1,2), vid );

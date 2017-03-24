@@ -69,7 +69,7 @@ include <math/math_bitwise.scad>;
     s1, value, s2, value-frequency, s3, fs
     \endverbatim
 
-    See vstr_html() for description of the html formatting parameters
+    See lstr_html() for description of the html formatting parameters
     \p cb, \p cp, \p ca, \p cf, and \p d.
 
     Output mode selection:
@@ -138,10 +138,10 @@ function hist
          : (sm==4) ? undef
          :           cf
     )
-    vstr
+    lstr
     ([
       for (i=[0:len(hv)-1])
-        vstr_html
+        lstr_html
         (
           [s1, first(hv[i]), s2, second(hv[i]), s3, if ((i<(len(hv)-1)) || fm) fs],
           b=fb, p=fp, a=fa, f=ff, d=d
