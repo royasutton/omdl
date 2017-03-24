@@ -91,7 +91,6 @@ library             := $(library_db01) \
                        math_bitwise \
                        math_polytope \
                        math_utility \
-                       utilities \
                        validation \
                        console \
                        units_angle \
