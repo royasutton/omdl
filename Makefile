@@ -89,6 +89,12 @@ library             := $(library_db01) \
                        validation \
                        \
                        datatypes \
+                       datatypes/datatypes_identify_scalar \
+                       datatypes/datatypes_identify_iterable \
+                       datatypes/datatypes_identify_list \
+                       datatypes/datatypes_operate_scalar \
+                       datatypes/datatypes_operate_iterable \
+                       datatypes/datatypes_operate_list \
                        datatypes/datatypes_map \
                        datatypes/datatypes_table \
                        \
