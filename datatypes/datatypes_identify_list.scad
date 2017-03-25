@@ -58,7 +58,33 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Test if all elements of two lists of values are sufficiently equal.
+//! Test if all elements of two lists of numbers are sufficiently equal.
+/***************************************************************************//**
+  \param    v1 <number-list> A list of numbers 1.
+  \param    v2 <number-list> A list of numbers 2.
+  \param    p \<number> The numerical precision.
+
+  \returns  <boolean> \b true when the distance between \p v1 and \p v2
+            is less than \p d and \b false otherwise.
+            Returns \b false when either list contains a non-numerica
+            values, or when the lists are not of the same length.
+
+  \details
+
+    The 'distance' between two numbers must be less than pow(10,-p) to
+    be considered almost equal.
+
+  \note     To compare general lists of values see almost_equal().
+*******************************************************************************/
+function n_almost_equal
+(
+  v1,
+  v2,
+  p = 6
+) = (len(v1) != len(v2)) ? false
+  : ( (sqrt((v1-v2)*(v1-v2)) * pow(10, p)) < 1 );
+
+//! Test if all numerical elements of two lists of values are sufficiently equal.
 /***************************************************************************//**
   \param    v1 \<list> A list of values 1.
   \param    v2 \<list> A list of values 2.
@@ -69,8 +95,10 @@
 
   \details
 
-    All numerical comparisons are performed to the specified precision.
-    All non-numeric comparisons test for equality.
+    The 'distance' between two numbers must be less than pow(10,-p) to
+    be considered almost equal. All numerical comparisons are performed
+    to the specified precision. All non-numeric comparisons test for
+    equality.
 
   \note     If the lists are scalar numbers, the function n_almost_equal()
             provides a more efficient test.
@@ -82,39 +110,13 @@ function almost_equal
   v1,
   v2,
   p = 6
-) = all_scalars([v1, v2]) ?
-    (
-      all_numbers([v1, v2]) ? ( (abs(v1-v2) * pow(10, p)) < 1 )
-    : (v1 == v2)
-    )
+) = all_numbers([v1, v2]) ? n_almost_equal(v1, v2, p)
+  : all_scalars([v1, v2]) ? (v1 == v2)
   : (is_string(v1) || is_string(v2)) ? (v1 == v2)
   : all_equal([v1, v2], empty_lst) ? true
   : any_equal([v1, v2], empty_lst) ? false
   : !almost_equal(first(v1), first(v2), p) ? false
   : almost_equal(ntail(v1), ntail(v2), p);
-
-//! Test if all elements of two lists of numbers are sufficiently equal.
-/***************************************************************************//**
-  \param    v1 <number-list> A list of numbers 1.
-  \param    v2 <number-list> A list of numbers 2.
-  \param    d \<number> A positive numerical distance.
-
-  \returns  <boolean> \b true when the distance between \p v1 and \p v2
-            is less than \p d and \b false otherwise.
-            Returns \b false when either list contains a non-numerica
-            values, or when the lists are not of the same length.
-
-  \details
-
-  \note     To compare general lists of values see almost_equal().
-*******************************************************************************/
-function n_almost_equal
-(
-  v1,
-  v2,
-  d = 0.000001
-) = (len(v1) != len(v2)) ? false
-  : (sqrt((v1-v2)*(v1-v2)) < d);
 
 //! Order to lists of arbitrary values.
 /***************************************************************************//**
@@ -326,11 +328,11 @@ BEGIN_SCOPE validate;
 
     good_r =
     [ // function           01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+      ["n_almost_equal_AA", f, t, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
       ["almost_equal_AA",   t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t],
       ["almost_equal_T",    f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["almost_equal_F",    f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["almost_equal_U",    t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
-      ["n_almost_equal_AA", f, t, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
       ["compare_AA",        t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t]
     ];
 
@@ -360,11 +362,11 @@ BEGIN_SCOPE validate;
     }
 
     // Indirect function calls would be very useful here!!!
+    for (vid=test_ids) run_test( "n_almost_equal_AA", n_almost_equal(get_value(vid),get_value(vid)), vid );
     for (vid=test_ids) run_test( "almost_equal_AA", almost_equal(get_value(vid),get_value(vid)), vid );
     for (vid=test_ids) run_test( "almost_equal_T", almost_equal(get_value(vid),t), vid );
     for (vid=test_ids) run_test( "almost_equal_F", almost_equal(get_value(vid),f), vid );
     for (vid=test_ids) run_test( "almost_equal_U", almost_equal(get_value(vid),u), vid );
-    for (vid=test_ids) run_test( "n_almost_equal_AA", n_almost_equal(get_value(vid),get_value(vid)), vid );
     for (vid=test_ids) run_test( "compare_AA", compare(get_value(vid),get_value(vid)) == 0, vid );
 
     // end-of-tests
