@@ -56,13 +56,13 @@ include <math.scad>;
     |  t  | shape translation |
     |:---:|:-----------------:|
     |  0  |  0                |
-    |  1  |  vi               |
-    |  2  |  (vt+vi)/2        |
-    |  3  |  vt               |
-    |  4  |  vt+vi            |
+    |  1  |  pi               |
+    |  2  |  (pt+pi)/2        |
+    |  3  |  pt               |
+    |  4  |  pt+pi            |
 
-    Where \c vi is the starting point (initiate) and \c vt is the
-    termination point of the vector or line.
+    Where \c pi is the initiating point and \c pt is the terminating
+    point of the vector or line.
 
     See \ref dt_vectors for argument specification and conventions.
 *******************************************************************************/
@@ -74,18 +74,17 @@ module align_axis2v
   a = 2
 )
 {
-  vt = is_iterable(v[0]) ? (len(v)>1) ? v[1] : v[0] : v;
-  vi = is_iterable(v[0]) ? (len(v)>1) ? v[0] : consts(len(v[0]), 0)
-     : is_iterable(v) ? consts(len(v), 0) : 0;
+  pt = vector_get_tp(v);
+  pi = vector_get_ip(v);
 
-  pa = acos((vt[2]-vi[2]) / distance_pp(vt, vi));
-  aa = atan2(vt[1]-vi[1], vt[0]-vi[0]);
+  pa = acos((pt[2]-pi[2]) / distance_pp(pt, pi));
+  aa = atan2(pt[1]-pi[1], pt[0]-pi[0]);
 
   tv  = (t == 0) ? origin3d
-      : (t == 1) ? vi
-      : (t == 2) ? (vt+vi)/2
-      : (t == 3) ? vt
-      : (t == 4) ? vt+vi
+      : (t == 1) ? pi
+      : (t == 2) ? (pt+pi)/2
+      : (t == 3) ? pt
+      : (t == 4) ? pt+pi
       : origin3d;
 
   rv = (a == 0) ? [[ 0, -90, r], [0, pa, aa]]
