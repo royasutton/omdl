@@ -100,8 +100,12 @@ library             := $(library_db01) \
                        \
                        math \
                        math/math_bitwise \
+                       math/math_linalg \
+                       math/math_oshapes \
                        math/math_polytope \
+                       math/math_triangle \
                        math/math_utility \
+                       math/math_vecalg \
                        \
                        shapes/shapes2d \
                        shapes/shapes2de \
