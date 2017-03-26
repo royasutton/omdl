@@ -54,6 +54,10 @@
 
   \defgroup datatypes_identify_list Lists
   \brief    List data type identification.
+
+  \details
+
+    See validation \ref tv_datatypes_identify_list_r "results".
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//

@@ -54,6 +54,10 @@
 
   \defgroup datatypes_operate_iterable Iterables
   \brief    Iterable data type operations.
+
+  \details
+
+    See validation \ref tv_datatypes_operate_iterable_r "results".
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//

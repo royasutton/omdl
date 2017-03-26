@@ -54,6 +54,10 @@
 
   \defgroup datatypes_identify_scalar Scalars
   \brief    Scalar data type identification.
+
+  \details
+
+    See validation \ref tv_datatypes_identify_scalar_r "results".
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//

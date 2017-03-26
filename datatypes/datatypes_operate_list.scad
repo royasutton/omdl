@@ -54,6 +54,10 @@
 
   \defgroup datatypes_operate_list Lists
   \brief    List data type operations.
+
+  \details
+
+    See validation \ref tv_datatypes_operate_list_r "results".
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//

@@ -54,6 +54,10 @@
 
   \defgroup datatypes_operate_scalar Scalars
   \brief    Scalar data type operations.
+
+  \details
+
+    See validation \ref tv_datatypes_operate_scalar_r "results".
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//

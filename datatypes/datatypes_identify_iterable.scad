@@ -54,6 +54,10 @@
 
   \defgroup datatypes_identify_iterable Iterables
   \brief    Iterable data type identification.
+
+  \details
+
+    See validation \ref tv_datatypes_identify_iterable_r "results".
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
