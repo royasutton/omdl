@@ -44,9 +44,26 @@ include <tools/tools_align.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//----------------------------------------------------------------------------//
-//
-//----------------------------------------------------------------------------//
+//! The 2d bounding box shape for a polygon definition.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+  \param    a <decimal-list-2> The box padding.
+            A list of lengths to equally pad the box dimensions.
+
+  \details
+
+    The 2d box shape that exactly encloses the defined 2d polygon with
+    the box sides oriented parallel to the coordinate axes.
+
+  \note     When \p p is not given, the listed order of the coordinates
+            \p c establishes the path.
+
+    \sa polytope_bboxlimits for warning about secondary shapes.
+*******************************************************************************/
 module polygon_bbox
 (
   c,
@@ -60,15 +77,36 @@ module polygon_bbox
   square([b[0][1]-b[0][0], b[1][1]-b[1][0]]);
 }
 
-//----------------------------------------------------------------------------//
-//
-//----------------------------------------------------------------------------//
+//! Label the vertices, paths, and edges of a polygon.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+
+  \param    lc <boolean> Label vertex coordinates.
+  \param    lp <boolean> Label paths.
+  \param    le <boolean> Label edges.
+
+  \param    sp <boolean> Show polygon shape.
+  \param    pc <boolean> Place path labels at path centroid.
+
+  \param    ts <decimal> The text size (to override the default).
+  \param    to <vector-3d> The text offset vector [x, y, z].
+  \param    tr <decimal> The text rotation.
+
+  \details
+
+  \note     When \p p is not given, the listed order of the coordinates
+            \p c establishes the path.
+*******************************************************************************/
 module polygon_number
 (
   c,
   p,
-  lp = true,
   lc = true,
+  lp = true,
   le = true,
   sp = false,
   pc = false,
@@ -82,18 +120,18 @@ module polygon_number
   fs = defined_or(ts, mean(polytope_bboxlimits (c, pm, d=[0:1], s=true))/50);
   fo = defined_or(to, [0, 0, fs/2]);
 
-  np = (lp == true) ?
-       consts(len(pm))
-     : is_number(lp) ? [lp]
-     : is_range(lp) ? [for (i=lp) i]
-     : all_numbers(lp) ? lp
-     : undef;
-
   nc = (lc == true) ?
        consts(len(c))
      : is_number(lc) ? [lc]
      : is_range(lc) ? [for (i=lc) i]
      : all_numbers(lc) ? lc
+     : undef;
+
+  np = (lp == true) ?
+       consts(len(pm))
+     : is_number(lp) ? [lp]
+     : is_range(lp) ? [for (i=lp) i]
+     : all_numbers(lp) ? lp
      : undef;
 
   ne = (le == true) ?
@@ -105,6 +143,17 @@ module polygon_number
 
   el = not_defined(ne) ? undef : polytope_faces2edges(pm);
 
+  // vertices
+  if (is_defined(nc))
+  color("green")
+  for (i = nc)
+  {
+    t = c[i];
+
+    translate(t) translate(fo) rotate(tr)
+    text(str(i), size=fs, halign="center", valign="center");
+  }
+
   // paths
   if (is_defined(np))
   color("red")
@@ -113,17 +162,6 @@ module polygon_number
     t = (pc == true) ?
         polygon2d_centroid(c, [pm[i]])
       : mean([for (j=pm[i]) c[j]]);
-
-    translate(t) translate(fo) rotate(tr)
-    text(str(i), size=fs, halign="center", valign="center");
-  }
-
-  // vertices
-  if (is_defined(nc))
-  color("green")
-  for (i = nc)
-  {
-    t = c[i];
 
     translate(t) translate(fo) rotate(tr)
     text(str(i), size=fs, halign="center", valign="center");
@@ -145,9 +183,22 @@ module polygon_number
     polygon(c, p);
 }
 
-//----------------------------------------------------------------------------//
-//
-//----------------------------------------------------------------------------//
+//! The 3d bounding box shape for a polyhedron definition.
+/***************************************************************************//**
+  \param    c <coords-3d> A list of 3d cartesian coordinates
+            [[x, y, z], ...].
+  \param    f <integer-list-list> A list of faces that enclose
+            the shape where each face is a list of coordinate indexes.
+  \param    a <decimal-list-3> The box padding.
+            A list of lengths to equally pad the box dimensions.
+
+  \details
+
+    The 3d box shape that completely encloses the defined 3d polyhedron
+    with the box sides oriented parallel to the coordinate axes.
+
+    \sa polytope_bboxlimits.
+*******************************************************************************/
 module polyhedron_bbox
 (
   c,

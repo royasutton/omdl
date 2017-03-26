@@ -43,9 +43,29 @@ include <math.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//----------------------------------------------------------------------------//
-//
-//----------------------------------------------------------------------------//
+//! Align an axis of a shape to an arbitrary vector.
+/***************************************************************************//**
+  \param    v <vector-3d> An alignment vector or line.
+  \param    t <integer> Translation mode (one of [0:4], see table).
+  \param    r <decimal> Post-alignment rotation about the alignment
+            vector (in degrees).
+  \param    a <integer> Shape axis index to align (0, 1, or 2).
+
+  \details
+
+    |  t  | shape translation |
+    |:---:|:-----------------:|
+    |  0  |  0                |
+    |  1  |  vi               |
+    |  2  |  (vt+vi)/2        |
+    |  3  |  vt               |
+    |  4  |  vt+vi            |
+
+    Where \c vi is the starting point (initiate) and \c vt is the
+    termination point of the vector or line.
+
+    See \ref dt_vectors for argument specification and conventions.
+*******************************************************************************/
 module align_axis2v
 (
   v,
