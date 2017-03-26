@@ -121,7 +121,7 @@ function is_left_ppp
 /***************************************************************************//**
   \param    v <vector> A vector or a line.
 
-  \returns  <integer> The number of dimensions.
+  \returns  <integer> The number of dimensions for the vector or line.
 
   \details
 
@@ -131,6 +131,37 @@ function vector_get_dim
 (
   v
 ) = is_defined(len(v[0])) ? len(v[0]) : len(v);
+
+//! Return the termination point of a Euclidean vector or line.
+/***************************************************************************//**
+  \param    v <vector> A vector or a line.
+
+  \returns  <integer> The terminating point of the vector or line.
+
+  \details
+
+    See \ref dt_vectors for argument specification and conventions.
+*******************************************************************************/
+function vector_get_tp
+(
+  v
+) = is_iterable(v[0]) ? (len(v)>1) ? v[1] : v[0] : v;
+
+//! Return the initiating point of a Euclidean vector or line.
+/***************************************************************************//**
+  \param    v <vector> A vector or a line.
+
+  \returns  <integer> The initiating point of the vector or line.
+
+  \details
+
+    See \ref dt_vectors for argument specification and conventions.
+*******************************************************************************/
+function vector_get_ip
+(
+  v
+) = is_iterable(v[0]) ? (len(v)>1) ? v[0] : consts(len(v[0]), 0)
+  : is_iterable(v) ? consts(len(v), 0) : 0;
 
 //! Shift a Euclidean vector or line to the origin.
 /***************************************************************************//**
@@ -424,6 +455,32 @@ BEGIN_SCOPE validate;
         3,                                                  // t08
         3                                                   // t09
       ],
+      ["vector_get_tp",
+        2,                                                  // fac
+        4,                                                  // crp
+        [undef,undef],                                      // t01
+        empty_lst,                                          // t02
+        [60,50],                                            // t03
+        [58],                                               // t04
+        [58,16],                                            // t05
+        [158,116,75],                                       // t06
+        [178,16,25,20],                                     // t07
+        y_axis3d_uv,                                        // t08
+        y_axis3d_uv                                         // t09
+      ],
+      ["vector_get_ip",
+        2,                                                  // fac
+        4,                                                  // crp
+        origin2d,                                           // t01
+        empty_lst,                                          // t02
+        origin2d,                                           // t03
+        [99],                                               // t04
+        [99,2],                                             // t05
+        [199,20,55],                                        // t06
+        [169,27,35,10],                                     // t07
+        x_axis3d_uv,                                        // t08
+        x_axis3d_uv                                         // t09
+      ],
       ["vector_to_origin",
         2,                                                  // fac
         4,                                                  // crp
@@ -579,6 +636,8 @@ BEGIN_SCOPE validate;
 
     // group 2: vectors
     for (vid=run_ids) run("vector_get_dim",vid) test( "vector_get_dim", vector_get_dim([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("vector_get_tp",vid) test( "vector_get_tp", vector_get_tp([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("vector_get_ip",vid) test( "vector_get_ip", vector_get_ip([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("vector_to_origin",vid) test( "vector_to_origin", vector_to_origin([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("dot_vv",vid) test( "dot_vv", dot_vv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("cross_vv",vid) test( "cross_vv", cross_vv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
