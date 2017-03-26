@@ -86,6 +86,9 @@ include <datatypes.scad>;
   \details
 
     When \p p2 is not given, it is assumed to be at the origin.
+    This function is similar to [norm].
+
+  [norm]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Mathematical_Functions#norm
 *******************************************************************************/
 function distance_pp
 (
@@ -167,6 +170,10 @@ function to_origin_v
 
   \details
 
+    This function supports the abstraction outlined in \ref dt_vectors.
+    The built-in operation will be more efficient in situations that do
+    not make use of the aforementioned abstraction.
+
     See \ref dt_vectors for argument specification and conventions.
     See [Wikipedia] for more information.
 
@@ -187,6 +194,10 @@ function dot_vv
             Returns \b undef when vectors have different dimensions.
 
   \details
+
+    This function supports the abstraction outlined in \ref dt_vectors.
+    The built-in operation will be more efficient in situations that do
+    not make use of the aforementioned abstraction.
 
     See \ref dt_vectors for argument specification and conventions.
     See Wikipedia [cross] and [determinant] for more information.
