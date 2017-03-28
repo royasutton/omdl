@@ -181,6 +181,36 @@ function vector_to_origin
   : (len(v) == 2) ? (v[1]-v[0])
   : undef;
 
+//! Get the normal vector of a plane.
+/***************************************************************************//**
+  \param    p <plane> A plane.
+
+  \param    cw <boolean> Point ordering. When the plane specified as
+            non-collinear points, this indicates ordering.
+
+  \returns  <vector-3d> The normal vector of a polytope face plane.
+
+  \details
+
+    See \ref dt_vectors for argument specification and conventions.
+*******************************************************************************/
+function plane_get_nv
+(
+  p,
+  cw = true
+) = not_defined(len(p[0])) ?
+    (
+      (len(p) == 3) ? p : (len(p) == 2) ? [p[0], p[1], 0]: undef
+    )
+  : let
+    (
+      q = [for (i=p) (len(i) == 3) ? i : (len(i) == 2) ? [i[0], i[1], 0]: undef]
+    )
+    (len(p) == 1) ? q[0]
+  : (len(p) == 2) ? cross(q[0], q[1])
+  : (len(p) == 3) ? cross(q[0]-q[1], q[2]-q[1]) * ((cw == true) ? 1 : -1)
+  : undef;
+
 //! Compute the dot product of two vectors.
 /***************************************************************************//**
   \param    v1 <vector> A n-dimensional vector 1.
@@ -494,6 +524,19 @@ BEGIN_SCOPE validate;
         [-1,1,0],                                           // t08
         [-1,1,0]                                            // t09
       ],
+      ["plane_get_nv",
+        2,                                                  // fac
+        4,                                                  // crp
+        skip,                                               // t01
+        skip,                                               // t02
+        [60,50,0],                                          // t03
+        skip,                                               // t04
+        [0,0,1468],                                         // t05
+        [-4880,-6235,19924],                                // t06
+        skip,                                               // t07
+        z_axis3d_uv,                                        // t08
+        z_axis3d_uv                                         // t09
+      ],
       ["dot_vv",
         4,                                                  // fac
         4,                                                  // crp
@@ -639,6 +682,7 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("vector_get_tp",vid) test( "vector_get_tp", vector_get_tp([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("vector_get_ip",vid) test( "vector_get_ip", vector_get_ip([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("vector_to_origin",vid) test( "vector_to_origin", vector_to_origin([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("plane_get_nv",vid) test( "plane_get_nv", plane_get_nv([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("dot_vv",vid) test( "dot_vv", dot_vv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("cross_vv",vid) test( "cross_vv", cross_vv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("striple_vvv",vid) test( "striple_vvv", striple_vvv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
