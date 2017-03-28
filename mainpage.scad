@@ -283,11 +283,12 @@
     Given three points \c 'p1', \c 'p2', \c 'p3', and two vectors
     \c 'v1' and \c 'v2' in space with vn = cross(v1, v2):
 
-    | no. | form          | description                               |
-    |:---:|:-------------:|:------------------------------------------|
-    |  1  | vn            | the normal vector to the plane            |
-    |  2  | [v1, v2]      | two distinct but intersecting vectors     |
-    |  3  | [p1, p2, p3]  | three non-collinear points                |
+    | no. | form          | description                                   |
+    |:---:|:-------------:|:----------------------------------------------|
+    |  1  | vn            | the predetermined normal vector to the plane  |
+    |  2  | [vn]          | the predetermined normal vector to the plane  |
+    |  3  | [v1, v2]      | two distinct but intersecting vectors         |
+    |  4  | [p1, p2, p3]  | three non-collinear points                    |
 
     \b Example: plane specifications for \c'n1', \c'n2', and \c'n3'.
 
@@ -301,10 +302,11 @@
     vn = cross_vv(v1, v2)
 
     n1 = vn           = cross_vv(v1, v2)
-    n2 = [v1, v2]     = [[[a,b,c],[d,e,f]], [[a,b,c],[g,h,i]]]
-    n3 = [p1, p2, p3] = [[a,b,c], [d,e,f], [g,h,i]]
+    n2 = [vn]         = cross_vv(v1, v2)
+    n3 = [v1, v2]     = [[[a,b,c],[d,e,f]], [[a,b,c],[g,h,i]]]
+    n4 = [p1, p2, p3] = [[a,b,c], [d,e,f], [g,h,i]]
 
-    n1 || n2 || n3
+    n1 || n2 || n3 || n4
     \endcode
 
 
