@@ -75,6 +75,22 @@ function defined_or
   d
 ) = is_defined(v) ? v : d;
 
+//! Map an index position into a circularly indexed list.
+/***************************************************************************//**
+  \param    i <integer> Any index, in or out of bounds.
+  \param    l <integer> The circular list length.
+  \param    f <integer> The starting index number.
+
+  \returns  <integer> A index position in the circular list within the
+            range <tt>[f : l+f-1]</tt>.
+*******************************************************************************/
+function circular_index
+(
+  i,
+  l,
+  f = 0
+) = f + (((i % l) + l) % l);
+
 //! @}
 //! @}
 
@@ -171,6 +187,7 @@ BEGIN_SCOPE validate;
 
     // Indirect function calls would be very useful here!!!
     for (vid=test_ids) run_test( "defined_or_D", defined_or(get_value(vid),"default"), vid );
+    // circular_index() not tested
 
     // end-of-tests
   END_OPENSCAD;
