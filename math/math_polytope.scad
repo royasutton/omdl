@@ -320,9 +320,9 @@ function polytope_face_mp
 
   \param    cw <boolean> Face vertex ordering.
 
-  \returns  <coords-3d-vector-3d-list> <tt>[mp, nv]</tt>. The mean
-            coordinate, \c mp, and normal vector, \c nv, of a polytope
-            face-plane.
+  \returns  <plane> <tt>[mp, nv]</tt>, where \c mp is \c coords-3d, the
+            mean coordinate, and \c nv is \c vector-3d, the normal
+            vector, of the polytope face-plane.
 
   \details
 
@@ -341,6 +341,12 @@ function polytope_face_mpnv
   l,
   cw = true
 ) = [polytope_face_mp(c, f, i, l), polytope_face_nv(c, f, i, l, cw)];
+
+//! Get the plane of a polytope face.
+/***************************************************************************//**
+  \copydetails polytope_face_mpnv()
+*******************************************************************************/
+function polytope_plane(c,f,i,l,cw=true) = polytope_face_mpnv(c,f,i,l,cw);
 
 //! Get the connected neighboring vertices for a given polytope vertex.
 /***************************************************************************//**
