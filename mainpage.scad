@@ -227,6 +227,7 @@
     | [point]     | a list of numbers to identify a location in space |
     | [vector]    | a direction and magnitude in space                |
     | [line]      | a start and end point in space                    |
+    | [normal]    | a vector that is perpendicular to a given object  |
     | [plane]     | a flat two-dimensional infinite surface           |
     | [coords]    | a list of points in space                         |
     | [matrix]    | a rectangular array of values                     |
@@ -259,12 +260,14 @@
     |  2  | [p2]      | a vector or line from the origin to 'p2'      |
     |  3  | [p1, p2]  | vector or line from 'p1' to 'p2'              |
 
-    \b Example: vector specifications for \c'v1', \c'v2', and \c'v3'.
+    \b Example: vector specifications.
 
     \code{.c}
+    // points
     p1 = [a,b,c]
     p2 = [d,e,f]
 
+    // vectors
     v1 = p2       = [d,e,f]
     v2 = [p2]     = [[d,e,f]]
     v3 = [p1, p2] = [[a,b,c], [d,e,f]]
@@ -275,38 +278,57 @@
 
   \subsubsection dt_planes Planes
 
-    A [plane] is a flat, two-dimensional doubly-ruled surface that
-    extends infinitely along independent, often orthogonal, vectors.
-    Operators in [omdl] make use of a common convention for specifying
-    planes as summarized in the following table:
+    Operators in [omdl] use a common convention for specifying planes.
+    A [plane] is identified by a [point] on its surface together with
+    its [normal], which is discussed in the following section. A
+    point and normal together specify a plane as follows:
 
-    Given three points \c 'p1', \c 'p2', \c 'p3', and two vectors
-    \c 'v1' and \c 'v2' in space with vn = cross(v1, v2):
+    | name    | form                |
+    |:-------:|:-------------------:|
+    | [plane] | [[point], [normal]] |
+
+  \subsubsection dt_planes_normal Planes' normal
+
+    Given three points \c 'p1', \c 'p2', \c 'p3', and three vectors
+    \c 'v1', \c 'v2', \c 'vn', the planes' [normal] can be specified
+    in any of the following forms:
 
     | no. | form          | description                                   |
     |:---:|:-------------:|:----------------------------------------------|
     |  1  | vn            | the predetermined normal vector to the plane  |
     |  2  | [vn]          | the predetermined normal vector to the plane  |
     |  3  | [v1, v2]      | two distinct but intersecting vectors         |
-    |  4  | [p1, p2, p3]  | three non-collinear points                    |
+    |  4  | [p1, p2, p3]  | three (or more) non-collinear coplanar points |
 
-    \b Example: plane specifications for \c'n1', \c'n2', and \c'n3'.
+    \b Example: plane specifications.
 
     \code{.c}
+    // points
     p1 = [a,b,c];
     p2 = [d,e,f];
     p3 = [g,h,i];
 
+    // vectors
     v1 = [p1, p2] = [[a,b,c], [d,e,f]]
     v2 = [p1, p3] = [[a,b,c], [g,h,i]]
     vn = cross_vv(v1, v2)
 
+    // planes' normal
     n1 = vn           = cross_vv(v1, v2)
     n2 = [vn]         = cross_vv(v1, v2)
     n3 = [v1, v2]     = [[[a,b,c],[d,e,f]], [[a,b,c],[g,h,i]]]
     n4 = [p1, p2, p3] = [[a,b,c], [d,e,f], [g,h,i]]
 
     n1 || n2 || n3 || n4
+
+    // planes
+    s1 = [p1, n1]
+    s2 = [p2, n2]
+    s3 = [p3, n3]
+    s4 = [n4[0], n4]
+    s5 = [mean(n4), n4]
+
+    s1 == s4
     \endcode
 
 
@@ -336,6 +358,7 @@
   [point]: https://en.wikipedia.org/wiki/Point_(geometry)
   [vector]: https://en.wikipedia.org/wiki/Euclidean_vector
   [line]: https://en.wikipedia.org/wiki/Line_(geometry)
+  [normal]: https://en.wikipedia.org/wiki/Normal_(geometry)
   [plane]: https://en.wikipedia.org/wiki/Plane_(geometry)
   [coords]: https://en.wikipedia.org/wiki/Coordinate_system
   [matrix]: https://en.wikipedia.org/wiki/Matrix_(mathematics)
