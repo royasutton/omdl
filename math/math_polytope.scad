@@ -192,6 +192,197 @@ function polytope_faces2edges
   )
   unique(el);
 
+//! Get a line from an edge (or any two vetices) of a polytope.
+/***************************************************************************//**
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
+
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+  \param    e <integer-list-2-list> A list of edges where each edge is
+            a list of two coordinate indexes.
+
+  \param    i <integer> A line specified as an edge index.
+  \param    l <integer-list-2> A line specified as a list of coordinate
+            index pairs.
+
+  \param    r <boolean> Reverse the line start and end points.
+
+  \returns  <line-3d|line-2d> The line as a pair of coordinates.
+
+  \details
+
+  \note     Parameter \p f is optional for polygons. When it is not
+            given, the listed order of the coordinates \p c establishes
+            the polygon path.
+  \note     When \p e is not specified, it is computed from \p f using
+            polytope_faces2edges() iff the line is identified by \p i.
+*******************************************************************************/
+function polytope_line
+(
+  c,
+  f,
+  e,
+  i,
+  l,
+  r = false
+) = is_defined(l) ? [c[first(l)], c[second(l)]]
+  : not_defined(i) ? undef
+  : let
+    (
+      fm = defined_or(f, [consts(len(c))]),
+      el = defined_or(e, polytope_faces2edges(fm)),
+      sl = el[i]
+    )
+    (r == false)
+  ? [c[second(sl)], c[first(sl)]]
+  : [c[first(sl)], c[second(sl)]];
+
+//! Get the normal vector of a polytope face-plane.
+/***************************************************************************//**
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+
+  \param    i <integer> The face specified as an face index.
+  \param    l <integer-list> The face-plane specified as a list of three
+            or more coordinate indexes that are a part of the face.
+
+  \param    cw <boolean> Face vertex ordering.
+
+  \returns  <vector-3d> The normal vector of a polytope face-plane.
+
+  \details
+
+    The face can be identified using either parameter \p i or \p l.
+    When using \p l, the parameter \p f is not required.
+
+  \note     Parameter \p f is optional for polygons. When it is not
+            given, the listed order of the coordinates \p c establishes
+            the polygon path.
+*******************************************************************************/
+function polytope_face_nv
+(
+  c,
+  f,
+  i,
+  l,
+  cw = true
+) = let
+    (
+      ci = is_defined(l) ? l : defined_or(f, [consts(len(c))])[i],
+      pc = [for (i = [0:2]) let (p = c[ci[i]]) (len(p) == 3) ? p : [p[0], p[1], 0]]
+    )
+    cross(pc[0]-pc[1], pc[2]-pc[1]) * ((cw == true) ? 1 : -1);
+
+//! Get the mean coordinate of all vertices of a polytope face.
+/***************************************************************************//**
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+
+  \param    i <integer> The face specified as an face index.
+  \param    l <integer-list> The face specified as a list of all the
+            coordinate indexes that define it.
+
+  \returns  <coords-3d> The mean coordinate of a polytope face.
+
+  \details
+
+    The face can be identified using either parameter \p i or \p l.
+    When using \p l, the parameter \p f is not required.
+
+  \note     Parameter \p f is optional for polygons. When it is not
+            given, the listed order of the coordinates \p c establishes
+            the polygon path.
+*******************************************************************************/
+function polytope_face_mp
+(
+  c,
+  f,
+  i,
+  l
+) = let
+    (
+      ci = is_defined(l) ? l : defined_or(f, [consts(len(c))])[i],
+      pc = [for (i = ci) c[i]]
+    )
+    mean(pc);
+
+//! Get the mean coordinate and normal vector of a polytope face.
+/***************************************************************************//**
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+
+  \param    i <integer> The face specified as an face index.
+  \param    l <integer-list> The face specified as a list of all the
+            coordinate indexes that define it.
+
+  \param    cw <boolean> Face vertex ordering.
+
+  \returns  <coords-3d-vector-3d-list> <tt>[mp, nv]</tt>. The mean
+            coordinate, \c mp, and normal vector, \c nv, of a polytope
+            face-plane.
+
+  \details
+
+    The face can be identified using either parameter \p i or \p l.
+    When using \p l, the parameter \p f is not required.
+
+  \note     Parameter \p f is optional for polygons. When it is not
+            given, the listed order of the coordinates \p c establishes
+            the polygon path.
+*******************************************************************************/
+function polytope_face_mpnv
+(
+  c,
+  f,
+  i,
+  l,
+  cw = true
+) = [polytope_face_mp(c, f, i, l), polytope_face_nv(c, f, i, l, cw)];
+
+//! Get the connected neighboring vertices for a given polytope vertex.
+/***************************************************************************//**
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+
+  \param    i <integer> A vertex index.
+
+  \returns  <coords-list|integer-list> The list of connected
+            neighboring vertices for the given vertex in coordinate or
+            index form (coordinates have the same dimensions as \p c).
+
+  \details
+
+    The connected vertex neighbors are those neighboring vertices that
+    are directly connected to the given vertex by a common edge.
+
+  \note     Parameter \p f is optional for polygons. When it is not
+            given, the listed order of the coordinates \p c establishes
+            the polygon path.
+*******************************************************************************/
+function polytope_vertex_neighbors
+(
+  c,
+  f,
+  i
+) =
+  let
+  (
+    vn =
+    [
+      for (fi = f) let (fn = len(fi))
+        for (j = [0:fn-1])
+          if (i == fi[j])
+            for (k = [-1, 1])
+              fi[circular_index(j + k, fn)]
+    ],
+    uv = unique(vn)
+  )
+  is_defined(c) ? [for (v = uv) c[v]] : uv;
+
 //! Determine the bounding-box limits of a polytope.
 /***************************************************************************//**
   \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
@@ -204,7 +395,7 @@ function polytope_faces2edges
             of dimensions, a list of dimensions, or a single dimension.
   \param    s <boolean> Return box size rather than coordinate limits.
 
-  \returns  \<list> A list with the bounding-box limits.
+  \returns  \<list> A list with the bounding-box limits (see: table).
 
   \details
 
@@ -294,9 +485,9 @@ function polytope_triangulate_ft
   \param    a <decimal-list-2> The box padding.
             A list of lengths to equally pad the box dimensions.
 
-  \returns  \<list> A list [points, path], where points are <coords-2d>
-            and path is a <integer-list-list>, that define the bounding
-            box of the given polygon.
+  \returns  \<list> A list <tt>[points, path]</tt>, where \c points are
+            <coords-2d> and \c path is a <integer-list-list>, that
+            define the bounding box of the given polygon.
 
   \details
 
@@ -725,9 +916,9 @@ function polygon2d_is_pip_as
   \param    a <decimal-list-3> The box padding.
             A list of lengths to equally pad the box dimensions.
 
-  \returns  \<list> A list [points, faces], where points are <coords-3d>
-            and faces are a <integer-list-list>, that define the bounding
-            box of the given polyhedron.
+  \returns  \<list> A list <tt>[points, faces]</tt>, where \c points are
+            <coords-3d> and \c faces are a <integer-list-list>, that
+            define the bounding box of the given polyhedron.
 
   \details
 
