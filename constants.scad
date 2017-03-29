@@ -143,8 +143,8 @@ z_axis3d_ul = [-z_axis3d_uv, +z_axis3d_uv];
 //! <plane> The right-handed xy plane centered at the origin with normal vector.
 xy_plane_nv = [origin3d, z_axis3d_uv];
 
-//! <plane> The right-handed xz plane centered at the origin with normal vector.
-xz_plane_nv = [origin3d, y_axis3d_uv];
+//! <plane> The right-handed zx plane centered at the origin with normal vector.
+zx_plane_nv = [origin3d, y_axis3d_uv];
 
 //! <plane> The right-handed yz plane centered at the origin with normal vector.
 yz_plane_nv = [origin3d, x_axis3d_uv];
@@ -152,8 +152,8 @@ yz_plane_nv = [origin3d, x_axis3d_uv];
 //! <plane> The right-handed xy plane centered at the origin with coplanar unit square points.
 xy_plane_us = [origin3d, [for (r=[[1,1],[1,-1],[-1,-1],[-1,1]]) [r[0],r[1],0]]];
 
-//! <plane> The right-handed xz plane centered at the origin with coplanar unit square points.
-xz_plane_us = [origin3d, [for (r=[[1,1],[1,-1],[-1,-1],[-1,1]]) [r[0],0,r[1]]]];
+//! <plane> The right-handed zx plane centered at the origin with coplanar unit square points.
+zx_plane_us = [origin3d, [for (r=[[1,1],[1,-1],[-1,-1],[-1,1]]) [r[1],0,r[0]]]];
 
 //! <plane> The right-handed yz plane centered at the origin with coplanar unit square points.
 yz_plane_us = [origin3d, [for (r=[[1,1],[1,-1],[-1,-1],[-1,1]]) [0,r[0],r[1]]]];
