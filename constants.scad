@@ -113,6 +113,12 @@ x_axis2d_uv = [1, 0];
 //! <vector-2d> The unit vector of the positive y-axis in 2d Euclidean space.
 y_axis2d_uv = [0, 1];
 
+//! <line-2d> A positively-directed unit line centered on the x-axis in 2d Euclidean space.
+x_axis2d_ul = [-x_axis2d_uv, +x_axis2d_uv];
+
+//! <line-2d> A positively-directed unit line centered on the y-axis in 2d Euclidean space.
+y_axis2d_ul = [-y_axis2d_uv, +y_axis2d_uv];
+
 //! <point-3d> The origin point coordinate in 3-dimensional Euclidean space.
 origin3d = [0, 0, 0];
 
@@ -124,6 +130,33 @@ y_axis3d_uv = [0, 1, 0];
 
 //! <vector-3d> The unit vector of the positive z-axis in 3d Euclidean space.
 z_axis3d_uv = [0, 0, 1];
+
+//! <line-3d> A positively-directed unit line centered on the x-axis in 3d Euclidean space.
+x_axis3d_ul = [-x_axis3d_uv, +x_axis3d_uv];
+
+//! <line-3d> A positively-directed unit line centered on the y-axis in 3d Euclidean space.
+y_axis3d_ul = [-y_axis3d_uv, +y_axis3d_uv];
+
+//! <line-3d> A positively-directed unit line centered on the z-axis in 3d Euclidean space.
+z_axis3d_ul = [-z_axis3d_uv, +z_axis3d_uv];
+
+//! <plane> The right-handed xy plane centered at the origin with normal vector.
+xy_plane_nv = [origin3d, z_axis3d_uv];
+
+//! <plane> The right-handed xz plane centered at the origin with normal vector.
+xz_plane_nv = [origin3d, y_axis3d_uv];
+
+//! <plane> The right-handed yz plane centered at the origin with normal vector.
+yz_plane_nv = [origin3d, x_axis3d_uv];
+
+//! <plane> The right-handed xy plane centered at the origin with coplanar unit square points.
+xy_plane_us = [origin3d, [for (r=[[1,1],[1,-1],[-1,-1],[-1,1]]) [r[0],r[1],0]]];
+
+//! <plane> The right-handed xz plane centered at the origin with coplanar unit square points.
+xz_plane_us = [origin3d, [for (r=[[1,1],[1,-1],[-1,-1],[-1,1]]) [r[0],0,r[1]]]];
+
+//! <plane> The right-handed yz plane centered at the origin with coplanar unit square points.
+yz_plane_us = [origin3d, [for (r=[[1,1],[1,-1],[-1,-1],[-1,1]]) [0,r[0],r[1]]]];
 
 //! @}
 //! @}
