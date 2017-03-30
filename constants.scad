@@ -95,14 +95,14 @@ empty_lst = [];
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! <integer> The mapping index for the x-axis in Euclidean space.
-x_axis_vi = 0;
+//! <integer> The coordinate axis index for the Euclidean space x-axis.
+x_axis_ci = 0;
 
-//! <integer> The mapping index for the y-axis in Euclidean space.
-y_axis_vi = 1;
+//! <integer> The coordinate axis index for the Euclidean space y-axis.
+y_axis_ci = 1;
 
-//! <integer> The mapping index for the z-axis in Euclidean space.
-z_axis_vi = 2;
+//! <integer> The coordinate axis index for the Euclidean space z-axis.
+z_axis_ci = 2;
 
 //! <decimal-list-2> A 2d zero vector (a list with two zeros).
 zero2d = [0, 0];
