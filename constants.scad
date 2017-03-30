@@ -104,6 +104,9 @@ y_axis_vi = 1;
 //! <integer> The mapping index for the z-axis in Euclidean space.
 z_axis_vi = 2;
 
+//! <decimal-list-2> A 2d zero vector (a list with two zeros).
+zero2d = [0, 0];
+
 //! <point-2d> The origin point coordinate in 2d Euclidean space.
 origin2d = [0, 0];
 
@@ -118,6 +121,9 @@ x_axis2d_ul = [-x_axis2d_uv, +x_axis2d_uv];
 
 //! <line-2d> A positively-directed unit line centered on the y-axis in 2d Euclidean space.
 y_axis2d_ul = [-y_axis2d_uv, +y_axis2d_uv];
+
+//! <decimal-list-2> A 3d zero vector (a list with three zeros).
+zero3d = [0, 0, 0];
 
 //! <point-3d> The origin point coordinate in 3-dimensional Euclidean space.
 origin3d = [0, 0, 0];
