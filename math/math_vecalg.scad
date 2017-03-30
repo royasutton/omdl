@@ -117,7 +117,7 @@ function is_left_ppp
 // group 2: vectors
 //----------------------------------------------------------------------------//
 
-//! Return the number of dimensions of a Euclidean vector or line.
+//! Return the number of dimensions of a Euclidean line or vector.
 /***************************************************************************//**
   \param    v <vector> A vector or a line.
 
@@ -127,12 +127,12 @@ function is_left_ppp
 
     See \ref dt_vectors for argument specification and conventions.
 *******************************************************************************/
-function vector_get_dim
+function line_get_dim
 (
   v
 ) = is_defined(len(v[0])) ? len(v[0]) : len(v);
 
-//! Return the termination point of a Euclidean vector or line.
+//! Return the termination point of a Euclidean line or vector.
 /***************************************************************************//**
   \param    v <vector> A vector or a line.
 
@@ -142,12 +142,12 @@ function vector_get_dim
 
     See \ref dt_vectors for argument specification and conventions.
 *******************************************************************************/
-function vector_get_tp
+function line_get_tp
 (
   v
 ) = is_iterable(v[0]) ? (len(v)>1) ? v[1] : v[0] : v;
 
-//! Return the initiating point of a Euclidean vector or line.
+//! Return the initiating point of a Euclidean line or vector.
 /***************************************************************************//**
   \param    v <vector> A vector or a line.
 
@@ -157,13 +157,13 @@ function vector_get_tp
 
     See \ref dt_vectors for argument specification and conventions.
 *******************************************************************************/
-function vector_get_ip
+function line_get_ip
 (
   v
 ) = is_iterable(v[0]) ? (len(v)>1) ? v[0] : consts(len(v[0]), 0)
   : is_iterable(v) ? consts(len(v), 0) : 0;
 
-//! Shift a Euclidean vector or line to the origin.
+//! Shift a Euclidean line or vector to the origin.
 /***************************************************************************//**
   \param    v <vector> A vector or a line.
 
@@ -173,7 +173,7 @@ function vector_get_ip
 
     See \ref dt_vectors for argument specification and conventions.
 *******************************************************************************/
-function vector_to_origin
+function line_to_origin
 (
   v
 ) = not_defined(len(v[0])) ? v
@@ -233,7 +233,7 @@ function dot_vv
 (
   v1,
   v2
-) = (vector_to_origin(v1) * vector_to_origin(v2));
+) = (line_to_origin(v1) * line_to_origin(v2));
 
 //! Compute the cross product of two vectors in a Euclidean 3d-space (2d).
 /***************************************************************************//**
@@ -261,7 +261,7 @@ function cross_vv
 (
   v1,
   v2
-) = cross(vector_to_origin(v1), vector_to_origin(v2));
+) = cross(line_to_origin(v1), line_to_origin(v2));
 
 //! Compute the scalar triple product of three vectors in a Euclidean 3d-space (2d).
 /***************************************************************************//**
@@ -290,7 +290,7 @@ function striple_vvv
   v1,
   v2,
   v3
-) = dot_vv(vector_to_origin(v1), cross_vv(v2, v3));
+) = dot_vv(line_to_origin(v1), cross_vv(v2, v3));
 
 //! Compute the angle between two vectors in a Euclidean 2 or 3d-space.
 /***************************************************************************//**
@@ -317,7 +317,7 @@ function angle_vv
 (
   v1,
   v2
-) = let(d = vector_get_dim(v1))
+) = let(d = line_get_dim(v1))
     (d == 2) ? atan2(cross_vv(v1, v2), dot_vv(v1, v2))
   : (d == 3) ? atan2(distance_pp(cross_vv(v1, v2)), dot_vv(v1, v2))
   : undef;
@@ -358,7 +358,7 @@ function angle_vvn
 function unit_v
 (
   v
-) = vector_to_origin(v) / distance_pp(vector_to_origin(v));
+) = line_to_origin(v) / distance_pp(line_to_origin(v));
 
 //! Test if three vectors are coplanar in Euclidean 3d-space.
 /***************************************************************************//**
@@ -471,7 +471,7 @@ BEGIN_SCOPE validate;
         1.4142,                                             // t08
         1.4142                                              // t09
       ],
-      ["vector_get_dim",
+      ["line_get_dim",
         2,                                                  // fac
         4,                                                  // crp
         2,                                                  // t01
@@ -484,7 +484,7 @@ BEGIN_SCOPE validate;
         3,                                                  // t08
         3                                                   // t09
       ],
-      ["vector_get_tp",
+      ["line_get_tp",
         2,                                                  // fac
         4,                                                  // crp
         [undef,undef],                                      // t01
@@ -497,7 +497,7 @@ BEGIN_SCOPE validate;
         y_axis3d_uv,                                        // t08
         y_axis3d_uv                                         // t09
       ],
-      ["vector_get_ip",
+      ["line_get_ip",
         2,                                                  // fac
         4,                                                  // crp
         origin2d,                                           // t01
@@ -510,7 +510,7 @@ BEGIN_SCOPE validate;
         x_axis3d_uv,                                        // t08
         x_axis3d_uv                                         // t09
       ],
-      ["vector_to_origin",
+      ["line_to_origin",
         2,                                                  // fac
         4,                                                  // crp
         [undef, undef],                                     // t01
@@ -677,10 +677,10 @@ BEGIN_SCOPE validate;
     // not tested: is_left_ppp()
 
     // group 2: vectors
-    for (vid=run_ids) run("vector_get_dim",vid) test( "vector_get_dim", vector_get_dim([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("vector_get_tp",vid) test( "vector_get_tp", vector_get_tp([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("vector_get_ip",vid) test( "vector_get_ip", vector_get_ip([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("vector_to_origin",vid) test( "vector_to_origin", vector_to_origin([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("line_get_dim",vid) test( "line_get_dim", line_get_dim([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("line_get_tp",vid) test( "line_get_tp", line_get_tp([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("line_get_ip",vid) test( "line_get_ip", line_get_ip([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("line_to_origin",vid) test( "line_to_origin", line_to_origin([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("plane_normal",vid) test( "plane_normal", plane_normal([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("dot_vv",vid) test( "dot_vv", dot_vv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("cross_vv",vid) test( "cross_vv", cross_vv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
