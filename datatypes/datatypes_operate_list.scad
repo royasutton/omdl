@@ -222,6 +222,36 @@ function consts
   : (u == false) ? [for (i=[0:1:l-1]) i]
   : [for (i=[0:1:l-1]) undef];
 
+//! Pad a list to a constant width of elements.
+/***************************************************************************//**
+  \param    l \<list> The list.
+  \param    w <integer> The padded width.
+  \param    p \<value> The padding value.
+  \param    r <boolean> Use right padding (\b false for left).
+
+  \returns  \<list> A list padded to \p w elements.
+
+  \details
+
+    When the list has greater than \p w elements, the list is returned
+    unchanged. The empty list, \b empty_lst, has zero elements. When
+    \p l is a string, characters are counted as individual elements.
+    Use function lstr() to join padded values back into a single string
+    if desired.
+*******************************************************************************/
+function pad
+(
+  l,
+  w,
+  p = 0,
+  r = true
+) = let
+    (
+      s = defined_or(len(l), 1),
+      q = (s < w) ? [for (i=[1:w-s]) p] : empty_lst
+    )
+    (r == true) ? concat(l, q) : concat(q, l);
+
 //! Round all numerical values of a list to a fixed number of decimal point digits.
 /***************************************************************************//**
   \param    v \<list> A list of values.
@@ -725,6 +755,19 @@ BEGIN_SCOPE validate;
         empty_lst,                                          // t10
         empty_lst                                           // t11
       ],
+      ["pad_9",
+        [undef,0,0,0,0,0,0,0,0],                            // t01
+        [0,0,0,0,0,0,0,0,0],                                // t02
+        [[0:0.5:9],0,0,0,0,0,0,0,0],                        // t03
+        ["A string",0],                                     // t04
+        ["orange","apple","grape","banana",0,0,0,0,0],      // t05
+        ["b","a","n","a","n","a","s",0,0],                  // t06
+        [undef,0,0,0,0,0,0,0,0],                            // t07
+        [[1,2],[2,3],0,0,0,0,0,0,0],                        // t08
+        ["ab",[1,2],[2,3],[4,5],0,0,0,0,0],                 // t09
+        [[1,2,3],[4,5,6],[7,8,9],["a","b","c"],0,0,0,0,0],  // t10
+        [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
+      ],
       ["limit_12",
         undef,                                              // t01
         empty_lst,                                          // t02
@@ -916,6 +959,7 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "lstr", lstr(get_value(vid)), vid );
     for (vid=test_ids) run_test( "lstr_html_B", lstr_html(get_value(vid),p="b"), vid );
     for (vid=test_ids) run_test( "consts", consts(get_value(vid)), vid );
+    for (vid=test_ids) run_test( "pad_9", pad(get_value(vid), w=9), vid );
     log_info( "not testing: dround()" );
     log_info( "not testing: sround()" );
     for (vid=test_ids) run_test( "limit_12", limit(get_value(vid),1,2), vid );
