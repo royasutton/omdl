@@ -43,100 +43,95 @@ include <math.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Align a shape's Cartesian axis to another axis specified as line.
+//! Align a shapes' x, y, or z Cartesian axis to reference line or vector.
 /***************************************************************************//**
-  \param    a <line-3d|line-2d> An alignment axis line or vector.
-  \param    t <integer> Translation mode (one of [0:4], see table).
-  \param    r <decimal> Rotation about the alignment vector (in degrees).
-  \param    d <integer> Dimension index. The Cartesian axis index to
-            align (0, 1, or 2).
+  \param    rl <line-3d|line-2d> The reference line or vector.
+  \param    t <integer> Origin translation along reference line (see table).
+  \param    r <decimal> Rotation about the reference line (in degrees).
+  \param    d <integer> The Cartesian axis index to align (0, 1, or 2).
 
   \details
 
-    |  t  | shape translation |
-    |:---:|:-----------------:|
-    |  0  |  0                |
-    |  1  |  pi               |
-    |  2  |  (pt+pi)/2        |
-    |  3  |  pt               |
-    |  4  |  pt+pi            |
-
-    Where \c pi is the initiating point and \c pt is the terminating
-    point of the vector or line.
+    |  t  | origin translation          |
+    |:---:|:----------------------------|
+    |  0  |  none                       |
+    |  1  |  line initial point         |
+    |  2  |  line median point          |
+    |  3  |  line termination point     |
+    |  4  |  line initial + termination |
 
     See \ref dt_vectors for argument specification and conventions.
 *******************************************************************************/
 module align_axis
 (
-  a,
+  rl,
   t = 0,
   r = 0,
   d = 2
 )
 {
-  pt = vector_get_tp(a);
-  pi = vector_get_ip(a);
+  pt = vector_get_tp(rl);
+  pi = vector_get_ip(rl);
 
   pa = acos((pt[2]-pi[2]) / distance_pp(pt, pi));
   aa = atan2(pt[1]-pi[1], pt[0]-pi[0]);
 
-  tv  = (t == 0) ? origin3d
-      : (t == 1) ? pi
-      : (t == 2) ? (pt+pi)/2
-      : (t == 3) ? pt
-      : (t == 4) ? pt+pi
-      : origin3d;
-
-  rv = (d == 0) ? [[ 0, -90, r], [0, pa, aa]]
-     : (d == 1) ? [[90,   0, r], [0, pa, aa]]
-     : (d == 2) ? [[ 0,   0, r], [0, pa, aa]]
-     : [origin3d, origin3d];
-
-  translate(tv)
-  rotate(rv[1])
-  rotate(rv[0])
+  translate(ciselect([origin3d, pi, (pt+pi)/2, pt, pt+pi, origin3d], t))
+  rotate(ciselect([[0, pa, aa], [0, pa, aa], [0, pa, aa], zero3d], d))
+  rotate(ciselect([[0, -90, r], [90, 0, r], [0, 0, r], zero3d], d))
   children();
 }
 
-//! Align a line to an arbitrary axis specified as another line.
+//! Align a line to a reference line or vector in Euclidean 2d-space.
 /***************************************************************************//**
-  \param    l <line-3d|line-2d> A line or vector to align.
-  \param    a <line-3d|line-2d> An alignment axis line or vector.
+  \param    l <line-2d> The line or vector to align.
+  \param    rl <line-2d> The reference line or vector.
 
-  \param    lm <integer> line reference point mode
-            (one of [0:2], see table).
-  \param    am <integer> axis reference point mode
-            (one of [0:2], see table).
+  \param    lp <integer> The line alignment point (see table).
+  \param    rp <integer> The reference line alignment point (see table).
 
-  \param    t <vector-3d|vector-2d> Post-alignment translation vector.
-  \param    r <decimal-list-1:3|decimal> Post-alignment rotation angles
-            (in degrees). Single decimal specifies z-rotation.
+  \param    t <vector-3d|vector-2d> Origin translation vector.
+  \param    r <decimal-list-1:3|decimal> Origin rotation angle (in degrees).
 
   \details
 
-    | lm, am  | reference point | note      |
-    |:-------:|:---------------:|:---------:|
-    |  0      |  initial        |           |
-    |  1      |  median         | (default) |
-    |  2      |  termination    |           |
+    The alignment reference point of the line will be a translated to
+    to the reference line alignment line reference. The origin rotation
+    is applied prior to the origin translation.
+
+    | lp, rp  | alignment translation |
+    |:-------:|:----------------------|
+    |  0      | none                  |
+    |  1      | initial               |
+    |  2      | median                |
+    |  3      | termination           |
+    |  4      | initial + termination |
 
     See \ref dt_vectors for argument specification and conventions.
 *******************************************************************************/
-module align_line
+module align_line2d
 (
   l,
-  a,
-  lm,
-  am,
-  t,
-  r
+  rl = x_axis2d_ul,
+  lp = 2,
+  rp = 2,
+  t  = origin2d,
+  r  = zero2d,
 )
 {
-  translate(ciselect([first(a), mean(a), second(a), mean(a)], am))
-  rotate(angle_vv(l, a))
-  rotate(defined_or(r, origin3d))
-  translate(-ciselect([first(l), mean(l), second(l), mean(l)], lm))
-  translate(defined_or(t, origin3d))
+  li = vector_get_ip(l);
+  lt = vector_get_tp(l);
+  lm = mean([li, lt]);
+
+  ai = vector_get_ip(rl);
+  at = vector_get_tp(rl);
+  am = mean([ai, at]);
+
+  translate(ciselect([origin2d, ai, am, at, ai+at, am], rp))
+  rotate(angle_vv(l, rl))
+  translate(t)
+  rotate(r)
+  translate(-ciselect([origin2d, li, lm, lt, li+lt, lm], lp))
   children();
 }
 
