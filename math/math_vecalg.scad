@@ -114,8 +114,23 @@ function is_left_ppp
 ) = ((p2[0]-p1[0]) * (p3[1]-p1[1]) - (p3[0]-p1[0]) * (p2[1]-p1[1]));
 
 //----------------------------------------------------------------------------//
-// group 2: vectors
+// group 2: vectors and lines
 //----------------------------------------------------------------------------//
+
+//! Return 3d vector unchanged or add zero third dimension to 2d vector.
+/***************************************************************************//**
+  \param    v <vector-3d|vector-2d> A vector.
+
+  \returns  <vector-3d> The 3d vector or the 2d vector converted to 3d
+            with its third dimension assigned zero.
+
+  \warning  To reduce overhead, this function assumes any vector that is
+            not a 3d vector to be 2d vector.
+*******************************************************************************/
+function dimension_2to3_v
+(
+  v
+) = (len(v) == 3) ? v : [v[0], v[1], 0];
 
 //! Return the number of dimensions of a Euclidean line or vector.
 /***************************************************************************//**
@@ -471,6 +486,32 @@ BEGIN_SCOPE validate;
         1.4142,                                             // t08
         1.4142                                              // t09
       ],
+      ["is_left_ppp",
+        3,                                                  // fac
+        4,                                                  // crp
+        undef,                                              // t01
+        undef,                                              // t02
+        undef,                                              // t03
+        undef,                                              // t04
+        -463,                                               // t05
+        17009,                                              // t06
+        -1583,                                              // t07
+        1,                                                  // t08
+        -3                                                  // t09
+      ],
+      ["dimension_2to3_v",
+        1,                                                  // fac
+        4,                                                  // crp
+        [undef,undef,0],                                    // t01
+        [undef,undef,0],                                    // t02
+        [undef,undef,0],                                    // t03
+        [99,undef,0],                                       // t04
+        [99,2,0],                                           // t05
+        [199,20,55],                                        // t06
+        [169,27,0],                                         // t07
+        x_axis3d_uv,                                        // t08
+        x_axis3d_uv                                         // t09
+      ],
       ["dimension_l",
         2,                                                  // fac
         4,                                                  // crp
@@ -674,9 +715,10 @@ BEGIN_SCOPE validate;
 
     // group 1: points
     for (vid=run_ids) run("distance_pp",vid) test( "distance_pp", distance_pp(gv(vid,0),gv(vid,1)), vid, false );
-    // not tested: is_left_ppp()
+    for (vid=run_ids) run("is_left_ppp",vid) test( "is_left_ppp", is_left_ppp(gv(vid,0),gv(vid,1),gv(vid,2)), vid, false );
 
-    // group 2: vectors
+    // group 2: vectors and lines
+    for (vid=run_ids) run("dimension_2to3_v",vid) test( "dimension_2to3_v", dimension_2to3_v(gv(vid,0)), vid, false );
     for (vid=run_ids) run("dimension_l",vid) test( "dimension_l", dimension_l([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("term_point_l",vid) test( "term_point_l", term_point_l([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("init_point_l",vid) test( "init_point_l", init_point_l([gv(vid,0),gv(vid,1)]), vid, true );

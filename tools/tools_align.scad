@@ -109,11 +109,11 @@ module align_ll
   ro = zero3d
 )
 {
-  li = pad(init_point_l( l), 3);
-  lt = pad(term_point_l( l), 3);
+  li = dimension_2to3_v(init_point_l( l));
+  lt = dimension_2to3_v(term_point_l( l));
 
-  ri = pad(init_point_l(rl), 3);
-  rt = pad(term_point_l(rl), 3);
+  ri = dimension_2to3_v(init_point_l(rl));
+  rt = dimension_2to3_v(term_point_l(rl));
 
   ll = [li, lt];
   lm = mean(ll);
