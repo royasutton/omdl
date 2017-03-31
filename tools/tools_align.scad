@@ -43,65 +43,54 @@ include <math.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Align a shapes' x, y, or z Cartesian axis to reference line or vector.
+//! Orient a line or vector to a reference line or vector.
 /***************************************************************************//**
+  \param    l <line-3d|line-2d> The line or vector to align.
   \param    rl <line-3d|line-2d> The reference line or vector.
-  \param    t <integer> Origin translation along reference line (see table).
-  \param    r <decimal> Rotation about the reference line (in degrees).
-  \param    d <integer> The Cartesian axis index to align (0, 1, or 2).
+
+  \param    r <decimal> Roll about axis \p rl (in degrees).
 
   \details
-
-    |  t  | origin translation          |
-    |:---:|:----------------------------|
-    |  0  |  none                       |
-    |  1  |  line initial point         |
-    |  2  |  line median point          |
-    |  3  |  line termination point     |
-    |  4  |  line initial + termination |
 
     See \ref dt_vectors for argument specification and conventions.
 *******************************************************************************/
-module align_axis
+module orient_l
 (
-  rl,
-  t = 0,
-  r = 0,
-  d = 2
+  l,
+  rl = z_axis3d_ul,
+  r  = 0
 )
 {
-  pt = vector_get_tp(rl);
-  pi = vector_get_ip(rl);
+  ll = line_to_origin(l);
+  lr = line_to_origin(rl);
 
-  pa = acos((pt[2]-pi[2]) / distance_pp(pt, pi));
-  aa = atan2(pt[1]-pi[1], pt[0]-pi[0]);
-
-  translate(ciselect([origin3d, pi, (pt+pi)/2, pt, pt+pi, origin3d], t))
-  rotate(ciselect([[0, pa, aa], [0, pa, aa], [0, pa, aa], zero3d], d))
-  rotate(ciselect([[0, -90, r], [90, 0, r], [0, 0, r], zero3d], d))
+  rotate(r, lr)
+  rotate(angle_vv(ll, lr), cross(ll, lr))
   children();
 }
 
-//! Align a line to a reference line or vector in Euclidean 2d-space.
+//! Align a line or vector to a reference line or vector.
 /***************************************************************************//**
-  \param    l <line-2d> The line or vector to align.
-  \param    rl <line-2d> The reference line or vector.
+  \param    l <line-3d|line-2d> The line or vector to align.
+  \param    rl <line-3d|line-2d> The reference line or vector.
 
-  \param    lp <integer> The line alignment point (see table).
-  \param    rp <integer> The reference line alignment point (see table).
+  \param    ap <integer> The line alignment point (see table).
+  \param    rp <integer> The reference-line alignment point (see table).
 
-  \param    t <vector-3d|vector-2d> Origin translation vector.
-  \param    r <decimal-list-1:3|decimal> Origin rotation angle (in degrees).
+  \param    r <decimal> Roll about axis \p rl (in degrees).
+
+  \param    to <vector-3d|vector-2d> Translation offset about \p rl.
+  \param    ro <decimal-list-1:3|decimal> Rotation offset about \p rl
+            (in degrees).
 
   \details
 
-    The alignment reference point of the line will be a translated to
-    to the reference line alignment line reference. The origin rotation
-    is applied prior to the origin translation.
+    The specified alignment point for the line \p l will be a translated
+    to the specified alignment point for the reference line \p rl.
 
-    | lp, rp  | alignment translation |
+    | ap, rp  | alignment point       |
     |:-------:|:----------------------|
-    |  0      | none                  |
+    |  0      | none (no translation) |
     |  1      | initial               |
     |  2      | median                |
     |  3      | termination           |
@@ -109,29 +98,87 @@ module align_axis
 
     See \ref dt_vectors for argument specification and conventions.
 *******************************************************************************/
-module align_line2d
+module align_ll
 (
   l,
-  rl = x_axis2d_ul,
-  lp = 2,
-  rp = 2,
-  t  = origin2d,
-  r  = zero2d,
+  rl = z_axis3d_ul,
+  ap = 0,
+  rp = 0,
+  r  = 0,
+  to = origin3d,
+  ro = zero3d
 )
 {
-  li = vector_get_ip(l);
-  lt = vector_get_tp(l);
-  lm = mean([li, lt]);
+  li = pad(line_get_ip( l), 3);
+  lt = pad(line_get_tp( l), 3);
 
-  ai = vector_get_ip(rl);
-  at = vector_get_tp(rl);
-  am = mean([ai, at]);
+  ri = pad(line_get_ip(rl), 3);
+  rt = pad(line_get_tp(rl), 3);
 
-  translate(ciselect([origin2d, ai, am, at, ai+at, am], rp))
-  rotate(angle_vv(l, rl))
-  translate(t)
-  rotate(r)
-  translate(-ciselect([origin2d, li, lm, lt, li+lt, lm], lp))
+  ll = [li, lt];
+  lm = mean(ll);
+
+  lr = [ri, rt];
+  rm = mean(lr);
+
+  // translate reference
+  translate(ciselect([origin3d, ri, rm, rt, ri+rt, rm], rp))
+
+  // orient and roll line about reference
+  rotate(r, line_to_origin(lr))
+  rotate(angle_vv(ll, lr), cross_vv(ll, lr))
+
+  // apply offsets
+  translate(to)
+  rotate(ro)
+
+  // translate alignment point
+  translate(-ciselect([origin3d, li, lm, lt, li+lt, lm], ap))
+  children();
+}
+
+//! Align a shapes' x, y, or z Cartesian axis to reference line or vector.
+/***************************************************************************//**
+  \param    rl <line-3d|line-2d> The reference line or vector.
+
+  \param    rp <integer> The reference-line alignment point (see table).
+
+  \param    r <decimal> Roll about axis \p rl (in degrees).
+
+  \param    to <vector-3d|vector-2d> Translation offset about \p rl.
+  \param    ro <decimal-list-1:3|decimal> Rotation offset about \p rl
+            (in degrees).
+
+  \param    d <integer> The Cartesian axis index to align (0, 1, or 2).
+
+  \details
+
+    The origin will be a translated to the specified alignment point
+    for the reference line \p rl.
+
+    | ap, rp  | alignment point       |
+    |:-------:|:----------------------|
+    |  0      | none (no translation) |
+    |  1      | initial               |
+    |  2      | median                |
+    |  3      | termination           |
+    |  4      | initial + termination |
+
+    See \ref dt_vectors for argument specification and conventions.
+*******************************************************************************/
+module align_l
+(
+  rl,
+  rp = 0,
+  r  = 0,
+  to = origin3d,
+  ro = zero3d,
+  d  = z_axis_ci
+)
+{
+  ra = ciselect([x_axis3d_ul, y_axis3d_ul, z_axis3d_ul], d);
+
+  align_ll(ra, rl, 0, rp, r, to, ro)
   children();
 }
 
