@@ -117,7 +117,7 @@ function is_left_ppp
 // group 2: vectors and lines
 //----------------------------------------------------------------------------//
 
-//! Return 3d vector unchanged or add zero third dimension to 2d vector.
+//! Return 3d vector unchanged or add a zeroed third dimension to 2d vector.
 /***************************************************************************//**
   \param    v <vector-3d|vector-2d> A vector.
 
@@ -134,9 +134,9 @@ function dimension_2to3_v
 
 //! Return the number of dimensions of a Euclidean line or vector.
 /***************************************************************************//**
-  \param    v <vector> A vector or a line.
+  \param    v <line> A line or a vector.
 
-  \returns  <integer> The number of dimensions for the vector or line.
+  \returns  <integer> The number of dimensions for the line or vector.
 
   \details
 
@@ -149,9 +149,9 @@ function dimension_l
 
 //! Return the termination point of a Euclidean line or vector.
 /***************************************************************************//**
-  \param    v <vector> A vector or a line.
+  \param    v <line> A line or a vector.
 
-  \returns  <integer> The terminating point of the vector or line.
+  \returns  <integer> The terminating point of the line or vector.
 
   \details
 
@@ -164,9 +164,9 @@ function term_point_l
 
 //! Return the initiating point of a Euclidean line or vector.
 /***************************************************************************//**
-  \param    v <vector> A vector or a line.
+  \param    v <line> A line or a vector.
 
-  \returns  <integer> The initiating point of the vector or line.
+  \returns  <integer> The initiating point of the line or vector.
 
   \details
 
@@ -180,9 +180,9 @@ function init_point_l
 
 //! Shift a Euclidean line or vector to the origin.
 /***************************************************************************//**
-  \param    v <vector> A vector or a line.
+  \param    v <line> A line or a vector.
 
-  \returns  <integer> The vector or line shifted to the origin.
+  \returns  <integer> The line or vector shifted to the origin.
 
   \details
 
@@ -225,10 +225,10 @@ function normal_ps
   : (len(p) == 2) ? cross(q[0], q[1])
   : cross(q[0]-q[1], q[2]-q[1]) * ((cw == true) ? 1 : -1);
 
-//! Compute the dot product of two vectors.
+//! Compute the dot product of two lines or vectors.
 /***************************************************************************//**
-  \param    v1 <vector> A n-dimensional vector 1.
-  \param    v2 <vector> A n-dimensional vector 2.
+  \param    v1 <line> A n-dimensional line or vector 1.
+  \param    v2 <line> A n-dimensional line or vector 2.
 
   \returns  <decimal> The dot product of \p v1 with \p v2.
             Returns \b undef when vectors have different dimensions.
@@ -250,10 +250,10 @@ function dot_ll
   v2
 ) = (to_origin_l(v1) * to_origin_l(v2));
 
-//! Compute the cross product of two vectors in a Euclidean 3d-space (2d).
+//! Compute the cross product of two lines or vectors in a Euclidean 3d-space (2d).
 /***************************************************************************//**
-  \param    v1 <vector-3d|vector-2d> A 3d or 2d vector 1.
-  \param    v2 <vector-3d|vector-2d> A 3d or 2d vector 2.
+  \param    v1 <line-3d|line-2d> A 3d or 2d line or vector 1.
+  \param    v2 <line-3d|line-2d> A 3d or 2d line or vector 2.
 
   \returns  <decimal|vector-2d> The cross product of \p v1 with \p v2.
             Returns \b undef when vectors have different dimensions.
@@ -278,11 +278,11 @@ function cross_ll
   v2
 ) = cross(to_origin_l(v1), to_origin_l(v2));
 
-//! Compute the scalar triple product of three vectors in a Euclidean 3d-space (2d).
+//! Compute the scalar triple product of three lines or vectors in a Euclidean 3d-space (2d).
 /***************************************************************************//**
-  \param    v1 <vector-3d|vector-2d> A 3d or 2d vector 1.
-  \param    v2 <vector-3d|vector-2d> A 3d or 2d vector 2.
-  \param    v3 <vector-3d|vector-2d> A 3d or 2d vector 3.
+  \param    v1 <line-3d|line-2d> A 3d or 2d line or vector 1.
+  \param    v2 <line-3d|line-2d> A 3d or 2d line or vector 2.
+  \param    v3 <line-3d|line-2d> A 3d or 2d line or vector 3.
 
   \returns  <decimal|vector-2d> The scalar triple product.
             Returns \b undef when vectors have different dimensions.
@@ -296,7 +296,7 @@ function cross_ll
 
   \warning  Returns a 2d vector result for 2d vectors. The cross product
             computes the 2x2 determinant of the vectors <tt>(v2 x v3)</tt>,
-            a scalar value, which is then \e multiplied by vector \c v1.
+            a scalar value, which is then \e multiplied by \c v1.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Triple_product
 *******************************************************************************/
@@ -307,10 +307,10 @@ function striple_lll
   v3
 ) = dot_ll(to_origin_l(v1), cross_ll(v2, v3));
 
-//! Compute the angle between two vectors in a Euclidean 2 or 3d-space.
+//! Compute the angle between two lines or vectors in a Euclidean 2 or 3d-space.
 /***************************************************************************//**
-  \param    v1 <vector-3d|vector-2d> A 3d or 2d vector 1.
-  \param    v2 <vector-3d|vector-2d> A 3d or 2d vector 2.
+  \param    v1 <line-3d|line-2d> A 3d or 2d line or vector 1.
+  \param    v2 <line-3d|line-2d> A 3d or 2d line or vector 2.
 
   \returns  <decimal> The angle between the two vectors in degrees.
             Returns \b undef when vectors have different dimensions
@@ -337,11 +337,11 @@ function angle_ll
   : (d == 3) ? atan2(distance_pp(cross_ll(v1, v2)), dot_ll(v1, v2))
   : undef;
 
-//! Compute the angle between two vectors in a Euclidean 3d-space.
+//! Compute the angle between two lines or vectors in a Euclidean 3d-space.
 /***************************************************************************//**
-  \param    v1 <vector-3d> A 3d vector 1.
-  \param    v2 <vector-3d> A 3d vector 2.
-  \param    nv <vector-3d> A 3d normal vector.
+  \param    v1 <line-3d> A 3d line or vector 1.
+  \param    v2 <line-3d> A 3d line or vector 2.
+  \param    nv <line-3d> A 3d normal line or vector.
 
   \returns  <decimal> The angle between the two vectors in degrees.
             Returns \b undef when vectors have different dimensions
@@ -360,9 +360,9 @@ function angle_lll
   nv
 ) = atan2(striple_lll(nv, v1, v2), dot_ll(v1, v2));
 
-//! Compute the normalized unit vector of a Euclidean vector.
+//! Compute the normalized unit vector of a Euclidean line or vector.
 /***************************************************************************//**
-  \param    v <vector> A vector or a line.
+  \param    v <line> A line or a vector.
 
   \returns  <vector> The normalized unit vector.
 
@@ -375,16 +375,16 @@ function unit_l
   v
 ) = to_origin_l(v) / distance_pp(to_origin_l(v));
 
-//! Test if three vectors are coplanar in Euclidean 3d-space.
+//! Test if three lines or vectors are coplanar in Euclidean 3d-space.
 /***************************************************************************//**
-  \param    v1 <vector-3d> A 3d vector 1.
-  \param    v2 <vector-3d> A 3d vector 2.
-  \param    v3 <vector-3d> A 3d vector 3.
+  \param    v1 <line-3d> A 3d line or vector 1.
+  \param    v2 <line-3d> A 3d line or vector 2.
+  \param    v3 <line-3d> A 3d line or vector 3.
   \param    d <integer> A positive numerical distance, proximity, or
             tolerance. The number of decimal places to consider.
 
-  \returns  <boolean> \b true when all three vectors are coplanar,
-            and \b false otherwise.
+  \returns  <boolean> \b true when all three lines or vectors are
+            coplanar, and \b false otherwise.
   \details
 
     See \ref dt_vectors for argument specification and conventions.
