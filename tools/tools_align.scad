@@ -65,7 +65,7 @@ module orient_l
   lr = to_origin_l(rl);
 
   rotate(r, lr)
-  rotate(angle_vv(ll, lr), cross(ll, lr))
+  rotate(angle_ll(ll, lr), cross(ll, lr))
   children();
 }
 
@@ -126,7 +126,7 @@ module align_ll
 
   // orient and roll line about reference
   rotate(r, to_origin_l(lr))
-  rotate(angle_vv(ll, lr), cross_vv(ll, lr))
+  rotate(angle_ll(ll, lr), cross_ll(ll, lr))
 
   // apply offsets
   translate(to)

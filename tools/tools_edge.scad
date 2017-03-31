@@ -151,7 +151,7 @@ module edge_profile_r
     c3x = c1x*cos(a);
     c3y = c1x*sin(a);
 
-    mpc = unit_v([(c1x+c3x)/2, c3y/2]);
+    mpc = unit_l([(c1x+c3x)/2, c3y/2]);
 
     if ( f < 1 )
       intersection()

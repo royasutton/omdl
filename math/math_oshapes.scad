@@ -89,7 +89,7 @@ function rpolygon_lp
   )
   for ( a = b )
     let( v = [s*cos(a), s*sin(a)] )
-    not_defined(vr) ? v : v - vr/cos(180/n) * unit_v(v)
+    not_defined(vr) ? v : v - vr/cos(180/n) * unit_l(v)
 ];
 
 //! Compute the area of an n-sided regular polygon.

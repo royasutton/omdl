@@ -244,7 +244,7 @@ function normal_ps
 
     [Wikipedia]: https://en.wikipedia.org/wiki/Dot_product
 *******************************************************************************/
-function dot_vv
+function dot_ll
 (
   v1,
   v2
@@ -272,7 +272,7 @@ function dot_vv
   [cross]: https://en.wikipedia.org/wiki/Cross_product
   [determinant]: https://en.wikipedia.org/wiki/Determinant
 *******************************************************************************/
-function cross_vv
+function cross_ll
 (
   v1,
   v2
@@ -300,12 +300,12 @@ function cross_vv
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Triple_product
 *******************************************************************************/
-function striple_vvv
+function striple_lll
 (
   v1,
   v2,
   v3
-) = dot_vv(to_origin_l(v1), cross_vv(v2, v3));
+) = dot_ll(to_origin_l(v1), cross_ll(v2, v3));
 
 //! Compute the angle between two vectors in a Euclidean 2 or 3d-space.
 /***************************************************************************//**
@@ -326,15 +326,15 @@ function striple_vvv
             axis of rotation will be that which fits this assumed
             positive angle.
 
-  \sa angle_vvv().
+  \sa angle_lll().
 *******************************************************************************/
-function angle_vv
+function angle_ll
 (
   v1,
   v2
 ) = let(d = dimension_l(v1))
-    (d == 2) ? atan2(cross_vv(v1, v2), dot_vv(v1, v2))
-  : (d == 3) ? atan2(distance_pp(cross_vv(v1, v2)), dot_vv(v1, v2))
+    (d == 2) ? atan2(cross_ll(v1, v2), dot_ll(v1, v2))
+  : (d == 3) ? atan2(distance_pp(cross_ll(v1, v2)), dot_ll(v1, v2))
   : undef;
 
 //! Compute the angle between two vectors in a Euclidean 3d-space.
@@ -351,14 +351,14 @@ function angle_vv
 
     See \ref dt_vectors for argument specification and conventions.
 
-  \sa angle_vv().
+  \sa angle_ll().
 *******************************************************************************/
-function angle_vvv
+function angle_lll
 (
   v1,
   v2,
   nv
-) = atan2(striple_vvv(nv, v1, v2), dot_vv(v1, v2));
+) = atan2(striple_lll(nv, v1, v2), dot_ll(v1, v2));
 
 //! Compute the normalized unit vector of a Euclidean vector.
 /***************************************************************************//**
@@ -370,7 +370,7 @@ function angle_vvv
 
     See \ref dt_vectors for argument specification and conventions.
 *******************************************************************************/
-function unit_v
+function unit_l
 (
   v
 ) = to_origin_l(v) / distance_pp(to_origin_l(v));
@@ -396,13 +396,13 @@ function unit_v
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Coplanarity
 *******************************************************************************/
-function are_coplanar_vvv
+function are_coplanar_lll
 (
   v1,
   v2,
   v3,
   d = 6
-) = (dround(striple_vvv(v1, v2, v3), d) ==  0);
+) = (dround(striple_lll(v1, v2, v3), d) ==  0);
 
 //! @}
 //! @}
@@ -577,7 +577,7 @@ BEGIN_SCOPE validate;
         z_axis3d_uv,                                        // t08
         z_axis3d_uv                                         // t09
       ],
-      ["dot_vv",
+      ["dot_ll",
         4,                                                  // fac
         4,                                                  // crp
         undef,                                              // t01
@@ -590,7 +590,7 @@ BEGIN_SCOPE validate;
         1,                                                  // t08
         0                                                   // t09
       ],
-      ["cross_vv",
+      ["cross_ll",
         4,                                                  // fac
         4,                                                  // crp
         skip,                                               // t01
@@ -603,7 +603,7 @@ BEGIN_SCOPE validate;
         [-1,-1,1],                                          // t08
         [0,0,4]                                             // t09
       ],
-      ["striple_vvv",
+      ["striple_lll",
         6,                                                  // fac
         4,                                                  // crp
         skip,                                               // t01
@@ -616,7 +616,7 @@ BEGIN_SCOPE validate;
         -2,                                                 // t08
         0                                                   // t09
       ],
-      ["angle_vv",
+      ["angle_ll",
         4,                                                  // fac
         4,                                                  // crp
         undef,                                              // t01
@@ -629,7 +629,7 @@ BEGIN_SCOPE validate;
         60,                                                 // t08
         90                                                  // t09
       ],
-      ["angle_vvv",
+      ["angle_lll",
         6,                                                  // fac
         4,                                                  // crp
         skip,                                               // t01
@@ -642,7 +642,7 @@ BEGIN_SCOPE validate;
         -63.4349,                                           // t08
         0                                                   // t09
       ],
-      ["unit_v",
+      ["unit_l",
         2,                                                  // fac
         4,                                                  // crp
         undef,                                              // t01
@@ -655,7 +655,7 @@ BEGIN_SCOPE validate;
         [-0.7071,0.7071,0],                                 // t08
         [-0.7071,0.7071,0]                                  // t09
       ],
-      ["are_coplanar_vvv",
+      ["are_coplanar_lll",
         6,                                                  // fac
         4,                                                  // crp
         skip,                                               // t01
@@ -724,13 +724,13 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("init_point_l",vid) test( "init_point_l", init_point_l([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("to_origin_l",vid) test( "to_origin_l", to_origin_l([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("normal_ps",vid) test( "normal_ps", normal_ps([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("dot_vv",vid) test( "dot_vv", dot_vv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
-    for (vid=run_ids) run("cross_vv",vid) test( "cross_vv", cross_vv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
-    for (vid=run_ids) run("striple_vvv",vid) test( "striple_vvv", striple_vvv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
-    for (vid=run_ids) run("angle_vv",vid) test( "angle_vv", angle_vv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
-    for (vid=run_ids) run("angle_vvv",vid) test( "angle_vvv", angle_vvv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
-    for (vid=run_ids) run("unit_v",vid) test( "unit_v", unit_v([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("are_coplanar_vvv",vid) test( "are_coplanar_vvv", are_coplanar_vvv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
+    for (vid=run_ids) run("dot_ll",vid) test( "dot_ll", dot_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
+    for (vid=run_ids) run("cross_ll",vid) test( "cross_ll", cross_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
+    for (vid=run_ids) run("striple_lll",vid) test( "striple_lll", striple_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
+    for (vid=run_ids) run("angle_ll",vid) test( "angle_ll", angle_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
+    for (vid=run_ids) run("angle_lll",vid) test( "angle_lll", angle_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
+    for (vid=run_ids) run("unit_l",vid) test( "unit_l", unit_l([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("are_coplanar_lll",vid) test( "are_coplanar_lll", are_coplanar_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
 
     // end-of-tests
   END_OPENSCAD;

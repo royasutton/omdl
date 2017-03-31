@@ -311,11 +311,11 @@
     // vectors
     v1 = [p1, p2] = [[a,b,c], [d,e,f]]
     v2 = [p1, p3] = [[a,b,c], [g,h,i]]
-    vn = cross_vv(v1, v2)
+    vn = cross_ll(v1, v2)
 
     // planes' normal
-    n1 = vn           = cross_vv(v1, v2)
-    n2 = [vn]         = cross_vv(v1, v2)
+    n1 = vn           = cross_ll(v1, v2)
+    n2 = [vn]         = cross_ll(v1, v2)
     n3 = [v1, v2]     = [[[a,b,c],[d,e,f]], [[a,b,c],[g,h,i]]]
     n4 = [p1, p2, p3] = [[a,b,c], [d,e,f], [g,h,i]]
 
