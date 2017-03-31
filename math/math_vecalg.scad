@@ -127,7 +127,7 @@ function is_left_ppp
 
     See \ref dt_vectors for argument specification and conventions.
 *******************************************************************************/
-function line_get_dim
+function dimension_l
 (
   v
 ) = is_defined(len(v[0])) ? len(v[0]) : len(v);
@@ -142,7 +142,7 @@ function line_get_dim
 
     See \ref dt_vectors for argument specification and conventions.
 *******************************************************************************/
-function line_get_tp
+function term_point_l
 (
   v
 ) = is_iterable(v[0]) ? (len(v)>1) ? v[1] : v[0] : v;
@@ -157,7 +157,7 @@ function line_get_tp
 
     See \ref dt_vectors for argument specification and conventions.
 *******************************************************************************/
-function line_get_ip
+function init_point_l
 (
   v
 ) = is_iterable(v[0]) ? (len(v)>1) ? v[0] : consts(len(v[0]), 0)
@@ -173,7 +173,7 @@ function line_get_ip
 
     See \ref dt_vectors for argument specification and conventions.
 *******************************************************************************/
-function line_to_origin
+function to_origin_l
 (
   v
 ) = not_defined(len(v[0])) ? v
@@ -194,7 +194,7 @@ function line_to_origin
 
     See \ref dt_planes_normal for argument specification and conventions.
 *******************************************************************************/
-function plane_normal
+function normal_ps
 (
   p,
   cw = true
@@ -233,7 +233,7 @@ function dot_vv
 (
   v1,
   v2
-) = (line_to_origin(v1) * line_to_origin(v2));
+) = (to_origin_l(v1) * to_origin_l(v2));
 
 //! Compute the cross product of two vectors in a Euclidean 3d-space (2d).
 /***************************************************************************//**
@@ -261,7 +261,7 @@ function cross_vv
 (
   v1,
   v2
-) = cross(line_to_origin(v1), line_to_origin(v2));
+) = cross(to_origin_l(v1), to_origin_l(v2));
 
 //! Compute the scalar triple product of three vectors in a Euclidean 3d-space (2d).
 /***************************************************************************//**
@@ -290,7 +290,7 @@ function striple_vvv
   v1,
   v2,
   v3
-) = dot_vv(line_to_origin(v1), cross_vv(v2, v3));
+) = dot_vv(to_origin_l(v1), cross_vv(v2, v3));
 
 //! Compute the angle between two vectors in a Euclidean 2 or 3d-space.
 /***************************************************************************//**
@@ -311,13 +311,13 @@ function striple_vvv
             axis of rotation will be that which fits this assumed
             positive angle.
 
-  \sa angle_vvn().
+  \sa angle_vvv().
 *******************************************************************************/
 function angle_vv
 (
   v1,
   v2
-) = let(d = line_get_dim(v1))
+) = let(d = dimension_l(v1))
     (d == 2) ? atan2(cross_vv(v1, v2), dot_vv(v1, v2))
   : (d == 3) ? atan2(distance_pp(cross_vv(v1, v2)), dot_vv(v1, v2))
   : undef;
@@ -338,7 +338,7 @@ function angle_vv
 
   \sa angle_vv().
 *******************************************************************************/
-function angle_vvn
+function angle_vvv
 (
   v1,
   v2,
@@ -358,7 +358,7 @@ function angle_vvn
 function unit_v
 (
   v
-) = line_to_origin(v) / distance_pp(line_to_origin(v));
+) = to_origin_l(v) / distance_pp(to_origin_l(v));
 
 //! Test if three vectors are coplanar in Euclidean 3d-space.
 /***************************************************************************//**
@@ -471,7 +471,7 @@ BEGIN_SCOPE validate;
         1.4142,                                             // t08
         1.4142                                              // t09
       ],
-      ["line_get_dim",
+      ["dimension_l",
         2,                                                  // fac
         4,                                                  // crp
         2,                                                  // t01
@@ -484,7 +484,7 @@ BEGIN_SCOPE validate;
         3,                                                  // t08
         3                                                   // t09
       ],
-      ["line_get_tp",
+      ["term_point_l",
         2,                                                  // fac
         4,                                                  // crp
         [undef,undef],                                      // t01
@@ -497,7 +497,7 @@ BEGIN_SCOPE validate;
         y_axis3d_uv,                                        // t08
         y_axis3d_uv                                         // t09
       ],
-      ["line_get_ip",
+      ["init_point_l",
         2,                                                  // fac
         4,                                                  // crp
         origin2d,                                           // t01
@@ -510,7 +510,7 @@ BEGIN_SCOPE validate;
         x_axis3d_uv,                                        // t08
         x_axis3d_uv                                         // t09
       ],
-      ["line_to_origin",
+      ["to_origin_l",
         2,                                                  // fac
         4,                                                  // crp
         [undef, undef],                                     // t01
@@ -523,7 +523,7 @@ BEGIN_SCOPE validate;
         [-1,1,0],                                           // t08
         [-1,1,0]                                            // t09
       ],
-      ["plane_normal",
+      ["normal_ps",
         2,                                                  // fac
         4,                                                  // crp
         skip,                                               // t01
@@ -588,7 +588,7 @@ BEGIN_SCOPE validate;
         60,                                                 // t08
         90                                                  // t09
       ],
-      ["angle_vvn",
+      ["angle_vvv",
         6,                                                  // fac
         4,                                                  // crp
         skip,                                               // t01
@@ -677,16 +677,16 @@ BEGIN_SCOPE validate;
     // not tested: is_left_ppp()
 
     // group 2: vectors
-    for (vid=run_ids) run("line_get_dim",vid) test( "line_get_dim", line_get_dim([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("line_get_tp",vid) test( "line_get_tp", line_get_tp([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("line_get_ip",vid) test( "line_get_ip", line_get_ip([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("line_to_origin",vid) test( "line_to_origin", line_to_origin([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("plane_normal",vid) test( "plane_normal", plane_normal([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("dimension_l",vid) test( "dimension_l", dimension_l([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("term_point_l",vid) test( "term_point_l", term_point_l([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("init_point_l",vid) test( "init_point_l", init_point_l([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("to_origin_l",vid) test( "to_origin_l", to_origin_l([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("normal_ps",vid) test( "normal_ps", normal_ps([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("dot_vv",vid) test( "dot_vv", dot_vv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("cross_vv",vid) test( "cross_vv", cross_vv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("striple_vvv",vid) test( "striple_vvv", striple_vvv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
     for (vid=run_ids) run("angle_vv",vid) test( "angle_vv", angle_vv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
-    for (vid=run_ids) run("angle_vvn",vid) test( "angle_vvn", angle_vvn([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
+    for (vid=run_ids) run("angle_vvv",vid) test( "angle_vvv", angle_vvv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
     for (vid=run_ids) run("unit_v",vid) test( "unit_v", unit_v([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("are_coplanar_vvv",vid) test( "are_coplanar_vvv", are_coplanar_vvv([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
 
