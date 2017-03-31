@@ -216,6 +216,27 @@
     | [integer]   | a positive, negative, or zero whole number        |
     | [decimal]   | integer numbers with a fractional part            |
     | [datalist]  | a list of arbitrary data values                   |
+    | indexs      | an index sequence specification                   |
+
+  \subsubsection dt_indexs Index sequence
+
+    The data type \em indexs refers to a convention for specifying a
+    sequence of indexes for some list of elements. For flexibility a
+    sequence may be specified in one of the following forms.
+
+    | value / form    | description                                   |
+    |:---------------:|:----------------------------------------------|
+    | \b true         | All index positions of the list [0:size-1]    |
+    | \b false        | No index positions                            |
+    | "all"           | All index positions of the list [0:size-1]    |
+    | "none"          | No index positions                            |
+    | "random"        | Random index positions of the list [0:size-1] |
+    | <integer>       | The single position given by an <integer>     |
+    | <range>         | The range of positions given by a <range>     |
+    | <integer-list>  | The list of positions give in <integer-list>  |
+
+    The function indexs() can be used to convert a value of this data
+    type into an index sequence list.
 
   \subsection dt_geometric Geometric
 
