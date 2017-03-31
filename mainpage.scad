@@ -322,13 +322,13 @@
     n1 || n2 || n3 || n4
 
     // planes
-    s1 = [p1, n1]
-    s2 = [p2, n2]
-    s3 = [p3, n3]
-    s4 = [n4[0], n4]
-    s5 = [mean(n4), n4]
+    pn1 = [p1, n1]
+    pn2 = [p2, n2]
+    pn3 = [p3, n3]
+    pn4 = [n4[0], n4]
+    pn5 = [mean(n4), n4]
 
-    s1 == s4
+    pn1 == pn4
     \endcode
 
 
