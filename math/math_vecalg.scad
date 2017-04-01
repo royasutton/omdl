@@ -283,7 +283,7 @@ function striple_lll
   l1,
   l2,
   l3
-) = dot_ll(to_origin_l(l1), cross_ll(l2, l3));
+) = (to_origin_l(l1) * cross_ll(l2, l3));
 
 //! Compute the angle between two lines (or vectors) in a Euclidean 3d or 2d-space.
 /***************************************************************************//**
