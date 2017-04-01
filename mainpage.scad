@@ -156,8 +156,8 @@
 
     [omdl] assumes a [value] is either a number, a boolean, a string, a
     list, a range, or the undefined value. What is called a vector in
-    the [OpenSCAD types] documentation is refereed to as a list here in
-    order to distinguish between sequential lists of values and
+    the [OpenSCAD types] documentation is refereed to as a \em list
+    here in order to distinguish between sequential lists of values and
     [Euclidean vectors].
 
     | type      | description                                         |
@@ -179,12 +179,12 @@
 
   \section dt_additions Additional conventions
 
-    When a list has an expected number of elements 'n' the \em count is
-    appended following a '-'. Where there is a range of expected
+    When a list has an expected number of elements 'n', the \em count
+    is appended following a '-'. When there is a range of expected
     elements, the lower and upper bounds are separated by a ':' and
-    appended. when the elements values are of an expected type, that
-    \em type is prepended. Combinations are used as needed as in
-    the following table:
+    appended (order of bounds may be reversed). When the elements
+    values are of an expected type, that \em type is prepended.
+    Combinations are used as needed as in the following table:
 
     | name        | description                                       |
     |:-----------:|:--------------------------------------------------|
@@ -208,7 +208,7 @@
   \subsection dt_general General
 
     From the fixed built-in set of [data types], [omdl] adds the
-    following general type specification conventions.
+    following general type specifications and conventions.
 
     | name        | description                                       |
     |:-----------:|:--------------------------------------------------|
@@ -216,13 +216,13 @@
     | [integer]   | a positive, negative, or zero whole number        |
     | [decimal]   | integer numbers with a fractional part            |
     | [datalist]  | a list of arbitrary data values                   |
-    | indexs      | a list index sequence specification               |
+    | [index]     | a list index sequence                             |
 
-  \subsubsection dt_indexs Index sequence
+  \subsubsection dt_index Index sequence
 
-    The data type \em indexs refers to a convention for specifying a
-    sequence of indexes for a list of elements. A list index sequence
-    may be specified in one of the following forms.
+    The data type \b index refers to a specified sequence of list
+    element indexes. A list index sequence may be specified in one of
+    the following forms.
 
     | value / form    | description                                   |
     |:---------------:|:----------------------------------------------|
@@ -236,20 +236,32 @@
     | <integer-list>  | The list of positions give in <integer-list>  |
 
     The function indexs() can be used to convert a value of this data
-    type into an index sequence list.
+    type into a sequence of list element indexes.
+
+    \b Example
+
+    \code{.c}
+    // list
+    l1 = [a,b,c,d,e,f]
+
+    // index sequence
+    indexs(true, len(l1))    = [0,1,2,3,4,5]
+    indexs("rands", len(l1)) = [0,2,5]
+    \endcode
 
   \subsection dt_geometric Geometric
 
     For [geometric] specifications and [geometric algebra], [omdl] adds
-    the following type specification conventions.
+    the following type specifications and conventions.
 
     | name        | description                                       |
     |:-----------:|:--------------------------------------------------|
     | [point]     | a list of numbers to identify a location in space |
     | [vector]    | a direction and magnitude in space                |
-    | [line]      | a start and end point in space                    |
+    | [line]      | a start and end point in space ([line wiki])      |
     | [normal]    | a vector that is perpendicular to a given object  |
-    | [plane]     | a flat two-dimensional infinite surface           |
+    | [pnorm]     | a vector that is perpendicular to a plane         |
+    | [plane]     | a flat 2d infinite surface ([plane wiki])         |
     | [coords]    | a list of points in space                         |
     | [matrix]    | a rectangular array of values                     |
 
@@ -265,30 +277,35 @@
     | coords-Nd   | a coordinate list in an 'N' dimensional space     |
     | matrix-MxN  | a 'M' by 'N' matrix of values                     |
 
-  \subsubsection dt_vectors Vectors and lines
+  \subsubsection dt_line Lines and vectors
 
-    A [vector] is a direction and magnitude in space. A [line], too,
-    has direction and magnitude, but also has location, as it starts at
-    one point in space and ends at another. Operators in [omdl] make
-    use of a common convention for specifying Euclidean vectors and
-    straight lines as summarized in the following table:
+    The data type \b line refers to a convention for specifying a line
+    or a vector. A vector is a direction and magnitude in space. A
+    line, too, has direction and magnitude, but also has location, as
+    it starts at one point in space and ends at another. Operators in
+    [omdl] make use of a common convention for specifying Euclidean
+    vectors and straight lines as summarized in the following table:
 
     Given two points \c 'p1' and \c 'p2', in space:
 
     | no. | form      | description                                   |
     |:---:|:---------:|:----------------------------------------------|
-    |  1  | p2        | a vector or line from the origin to 'p2'      |
-    |  2  | [p2]      | a vector or line from the origin to 'p2'      |
-    |  3  | [p1, p2]  | vector or line from 'p1' to 'p2'              |
+    |  1  | p2        | a line or vector from the origin to 'p2'      |
+    |  2  | [p2]      | a line or vector from the origin to 'p2'      |
+    |  3  | [p1, p2]  | line or vector from 'p1' to 'p2'              |
 
-    \b Example: vector specifications.
+    The functions dimension_l(), term_point_l(), init_point_l(), and
+    to_origin_l(), are available to identify the dimension of and
+    convert a line into a vector or point.
+
+    \b Example
 
     \code{.c}
     // points
     p1 = [a,b,c]
     p2 = [d,e,f]
 
-    // vectors
+    // lines and vectors
     v1 = p2       = [d,e,f]
     v2 = [p2]     = [[d,e,f]]
     v3 = [p1, p2] = [[a,b,c], [d,e,f]]
@@ -297,22 +314,25 @@
     v1 == v2 == v3, iff p1 == origin3d
     \endcode
 
-  \subsubsection dt_planes Planes
+  \subsubsection dt_plane Planes
 
     Operators in [omdl] use a common convention for specifying planes.
-    A [plane] is identified by a [point] on its surface together with
-    its [normal], which is discussed in the following section. A
-    point and normal together specify a plane as follows:
+    A \b plane is identified by a [point] on its surface together with
+    its [normal] vector specified by [pnorm], which is discussed in the
+    following section. A list with a point and normal together specify
+    the plane as follows:
 
     | name    | form                |
     |:-------:|:-------------------:|
-    | [plane] | [[point], [normal]] |
+    | [plane] | [[point], [pnorm]]  |
 
-  \subsubsection dt_planes_normal Planes' normal
+  \subsubsection dt_pnorm Planes' normal
 
-    Given three points \c 'p1', \c 'p2', \c 'p3', and three vectors
-    \c 'v1', \c 'v2', \c 'vn', the planes' [normal] can be specified
-    in any of the following forms:
+    The data type \b pnorm refers to a convention for specifying a
+    direction vector that is perpendicular to a plane. Given three
+    points \c 'p1', \c 'p2', \c 'p3', and three vectors \c 'v1',
+    \c 'v2', \c 'vn', the planes' [normal] can be specified in any of
+    the following forms:
 
     | no. | form          | description                                   |
     |:---:|:-------------:|:----------------------------------------------|
@@ -321,7 +341,10 @@
     |  3  | [v1, v2]      | two distinct but intersecting vectors         |
     |  4  | [p1, p2, p3]  | three (or more) non-collinear coplanar points |
 
-    \b Example: plane specifications.
+    The function normal_ps() can be used to convert a value of this data
+    type into a normal vector.
+
+    \b Example
 
     \code{.c}
     // points
@@ -329,7 +352,7 @@
     p2 = [d,e,f];
     p3 = [g,h,i];
 
-    // vectors
+    // lines and vectors
     v1 = [p1, p2] = [[a,b,c], [d,e,f]]
     v2 = [p1, p3] = [[a,b,c], [g,h,i]]
     vn = cross_ll(v1, v2)
@@ -352,7 +375,6 @@
     pn1 == pn4
     \endcode
 
-
   [omdl]: https://royasutton.github.io/omdl
   [Data types]: https://en.wikipedia.org/wiki/Data_type
   [value]: https://en.wikipedia.org/wiki/Value_(computer_science)
@@ -372,15 +394,19 @@
   [integer]: https://en.wikipedia.org/wiki/Integer
   [decimal]: https://en.wikipedia.org/wiki/Decimal
   [datalist]: https://en.wikipedia.org/wiki/Data
+  [index]: \ref dt_index
 
   [geometric]: https://en.wikipedia.org/wiki/Geometry
   [geometric algebra]: https://en.wikipedia.org/wiki/Geometric_algebra
 
   [point]: https://en.wikipedia.org/wiki/Point_(geometry)
   [vector]: https://en.wikipedia.org/wiki/Euclidean_vector
-  [line]: https://en.wikipedia.org/wiki/Line_(geometry)
+  [line wiki]: https://en.wikipedia.org/wiki/Line_(geometry)
+  [line]: \ref dt_line
   [normal]: https://en.wikipedia.org/wiki/Normal_(geometry)
-  [plane]: https://en.wikipedia.org/wiki/Plane_(geometry)
+  [pnorm]: \ref dt_pnorm
+  [plane wiki]: https://en.wikipedia.org/wiki/Plane_(geometry)
+  [plane]: \ref dt_plane
   [coords]: https://en.wikipedia.org/wiki/Coordinate_system
   [matrix]: https://en.wikipedia.org/wiki/Matrix_(mathematics)
 *******************************************************************************/

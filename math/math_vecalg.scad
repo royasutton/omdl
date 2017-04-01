@@ -140,7 +140,7 @@ function dimension_2to3_v
 
   \details
 
-    See \ref dt_vectors for argument specification and conventions.
+    See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
 function dimension_l
 (
@@ -155,7 +155,7 @@ function dimension_l
 
   \details
 
-    See \ref dt_vectors for argument specification and conventions.
+    See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
 function term_point_l
 (
@@ -170,7 +170,7 @@ function term_point_l
 
   \details
 
-    See \ref dt_vectors for argument specification and conventions.
+    See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
 function init_point_l
 (
@@ -186,7 +186,7 @@ function init_point_l
 
   \details
 
-    See \ref dt_vectors for argument specification and conventions.
+    See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
 function to_origin_l
 (
@@ -198,16 +198,16 @@ function to_origin_l
 
 //! Convert a planes' normal specification into a normal vector.
 /***************************************************************************//**
-  \param    p <*> A plane normal \ref dt_planes_normal "specification".
+  \param    p <pnorm> A plane normal \ref dt_pnorm "specification".
 
   \param    cw <boolean> Point ordering. When the plane specified as
             non-collinear points, this indicates ordering.
 
-  \returns  <vector-3d> A vector normal to the plane.
+  \returns  <normal> A vector normal to the plane.
 
   \details
 
-    See \ref dt_planes_normal for argument specification and conventions.
+    See \ref dt_pnorm for argument specification and conventions.
 *******************************************************************************/
 function normal_ps
 (
@@ -235,11 +235,11 @@ function normal_ps
 
   \details
 
-    This function supports the abstraction outlined in \ref dt_vectors.
+    This function supports the abstraction outlined in \ref dt_line.
     The built-in operation will be more efficient in situations that do
     not make use of the aforementioned abstraction.
 
-    See \ref dt_vectors for argument specification and conventions.
+    See \ref dt_line for argument specification and conventions.
     See [Wikipedia] for more information.
 
     [Wikipedia]: https://en.wikipedia.org/wiki/Dot_product
@@ -260,11 +260,11 @@ function dot_ll
 
   \details
 
-    This function supports the abstraction outlined in \ref dt_vectors.
+    This function supports the abstraction outlined in \ref dt_line.
     The built-in operation will be more efficient in situations that do
     not make use of the aforementioned abstraction.
 
-    See \ref dt_vectors for argument specification and conventions.
+    See \ref dt_line for argument specification and conventions.
     See Wikipedia [cross] and [determinant] for more information.
 
   \note     This function returns the 2x2 determinant for 2d vectors.
@@ -291,7 +291,7 @@ function cross_ll
 
     [v1, v2, v3] = v1 * (v2 x v3)
 
-    See \ref dt_vectors for argument specification and conventions.
+    See \ref dt_line for argument specification and conventions.
     See [Wikipedia] for more information.
 
   \warning  Returns a 2d vector result for 2d vectors. The cross product
@@ -318,7 +318,7 @@ function striple_lll
 
   \details
 
-    See \ref dt_vectors for argument specification and conventions.
+    See \ref dt_line for argument specification and conventions.
 
   \note     For 3d vectors, a normal vector is required to uniquely
             identify the perpendicular plane and axis of rotation. This
@@ -349,7 +349,7 @@ function angle_ll
 
   \details
 
-    See \ref dt_vectors for argument specification and conventions.
+    See \ref dt_line for argument specification and conventions.
 
   \sa angle_ll().
 *******************************************************************************/
@@ -368,7 +368,7 @@ function angle_lll
 
   \details
 
-    See \ref dt_vectors for argument specification and conventions.
+    See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
 function unit_l
 (
@@ -387,7 +387,7 @@ function unit_l
             coplanar, and \b false otherwise.
   \details
 
-    See \ref dt_vectors for argument specification and conventions.
+    See \ref dt_line for argument specification and conventions.
     See [Wikipedia] for more information.
 
   \note     When vectors are specified with start and end points, this

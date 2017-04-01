@@ -121,7 +121,6 @@ function translate_lp
 
   \details
 
-    See \ref dt_vectors for argument specification and conventions.
     See [Wikipedia] for more information on [transformation matrix]
     and [axis rotation].
 

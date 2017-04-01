@@ -224,7 +224,7 @@ function consts
 
 //! Create a list index sequence from an index sequence specification.
 /***************************************************************************//**
-  \param    v <indexs> The index sequence \ref dt_indexs "specification".
+  \param    v <index> The index sequence \ref dt_index "specification".
   \param    l <integer> The list length.
   \param    s <integer> An optional seed for random sequences.
 
@@ -234,7 +234,7 @@ function consts
 
   \details
 
-    See \ref dt_indexs for argument specification and conventions.
+    See \ref dt_index for argument specification and conventions.
 *******************************************************************************/
 function indexs
 (
