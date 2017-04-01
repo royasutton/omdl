@@ -248,7 +248,7 @@ function indexs
   : all_numbers(v) ? v
   : (v == "all") ? consts(l)
   : (v == "none") ? empty_lst
-  : (v == "random") ?
+  : (v == "rands") ?
     let
     (
       r = defined_or(s, first(rands(0, 100, 1))),
