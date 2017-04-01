@@ -52,7 +52,7 @@ include <math.scad>;
 
   \details
 
-    See \ref dt_vectors for argument specification and conventions.
+    See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
 module orient_l
 (
@@ -96,7 +96,7 @@ module orient_l
     |  3      | termination           |
     |  4      | initial + termination |
 
-    See \ref dt_vectors for argument specification and conventions.
+    See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
 module align_ll
 (
@@ -164,7 +164,7 @@ module align_ll
     |  3      | termination           |
     |  4      | initial + termination |
 
-    See \ref dt_vectors for argument specification and conventions.
+    See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
 module align_l
 (
