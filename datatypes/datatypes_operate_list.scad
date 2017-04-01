@@ -236,7 +236,7 @@ function consts
 
     See \ref dt_index for argument specification and conventions.
 *******************************************************************************/
-function indexs
+function get_index
 (
   v,
   l,
@@ -790,7 +790,7 @@ BEGIN_SCOPE validate;
         empty_lst,                                          // t10
         empty_lst                                           // t11
       ],
-      ["indexs",
+      ["get_index",
         empty_lst,                                          // t01
         empty_lst,                                          // t02
         [0,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9],
@@ -1007,7 +1007,7 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "lstr", lstr(get_value(vid)), vid );
     for (vid=test_ids) run_test( "lstr_html_B", lstr_html(get_value(vid),p="b"), vid );
     for (vid=test_ids) run_test( "consts", consts(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "indexs", indexs(get_value(vid)), vid );
+    for (vid=test_ids) run_test( "get_index", get_index(get_value(vid)), vid );
     for (vid=test_ids) run_test( "pad_9", pad(get_value(vid), w=9), vid );
     log_info( "not testing: dround()" );
     log_info( "not testing: sround()" );

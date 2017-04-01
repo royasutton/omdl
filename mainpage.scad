@@ -235,8 +235,8 @@
     | <range>         | The range of positions given by a <range>     |
     | <integer-list>  | The list of positions give in <integer-list>  |
 
-    The function indexs() can be used to convert a value of this data
-    type into a sequence of list element indexes.
+    The function get_index() can be used to convert a value of this
+    data type into a sequence of list element indexes.
 
     \b Example
 
@@ -245,8 +245,8 @@
     l1 = [a,b,c,d,e,f]
 
     // index sequence
-    indexs(true, len(l1))    = [0,1,2,3,4,5]
-    indexs("rands", len(l1)) = [0,2,5]
+    get_index(true, len(l1))    = [0,1,2,3,4,5]
+    get_index("rands", len(l1)) = [0,2,5]
     \endcode
 
   \subsection dt_geometric Geometric
@@ -294,8 +294,8 @@
     |  2  | [p2]      | a line or vector from the origin to 'p2'      |
     |  3  | [p1, p2]  | line or vector from 'p1' to 'p2'              |
 
-    The functions dimension_l(), term_point_l(), init_point_l(), and
-    to_origin_l(), are available to identify the dimension of and
+    The functions get_line_dim(), get_line_tp(), get_line_ip(), and
+    get_line2origin(), are available to identify the dimension of and
     convert a line into a vector or point.
 
     \b Example
@@ -341,8 +341,8 @@
     |  3  | [v1, v2]      | two distinct but intersecting vectors         |
     |  4  | [p1, p2, p3]  | three (or more) non-collinear coplanar points |
 
-    The function normal_ps() can be used to convert a value of this data
-    type into a normal vector.
+    The function get_pnorm2nv() can be used to convert a value of this
+    data type into a normal vector.
 
     \b Example
 

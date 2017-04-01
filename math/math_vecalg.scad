@@ -146,7 +146,7 @@ function dimension_2to3_v
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function dimension_l
+function get_line_dim
 (
   l
 ) = is_defined(len(l[0])) ? len(l[0]) : len(l);
@@ -161,7 +161,7 @@ function dimension_l
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function term_point_l
+function get_line_tp
 (
   l
 ) = is_iterable(l[0]) ? (len(l)>1) ? l[1] : l[0] : l;
@@ -176,7 +176,7 @@ function term_point_l
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function init_point_l
+function get_line_ip
 (
   l
 ) = is_iterable(l[0]) ? (len(l)>1) ? l[0] : consts(len(l[0]), 0)
@@ -192,7 +192,7 @@ function init_point_l
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function to_origin_l
+function get_line2origin
 (
   l
 ) = not_defined(len(l[0])) ? l
@@ -224,7 +224,7 @@ function dot_ll
 (
   l1,
   l2
-) = (to_origin_l(l1) * to_origin_l(l2));
+) = (get_line2origin(l1) * get_line2origin(l2));
 
 //! Compute the cross product of two lines (or vectors) in a Euclidean 3d or 2d-space.
 /***************************************************************************//**
@@ -253,7 +253,7 @@ function cross_ll
 (
   l1,
   l2
-) = cross(to_origin_l(l1), to_origin_l(l2));
+) = cross(get_line2origin(l1), get_line2origin(l2));
 
 //! Compute the scalar triple product of three lines (or vectors) in a Euclidean 3d or 2d-space.
 /***************************************************************************//**
@@ -283,7 +283,7 @@ function striple_lll
   l1,
   l2,
   l3
-) = (to_origin_l(l1) * cross_ll(l2, l3));
+) = (get_line2origin(l1) * cross_ll(l2, l3));
 
 //! Compute the angle between two lines (or vectors) in a Euclidean 3d or 2d-space.
 /***************************************************************************//**
@@ -310,7 +310,7 @@ function angle_ll
 (
   l1,
   l2
-) = let(d = dimension_l(l1))
+) = let(d = get_line_dim(l1))
     (d == 2) ? atan2(cross_ll(l1, l2), dot_ll(l1, l2))
   : (d == 3) ? atan2(distance_pp(cross_ll(l1, l2)), dot_ll(l1, l2))
   : undef;
@@ -351,7 +351,7 @@ function angle_lll
 function unit_l
 (
   l
-) = to_origin_l(l) / distance_pp(to_origin_l(l));
+) = get_line2origin(l) / distance_pp(get_line2origin(l));
 
 //! Test if three lines (or vectors) are coplanar in Euclidean 3d-space.
 /***************************************************************************//**
@@ -399,7 +399,7 @@ function are_coplanar_lll
 
     See \ref dt_pnorm for argument specification and conventions.
 *******************************************************************************/
-function normal_ps
+function get_pnorm2nv
 (
   pn,
   cw = true
@@ -523,7 +523,7 @@ BEGIN_SCOPE validate;
         x_axis3d_uv,                                        // t08
         x_axis3d_uv                                         // t09
       ],
-      ["dimension_l",
+      ["get_line_dim",
         2,                                                  // fac
         4,                                                  // crp
         2,                                                  // t01
@@ -536,7 +536,7 @@ BEGIN_SCOPE validate;
         3,                                                  // t08
         3                                                   // t09
       ],
-      ["term_point_l",
+      ["get_line_tp",
         2,                                                  // fac
         4,                                                  // crp
         [undef,undef],                                      // t01
@@ -549,7 +549,7 @@ BEGIN_SCOPE validate;
         y_axis3d_uv,                                        // t08
         y_axis3d_uv                                         // t09
       ],
-      ["init_point_l",
+      ["get_line_ip",
         2,                                                  // fac
         4,                                                  // crp
         origin2d,                                           // t01
@@ -562,7 +562,7 @@ BEGIN_SCOPE validate;
         x_axis3d_uv,                                        // t08
         x_axis3d_uv                                         // t09
       ],
-      ["to_origin_l",
+      ["get_line2origin",
         2,                                                  // fac
         4,                                                  // crp
         [undef, undef],                                     // t01
@@ -666,7 +666,7 @@ BEGIN_SCOPE validate;
         false,                                              // t08
         true                                                // t09
       ],
-      ["normal_ps",
+      ["get_pnorm2nv",
         2,                                                  // fac
         4,                                                  // crp
         skip,                                               // t01
@@ -732,10 +732,10 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("dimension_2to3_v",vid) test( "dimension_2to3_v", dimension_2to3_v(gv(vid,0)), vid, false );
 
     // group 3: line (or vector)
-    for (vid=run_ids) run("dimension_l",vid) test( "dimension_l", dimension_l([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("term_point_l",vid) test( "term_point_l", term_point_l([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("init_point_l",vid) test( "init_point_l", init_point_l([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("to_origin_l",vid) test( "to_origin_l", to_origin_l([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("get_line_dim",vid) test( "get_line_dim", get_line_dim([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("get_line_tp",vid) test( "get_line_tp", get_line_tp([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("get_line_ip",vid) test( "get_line_ip", get_line_ip([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("get_line2origin",vid) test( "get_line2origin", get_line2origin([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("dot_ll",vid) test( "dot_ll", dot_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("cross_ll",vid) test( "cross_ll", cross_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("striple_lll",vid) test( "striple_lll", striple_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
@@ -745,7 +745,7 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("are_coplanar_lll",vid) test( "are_coplanar_lll", are_coplanar_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
 
     // group 4: plane and pnorm
-    for (vid=run_ids) run("normal_ps",vid) test( "normal_ps", normal_ps([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("get_pnorm2nv",vid) test( "get_pnorm2nv", get_pnorm2nv([gv(vid,0),gv(vid,1)]), vid, true );
 
     // end-of-tests
   END_OPENSCAD;
