@@ -62,7 +62,7 @@
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
-// group 1: points
+// group 1: point
 //----------------------------------------------------------------------------//
 
 //! Compute the distance between two Euclidean points.
@@ -114,7 +114,7 @@ function is_left_ppp
 ) = ((p2[0]-p1[0]) * (p3[1]-p1[1]) - (p3[0]-p1[0]) * (p2[1]-p1[1]));
 
 //----------------------------------------------------------------------------//
-// group 2: vectors and lines
+// group 2: vector
 //----------------------------------------------------------------------------//
 
 //! Return 3d vector unchanged or add a zeroed third dimension to 2d vector.
@@ -131,6 +131,10 @@ function dimension_2to3_v
 (
   v
 ) = (len(v) == 3) ? v : [v[0], v[1], 0];
+
+//----------------------------------------------------------------------------//
+// group 3: line (or vector)
+//----------------------------------------------------------------------------//
 
 //! Return the number of dimensions of a Euclidean line or vector.
 /***************************************************************************//**
@@ -195,35 +199,6 @@ function to_origin_l
   : (len(v) == 1) ? v[0]
   : (len(v) == 2) ? (v[1]-v[0])
   : undef;
-
-//! Convert a planes' normal specification into a normal vector.
-/***************************************************************************//**
-  \param    p <pnorm> A plane normal \ref dt_pnorm "specification".
-
-  \param    cw <boolean> Point ordering. When the plane specified as
-            non-collinear points, this indicates ordering.
-
-  \returns  <normal> A vector normal to the plane.
-
-  \details
-
-    See \ref dt_pnorm for argument specification and conventions.
-*******************************************************************************/
-function normal_ps
-(
-  p,
-  cw = true
-) = not_defined(len(p[0])) ?
-    (
-      (len(p) == 3) ? p : (len(p) == 2) ? [p[0], p[1], 0]: undef
-    )
-  : let
-    (
-      q = [for (i=p) (len(i) == 3) ? i : (len(i) == 2) ? [i[0], i[1], 0]: undef]
-    )
-    (len(p) == 1) ? q[0]
-  : (len(p) == 2) ? cross(q[0], q[1])
-  : cross(q[0]-q[1], q[2]-q[1]) * ((cw == true) ? 1 : -1);
 
 //! Compute the dot product of two lines or vectors.
 /***************************************************************************//**
@@ -404,6 +379,39 @@ function are_coplanar_lll
   d = 6
 ) = (dround(striple_lll(v1, v2, v3), d) ==  0);
 
+//----------------------------------------------------------------------------//
+// group 4: plane and pnorm
+//----------------------------------------------------------------------------//
+
+//! Convert a planes' normal specification into a normal vector.
+/***************************************************************************//**
+  \param    p <pnorm> A plane normal \ref dt_pnorm "specification".
+
+  \param    cw <boolean> Point ordering. When the plane specified as
+            non-collinear points, this indicates ordering.
+
+  \returns  <normal> A vector normal to the plane.
+
+  \details
+
+    See \ref dt_pnorm for argument specification and conventions.
+*******************************************************************************/
+function normal_ps
+(
+  p,
+  cw = true
+) = not_defined(len(p[0])) ?
+    (
+      (len(p) == 3) ? p : (len(p) == 2) ? [p[0], p[1], 0]: undef
+    )
+  : let
+    (
+      q = [for (i=p) (len(i) == 3) ? i : (len(i) == 2) ? [i[0], i[1], 0]: undef]
+    )
+    (len(p) == 1) ? q[0]
+  : (len(p) == 2) ? cross(q[0], q[1])
+  : cross(q[0]-q[1], q[2]-q[1]) * ((cw == true) ? 1 : -1);
+
 //! @}
 //! @}
 
@@ -564,19 +572,6 @@ BEGIN_SCOPE validate;
         [-1,1,0],                                           // t08
         [-1,1,0]                                            // t09
       ],
-      ["normal_ps",
-        2,                                                  // fac
-        4,                                                  // crp
-        skip,                                               // t01
-        skip,                                               // t02
-        [60,50,0],                                          // t03
-        skip,                                               // t04
-        [0,0,1468],                                         // t05
-        [-4880,-6235,19924],                                // t06
-        skip,                                               // t07
-        z_axis3d_uv,                                        // t08
-        z_axis3d_uv                                         // t09
-      ],
       ["dot_ll",
         4,                                                  // fac
         4,                                                  // crp
@@ -667,6 +662,19 @@ BEGIN_SCOPE validate;
         skip,                                               // t07
         false,                                              // t08
         true                                                // t09
+      ],
+      ["normal_ps",
+        2,                                                  // fac
+        4,                                                  // crp
+        skip,                                               // t01
+        skip,                                               // t02
+        [60,50,0],                                          // t03
+        skip,                                               // t04
+        [0,0,1468],                                         // t05
+        [-4880,-6235,19924],                                // t06
+        skip,                                               // t07
+        z_axis3d_uv,                                        // t08
+        z_axis3d_uv                                         // t09
       ]
     ];
 
@@ -713,17 +721,18 @@ BEGIN_SCOPE validate;
     // Indirect function calls would be very useful here!!!
     run_ids = delete( test_ids, mv=["fac", "crp"] );
 
-    // group 1: points
+    // group 1: point
     for (vid=run_ids) run("distance_pp",vid) test( "distance_pp", distance_pp(gv(vid,0),gv(vid,1)), vid, false );
     for (vid=run_ids) run("is_left_ppp",vid) test( "is_left_ppp", is_left_ppp(gv(vid,0),gv(vid,1),gv(vid,2)), vid, false );
 
-    // group 2: vectors and lines
+    // group 2: vector
     for (vid=run_ids) run("dimension_2to3_v",vid) test( "dimension_2to3_v", dimension_2to3_v(gv(vid,0)), vid, false );
+
+    // group 3: line (or vector)
     for (vid=run_ids) run("dimension_l",vid) test( "dimension_l", dimension_l([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("term_point_l",vid) test( "term_point_l", term_point_l([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("init_point_l",vid) test( "init_point_l", init_point_l([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("to_origin_l",vid) test( "to_origin_l", to_origin_l([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("normal_ps",vid) test( "normal_ps", normal_ps([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("dot_ll",vid) test( "dot_ll", dot_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("cross_ll",vid) test( "cross_ll", cross_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("striple_lll",vid) test( "striple_lll", striple_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
@@ -731,6 +740,9 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("angle_lll",vid) test( "angle_lll", angle_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
     for (vid=run_ids) run("unit_l",vid) test( "unit_l", unit_l([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("are_coplanar_lll",vid) test( "are_coplanar_lll", are_coplanar_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
+
+    // group 4: plane and pnorm
+    for (vid=run_ids) run("normal_ps",vid) test( "normal_ps", normal_ps([gv(vid,0),gv(vid,1)]), vid, true );
 
     // end-of-tests
   END_OPENSCAD;
