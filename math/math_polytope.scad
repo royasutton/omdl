@@ -348,30 +348,27 @@ function polytope_face_mpnv
 *******************************************************************************/
 function polytope_plane(c,f,i,l,cw=true) = polytope_face_mpnv(c,f,i,l,cw);
 
-//! Get the connected neighboring vertices for a given polytope vertex.
+//! Get the adjacent vertices for a given polytope vertex.
 /***************************************************************************//**
-  \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
   \param    f <integer-list-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
 
   \param    i <integer> A vertex index.
 
-  \returns  <coords-list|integer-list> The list of connected
-            neighboring vertices for the given vertex in coordinate or
-            index form (coordinates have the same dimensions as \p c).
+  \returns  <integer-list> The list of adjacent vertex indexes for the
+            given vertex index.
 
   \details
 
-    The connected vertex neighbors are those neighboring vertices that
-    are directly connected to the given vertex by a common edge.
+    The adjacent vertices are those neighboring vertices that are
+    directly connected to the given vertex by a common edge.
 
   \note     Parameter \p f is optional for polygons. When it is not
             given, the listed order of the coordinates \p c establishes
             the polygon path.
 *******************************************************************************/
-function polytope_vertex_neighbors
+function polytope_vertex_av
 (
-  c,
   f,
   i
 ) =
@@ -384,10 +381,9 @@ function polytope_vertex_neighbors
           if (i == fi[j])
             for (k = [-1, 1])
               fi[circular_index(j + k, fn)]
-    ],
-    uv = unique(vn)
+    ]
   )
-  is_defined(c) ? [for (v = uv) c[v]] : uv;
+  unique(vn);
 
 //! Determine the bounding-box limits of a polytope.
 /***************************************************************************//**
