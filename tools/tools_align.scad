@@ -56,13 +56,13 @@ include <math.scad>;
 *******************************************************************************/
 module orient_l
 (
-  l,
+  l  = z_axis3d_ul,
   rl = z_axis3d_ul,
   r  = 0
 )
 {
-  ll = to_origin_l(l);
-  lr = to_origin_l(rl);
+  ll = get_line2origin(l);
+  lr = get_line2origin(rl);
 
   rotate(r, lr)
   rotate(angle_ll(ll, lr), cross(ll, lr))
@@ -100,7 +100,7 @@ module orient_l
 *******************************************************************************/
 module align_ll
 (
-  l,
+  l  = z_axis3d_ul,
   rl = z_axis3d_ul,
   ap = 0,
   rp = 0,
@@ -109,11 +109,11 @@ module align_ll
   ro = zero3d
 )
 {
-  li = dimension_2to3_v(init_point_l( l));
-  lt = dimension_2to3_v(term_point_l( l));
+  li = dimension_2to3_v(get_line_ip( l));
+  lt = dimension_2to3_v(get_line_tp( l));
 
-  ri = dimension_2to3_v(init_point_l(rl));
-  rt = dimension_2to3_v(term_point_l(rl));
+  ri = dimension_2to3_v(get_line_ip(rl));
+  rt = dimension_2to3_v(get_line_tp(rl));
 
   ll = [li, lt];
   lm = mean(ll);
@@ -125,7 +125,7 @@ module align_ll
   translate(ciselect([origin3d, ri, rm, rt, ri+rt, rm], rp))
 
   // orient and roll line about reference
-  rotate(r, to_origin_l(lr))
+  rotate(r, get_line2origin(lr))
   rotate(angle_ll(ll, lr), cross_ll(ll, lr))
 
   // apply offsets
@@ -168,7 +168,7 @@ module align_ll
 *******************************************************************************/
 module align_l
 (
-  rl,
+  rl = z_axis3d_ul,
   rp = 0,
   r  = 0,
   to = origin3d,
