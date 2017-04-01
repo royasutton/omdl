@@ -196,7 +196,7 @@ function lstr_html
     )
     lstr(concat(cs, lstr_html(nv, nb, np, na, nf, d)));
 
-//! Create a list of constant elements.
+//! Create a sequence of constant or incrementing elements.
 /***************************************************************************//**
   \param    l <integer> The list length.
   \param    v \<value> The element value.
@@ -221,6 +221,41 @@ function consts
   : is_defined(v) ? [for (i=[0:1:l-1]) v]
   : (u == false) ? [for (i=[0:1:l-1]) i]
   : [for (i=[0:1:l-1]) undef];
+
+//! Create a list index sequence from an index sequence specification.
+/***************************************************************************//**
+  \param    v <indexs> The index sequence \ref dt_indexs "specification".
+  \param    l <integer> The list length.
+  \param    s <integer> An optional seed for random sequences.
+
+  \returns  <number-list> An index sequence based on the specification.
+            Returns \b empty_lst for any \p v that does not fall into
+            one of the specification forms.
+
+  \details
+
+    See \ref dt_indexs for argument specification and conventions.
+*******************************************************************************/
+function indexs
+(
+  v,
+  l,
+  s
+) = (v == true) ? consts(l)
+  : (v == false) ? empty_lst
+  : is_number(v) ? [v]
+  : is_range(v) ? [for (i=v) i]
+  : all_numbers(v) ? v
+  : (v == "all") ? consts(l)
+  : (v == "none") ? empty_lst
+  : (v == "random") ?
+    let
+    (
+      r = defined_or(s, first(rands(0, 100, 1))),
+      i = rands(0, 2, l, r)
+    )
+    [for (j = [0:len(i)-1]) if (i[j] > 1) j]
+  : empty_lst;
 
 //! Pad a list to a constant width of elements.
 /***************************************************************************//**
@@ -755,6 +790,19 @@ BEGIN_SCOPE validate;
         empty_lst,                                          // t10
         empty_lst                                           // t11
       ],
+      ["indexs",
+        empty_lst,                                          // t01
+        empty_lst,                                          // t02
+        [0,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9],
+        empty_lst,                                          // t04
+        empty_lst,                                          // t05
+        empty_lst,                                          // t06
+        empty_lst,                                          // t07
+        empty_lst,                                          // t08
+        empty_lst,                                          // t09
+        empty_lst,                                          // t10
+        [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
+      ],
       ["pad_9",
         [undef,0,0,0,0,0,0,0,0],                            // t01
         [0,0,0,0,0,0,0,0,0],                                // t02
@@ -959,6 +1007,7 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "lstr", lstr(get_value(vid)), vid );
     for (vid=test_ids) run_test( "lstr_html_B", lstr_html(get_value(vid),p="b"), vid );
     for (vid=test_ids) run_test( "consts", consts(get_value(vid)), vid );
+    for (vid=test_ids) run_test( "indexs", indexs(get_value(vid)), vid );
     for (vid=test_ids) run_test( "pad_9", pad(get_value(vid), w=9), vid );
     log_info( "not testing: dround()" );
     log_info( "not testing: sround()" );

@@ -216,13 +216,13 @@
     | [integer]   | a positive, negative, or zero whole number        |
     | [decimal]   | integer numbers with a fractional part            |
     | [datalist]  | a list of arbitrary data values                   |
-    | indexs      | an index sequence specification                   |
+    | indexs      | a list index sequence specification               |
 
   \subsubsection dt_indexs Index sequence
 
     The data type \em indexs refers to a convention for specifying a
-    sequence of indexes for some list of elements. For flexibility a
-    sequence may be specified in one of the following forms.
+    sequence of indexes for a list of elements. A list index sequence
+    may be specified in one of the following forms.
 
     | value / form    | description                                   |
     |:---------------:|:----------------------------------------------|
