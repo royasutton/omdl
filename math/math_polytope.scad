@@ -49,12 +49,67 @@ include <math.scad>;
 // polytope
 //----------------------------------------------------------------------------//
 
+//! Return a list of all polytope face indexes.
+/***************************************************************************//**
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+
+  \returns  <integer-list> The list of all polytope face indexes.
+*******************************************************************************/
+function polytope_faces
+(
+  f
+) = consts(len(f));
+
+//! Return the list of face indexes adjacent to a polytope vertex.
+/***************************************************************************//**
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+  \param    i <integer> The vertex index.
+
+  \returns  <integer-list> The list of face indexes adjacent to the
+            given polytope vertex.
+*******************************************************************************/
+function polytope_vertex_af
+(
+  f,
+  i
+) = [for (fi = [0:len(f)-1]) if (exists(i, f[fi])) fi];
+
+//! Return the list of face indexes adjacent to a polytope edge.
+/***************************************************************************//**
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+  \param    e <integer-list-2-list> A list of edges where each edge is
+            a list of two coordinate indexes.
+  \param    i <integer> The edge index.
+
+  \returns  <integer-list> The list of face indexes adjacent to the
+            given polytope edge.
+
+  \details
+
+  \note     When \p e is not specified, it is computed from \p f using
+            polytope_faces2edges().
+*******************************************************************************/
+function polytope_edge_af
+(
+  f,
+  e,
+  i
+) = let (el = is_defined(e) ? e : polytope_faces2edges(f))
+    [
+      for (fi = [0:len(f)-1])
+        if (exists(first(el[i]), f[fi]) && exists(second(el[i]), f[fi]))
+          fi
+    ];
+
 //! List the vertex counts for all polytope faces.
 /***************************************************************************//**
   \param    f <integer-list-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
 
-  \returns  \<list> A list with a vertex count of every face.
+  \returns  <integer-list> A list with a vertex count of every face.
 *******************************************************************************/
 function polytope_faceverticies
 (
@@ -68,7 +123,7 @@ function polytope_faceverticies
   \param    f <integer-list-list> A list of faces that enclose
             the shape where each face is a list of coordinate indexes.
 
-  \returns  \<list> A list of the polyhedron adjacent face angles.
+  \returns  <decimal-list> A list of the polyhedron adjacent face angles.
 
   \details
 
@@ -103,7 +158,7 @@ function polytope_faceangles
   \param    e <integer-list-2-list> A list of edges where each edge is
             a list of two coordinate indexes.
 
-  \returns  \<list> A list of the polytope edge lengths.
+  \returns  <decimal-list> A list of the polytope edge lengths.
 *******************************************************************************/
 function polytope_edgelengths
 (
@@ -118,7 +173,7 @@ function polytope_edgelengths
   \param    f <integer-list-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
 
-  \returns  \<list> A list of the polytope adjacent edge angles.
+  \returns  <decimal-list> A list of the polytope adjacent edge angles.
 *******************************************************************************/
 function polytope_edgeangles
 (
@@ -236,6 +291,68 @@ function polytope_line
     (r == false)
   ? [c[second(sl)], c[first(sl)]]
   : [c[first(sl)], c[second(sl)]];
+
+//! Get a normal vector for a polytope vertex.
+/***************************************************************************//**
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+  \param    i <integer> The vertex index.
+
+  \returns  <vector-3d> A normal vector for the polytope vertex.
+
+  \details
+
+    The normal is computed as the mean of the adjacent faces.
+
+  \note     Parameter \p f is optional for polygons. When it is not
+            given, the listed order of the coordinates \p c establishes
+            the polygon path.
+*******************************************************************************/
+function polytope_vertex_n
+(
+  c,
+  f,
+  i
+) = let
+    (
+      fm = defined_or(f, [consts(len(c))])
+    )
+    mean([for (j=polytope_vertex_af(fm, i)) unit_l(polytope_face_n(c, l=fm[j]))]);
+
+//! Get a normal vector for a polytope edge.
+/***************************************************************************//**
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+  \param    e <integer-list-2-list> A list of edges where each edge is
+            a list of two coordinate indexes.
+  \param    i <integer> The edge index.
+
+  \returns  <vector-3d> A normal vector for the polytope edge.
+
+  \details
+
+    The normal is computed as the mean of the adjacent faces.
+
+  \note     Parameter \p f is optional for polygons. When it is not
+            given, the listed order of the coordinates \p c establishes
+            the polygon path.
+  \note     When \p e is not specified, it is computed from \p f using
+            polytope_faces2edges() iff the line is identified by \p i.
+*******************************************************************************/
+function polytope_edge_n
+(
+  c,
+  f,
+  e,
+  i
+) = let
+    (
+      fm = defined_or(f, [consts(len(c))]),
+      el = is_defined(e) ? e : polytope_faces2edges(fm)
+    )
+    mean([for (j=polytope_edge_af(fm, el, i)) unit_l(polytope_face_n(c, l=fm[j]))]);
 
 //! Get the normal vector of a polytope face-plane.
 /***************************************************************************//**
