@@ -51,7 +51,7 @@ include <math/math_bitwise.scad>;
 
 //! Generate a histogram for the elements of a list of values.
 /***************************************************************************//**
-  \param    v <datalist> A list of values.
+  \param    v <data> A list of values.
   \param    m <integer> The output mode (a 5-bit encoded integer).
 
   \param    cs <string-list-4> A list of strings [s1, s2, s3, fs]

@@ -210,13 +210,14 @@
     From the fixed built-in set of [data types], [omdl] adds the
     following general type specifications and conventions.
 
-    | name        | description                                       |
-    |:-----------:|:--------------------------------------------------|
-    | [bit]       | a binary numerical value (0 or 1)                 |
-    | [integer]   | a positive, negative, or zero whole number        |
-    | [decimal]   | integer numbers with a fractional part            |
-    | [datalist]  | a list of arbitrary data values                   |
-    | [index]     | a list index sequence                             |
+    | name          | description                                     |
+    |:-------------:|:------------------------------------------------|
+    | [bit]         | a binary numerical value (0 or 1)               |
+    | [integer]     | a positive, negative, or zero whole number      |
+    | [decimal]     | integer numbers with a fractional part          |
+    | [index]       | a list index sequence                           |
+    | [datastruct]  | a defined data structure                        |
+    | [data]        | an arbitrary data structure                     |
 
   \subsubsection dt_index Index sequence
 
@@ -393,8 +394,9 @@
   [bit]: https://en.wikipedia.org/wiki/Bit
   [integer]: https://en.wikipedia.org/wiki/Integer
   [decimal]: https://en.wikipedia.org/wiki/Decimal
-  [datalist]: https://en.wikipedia.org/wiki/Data
   [index]: \ref dt_index
+  [datastruct]: https://en.wikipedia.org/wiki/Data_structure
+  [data]: https://en.wikipedia.org/wiki/Data
 
   [geometric]: https://en.wikipedia.org/wiki/Geometry
   [geometric algebra]: https://en.wikipedia.org/wiki/Geometric_algebra

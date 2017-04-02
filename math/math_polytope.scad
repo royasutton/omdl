@@ -100,13 +100,13 @@ function polytope_faces2edges
             of dimensions, a list of dimensions, or a single dimension.
   \param    s <boolean> Return box size rather than coordinate limits.
 
-  \returns  \<list> A list with the bounding-box limits (see: table).
+  \returns  <datastruct> A list with the bounding-box limits (see: table).
 
   \details
 
   The returned list will be of the following form:
 
-  |     |  s    |     x     |     y     |     z     |  list form            |
+  |     |  s    |     x     |     y     |     z     |  datastruct form      |
   |:---:|:-----:|:---------:|:---------:|:---------:|:---------------------:|
   | 2d  | false | [min,max] | [min,max] | -         | decimal-list-2-list-2 |
   | 2d  | true  |  max-min  |  max-min  | -         | decimal-list-list-2   |
@@ -611,9 +611,10 @@ function polytope_triangulate_ft
   \param    a <decimal-list-2> The box padding.
             A list of lengths to equally pad the box dimensions.
 
-  \returns  \<list> A list <tt>[points, path]</tt>, where \c points are
-            <coords-2d> and \c path is a <integer-list-list>, that
-            define the bounding box of the given polygon.
+  \returns  <datastruct> A structure <tt>[points, path]</tt>, where
+            \c points are <coords-2d> and \c path is a
+            <integer-list-list>, that define the bounding box of the
+            given polygon.
 
   \details
 
@@ -1042,9 +1043,10 @@ function polygon2d_is_pip_as
   \param    a <decimal-list-3> The box padding.
             A list of lengths to equally pad the box dimensions.
 
-  \returns  \<list> A list <tt>[points, faces]</tt>, where \c points are
-            <coords-3d> and \c faces are a <integer-list-list>, that
-            define the bounding box of the given polyhedron.
+  \returns  <datastruct> A structure <tt>[points, faces]</tt>, where
+            \c points are <coords-3d> and \c faces are a
+            <integer-list-list>, that define the bounding box of the
+            given polyhedron.
 
   \details
 
@@ -1189,9 +1191,10 @@ function polyhedron_centroid_tf
   \param    centroid <boolean> Center polygon centroid at z-axis.
   \param    center <boolean> Center polyhedron height about xy-plane.
 
-  \returns  \<list> A list [points, faces], where points are <coords-3d>
-            and faces are a <integer-list-list>, that define the bounding
-            box of the given polyhedron.
+  \returns  <datastruct> A structure <tt>[points, faces]</tt>, where
+            \c points are <coords-3d> and \c faces are a
+            <integer-list-list>, that define the bounding box of the
+            given polyhedron.
 
   \details
 

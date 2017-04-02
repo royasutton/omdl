@@ -635,7 +635,7 @@ function qsort
 
 //! Hierarchically sort an arbitrary data list using quick sort.
 /***************************************************************************//**
-  \param    v <datalist> A list of values.
+  \param    v <data> A list of values.
   \param    i <integer> The sort column index for iterable elements.
   \param    d <integer> The recursive sort depth.
   \param    r <boolean> Reverse the sort order.
