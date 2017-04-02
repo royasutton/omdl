@@ -49,7 +49,7 @@ include <math.scad>;
 // polytope
 //----------------------------------------------------------------------------//
 
-//! Return a list of all polytope face indexes.
+//! List the indexes for all polytope faces.
 /***************************************************************************//**
   \param    f <integer-list-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
@@ -60,165 +60,6 @@ function polytope_faces
 (
   f
 ) = consts(len(f));
-
-//! Return the list of face indexes adjacent to a polytope vertex.
-/***************************************************************************//**
-  \param    f <integer-list-list> A list of faces (or paths) that enclose
-            the shape where each face is a list of coordinate indexes.
-  \param    i <integer> The vertex index.
-
-  \returns  <integer-list> The list of face indexes adjacent to the
-            given polytope vertex.
-*******************************************************************************/
-function polytope_vertex_af
-(
-  f,
-  i
-) = [for (fi = [0:len(f)-1]) if (exists(i, f[fi])) fi];
-
-//! Return the list of face indexes adjacent to a polytope edge.
-/***************************************************************************//**
-  \param    f <integer-list-list> A list of faces (or paths) that enclose
-            the shape where each face is a list of coordinate indexes.
-  \param    e <integer-list-2-list> A list of edges where each edge is
-            a list of two coordinate indexes.
-  \param    i <integer> The edge index.
-
-  \returns  <integer-list> The list of face indexes adjacent to the
-            given polytope edge.
-
-  \details
-
-  \note     When \p e is not specified, it is computed from \p f using
-            polytope_faces2edges().
-*******************************************************************************/
-function polytope_edge_af
-(
-  f,
-  e,
-  i
-) = let (el = is_defined(e) ? e : polytope_faces2edges(f))
-    [
-      for (fi = [0:len(f)-1])
-        if (exists(first(el[i]), f[fi]) && exists(second(el[i]), f[fi]))
-          fi
-    ];
-
-//! List the vertex counts for all polytope faces.
-/***************************************************************************//**
-  \param    f <integer-list-list> A list of faces (or paths) that enclose
-            the shape where each face is a list of coordinate indexes.
-
-  \returns  <integer-list> A list with a vertex count of every face.
-*******************************************************************************/
-function polytope_faceverticies
-(
-  f
-) = [for (fi=f) len(fi)];
-
-//! List the angles between all adjacent faces of a polyhedron.
-/***************************************************************************//**
-  \param    c <coords-3d> A list of 3d cartesian coordinates
-            [[x, y, z], ...].
-  \param    f <integer-list-list> A list of faces that enclose
-            the shape where each face is a list of coordinate indexes.
-
-  \returns  <decimal-list> A list of the polyhedron adjacent face angles.
-
-  \details
-
-    See [Wikipedia] for more information on dihedral angles.
-
-    [Wikipedia]: https://en.wikipedia.org/wiki/Dihedral_angle
-*******************************************************************************/
-function polytope_faceangles
-(
-  c,
-  f
-) =
-  [
-    for (i=[0 : len(f)-1])
-    let
-    (
-      n1 = cross_ll([c[f[i][0]], c[f[i][1]]], [c[f[i][0]], c[f[i][2]]]),
-      af = [for (v=f[i]) for (j=[0 : len(f)-1]) if (j != i && exists(v, f[j])) j]
-    )
-      for (u=unique(af))
-      let
-      (
-        n2 = cross_ll([c[f[u][0]], c[f[u][1]]], [c[f[u][0]], c[f[u][2]]])
-      )
-        angle_ll(n1, n2)
-  ];
-
-//! List the edge lengths of a polytope.
-/***************************************************************************//**
-  \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
-            coordinates [[x, y (, z)], ...].
-  \param    e <integer-list-2-list> A list of edges where each edge is
-            a list of two coordinate indexes.
-
-  \returns  <decimal-list> A list of the polytope edge lengths.
-*******************************************************************************/
-function polytope_edgelengths
-(
-  c,
-  e
-) = [for (ei=e) distance_pp(c[ei[0]], c[ei[1]])];
-
-//! List the adjacent edge angles for each polytope vertex.
-/***************************************************************************//**
-  \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
-            coordinates [[x, y (, z)], ...].
-  \param    f <integer-list-list> A list of faces (or paths) that enclose
-            the shape where each face is a list of coordinate indexes.
-
-  \returns  <decimal-list> A list of the polytope adjacent edge angles.
-*******************************************************************************/
-function polytope_edgeangles
-(
-  c,
-  f
-) =
-  [
-    for (k=[for (j=f) for (i=nssequence(j, n=3, s=1, w=true)) i])
-      angle_ll([c[k[0]], c[k[1]]], [c[k[1]], c[k[2]]])
-  ];
-
-//! Test if the faces of a polytope are all regular.
-/***************************************************************************//**
-  \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
-            coordinates [[x, y (, z)], ...].
-  \param    f <integer-list-list> A list of faces (or paths) that enclose
-            the shape where each face is a list of coordinate indexes.
-  \param    e <integer-list-2-list> A list of edges where each edge is
-            a list of two coordinate indexes.
-  \param    d <integer> The number of significant figures used when
-            comparing lengths and angles.
-
-  \returns  <boolean> \b true when there is both a single edge length
-            and a single edge angle and \b false otherwise.
-
-  \details
-
-  \note     When \p e is not specified, it is computed from \p f using
-            polytope_faces2edges().
-*******************************************************************************/
-function polytope_arefacesregular
-(
-  c,
-  f,
-  e,
-  d = 6
-) =
-  let
-  (
-    ce = is_defined(e) ? e : polytope_faces2edges(f),
-
-    ul = unique(sround(polytope_edgelengths(c, ce), d)),
-    ua = unique(sround(polytope_edgeangles(c, f), d))
-  )
-  ((len(ul) == 1) && (len(ua) == 1));
 
 //! List the edge coordinate index pairs of a polytope.
 /***************************************************************************//**
@@ -247,7 +88,68 @@ function polytope_faces2edges
   )
   unique(el);
 
-//! Get a line from an edge (or any two vetices) of a polytope.
+//! Determine the bounding limits of a polytope.
+/***************************************************************************//**
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
+            coordinates [[x, y (, z)], ...].
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+  \param    a <decimal-list-3|decimal-list-2> The box padding.
+            A list of lengths to equally pad the box dimensions.
+  \param    d <range|list|integer> The dimensions to consider. A range
+            of dimensions, a list of dimensions, or a single dimension.
+  \param    s <boolean> Return box size rather than coordinate limits.
+
+  \returns  \<list> A list with the bounding-box limits (see: table).
+
+  \details
+
+  The returned list will be of the following form:
+
+  |     |  s    |     x     |     y     |     z     |  list form            |
+  |:---:|:-----:|:---------:|:---------:|:---------:|:---------------------:|
+  | 2d  | false | [min,max] | [min,max] | -         | decimal-list-2-list-2 |
+  | 2d  | true  |  max-min  |  max-min  | -         | decimal-list-list-2   |
+  | 3d  | false | [min,max] | [min,max] | [min,max] | decimal-list-2-list-3 |
+  | 3d  | true  |  max-min  |  max-min  |  max-min  | decimal-list-list-3   |
+
+  \note     When \p f is not specified, all coordinates are used to
+            determine the geometric limits, which, simplifies the
+            calculation. Parameter \p f is needed when a subset of the
+            coordinates should be considered.
+  \warning  This function does not track secondary shapes subtraction as
+            implemented by the polygon() function.
+*******************************************************************************/
+function polytope_limits
+(
+  c,
+  f,
+  a,
+  d = [0:2],
+  s = true
+) =
+  [
+    let
+    (
+      ax = is_range(d) ? [for (di=d) di]
+         : is_list(d) ? d
+         : is_integer(d) ? [d]
+         : undef,
+
+      ad = (is_defined(a) && is_scalar(a)) ? a : 0,
+      ap = [for (j = ax) edefined_or(a, j, ad)],
+
+      pm = is_defined(f)
+        ? [for (j = ax) [for (m = f) for (i=[0 : len(m)-1]) c[m[i]][j]]]
+        : [for (j = ax) [for (i = c) i[j]]],
+
+      b = [for (j = ax) [min(pm[j]), max(pm[j])] + [-ap[j]/2, +ap[j]/2]]
+    )
+    for (j = ax)
+      (s == true) ? b[j][1] - b[j][0] : [b[j][0], b[j][1]]
+  ];
+
+//! Get a line from an edge or any two vetices of a polytope.
 /***************************************************************************//**
   \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
 
@@ -291,6 +193,86 @@ function polytope_line
     (r == false)
   ? [c[second(sl)], c[first(sl)]]
   : [c[first(sl)], c[second(sl)]];
+
+//! List the adjacent vertices for a given polytope vertex.
+/***************************************************************************//**
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+
+  \param    i <integer> A vertex index.
+
+  \returns  <integer-list> The list of adjacent vertex indexes for the
+            given vertex index.
+
+  \details
+
+    The adjacent vertices are those neighboring vertices that are
+    directly connected to the given vertex by a common edge.
+
+  \note     Parameter \p f is optional for polygons. When it is not
+            given, the listed order of the coordinates \p c establishes
+            the polygon path.
+*******************************************************************************/
+function polytope_vertex_av
+(
+  f,
+  i
+) =
+  let
+  (
+    vn =
+    [
+      for (fi = f) let (fn = len(fi))
+        for (j = [0:fn-1])
+          if (i == fi[j])
+            for (k = [-1, 1])
+              fi[circular_index(j + k, fn)]
+    ]
+  )
+  unique(vn);
+
+//! List the adjacent face indexes for a polytope vertex.
+/***************************************************************************//**
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+  \param    i <integer> The vertex index.
+
+  \returns  <integer-list> The list of face indexes adjacent to the
+            given polytope vertex.
+*******************************************************************************/
+function polytope_vertex_af
+(
+  f,
+  i
+) = [for (fi = [0:len(f)-1]) if (exists(i, f[fi])) fi];
+
+//! List the adjacent face indexes for a polytope edge.
+/***************************************************************************//**
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+  \param    e <integer-list-2-list> A list of edges where each edge is
+            a list of two coordinate indexes.
+  \param    i <integer> The edge index.
+
+  \returns  <integer-list> The list of face indexes adjacent to the
+            given polytope edge.
+
+  \details
+
+  \note     When \p e is not specified, it is computed from \p f using
+            polytope_faces2edges().
+*******************************************************************************/
+function polytope_edge_af
+(
+  f,
+  e,
+  i
+) = let (el = is_defined(e) ? e : polytope_faces2edges(f))
+    [
+      for (fi = [0:len(f)-1])
+        if (exists(first(el[i]), f[fi]) && exists(second(el[i]), f[fi]))
+          fi
+    ];
 
 //! Get a normal vector for a polytope vertex.
 /***************************************************************************//**
@@ -354,7 +336,7 @@ function polytope_edge_n
     )
     mean([for (j=polytope_edge_af(fm, el, i)) unit_l(polytope_face_n(c, l=fm[j]))]);
 
-//! Get the normal vector of a polytope face-plane.
+//! Get the normal vector of a polytope face.
 /***************************************************************************//**
   \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
   \param    f <integer-list-list> A list of faces (or paths) that enclose
@@ -366,7 +348,7 @@ function polytope_edge_n
 
   \param    cw <boolean> Face vertex ordering.
 
-  \returns  <vector-3d> The normal vector of a polytope face-plane.
+  \returns  <vector-3d> The normal vector of a polytope face.
 
   \details
 
@@ -459,111 +441,136 @@ function polytope_face_mn
   cw = true
 ) = [polytope_face_m(c, f, i, l), polytope_face_n(c, f, i, l, cw)];
 
-//! Get the plane of a polytope face.
+//! Get a plane for a polytope face.
 /***************************************************************************//**
   \copydetails polytope_face_mn()
 *******************************************************************************/
-function polytope_plane(c,f,i,l,cw=true) = polytope_face_mn(c,f,i,l,cw);
+function polytope_plane
+(
+  c,
+  f,
+  i,
+  l,
+  cw=true
+) = polytope_face_mn(c, f, i, l, cw);
 
-//! Get the adjacent vertices for a given polytope vertex.
+//! List the vertex counts for all polytope faces.
 /***************************************************************************//**
   \param    f <integer-list-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
 
-  \param    i <integer> A vertex index.
+  \returns  <integer-list> A list with a vertex count of every face.
+*******************************************************************************/
+function polytope_face_vcounts
+(
+  f
+) = [for (fi=f) len(fi)];
 
-  \returns  <integer-list> The list of adjacent vertex indexes for the
-            given vertex index.
+//! List the angles between all adjacent faces of a polyhedron.
+/***************************************************************************//**
+  \param    c <coords-3d> A list of 3d cartesian coordinates
+            [[x, y, z], ...].
+  \param    f <integer-list-list> A list of faces that enclose
+            the shape where each face is a list of coordinate indexes.
+
+  \returns  <decimal-list> A list of the polyhedron adjacent face angles.
 
   \details
 
-    The adjacent vertices are those neighboring vertices that are
-    directly connected to the given vertex by a common edge.
+    See [Wikipedia] for more information on dihedral angles.
 
-  \note     Parameter \p f is optional for polygons. When it is not
-            given, the listed order of the coordinates \p c establishes
-            the polygon path.
+    [Wikipedia]: https://en.wikipedia.org/wiki/Dihedral_angle
 *******************************************************************************/
-function polytope_vertex_av
+function polytope_face_angles
 (
-  f,
-  i
+  c,
+  f
 ) =
-  let
-  (
-    vn =
-    [
-      for (fi = f) let (fn = len(fi))
-        for (j = [0:fn-1])
-          if (i == fi[j])
-            for (k = [-1, 1])
-              fi[circular_index(j + k, fn)]
-    ]
-  )
-  unique(vn);
+  [
+    for (i=[0 : len(f)-1])
+    let
+    (
+      n1 = cross_ll([c[f[i][0]], c[f[i][1]]], [c[f[i][0]], c[f[i][2]]]),
+      af = [for (v=f[i]) for (j=[0 : len(f)-1]) if (j != i && exists(v, f[j])) j]
+    )
+      for (u=unique(af))
+      let
+      (
+        n2 = cross_ll([c[f[u][0]], c[f[u][1]]], [c[f[u][0]], c[f[u][2]]])
+      )
+        angle_ll(n1, n2)
+  ];
 
-//! Determine the bounding-box limits of a polytope.
+//! List the edge lengths of a polytope.
+/***************************************************************************//**
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
+            coordinates [[x, y (, z)], ...].
+  \param    e <integer-list-2-list> A list of edges where each edge is
+            a list of two coordinate indexes.
+
+  \returns  <decimal-list> A list of the polytope edge lengths.
+*******************************************************************************/
+function polytope_edge_lengths
+(
+  c,
+  e
+) = [for (ei=e) distance_pp(c[ei[0]], c[ei[1]])];
+
+//! List the adjacent edge angles for each polytope vertex.
 /***************************************************************************//**
   \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
             coordinates [[x, y (, z)], ...].
   \param    f <integer-list-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
-  \param    a <decimal-list-3|decimal-list-2> The box padding.
-            A list of lengths to equally pad the box dimensions.
-  \param    d <range|list|integer> The dimensions to consider. A range
-            of dimensions, a list of dimensions, or a single dimension.
-  \param    s <boolean> Return box size rather than coordinate limits.
 
-  \returns  \<list> A list with the bounding-box limits (see: table).
+  \returns  <decimal-list> A list of the polytope adjacent edge angles.
+*******************************************************************************/
+function polytope_edge_angles
+(
+  c,
+  f
+) =
+  [
+    for (k=[for (j=f) for (i=nssequence(j, n=3, s=1, w=true)) i])
+      angle_ll([c[k[0]], c[k[1]]], [c[k[1]], c[k[2]]])
+  ];
+
+//! Test if the faces of a polytope are all regular.
+/***************************************************************************//**
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
+            coordinates [[x, y (, z)], ...].
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+  \param    e <integer-list-2-list> A list of edges where each edge is
+            a list of two coordinate indexes.
+  \param    d <integer> The number of significant figures used when
+            comparing lengths and angles.
+
+  \returns  <boolean> \b true when there is both a single edge length
+            and a single edge angle and \b false otherwise.
 
   \details
 
-  The returned list will be of the following form:
-
-  |     |  s    |     x     |     y     |     z     |  list form            |
-  |:---:|:-----:|:---------:|:---------:|:---------:|:---------------------:|
-  | 2d  | false | [min,max] | [min,max] | -         | decimal-list-2-list-2 |
-  | 2d  | true  |  max-min  |  max-min  | -         | decimal-list-list-2   |
-  | 3d  | false | [min,max] | [min,max] | [min,max] | decimal-list-2-list-3 |
-  | 3d  | true  |  max-min  |  max-min  |  max-min  | decimal-list-list-3   |
-
-  \note     When \p f is not specified, all coordinates are used to
-            determine the geometric limits, which, simplifies the
-            calculation. Parameter \p f is needed when a subset of the
-            coordinates should be considered.
-  \warning  This function does not track secondary shapes subtraction as
-            implemented by the polygon() function.
+  \note     When \p e is not specified, it is computed from \p f using
+            polytope_faces2edges().
 *******************************************************************************/
-function polytope_bboxlimits
+function polytope_faces_are_regular
 (
   c,
   f,
-  a,
-  d = [0:2],
-  s = true
+  e,
+  d = 6
 ) =
-  [
-    let
-    (
-      ax = is_range(d) ? [for (di=d) di]
-         : is_list(d) ? d
-         : is_integer(d) ? [d]
-         : undef,
+  let
+  (
+    ce = is_defined(e) ? e : polytope_faces2edges(f),
 
-      ad = (is_defined(a) && is_scalar(a)) ? a : 0,
-      ap = [for (j = ax) edefined_or(a, j, ad)],
+    ul = unique(sround(polytope_edge_lengths(c, ce), d)),
+    ua = unique(sround(polytope_edge_angles(c, f), d))
+  )
+  ((len(ul) == 1) && (len(ua) == 1));
 
-      pm = is_defined(f)
-        ? [for (j = ax) [for (m = f) for (i=[0 : len(m)-1]) c[m[i]][j]]]
-        : [for (j = ax) [for (i = c) i[j]]],
-
-      b = [for (j = ax) [min(pm[j]), max(pm[j])] + [-ap[j]/2, +ap[j]/2]]
-    )
-    for (j = ax)
-      (s == true) ? b[j][1] - b[j][0] : [b[j][0], b[j][1]]
-  ];
-
-//! Triangulate the faces of a convex polytope via fan triangulation.
+//! Triangulate the faces of a convex polytope using fan triangulation.
 /***************************************************************************//**
   \param    f <integer-list-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
@@ -594,7 +601,7 @@ function polytope_triangulate_ft
 // polygon
 //----------------------------------------------------------------------------//
 
-//! Generate a polygon for the bounding box of another polygon in 2d.
+//! Generate a bounding box polygon for another polygon in 2d.
 /***************************************************************************//**
   \param    c <coords-2d> A list of 2d cartesian coordinates
             [[x, y], ...].
@@ -616,7 +623,7 @@ function polytope_triangulate_ft
   \note     When \p p is not given, the listed order of the coordinates
             \p c establishes the path.
 
-    \sa polytope_bboxlimits for warning about secondary shapes.
+    \sa polytope_limits for warning about secondary shapes.
 *******************************************************************************/
 function polygon2d_bbox_pp
 (
@@ -626,7 +633,7 @@ function polygon2d_bbox_pp
 ) =
   let
   (
-    bb = polytope_bboxlimits(c=c, f=p, a=a, d=[0:1], s=false),
+    bb = polytope_limits(c=c, f=p, a=a, d=[0:1], s=false),
     pp = [for (x=bb[0], y=bb[1]) [x, y]],
     pf = [[0,1,3,2]]
   )
@@ -1026,7 +1033,7 @@ function polygon2d_is_pip_as
 // polyhedron
 //----------------------------------------------------------------------------//
 
-//! Generate a polyhedron for the bounding box of another polyhedron in 3d.
+//! Generate a bounding box polyhedron for another polyhedron in 3d.
 /***************************************************************************//**
   \param    c <coords-3d> A list of 3d cartesian coordinates
             [[x, y, z], ...].
@@ -1044,7 +1051,7 @@ function polygon2d_is_pip_as
     The faces will be ordered \em clockwise when looking from outside
     the shape inwards.
 
-    \sa polytope_bboxlimits.
+    \sa polytope_limits.
 *******************************************************************************/
 function polyhedron_bbox_pf
 (
@@ -1054,7 +1061,7 @@ function polyhedron_bbox_pf
 ) =
   let
   (
-    bb = polytope_bboxlimits(c=c, f=f, a=a, d=[0:2], s=false),
+    bb = polytope_limits(c=c, f=f, a=a, d=[0:2], s=false),
     pp = [for (x=bb[0], y=bb[1], z=bb[2]) [x, y, z]],
     pf = [[0,2,3,1], [4,0,1,5], [6,4,5,7], [2,6,7,3], [0,4,6,2], [3,7,5,1]]
   )
@@ -1075,7 +1082,7 @@ function polyhedron_area
   f
 ) = sum([for (fi = f) polygon3d_area(c, [fi])]);
 
-//! Compute the volume of a polyhedron with triangular faces in a Euclidean 3d-space.
+//! Compute the volume of a triangulated polyhedron in a Euclidean 3d-space.
 /***************************************************************************//**
   \param    c <coords-3d> A list of 3d cartesian coordinates
             [[x, y, z], ...].
@@ -1120,7 +1127,7 @@ function polyhedron_volume_tf
   )
   sv/6;
 
-//! Compute the center of mass of a polyhedron with triangular faces in a Euclidean 3d-space.
+//! Compute the center of mass of a triangulated polyhedron in a Euclidean 3d-space.
 /***************************************************************************//**
   \param    c <coords-3d> A list of 3d cartesian coordinates
             [[x, y, z], ...].
