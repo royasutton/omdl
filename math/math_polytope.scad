@@ -260,7 +260,7 @@ function polytope_line
             given, the listed order of the coordinates \p c establishes
             the polygon path.
 *******************************************************************************/
-function polytope_face_nv
+function polytope_face_n
 (
   c,
   f,
@@ -295,7 +295,7 @@ function polytope_face_nv
             given, the listed order of the coordinates \p c establishes
             the polygon path.
 *******************************************************************************/
-function polytope_face_mp
+function polytope_face_m
 (
   c,
   f,
@@ -333,20 +333,20 @@ function polytope_face_mp
             given, the listed order of the coordinates \p c establishes
             the polygon path.
 *******************************************************************************/
-function polytope_face_mpnv
+function polytope_face_mn
 (
   c,
   f,
   i,
   l,
   cw = true
-) = [polytope_face_mp(c, f, i, l), polytope_face_nv(c, f, i, l, cw)];
+) = [polytope_face_m(c, f, i, l), polytope_face_n(c, f, i, l, cw)];
 
 //! Get the plane of a polytope face.
 /***************************************************************************//**
-  \copydetails polytope_face_mpnv()
+  \copydetails polytope_face_mn()
 *******************************************************************************/
-function polytope_plane(c,f,i,l,cw=true) = polytope_face_mpnv(c,f,i,l,cw);
+function polytope_plane(c,f,i,l,cw=true) = polytope_face_mn(c,f,i,l,cw);
 
 //! Get the adjacent vertices for a given polytope vertex.
 /***************************************************************************//**
