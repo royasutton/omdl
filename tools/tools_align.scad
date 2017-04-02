@@ -54,7 +54,7 @@ include <math.scad>;
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-module orient_l
+module orient_ll
 (
   l  = z_axis3d_ul,
   rl = z_axis3d_ul,
