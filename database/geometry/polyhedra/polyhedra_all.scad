@@ -65,9 +65,32 @@
 
   \details
 
+    Database of polyhedra vertices, faces, and edges. Classes of
+    polyhedra are grouped into separate files. The file
+    polyhedra_all.scad contains all polyhedra from all files. Each
+    table uses the following column data structure.
+
+    | feild | description         |
+    |:-----:|:--------------------|
+    | id    | identifier          |
+    | n     | name                |
+    | o     | other name          |
+    | g     | group               |
+    | d     | data source         |
+    | c     | cartesian vertices  |
+    | s     | spherical vertices  |
+    | f     | faces               |
+    | e     | edges               |
+
+    Use the functions table_get() to retrieve feild data as show in the
+    following example. To see a list of all table identifiers consider
+    the function table_get_allrow_ids() or module table_dump(). See
+    datatypes_table.scad for other available table functions.
+
     \b Example
     \code{.C}
     include <units/units_coordinate.scad>;
+    include <tools/tools_polytope.scad>;
     include <datatypes/datatypes_table.scad>;
     include <database/geometry/polyhedra/platonic.scad>;
 
@@ -81,7 +104,9 @@
 
     sv = coordinates_csc(pv, 100);
 
-    polyhedron(points=sv, faces=pf);
+    polytope_number(sv, pf, to=[0,0,5]);
+    polytope_frame(sv, pf) {color("grey") sphere(r=4); circle(r=2);}
+    polyhedron(sv, pf);
     \endcode
 
     \b Autotests \include polyhedra_all_db_autotest.log
@@ -94,7 +119,8 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! \<table> \c polyhedra_all polyhedra data table columns definition.
+//! <matrix-2x9> \c polyhedra_all polyhedra data table columns definition.
+//! \hideinitializer
 dtc_polyhedra_polyhedra_all =
 [
   ["id", "identifier"],
@@ -108,7 +134,8 @@ dtc_polyhedra_polyhedra_all =
   ["e", "edges"]
 ];
 
-//! \<table> \c polyhedra_all polyhedra data table rows.
+//! <matrix-9xR> \c polyhedra_all polyhedra data table rows.
+//! \hideinitializer
 dtr_polyhedra_polyhedra_all =
 [
   [

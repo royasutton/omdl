@@ -109,7 +109,8 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! \<table> \c archimedean_duals polyhedra data table columns definition.
+//! <matrix-2x9> \c archimedean_duals polyhedra data table columns definition.
+//! \hideinitializer
 dtc_polyhedra_archimedean_duals =
 [
   ["id", "identifier"],
@@ -123,7 +124,8 @@ dtc_polyhedra_archimedean_duals =
   ["e", "edges"]
 ];
 
-//! \<table> \c archimedean_duals polyhedra data table rows.
+//! <matrix-9xR> \c archimedean_duals polyhedra data table rows.
+//! \hideinitializer
 dtr_polyhedra_archimedean_duals =
 [
   [
@@ -2828,10 +2830,10 @@ BEGIN_SCOPE autostat;
           i, fs, id, fs, fo, fs,
           len(c), fs, len(f), fs, len(e),
 
-          fs, hist(qsort(polytope_faceverticies(f)), m=9),
-          fs, hist(qsort(dround(polytope_faceangles(c, f), d=1)), m=9),
-          fs, hist(qsort(sround(polytope_edgelengths(c, e), d=3)), m=9),
-          fs, hist(qsort(dround(polytope_edgeangles(c, f), d=1)), m=9),
+          fs, hist(qsort(polytope_face_vcounts(f)), m=9),
+          fs, hist(qsort(dround(polytope_face_angles(c, f), d=1)), m=9),
+          fs, hist(qsort(sround(polytope_edge_lengths(c, e), d=3)), m=9),
+          fs, hist(qsort(dround(polytope_edge_angles(c, f), d=1)), m=9),
 
           fs
         )
@@ -2851,41 +2853,43 @@ END_SCOPE;
 BEGIN_SCOPE db;
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <constants.scad>;
+    include <units/units_coordinate.scad>;
     include <tools/tools_polytope.scad>;
     include <datatypes/datatypes_table.scad>;
     include <database/geometry/polyhedra/archimedean_duals.scad>;
+
+    config = 0;
 
     tc = dtc_polyhedra_archimedean_duals;
     tr = dtr_polyhedra_archimedean_duals;
 
     id = "default";
-    ct = 1/25;
-
-    config = 0;
-    rp = config == 0 ? true : false;
-    rs = config == 0 ? true : false;
-    rc = config == 0 ? true : false;
+    sr = 100;
 
     pv = table_get(tr, tc, id, "c");
     pf = table_get(tr, tc, id, "f");
     pe = table_get(tr, tc, id, "e");
 
-    if( rp )
-    %polyhedron(points=pv, faces=pf);
-    else
-    polyhedron(points=pv, faces=pf);
+    sv = coordinates_csc(pv, sr);
 
-    if ( rs )
-    color("lightblue")
-    for(p=pv)
-      translate(p)
-        sphere(r=ct*(1+1/2), $fn=25);
+    if (config == 0)  // png preview
+    {
+      $fn = 25;
 
-    if ( rc )
-    for(e=pe)
-      align_axis2v([pv[first(e)], pv[second(e)]], t=2, a=2)
-      cylinder(r=ct, h=norm(pv[first(e)]-pv[second(e)]), center=true);
+      %polyhedron(sv, pf);
+
+      polytope_frame(sv, pf, pe)
+      {
+        circle(r = sr / 25);
+        color("lightblue")
+        sphere(r = sr / 25 * (1 + 1/2));
+      }
+    }
+
+    if (config == 1)  // stl model
+    {
+      polyhedron(sv, pf);
+    }
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
