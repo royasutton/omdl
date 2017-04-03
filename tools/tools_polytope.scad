@@ -159,7 +159,7 @@ module polytope_number
   }
 }
 
-//! Assemble a skeletal frame using child objects for a polytope.
+//! Assemble a polytope skeletal frame using child objects.
 /***************************************************************************//**
   \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
   \param    f <integer-list-list> A list of faces (or paths) that enclose
@@ -167,24 +167,31 @@ module polytope_number
   \param    e <integer-list-2-list> A list of edges where each edge is
             a list of two coordinate indexes.
 
+  \param    vc <boolean> Vertex children enabled.
+  \param    fc <boolean> Face children enabled.
+  \param    ec <boolean> Edge children enabled.
+
   \details
 
-    This function expects two children. The first should be a 3d object
-    and is translated to the center of each polytope vertex. The second
-    child should be a 2d object and is linearly extruded along all
-    polytope edges.
+    This function accepts one to three child objects. The first is
+    mandatory and must be a 2d object. This 2d object is linearly
+    extruded along all edges. The remaining objects are optional and
+    are 3d objects. The second child is translated to the center of
+    each vertex and the third is translated to the mean coordinate of
+    each face.
 
     \b Example
 
     \code{.c}
     include <tools/tools_polytope.scad>;
-    c = 25 * second(xy_plane_os);
+    s = second(xy_plane_os) * 25;
+    p = linear_extrude_pp2pf(s, h=50);
 
-    polytope_frame( c )
+    polytope_frame(first(p), second(p))
     {
-      color("grey")
-      sphere(r=4);
       circle(r=2);
+      color("grey") sphere(r=4);
+      color("blue") cube(4);
     }
     \endcode
 
@@ -198,24 +205,56 @@ module polytope_frame
 (
   c,
   f,
-  e
+  e,
+  vc = true,
+  fc = true,
+  ec = true
 )
 {
   fm = defined_or(f, [consts(len(c))]);
+  el = is_defined(e) ? e : polytope_faces2edges(fm);
 
-  for (ci = c)
-    translate(ci)
-    children(0);
-
-  for (ei = is_defined(e) ? e : polytope_faces2edges(fm))
+  // edge
+  if ((ec == true) && ($children > 0))
   {
-    p1 = dimension_2to3_v(c[ei[0]]);
-    p2 = dimension_2to3_v(c[ei[1]]);
+    for (i = get_index(el))
+    {
+      p1 = dimension_2to3_v(c[first(el[i])]);   // 3d points required for
+      p2 = dimension_2to3_v(c[second(el[i])]);  // polygons.
 
-    translate(p1)
-    orient_ll(z_axis3d_ul, [p1, p2])
-    linear_extrude(distance_pp(p1, p2))
-    children(1);
+      translate((p1+p2)/2)
+      orient_ll(rl=[p1, p2])
+      linear_extrude(distance_pp(p1, p2), center=true)
+      children(0);
+    }
+  }
+
+  // vertex
+  if ((vc == true) && ($children > 1))
+  {
+    for (i = get_index(c))
+    {
+      p = c[i];
+      n = polytope_vertex_n(c, fm, i);
+
+      translate(p)
+      orient_ll(rl=n)
+      children(1);
+    }
+  }
+
+  // face
+  if ((fc == true) && ($children > 2))
+  {
+    for (i = get_index(fm))
+    {
+      p = polytope_face_m(c, l=fm[i]);
+      n = polytope_face_n(c, l=fm[i]);
+
+      translate(p)
+      orient_ll(rl=n)
+      children(2);
+    }
   }
 }
 
