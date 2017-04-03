@@ -243,18 +243,21 @@ function get_index
   rs
 ) = (s == true) ? consts(len(l))
   : (s == false) ? empty_lst
-  : is_number(s) ? [s]
-  : is_range(s) ? [for (i=s) i]
-  : all_numbers(s) ? s
   : (s == "all") ? consts(len(l))
   : (s == "none") ? empty_lst
+  : (s == "even") ? [for (i = [0:2:len(l)-1]) i]
+  : (s == "odd") ? [for (i = [1:2:len(l)-1]) i]
   : (s == "rands") ?
     let
     (
       r = defined_or(rs, first(rands(0, 100, 1))),
-      i = rands(0, 2, l, r)
+      i = rands(0, 2, len(l), r)
     )
     [for (j = [0:len(i)-1]) if (i[j] > 1) j]
+  : is_string(s) ? empty_lst
+  : is_number(s) ? [s]
+  : is_range(s) ? [for (i=s) i]
+  : all_numbers(s) ? s
   : empty_lst;
 
 //! Pad a list to a constant width of elements.

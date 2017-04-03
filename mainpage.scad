@@ -232,6 +232,8 @@
     | "all"           | All index positions of the list [0:size-1]    |
     | "none"          | No index positions                            |
     | "rands"         | Random index selection of the list [0:size-1] |
+    | "even"          | The even index of the list [0:size-1]         |
+    | "odd"           | The odd index of the list [0:size-1]          |
     | <integer>       | The single position given by an <integer>     |
     | <range>         | The range of positions given by a <range>     |
     | <integer-list>  | The list of positions give in <integer-list>  |
