@@ -329,14 +329,16 @@ function sround
   : is_list(v) ? [for (i=v) sround(i, d)]
   : v;
 
-//! Limit a number between upper and lower bounds.
+//! Limit all numerical values of a list between an upper and lower bounds.
 /***************************************************************************//**
-  \param    v <decimal> A numeric value.
-  \param    l <decimal> The minimum value.
-  \param    u <decimal> The maximum value.
+  \param    v \<list> A list of values.
+  \param    l <number> The minimum value.
+  \param    u <number> The maximum value.
 
-  \returns  <decimal> \p v when it is within <tt>[l : u]</tt>.
-            Returns \p l when <tt>(v<l)</tt> and \p u when <tt>(v>u)</tt>.
+  \returns  \<list> The list with all numeric values limited to the
+            range <tt>[l : u]</tt>. A value will be assigned \p l when
+            it is less than \p l and \p u when it is greater than \p u.
+            Non-numeric values are unchanged.
 *******************************************************************************/
 function limit
 (
