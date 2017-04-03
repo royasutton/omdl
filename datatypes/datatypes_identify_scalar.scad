@@ -279,6 +279,22 @@ function is_odd
 ) = !is_integer(v) ? false
   : ((v % 2) != 0);
 
+//! Test if a numerical value is between an upper and lower bounds.
+/***************************************************************************//**
+  \param    v <number> A numerical value.
+  \param    l <number> The minimum value.
+  \param    u <number> The maximum value.
+
+  \returns  <boolean> \b true when the value is between the upper and
+            lower bounds and \b false otherwise.
+*******************************************************************************/
+function is_between
+(
+  v,
+  l,
+  u
+) = ((v >= l) && (v <=u));
+
 //! @}
 //! @}
 
@@ -345,23 +361,24 @@ BEGIN_SCOPE validate;
     s = -1;     // skip test
 
     good_r =
-    [ // function     01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21
-      ["is_defined",  f, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t],
-      ["not_defined", t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
-      ["is_nan",      f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f],
-      ["is_inf",      f, f, f, f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f],
-      ["is_scalar",   t, t, t, t, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, s, s],
-      ["is_iterable", f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, t, t, t, s, s],
-      ["is_empty",    f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f],
-      ["is_number",   f, t, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f],
-      ["is_integer",  f, t, t, t, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
-      ["is_decimal",  f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
-      ["is_boolean",  f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
-      ["is_string",   f, f, f, f, f, f, f, f, f, f, f, t, t, t, f, f, f, f, f, f, f],
-      ["is_list",   f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, s, s],
-      ["is_range",    f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t],
-      ["is_even",     s, f, t, t, f, t, t, s, s, s, s, s, s, s, s, s, s, s, s, s, s],
-      ["is_odd",      s, t, f, f, f, f, f, s, s, s, s, s, s, s, s, s, s, s, s, s, s]
+    [ // function       01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21
+      ["is_defined",    f, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t],
+      ["not_defined",   t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+      ["is_nan",        f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f],
+      ["is_inf",        f, f, f, f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f],
+      ["is_scalar",     t, t, t, t, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, s, s],
+      ["is_iterable",   f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, t, t, t, s, s],
+      ["is_empty",      f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f],
+      ["is_number",     f, t, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f],
+      ["is_integer",    f, t, t, t, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+      ["is_decimal",    f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+      ["is_boolean",    f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
+      ["is_string",     f, f, f, f, f, f, f, f, f, f, f, t, t, t, f, f, f, f, f, f, f],
+      ["is_list",       f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, s, s],
+      ["is_range",      f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t],
+      ["is_even",       s, f, t, t, f, t, t, s, s, s, s, s, s, s, s, s, s, s, s, s, s],
+      ["is_odd",        s, t, f, f, f, f, f, s, s, s, s, s, s, s, s, s, s, s, s, s, s],
+      ["is_between_MM", f, t, t, t, t, t, t, f, f, t, t, f, f, f, f, f, f, f, f, f, f]
     ];
 
     // sanity-test tables
@@ -407,6 +424,7 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "is_range", is_range(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_even", is_even(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_odd", is_odd(get_value(vid)), vid );
+    for (vid=test_ids) run_test( "is_between_MM", is_between(get_value(vid),number_min,number_max), vid );
 
     // end-of-tests
   END_OPENSCAD;
