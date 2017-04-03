@@ -272,56 +272,29 @@ module polytope_frame
   }
 }
 
-//! The 2d bounding box shape for a polygon.
+//! The 3d or 2d bounding box shape for a polytope.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of 2d cartesian coordinates
-            [[x, y], ...].
-  \param    p <integer-list-list> An \em optional list of paths that
-            define one or more closed shapes where each is a list of
-            coordinate indexes.
-  \param    a <decimal-list-2> The box padding.
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
+            coordinates [[x, y (, z)], ...].
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+  \param    a <decimal-list-1:3|decimal> The box padding.
             A list of lengths to equally pad the box dimensions.
 
   \details
 
-    The 2d box shape that exactly encloses the defined 2d polygon with
-    the box sides oriented parallel to the coordinate axes.
+    Generates: (1) the 3d box shape that completely encloses the
+    defined 3d polyhedron with the box sides oriented parallel to the
+    coordinate axes. Or: (2) the 2d box shape that exactly encloses the
+    defined 2d polygon with the box sides oriented parallel to the
+    coordinate axes.
 
-  \note     When \p p is not given, the listed order of the coordinates
+  \note     When \p f is not given, the listed order of the coordinates
             \p c establishes the path.
 
     \sa polytope_limits for warning about secondary shapes.
 *******************************************************************************/
-module polygon_bbox
-(
-  c,
-  p,
-  a
-)
-{
-  b = polytope_limits(c=c, f=p, a=a, d=[0:1], s=false);
-
-  translate([b[0][0], b[1][0]])
-  square([b[0][1]-b[0][0], b[1][1]-b[1][0]]);
-}
-
-//! The 3d bounding box shape for a polyhedron.
-/***************************************************************************//**
-  \param    c <coords-3d> A list of 3d cartesian coordinates
-            [[x, y, z], ...].
-  \param    f <integer-list-list> A list of faces that enclose
-            the shape where each face is a list of coordinate indexes.
-  \param    a <decimal-list-3> The box padding.
-            A list of lengths to equally pad the box dimensions.
-
-  \details
-
-    The 3d box shape that completely encloses the defined 3d polyhedron
-    with the box sides oriented parallel to the coordinate axes.
-
-    \sa polytope_limits.
-*******************************************************************************/
-module polyhedron_bbox
+module polytope_bbox
 (
   c,
   f,
@@ -329,9 +302,14 @@ module polyhedron_bbox
 )
 {
   b = polytope_limits(c=c, f=f, a=a, d=[0:2], s=false);
+  d = len([for (i=b) if (i != [undef, undef]) i]);
 
-  translate([b[0][0], b[1][0], b[2][0]])
-  cube([b[0][1]-b[0][0], b[1][1]-b[1][0], b[2][1]-b[2][0]]);
+  if (d == 3)
+    translate([b[0][0], b[1][0], b[2][0]])
+    cube([b[0][1]-b[0][0], b[1][1]-b[1][0], b[2][1]-b[2][0]]);
+  else
+    translate([b[0][0], b[1][0]])
+    square([b[0][1]-b[0][0], b[1][1]-b[1][0]]);
 }
 
 //! @}

@@ -82,7 +82,7 @@ function polytope_faces2edges
             coordinates [[x, y (, z)], ...].
   \param    f <integer-list-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
-  \param    a <decimal-list-3|decimal-list-2> The box padding.
+  \param    a <decimal-list-1:3|decimal> The box padding.
             A list of lengths to equally pad the box dimensions.
   \param    d <range|list|integer> The dimensions to consider. A range
             of dimensions, a list of dimensions, or a single dimension.
@@ -136,6 +136,52 @@ function polytope_limits
     for (j = ax)
       (s == true) ? b[j][1] - b[j][0] : [b[j][0], b[j][1]]
   ];
+
+//! Generate a bounding box polytope for another polytope in 3d or 2d.
+/***************************************************************************//**
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
+            coordinates [[x, y (, z)], ...].
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+  \param    a <decimal-list-1:3|decimal> The box padding.
+            A list of lengths to equally pad the box dimensions.
+
+  \returns  <datastruct> A structure: (1) <tt>[points, faces]</tt>,
+            where \c points are <coords-3d> and \c faces are a
+            <integer-list-list>, that define the bounding box of the
+            given polyhedron. Or: (2) <tt>[points, path]</tt>, where
+            \c points are <coords-2d> and \c path is a
+            <integer-list-list>, that define the bounding box of the
+            given polygon.
+
+  \details
+
+    Polyhedron faces will be ordered \em clockwise when looking from
+    outside the shape inwards. Polygon path will be ordered clockwise
+    when looking from the top (positive z) downwards.
+
+  \note     When \p f is not specified, all coordinates are used to
+            determine the geometric limits, which, simplifies the
+            calculation. Parameter \p f is needed when a subset of the
+            coordinates should be considered.
+
+    \sa polytope_limits for warning about secondary shapes.
+*******************************************************************************/
+function polytope_bbox_pf
+(
+  c,
+  f,
+  a
+) = let
+    (
+      b = polytope_limits(c=c, f=f, a=a, d=[0:2], s=false),
+      d  = len([for (i=b) if (i != [undef, undef]) i])
+    )
+    (d == 3) ?
+      [ [for (x=b[0], y=b[1], z=b[2]) [x, y, z]],
+        [[0,2,3,1], [4,0,1,5], [6,4,5,7], [2,6,7,3], [0,4,6,2], [3,7,5,1]] ]
+    : [ [for (x=b[0], y=b[1]) [x, y]],
+        [[0,1,3,2]] ];
 
 //! Get a line from an edge or any two vetices of a polytope.
 /***************************************************************************//**
@@ -589,45 +635,6 @@ function polytope_triangulate_ft
 // polygon
 //----------------------------------------------------------------------------//
 
-//! Generate a bounding box polygon for another polygon in 2d.
-/***************************************************************************//**
-  \param    c <coords-2d> A list of 2d cartesian coordinates
-            [[x, y], ...].
-  \param    p <integer-list-list> An \em optional list of paths that
-            define one or more closed shapes where each is a list of
-            coordinate indexes.
-  \param    a <decimal-list-2> The box padding.
-            A list of lengths to equally pad the box dimensions.
-
-  \returns  <datastruct> A structure <tt>[points, path]</tt>, where
-            \c points are <coords-2d> and \c path is a
-            <integer-list-list>, that define the bounding box of the
-            given polygon.
-
-  \details
-
-    The path will be ordered clockwise when looking from the top
-    (positive z) downwards.
-
-  \note     When \p p is not given, the listed order of the coordinates
-            \p c establishes the path.
-
-    \sa polytope_limits for warning about secondary shapes.
-*******************************************************************************/
-function polygon2d_bbox_pp
-(
-  c,
-  p,
-  a
-) =
-  let
-  (
-    bb = polytope_limits(c=c, f=p, a=a, d=[0:1], s=false),
-    pp = [for (x=bb[0], y=bb[1]) [x, y]],
-    pf = [[0,1,3,2]]
-  )
-  [pp, pf];
-
 //! Calculate the perimeter length of a polygon in 2d.
 /***************************************************************************//**
   \param    c <coords-2d> A list of 2d cartesian coordinates
@@ -1021,41 +1028,6 @@ function polygon2d_is_pip_as
 //----------------------------------------------------------------------------//
 // polyhedron
 //----------------------------------------------------------------------------//
-
-//! Generate a bounding box polyhedron for another polyhedron in 3d.
-/***************************************************************************//**
-  \param    c <coords-3d> A list of 3d cartesian coordinates
-            [[x, y, z], ...].
-  \param    f <integer-list-list> A list of faces that enclose
-            the shape where each face is a list of coordinate indexes.
-  \param    a <decimal-list-3> The box padding.
-            A list of lengths to equally pad the box dimensions.
-
-  \returns  <datastruct> A structure <tt>[points, faces]</tt>, where
-            \c points are <coords-3d> and \c faces are a
-            <integer-list-list>, that define the bounding box of the
-            given polyhedron.
-
-  \details
-
-    The faces will be ordered \em clockwise when looking from outside
-    the shape inwards.
-
-    \sa polytope_limits.
-*******************************************************************************/
-function polyhedron_bbox_pf
-(
-  c,
-  f,
-  a
-) =
-  let
-  (
-    bb = polytope_limits(c=c, f=f, a=a, d=[0:2], s=false),
-    pp = [for (x=bb[0], y=bb[1], z=bb[2]) [x, y, z]],
-    pf = [[0,2,3,1], [4,0,1,5], [6,4,5,7], [2,6,7,3], [0,4,6,2], [3,7,5,1]]
-  )
-  [pp, pf];
 
 //! Compute the surface area of a polyhedron in a Euclidean 3d-space.
 /***************************************************************************//**
