@@ -342,7 +342,7 @@ function ntail
 /***************************************************************************//**
   \param    v \<value> An iterable value.
 
-  \returns  <list> A list containing the elements of \p v in reversed order.
+  \returns  \<list> A list containing the elements of \p v in reversed order.
             Returns \b empty_lst when \p v is empty.
             Returns \b undef when \p v is not defined or is not iterable.
 *******************************************************************************/
@@ -427,7 +427,7 @@ function nssequence
 
   \param    l <boolean> Append new value to last element.
 
-  \returns  <list> A list with \p nv appended to each element of \p v.
+  \returns  \<list> A list with \p nv appended to each element of \p v.
             Returns \b undef when \p v is not defined or is not iterable.
 
   \details
@@ -489,7 +489,7 @@ function eappend
             (assign \b false to use find()).
   \param    si <integer> The element column index when matching.
 
-  \returns  <list> A list with \p nv inserted into \p v at the
+  \returns  \<list> A list with \p nv inserted into \p v at the
             specified position.
             Returns \b undef when no value of \p mv exists in \p v.
             Returns \b undef when <tt>(mi + 1)</tt> exceeds the matched
@@ -554,7 +554,7 @@ function insert
             (assign \b false to use find()).
   \param    si <integer> The element column index when matching.
 
-  \returns  <list> A list with all specified elements removed.
+  \returns  \<list> A list with all specified elements removed.
             Returns \b undef when \p i does not map to an element of \p v.
             Returns \b undef when \p v is not defined or is not iterable.
 
@@ -607,7 +607,7 @@ function delete
   \param    v \<value> An iterable value.
   \param    mv \<value> The match value.
 
-  \returns  <list> A list with all elements equal to \p mv removed.
+  \returns  \<list> A list with all elements equal to \p mv removed.
             Returns \b undef when \p v is not defined or is not iterable.
 *******************************************************************************/
 function strip
@@ -624,7 +624,7 @@ function strip
 /***************************************************************************//**
   \param    v \<value> An iterable value.
 
-  \returns  <list> A list of unique elements with order preserved.
+  \returns  \<list> A list of unique elements with order preserved.
             Returns \b undef when \p v is not defined or is not iterable.
 *******************************************************************************/
 function unique

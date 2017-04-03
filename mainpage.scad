@@ -246,8 +246,8 @@
     l1 = [a,b,c,d,e,f]
 
     // index sequence
-    get_index(true, len(l1))    = [0,1,2,3,4,5]
-    get_index("rands", len(l1)) = [0,2,5]
+    get_index(l1)          = [0,1,2,3,4,5]
+    get_index(l1, "rands") = [0,2,5]
     \endcode
 
   \subsection dt_geometric Geometric

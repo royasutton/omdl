@@ -222,11 +222,11 @@ function consts
   : (u == false) ? [for (i=[0:1:l-1]) i]
   : [for (i=[0:1:l-1]) undef];
 
-//! Create a list index sequence from an index sequence specification.
+//! Create a sequence for a list index sequence specification.
 /***************************************************************************//**
-  \param    v <index> The index sequence \ref dt_index "specification".
-  \param    l <integer> The list length.
-  \param    s <integer> An optional seed for random sequences.
+  \param    l \<list> The list.
+  \param    s <index> The index sequence \ref dt_index "specification".
+  \param    rs <integer> An optional seed for random sequences.
 
   \returns  <number-list> An index sequence based on the specification.
             Returns \b empty_lst for any \p v that does not fall into
@@ -238,20 +238,20 @@ function consts
 *******************************************************************************/
 function get_index
 (
-  v,
   l,
-  s
-) = (v == true) ? consts(l)
-  : (v == false) ? empty_lst
-  : is_number(v) ? [v]
-  : is_range(v) ? [for (i=v) i]
-  : all_numbers(v) ? v
-  : (v == "all") ? consts(l)
-  : (v == "none") ? empty_lst
-  : (v == "rands") ?
+  s = true,
+  rs
+) = (s == true) ? consts(len(l))
+  : (s == false) ? empty_lst
+  : is_number(s) ? [s]
+  : is_range(s) ? [for (i=s) i]
+  : all_numbers(s) ? s
+  : (s == "all") ? consts(len(l))
+  : (s == "none") ? empty_lst
+  : (s == "rands") ?
     let
     (
-      r = defined_or(s, first(rands(0, 100, 1))),
+      r = defined_or(rs, first(rands(0, 100, 1))),
       i = rands(0, 2, l, r)
     )
     [for (j = [0:len(i)-1]) if (i[j] > 1) j]
@@ -507,7 +507,7 @@ function eselect
   \param    v \<list> A list of iterable values.
   \param    r <boolean> Recursively merge elements that are iterable.
 
-  \returns  <list> A list containing the serial-wise element concatenation
+  \returns  \<list> A list containing the serial-wise element concatenation
             of each element in \p v.
             Returns \b empty_lst when \p v is empty.
             Returns \b undef when \p v is not defined.
@@ -533,7 +533,7 @@ function smerge
   \param    v \<list> A list of iterable values.
   \param    j <boolean> Join each merge as a separate list.
 
-  \returns  <list> A list containing the parallel-wise element concatenation
+  \returns  \<list> A list containing the parallel-wise element concatenation
             of each iterable value in \p v.
             Returns \b empty_lst when any element value in \p v is empty.
             Returns \b undef when \p v is not defined or when any element
@@ -793,14 +793,14 @@ BEGIN_SCOPE validate;
       ["get_index",
         empty_lst,                                          // t01
         empty_lst,                                          // t02
-        [0,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8,8.5,9],
-        empty_lst,                                          // t04
-        empty_lst,                                          // t05
-        empty_lst,                                          // t06
-        empty_lst,                                          // t07
-        empty_lst,                                          // t08
-        empty_lst,                                          // t09
-        empty_lst,                                          // t10
+        empty_lst,                                          // t03
+        [0,1,2,3,4,5,6,7],                                  // t04
+        [0,1,2,3],                                          // t05
+        [0,1,2,3,4,5,6],                                    // t06
+        [0],                                                // t07
+        [0,1],                                              // t08
+        [0,1,2,3],                                          // t09
+        [0,1,2,3],                                          // t10
         [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
       ],
       ["pad_9",
