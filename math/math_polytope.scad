@@ -49,18 +49,6 @@ include <math.scad>;
 // polytope
 //----------------------------------------------------------------------------//
 
-//! List the indexes for all polytope faces.
-/***************************************************************************//**
-  \param    f <integer-list-list> A list of faces (or paths) that enclose
-            the shape where each face is a list of coordinate indexes.
-
-  \returns  <integer-list> The list of all polytope face indexes.
-*******************************************************************************/
-function polytope_faces
-(
-  f
-) = consts(len(f));
-
 //! List the edge coordinate index pairs of a polytope.
 /***************************************************************************//**
   \param    f <integer-list-list> A list of faces (or paths) that enclose
