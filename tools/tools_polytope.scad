@@ -52,9 +52,9 @@ include <tools/tools_align.scad>;
   \param    e <integer-list-2-list> A list of edges where each edge is
             a list of two coordinate indexes.
 
-  \param    lv <boolean> Label vertex.
-  \param    lf <boolean> Label faces.
-  \param    le <boolean> Label edges.
+  \param    vi <index> Vertex index. An index sequence [specification].
+  \param    fi <index> Face index. An index sequence [specification].
+  \param    ei <index> Edge index. An index sequence [specification].
 
   \param    sp <boolean> Show polyhedron shape.
 
@@ -71,15 +71,17 @@ include <tools/tools_align.scad>;
             the polygon path.
   \note     When \p e is not specified, it is computed from \p f using
             polytope_faces2edges().
+
+  [specification]: \ref dt_index
 *******************************************************************************/
 module polytope_number
 (
   c,
   f,
   e,
-  lv = true,
-  lf = true,
-  le = true,
+  vi = true,
+  fi = true,
+  ei = true,
   sp = false,
   ts,
   th,
@@ -97,9 +99,9 @@ module polytope_number
   fh = defined_or(th, ceil(min(bb)/100));
   fo = defined_or(to, [0, 0, fs/2]);
 
-  // vertices
+  // vertex
   color("green")
-  for (i = get_index(c, lv))
+  for (i = get_index(c, vi))
   {
     p = c[i];
     n = polytope_vertex_n(c, fm, i);
@@ -114,9 +116,9 @@ module polytope_number
       text(str(i), size=fs, halign="center", valign="center");
   }
 
-  // faces
+  // face
   color("red")
-  for (i = get_index(fm, lf))
+  for (i = get_index(fm, fi))
   {
     p = polytope_face_m(c, l=fm[i]);
     n = polytope_face_n(c, l=fm[i]);
@@ -131,9 +133,9 @@ module polytope_number
       text(str(i), size=fs, halign="center", valign="center");
   }
 
-  // edges
+  // edge
   color("blue")
-  for (i = get_index(el, le))
+  for (i = get_index(el, ei))
   {
     p = mean([c[first(el[i])], c[second(el[i])]]);
     n = polytope_edge_n(c, fm, el, i);
@@ -148,7 +150,7 @@ module polytope_number
       text(str(i), size=fs, halign="center", valign="center");
   }
 
-  // show shape
+  // shape
   if (sp == true)
   {
     if (pd == 3)
@@ -167,23 +169,27 @@ module polytope_number
   \param    e <integer-list-2-list> A list of edges where each edge is
             a list of two coordinate indexes.
 
-  \param    vc <boolean> Vertex children enabled.
-  \param    fc <boolean> Face children enabled.
-  \param    ec <boolean> Edge children enabled.
+  \param    vi <index> Vertex index. An index sequence [specification].
+  \param    fi <index> Face index. An index sequence [specification].
+  \param    ei <index> Edge index. An index sequence [specification].
+
+  \param    vc <integer> Vertex child index.
+  \param    fc <integer> Face child index.
+  \param    ec <integer> Edge child index.
 
   \details
 
-    This function accepts one to three child objects. The first is
-    mandatory and must be a 2d object. This 2d object is linearly
-    extruded along all edges. The remaining objects are optional and
-    are 3d objects. The second child is translated to the center of
-    each vertex and the third is translated to the mean coordinate of
-    each face.
+    This function constructs a skeletal frame for a given polytope. A
+    2d child object is linearly extruded along specified edges of the
+    polytope to form the frame. Additional 3d child objects can be
+    centered on specified vertices and/or the mean coordinates of
+    specified faces.
 
     \b Example
 
     \code{.c}
     include <tools/tools_polytope.scad>;
+
     s = second(xy_plane_os) * 25;
     p = linear_extrude_pp2pf(s, h=50);
 
@@ -195,29 +201,65 @@ module polytope_number
     }
     \endcode
 
+  \note     To disable a child assignment to the vertices, faces, or
+            edges, use an index that is less than zero or greater than
+            the number of children.
   \note     Parameter \p f is optional for polygons. When it is not
             given, the listed order of the coordinates \p c establishes
             the polygon path.
   \note     When \p e is not specified, it is computed from \p f using
             polytope_faces2edges().
+
+  [specification]: \ref dt_index
 *******************************************************************************/
 module polytope_frame
 (
   c,
   f,
   e,
-  vc = true,
-  fc = true,
-  ec = true
+  vi = true,
+  fi = true,
+  ei = true,
+  vc = 1,
+  fc = 2,
+  ec = 0
 )
 {
   fm = defined_or(f, [consts(len(c))]);
   el = is_defined(e) ? e : polytope_faces2edges(fm);
 
-  // edge
-  if ((ec == true) && ($children > 0))
+  // vertex
+  if (is_between(vc, 0, $children) && ($children > 1))
   {
-    for (i = get_index(el))
+    for (i = get_index(c, vi))
+    {
+      p = c[i];
+      n = polytope_vertex_n(c, fm, i);
+
+      translate(p)
+      orient_ll(rl=n)
+      children(vc);
+    }
+  }
+
+  // face
+  if (is_between(fc, 0, $children) && ($children > 2))
+  {
+    for (i = get_index(fm, fi))
+    {
+      p = polytope_face_m(c, l=fm[i]);
+      n = polytope_face_n(c, l=fm[i]);
+
+      translate(p)
+      orient_ll(rl=n)
+      children(fc);
+    }
+  }
+
+  // edge
+  if (is_between(ec, 0, $children) && ($children > 0))
+  {
+    for (i = get_index(el, ei))
     {
       p1 = dimension_2to3_v(c[first(el[i])]);   // 3d points required for
       p2 = dimension_2to3_v(c[second(el[i])]);  // polygons.
@@ -225,35 +267,7 @@ module polytope_frame
       translate((p1+p2)/2)
       orient_ll(rl=[p1, p2])
       linear_extrude(distance_pp(p1, p2), center=true)
-      children(0);
-    }
-  }
-
-  // vertex
-  if ((vc == true) && ($children > 1))
-  {
-    for (i = get_index(c))
-    {
-      p = c[i];
-      n = polytope_vertex_n(c, fm, i);
-
-      translate(p)
-      orient_ll(rl=n)
-      children(1);
-    }
-  }
-
-  // face
-  if ((fc == true) && ($children > 2))
-  {
-    for (i = get_index(fm))
-    {
-      p = polytope_face_m(c, l=fm[i]);
-      n = polytope_face_n(c, l=fm[i]);
-
-      translate(p)
-      orient_ll(rl=n)
-      children(2);
+      children(ec);
     }
   }
 }
