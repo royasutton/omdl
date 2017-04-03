@@ -97,19 +97,14 @@ module polytope_number
   fh = defined_or(th, ceil(min(bb)/100));
   fo = defined_or(to, [0, 0, fs/2]);
 
-  nv = get_index(lv, len(c));
-  nf = get_index(lf, len(fm));
-  ne = get_index(le, len(el));
-
   // vertices
-  if (is_defined(nv))
   color("green")
-  for (i = nv)
+  for (i = get_index(c, lv))
   {
+    p = c[i];
     n = polytope_vertex_n(c, fm, i);
-    t = c[i];
 
-    translate(t)
+    translate(p)
     orient_ll(rl=n)
     translate(fo) rotate(tr)
     if (pd == 3)
@@ -120,14 +115,13 @@ module polytope_number
   }
 
   // faces
-  if (is_defined(nf))
   color("red")
-  for (i = nf)
+  for (i = get_index(fm, lf))
   {
+    p = polytope_face_m(c, l=fm[i]);
     n = polytope_face_n(c, l=fm[i]);
-    t = polytope_face_m(c, l=fm[i]);
 
-    translate(t)
+    translate(p)
     orient_ll(rl=n)
     translate(fo) rotate(tr)
     if (pd == 3)
@@ -138,14 +132,13 @@ module polytope_number
   }
 
   // edges
-  if (is_defined(ne))
   color("blue")
-  for (i = ne)
+  for (i = get_index(el, le))
   {
+    p = mean([c[first(el[i])], c[second(el[i])]]);
     n = polytope_edge_n(c, fm, el, i);
-    t = mean([c[first(el[i])], c[second(el[i])]]);
 
-    translate(t)
+    translate(p)
     orient_ll(rl=n)
     translate(fo) rotate(tr)
     if (pd == 3)
