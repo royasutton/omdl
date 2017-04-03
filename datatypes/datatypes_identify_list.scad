@@ -66,7 +66,7 @@
 /***************************************************************************//**
   \param    v1 <number-list> A list of numbers 1.
   \param    v2 <number-list> A list of numbers 2.
-  \param    p \<number> The numerical precision.
+  \param    p <number> The numerical precision.
 
   \returns  <boolean> \b true when the distance between \p v1 and \p v2
             is less than \p d and \b false otherwise.
@@ -92,7 +92,7 @@ function n_almost_equal
 /***************************************************************************//**
   \param    v1 \<list> A list of values 1.
   \param    v2 \<list> A list of values 2.
-  \param    p \<number> The numerical precision.
+  \param    p <number> The numerical precision.
 
   \returns  <boolean> \b true when all elements of each lists are
             sufficiently equal and \b false otherwise.

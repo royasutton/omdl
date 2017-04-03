@@ -61,7 +61,7 @@ include <datatypes.scad>;
   \param    t <string|boolean> The validation type.
   \param    ev \<value> The expected good value.
 
-  \param    p \<number> A numerical precision for approximate comparisons.
+  \param    p <number> A numerical precision for approximate comparisons.
 
   \param    pf <boolean> Report result as pass or fail boolean value.
 

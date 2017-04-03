@@ -71,7 +71,7 @@ include <units/units_length.scad>;
 //! <string> Global special variable that configures the arc resolution mode.
 $resolution_mode = "fast";
 
-//! \<number> Global special variable for modes that use custom resolutions.
+//! <number> Global special variable for modes that use custom resolutions.
 $resolution_value = 0;
 
 //! Return facets number for the given arc radius.
