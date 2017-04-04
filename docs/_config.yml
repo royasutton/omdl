@@ -9,9 +9,22 @@
 # GitHub Pages theme
 theme: jekyll-theme-cayman
 
-# omdl current release
-vcurrent_path: omdl-v0.5
-vcurrent_version: v0.5
+# omdl api release
+api:            api/html
+vcurrent:       omdl-v0.6
+api_vcurrent:   api/html/omdl-v0.6
+
+# omdl groups
+omdl_groups:
+  - constants
+  - database
+  - datatypes
+  - math
+  - parts
+  - shapes
+  - tools
+  - units
+  - utilities
 
 #
 # eof

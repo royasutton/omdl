@@ -48,8 +48,8 @@
     work as expected across evolving [OpenSCAD] versions (validation
     performed when building the documentation). The library uses a
     common set of conventions for specifying [data types] and is
-    divided into individual components of functionality that may be
-    \c included as desired.
+    divided into individual component modules of functionality,
+    organized into groups, that may be \c included as desired.
 
     \b Example:
 
