@@ -746,7 +746,7 @@ BEGIN_SCOPE validate;
       ["t11", "Vector of integers 0 to 15", [for (i=[0:15]) i]]
     ];
 
-    test_ids = table_get_allrow_ids( test_r );
+    test_ids = get_table_ridl( test_r );
 
     // expected columns: ("id" + one column for each test)
     good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
@@ -988,11 +988,11 @@ BEGIN_SCOPE validate;
     table_check( good_r, good_c, false );
 
     // validate helper function and module
-    function get_value( vid ) = table_get(test_r, test_c, vid, "tv");
+    function get_value( vid ) = get_table_v(test_r, test_c, vid, "tv");
     module run_test( fname, fresult, vid )
     {
-      value_text = table_get(test_r, test_c, vid, "td");
-      pass_value = table_get(good_r, good_c, fname, vid);
+      value_text = get_table_v(test_r, test_c, vid, "td");
+      pass_value = get_table_v(good_r, good_c, fname, vid);
 
       test_pass = validate( cv=fresult, t="equals", ev=pass_value, pf=true );
       test_text = validate( str(fname, "(", get_value(vid), ")=", pass_value), fresult, "equals", pass_value );

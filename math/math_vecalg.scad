@@ -474,7 +474,7 @@ BEGIN_SCOPE validate;
                                             ]]
     ];
 
-    test_ids = table_get_allrow_ids( test_r );
+    test_ids = get_table_ridl( test_r );
 
     // expected columns: ("id" + one column for each test)
     good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
@@ -686,23 +686,23 @@ BEGIN_SCOPE validate;
     table_check( good_r, good_c, false );
 
     // validate helper function and module
-    function get_value( vid ) = table_get(test_r, test_c, vid, "tv");
+    function get_value( vid ) = get_table_v(test_r, test_c, vid, "tv");
     function gv( vid, e ) = get_value( vid )[e];
     module run( fname, vid )
     {
-      value_text = table_get(test_r, test_c, vid, "td");
+      value_text = get_table_v(test_r, test_c, vid, "td");
 
-      if ( table_get(good_r, good_c, fname, vid) != skip )
+      if ( get_table_v(good_r, good_c, fname, vid) != skip )
         children();
       else if ( show_skipped )
         log_info( str("*skip*: ", vid, " '", fname, "(", value_text, ")'") );
     }
     module test( fname, fresult, vid, pair )
     {
-      value_text = table_get(test_r, test_c, vid, "td");
-      fname_argc = table_get(good_r, good_c, fname, "fac");
-      comp_prcsn = table_get(good_r, good_c, fname, "crp");
-      pass_value = table_get(good_r, good_c, fname, vid);
+      value_text = get_table_v(test_r, test_c, vid, "td");
+      fname_argc = get_table_v(good_r, good_c, fname, "fac");
+      comp_prcsn = get_table_v(good_r, good_c, fname, "crp");
+      pass_value = get_table_v(good_r, good_c, fname, vid);
 
       test_pass = validate(cv=fresult, t="almost", ev=pass_value, p=comp_prcsn, pf=true);
       farg_text = (pair == true)
