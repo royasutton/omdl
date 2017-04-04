@@ -31,7 +31,7 @@ version_checks                          := $(true)
 generate_latex                          := $(true)
 
 release_project                         := $(false)
-release_library                         := $(true)
+release_library                         := $(false)
 release_archive_doxygen                 := $(true)
 release_archive_scopes                  := $(false)
 
@@ -146,7 +146,7 @@ release_files_add    = $(library_info) \
                        $(output_path)stl/shapes2de_manifest.stl \
                        $(output_path)stl/shapes3d_manifest_1.stl \
                        $(output_path)stl/shapes3d_manifest_2.stl \
-                       $(output_path)stl/tool_edge_manifest.stl
+                       $(output_path)stl/tools_edge_manifest.stl
 
 release_archive_files_add := $(library_info)
 
