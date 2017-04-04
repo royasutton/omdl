@@ -229,7 +229,7 @@ module polytope_frame
   el = is_defined(e) ? e : polytope_faces2edges(fm);
 
   // vertex
-  if (is_between(vc, 0, $children) && ($children > 1))
+  if (is_between(vc, 0, $children) && ($children > 0))
   {
     for (i = get_index(c, vi))
     {
@@ -243,7 +243,7 @@ module polytope_frame
   }
 
   // face
-  if (is_between(fc, 0, $children) && ($children > 2))
+  if (is_between(fc, 0, $children) && ($children > 0))
   {
     for (i = get_index(fm, fi))
     {
