@@ -311,7 +311,7 @@ module linear_extrude_uls
 
 //! Distribute copies of a 2d or 3d shape equally about a z-axis radius.
 /***************************************************************************//**
-  \param    n <decimal> The number of equally spaced radii.
+  \param    n <integer> The number of equally spaced radii.
   \param    r <decimal> The shape move radius.
   \param    angle <boolean> Rotate each copy about z-axis.
   \param    move <boolean> Move each shape copy to radii coordinate.
@@ -339,10 +339,10 @@ module radial_repeat
 
 //! Distribute copies of 2d or 3d shapes about Cartesian grid.
 /***************************************************************************//**
-  \param    g <decimal-list-3|decimal> The grid. A list [x, y, z] of
-            decimals or a single decimal for (x=y=z).
-  \param    i <decimal-list-3|decimal> The grid increment A list [x, y, z]
-            of decimals or a single decimal for (x=y=z).
+  \param    g <integer-list-3|integer> The grid division count. A list
+            [x, y, z] of integers or a single integer for (x=y=z).
+  \param    i <decimal-list-3|decimal> The grid increment size. A list
+            [x, y, z] of decimals or a single decimal for (x=y=z).
   \param    c <integer> The number of copies. Number of times to iterate
             over children.
   \param    center <boolean> Center distribution about origin.
