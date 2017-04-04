@@ -57,7 +57,7 @@ include <datatypes.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Return the index for the location of a key-value pair.
+//! Return the index of a map key.
 /***************************************************************************//**
   \param    m <matrix-2xN> A list of N key-value map pairs.
   \param    k <string> A map key.
@@ -65,7 +65,7 @@ include <datatypes.scad>;
   \returns  <integer> The index of the map entry if it exists.
             Returns \b undef if \p key is not a string or does not exists.
 *******************************************************************************/
-function map_get_idx
+function get_map_i
 (
   m,
   k
@@ -85,9 +85,9 @@ function map_exists
 (
   m,
   k
-) = is_defined(map_get_idx(m, k));
+) = is_defined(get_map_i(m, k));
 
-//! Get the value associated with a key.
+//! Get the map value associated with a key.
 /***************************************************************************//**
   \param    m <matrix-2xN> A list of N key-value map pairs.
   \param    k <string> A map key.
@@ -95,11 +95,11 @@ function map_exists
   \returns  \<value> The value associated  with \p key.
             Returns \b undef if \p key does not exists.
 *******************************************************************************/
-function map_get
+function get_map_v
 (
   m,
   k
-) = second(m[map_get_idx(m, k)]);
+) = second(m[get_map_i(m, k)]);
 
 //! Get a list of all map keys.
 /***************************************************************************//**
@@ -107,7 +107,7 @@ function map_get
 
   \returns  <string-list-N> A list of key strings for all N map entries.
 *******************************************************************************/
-function map_get_allkeys
+function get_map_kl
 (
   m
 ) = eselect(m, f=true);
@@ -118,7 +118,7 @@ function map_get_allkeys
 
   \returns  <list-N> A list of values for all N map entries.
 *******************************************************************************/
-function map_get_allvalues
+function get_map_vl
 (
   m
 ) = eselect(m, l=true);
@@ -129,7 +129,7 @@ function map_get_allvalues
 
   \returns  <integer> The number of map entries.
 *******************************************************************************/
-function map_size
+function get_map_size
 (
   m
 ) = len(m);
@@ -155,8 +155,8 @@ module map_check
 
   if (verbose) log_info ("checking map format and keys.");
 
-  if ( map_size(m) > 0 )
-  for ( i = [0:map_size(m)-1] )
+  if ( get_map_size(m) > 0 )
+  for ( i = [0:get_map_size(m)-1] )
   {
     entry = m[i];
     key = first(entry);
@@ -204,7 +204,7 @@ module map_check
     (
       str (
         "map size: ",
-        map_size(m), " entries."
+        get_map_size(m), " entries."
       )
     );
 
@@ -227,14 +227,14 @@ module map_dump
   p = 3
 )
 {
-  if ( map_size(m) > 0 )
+  if ( get_map_size(m) > 0 )
   {
-    keys = map_get_allkeys(m);
+    keys = get_map_kl(m);
     maxl = max( [for (i = keys) len(i)] ) + 1;
 
     for (key = sort ? qsort(keys) : keys)
     {
-      idx = map_get_idx(m, key);
+      idx = get_map_i(m, key);
 
       log_echo
       (
@@ -242,14 +242,14 @@ module map_dump
           number ? chr(consts(p-len(str(idx)), 48)) : empty_str,
           number ? str(idx, ": ") : empty_str,
           chr(consts(maxl-len(key), 32)), "'", key, "' = ",
-          "'", map_get(m, key), "'"
+          "'", get_map_v(m, key), "'"
         )
       );
     }
   }
 
   if ( number )
-    log_echo(str("map size: ", map_size(m), " entries."));
+    log_echo(str("map size: ", get_map_size(m), " entries."));
 }
 
 //! @}
@@ -279,18 +279,18 @@ BEGIN_SCOPE example;
     echo( str("is part0 = ", map_exists(map, "part0")) );
     echo( str("is part1 = ", map_exists(map, "part1")) );
 
-    p1 = map_get(map, "part1");
+    p1 = get_map_v(map, "part1");
     echo( c=second(p1) );
 
-    keys = map_get_allkeys(map);
+    keys = get_map_kl(map);
     parts = delete(keys, mv=["config", "version", "runid"]);
 
     for ( p = parts )
       echo
       (
         n=p,
-        p=first(map_get(map, p)),
-        l=second(map_get(map, p))
+        p=first(get_map_v(map, p)),
+        l=second(get_map_v(map, p))
       );
 
     map_dump(map);
