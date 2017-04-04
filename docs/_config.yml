@@ -1,1 +1,18 @@
+#
+# Jekyll configuration
+#
+# https://help.github.com/categories/customizing-github-pages
+# https://help.github.com/articles/configuring-jekyll
+# https://jekyllrb.com/docs/configuration
+#
+
+# GitHub Pages theme
 theme: jekyll-theme-cayman
+
+# omdl current release
+vcurrent_path: omdl-v0.5
+vcurrent_version: v0.5
+
+#
+# eof
+#

@@ -44,13 +44,12 @@
     API's include [markups] that describe its parameters, behavior, and
     use.
 
-    \ref validation "Validation" scripts are used to verify that the
-    core operations work as expected across evolving [OpenSCAD]
-    versions (validations are performed when rebuilding the
-    documentation). [omdl] uses a common set of assumptions and
-    conventions for specifying \ref dt "data types" and is divided into
-    individual components of functionality that may be \c included as
-    desired.
+    [Validation] scripts are used to verify that the core operations
+    work as expected across evolving [OpenSCAD] versions (validation
+    performed when building the documentation). The library uses a
+    common set of conventions for specifying [data types] and is
+    divided into individual components of functionality that may be
+    \c included as desired.
 
     \b Example:
 
@@ -86,16 +85,16 @@
     [library location]. This can be done manually or can be done using
     using [openscad-amu].
 
-    The ladder is recommended and has several advantages. When using
-    [openscad-amu], the generated documentation is installed together
-    with the library source. A link to this documentation is also added
-    to a browsable index of libraries, which greatly facilitates design
-    reference access. Additionally, with [openscad-amu] installed, new
-    designs can be similarly documented.
+    The ladder has several advantages and is recommended. When using
+    [openscad-amu], the library documentation is installed together
+    with the library source code. This documentation is also added to a
+    local browsable index, which facilitates reference use. Moreover,
+    with [openscad-amu] installed, one can develop documentation for
+    other [OpenSCAD] design scripts.
 
-    See the recommended \ref install "installation method" for more
-    information. Library releases are periodically made available in
-    the [omdl repository] under [snapshots].
+    See the recommended [installation] method for more information.
+    Library releases are periodically made available in the
+    [omdl repository] under [snapshots].
 
   \section contributing Contributing
 
@@ -122,8 +121,13 @@
 
   [omdl]: https://royasutton.github.io/omdl
   [omdl repository]: https://github.com/royasutton/omdl
-  [snapshots]: https://github.com/royasutton/omdl/tree/master/snapshots
   [issue]: https://github.com/royasutton/omdl/issues
+
+  [snapshots]: https://github.com/royasutton/omdl/tree/master/snapshots
+
+  [Validation]: \ref validation
+  [data types]: \ref dt
+  [installation]: \ref install
 
   [openscad-amu]: https://royasutton.github.io/openscad-amu
 
@@ -507,7 +511,7 @@
 
     A build script exists for \em Linux and \em Cygwin (pull requests
     for \em macos are welcome). If \c wget is not available, here is a
-    downloadable link to the [bootstrap script].
+    downloadable link to the [bootstrap] script.
 
     \verbatim
     $ mkdir tmp && cd tmp
@@ -561,7 +565,7 @@
 
   [openscad-amu]: https://royasutton.github.io/openscad-amu
   [amu repository]: https://github.com/royasutton/openscad-amu
-  [bootstrap script]: https://raw.githubusercontent.com/royasutton/openscad-amu/master/snapshots/bootstrap.bash
+  [bootstrap]: https://raw.githubusercontent.com/royasutton/openscad-amu/master/snapshots/bootstrap.bash
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
