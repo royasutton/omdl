@@ -166,6 +166,22 @@ function get_table_ridl
   r
 ) = eselect(r,f=true);
 
+//! Form a list of all table column identifiers.
+/***************************************************************************//**
+  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+
+  \returns  \<list> The list of all column identifiers.
+
+  \details
+
+  \note     This functions assumes the first element of each table column
+            to be the column identifier.
+*******************************************************************************/
+function get_table_cidl
+(
+  c
+) = eselect(c,f=true);
+
 //! Test the existence of a table row and column identifier.
 /***************************************************************************//**
   \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
@@ -211,6 +227,57 @@ function get_table_size
 ) = ( is_defined(r) && not_defined(c) ) ? len( r )
   : ( not_defined(r) && is_defined(c) ) ? len( c )
   : len( r ) * len( c );
+
+//! Create a new matrix from select rows and columns of a table.
+/***************************************************************************//**
+  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
+  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    rl <string-list> A list of selected row identifiers.
+  \param    cl <string-list> A list of selected column identifiers.
+
+  \returns  <matrix> A matrix of the selected rows and columns.
+*******************************************************************************/
+function get_table_copy
+(
+  r,
+  c,
+  rl,
+  cl
+) =
+[
+  for ( r_iter = r )
+    if
+    (
+      not_defined( rl ) || is_empty( rl ) ||
+      !is_empty( first( search( r_iter, rl, 1, 0 ) ) )
+    )
+    [
+      for ( c_iter = c )
+        if
+        (
+          not_defined( cl ) || is_empty( cl ) ||
+          !is_empty( first( search( c_iter, cl, 1, 0 ) ) )
+        )
+          get_table_v(r, c, r_iter, c_iter)
+    ]
+];
+
+//! Sum select rows and columns of a table.
+/***************************************************************************//**
+  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
+  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    rl <string-list> A list of selected row identifiers.
+  \param    cl <string-list> A list of selected column identifiers.
+
+  \returns  \<list> A list with the sum of each selected rows and columns.
+*******************************************************************************/
+function get_table_sum
+(
+  r,
+  c,
+  rl,
+  cl
+) = sum( get_table_copy(r, c, rl, cl) );
 
 //! Perform some basic validation/checks on a table.
 /***************************************************************************//**
@@ -367,57 +434,6 @@ module table_dump
     );
   }
 }
-
-//! Create a new matrix from select rows and columns of a table.
-/***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
-  \param    rl <string-list> A list of selected row identifiers.
-  \param    cl <string-list> A list of selected column identifiers.
-
-  \returns  <matrix> A matrix of the selected rows and columns.
-*******************************************************************************/
-function get_table_copy
-(
-  r,
-  c,
-  rl,
-  cl
-) =
-[
-  for ( r_iter = r )
-    if
-    (
-      not_defined( rl ) || is_empty( rl ) ||
-      !is_empty( first( search( r_iter, rl, 1, 0 ) ) )
-    )
-    [
-      for ( c_iter = c )
-        if
-        (
-          not_defined( cl ) || is_empty( cl ) ||
-          !is_empty( first( search( c_iter, cl, 1, 0 ) ) )
-        )
-          get_table_v(r, c, r_iter, c_iter)
-    ]
-];
-
-//! Sum select rows and columns of a table.
-/***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
-  \param    rl <string-list> A list of selected row identifiers.
-  \param    cl <string-list> A list of selected column identifiers.
-
-  \returns  \<list> A list with the sum of each selected rows and columns.
-*******************************************************************************/
-function get_table_sum
-(
-  r,
-  c,
-  rl,
-  cl
-) = sum( get_table_copy(r, c, rl, cl) );
 
 //! @}
 //! @}
