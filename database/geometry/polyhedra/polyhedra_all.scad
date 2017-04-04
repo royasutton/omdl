@@ -105,7 +105,7 @@
     sv = coordinates_csc(pv, 100);
 
     polytope_number(sv, pf, to=[0,0,5]);
-    polytope_frame(sv, pf) {color("grey") sphere(r=4); circle(r=2);}
+    polytope_frame(sv, pf) {circle(r=2); color("grey") sphere(r=4);}
     polyhedron(sv, pf);
     \endcode
 
