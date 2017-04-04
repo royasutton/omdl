@@ -298,7 +298,7 @@ END_SCOPE;
 
 BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
-    include <tools_edge.scad>;
+    include <tools/tools_edge.scad>;
 
     $fn = 72;
 
