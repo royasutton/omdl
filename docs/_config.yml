@@ -20,11 +20,13 @@ omdl_groups:
   - database
   - datatypes
   - math
-  - parts
   - shapes
   - tools
   - units
   - utilities
+
+# removed until parts are added.
+#  - parts
 
 #
 # eof
