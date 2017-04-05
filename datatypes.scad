@@ -43,42 +43,5 @@ include <datatypes/datatypes_operate_iterable.scad>;
 include <datatypes/datatypes_operate_list.scad>;
 
 //----------------------------------------------------------------------------//
-/***************************************************************************//**
-  \page tv_datatypes Datatypes
-    \li \subpage tv_datatypes_identify
-    \li \subpage tv_datatypes_operate
-*******************************************************************************/
-
-/***************************************************************************//**
-  \page tv_datatypes_identify Identification
-    \li \subpage tv_datatypes_identify_scalar
-    \li \subpage tv_datatypes_identify_iterable
-    \li \subpage tv_datatypes_identify_list
-*******************************************************************************/
-
-/***************************************************************************//**
-  \page tv_datatypes_operate Operations
-    \li \subpage tv_datatypes_operate_scalar
-    \li \subpage tv_datatypes_operate_iterable
-    \li \subpage tv_datatypes_operate_list
-*******************************************************************************/
-//----------------------------------------------------------------------------//
-
-//----------------------------------------------------------------------------//
-/***************************************************************************//**
-  \addtogroup datatypes
-  @{
-
-  \defgroup datatypes_identify Identification
-  \brief    Compile-time data type identification and tests.
-
-  \defgroup datatypes_operate Operations
-  \brief    Data type operation.
-
-  @}
-*******************************************************************************/
-//----------------------------------------------------------------------------//
-
-//----------------------------------------------------------------------------//
 // end of file
 //----------------------------------------------------------------------------//
