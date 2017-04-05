@@ -5,9 +5,9 @@
 #
 ################################################################################
 
-AMU_LIB_PATH        := /usr/local/share/openscad-amu/v1.7
+AMU_LIB_PATH        := /usr/local/share/openscad-amu/v1.8
 AMU_TOOL_PREFIX     := /usr/local/bin/
-AMU_TOOL_VERSION    := v1.7
+AMU_TOOL_VERSION    := v1.8
 
 AMU_PM_PREFIX       := $(AMU_LIB_PATH)/include/pmf/
 
@@ -31,7 +31,7 @@ version_checks                          := $(true)
 generate_latex                          := $(true)
 
 release_project                         := $(false)
-release_library                         := $(true)
+release_library                         := $(false)
 release_archive_doxygen                 := $(true)
 release_archive_scopes                  := $(false)
 
@@ -56,29 +56,88 @@ seam_defines        := INCLUDE_PATH=include
 doxygen_config      := Doxyfile
 project_files_add   := $(wildcard include/*.mfs)
 
-library             := mainpage \
-                       constants \
-                       primitives \
-                       math \
-                       math_bitwise \
-                       utilities \
-                       validation \
-                       console \
-                       units_angle \
-                       units_length \
-                       resolution \
-                       map \
-                       table \
-                       transform \
-                       shapes2d \
-                       shapes2de \
-                       shapes3d \
-                       tool_edge
-
-backup_files_add    := README.md \
+library_info        := README.md \
                        lgpl-2.1.txt
 
-release_files_add    = $(backup_files_add) \
+# Polyhedra
+library_db01        := database/geometry/polyhedra/anti_prisms \
+                       database/geometry/polyhedra/archimedean_duals \
+                       database/geometry/polyhedra/archimedean \
+                       database/geometry/polyhedra/cupolas \
+                       database/geometry/polyhedra/dipyramids \
+                       database/geometry/polyhedra/johnson \
+                       database/geometry/polyhedra/platonic \
+                       database/geometry/polyhedra/prisms \
+                       database/geometry/polyhedra/pyramids \
+                       database/geometry/polyhedra/trapezohedron \
+                       database/geometry/polyhedra/polyhedra_all
+
+library_db01_src    := database_src/geometry/polyhedra/Makefile \
+                       database_src/geometry/polyhedra/src/Makefile \
+                       database_src/geometry/polyhedra/src/convert \
+                       database_src/geometry/polyhedra/src/convert.conf \
+                       database_src/geometry/polyhedra/src/convert.text \
+                       database_src/geometry/polyhedra/src/dist/fetch.bash \
+                       database_src/geometry/polyhedra/src/dist/rename
+
+library             := $(library_db01) \
+                       \
+                       mainpage \
+                       \
+                       console \
+                       constants \
+                       validation \
+                       \
+                       datatypes \
+                       datatypes/datatypes_identify_scalar \
+                       datatypes/datatypes_identify_iterable \
+                       datatypes/datatypes_identify_list \
+                       datatypes/datatypes_operate_scalar \
+                       datatypes/datatypes_operate_iterable \
+                       datatypes/datatypes_operate_list \
+                       datatypes/datatypes_map \
+                       datatypes/datatypes_table \
+                       \
+                       math \
+                       math/math_bitwise \
+                       math/math_linalg \
+                       math/math_oshapes \
+                       math/math_polytope \
+                       math/math_triangle \
+                       math/math_utility \
+                       math/math_vecalg \
+                       \
+                       shapes/shapes2d \
+                       shapes/shapes2de \
+                       shapes/shapes3d \
+                       \
+                       tools/tools_align \
+                       tools/tools_edge \
+                       tools/tools_polytope \
+                       tools/tools_utility \
+                       \
+                       units/units_angle \
+                       units/units_coordinate \
+                       units/units_length \
+                       units/units_resolution
+
+#------------------------------------------------------------------------------#
+# Scope excludes
+#------------------------------------------------------------------------------#
+
+# shape manifests: only requred when doing a release
+scopes_exclude      := manifest
+
+# database: normally pre-built and released by database makefiles
+scopes_exclude      += db_autotest db_autostat
+
+#------------------------------------------------------------------------------#
+# Release and backup additions
+#------------------------------------------------------------------------------#
+# use recursive assignment '=' for references that use derived paths
+# such as: $(output_path), $(release_path), etc.
+
+release_files_add    = $(library_info) \
                        \
                        $(output_path)latex/refman.pdf \
                        \
@@ -87,15 +146,13 @@ release_files_add    = $(backup_files_add) \
                        $(output_path)stl/shapes2de_manifest.stl \
                        $(output_path)stl/shapes3d_manifest_1.stl \
                        $(output_path)stl/shapes3d_manifest_2.stl \
-                       $(output_path)stl/tool_edge_manifest.stl
+                       $(output_path)stl/tools_edge_manifest.stl
 
-release_archive_files_add = $(backup_files_add)
+release_archive_files_add := $(library_info)
 
-# comment out to build shape manifest release files
-scopes_exclude_filter := %manifest.bash
-
-# temp
-edit: ; geany Makefile $(src_files)
+backup_files_add    := $(library_info) \
+                       \
+                       $(library_db01_src)
 
 #------------------------------------------------------------------------------#
 include $(AMU_PM_PREFIX)amu_pm_rules

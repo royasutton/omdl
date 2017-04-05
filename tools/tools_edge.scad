@@ -1,6 +1,6 @@
 //! Shape edge finishing tools.
 /***************************************************************************//**
-  \file   tool_edge.scad
+  \file   tools_edge.scad
   \author Roy Allen Sutton
   \date   2017
 
@@ -30,14 +30,13 @@
   \ingroup tools tools_edge
 *******************************************************************************/
 
-include <shapes2d.scad>;
+include <shapes/shapes2d.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
   \addtogroup tools
-  @{
 
-    \amu_define caption (Edge Finishing)
+    \amu_define caption (Edge)
 
     \amu_make png_files (append=dim extension=png)
     \amu_make eps_files (append=dim extension=png2eps)
@@ -58,18 +57,23 @@ include <shapes2d.scad>;
           table_caption="${caption}" cell_captions="${cell_num}"
         )
     \endlatexonly
+*******************************************************************************/
 
-  \defgroup tools_edge Edge Finishing
+/***************************************************************************//**
+  \addtogroup tools
+  @{
+
+  \defgroup tools_edge Edge
   \brief    Shape edge finishing tools.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
-// amu macros
+// openscad-amu macros
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \amu_define scope (tool_edge_dim)
+  \amu_define scope (tools_edge_dim)
   \amu_define size  (qvga)
   \amu_define view  (diag)
 
@@ -82,7 +86,7 @@ include <shapes2d.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! A 2D edge-finish profile specified by intersection radius.
+//! A 2d edge-finish profile specified by intersection radius.
 /***************************************************************************//**
   \param    r <decimal> The radius length.
   \param    p <integer> The profile identifier.
@@ -96,13 +100,13 @@ include <shapes2d.scad>;
 
   \b Profiles:
 
-    | p   | Description                           |
+    |  p  | Description                           |
     |:---:|:--------------------------------------|
     |  0  | Two segment bevel with mid inflection |
     |  1  | A cove with cut-out offset            |
     |  2  | A quarter round with offset           |
 
-  \note     A offset factor greater than 1 moves the mid-point away
+  \note     An offset factor greater than 1 moves the mid-point away
             from the profile edge-vertex. A factor less than 1 move it
             inwards towards the edge-vertex.
 *******************************************************************************/
@@ -147,7 +151,7 @@ module edge_profile_r
     c3x = c1x*cos(a);
     c3y = c1x*sin(a);
 
-    mpc = unit_v([(c1x+c3x)/2, c3y/2]);
+    mpc = unit_l([(c1x+c3x)/2, c3y/2]);
 
     if ( f < 1 )
       intersection()
@@ -170,7 +174,7 @@ module edge_profile_r
   }
 }
 
-//! A 3D edge-finish additive shape specified by intersection radius.
+//! A 3d edge-finish additive shape specified by intersection radius.
 /***************************************************************************//**
   \param    r <decimal> The radius length.
   \param    l <decimal> The edge length.
@@ -181,8 +185,8 @@ module edge_profile_r
   \param    m <integer> The end finish mode: (B0: bottom, B1: top).
   \param    ba <decimal> The end bevel angle.
 
-  \param    a1 <decimal> The edge intersection start angle.
-  \param    a2 <decimal> The edge intersection end angle.
+  \param    a1 <decimal> The edge plane start angle.
+  \param    a2 <decimal> The edge plane end angle.
 
   \param    center <boolean> Center length about origin.
 
@@ -242,12 +246,12 @@ module edge_add_r
       (
         points =
         [
-          [ 0, -wy, -(l/2+eps)],
-          [ 0, +wy, -(l/2+eps)],
-          [wx, +wy, -(l/2+eps)],
-          [wx, -wy, -(l/2+eps)],
-          [wx, -wy, -(l/2-eps-wz)],
-          [wx, +wy, -(l/2-eps-wz)]
+          [ 0, -wy, -(l/2+aeps)],
+          [ 0, +wy, -(l/2+aeps)],
+          [wx, +wy, -(l/2+aeps)],
+          [wx, -wy, -(l/2+aeps)],
+          [wx, -wy, -(l/2-aeps-wz)],
+          [wx, +wy, -(l/2-aeps-wz)]
         ],
         faces = [[1,5,4,0], [0,4,3], [1,2,5], [5,2,3,4], [2,1,0,3]]
       );
@@ -265,7 +269,7 @@ module edge_add_r
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <tool_edge.scad>;
+    include <tools/tools_edge.scad>;
 
     shape = "edge_profile_r";
     $fn = 72;
@@ -294,11 +298,11 @@ END_SCOPE;
 
 BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
-    include <tool_edge.scad>;
+    include <tools/tools_edge.scad>;
 
     $fn = 72;
 
-    st_cartesian_copy( grid=5, incr=10, center=true )
+    grid_repeat( g=5, i=10, center=true )
     {
       linear_extrude(1) edge_profile_r( r=5, p=1, f=1+10/100, a=75 );
       edge_add_r( r=5, l=20, f=5/8, center=true );

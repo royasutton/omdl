@@ -1,6 +1,6 @@
-//! Mapped key-value pair data access.
+//! Map data type operations.
 /***************************************************************************//**
-  \file   map.scad
+  \file   datatypes_map.scad
   \author Roy Allen Sutton
   \date   2015-2017
 
@@ -29,134 +29,114 @@
 
     Manage a collection of key-value pairs where keys are unique.
 
-  \ingroup data data_map
+  \ingroup datatypes datatypes_map
 *******************************************************************************/
 
 use <console.scad>;
-include <primitives.scad>;
+include <datatypes.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup data
+  \addtogroup datatypes
   @{
 
-  \defgroup data_map Map
-  \brief    Mapped data access via key-value pairs.
+  \defgroup datatypes_map Maps
+  \brief    Map data type operations.
 
   \details
 
     \b Example
 
-      \dontinclude map_example.scad
+      \dontinclude datatypes_map_example.scad
       \skip use
       \until map_dump(map);
 
-    \b Result \include map_example.log
+    \b Result \include datatypes_map_example.log
 
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Return the index for the storage location of a map key-value pair.
+//! Return the index of a map key.
 /***************************************************************************//**
-  \param    map <2d-vector> A two dimensional vector (2-tuple x n-tuple)
-            containing an associative map with n elements.
-  \param    key <string> A map entry identifier.
+  \param    m <matrix-2xN> A list of N key-value map pairs.
+  \param    k <string> A map key.
 
-  \returns  <integer> The index of the value associated \p key in the map.
+  \returns  <integer> The index of the map entry if it exists.
             Returns \b undef if \p key is not a string or does not exists.
 *******************************************************************************/
-function map_get_idx
+function get_map_i
 (
-  map,
-  key
-) = !is_string(key) ? undef
-  : let
-    (
-      i = first(search([key], map, 1, 0 ))
-    )
-    (i == empty_v) ? undef
+  m,
+  k
+) = !is_string(k) ? undef
+  : let(i = first(search([k], m, 1, 0 )))
+    (i == empty_lst) ? undef
   : i;
 
-//! Test if a key exists in a map.
+//! Test if a key exists.
 /***************************************************************************//**
-  \param    map <2d-vector> A two dimensional vector (2-tuple x n-tuple)
-            containing an associative map with n elements.
-  \param    key <string> A map entry identifier.
+  \param    m <matrix-2xN> A list of N key-value map pairs.
+  \param    k <string> A map key.
 
   \returns  <boolean> \b true when the key exists and \b false otherwise.
 *******************************************************************************/
 function map_exists
 (
-  map,
-  key
-) = (map_get_idx(map, key) != undef);
+  m,
+  k
+) = is_defined(get_map_i(m, k));
 
-//! Get the value associated with a map key.
+//! Get the map value associated with a key.
 /***************************************************************************//**
-  \param    map <2d-vector> A two dimensional vector (2-tuple x n-tuple)
-            containing an associative map with n elements.
-  \param    key <string> A map entry identifier.
+  \param    m <matrix-2xN> A list of N key-value map pairs.
+  \param    k <string> A map key.
 
-  \returns  <value> The map value associated  with \p key.
+  \returns  \<value> The value associated  with \p key.
             Returns \b undef if \p key does not exists.
 *******************************************************************************/
-function map_get
+function get_map_v
 (
-  map,
-  key
-) = second(map[map_get_idx(map, key)]);
+  m,
+  k
+) = second(m[get_map_i(m, k)]);
 
-//! Get a vector of the map entry identifier keys.
+//! Get a list of all map keys.
 /***************************************************************************//**
-  \param    map <2d-vector> A two dimensional vector (2-tuple x n-tuple)
-            containing an associative map with n elements.
+  \param    m <matrix-2xN> A list of N key-value map pairs.
 
-  \returns  <vector> A vector of keys that exist in the associative map.
-
-  \details
-
-  \note     Uses function \ref eselect to select the first column of the
-            vector defining the map.
+  \returns  <string-list-N> A list of key strings for all N map entries.
 *******************************************************************************/
-function map_get_keys
+function get_map_kl
 (
-  map
-) = eselect(map, f=true);
+  m
+) = eselect(m, f=true);
 
-//! Get a vector of the map entry values.
+//! Get a list of all map values.
 /***************************************************************************//**
-  \param    map <2d-vector> A two dimensional vector (2-tuple x n-tuple)
-            containing an associative map with n elements.
+  \param    m <matrix-2xN> A list of N key-value map pairs.
 
-  \returns  <vector> A vector of values stored in the associative map.
-
-  \details
-
-  \note     Uses function \ref eselect to select the last column of the
-            vector defining the map.
+  \returns  <list-N> A list of values for all N map entries.
 *******************************************************************************/
-function map_get_values
+function get_map_vl
 (
-  map
-) = eselect(map, l=true);
+  m
+) = eselect(m, l=true);
 
-//! Get the number of key-value pairs stored in a map.
+//! Get the number of map entries.
 /***************************************************************************//**
-  \param    map <2d-vector> A two dimensional vector (2-tuple x n-tuple)
-            containing an associative map with n elements.
+  \param    m <matrix-2xN> A list of N key-value map pairs.
 
-  \returns  <integer> The number of key-value pairs stored in the map.
+  \returns  <integer> The number of map entries.
 *******************************************************************************/
-function map_size
+function get_map_size
 (
-  map
-) = len(map);
+  m
+) = len(m);
 
 //! Perform some basic validation/checks on a map.
 /***************************************************************************//**
-  \param    map <2d-vector> A two dimensional vector (2-tuple x n-tuple)
-            containing an associative map with n elements.
+  \param    m <matrix-2xN> A list of N key-value map pairs.
 
   \param    verbose <boolean> Be verbose during check.
 
@@ -167,7 +147,7 @@ function map_size
 *******************************************************************************/
 module map_check
 (
-  map,
+  m,
   verbose = false
 )
 {
@@ -175,10 +155,10 @@ module map_check
 
   if (verbose) log_info ("checking map format and keys.");
 
-  if ( map_size(map) > 0 )
-  for ( i = [0:map_size(map)-1] )
+  if ( get_map_size(m) > 0 )
+  for ( i = [0:get_map_size(m)-1] )
   {
-    entry = map[i];
+    entry = m[i];
     key = first(entry);
 
     // each entry has key-value 2-tuple.
@@ -208,7 +188,7 @@ module map_check
     }
 
     // no repeat key identifiers
-    if ( len(first(search([key], map, 0, 0))) > 1 )
+    if ( len(first(search([key], m, 0, 0))) > 1 )
       log_warn
       (
         str(
@@ -224,7 +204,7 @@ module map_check
     (
       str (
         "map size: ",
-        map_size(map), " entries."
+        get_map_size(m), " entries."
       )
     );
 
@@ -232,31 +212,29 @@ module map_check
   }
 }
 
-//! Dump each map key-value pair to the console.
+//! Dump each map entry to the console.
 /***************************************************************************//**
-  \param    map <2d-vector> A two dimensional vector (2-tuple x n-tuple)
-            containing an associative map with n elements.
-
+  \param    m <matrix-2xN> A list of N key-value map pairs.
   \param    sort <boolean> Sort the output by key.
   \param    number <boolean> Output index number.
   \param    p <integer> Number of places for zero-padded numbering.
 *******************************************************************************/
 module map_dump
 (
-  map,
+  m,
   sort = true,
   number = true,
   p = 3
 )
 {
-  if ( map_size(map) > 0 )
+  if ( get_map_size(m) > 0 )
   {
-    keys = map_get_keys(map);
+    keys = get_map_kl(m);
     maxl = max( [for (i = keys) len(i)] ) + 1;
 
     for (key = sort ? qsort(keys) : keys)
     {
-      idx = map_get_idx(map, key);
+      idx = get_map_i(m, key);
 
       log_echo
       (
@@ -264,14 +242,14 @@ module map_dump
           number ? chr(consts(p-len(str(idx)), 48)) : empty_str,
           number ? str(idx, ": ") : empty_str,
           chr(consts(maxl-len(key), 32)), "'", key, "' = ",
-          "'", map_get(map, key), "'"
+          "'", get_map_v(m, key), "'"
         )
       );
     }
   }
 
   if ( number )
-    log_echo(str("map size: ", map_size(map), " entries."));
+    log_echo(str("map size: ", get_map_size(m), " entries."));
 }
 
 //! @}
@@ -284,7 +262,7 @@ module map_dump
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    use <map.scad>;
+    use <datatypes/datatypes_map.scad>;
 
     map =
     [
@@ -301,18 +279,18 @@ BEGIN_SCOPE example;
     echo( str("is part0 = ", map_exists(map, "part0")) );
     echo( str("is part1 = ", map_exists(map, "part1")) );
 
-    p1 = map_get(map, "part1");
+    p1 = get_map_v(map, "part1");
     echo( c=second(p1) );
 
-    keys=map_get_keys(map);
+    keys = get_map_kl(map);
     parts = delete(keys, mv=["config", "version", "runid"]);
 
     for ( p = parts )
       echo
       (
         n=p,
-        p=first(map_get(map, p)),
-        l=second(map_get(map, p))
+        p=first(get_map_v(map, p)),
+        l=second(get_map_v(map, p))
       );
 
     map_dump(map);

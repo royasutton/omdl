@@ -1,8 +1,7 @@
 omdl
 ====
 
-> A collection of documented design primitives for [OpenSCAD] inspired
-> by *MCAD*.
+> An open mechanical design library for [OpenSCAD].
 
 [![LGPL licensed](https://img.shields.io/badge/license-LGPL-blue.svg?style=flat)](https://raw.githubusercontent.com/royasutton/omdl/master/lgpl-2.1.txt)
 
@@ -12,31 +11,29 @@ View live docs on [GitHib Pages](https://royasutton.github.io/omdl).
 Using omdl
 ----------
 
-To use [omdl] the library files must be copied to one of the
-[OpenSCAD Library Locations]. This can be done manually, as described
-in the [OpenSCAD] documentation, or can be automated using [openscad-amu].
+To use [omdl] the library files must be copied to an OpenSCAD
+[library location]. This can be done manually, as described in the
+OpenSCAD documentation, or can be automated using [openscad-amu].
 
-The ladder is recommended and has several advantages. When using
-[openscad-amu], the library reference documentation is installed
-together with the library source code. This reference documentation is
-also added to a browsable data-table of installed libraries, which
-facilitates design reference searches. Moreover, with [openscad-amu]
-installed, one can rebuild the [omdl] reference manual or develop
-documentation for new [OpenSCAD] designs.
+The ladder has several advantages and is recommended. When using
+[openscad-amu], the library documentation is installed together with
+the library source code. This documentation is also added to a local
+[browsable index], which facilitates reference use. Moreover, with
+openscad-amu installed, one can develop documentation for other
+OpenSCAD design scripts.
 
-Library release files are made available in the source [repository] in
-a sub-directory called *snapshots*.
+Library releases are periodically made available in the [repository]
+under [snapshots].
 
 #### Recommended install method ####
 
-More information on installing [openscad-amu] can be found
-[published](http://www.thingiverse.com/thing:1858181) on [Thingiverse]
-and in the GitHib [openscad-amu repository] where the source is
-maintained.
+First install [openscad-amu]. More information can be found at
+[amu on Thingiverse] and in the GitHib [amu repository] where the
+source is maintained.
 
 A build script exists for *Linux* and *Cygwin* (pull requests for
 *macOS* are welcome). If *wget* is not available, here is a
-downloadable link to the [bootstrap script].
+downloadable link to the [bootstrap] script.
 
     $ mkdir tmp && cd tmp
 
@@ -61,7 +58,7 @@ follows:
     $ make install
 
 The library and documentation should now have been installed to the
-[OpenSCAD] *built-in* library location along with the reference
+OpenSCAD *built-in* library location along with the reference
 manual that can be views with a web browser.
 
 Have a look in:
@@ -69,12 +66,11 @@ Have a look in:
 * **Windows:** My Documents\\OpenSCAD\\libraries
 
 Now you may include the desired library primitives in your project as
-follows, replacing the version number as needed (multiple version of
-a library may coexists):
+follows, replacing the version number as needed:
 
 ```
-include <omdl-v0.4/shapes2de.scad>;
-include <omdl-v0.4/shapes3d.scad>;
+include <omdl-v0.6/shapes/shapes2de.scad>;
+include <omdl-v0.6/shapes/shapes3d.scad>;
 ...
 ```
 
@@ -108,18 +104,22 @@ you can contact the maintainer of the project or file an [issue].
 [repository]: https://github.com/royasutton/omdl
 [issue]: https://github.com/royasutton/omdl/issues
 
+[snapshots]: https://github.com/royasutton/omdl/tree/master/snapshots
+[browsable index]: https://royasutton.github.io/omdl/api/html
+
 [openscad-amu]: https://royasutton.github.io/openscad-amu
-[openscad-amu repository]: https://github.com/royasutton/openscad-amu
-[bootstrap script]: https://raw.githubusercontent.com/royasutton/openscad-amu/master/snapshots/bootstrap.bash
+[amu repository]: https://github.com/royasutton/openscad-amu
+[bootstrap]: https://raw.githubusercontent.com/royasutton/openscad-amu/master/snapshots/bootstrap.bash
 
 [Doxygen]: http://www.stack.nl/~dimitri/doxygen/index.html
 
 [OpenSCAD]: http://www.openscad.org
-[OpenSCAD Library Locations]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Libraries
+[library location]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Libraries
 
 [Thingiverse]: http://www.thingiverse.com
+[amu on Thingiverse]: http://www.thingiverse.com/thing:1858181
 
 [git]: http://git-scm.com
 [GitHub]: http://github.com
 [forking]: http://help.github.com/forking
-[pull requests]: https://help.github.com/articles/about-pull-requests/
+[pull requests]: https://help.github.com/articles/about-pull-requests

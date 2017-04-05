@@ -30,14 +30,13 @@
   \ingroup shapes shapes_2d
 *******************************************************************************/
 
-include <transform.scad>;
+include <tools/tools_utility.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
   \addtogroup shapes
-  @{
 
-    \amu_define caption (2D Shapes)
+    \amu_define caption (2d Shapes)
 
     \amu_make png_files (append=dim extension=png)
     \amu_make eps_files (append=dim extension=png2eps)
@@ -58,15 +57,20 @@ include <transform.scad>;
           table_caption="${caption}" cell_captions="${cell_num}"
         )
     \endlatexonly
+*******************************************************************************/
 
-  \defgroup shapes_2d 2D Shapes
-  \brief    Two dimensional geometric shapes.
+/***************************************************************************//**
+  \addtogroup shapes
+  @{
+
+  \defgroup shapes_2d 2d Shapes
+  \brief    Two-dimensional geometric shapes.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
-// amu macros
+// openscad-amu macros
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
   \amu_define scope (shapes2d_dim)
@@ -83,11 +87,11 @@ include <transform.scad>;
 
 //! A rectangle with edge, fillet, and/or chamfer corners.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [x, y] of decimals
+  \param    size <decimal-list-2|decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
 
-  \param    vr <vector|decimal> The corner rounding radius.
-            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+  \param    vr <decimal-list-4|decimal> The corner rounding radius.
+            A list [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
   \param    vrm <integer> The corner radius mode.
@@ -140,7 +144,7 @@ module rectangle
         else
         {
           rotate([0, 0, i[5]])
-          polygon(points=[[eps,-vr], [eps,eps], [-vr,eps]], paths=[[0,1,2]]);
+          polygon(points=[[aeps,-vr], [aeps,aeps], [-vr,aeps]], paths=[[0,1,2]]);
         }
       }
 
@@ -194,22 +198,22 @@ module rectangle
 
 //! A rectangle with a removed rectangular core.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [x, y] of decimals
+  \param    size <decimal-list-2|decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
-  \param    core <vector|decimal> A vector [x, y] of decimals
-            or a single decimal for (x=y).
-
-  \param    t <vector|decimal> A vector [x, y] of decimals
+  \param    core <decimal-list-2|decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
 
-  \param    co <vector> Core offset. A vector [x, y] of decimals.
+  \param    t <decimal-list-2|decimal> A list [x, y] of decimals
+            or a single decimal for (x=y).
+
+  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
-  \param    vr <vector|decimal> The default corner rounding radius.
-            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+  \param    vr <decimal-list-4|decimal> The default corner rounding radius.
+            A list [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
-  \param    vr1 <vector|decimal> The outer corner rounding radius.
-  \param    vr2 <vector|decimal> The core corner rounding radius.
+  \param    vr1 <decimal-list-4|decimal> The outer corner rounding radius.
+  \param    vr2 <decimal-list-4|decimal> The core corner rounding radius.
 
   \param    vrm <integer> The default corner radius mode.
             A 4-bit encoded integer that indicates each corner finish.
@@ -276,11 +280,11 @@ module rectangle_c
 
 //! A rhombus.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [w, h] of decimals
+  \param    size <decimal-list-2|decimal> A list [w, h] of decimals
             or a single decimal for (w=h).
 
-  \param    vr <vector|decimal> The corner rounding radius.
-            A vector [v1r, v2r, v3r, v4r] of decimals or a single decimal
+  \param    vr <decimal-list-4|decimal> The corner rounding radius.
+            A list [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
   \param    center <boolean> Center about origin.
@@ -322,7 +326,7 @@ module rhombus
               edefined_or(vr, 2, erc),
               edefined_or(vr, 3, erc) ];
 
-      a1 = angle_vv(v1t=[0,ry], v1i=[rx,0], v2t=[0,-ry], v2i=[rx,0]) / 2;
+      a1 = angle_ll([[rx,0], [0,ry]], [[rx,0], [0,-ry]]) / 2;
       a2 = 90 - a1;
 
       for ( i = [ [0,  1, -1,  0,  0],
@@ -370,9 +374,9 @@ module rhombus
 
 //! A general triangle specified by three vertices.
 /***************************************************************************//**
-  \param    v1 <vector> A vector [x, y] for vertex 1.
-  \param    v2 <vector> A vector [x, y] for vertex 2.
-  \param    v3 <vector> A vector [x, y] for vertex 3.
+  \param    v1 <point-2d> A point [x, y] for vertex 1.
+  \param    v2 <point-2d> A point [x, y] for vertex 2.
+  \param    v3 <point-2d> A point [x, y] for vertex 3.
 
   \param    vr <decimal> The default vertex rounding radius.
   \param    v1r <decimal> Vertex 1 rounding radius.
@@ -431,13 +435,13 @@ module triangle_ppp
   {
     ic = triangle_incenter_ppp( v1=v1, v2=v2, v3=v3 );
 
-    a1 = angle_vv(v1t=v2, v1i=v1, v2t=ic, v2i=v1);
-    a2 = angle_vv(v1t=v3, v1i=v2, v2t=ic, v2i=v2);
-    a3 = angle_vv(v1t=v1, v1i=v3, v2t=ic, v2i=v3);
+    a1 = angle_ll([v1, v2], [v1, ic]);
+    a2 = angle_ll([v2, v3], [v2, ic]);
+    a3 = angle_ll([v3, v1], [v3, ic]);
 
-    c1 = v1 + cr1/sin(a1) * unit_v(vt=ic, vi=v1);
-    c2 = v2 + cr2/sin(a2) * unit_v(vt=ic, vi=v2);
-    c3 = v3 + cr3/sin(a3) * unit_v(vt=ic, vi=v3);
+    c1 = v1 + cr1/sin(a1) * unit_l([v1, ic]);
+    c2 = v2 + cr2/sin(a2) * unit_l([v2, ic]);
+    c3 = v3 + cr3/sin(a3) * unit_l([v3, ic]);
 
     hull()
     {
@@ -451,12 +455,13 @@ module triangle_ppp
   }
 }
 
-//! A general triangle specified by a vector of its three vertices.
+//! A general triangle specified by a list of its three vertices.
 /***************************************************************************//**
-  \param    v <vector> A vector [v1, v2, v3] of vectors [x, y].
+  \param    v <point-2d-list-3> A list [v1, v2, v3] of points [x, y].
 
-  \param    vr <vector|decimal> The vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
+  \param    vr <decimal-list-3|decimal> The vertex rounding radius. A
+            list [v1r, v2r, v3r] of decimals or a single decimal for
+            (v1r=v2r=v3r).
 
   \param    centroid <boolean> Center centroid at origin.
   \param    incenter <boolean> Center incenter at origin.
@@ -465,12 +470,12 @@ module triangle_ppp
 
     \b Example
     \code{.C}
-    t = triangle_lll2vp( 30, 40, 50 );
+    t = triangle_sss2lp( 30, 40, 50 );
     r = [2, 4, 6];
-    triangle_vp( v=t, vr=r  );
+    triangle_lp( v=t, vr=r  );
     \endcode
 *******************************************************************************/
-module triangle_vp
+module triangle_lp
 (
   v,
   vr,
@@ -515,12 +520,12 @@ module triangle_vp
   \details
 
     \b Example
-    \amu_eval ( function=triangle_lll ${example_dim} )
+    \amu_eval ( function=triangle_sss ${example_dim} )
 
     See [Wikipedia](https://en.wikipedia.org/wiki/Solution_of_triangles)
     for more information.
 *******************************************************************************/
-module triangle_lll
+module triangle_sss
 (
   s1,
   s2,
@@ -561,12 +566,13 @@ module triangle_lll
   }
 }
 
-//! A general triangle specified by a vector of its three side lengths.
+//! A general triangle specified by a list of its three side lengths.
 /***************************************************************************//**
-  \param    v <vector> A vector [s1, s2, s3] of decimals.
+  \param    v <decimal-list-3> A list [s1, s2, s3] of decimals.
 
-  \param    vr <vector|decimal> The vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
+  \param    vr <decimal-list-3|decimal> The vertex rounding radius. A
+            list [v1r, v2r, v3r] of decimals or a single decimal for
+            (v1r=v2r=v3r).
 
   \param    centroid <boolean> Center centroid at origin.
   \param    incenter <boolean> Center incenter at origin.
@@ -575,12 +581,12 @@ module triangle_lll
 
     \b Example
     \code{.C}
-    t = triangle_lll2vp( 3, 4, 5 );
-    s = triangle_vp2vl( t );
-    triangle_vl( v=s, vr=2, centroid=true );
+    t = triangle_sss2lp( 3, 4, 5 );
+    s = triangle_lp2ls( t );
+    triangle_ls( v=s, vr=2, centroid=true );
     \endcode
 *******************************************************************************/
-module triangle_vl
+module triangle_ls
 (
   v,
   vr,
@@ -590,7 +596,7 @@ module triangle_vl
 {
   if ( is_scalar(vr) )
   {
-    triangle_lll
+    triangle_sss
     (
       s1=v[0], s2=v[1], s3=v[2],
       vr=vr,
@@ -599,7 +605,7 @@ module triangle_vl
   }
   else
   {
-    triangle_lll
+    triangle_sss
     (
       s1=v[0], s2=v[1], s3=v[2],
       v1r=vr[0], v2r=vr[1], v3r=vr[2],
@@ -610,18 +616,19 @@ module triangle_vl
 
 //! A general triangle specified by its sides with a removed triangular core.
 /***************************************************************************//**
-  \param    vs <vector|decimal> The size. A vector [s1, s2, s3] of decimals
-            or a single decimal for (s1=s2=s3).
-  \param    vc <vector|decimal> The core. A vector [s1, s2, s3] of decimals
-            or a single decimal for (s1=s2=s3).
+  \param    vs <decimal-list-3|decimal> The size. A list [s1, s2, s3] of
+            decimals or a single decimal for (s1=s2=s3).
+  \param    vc <decimal-list-3|decimal> The core. A list [s1, s2, s3] of
+            decimals or a single decimal for (s1=s2=s3).
 
-  \param    co <vector> Core offset. A vector [x, y] of decimals.
+  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
-  \param    vr <vector|decimal> The default vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
-  \param    vr1 <vector|decimal> The outer vertex rounding radius.
-  \param    vr2 <vector|decimal> The core vertex rounding radius.
+  \param    vr <decimal-list-3|decimal> The default vertex rounding radius.
+            A list [v1r, v2r, v3r] of decimals or a single decimal for
+            (v1r=v2r=v3r).
+  \param    vr1 <decimal-list-3|decimal> The outer vertex rounding radius.
+  \param    vr2 <decimal-list-3|decimal> The core vertex rounding radius.
 
   \param    centroid <boolean> Center centroid at origin.
   \param    incenter <boolean> Center incenter at origin.
@@ -629,12 +636,12 @@ module triangle_vl
   \details
 
     \b Example
-    \amu_eval ( function=triangle_vl_c ${example_dim} )
+    \amu_eval ( function=triangle_ls_c ${example_dim} )
 
   \note     The outer and inner triangles centroids are aligned prior to
             the core removal.
 *******************************************************************************/
-module triangle_vl_c
+module triangle_ls_c
 (
   vs,
   vc,
@@ -663,18 +670,18 @@ module triangle_vl_c
     translate
     (
       ( centroid==false ) && ( incenter==true )
-        ? -triangle_incenter_vp( triangle_lll2vp(s1=ts1, s2=ts2, s3=ts3) )
+        ? -triangle_incenter_lp( triangle_sss2lp(s1=ts1, s2=ts2, s3=ts3) )
         : origin2d
     )
     translate
     (
       ( centroid==true ) && ( incenter==false )
         ? origin2d
-        : triangle_centroid_vp( triangle_lll2vp(s1=ts1, s2=ts2, s3=ts3) )
+        : triangle_centroid_lp( triangle_sss2lp(s1=ts1, s2=ts2, s3=ts3) )
     )
     difference()
     {
-      triangle_vl
+      triangle_ls
       (
         v=[ts1, ts2, ts3],
         vr=vrs,
@@ -683,7 +690,7 @@ module triangle_vl_c
 
       translate(is_defined(co) ? co : origin2d)
       rotate([0, 0, cr])
-      triangle_vl
+      triangle_ls
       (
         v=[tc1, tc2, tc3],
         vr=vrc,
@@ -693,7 +700,7 @@ module triangle_vl_c
   }
   else
   {
-    triangle_vl
+    triangle_ls
     (
       v=[ts1, ts2, ts3],
       vr=vrs,
@@ -708,7 +715,8 @@ module triangle_vl_c
   \param    a <decimal> The included angle in degrees.
   \param    s2 <decimal> The length of the side 2.
 
-  \param    x <decimal> The side to draw on the positive x-axis (\p x=1 for \p s1).
+  \param    x <integer> The side to draw on the positive x-axis
+            (\p x=1 for \p s1).
 
   \param    vr <decimal> The default vertex rounding radius.
   \param    v1r <decimal> Vertex 1 rounding radius.
@@ -721,12 +729,13 @@ module triangle_vl_c
   \details
 
     \b Example
-    \amu_eval ( function=triangle_lal ${example_dim} )
+    \amu_eval ( function=triangle_sas ${example_dim} )
 
-    See [Wikipedia](https://en.wikipedia.org/wiki/Solution_of_triangles)
-    for more information.
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
 *******************************************************************************/
-module triangle_lal
+module triangle_sas
 (
   s1,
   a,
@@ -744,7 +753,7 @@ module triangle_lal
 
   if ( x%4 == 1 )
   {
-    triangle_lll
+    triangle_sss
     (
       s1=s1, s2=s2, s3=s3,
       vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
@@ -753,7 +762,7 @@ module triangle_lal
   }
   else if ( x%4 == 2 )
   {
-    triangle_lll
+    triangle_sss
     (
       s1=s2, s2=s3, s3=s1,
       vr=vr, v1r=v2r, v2r=v3r, v3r=v1r,
@@ -762,7 +771,7 @@ module triangle_lal
   }
   else if ( x%4 == 3 )
   {
-    triangle_lll
+    triangle_sss
     (
       s1=s3, s2=s1, s3=s2,
       vr=vr, v1r=v3r, v2r=v1r, v3r=v2r,
@@ -777,7 +786,8 @@ module triangle_lal
   \param    s <decimal> The side length adjacent to the angles.
   \param    a2 <decimal> The adjacent angle 2 in degrees.
 
-  \param    x <decimal> The side to draw on the positive x-axis (\p x=1 for \p s).
+  \param    x <integer> The side to draw on the positive x-axis
+            (\p x=1 for \p s).
 
   \param    vr <decimal> The default vertex rounding radius.
   \param    v1r <decimal> Vertex 1 rounding radius.
@@ -790,12 +800,13 @@ module triangle_lal
   \details
 
     \b Example
-    \amu_eval ( function=triangle_ala ${example_dim} )
+    \amu_eval ( function=triangle_asa ${example_dim} )
 
-    See [Wikipedia](https://en.wikipedia.org/wiki/Solution_of_triangles)
-    for more information.
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
 *******************************************************************************/
-module triangle_ala
+module triangle_asa
 (
   a1,
   s,
@@ -826,7 +837,7 @@ module triangle_ala
 
     if ( x%4 == 1 )
     {
-      triangle_lll
+      triangle_sss
       (
         s1=s3, s2=s1, s3=s2,
         vr=vr, v1r=v3r, v2r=v1r, v3r=v2r,
@@ -835,7 +846,7 @@ module triangle_ala
     }
     else if ( x%4 == 2 )
     {
-      triangle_lll
+      triangle_sss
       (
         s1=s1, s2=s2, s3=s3,
         vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
@@ -844,7 +855,7 @@ module triangle_ala
     }
     else if ( x%4 == 3 )
     {
-      triangle_lll
+      triangle_sss
       (
         s1=s2, s2=s3, s3=s1,
         vr=vr, v1r=v2r, v2r=v3r, v3r=v1r,
@@ -860,7 +871,8 @@ module triangle_ala
   \param    a2 <decimal> The adjacent angle 2 in degrees.
   \param    s <decimal> The side length.
 
-  \param    x <decimal> The side to draw on the positive x-axis (\p x=1 for \p s).
+  \param    x <integer> The side to draw on the positive x-axis
+            (\p x=1 for \p s).
 
   \param    vr <decimal> The default vertex rounding radius.
   \param    v1r <decimal> Vertex 1 rounding radius.
@@ -873,12 +885,13 @@ module triangle_ala
   \details
 
     \b Example
-    \amu_eval ( function=triangle_aal ${example_dim} )
+    \amu_eval ( function=triangle_aas ${example_dim} )
 
-    See [Wikipedia](https://en.wikipedia.org/wiki/Solution_of_triangles)
-    for more information.
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
 *******************************************************************************/
-module triangle_aal
+module triangle_aas
 (
   a1,
   a2,
@@ -909,7 +922,7 @@ module triangle_aal
 
     if ( x%4 == 1 )
     {
-      triangle_lll
+      triangle_sss
       (
         s1=s1, s2=s2, s3=s3,
         vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
@@ -918,7 +931,7 @@ module triangle_aal
     }
     else if ( x%4 == 2 )
     {
-      triangle_lll
+      triangle_sss
       (
         s1=s2, s2=s3, s3=s1,
         vr=vr, v1r=v2r, v2r=v3r, v3r=v1r,
@@ -927,7 +940,7 @@ module triangle_aal
     }
     else if ( x%4 == 3 )
     {
-      triangle_lll
+      triangle_sss
       (
         s1=s3, s2=s1, s3=s2,
         vr=vr, v1r=v3r, v2r=v1r, v3r=v2r,
@@ -953,9 +966,9 @@ module triangle_aal
   \details
 
     \b Example
-    \amu_eval ( function=triangle_ll ${example_dim} )
+    \amu_eval ( function=triangle_ss ${example_dim} )
 *******************************************************************************/
-module triangle_ll
+module triangle_ss
 (
   x,
   y,
@@ -993,12 +1006,12 @@ module triangle_ll
   \details
 
     \b Example
-    \amu_eval ( function=triangle_la ${example_dim} )
+    \amu_eval ( function=triangle_sa ${example_dim} )
 
   \note     When both \p x and \p y are given, both triangles are rendered.
   \note     When both \p aa and \p oa are given, \p aa is used.
 *******************************************************************************/
-module triangle_la
+module triangle_sa
 (
   x,
   y,
@@ -1037,7 +1050,7 @@ module triangle_la
 
 //! An n-sided equiangular/equilateral regular polygon.
 /***************************************************************************//**
-  \param    n <decimal> The number of sides.
+  \param    n <integer> The number of sides.
   \param    r <decimal> The ngon vertex radius.
 
   \param    vr <decimal> The vertex rounding radius.
@@ -1047,8 +1060,9 @@ module triangle_la
     \b Example
     \amu_eval ( function=ngon ${example_dim} )
 
-    See [Wikipedia](https://en.wikipedia.org/wiki/Regular_polygon)
-    for more information.
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Regular_polygon
 *******************************************************************************/
 module ngon
 (
@@ -1065,7 +1079,7 @@ module ngon
   {
     hull()
     {
-      for ( c = ngon_vp( r=r, n=n, vr=vr ) )
+      for ( c = rpolygon_lp( r=r, n=n, vr=vr ) )
       {
         translate( c )
         circle( r=vr );
@@ -1076,7 +1090,7 @@ module ngon
 
 //! An ellipse.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [rx, ry] of decimals
+  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
 
   \details
@@ -1105,15 +1119,15 @@ module ellipse
 
 //! An ellipse with a removed elliptical core.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [rx, ry] of decimals
+  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
-  \param    core <vector|decimal> A vector [rx, ry] of decimals
+  \param    core <decimal-list-2|decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
 
-  \param    t <vector|decimal> A vector [x, y] of decimals
+  \param    t <decimal-list-2|decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
 
-  \param    co <vector> Core offset. A vector [x, y] of decimals.
+  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
   \details
@@ -1156,7 +1170,7 @@ module ellipse_c
 
 //! An ellipse sector.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [rx, ry] of decimals
+  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
 
   \param    a1 <decimal> The start angle in degrees.
@@ -1212,18 +1226,18 @@ module ellipse_s
 
 //! A sector of an ellipse with a removed elliptical core.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [rx, ry] of decimals
+  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
-  \param    core <vector|decimal> A vector [rx, ry] of decimals
+  \param    core <decimal-list-2|decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
 
-  \param    t <vector|decimal> A vector [x, y] of decimals
+  \param    t <decimal-list-2|decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
 
   \param    a1 <decimal> The start angle in degrees.
   \param    a2 <decimal> The stop angle in degrees.
 
-  \param    co <vector> Core offset. A vector [x, y] of decimals.
+  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
   \details
@@ -1266,15 +1280,16 @@ module ellipse_cs
   }
 }
 
-//! A two dimensional star.
+//! A two-dimensional star.
 /***************************************************************************//**
-  \param    size <vector|decimal> A vector [l, w] of decimals
+  \param    size <decimal-list-2|decimal> A list [l, w] of decimals
             or a single decimal for (size=l=2*w).
 
   \param    n <decimal> The number of points.
 
-  \param    vr <vector|decimal> The vertex rounding radius. A vector
-            [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r).
+  \param    vr <decimal-list-3|decimal> The vertex rounding radius.
+            A list [v1r, v2r, v3r] of decimals or a single decimal for
+            (v1r=v2r=v3r).
 
   \details
 
@@ -1291,10 +1306,10 @@ module star2d
   l = edefined_or(size, 0, size);
   w = edefined_or(size, 1, l/2);
 
-  st_radial_copy(n=n, angle=true, move=false)
+  radial_repeat(n=n, angle=true, move=false)
   rotate([0, 0, -90])
   translate([-w/2, 0])
-  triangle_vl(v=[w, l, l], vr=vr);
+  triangle_ls(v=[w, l, l], vr=vr);
 }
 
 //! @}
@@ -1307,7 +1322,7 @@ module star2d
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <shapes2d.scad>;
+    include <shapes/shapes2d.scad>;
 
     shape = "ellipse_cs";
     $fn = 72;
@@ -1320,20 +1335,20 @@ BEGIN_SCOPE dim;
       rhombus( size=[40,25], vr=[2,4,2,4], center=true );
     else if (shape == "triangle_ppp")
       triangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], vr=2, centroid=true );
-    else if (shape == "triangle_lll")
-      triangle_lll( s1=30, s2=40, s3=50, vr=2, centroid=true );
-    else if (shape == "triangle_vl_c")
-      triangle_vl_c( vs=[30,50,50], vc=[20,40,40], co=[0,-4], vr1=[1,1,6], vr2=4, centroid=true );
-    else if (shape == "triangle_lal")
-      triangle_lal( s1=50, a=60, s2=30, vr=2, centroid=true );
-    else if (shape == "triangle_ala")
-      triangle_ala( a1=30, s=50, a2=60, vr=2, centroid=true );
-    else if (shape == "triangle_aal")
-      triangle_aal( a1=60, a2=30, s=40, vr=2, centroid=true );
-    else if (shape == "triangle_ll")
-      triangle_ll( x=30, y=40, vr=2, centroid=true );
-    else if (shape == "triangle_la")
-      triangle_la( x=40, aa=30, vr=2, centroid=true );
+    else if (shape == "triangle_sss")
+      triangle_sss( s1=30, s2=40, s3=50, vr=2, centroid=true );
+    else if (shape == "triangle_ls_c")
+      triangle_ls_c( vs=[30,50,50], vc=[20,40,40], co=[0,-4], vr1=[1,1,6], vr2=4, centroid=true );
+    else if (shape == "triangle_sas")
+      triangle_sas( s1=50, a=60, s2=30, vr=2, centroid=true );
+    else if (shape == "triangle_asa")
+      triangle_asa( a1=30, s=50, a2=60, vr=2, centroid=true );
+    else if (shape == "triangle_aas")
+      triangle_aas( a1=60, a2=30, s=40, vr=2, centroid=true );
+    else if (shape == "triangle_ss")
+      triangle_ss( x=30, y=40, vr=2, centroid=true );
+    else if (shape == "triangle_sa")
+      triangle_sa( x=40, aa=30, vr=2, centroid=true );
     else if (shape == "ngon")
       ngon( n=6, r=25, vr=6 );
     else if (shape == "ellipse")
@@ -1358,13 +1373,13 @@ BEGIN_SCOPE dim;
                 rectangle_c
                 rhombus
                 triangle_ppp
-                triangle_lll
-                triangle_vl_c
-                triangle_lal
-                triangle_ala
-                triangle_aal
-                triangle_ll
-                triangle_la
+                triangle_sss
+                triangle_ls_c
+                triangle_sas
+                triangle_asa
+                triangle_aas
+                triangle_ss
+                triangle_sa
                 ngon
                 ellipse
                 ellipse_c
@@ -1381,23 +1396,23 @@ END_SCOPE;
 
 BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
-    include <shapes2d.scad>;
+    include <shapes/shapes2d.scad>;
 
     $fn = 72;
 
-    st_cartesian_copy( grid=5, incr=60, center=true )
+    grid_repeat( g=5, i=60, center=true )
     {
       rectangle( size=[25,40], vr=[0,10,10,5], vrm=4, center=true );
       rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, vrm2=3, co=[0,5], center=true );
       rhombus( size=[40,25], vr=[2,4,2,4], center=true );
       triangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], vr=2, centroid=true );
-      triangle_lll( s1=30, s2=40, s3=50, vr=2, centroid=true );
-      triangle_vl_c( vs=[30,50,50], vc=[20,40,40], co=[0,-4], vr1=[1,1,6], vr2=4, centroid=true );
-      triangle_lal( s1=50, a=60, s2=30, vr=2, centroid=true );
-      triangle_ala( a1=30, s=50, a2=60, vr=2, centroid=true );
-      triangle_aal( a1=60, a2=30, s=40, vr=2, centroid=true );
-      triangle_ll( x=30, y=40, vr=2, centroid=true );
-      triangle_la( x=40, aa=30, vr=2, centroid=true );
+      triangle_sss( s1=30, s2=40, s3=50, vr=2, centroid=true );
+      triangle_ls_c( vs=[30,50,50], vc=[20,40,40], co=[0,-4], vr1=[1,1,6], vr2=4, centroid=true );
+      triangle_sas( s1=50, a=60, s2=30, vr=2, centroid=true );
+      triangle_asa( a1=30, s=50, a2=60, vr=2, centroid=true );
+      triangle_aas( a1=60, a2=30, s=40, vr=2, centroid=true );
+      triangle_ss( x=30, y=40, vr=2, centroid=true );
+      triangle_sa( x=40, aa=30, vr=2, centroid=true );
       ngon( n=6, r=25, vr=6 );
       ellipse( size=[25, 40] );
       ellipse_c( size=[25,40], core=[16,10], co=[0,10], cr=45 );

@@ -1,4 +1,4 @@
-//! Mechanical design constants.
+//! Design constant definitions.
 /***************************************************************************//**
   \file   constants.scad
   \author Roy Allen Sutton
@@ -43,14 +43,17 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! <decimal> Epsilon, small distance to deal with overlaping shapes
-eps = 0.01;
+//! <decimal> Epsilon, small distance to deal with overlapping shapes.
+aeps = 0.001;
 
-//! <decimal> The ratio of a circle's circumference to its diameter
-pi  = 3.1415926535897932384626433832795;
+//! <decimal> The ratio of a circle's circumference to its diameter.
+pi  = 3.14159265358979323;
 
-//! <decimal> The ratio of a circle's circumference to its radius
+//! <decimal> The ratio of a circle's circumference to its radius.
 tau = 2*pi;
+
+//! <decimal> The golden ratio.
+phi = (1 + sqrt(5)) / 2;
 
 //! @}
 //! @}
@@ -61,22 +64,22 @@ tau = 2*pi;
   @{
 
   \defgroup constants_system System
-  \brief    System/Program limits.
+  \brief    System and program limits.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! The largest representable number in OpenSCAD scripts.
+//! <decimal> The largest representable number in OpenSCAD scripts.
 number_max = 1e308;
 
-//! The smallest representable number in OpenSCAD scripts.
+//! <decimal> The smallest representable number in OpenSCAD scripts.
 number_min = -1e308;
 
-//! A string with no content (the empty string).
+//! <string> A string with no characters (the empty string).
 empty_str = "";
 
-//! A vector with no content (the empty vector).
-empty_v = [];
+//! \<list> A list with no values (the empty list).
+empty_lst = [];
 
 //! @}
 //! @}
@@ -87,40 +90,79 @@ empty_v = [];
   @{
 
   \defgroup constants_euclidean Euclidean
-  \brief    Euclidean 2D/3D space mapping.
+  \brief    Euclidean space axis mapping.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! The vector index for the x-coordinate of a vector.
-x_axis_vi = 0;
+//! <integer> The coordinate axis index for the Euclidean space x-axis.
+x_axis_ci = 0;
 
-//! The vector index for the y-coordinate of a vector.
-y_axis_vi = 1;
+//! <integer> The coordinate axis index for the Euclidean space y-axis.
+y_axis_ci = 1;
 
-//! The vector index for the z-coordinate of a vector.
-z_axis_vi = 2;
+//! <integer> The coordinate axis index for the Euclidean space z-axis.
+z_axis_ci = 2;
 
-//! The origin coordinates in 2-dimensional Euclidean space.
+//! <decimal-list-2> A 2d zero vector (a list with two zeros).
+zero2d = [0, 0];
+
+//! <point-2d> The origin point coordinate in 2d Euclidean space.
 origin2d = [0, 0];
 
-//! The unit vector of the positive x-axis in 2-dimensional Euclidean space.
+//! <vector-2d> The unit vector of the positive x-axis in 2d Euclidean space.
 x_axis2d_uv = [1, 0];
 
-//! The unit vector of the positive y-axis in 2-dimensional Euclidean space.
+//! <vector-2d> The unit vector of the positive y-axis in 2d Euclidean space.
 y_axis2d_uv = [0, 1];
 
-//! The origin coordinates in 3-dimensional Euclidean space.
+//! <line-2d> A positively-directed unit line centered on the x-axis in 2d Euclidean space.
+x_axis2d_ul = [-x_axis2d_uv, +x_axis2d_uv];
+
+//! <line-2d> A positively-directed unit line centered on the y-axis in 2d Euclidean space.
+y_axis2d_ul = [-y_axis2d_uv, +y_axis2d_uv];
+
+//! <decimal-list-2> A 3d zero vector (a list with three zeros).
+zero3d = [0, 0, 0];
+
+//! <point-3d> The origin point coordinate in 3-dimensional Euclidean space.
 origin3d = [0, 0, 0];
 
-//! The unit vector of the positive x-axis in 3-dimensional Euclidean space.
+//! <vector-3d> The unit vector of the positive x-axis in 3d Euclidean space.
 x_axis3d_uv = [1, 0, 0];
 
-//! The unit vector of the positive y-axis in 3-dimensional Euclidean space.
+//! <vector-3d> The unit vector of the positive y-axis in 3d Euclidean space.
 y_axis3d_uv = [0, 1, 0];
 
-//! The unit vector of the positive z-axis in 3-dimensional Euclidean space.
+//! <vector-3d> The unit vector of the positive z-axis in 3d Euclidean space.
 z_axis3d_uv = [0, 0, 1];
+
+//! <line-3d> A positively-directed unit line centered on the x-axis in 3d Euclidean space.
+x_axis3d_ul = [-x_axis3d_uv, +x_axis3d_uv];
+
+//! <line-3d> A positively-directed unit line centered on the y-axis in 3d Euclidean space.
+y_axis3d_ul = [-y_axis3d_uv, +y_axis3d_uv];
+
+//! <line-3d> A positively-directed unit line centered on the z-axis in 3d Euclidean space.
+z_axis3d_ul = [-z_axis3d_uv, +z_axis3d_uv];
+
+//! <plane> The right-handed xy plane centered at the origin with normal vector.
+xy_plane_on = [origin3d, z_axis3d_uv];
+
+//! <plane> The right-handed yz plane centered at the origin with normal vector.
+yz_plane_on = [origin3d, x_axis3d_uv];
+
+//! <plane> The right-handed zx plane centered at the origin with normal vector.
+zx_plane_on = [origin3d, y_axis3d_uv];
+
+//! <plane> The right-handed xy plane centered at the origin with coplanar unit square points.
+xy_plane_os = [origin3d, [for (r=[[1,1],[1,-1],[-1,-1],[-1,1]]) [r[0],r[1],0]]];
+
+//! <plane> The right-handed yz plane centered at the origin with coplanar unit square points.
+yz_plane_os = [origin3d, [for (r=[[1,1],[1,-1],[-1,-1],[-1,1]]) [0,r[0],r[1]]]];
+
+//! <plane> The right-handed zx plane centered at the origin with coplanar unit square points.
+zx_plane_os = [origin3d, [for (r=[[1,1],[1,-1],[-1,-1],[-1,1]]) [r[1],0,r[0]]]];
 
 //! @}
 //! @}

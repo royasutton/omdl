@@ -1,4 +1,4 @@
-//! Result validation functions.
+//! Function validation methods.
 /***************************************************************************//**
   \file   validation.scad
   \author Roy Allen Sutton
@@ -27,14 +27,29 @@
 
   \details
 
-  \ingroup utilities
+  \ingroup utilities utilities_validate
 *******************************************************************************/
 
-include <primitives.scad>;
+include <datatypes.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \ingroup utilities
+  \addtogroup utilities
+  @{
+
+  \defgroup utilities_validate Validation
+  \brief    Function validation methods.
+
+  \details
+
+    \b Example
+
+      \dontinclude validation_example.scad
+      \skip use
+      \until tvae2, 4) );
+
+    \b Result \include validation_example.log
+
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -46,9 +61,9 @@ include <primitives.scad>;
   \param    t <string|boolean> The validation type.
   \param    ev \<value> The expected good value.
 
-  \param    p \<number> A numerical precision for approximate comparisons.
+  \param    p <number> A numerical precision for approximate comparisons.
 
-  \param    pf <boolean> Result reported as a pass or fail boolean value.
+  \param    pf <boolean> Report result as pass or fail boolean value.
 
   \returns  <string|boolean> Validation result indicating if the test
             passed or failed.
@@ -63,20 +78,12 @@ include <primitives.scad>;
      "true" \| \b true    | \p cv is \b true
      "false" \| \b false  | \p cv is \b false
 
-    \b Example
-
-      \dontinclude validation_example.scad
-      \skip use
-      \until tvae2, 4) );
-
-    \b Result \include validation_example.log
-
-  \note     When performing an almost equal validation type, the
+  \note     When performing an \b "almost" equal validation, the
             comparison precision is controlled by \p p. This specifies
-            the number of digits of precision for each numerical comparison.
-            A passing result indicates that \p cv equals \p ev to the
-            number of decimal digits specified by \p p. The comparison
-            is performed by the function \ref almost_equal.
+            the number of digits of precision for each numerical
+            comparison. A passing result indicates that \p cv equals
+            \p ev to the number of decimal digits specified by \p p. The
+            comparison is performed by the function almost_equal().
 *******************************************************************************/
 function validate
 (
@@ -125,6 +132,7 @@ function validate
     )
   : (pf?false : str("FAILED: '", d, "'.  Unknown test '", t, "'"));
 
+//! @}
 //! @}
 
 //----------------------------------------------------------------------------//

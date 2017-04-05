@@ -1,4 +1,4 @@
-//! Mathematical bitwise binary (base-two) functions.
+//! Mathematical base-two bitwise binary functions.
 /***************************************************************************//**
   \file   math_bitwise.scad
   \author Roy Allen Sutton
@@ -32,18 +32,18 @@
   \ingroup math math_bitwise
 *******************************************************************************/
 
-include <primitives.scad>;
+include <datatypes.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \page tv_math_bitwise Bitwise Operations
+  \page tv_math_bitwise Bitwise
     \li \subpage tv_math_bitwise_s
     \li \subpage tv_math_bitwise_r
-  \page tv_math_bitwise_s Validation Script
+  \page tv_math_bitwise_s Script
     \dontinclude math_bitwise_validate.scad
     \skip include
     \until end-of-tests
-  \page tv_math_bitwise_r Validation Results
+  \page tv_math_bitwise_r Results
     \include math_bitwise_validate.log
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -53,8 +53,8 @@ include <primitives.scad>;
   \addtogroup math
   @{
 
-  \defgroup math_bitwise Bitwise Operations
-  \brief    Bitwise binary (base-two) operations.
+  \defgroup math_bitwise Bitwise
+  \brief    Base-two bitwise binary operations.
 
   \details
 
@@ -83,13 +83,13 @@ function bitwise_is_equal
   t = 1
 ) = ((floor(v / pow(2, b)) % 2) == t);
 
-//! Encode an integer value as a base-two vector of bits.
+//! Encode an integer value as a base-two list of bits.
 /***************************************************************************//**
   \param    v <integer> An integer value.
   \param    w <integer> The minimum bit width.
   \param    bv (an internal recursion loop variable).
 
-  \returns  <vector> of bits base-two encoding of the integer value.
+  \returns  <bit-list> of bits base-two encoding of the integer value.
             Returns \b undef when \p v or \p w is not an integer.
 *******************************************************************************/
 function bitwise_i2v
@@ -99,17 +99,17 @@ function bitwise_i2v
   bv = 1    // iteration bit value
 ) = !is_integer(v) ? undef
   : !is_integer(w) ? undef
-  : ((v == 0) && (bv >= pow(2, w))) ? empty_v
+  : ((v == 0) && (bv >= pow(2, w))) ? empty_lst
   : ((v % 2) > 0) ?
     concat(bitwise_i2v(floor(v/2), w, bv*2), 1)
   : concat(bitwise_i2v(floor(v/2), w, bv*2), 0);
 
-//! Decode a base-two vector of bits to an integer value.
+//! Decode a base-two list of bits to an integer value.
 /***************************************************************************//**
-  \param    v <vector> A value encoded as a base-two vector of bits.
+  \param    v <bit-list> A value encoded as a base-two list of bits.
 
-  \returns  <integer> value encoding of the base-two vector of bits.
-            Returns \b undef when \p v is not a vector of bit values.
+  \returns  <integer> value encoding of the base-two list of bits.
+            Returns \b undef when \p v is not a list of bit values.
 *******************************************************************************/
 function bitwise_v2i
 (
@@ -124,7 +124,7 @@ function bitwise_v2i
   \param    v <integer> An integer value.
   \param    w <integer> The minimum bit width.
 
-  \returns  <string> of bits base-two encoding of the integer value.
+  \returns  <bit-string> of bits base-two encoding of the integer value.
             Returns \b undef when \p v or \p w is not an integer.
 *******************************************************************************/
 function bitwise_i2s
@@ -133,11 +133,11 @@ function bitwise_i2s
   w = 1
 ) = !is_integer(v) ? undef
   : !is_integer(w) ? undef
-  : vstr(bitwise_i2v(v, w));
+  : lstr(bitwise_i2v(v, w));
 
 //! Decode a base-two string of bits to an integer value.
 /***************************************************************************//**
-  \param    v <string> A value encoded as a base-two string of bits.
+  \param    v <bit-string> A value encoded as a base-two string of bits.
 
   \returns  <integer> value encoding of the base-two string of bits.
             Returns \b undef when \p v is not a string of bit values.
@@ -149,6 +149,22 @@ function bitwise_s2i
   : (first(v) == "1") ? bitwise_s2i(ntail(v)) + pow(2, len(v)-1)
   : (first(v) == "0") ? bitwise_s2i(ntail(v))
   : undef;
+
+//! Decode the integer in a value at a shifted base-two bit mask of width-w.
+/***************************************************************************//**
+  \param    v <integer> An integer value.
+  \param    w <integer> The bit mask width.
+  \param    s <integer> The bit mask shift offset.
+
+  \returns  <integer> value of the \p w bits of \p v starting at bit
+            position \p s up to bit <tt>(w+s-1)</tt>.
+*******************************************************************************/
+function bitwise_imi
+(
+  v,
+  w,
+  s
+) = bitwise_rsh(bitwise_and(v, bitwise_lsh(pow(2,w)-1, s)), s);
 
 //! Base-two bitwise AND operation for integers.
 /***************************************************************************//**
@@ -287,8 +303,8 @@ function bitwise_rsh
 /*
 BEGIN_SCOPE validate;
   BEGIN_OPENSCAD;
-    include <math_bitwise.scad>;
-    use <table.scad>;
+    include <math/math_bitwise.scad>;
+    use <datatypes/datatypes_table.scad>;
     use <console.scad>;
     use <validation.scad>;
 
@@ -310,7 +326,7 @@ BEGIN_SCOPE validate;
     [
       ["fac", "Function argument count",    undef],
       ["t01", "All undefined",              [undef,undef]],
-      ["t02", "All empty vector",           [empty_v,empty_v]],
+      ["t02", "All empty lists",            [empty_lst,empty_lst]],
       ["t03", "test value 1",               [254, 0]],
       ["t04", "test value 2",               [254, 1]],
       ["t05", "test value 3",               [255, 0]],
@@ -323,7 +339,7 @@ BEGIN_SCOPE validate;
       ["t12", "test value 10",              [856, 625]]
     ];
 
-    test_ids = table_get_row_ids( test_r );
+    test_ids = get_table_ridl( test_r );
 
     // expected columns: ("id" + one column for each test)
     good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
@@ -417,6 +433,20 @@ BEGIN_SCOPE validate;
         835,                            // t11
         856                             // t12
       ],
+      ["bitwise_imi_32", 1,
+        undef,                          // t01
+        undef,                          // t02
+        7,                              // t03
+        7,                              // t04
+        7,                              // t05
+        0,                              // t06
+        7,                              // t07
+        6,                              // t08
+        0,                              // t09
+        7,                              // t10
+        0,                              // t11
+        6                               // t12
+      ],
       ["bitwise_and", 2,
         undef,                          // t01
         undef,                          // t02
@@ -508,25 +538,25 @@ BEGIN_SCOPE validate;
     table_check( good_r, good_c, false );
 
     // validate helper function and module
-    function get_value( vid ) = table_get(test_r, test_c, vid, "tv");
+    function get_value( vid ) = get_table_v(test_r, test_c, vid, "tv");
     function gv( vid, e ) = get_value( vid )[e];
     module run( fname, vid )
     {
-      value_text = table_get(test_r, test_c, vid, "td");
+      value_text = get_table_v(test_r, test_c, vid, "td");
 
-      if ( table_get(good_r, good_c, fname, vid) != skip )
+      if ( get_table_v(good_r, good_c, fname, vid) != skip )
         children();
       else if ( show_skipped )
         log_info( str("*skip*: ", vid, " '", fname, "(", value_text, ")'") );
     }
     module test( fname, fresult, vid )
     {
-      value_text = table_get(test_r, test_c, vid, "td");
-      fname_argc = table_get(good_r, good_c, fname, "fac");
-      pass_value = table_get(good_r, good_c, fname, vid);
+      value_text = get_table_v(test_r, test_c, vid, "td");
+      fname_argc = get_table_v(good_r, good_c, fname, "fac");
+      pass_value = get_table_v(good_r, good_c, fname, vid);
 
       test_pass = validate(cv=fresult, t="equals", ev=pass_value, pf=true);
-      farg_text = vstr(eappend(", ", rselect(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
+      farg_text = lstr(eappend(", ", rselect(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
       test_text = validate(str(fname, "(", farg_text, ")=", pass_value), fresult, "equals", pass_value);
 
       if ( pass_value != skip )
@@ -548,6 +578,7 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("bitwise_i2v_v2i",vid) test( "bitwise_i2v_v2i", bitwise_v2i(bitwise_i2v(gv(vid,0))), vid );
     for (vid=run_ids) run("bitwise_i2s",vid) test( "bitwise_i2s", bitwise_i2s(gv(vid,0)), vid );
     for (vid=run_ids) run("bitwise_i2s_s2i",vid) test( "bitwise_i2s_s2i", bitwise_s2i(bitwise_i2s(gv(vid,0))), vid );
+    for (vid=run_ids) run("bitwise_imi_32",vid) test( "bitwise_imi_32", bitwise_imi(gv(vid,0),3,2), vid );
     for (vid=run_ids) run("bitwise_and",vid) test( "bitwise_and", bitwise_and(gv(vid,0),gv(vid,1)), vid );
     for (vid=run_ids) run("bitwise_or",vid) test( "bitwise_or", bitwise_or(gv(vid,0),gv(vid,1)), vid );
     for (vid=run_ids) run("bitwise_xor",vid) test( "bitwise_xor", bitwise_xor(gv(vid,0),gv(vid,1)), vid );

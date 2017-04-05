@@ -1,6 +1,6 @@
-//! Miscellaneous utilities.
+//! Data type identification and operations.
 /***************************************************************************//**
-  \file   utilities.scad
+  \file   datatypes.scad
   \author Roy Allen Sutton
   \date   2015-2017
 
@@ -27,48 +27,57 @@
 
   \details
 
-  \ingroup utilities
+  \note Include this library file using the \b include statement.
+
+  \ingroup datatypes datatypes_identify datatypes_operate
 *******************************************************************************/
+
+include <constants.scad>;
+
+include <datatypes/datatypes_identify_scalar.scad>;
+include <datatypes/datatypes_identify_iterable.scad>;
+include <datatypes/datatypes_identify_list.scad>;
+
+include <datatypes/datatypes_operate_scalar.scad>;
+include <datatypes/datatypes_operate_iterable.scad>;
+include <datatypes/datatypes_operate_list.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \ingroup utilities
+  \page tv_datatypes Datatypes
+    \li \subpage tv_datatypes_identify
+    \li \subpage tv_datatypes_operate
+*******************************************************************************/
+
+/***************************************************************************//**
+  \page tv_datatypes_identify Identification
+    \li \subpage tv_datatypes_identify_scalar
+    \li \subpage tv_datatypes_identify_iterable
+    \li \subpage tv_datatypes_identify_list
+*******************************************************************************/
+
+/***************************************************************************//**
+  \page tv_datatypes_operate Operations
+    \li \subpage tv_datatypes_operate_scalar
+    \li \subpage tv_datatypes_operate_iterable
+    \li \subpage tv_datatypes_operate_list
+*******************************************************************************/
+//----------------------------------------------------------------------------//
+
+//----------------------------------------------------------------------------//
+/***************************************************************************//**
+  \addtogroup datatypes
   @{
+
+  \defgroup datatypes_identify Identification
+  \brief    Compile-time data type identification and tests.
+
+  \defgroup datatypes_operate Operations
+  \brief    Data type operation.
+
+  @}
 *******************************************************************************/
 //----------------------------------------------------------------------------//
-
-//! Format the function call stack as a string.
-/***************************************************************************//**
-  \param    b <decimal> The stack index bottom offset.
-            Include function names above this offset.
-  \param    t <decimal> The stack index top offset.
-            Include function names below this offset.
-
-  \returns  <string> A colon-separated list of functions names for the
-            current function call stack.
-
-  \note     Returns \b undef when \p b is greater than the current number
-            of function instances (ie: <tt>bo > $parent_modules-1</tt>).
-  \note     Returns the string \c "root()" when the function call stack
-            is empty (ie: at the root of the script).
-*******************************************************************************/
-function stack
-(
-  b = 0,
-  t = 0
-) = let
-  (
-    bo = abs(b),
-    to = abs(t),
-    i = $parent_modules - 1 - bo
-  )
-  ($parent_modules == undef) ? "root()"
-  : (bo > $parent_modules-1) ? undef
-  : (i  < to) ? "root()"
-  : (i == to) ? str( parent_module( i ), "()" )
-  : str( parent_module( i ), "(): ", stack( bo + 1, to ) );
-
-//! @}
 
 //----------------------------------------------------------------------------//
 // end of file

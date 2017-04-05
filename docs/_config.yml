@@ -1,1 +1,31 @@
+#
+# Jekyll configuration
+#
+# https://help.github.com/categories/customizing-github-pages
+# https://help.github.com/articles/configuring-jekyll
+# https://jekyllrb.com/docs/configuration
+#
+
+# GitHub Pages theme
 theme: jekyll-theme-cayman
+
+# omdl api release
+api:            api/html
+vcurrent:       omdl-v0.6
+api_vcurrent:   api/html/omdl-v0.6
+
+# omdl groups
+omdl_groups:
+  - constants
+  - database
+  - datatypes
+  - math
+  - parts
+  - shapes
+  - tools
+  - units
+  - utilities
+
+#
+# eof
+#

@@ -1,4 +1,10 @@
 #
+# database source directory
+#
+
+/database_src/
+
+#
 # backup, build, and release directories
 #
 

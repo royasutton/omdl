@@ -1,6 +1,6 @@
-//! Shape transformation functions.
+//! Shape transformation utility tools.
 /***************************************************************************//**
-  \file   transform.scad
+  \file   tools_utility.scad
   \author Roy Allen Sutton
   \date   2015-2017
 
@@ -27,18 +27,18 @@
 
   \details
 
-  \ingroup transforms transforms_extrude transforms_replicate
+  \ingroup tools tools_extrude tools_repeat
 *******************************************************************************/
 
 use <console.scad>;
 include <math.scad>;
-include <math_bitwise.scad>;
+include <math/math_bitwise.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup transforms
+  \addtogroup tools
 
-    \amu_define caption (Extrusions and Replications)
+    \amu_define caption (Transformation Utilities)
 
     \amu_make png_files (append=dim extension=png)
     \amu_make eps_files (append=dim extension=png2eps)
@@ -62,20 +62,20 @@ include <math_bitwise.scad>;
 *******************************************************************************/
 
 /***************************************************************************//**
-  \addtogroup transforms
+  \addtogroup tools
   @{
 
-  \defgroup transforms_extrude Extrusions
-  \brief    Shape Extrusions.
+  \defgroup tools_extrude Extrude
+  \brief    Shape extrusion tools.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
-// amu macros
+// openscad-amu macros
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \amu_define scope (transform_dim)
+  \amu_define scope (tools_utility_dim)
   \amu_define tuple (qvga_diag)
 
   \amu_define example_dim
@@ -87,7 +87,7 @@ include <math_bitwise.scad>;
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Revolve the 2D shape about the z-axis.
+//! Translate, rotate, and revolve the 2d shape about the z-axis.
 /***************************************************************************//**
   \param    r <decimal> The rotation radius.
   \param    pa <decimal> The profile pitch angle in degrees.
@@ -97,9 +97,9 @@ include <math_bitwise.scad>;
   \details
 
     \b Example
-    \amu_eval ( function=st_rotate_extrude ${example_dim} )
+    \amu_eval ( function=rotate_extrude_tr ${example_dim} )
 *******************************************************************************/
-module st_rotate_extrude
+module rotate_extrude_tr
 (
   r,
   pa = 0,
@@ -113,11 +113,11 @@ module st_rotate_extrude
   children();
 }
 
-//! Revolve the 2D shape about the z-axis with linear elongation.
+//! Translate, rotate, and revolve the 2d shape about the z-axis with linear elongation.
 /***************************************************************************//**
   \param    r <decimal> The rotation radius.
-  \param    l <vector|decimal> The elongation length.
-            A vector [x, y] of decimals or a single decimal for (x=y)
+  \param    l <decimal-list-2|decimal> The elongation length.
+            A list [x, y] of decimals or a single decimal for (x=y)
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.
   \param    m <integer> The section render mode. An 8-bit encoded integer
@@ -130,12 +130,12 @@ module st_rotate_extrude
   \details
 
     \b Example
-    \amu_eval ( function=st_rotate_extrude_elongate ${example_dim} )
+    \amu_eval ( function=rotate_extrude_tre ${example_dim} )
 
   \note When elongating <tt>(l > 0)</tt>, \p ra is ignored. However, \p m
         may be used to control which complete revolution section to render.
 *******************************************************************************/
-module st_rotate_extrude_elongate
+module rotate_extrude_tre
 (
   r,
   l,
@@ -147,7 +147,7 @@ module st_rotate_extrude_elongate
 {
   if ( not_defined(l) || (profile==true) )
   {
-    st_rotate_extrude(r=r, pa=pa, ra=ra, profile=profile)
+    rotate_extrude_tr(r=r, pa=pa, ra=ra, profile=profile)
     children();
   }
   else
@@ -169,7 +169,7 @@ module st_rotate_extrude_elongate
     {
       translate([i[0], i[1], 0])
       rotate([0, 0, i[2]])
-      st_rotate_extrude(r=r, pa=pa, ra=90, profile=profile)
+      rotate_extrude_tr(r=r, pa=pa, ra=90, profile=profile)
       children();
     }
 
@@ -193,18 +193,18 @@ module st_rotate_extrude_elongate
   }
 }
 
-//! Linearly extrude 2D shape with extrusion upper and lower scaling.
+//! Linearly extrude 2d shape with extrusion upper and lower scaling.
 /***************************************************************************//**
-  \param    h <vector|decimal> A vector of decimals or a single decimal to
-            specify simple extrusion height.
+  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
+            decimal to specify simple extrusion height.
   \param    center <boolean> Center extrusion about origin.
 
   \details
 
-    When \p h is a decimal, the shape is extruded linearly as normal. To
-    scale the upper and lower slices of the extrusion, \p h must be
-    assigned a vector with a minimum of three decimal values as
-    described in the following table.
+    When \p h is a decimal, the shape is extruded linearly as normal.
+    To scale the upper and lower slices of the extrusion, \p h must be
+    assigned a list with a minimum of three decimal values as described
+    in the following table.
 
       sym | h[n] | default | description
     :----:|:----:|:-------:|:---------------------------------------
@@ -221,12 +221,15 @@ module st_rotate_extrude_elongate
   \details
 
     \b Example
-    \amu_eval ( function=st_linear_extrude_scale ${example_dim} )
+    \amu_eval ( function=linear_extrude_uls ${example_dim} )
 
   \note When symmetrical scaling is desired, shape must be centered about
         origin.
+
+  \todo This function should be rewritten to use the built-in scaling
+        provided by linear_extrude() in the upper and lower scaling zones.
 *******************************************************************************/
-module st_linear_extrude_scale
+module linear_extrude_uls
 (
   h,
   center = false
@@ -297,18 +300,18 @@ module st_linear_extrude_scale
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup transforms
+  \addtogroup tools
   @{
 
-  \defgroup transforms_replicate Replications
-  \brief    Shape Replications and distribution.
+  \defgroup tools_repeat Repeat
+  \brief    Shape repetition and distribution tools.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! Distribute copies of a 2D or 3D shape equally about a z-axis radius.
+//! Distribute copies of a 2d or 3d shape equally about a z-axis radius.
 /***************************************************************************//**
-  \param    n <decimal> The number of equally spaced radii.
+  \param    n <integer> The number of equally spaced radii.
   \param    r <decimal> The shape move radius.
   \param    angle <boolean> Rotate each copy about z-axis.
   \param    move <boolean> Move each shape copy to radii coordinate.
@@ -316,9 +319,9 @@ module st_linear_extrude_scale
   \details
 
     \b Example
-    \amu_eval ( function=st_radial_copy ${example_dim} )
+    \amu_eval ( function=radial_repeat ${example_dim} )
 *******************************************************************************/
-module st_radial_copy
+module radial_repeat
 (
   n,
   r = 1,
@@ -326,49 +329,50 @@ module st_radial_copy
   move = false
 )
 {
-  for ( p = ngon_vp( r=r, n=n ) )
+  for ( p = rpolygon_lp( r=r, n=n ) )
   {
     translate(move==true ? p : origin2d)
-    rotate(angle==true ? [0, 0, angle_vv( v1t=x_axis2d_uv, v2t=p )] : origin3d)
+    rotate(angle==true ? [0, 0, angle_ll(x_axis2d_uv, p)] : origin3d)
     children();
   }
 }
 
-//! Distribute copies of 2D or 3D shapes about Cartesian grid.
+//! Distribute copies of 2d or 3d shapes about Cartesian grid.
 /***************************************************************************//**
-  \param    grid <vector|decimal> A vector [x, y, z] of decimals or a
-            single decimal for (x=y=z).
-  \param    incr <vector|decimal> A vector [x, y, z] of decimals or a
-            single decimal for (x=y=z).
-  \param    copy <decimal> Number of times to iterate over children.
+  \param    g <integer-list-3|integer> The grid division count. A list
+            [x, y, z] of integers or a single integer for (x=y=z).
+  \param    i <decimal-list-3|decimal> The grid increment size. A list
+            [x, y, z] of decimals or a single decimal for (x=y=z).
+  \param    c <integer> The number of copies. Number of times to iterate
+            over children.
   \param    center <boolean> Center distribution about origin.
 
   \details
 
     \b Example
-    \amu_eval ( function=st_cartesian_copy ${example_dim} )
+    \amu_eval ( function=grid_repeat ${example_dim} )
 *******************************************************************************/
-module st_cartesian_copy
+module grid_repeat
 (
-  grid,
-  incr,
-  copy = 1,
+  g,
+  i,
+  c = 1,
   center = false
 )
 {
-  gridd = is_scalar(grid) ? grid : 1;
+  gridd = is_scalar(g) ? g : 1;
 
-  gridx = edefined_or(grid, 0, gridd);
-  gridy = edefined_or(grid, 1, gridd);
-  gridz = edefined_or(grid, 2, gridd);
+  gridx = edefined_or(g, 0, gridd);
+  gridy = edefined_or(g, 1, gridd);
+  gridz = edefined_or(g, 2, gridd);
 
-  incrd = is_scalar(incr) ? incr : 0;
+  incrd = is_scalar(i) ? i : 0;
 
-  incrx = edefined_or(incr, 0, incrd);
-  incry = edefined_or(incr, 1, incrd);
-  incrz = edefined_or(incr, 2, incrd);
+  incrx = edefined_or(i, 0, incrd);
+  incry = edefined_or(i, 1, incrd);
+  incrz = edefined_or(i, 2, incrd);
 
-  if ( ( $children * copy ) > ( gridx * gridy * gridz ) )
+  if ( ( $children * c ) > ( gridx * gridy * gridz ) )
   {
     log_warn("more objects than grid capacity, shapes will overlap.");
     log_info
@@ -376,8 +380,8 @@ module st_cartesian_copy
       str
       (
         "children=", $children,
-        ", copies=", copy,
-        ", objects=", $children * copy
+        ", copies=", c,
+        ", objects=", $children * c
       )
     );
     log_info
@@ -394,28 +398,28 @@ module st_cartesian_copy
   (
     center==true
     ? [
-        -( min($children * copy, gridx) -1 )                   * incrx / 2,
-        -( min(ceil($children * copy/gridx), gridy) -1 )       * incry / 2,
-        -( min(ceil($children * copy/gridx/gridy), gridz) -1 ) * incrz / 2
+        -( min($children * c, gridx) -1 )                   * incrx / 2,
+        -( min(ceil($children * c/gridx), gridy) -1 )       * incry / 2,
+        -( min(ceil($children * c/gridx/gridy), gridz) -1 ) * incrz / 2
       ]
     : origin3d
   )
-  if ( copy > 0 )
+  if ( c > 0 )
   {
     for
     (
-      y = [0 : (copy-1)],
+      y = [0 : (c-1)],
       x = [0 : ($children-1)]
     )
     {
-      i = y * $children + x;
+      j = y * $children + x;
 
       translate
       (
         [
-          incrx * (i%gridx),
-          incry * (floor(i/gridx)%gridy),
-          incrz * (floor(floor(i/gridx)/gridy)%gridz)
+          incrx * (j%gridx),
+          incry * (floor(j/gridx)%gridy),
+          incrz * (floor(floor(j/gridx)/gridy)%gridz)
         ]
       )
       children([x]);
@@ -433,21 +437,21 @@ module st_cartesian_copy
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <transform.scad>;
+    include <tools/tools_utility.scad>;
 
-    shape = "st_rotate_extrude";
+    shape = "rotate_extrude_tr";
     $fn = 72;
 
-    if (shape == "st_rotate_extrude")
-      st_rotate_extrude( r=50, pa=45, ra=270 ) square( [10,5], center=true );
-    else if (shape == "st_rotate_extrude_elongate")
-      st_rotate_extrude_elongate( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
-    else if (shape == "st_linear_extrude_scale")
-      st_linear_extrude_scale( [5,10,15,-5], center=true ) square( [20,15], center=true );
-    else if (shape == "st_radial_copy")
-      st_radial_copy( n=7, r=6, move=true ) square( [20,1], center=true );
-    else if (shape == "st_cartesian_copy")
-      st_cartesian_copy( grid=[5,5,4], incr=10, copy=50, center=true ) {cube(10, center=true); sphere(10);}
+    if (shape == "rotate_extrude_tr")
+      rotate_extrude_tr( r=50, pa=45, ra=270 ) square( [10,5], center=true );
+    else if (shape == "rotate_extrude_tre")
+      rotate_extrude_tre( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
+    else if (shape == "linear_extrude_uls")
+      linear_extrude_uls( [5,10,15,-5], center=true ) square( [20,15], center=true );
+    else if (shape == "radial_repeat")
+      radial_repeat( n=7, r=6, move=true ) square( [20,1], center=true );
+    else if (shape == "grid_repeat")
+      grid_repeat( g=[5,5,4], i=10, c=50, center=true ) {cube(10, center=true); sphere(10);}
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -456,11 +460,11 @@ BEGIN_SCOPE dim;
     views     name "views" views "diag";
     defines   name "shapes" define "shape"
               strings "
-                st_rotate_extrude
-                st_rotate_extrude_elongate
-                st_linear_extrude_scale
-                st_radial_copy
-                st_cartesian_copy
+                rotate_extrude_tr
+                rotate_extrude_tre
+                linear_extrude_uls
+                radial_repeat
+                grid_repeat
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter";
