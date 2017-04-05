@@ -1,0 +1,144 @@
+.TH "math_linalg" 3 "Tue Apr 4 2017" "Version v0.6" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+math_linalg \- Linear Algebra
+.PP
+Linear algebra transformations on Euclidean coordinates\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBmath_linalg\&.scad\fP"
+.br
+.RI "\fILinear algebra mathematical functions\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBmultmatrix_lp\fP (c, m)"
+.br
+.RI "\fIMultiply all coordinates by a 4x4 3d-transformation matrix\&. \fP"
+.ti -1c
+.RI "function \fBtranslate_lp\fP (c, v)"
+.br
+.RI "\fITranslate all coordinates dimensions\&. \fP"
+.ti -1c
+.RI "function \fBrotate_lp\fP (c, a, v, o=\fBorigin3d\fP)"
+.br
+.RI "\fIRotate all coordinates about one or more axes in Euclidean 2d or 3d space\&. \fP"
+.ti -1c
+.RI "function \fBscale_lp\fP (c, v)"
+.br
+.RI "\fIScale all coordinates dimensions\&. \fP"
+.ti -1c
+.RI "function \fBresize_lp\fP (c, v)"
+.br
+.RI "\fIScale all coordinates dimensions proportionately to fit inside a region\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Linear algebra transformations on Euclidean coordinates\&. 
+
+
+.SH "Function Documentation"
+.PP 
+.SS "function multmatrix_lp (c, m)"
+
+.PP
+Multiply all coordinates by a 4x4 3d-transformation matrix\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIc\fP <coords-3d> A list of 3d coordinate points\&. 
+.br
+\fIm\fP <matrix-4x4> A 4x4 transformation matrix (decimal-list-4-list4)\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<coords-3d> A list of 3d coordinate points multiplied by the transformation matrix\&.
+.RE
+.PP
+See \fCWikipedia\fP and \fCmultmatrix\fP for more information\&. 
+.SS "function resize_lp (c, v)"
+
+.PP
+Scale all coordinates dimensions proportionately to fit inside a region\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIc\fP <coords-nd> A list of nd coordinate points\&. 
+.br
+\fIv\fP <decimal-list-n> A list of bounds for each dimension\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<coords-nd> A list of proportionately scaled coordinate points which exactly fit the region bounds \fCv\fP\&. 
+.RE
+.PP
+
+.SS "function rotate_lp (c, a, v, o = \fC\fBorigin3d\fP\fP)"
+
+.PP
+Rotate all coordinates about one or more axes in Euclidean 2d or 3d space\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIc\fP <coords-3d|coords-2d> A list of 3d or 2d coordinate points\&. 
+.br
+\fIa\fP <decimal-list-3|decimal> The axis rotation angle\&. A list [ax, ay, az] or a single decimal to specify az only\&. 
+.br
+\fIv\fP <vector-3d> An arbitrary axis for the rotation\&. When specified, the rotation angle will be \fCa\fP or az about the line \fCv\fP that passes through point \fCo\fP\&. 
+.br
+\fIo\fP <point-3d> A 3d point origin for the rotation\&. Ignored when \fCv\fP is not specified\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<coords-3d|coords-2d> A list of 3d or 2d rotated coordinates\&. Rotation order is rz, ry, rx\&.
+.RE
+.PP
+See \fCWikipedia\fP for more information on \fCtransformation matrix\fP and \fCaxis rotation\fP\&. 
+.SS "function scale_lp (c, v)"
+
+.PP
+Scale all coordinates dimensions\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIc\fP <coords-nd> A list of nd coordinate points\&. 
+.br
+\fIv\fP <decimal-list-n> A list of scalers for each dimension\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<coords-nd> A list of scaled coordinate points\&. 
+.RE
+.PP
+
+.SS "function translate_lp (c, v)"
+
+.PP
+Translate all coordinates dimensions\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIc\fP <coords-nd> A list of nd coordinate points\&. 
+.br
+\fIv\fP <decimal-list-n> A list of translations for each dimension\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<coords-nd> A list of translated coordinate points\&.
+.RE
+.PP
+See \fCWikipedia\fP for more information and \fCtransformation matrix\fP\&. 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

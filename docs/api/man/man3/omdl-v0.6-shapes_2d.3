@@ -1,0 +1,765 @@
+.TH "shapes_2d" 3 "Tue Apr 4 2017" "Version v0.6" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+shapes_2d \- 2d Shapes
+.PP
+Two-dimensional geometric shapes\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBshapes2d\&.scad\fP"
+.br
+.RI "\fITwo-dimensional basic shapes\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "module \fBrectangle\fP (size, vr, vrm=0, center=false)"
+.br
+.RI "\fIA rectangle with edge, fillet, and/or chamfer corners\&. \fP"
+.ti -1c
+.RI "module \fBrectangle_c\fP (size, core, t, co, cr=0, vr, vr1, vr2, vrm=0, vrm1, vrm2, center=false)"
+.br
+.RI "\fIA rectangle with a removed rectangular core\&. \fP"
+.ti -1c
+.RI "module \fBrhombus\fP (size, vr, center=false)"
+.br
+.RI "\fIA rhombus\&. \fP"
+.ti -1c
+.RI "module \fBtriangle_ppp\fP (v1, v2, v3, vr, v1r, v2r, v3r, centroid=false, incenter=false)"
+.br
+.RI "\fIA general triangle specified by three vertices\&. \fP"
+.ti -1c
+.RI "module \fBtriangle_lp\fP (v, vr, centroid=false, incenter=false)"
+.br
+.RI "\fIA general triangle specified by a list of its three vertices\&. \fP"
+.ti -1c
+.RI "module \fBtriangle_sss\fP (s1, s2, s3, vr, v1r, v2r, v3r, centroid=false, incenter=false)"
+.br
+.RI "\fIA general triangle specified by its three side lengths\&. \fP"
+.ti -1c
+.RI "module \fBtriangle_ls\fP (v, vr, centroid=false, incenter=false)"
+.br
+.RI "\fIA general triangle specified by a list of its three side lengths\&. \fP"
+.ti -1c
+.RI "module \fBtriangle_ls_c\fP (vs, vc, co, cr=0, vr, vr1, vr2, centroid=false, incenter=false)"
+.br
+.RI "\fIA general triangle specified by its sides with a removed triangular core\&. \fP"
+.ti -1c
+.RI "module \fBtriangle_sas\fP (s1, a, s2, x=1, vr, v1r, v2r, v3r, centroid=false, incenter=false)"
+.br
+.RI "\fIA general triangle specified by two sides and the included angle\&. \fP"
+.ti -1c
+.RI "module \fBtriangle_asa\fP (a1, s, a2, x=1, vr, v1r, v2r, v3r, centroid=false, incenter=false)"
+.br
+.RI "\fIA general triangle specified by a side and two adjacent angles\&. \fP"
+.ti -1c
+.RI "module \fBtriangle_aas\fP (a1, a2, s, x=1, vr, v1r, v2r, v3r, centroid=false, incenter=false)"
+.br
+.RI "\fIA general triangle specified by a side, one adjacent angle and the opposite angle\&. \fP"
+.ti -1c
+.RI "module \fBtriangle_ss\fP (x, y, vr, v1r, v2r, v3r, centroid=false, incenter=false)"
+.br
+.RI "\fIA right-angled triangle specified by its opposite and adjacent side lengths\&. \fP"
+.ti -1c
+.RI "module \fBtriangle_sa\fP (x, y, aa, oa, vr, v1r, v2r, v3r, centroid=false, incenter=false)"
+.br
+.RI "\fIA right-angled triangle specified by a side length and an angle\&. \fP"
+.ti -1c
+.RI "module \fBngon\fP (n, r, vr)"
+.br
+.RI "\fIAn n-sided equiangular/equilateral regular polygon\&. \fP"
+.ti -1c
+.RI "module \fBellipse\fP (size)"
+.br
+.RI "\fIAn ellipse\&. \fP"
+.ti -1c
+.RI "module \fBellipse_c\fP (size, core, t, co, cr=0)"
+.br
+.RI "\fIAn ellipse with a removed elliptical core\&. \fP"
+.ti -1c
+.RI "module \fBellipse_s\fP (size, a1=0, a2=0)"
+.br
+.RI "\fIAn ellipse sector\&. \fP"
+.ti -1c
+.RI "module \fBellipse_cs\fP (size, core, t, a1=0, a2=0, co, cr=0)"
+.br
+.RI "\fIA sector of an ellipse with a removed elliptical core\&. \fP"
+.ti -1c
+.RI "module \fBstar2d\fP (size, n=5, vr)"
+.br
+.RI "\fIA two-dimensional star\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Two-dimensional geometric shapes\&. 
+
+
+.SH "Function Documentation"
+.PP 
+.SS "module ellipse (size)"
+
+.PP
+An ellipse\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsize\fP <decimal-list-2|decimal> A list [rx, ry] of decimals or a single decimal for (rx=ry)\&.
+.RE
+.PP
+\fBExample\fP ellipse ellipse 
+.PP
+.nf
+1       ellipse( size=[25, 40] );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 1102 of file shapes2d\&.scad\&.
+.SS "module ellipse_c (size, core, t, co, cr = \fC0\fP)"
+
+.PP
+An ellipse with a removed elliptical core\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsize\fP <decimal-list-2|decimal> A list [rx, ry] of decimals or a single decimal for (rx=ry)\&. 
+.br
+\fIcore\fP <decimal-list-2|decimal> A list [rx, ry] of decimals or a single decimal for (rx=ry)\&.
+.br
+\fIt\fP <decimal-list-2|decimal> A list [x, y] of decimals or a single decimal for (x=y)\&.
+.br
+\fIco\fP <decimal-list-2> Core offset\&. A list [x, y] of decimals\&. 
+.br
+\fIcr\fP <decimal> Core z-rotation\&.
+.RE
+.PP
+Thickness \fCt\fP 
+.PD 0
+
+.IP "\(bu" 2
+\fCcore = size - t\fP; when \fCt\fP and \fCsize\fP are given\&. 
+.IP "\(bu" 2
+\fCsize = core + t\fP; when \fCt\fP and \fCcore\fP are given\&.
+.PP
+\fBExample\fP ellipse_c ellipse_c 
+.PP
+.nf
+1       ellipse_c( size=[25,40], core=[16,10], co=[0,10], cr=45 );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 1143 of file shapes2d\&.scad\&.
+.SS "module ellipse_cs (size, core, t, a1 = \fC0\fP, a2 = \fC0\fP, co, cr = \fC0\fP)"
+
+.PP
+A sector of an ellipse with a removed elliptical core\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsize\fP <decimal-list-2|decimal> A list [rx, ry] of decimals or a single decimal for (rx=ry)\&. 
+.br
+\fIcore\fP <decimal-list-2|decimal> A list [rx, ry] of decimals or a single decimal for (rx=ry)\&.
+.br
+\fIt\fP <decimal-list-2|decimal> A list [x, y] of decimals or a single decimal for (x=y)\&.
+.br
+\fIa1\fP <decimal> The start angle in degrees\&. 
+.br
+\fIa2\fP <decimal> The stop angle in degrees\&.
+.br
+\fIco\fP <decimal-list-2> Core offset\&. A list [x, y] of decimals\&. 
+.br
+\fIcr\fP <decimal> Core z-rotation\&.
+.RE
+.PP
+Thickness \fCt\fP 
+.PD 0
+
+.IP "\(bu" 2
+\fCcore = size - t\fP; when \fCt\fP and \fCsize\fP are given\&. 
+.IP "\(bu" 2
+\fCsize = core + t\fP; when \fCt\fP and \fCcore\fP are given\&.
+.PP
+\fBExample\fP ellipse_cs ellipse_cs 
+.PP
+.nf
+1       ellipse_cs( size=[25,40], t=[10,5], a1=90, a2=180, co=[10,0], cr=45);
+
+.fi
+.PP
+ 
+.PP
+Definition at line 1253 of file shapes2d\&.scad\&.
+.SS "module ellipse_s (size, a1 = \fC0\fP, a2 = \fC0\fP)"
+
+.PP
+An ellipse sector\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsize\fP <decimal-list-2|decimal> A list [rx, ry] of decimals or a single decimal for (rx=ry)\&.
+.br
+\fIa1\fP <decimal> The start angle in degrees\&. 
+.br
+\fIa2\fP <decimal> The stop angle in degrees\&.
+.RE
+.PP
+\fBExample\fP ellipse_s ellipse_s 
+.PP
+.nf
+1       ellipse_s( size=[25,40], a1=90, a2=180 );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 1185 of file shapes2d\&.scad\&.
+.SS "module ngon (n, r, vr)"
+
+.PP
+An n-sided equiangular/equilateral regular polygon\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIn\fP <integer> The number of sides\&. 
+.br
+\fIr\fP <decimal> The ngon vertex radius\&.
+.br
+\fIvr\fP <decimal> The vertex rounding radius\&.
+.RE
+.PP
+\fBExample\fP ngon ngon 
+.PP
+.nf
+1       ngon( n=6, r=25, vr=6 );
+
+.fi
+.PP
+.PP
+See \fCWikipedia\fP for more information\&. 
+.PP
+Definition at line 1068 of file shapes2d\&.scad\&.
+.SS "module rectangle (size, vr, vrm = \fC0\fP, center = \fCfalse\fP)"
+
+.PP
+A rectangle with edge, fillet, and/or chamfer corners\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsize\fP <decimal-list-2|decimal> A list [x, y] of decimals or a single decimal for (x=y)\&.
+.br
+\fIvr\fP <decimal-list-4|decimal> The corner rounding radius\&. A list [v1r, v2r, v3r, v4r] of decimals or a single decimal for (v1r=v2r=v3r=v4r)\&. Unspecified corners are not rounded\&.
+.br
+\fIvrm\fP <integer> The corner radius mode\&. A 4-bit encoded integer that indicates each corner finish\&. Use bit value \fB0\fP for \fIfillet\fP and \fB1\fP for \fIchamfer\fP\&.
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBExample\fP rectangle rectangle 
+.PP
+.nf
+1       rectangle( size=[25,40], vr=[0,10,10,5], vrm=4, center=true );
+
+.fi
+.PP
+.PP
+\fBNote:\fP
+.RS 4
+A corner \fIfillet\fP replaces an edge with a quarter circle of radius \fCvr\fP, inset \fC[vr, vr]\fP from the corner vertex\&. 
+.PP
+A corner \fIchamfer\fP replaces an edge with an isosceles right triangle with side lengths equal to the corresponding corner rounding radius \fCvr\fP\&. Therefore the chamfer length will be \fCvr*sqrt(2)\fP at 45 degree angles\&. 
+.RE
+.PP
+
+.PP
+Definition at line 116 of file shapes2d\&.scad\&.
+.SS "module rectangle_c (size, core, t, co, cr = \fC0\fP, vr, vr1, vr2, vrm = \fC0\fP, vrm1, vrm2, center = \fCfalse\fP)"
+
+.PP
+A rectangle with a removed rectangular core\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsize\fP <decimal-list-2|decimal> A list [x, y] of decimals or a single decimal for (x=y)\&. 
+.br
+\fIcore\fP <decimal-list-2|decimal> A list [x, y] of decimals or a single decimal for (x=y)\&.
+.br
+\fIt\fP <decimal-list-2|decimal> A list [x, y] of decimals or a single decimal for (x=y)\&.
+.br
+\fIco\fP <decimal-list-2> Core offset\&. A list [x, y] of decimals\&. 
+.br
+\fIcr\fP <decimal> Core z-rotation\&.
+.br
+\fIvr\fP <decimal-list-4|decimal> The default corner rounding radius\&. A list [v1r, v2r, v3r, v4r] of decimals or a single decimal for (v1r=v2r=v3r=v4r)\&. Unspecified corners are not rounded\&. 
+.br
+\fIvr1\fP <decimal-list-4|decimal> The outer corner rounding radius\&. 
+.br
+\fIvr2\fP <decimal-list-4|decimal> The core corner rounding radius\&.
+.br
+\fIvrm\fP <integer> The default corner radius mode\&. A 4-bit encoded integer that indicates each corner finish\&. Use bit value \fB0\fP for \fIfillet\fP and \fB1\fP for \fIchamfer\fP\&. 
+.br
+\fIvrm1\fP <integer> The outer corner radius mode\&. 
+.br
+\fIvrm2\fP <integer> The core corner radius mode\&.
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+Thickness \fCt\fP 
+.PD 0
+
+.IP "\(bu" 2
+\fCcore = size - t\fP; when \fCt\fP and \fCsize\fP are given\&. 
+.IP "\(bu" 2
+\fCsize = core + t\fP; when \fCt\fP and \fCcore\fP are given\&.
+.PP
+\fBExample\fP rectangle_c rectangle_c 
+.PP
+.nf
+1       rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2\&.5, vrm2=3, co=[0,5], center=true );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 236 of file shapes2d\&.scad\&.
+.SS "module rhombus (size, vr, center = \fCfalse\fP)"
+
+.PP
+A rhombus\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsize\fP <decimal-list-2|decimal> A list [w, h] of decimals or a single decimal for (w=h)\&.
+.br
+\fIvr\fP <decimal-list-4|decimal> The corner rounding radius\&. A list [v1r, v2r, v3r, v4r] of decimals or a single decimal for (v1r=v2r=v3r=v4r)\&. Unspecified corners are not rounded\&.
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBExample\fP rhombus rhombus 
+.PP
+.nf
+1       rhombus( size=[40,25], vr=[2,4,2,4], center=true );
+
+.fi
+.PP
+.PP
+See \fCWikipedia\fP for more information\&. 
+.PP
+Definition at line 301 of file shapes2d\&.scad\&.
+.SS "module star2d (size, n = \fC5\fP, vr)"
+
+.PP
+A two-dimensional star\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsize\fP <decimal-list-2|decimal> A list [l, w] of decimals or a single decimal for (size=l=2*w)\&.
+.br
+\fIn\fP <decimal> The number of points\&.
+.br
+\fIvr\fP <decimal-list-3|decimal> The vertex rounding radius\&. A list [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r)\&.
+.RE
+.PP
+\fBExample\fP star2d star2d 
+.PP
+.nf
+1       star2d( size=[40, 15], n=5, vr=2 );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 1300 of file shapes2d\&.scad\&.
+.SS "module triangle_aas (a1, a2, s, x = \fC1\fP, vr, v1r, v2r, v3r, centroid = \fCfalse\fP, incenter = \fCfalse\fP)"
+
+.PP
+A general triangle specified by a side, one adjacent angle and the opposite angle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa1\fP <decimal> The opposite angle 1 in degrees\&. 
+.br
+\fIa2\fP <decimal> The adjacent angle 2 in degrees\&. 
+.br
+\fIs\fP <decimal> The side length\&.
+.br
+\fIx\fP <integer> The side to draw on the positive x-axis (\fCx=1\fP for \fCs\fP)\&.
+.br
+\fIvr\fP <decimal> The default vertex rounding radius\&. 
+.br
+\fIv1r\fP <decimal> Vertex 1 rounding radius\&. 
+.br
+\fIv2r\fP <decimal> Vertex 2 rounding radius\&. 
+.br
+\fIv3r\fP <decimal> Vertex 3 rounding radius\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&.
+.RE
+.PP
+\fBExample\fP triangle_aas triangle_aas 
+.PP
+.nf
+1       triangle_aas( a1=60, a2=30, s=40, vr=2, centroid=true );
+
+.fi
+.PP
+.PP
+See \fCWikipedia\fP for more information\&. 
+.PP
+Definition at line 895 of file shapes2d\&.scad\&.
+.SS "module triangle_asa (a1, s, a2, x = \fC1\fP, vr, v1r, v2r, v3r, centroid = \fCfalse\fP, incenter = \fCfalse\fP)"
+
+.PP
+A general triangle specified by a side and two adjacent angles\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa1\fP <decimal> The adjacent angle 1 in degrees\&. 
+.br
+\fIs\fP <decimal> The side length adjacent to the angles\&. 
+.br
+\fIa2\fP <decimal> The adjacent angle 2 in degrees\&.
+.br
+\fIx\fP <integer> The side to draw on the positive x-axis (\fCx=1\fP for \fCs\fP)\&.
+.br
+\fIvr\fP <decimal> The default vertex rounding radius\&. 
+.br
+\fIv1r\fP <decimal> Vertex 1 rounding radius\&. 
+.br
+\fIv2r\fP <decimal> Vertex 2 rounding radius\&. 
+.br
+\fIv3r\fP <decimal> Vertex 3 rounding radius\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&.
+.RE
+.PP
+\fBExample\fP triangle_asa triangle_asa 
+.PP
+.nf
+1       triangle_asa( a1=30, s=50, a2=60, vr=2, centroid=true );
+
+.fi
+.PP
+.PP
+See \fCWikipedia\fP for more information\&. 
+.PP
+Definition at line 810 of file shapes2d\&.scad\&.
+.SS "module triangle_lp (v, vr, centroid = \fCfalse\fP, incenter = \fCfalse\fP)"
+
+.PP
+A general triangle specified by a list of its three vertices\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <point-2d-list-3> A list [v1, v2, v3] of points [x, y]\&.
+.br
+\fIvr\fP <decimal-list-3|decimal> The vertex rounding radius\&. A list [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r)\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&.
+.RE
+.PP
+\fBExample\fP 
+.PP
+.nf
+t = triangle_sss2lp( 30, 40, 50 );
+r = [2, 4, 6];
+triangle_lp( v=t, vr=r  );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 479 of file shapes2d\&.scad\&.
+.SS "module triangle_ls (v, vr, centroid = \fCfalse\fP, incenter = \fCfalse\fP)"
+
+.PP
+A general triangle specified by a list of its three side lengths\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <decimal-list-3> A list [s1, s2, s3] of decimals\&.
+.br
+\fIvr\fP <decimal-list-3|decimal> The vertex rounding radius\&. A list [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r)\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&.
+.RE
+.PP
+\fBExample\fP 
+.PP
+.nf
+t = triangle_sss2lp( 3, 4, 5 );
+s = triangle_lp2ls( t );
+triangle_ls( v=s, vr=2, centroid=true );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 590 of file shapes2d\&.scad\&.
+.SS "module triangle_ls_c (vs, vc, co, cr = \fC0\fP, vr, vr1, vr2, centroid = \fCfalse\fP, incenter = \fCfalse\fP)"
+
+.PP
+A general triangle specified by its sides with a removed triangular core\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIvs\fP <decimal-list-3|decimal> The size\&. A list [s1, s2, s3] of decimals or a single decimal for (s1=s2=s3)\&. 
+.br
+\fIvc\fP <decimal-list-3|decimal> The core\&. A list [s1, s2, s3] of decimals or a single decimal for (s1=s2=s3)\&.
+.br
+\fIco\fP <decimal-list-2> Core offset\&. A list [x, y] of decimals\&. 
+.br
+\fIcr\fP <decimal> Core z-rotation\&.
+.br
+\fIvr\fP <decimal-list-3|decimal> The default vertex rounding radius\&. A list [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r)\&. 
+.br
+\fIvr1\fP <decimal-list-3|decimal> The outer vertex rounding radius\&. 
+.br
+\fIvr2\fP <decimal-list-3|decimal> The core vertex rounding radius\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&.
+.RE
+.PP
+\fBExample\fP triangle_ls_c triangle_ls_c 
+.PP
+.nf
+1       triangle_ls_c( vs=[30,50,50], vc=[20,40,40], co=[0,-4], vr1=[1,1,6], vr2=4, centroid=true );
+
+.fi
+.PP
+.PP
+\fBNote:\fP
+.RS 4
+The outer and inner triangles centroids are aligned prior to the core removal\&. 
+.RE
+.PP
+
+.PP
+Definition at line 645 of file shapes2d\&.scad\&.
+.SS "module triangle_ppp (v1, v2, v3, vr, v1r, v2r, v3r, centroid = \fCfalse\fP, incenter = \fCfalse\fP)"
+
+.PP
+A general triangle specified by three vertices\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv1\fP <point-2d> A point [x, y] for vertex 1\&. 
+.br
+\fIv2\fP <point-2d> A point [x, y] for vertex 2\&. 
+.br
+\fIv3\fP <point-2d> A point [x, y] for vertex 3\&.
+.br
+\fIvr\fP <decimal> The default vertex rounding radius\&. 
+.br
+\fIv1r\fP <decimal> Vertex 1 rounding radius\&. 
+.br
+\fIv2r\fP <decimal> Vertex 2 rounding radius\&. 
+.br
+\fIv3r\fP <decimal> Vertex 3 rounding radius\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&.
+.RE
+.PP
+\fBExample\fP triangle_ppp triangle_ppp 
+.PP
+.nf
+1       triangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], vr=2, centroid=true );
+
+.fi
+.PP
+.PP
+\fBWarning:\fP
+.RS 4
+Currently, in order to round any vertex, all must be given a rounding radius, either via \fCvr\fP or individually\&.
+.RE
+.PP
+\fBTodo\fP
+.RS 4
+Replace the hull() operation with calculated tangential intersection of the rounded vertexes\&. 
+.PP
+Remove the all or nothing requirement for vertex rounding\&. 
+.RE
+.PP
+
+.PP
+Definition at line 402 of file shapes2d\&.scad\&.
+.SS "module triangle_sa (x, y, aa, oa, vr, v1r, v2r, v3r, centroid = \fCfalse\fP, incenter = \fCfalse\fP)"
+
+.PP
+A right-angled triangle specified by a side length and an angle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP <decimal> The length of the side along the x-axis\&. 
+.br
+\fIy\fP <decimal> The length of the side along the y-axis\&. 
+.br
+\fIaa\fP <decimal> The adjacent angle in degrees\&. 
+.br
+\fIoa\fP <decimal> The opposite angle in degrees\&.
+.br
+\fIvr\fP <decimal> The default vertex rounding radius\&. 
+.br
+\fIv1r\fP <decimal> Vertex 1 rounding radius\&. 
+.br
+\fIv2r\fP <decimal> Vertex 2 rounding radius\&. 
+.br
+\fIv3r\fP <decimal> Vertex 3 rounding radius\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&.
+.RE
+.PP
+\fBExample\fP triangle_sa triangle_sa 
+.PP
+.nf
+1       triangle_sa( x=40, aa=30, vr=2, centroid=true );
+
+.fi
+.PP
+.PP
+\fBNote:\fP
+.RS 4
+When both \fCx\fP and \fCy\fP are given, both triangles are rendered\&. 
+.PP
+When both \fCaa\fP and \fCoa\fP are given, \fCaa\fP is used\&. 
+.RE
+.PP
+
+.PP
+Definition at line 1015 of file shapes2d\&.scad\&.
+.SS "module triangle_sas (s1, a, s2, x = \fC1\fP, vr, v1r, v2r, v3r, centroid = \fCfalse\fP, incenter = \fCfalse\fP)"
+
+.PP
+A general triangle specified by two sides and the included angle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs1\fP <decimal> The length of the side 1\&. 
+.br
+\fIa\fP <decimal> The included angle in degrees\&. 
+.br
+\fIs2\fP <decimal> The length of the side 2\&.
+.br
+\fIx\fP <integer> The side to draw on the positive x-axis (\fCx=1\fP for \fCs1\fP)\&.
+.br
+\fIvr\fP <decimal> The default vertex rounding radius\&. 
+.br
+\fIv1r\fP <decimal> Vertex 1 rounding radius\&. 
+.br
+\fIv2r\fP <decimal> Vertex 2 rounding radius\&. 
+.br
+\fIv3r\fP <decimal> Vertex 3 rounding radius\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&.
+.RE
+.PP
+\fBExample\fP triangle_sas triangle_sas 
+.PP
+.nf
+1       triangle_sas( s1=50, a=60, s2=30, vr=2, centroid=true );
+
+.fi
+.PP
+.PP
+See \fCWikipedia\fP for more information\&. 
+.PP
+Definition at line 739 of file shapes2d\&.scad\&.
+.SS "module triangle_ss (x, y, vr, v1r, v2r, v3r, centroid = \fCfalse\fP, incenter = \fCfalse\fP)"
+
+.PP
+A right-angled triangle specified by its opposite and adjacent side lengths\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP <decimal> The length of the side along the x-axis\&. 
+.br
+\fIy\fP <decimal> The length of the side along the y-axis\&.
+.br
+\fIvr\fP <decimal> The default vertex rounding radius\&. 
+.br
+\fIv1r\fP <decimal> Vertex 1 rounding radius\&. 
+.br
+\fIv2r\fP <decimal> Vertex 2 rounding radius\&. 
+.br
+\fIv3r\fP <decimal> Vertex 3 rounding radius\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&.
+.RE
+.PP
+\fBExample\fP triangle_ss triangle_ss 
+.PP
+.nf
+1       triangle_ss( x=30, y=40, vr=2, centroid=true );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 972 of file shapes2d\&.scad\&.
+.SS "module triangle_sss (s1, s2, s3, vr, v1r, v2r, v3r, centroid = \fCfalse\fP, incenter = \fCfalse\fP)"
+
+.PP
+A general triangle specified by its three side lengths\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs1\fP <decimal> The length of the side 1 (along the x-axis)\&. 
+.br
+\fIs2\fP <decimal> The length of the side 2\&. 
+.br
+\fIs3\fP <decimal> The length of the side 3\&.
+.br
+\fIvr\fP <decimal> The default vertex rounding radius\&. 
+.br
+\fIv1r\fP <decimal> Vertex 1 rounding radius\&. 
+.br
+\fIv2r\fP <decimal> Vertex 2 rounding radius\&. 
+.br
+\fIv3r\fP <decimal> Vertex 3 rounding radius\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&.
+.RE
+.PP
+\fBExample\fP triangle_sss triangle_sss 
+.PP
+.nf
+1       triangle_sss( s1=30, s2=40, s3=50, vr=2, centroid=true );
+
+.fi
+.PP
+.PP
+See \fCWikipedia\fP for more information\&. 
+.PP
+Definition at line 529 of file shapes2d\&.scad\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

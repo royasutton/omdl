@@ -1,0 +1,409 @@
+.TH "math_vecalg" 3 "Tue Apr 4 2017" "Version v0.6" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+math_vecalg \- Vector Algebra
+.PP
+Algebraic operations on Euclidean vectors\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBmath_vecalg\&.scad\fP"
+.br
+.RI "\fIVector algebra mathematical functions\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBdistance_pp\fP (p1, p2)"
+.br
+.RI "\fICompute the distance between two Euclidean points\&. \fP"
+.ti -1c
+.RI "function \fBis_left_ppp\fP (p1, p2, p3)"
+.br
+.RI "\fITest if a point is left, on, or right of an infinite line in a Euclidean 2d-space\&. \fP"
+.ti -1c
+.RI "function \fBdimension_2to3_v\fP (v)"
+.br
+.RI "\fIReturn 3d vector unchanged or add a zeroed third dimension to 2d vector\&. \fP"
+.ti -1c
+.RI "function \fBget_line_dim\fP (l)"
+.br
+.RI "\fIReturn the number of dimensions of a Euclidean line (or vector)\&. \fP"
+.ti -1c
+.RI "function \fBget_line_tp\fP (l)"
+.br
+.RI "\fIReturn the terminal point of a Euclidean line (or vector)\&. \fP"
+.ti -1c
+.RI "function \fBget_line_ip\fP (l)"
+.br
+.RI "\fIReturn the initial point of a Euclidean line (or vector)\&. \fP"
+.ti -1c
+.RI "function \fBget_line2origin\fP (l)"
+.br
+.RI "\fIShift a Euclidean line (or vector) to the origin\&. \fP"
+.ti -1c
+.RI "function \fBdot_ll\fP (l1, l2)"
+.br
+.RI "\fICompute the dot product of two lines (or vectors)\&. \fP"
+.ti -1c
+.RI "function \fBcross_ll\fP (l1, l2)"
+.br
+.RI "\fICompute the cross product of two lines (or vectors) in a Euclidean 3d or 2d-space\&. \fP"
+.ti -1c
+.RI "function \fBstriple_lll\fP (l1, l2, l3)"
+.br
+.RI "\fICompute the scalar triple product of three lines (or vectors) in a Euclidean 3d or 2d-space\&. \fP"
+.ti -1c
+.RI "function \fBangle_ll\fP (l1, l2)"
+.br
+.RI "\fICompute the angle between two lines (or vectors) in a Euclidean 3d or 2d-space\&. \fP"
+.ti -1c
+.RI "function \fBangle_lll\fP (l1, l2, n)"
+.br
+.RI "\fICompute the angle between two lines (or vectors) in a Euclidean 3d-space\&. \fP"
+.ti -1c
+.RI "function \fBunit_l\fP (l)"
+.br
+.RI "\fICompute the normalized unit vector of a Euclidean line (or vector)\&. \fP"
+.ti -1c
+.RI "function \fBare_coplanar_lll\fP (l1, l2, l3, d=6)"
+.br
+.RI "\fITest if three lines (or vectors) are coplanar in Euclidean 3d-space\&. \fP"
+.ti -1c
+.RI "function \fBget_pnorm2nv\fP (pn, cw=true)"
+.br
+.RI "\fIConvert a planes' normal specification into a normal vector\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Algebraic operations on Euclidean vectors\&. 
+
+See validation \fBresults\fP\&. 
+.SH "Function Documentation"
+.PP 
+.SS "function angle_ll (l1, l2)"
+
+.PP
+Compute the angle between two lines (or vectors) in a Euclidean 3d or 2d-space\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIl1\fP <line-3d|line-2d> A 3d or 2d line (or vector) 1\&. 
+.br
+\fIl2\fP <line-3d|line-2d> A 3d or 2d line (or vector) 2\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> The angle between the two lines (or vectors) in degrees\&. Returns \fBundef\fP when lines (or vectors) have different dimensions or when they do not intersect\&.
+.RE
+.PP
+See \fBLines and vectors\fP for argument specification and conventions\&.
+.PP
+\fBNote:\fP
+.RS 4
+For 3d lines (or vectors), a normal is required to uniquely identify the perpendicular plane and axis of rotation\&. This function calculates the positive angle, and the plane and axis of rotation will be that which fits this assumed positive angle\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBangle_lll()\fP\&. 
+.RE
+.PP
+
+.SS "function angle_lll (l1, l2, n)"
+
+.PP
+Compute the angle between two lines (or vectors) in a Euclidean 3d-space\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIl1\fP <line-3d> A 3d line (or vector) 1\&. 
+.br
+\fIl2\fP <line-3d> A 3d line (or vector) 2\&. 
+.br
+\fIn\fP <line-3d> A 3d normal line (or vector)\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> The angle between the two lines (or vectors) in degrees\&. Returns \fBundef\fP when lines (or vectors) have different dimensions or when they do not intersect\&.
+.RE
+.PP
+See \fBLines and vectors\fP for argument specification and conventions\&.
+.PP
+\fBSee also:\fP
+.RS 4
+\fBangle_ll()\fP\&. 
+.RE
+.PP
+
+.SS "function are_coplanar_lll (l1, l2, l3, d = \fC6\fP)"
+
+.PP
+Test if three lines (or vectors) are coplanar in Euclidean 3d-space\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIl1\fP <line-3d> A 3d line (or vector) 1\&. 
+.br
+\fIl2\fP <line-3d> A 3d line (or vector) 2\&. 
+.br
+\fIl3\fP <line-3d> A 3d line (or vector) 3\&. 
+.br
+\fId\fP <integer> The number of decimal places to consider\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when all three lines (or vectors) are coplanar, and \fBfalse\fP otherwise\&.
+.RE
+.PP
+See \fBLines and vectors\fP for argument specification and conventions\&. See \fCWikipedia\fP for more information\&.
+.PP
+\fBNote:\fP
+.RS 4
+When lines (or vectors) are specified with start and end points, this function tests if they are in a planes parallel to the coplanar\&. 
+.RE
+.PP
+
+.SS "function cross_ll (l1, l2)"
+
+.PP
+Compute the cross product of two lines (or vectors) in a Euclidean 3d or 2d-space\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIl1\fP <line-3d|line-2d> A 3d or 2d line (or vector) 1\&. 
+.br
+\fIl2\fP <line-3d|line-2d> A 3d or 2d line (or vector) 2\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal|vector-2d> The cross product of \fCl1\fP with \fCl2\fP\&. Returns \fBundef\fP when lines (or vectors) have different dimensions\&.
+.RE
+.PP
+This function supports the abstraction outlined in \fBLines and vectors\fP\&. The built-in operation will be more efficient in situations that do not make use of the aforementioned abstraction\&.
+.PP
+See \fBLines and vectors\fP for argument specification and conventions\&. See Wikipedia \fCcross\fP and \fCdeterminant\fP for more information\&.
+.PP
+\fBNote:\fP
+.RS 4
+This function returns the 2x2 determinant for 2d vectors\&. 
+.RE
+.PP
+
+.SS "function dimension_2to3_v (v)"
+
+.PP
+Return 3d vector unchanged or add a zeroed third dimension to 2d vector\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <vector-3d|vector-2d> A vector\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector-3d> The 3d vector or the 2d vector converted to 3d with its third dimension assigned zero\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+To reduce overhead, this function assumes any vector that is not 3d to be 2d\&. 
+.RE
+.PP
+
+.SS "function distance_pp (p1, p2)"
+
+.PP
+Compute the distance between two Euclidean points\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIp1\fP <point> A point coordinate 1\&. 
+.br
+\fIp2\fP <point> A point coordinate 2\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> The distance between the two points\&. Returns \fBundef\fP when points do not have equal dimensions\&.
+.RE
+.PP
+When \fCp2\fP is not given, it is assumed to be at the origin\&. This function is similar to \fCnorm\fP\&. 
+.SS "function dot_ll (l1, l2)"
+
+.PP
+Compute the dot product of two lines (or vectors)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIl1\fP <line> A n-dimensional line (or vector) 1\&. 
+.br
+\fIl2\fP <line> A n-dimensional line (or vector) 2\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> The dot product of \fCl1\fP with \fCl2\fP\&. Returns \fBundef\fP when lines (or vectors) have different dimensions\&.
+.RE
+.PP
+This function supports the abstraction outlined in \fBLines and vectors\fP\&. The built-in operation will be more efficient in situations that do not make use of the aforementioned abstraction\&.
+.PP
+See \fBLines and vectors\fP for argument specification and conventions\&. See \fCWikipedia\fP for more information\&. 
+.SS "function get_line2origin (l)"
+
+.PP
+Shift a Euclidean line (or vector) to the origin\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIl\fP <line> A line (or vector)\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> The line (or vector) shifted to the origin\&.
+.RE
+.PP
+See \fBLines and vectors\fP for argument specification and conventions\&. 
+.SS "function get_line_dim (l)"
+
+.PP
+Return the number of dimensions of a Euclidean line (or vector)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIl\fP <line> A line (or vector)\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<integer> The number of dimensions for the line (or vector)\&.
+.RE
+.PP
+See \fBLines and vectors\fP for argument specification and conventions\&. 
+.SS "function get_line_ip (l)"
+
+.PP
+Return the initial point of a Euclidean line (or vector)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIl\fP <line> A line (or vector)\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<point> The initial point of the line (or vector)\&.
+.RE
+.PP
+See \fBLines and vectors\fP for argument specification and conventions\&. 
+.SS "function get_line_tp (l)"
+
+.PP
+Return the terminal point of a Euclidean line (or vector)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIl\fP <line> A line (or vector)\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<point> The terminal point of the line (or vector)\&.
+.RE
+.PP
+See \fBLines and vectors\fP for argument specification and conventions\&. 
+.SS "function get_pnorm2nv (pn, cw = \fCtrue\fP)"
+
+.PP
+Convert a planes' normal specification into a normal vector\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpn\fP <pnorm> A plane normal \fBspecification\fP\&.
+.br
+\fIcw\fP <boolean> Point ordering\&. When the plane specified as non-collinear points, this indicates ordering\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<normal> A vector-3d normal to the plane\&.
+.RE
+.PP
+See \fBPlanes' normal\fP for argument specification and conventions\&. 
+.SS "function is_left_ppp (p1, p2, p3)"
+
+.PP
+Test if a point is left, on, or right of an infinite line in a Euclidean 2d-space\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIp1\fP <point-2d> A 2d point coordinate 1\&. 
+.br
+\fIp2\fP <point-2d> A 2d point coordinate 2\&. 
+.br
+\fIp3\fP <point-2d> A 2d point coordinate 3\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> (\fB>\fP 0) for \fCp3\fP \fIleft\fP of the line through \fCp1\fP and \fCp2\fP, (\fB=\fP 0) for p3 \fIon\fP the line, and (\fB<\fP 0) for p3 right of the line\&.
+.RE
+.PP
+Function patterned after \fCDan Sunday, 2012\fP\&. 
+.SS "function striple_lll (l1, l2, l3)"
+
+.PP
+Compute the scalar triple product of three lines (or vectors) in a Euclidean 3d or 2d-space\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIl1\fP <line-3d|line-2d> A 3d or 2d line (or vector) 1\&. 
+.br
+\fIl2\fP <line-3d|line-2d> A 3d or 2d line (or vector) 2\&. 
+.br
+\fIl3\fP <line-3d|line-2d> A 3d or 2d line (or vector) 3\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal|vector-2d> The scalar triple product\&. Returns \fBundef\fP when lines (or vectors) have different dimensions\&.
+.RE
+.PP
+[l1, l2, l3] = l1 * (l2 x l3)
+.PP
+See \fBLines and vectors\fP for argument specification and conventions\&. See \fCWikipedia\fP for more information\&.
+.PP
+\fBWarning:\fP
+.RS 4
+Returns a 2d vector result for 2d vectors\&. The cross product computes the 2x2 determinant of the vectors \fC(l2 x l3)\fP, a scalar value, which is then \fImultiplied\fP by \fCl1\fP\&. 
+.RE
+.PP
+
+.SS "function unit_l (l)"
+
+.PP
+Compute the normalized unit vector of a Euclidean line (or vector)\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIl\fP <line> A line (or vector)\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<vector> The normalized unit vector\&.
+.RE
+.PP
+See \fBLines and vectors\fP for argument specification and conventions\&. 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

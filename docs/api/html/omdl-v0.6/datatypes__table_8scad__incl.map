@@ -1,0 +1,11 @@
+<map id="datatypes/datatypes_table.scad" name="datatypes/datatypes_table.scad">
+<area shape="rect" id="node2" href="$console_8scad.html" title="Message logging functions. " alt="" coords="378,95,477,121"/>
+<area shape="rect" id="node3" href="$datatypes_8scad.html" title="Data type identification and operations. " alt="" coords="501,95,612,121"/>
+<area shape="rect" id="node4" href="$constants_8scad.html" title="Design constant definitions. " alt="" coords="5,177,116,203"/>
+<area shape="rect" id="node5" href="$datatypes__identify__scalar_8scad.html" title="Scalar data type identification. " alt="" coords="140,169,285,211"/>
+<area shape="rect" id="node6" href="$datatypes__identify__iterable_8scad.html" title="Iterable data type identification. " alt="" coords="310,169,462,211"/>
+<area shape="rect" id="node7" href="$datatypes__identify__list_8scad.html" title="List data type identification. " alt="" coords="487,169,627,211"/>
+<area shape="rect" id="node8" href="$datatypes__operate__scalar_8scad.html" title="Scalar data type operations. " alt="" coords="651,169,798,211"/>
+<area shape="rect" id="node9" href="$datatypes__operate__iterable_8scad.html" title="Iterable data type operations. " alt="" coords="823,169,976,211"/>
+<area shape="rect" id="node10" href="$datatypes__operate__list_8scad.html" title="List data type operations. " alt="" coords="1000,169,1140,211"/>
+</map>

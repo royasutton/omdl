@@ -1,0 +1,95 @@
+.TH "shapes/shapes3d.scad" 3 "Tue Apr 4 2017" "Version v0.6" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+shapes/shapes3d.scad \- Three-dimensional basic shapes\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <shapes/shapes2d\&.scad>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "module \fBcone\fP (r, h, d, vr, vr1, vr2)"
+.br
+.RI "\fIA cone\&. \fP"
+.ti -1c
+.RI "module \fBcuboid\fP (size, vr, vrm=0, center=false)"
+.br
+.RI "\fIA cuboid with edge, fillet, or chamfer corners\&. \fP"
+.ti -1c
+.RI "module \fBellipsoid\fP (size)"
+.br
+.RI "\fIAn ellipsoid\&. \fP"
+.ti -1c
+.RI "module \fBellipsoid_s\fP (size, a1=0, a2=0)"
+.br
+.RI "\fIA sector of an ellipsoid\&. \fP"
+.ti -1c
+.RI "module \fBpyramid_t\fP (size, center=false)"
+.br
+.RI "\fIA pyramid with trilateral base formed by four equilateral triangles\&. \fP"
+.ti -1c
+.RI "module \fBpyramid_q\fP (size, center=false)"
+.br
+.RI "\fIA pyramid with quadrilateral base\&. \fP"
+.ti -1c
+.RI "module \fBstar3d\fP (size, n=5, half=false)"
+.br
+.RI "\fIA three-dimensional star\&. \fP"
+.ti -1c
+.RI "module \fBtorus_rp\fP (size, core, r, l, t, co, cr=0, vr, vr1, vr2, vrm=0, vrm1, vrm2, pa=0, ra=360, m=255, center=false, profile=false)"
+.br
+.RI "\fIA rectangular cross-sectional profile revolved about the z-axis\&. \fP"
+.ti -1c
+.RI "module \fBtorus_tp\fP (size, core, r, l, co, cr=0, vr, vr1, vr2, pa=0, ra=360, m=255, centroid=false, incenter=false, profile=false,)"
+.br
+.RI "\fIA triangular cross-sectional profile revolved about the z-axis\&. \fP"
+.ti -1c
+.RI "module \fBtorus_ep\fP (size, core, r, l, t, a1=0, a2=0, co, cr=0, pa=0, ra=360, m=255, profile=false)"
+.br
+.RI "\fIAn elliptical cross-sectional profile revolved about the z-axis\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Three-dimensional basic shapes\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy Allen Sutton 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2015-2017
+.RE
+.PP
+\fBCopyright:\fP
+.RS 4
+.RE
+.PP
+This file is part of \fComdl\fP, an OpenSCAD mechanical design library\&.
+.PP
+The \fIomdl\fP is free software; you can redistribute it and/or modify it under the terms of the \fCGNU Lesser General Public License\fP as published by the Free Software Foundation; either version 2\&.1 of the License, or (at your option) any later version\&.
+.PP
+The \fIomdl\fP is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE\&. See the GNU Lesser General Public License for more details\&.
+.PP
+You should have received a copy of the GNU Lesser General Public License along with the \fIomdl\fP; if not, write to the Free Software Foundation, Inc\&., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA; or see http://www.gnu.org/licenses/\&.
+.PP
+\fBTodo\fP
+.RS 4
+Complete rounded cylinder\&.
+.RE
+.PP
+
+.PP
+Definition in file \fBshapes3d\&.scad\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

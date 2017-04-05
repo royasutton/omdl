@@ -1,0 +1,11 @@
+<map id="math/math_utility.scad" name="math/math_utility.scad">
+<area shape="rect" id="node2" href="$math__bitwise_8scad.html" title="Mathematical base&#45;two bitwise binary functions. " alt="" coords="475,80,639,107"/>
+<area shape="rect" id="node3" href="$datatypes_8scad.html" title="Data type identification and operations. " alt="" coords="501,155,612,181"/>
+<area shape="rect" id="node4" href="$constants_8scad.html" title="Design constant definitions. " alt="" coords="5,237,116,263"/>
+<area shape="rect" id="node5" href="$datatypes__identify__scalar_8scad.html" title="Scalar data type identification. " alt="" coords="140,229,285,271"/>
+<area shape="rect" id="node6" href="$datatypes__identify__iterable_8scad.html" title="Iterable data type identification. " alt="" coords="310,229,462,271"/>
+<area shape="rect" id="node7" href="$datatypes__identify__list_8scad.html" title="List data type identification. " alt="" coords="487,229,627,271"/>
+<area shape="rect" id="node8" href="$datatypes__operate__scalar_8scad.html" title="Scalar data type operations. " alt="" coords="651,229,798,271"/>
+<area shape="rect" id="node9" href="$datatypes__operate__iterable_8scad.html" title="Iterable data type operations. " alt="" coords="823,229,976,271"/>
+<area shape="rect" id="node10" href="$datatypes__operate__list_8scad.html" title="List data type operations. " alt="" coords="1000,229,1140,271"/>
+</map>

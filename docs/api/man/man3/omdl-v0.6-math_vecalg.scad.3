@@ -1,0 +1,112 @@
+.TH "math/math_vecalg.scad" 3 "Tue Apr 4 2017" "Version v0.6" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+math/math_vecalg.scad \- Vector algebra mathematical functions\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBdistance_pp\fP (p1, p2)"
+.br
+.RI "\fICompute the distance between two Euclidean points\&. \fP"
+.ti -1c
+.RI "function \fBis_left_ppp\fP (p1, p2, p3)"
+.br
+.RI "\fITest if a point is left, on, or right of an infinite line in a Euclidean 2d-space\&. \fP"
+.ti -1c
+.RI "function \fBdimension_2to3_v\fP (v)"
+.br
+.RI "\fIReturn 3d vector unchanged or add a zeroed third dimension to 2d vector\&. \fP"
+.ti -1c
+.RI "function \fBget_line_dim\fP (l)"
+.br
+.RI "\fIReturn the number of dimensions of a Euclidean line (or vector)\&. \fP"
+.ti -1c
+.RI "function \fBget_line_tp\fP (l)"
+.br
+.RI "\fIReturn the terminal point of a Euclidean line (or vector)\&. \fP"
+.ti -1c
+.RI "function \fBget_line_ip\fP (l)"
+.br
+.RI "\fIReturn the initial point of a Euclidean line (or vector)\&. \fP"
+.ti -1c
+.RI "function \fBget_line2origin\fP (l)"
+.br
+.RI "\fIShift a Euclidean line (or vector) to the origin\&. \fP"
+.ti -1c
+.RI "function \fBdot_ll\fP (l1, l2)"
+.br
+.RI "\fICompute the dot product of two lines (or vectors)\&. \fP"
+.ti -1c
+.RI "function \fBcross_ll\fP (l1, l2)"
+.br
+.RI "\fICompute the cross product of two lines (or vectors) in a Euclidean 3d or 2d-space\&. \fP"
+.ti -1c
+.RI "function \fBstriple_lll\fP (l1, l2, l3)"
+.br
+.RI "\fICompute the scalar triple product of three lines (or vectors) in a Euclidean 3d or 2d-space\&. \fP"
+.ti -1c
+.RI "function \fBangle_ll\fP (l1, l2)"
+.br
+.RI "\fICompute the angle between two lines (or vectors) in a Euclidean 3d or 2d-space\&. \fP"
+.ti -1c
+.RI "function \fBangle_lll\fP (l1, l2, n)"
+.br
+.RI "\fICompute the angle between two lines (or vectors) in a Euclidean 3d-space\&. \fP"
+.ti -1c
+.RI "function \fBunit_l\fP (l)"
+.br
+.RI "\fICompute the normalized unit vector of a Euclidean line (or vector)\&. \fP"
+.ti -1c
+.RI "function \fBare_coplanar_lll\fP (l1, l2, l3, d=6)"
+.br
+.RI "\fITest if three lines (or vectors) are coplanar in Euclidean 3d-space\&. \fP"
+.ti -1c
+.RI "function \fBget_pnorm2nv\fP (pn, cw=true)"
+.br
+.RI "\fIConvert a planes' normal specification into a normal vector\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Vector algebra mathematical functions\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy Allen Sutton 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2015-2017
+.RE
+.PP
+\fBCopyright:\fP
+.RS 4
+.RE
+.PP
+This file is part of \fComdl\fP, an OpenSCAD mechanical design library\&.
+.PP
+The \fIomdl\fP is free software; you can redistribute it and/or modify it under the terms of the \fCGNU Lesser General Public License\fP as published by the Free Software Foundation; either version 2\&.1 of the License, or (at your option) any later version\&.
+.PP
+The \fIomdl\fP is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE\&. See the GNU Lesser General Public License for more details\&.
+.PP
+You should have received a copy of the GNU Lesser General Public License along with the \fIomdl\fP; if not, write to the Free Software Foundation, Inc\&., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA; or see http://www.gnu.org/licenses/\&.
+.PP
+\fBNote:\fP
+.RS 4
+Include this library file using the \fBinclude\fP statement\&. 
+.RE
+.PP
+
+.PP
+Definition in file \fBmath_vecalg\&.scad\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

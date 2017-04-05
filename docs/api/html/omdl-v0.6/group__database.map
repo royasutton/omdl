@@ -1,0 +1,6 @@
+<map id="Database" name="Database">
+<area shape="rect" id="node1" href="$group__database__geometry.html" title="Predefined geometry. " alt="" coords="137,5,216,32"/>
+<area shape="rect" id="node2" href="$group__database__electrical.html" title="Electrical specifications. " alt="" coords="139,56,215,83"/>
+<area shape="rect" id="node4" href="$group__database__material.html" title="Material specifications. " alt="" coords="143,107,211,133"/>
+<area shape="rect" id="node5" href="$group__database__component.html" title="Component specifications. " alt="" coords="132,157,221,184"/>
+</map>

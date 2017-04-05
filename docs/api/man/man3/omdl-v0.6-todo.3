@@ -1,0 +1,20 @@
+.TH "todo" 3 "Tue Apr 4 2017" "Version v0.6" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+todo \- Todo List 
+
+.IP "\fBglobalScope> Global \fBlinear_extrude_uls\fP (h, center=false)\fP" 1c
+This function should be rewritten to use the built-in scaling provided by linear_extrude() in the upper and lower scaling zones\&.  
+.IP "\fBglobalScope> Global \fBpyramid_q\fP (size, center=false)\fP" 1c
+Support vertex rounding radius\&.  
+.IP "\fBglobalScope> Global \fBpyramid_t\fP (size, center=false)\fP" 1c
+Support vertex rounding radius\&.  
+.IP "\fBFile \fBshapes3d\&.scad\fP \fP" 1c
+Complete rounded cylinder\&. 
+.IP "\fBglobalScope> Global \fBtriangle_ppp\fP (v1, v2, v3, vr, v1r, v2r, v3r, centroid=false, incenter=false)\fP" 1c
+Replace the hull() operation with calculated tangential intersection of the rounded vertexes\&. 
+.PP
+Remove the all or nothing requirement for vertex rounding\&. 
+.PP
+

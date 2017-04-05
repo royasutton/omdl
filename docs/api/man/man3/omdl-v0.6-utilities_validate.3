@@ -1,0 +1,134 @@
+.TH "utilities_validate" 3 "Tue Apr 4 2017" "Version v0.6" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+utilities_validate \- Validation
+.PP
+Function validation methods\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBvalidation\&.scad\fP"
+.br
+.RI "\fIFunction validation methods\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBvalidate\fP (d, cv, t, ev, p=4, pf=false)"
+.br
+.RI "\fICompare a computed test value with an known good result\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Function validation methods\&. 
+
+\fBExample\fP 
+.PP
+ 
+.PP
+.nf
+    use <validation\&.scad>;
+    use <console\&.scad>;
+
+    //
+    // function to validate
+    //
+    function f1( x ) = (x == undef) ? 1 : 2;
+
+    farg = undef;     // function test argument
+    erv1 = 1;         // correct expected function result
+    erv2 = 3;         // incorrect expected function result
+
+    //
+    // pass test example
+    //
+    pass_result = validate("test-a f1(farg)", f1(farg), "equals", erv1);
+
+    if ( !validate(cv=f1(farg), t="equals", ev=erv1, pf=true) )
+      log_warn( pass_result );
+    else
+      log_info( pass_result );
+
+    //
+    // fail test example
+    //
+    fail_result = validate("test-b f1(farg)", f1(farg), "equals", erv2);
+
+    if ( !validate(cv=f1(farg), t="equals", ev=erv2, pf=true) )
+      log_warn( fail_result );
+    else
+      log_info( fail_result );
+
+    //
+    // almost equal test example
+    //
+    tvae1 = [[90\&.001], [[45\&.009], true]];
+    tvae2 = [[90\&.002], [[45\&.010], true]];
+
+    log_info( validate("test-c", tvae1, "almost", tvae2, 3) );
+    log_warn( validate("test-d", tvae1, "almost", tvae2, 4) );
+
+.fi
+.PP
+.PP
+\fBResult\fP 
+.PP
+.nf
+1 ECHO: "[ INFO ] root(); passed: 'test-a f1(farg)'"
+2 ECHO: 
+3 ECHO: "root()"
+4 ECHO: "##########################################################################"
+5 ECHO: "# [ WARNING ] FAILED: 'test-b f1(farg)'\&.  Got '1'\&. Expected to equal '3' #"
+6 ECHO: "##########################################################################"
+7 ECHO: "[ INFO ] root(); passed: 'test-c'"
+8 ECHO: 
+9 ECHO: "root()"
+10 ECHO: "#########################################################################################################################################"
+11 ECHO: "# [ WARNING ] FAILED: 'test-d'\&.  Got '[[90\&.001], [[45\&.009], true]]'\&. Expected to almost equal '[[90\&.002], [[45\&.01], true]]' to 4 digits #"
+12 ECHO: "#########################################################################################################################################"
+
+.fi
+.PP
+ 
+.SH "Function Documentation"
+.PP 
+.SS "function validate (d, cv, t, ev, p = \fC4\fP, pf = \fCfalse\fP)"
+
+.PP
+Compare a computed test value with an known good result\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fId\fP <string> A description\&. 
+.br
+\fIcv\fP <value> A computed value to validate\&. 
+.br
+\fIt\fP <string|boolean> The validation type\&. 
+.br
+\fIev\fP <value> The expected good value\&.
+.br
+\fIp\fP <number> A numerical precision for approximate comparisons\&.
+.br
+\fIpf\fP <boolean> Report result as pass or fail boolean value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<string|boolean> Validation result indicating if the test passed or failed\&.
+.RE
+.PP
+validation types pass if (else fail)  'almost' \fCcv\fP almost equals \fCev\fP 'equals' \fCcv\fP equals \fCev\fP 'not' \fCcv\fP not equal to \fCev\fP 'true' | \fBtrue\fP \fCcv\fP is \fBtrue\fP 'false' | \fBfalse\fP \fCcv\fP is \fBfalse\fP 
+.PP
+\fBNote:\fP
+.RS 4
+When performing an \fB'almost'\fP equal validation, the comparison precision is controlled by \fCp\fP\&. This specifies the number of digits of precision for each numerical comparison\&. A passing result indicates that \fCcv\fP equals \fCev\fP to the number of decimal digits specified by \fCp\fP\&. The comparison is performed by the function \fBalmost_equal()\fP\&. 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

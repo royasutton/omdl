@@ -1,0 +1,262 @@
+.TH "datatypes_map" 3 "Tue Apr 4 2017" "Version v0.6" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+datatypes_map \- Maps
+.PP
+Map data type operations\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBdatatypes_map\&.scad\fP"
+.br
+.RI "\fIMap data type operations\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBget_map_i\fP (m, k)"
+.br
+.RI "\fIReturn the index of a map key\&. \fP"
+.ti -1c
+.RI "function \fBmap_exists\fP (m, k)"
+.br
+.RI "\fITest if a key exists\&. \fP"
+.ti -1c
+.RI "function \fBget_map_v\fP (m, k)"
+.br
+.RI "\fIGet the map value associated with a key\&. \fP"
+.ti -1c
+.RI "function \fBget_map_kl\fP (m)"
+.br
+.RI "\fIGet a list of all map keys\&. \fP"
+.ti -1c
+.RI "function \fBget_map_vl\fP (m)"
+.br
+.RI "\fIGet a list of all map values\&. \fP"
+.ti -1c
+.RI "function \fBget_map_size\fP (m)"
+.br
+.RI "\fIGet the number of map entries\&. \fP"
+.ti -1c
+.RI "module \fBmap_check\fP (m, verbose=false)"
+.br
+.RI "\fIPerform some basic validation/checks on a map\&. \fP"
+.ti -1c
+.RI "module \fBmap_dump\fP (m, sort=true, number=true, p=3)"
+.br
+.RI "\fIDump each map entry to the console\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Map data type operations\&. 
+
+\fBExample\fP 
+.PP
+ 
+.PP
+.nf
+    use <datatypes/datatypes_map\&.scad>;
+
+    map =
+    [
+      ["part1",       ["screw10", [10, 11, 13]]],
+      ["part2",       ["screw12", [20, 21, 30]]],
+      ["part3",       ["screw10", [10, 10, -12]]],
+      ["config",      ["top", "front", "rear"]],
+      ["version",     [21, 5, 0]],
+      ["runid",       10]
+    ];
+
+    map_check(map, true);
+
+    echo( str("is part0 = ", map_exists(map, "part0")) );
+    echo( str("is part1 = ", map_exists(map, "part1")) );
+
+    p1 = get_map_v(map, "part1");
+    echo( c=second(p1) );
+
+    keys = get_map_kl(map);
+    parts = delete(keys, mv=["config", "version", "runid"]);
+
+    for ( p = parts )
+      echo
+      (
+        n=p,
+        p=first(get_map_v(map, p)),
+        l=second(get_map_v(map, p))
+      );
+
+    map_dump(map);
+
+.fi
+.PP
+.PP
+\fBResult\fP 
+.PP
+.nf
+1 ECHO: "[ INFO ] map_check(); begin map check"
+2 ECHO: "[ INFO ] map_check(); checking map format and keys\&."
+3 ECHO: "[ INFO ] map_check(); map size: 6 entries\&."
+4 ECHO: "[ INFO ] map_check(); end map check"
+5 ECHO: "is part0 = false"
+6 ECHO: "is part1 = true"
+7 ECHO: c = [10, 11, 13]
+8 ECHO: n = "part1", p = "screw10", l = [10, 11, 13]
+9 ECHO: n = "part2", p = "screw12", l = [20, 21, 30]
+10 ECHO: n = "part3", p = "screw10", l = [10, 10, -12]
+11 ECHO: "003:   'config' = '["top", "front", "rear"]'"
+12 ECHO: "000:    'part1' = '["screw10", [10, 11, 13]]'"
+13 ECHO: "001:    'part2' = '["screw12", [20, 21, 30]]'"
+14 ECHO: "002:    'part3' = '["screw10", [10, 10, -12]]'"
+15 ECHO: "005:    'runid' = '10'"
+16 ECHO: "004:  'version' = '[21, 5, 0]'"
+17 ECHO: "map size: 6 entries\&."
+
+.fi
+.PP
+ 
+.SH "Function Documentation"
+.PP 
+.SS "function get_map_i (m, k)"
+
+.PP
+Return the index of a map key\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP <matrix-2xN> A list of N key-value map pairs\&. 
+.br
+\fIk\fP <string> A map key\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<integer> The index of the map entry if it exists\&. Returns \fBundef\fP if \fCkey\fP is not a string or does not exists\&. 
+.RE
+.PP
+
+.SS "function get_map_kl (m)"
+
+.PP
+Get a list of all map keys\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP <matrix-2xN> A list of N key-value map pairs\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<string-list-N> A list of key strings for all N map entries\&. 
+.RE
+.PP
+
+.SS "function get_map_size (m)"
+
+.PP
+Get the number of map entries\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP <matrix-2xN> A list of N key-value map pairs\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<integer> The number of map entries\&. 
+.RE
+.PP
+
+.SS "function get_map_v (m, k)"
+
+.PP
+Get the map value associated with a key\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP <matrix-2xN> A list of N key-value map pairs\&. 
+.br
+\fIk\fP <string> A map key\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<value> The value associated with \fCkey\fP\&. Returns \fBundef\fP if \fCkey\fP does not exists\&. 
+.RE
+.PP
+
+.SS "function get_map_vl (m)"
+
+.PP
+Get a list of all map values\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP <matrix-2xN> A list of N key-value map pairs\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<list-N> A list of values for all N map entries\&. 
+.RE
+.PP
+
+.SS "module map_check (m, verbose = \fCfalse\fP)"
+
+.PP
+Perform some basic validation/checks on a map\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP <matrix-2xN> A list of N key-value map pairs\&.
+.br
+\fIverbose\fP <boolean> Be verbose during check\&.
+.RE
+.PP
+Check that: (1) each entry has key-value 2-tuple, (2) each key is a string, and (3) key identifiers are unique\&. 
+.PP
+Definition at line 149 of file datatypes_map\&.scad\&.
+.SS "module map_dump (m, sort = \fCtrue\fP, number = \fCtrue\fP, p = \fC3\fP)"
+
+.PP
+Dump each map entry to the console\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP <matrix-2xN> A list of N key-value map pairs\&. 
+.br
+\fIsort\fP <boolean> Sort the output by key\&. 
+.br
+\fInumber\fP <boolean> Output index number\&. 
+.br
+\fIp\fP <integer> Number of places for zero-padded numbering\&. 
+.RE
+.PP
+
+.PP
+Definition at line 223 of file datatypes_map\&.scad\&.
+.SS "function map_exists (m, k)"
+
+.PP
+Test if a key exists\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIm\fP <matrix-2xN> A list of N key-value map pairs\&. 
+.br
+\fIk\fP <string> A map key\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the key exists and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

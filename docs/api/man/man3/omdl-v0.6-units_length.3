@@ -1,0 +1,172 @@
+.TH "units_length" 3 "Tue Apr 4 2017" "Version v0.6" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+units_length \- Lengths
+.PP
+Length units and conversions\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBunits_length\&.scad\fP"
+.br
+.RI "\fILength units and conversions\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBunit_length_name\fP (u=\fBbase_unit_length\fP, d=1, w=false)"
+.br
+.RI "\fIReturn the name for a length unit identifier with dimension\&. \fP"
+.ti -1c
+.RI "function \fBconvert_length\fP (v, from=\fBbase_unit_length\fP, to=\fBbase_unit_length\fP, d=1)"
+.br
+.RI "\fIConvert a value from from one units to another with dimensions\&. \fP"
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "\fBbase_unit_length\fP = 'mm'"
+.br
+.RI "\fI<string> The base unit for length measurements\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Length units and conversions\&. 
+
+These functions allow for lengths to be specified with units\&. Lengths specified with units are independent of (\fBbase_unit_length\fP)\&. There are also unit conversion functions for converting from one unit to another\&.
+.PP
+The table below enumerates the supported units\&.
+.PP
+units id description  pm picometer nm nanometer um micrometer mm millimeter cm centimeter dm decimeter m meter km kilometer thou, mil thousandth of an inch in inch ft feet yd yard mi mile \fBExample\fP 
+.PP
+ 
+.PP
+.nf
+    include <units/units_length\&.scad>;
+
+    base_unit_length = "mm";
+
+    // get base unit name
+    un = unit_length_name();
+
+    // absolute length measurements in base unit\&.
+    c1 = convert_length(1/8, "in");
+    c2 = convert_length(3\&.175, "mm");
+    c3 = convert_length(25, "mil");
+    c4 = convert_length(1, "ft", d=3);
+
+    // convert between units\&.
+    c5 = convert_length(10, from="mil", to="in");
+    c6 = convert_length(10, from="ft", to="mm");
+
+.fi
+.PP
+.PP
+\fBResult\fP (base_unit_length = \fBmm\fP): 
+.PP
+.nf
+1 ECHO: un = "millimeter"
+2 ECHO: c1 = 3\&.175
+3 ECHO: c2 = 3\&.175
+4 ECHO: c3 = 0\&.635
+5 ECHO: c4 = 2\&.83168e+07
+6 ECHO: c5 = 0\&.01
+7 ECHO: c6 = 3048
+
+.fi
+.PP
+ \fBResult\fP (base_unit_length = \fBcm\fP): 
+.PP
+.nf
+1 ECHO: un = "centimeter"
+2 ECHO: c1 = 0\&.3175
+3 ECHO: c2 = 0\&.3175
+4 ECHO: c3 = 0\&.0635
+5 ECHO: c4 = 28316\&.8
+6 ECHO: c5 = 0\&.01
+7 ECHO: c6 = 3048
+
+.fi
+.PP
+ \fBResult\fP (base_unit_length = \fBmil\fP): 
+.PP
+.nf
+1 ECHO: un = "thousandth"
+2 ECHO: c1 = 125
+3 ECHO: c2 = 125
+4 ECHO: c3 = 25
+5 ECHO: c4 = 1\&.728e+12
+6 ECHO: c5 = 0\&.01
+7 ECHO: c6 = 3048
+
+.fi
+.PP
+ \fBResult\fP (base_unit_length = \fBin\fP): 
+.PP
+.nf
+1 ECHO: un = "inch"
+2 ECHO: c1 = 0\&.125
+3 ECHO: c2 = 0\&.125
+4 ECHO: c3 = 0\&.025
+5 ECHO: c4 = 1728
+6 ECHO: c5 = 0\&.01
+7 ECHO: c6 = 3048
+
+.fi
+.PP
+.PP
+\fBExample\fP (equivalent lengths)
+.PP
+Unit Lengths Unit Lengths 
+.SH "Function Documentation"
+.PP 
+.SS "function convert_length (v, from = \fC\fBbase_unit_length\fP\fP, to = \fC\fBbase_unit_length\fP\fP, d = \fC1\fP)"
+
+.PP
+Convert a value from from one units to another with dimensions\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <decimal> A value to convert\&. 
+.br
+\fIfrom\fP <string> The units of the value to be converted\&. 
+.br
+\fIto\fP <string> A units to which the value should be converted\&. 
+.br
+\fId\fP <integer> A dimension\&. One of [1|2|3]\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> The conversion result\&. Returns \fBundef\fP for identifiers or dimensions that are not defined\&. 
+.RE
+.PP
+
+.SS "function unit_length_name (u = \fC\fBbase_unit_length\fP\fP, d = \fC1\fP, w = \fCfalse\fP)"
+
+.PP
+Return the name for a length unit identifier with dimension\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIw\fP <boolean> \fBtrue\fP for word and \fBfalse\fP for symbol format\&.
+.br
+\fIu\fP <string> A length unit identifier\&. 
+.br
+\fId\fP <integer> A dimension\&. One of [1|2|3]\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<string> The long name for a length unit identifier with dimension\&. Returns \fBundef\fP for identifiers or dimensions that are not defined\&. 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.
