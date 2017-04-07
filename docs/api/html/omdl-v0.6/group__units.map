@@ -1,6 +1,0 @@
-<map id="Units" name="Units">
-<area shape="rect" id="node1" href="$group__units__coordinate.html" title="Coordinate systems and conversions. " alt="" coords="235,13,327,40"/>
-<area shape="rect" id="node3" href="$group__units__length.html" title="Length units and conversions. " alt="" coords="247,92,315,118"/>
-<area shape="rect" id="node4" href="$group__units__angle.html" title="Angle units and conversions. " alt="" coords="249,178,312,205"/>
-<area shape="rect" id="node5" href="$group__units__resolution.html" title="Arch rendering resolution management. " alt="" coords="235,242,326,269"/>
-</map>

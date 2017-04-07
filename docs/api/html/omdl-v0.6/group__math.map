@@ -1,9 +1,0 @@
-<map id="Math" name="Math">
-<area shape="rect" id="node2" href="$group__math__utility.html" title="Miscellaneous mathematical utilities. " alt="" coords="242,15,309,42"/>
-<area shape="rect" id="node3" href="$group__math__vecalg.html" title="Algebraic operations on Euclidean vectors. " alt="" coords="221,94,329,121"/>
-<area shape="rect" id="node4" href="$group__math__linalg.html" title="Linear algebra transformations on Euclidean coordinates. " alt="" coords="223,173,328,199"/>
-<area shape="rect" id="node5" href="$group__math__polytope.html" title="Polygon and polyhedron mathematical functions. " alt="" coords="235,251,315,278"/>
-<area shape="rect" id="node6" href="$group__math__bitwise.html" title="Base&#45;two bitwise binary operations. " alt="" coords="243,330,308,357"/>
-<area shape="rect" id="node7" href="$group__math__oshapes.html" title="Mathematical functions for other shapes. " alt="" coords="224,417,327,443"/>
-<area shape="rect" id="node8" href="$group__math__triangle.html" title="Triangle mathematical functions. " alt="" coords="238,481,313,507"/>
-</map>

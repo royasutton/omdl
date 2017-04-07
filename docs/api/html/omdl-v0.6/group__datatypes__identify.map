@@ -1,7 +1,0 @@
-<map id="Identification" name="Identification">
-<area shape="rect" id="node1" href="$group__datatypes__operate.html" title="Data type operation. " alt="" coords="256,165,341,192"/>
-<area shape="rect" id="node2" href="$group__datatypes__identify__scalar.html" title="Scalar data type identification. " alt="" coords="265,237,332,264"/>
-<area shape="rect" id="node3" href="$group__datatypes.html" title="Data type definitions and operators. " alt="" coords="257,101,340,128"/>
-<area shape="rect" id="node4" href="$group__datatypes__identify__list.html" title="List data type identification. " alt="" coords="273,339,324,365"/>
-<area shape="rect" id="node5" href="$group__datatypes__identify__iterable.html" title="Iterable data type identification. " alt="" coords="263,411,335,437"/>
-</map>
