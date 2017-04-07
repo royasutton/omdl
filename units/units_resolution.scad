@@ -27,16 +27,14 @@
 
   \details
 
-  \note Include this library file using the \b include statement.
-
   \test Review model for accuracy.
 
   \ingroup units units_resolution
 *******************************************************************************/
 
-use     <console.scad>;
-include <constants.scad>;
-include <units/units_length.scad>;
+include <../console.scad>;
+include <../constants.scad>;
+include <units_length.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**

@@ -30,8 +30,8 @@
   \ingroup tools tools_polytope
 *******************************************************************************/
 
-include <math/math_polytope.scad>;
-include <tools/tools_align.scad>;
+include <../math/math_polytope.scad>;
+include <tools_align.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -92,7 +92,7 @@ module polytope_number
   fm = defined_or(f, [consts(len(c))]);
   el = is_defined(e) ? e : polytope_faces2edges(fm);
 
-  bb = polytope_limits (c, fm, d=[0:2], s=true);
+  bb = polytope_limits(c, fm, d=[0:2], s=true);
   pd = all_defined(bb) ? 3 : 2;
 
   fs = defined_or(ts, ceil(max(bb)/50));

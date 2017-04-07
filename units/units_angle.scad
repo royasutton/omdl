@@ -27,12 +27,10 @@
 
   \details
 
-  \note Include this library file using the \b include statement.
-
   \ingroup units units_angle
 *******************************************************************************/
 
-include <constants.scad>;
+include <../constants.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**

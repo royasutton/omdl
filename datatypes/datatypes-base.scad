@@ -1,6 +1,6 @@
-//! Mathematical function primitives.
+//! Include file wrapper of data types base primitives.
 /***************************************************************************//**
-  \file   math.scad
+  \file   datatypes-base.scad
   \author Roy Allen Sutton
   \date   2015-2017
 
@@ -27,17 +27,30 @@
 
   \details
 
-  \note Include this library file using the \b include statement.
+  \ingroup \
+    datatypes \
+    \
+    datatypes_identify \
+    datatypes_identify_scalar \
+    datatypes_identify_iterable \
+    datatypes_identify_list \
+    \
+    datatypes_operate \
+    datatypes_operate_scalar \
+    datatypes_operate_iterable \
+    datatypes_operate_list
 
-  \ingroup math
 *******************************************************************************/
 
-include <datatypes.scad>;
+include <../constants.scad>;
 
-include <math/math_vecalg.scad>;
-include <math/math_linalg.scad>;
-include <math/math_triangle.scad>;
-include <math/math_oshapes.scad>;
+include <datatypes_identify_scalar.scad>;
+include <datatypes_identify_iterable.scad>;
+include <datatypes_identify_list.scad>;
+
+include <datatypes_operate_scalar.scad>;
+include <datatypes_operate_iterable.scad>;
+include <datatypes_operate_list.scad>;
 
 //----------------------------------------------------------------------------//
 // end of file

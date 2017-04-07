@@ -25,11 +25,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     02110-1301, USA; or see <http://www.gnu.org/licenses/>.
 
-  \details
-
-  \note Include this library file using the \b include statement.
-
-  \ingroup datatypes datatypes_identify datatypes_identify_iterable
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -247,10 +242,10 @@ function all_len
 /*
 BEGIN_SCOPE validate;
   BEGIN_OPENSCAD;
-    include <datatypes.scad>;
-    use <datatypes/datatypes_table.scad>;
-    use <console.scad>;
-    use <validation.scad>;
+    include <console.scad>;
+    include <datatypes/datatypes-base.scad>;
+    include <datatypes/datatypes_table.scad>;
+    include <validation.scad>;
 
     show_passing = true;    // show passing tests
     show_skipped = true;    // show skipped tests
@@ -315,7 +310,7 @@ BEGIN_SCOPE validate;
       ["all_defined",       f, t, t, t, t, t, t, t, t, t, f, t, t, t, t, t, t, f, f, t, t, t, t],
       ["any_undefined",     t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
       ["all_scalars",       u, t, t, t, f, f, s, s, s, s, t, t, t, f, f, f, f, t, t, f, t, t, t],
-      ["all_lists",       u, f, f, f, f, f, t, t, f, f, f, f, f, t, t, f, t, f, f, t, f, f, f],
+      ["all_lists",         u, f, f, f, f, f, t, t, f, f, f, f, f, t, t, f, t, f, f, t, f, f, f],
       ["all_strings",       u, f, f, f, t, t, t, s, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["all_numbers",       u, t, f, f, f, f, s, s, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
       ["all_len_1",         u, f, f, f, t, t, s, s, f, f, f, f, f, t, f, f, f, f, f, t, f, f, f],

@@ -1,6 +1,6 @@
 //! Linear algebra mathematical functions.
 /***************************************************************************//**
-  \file   math_linalg.scad
+  \file   math_linear_algebra.scad
   \author Roy Allen Sutton
   \date   2015-2017
 
@@ -25,11 +25,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     02110-1301, USA; or see <http://www.gnu.org/licenses/>.
 
-  \details
-
-  \note Include this library file using the \b include statement.
-
-  \ingroup math math_linalg
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -37,7 +32,7 @@
   \addtogroup math
   @{
 
-  \defgroup math_linalg Linear Algebra
+  \defgroup math_linear_algebra Linear Algebra
   \brief    Linear algebra transformations on Euclidean coordinates.
   @{
 *******************************************************************************/

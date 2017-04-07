@@ -51,7 +51,7 @@
     performed when building the documentation). The library uses a
     common set of conventions for specifying [data types] and is
     divided into individual component modules of functionality,
-    organized into groups, that may be \c included as desired.
+    organized into groups, that may be included as desired.
 
   \section starting Getting Started
 
@@ -447,7 +447,7 @@
 
 /***************************************************************************//**
   \page tv_math Math
-    \li \subpage tv_math_vecalg
+    \li \subpage tv_math_vector_algebra
     \li \subpage tv_math_bitwise
 *******************************************************************************/
 
@@ -661,8 +661,7 @@ END_SCOPE;
 
 BEGIN_SCOPE quickstart;
   BEGIN_OPENSCAD;
-    include <shapes/shapes2de.scad>;
-    include <shapes/shapes3d.scad>;
+    include <omdl-base.scad>;
 
     $fn = 36;
 

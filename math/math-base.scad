@@ -1,6 +1,6 @@
-//! Data type identification and operations.
+//! Include file wrapper of math base primitives.
 /***************************************************************************//**
-  \file   datatypes.scad
+  \file   math-base.scad
   \author Roy Allen Sutton
   \date   2015-2017
 
@@ -27,20 +27,18 @@
 
   \details
 
-  \note Include this library file using the \b include statement.
+  \ingroup \
+    math \
+    \
+    math_vector_algebra \
+    math_linear_algebra
 
-  \ingroup datatypes datatypes_identify datatypes_operate
 *******************************************************************************/
 
-include <constants.scad>;
+include <../datatypes/datatypes-base.scad>;
 
-include <datatypes/datatypes_identify_scalar.scad>;
-include <datatypes/datatypes_identify_iterable.scad>;
-include <datatypes/datatypes_identify_list.scad>;
-
-include <datatypes/datatypes_operate_scalar.scad>;
-include <datatypes/datatypes_operate_iterable.scad>;
-include <datatypes/datatypes_operate_list.scad>;
+include <math_linear_algebra.scad>;
+include <math_vector_algebra.scad>;
 
 //----------------------------------------------------------------------------//
 // end of file

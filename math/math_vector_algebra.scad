@@ -1,6 +1,6 @@
 //! Vector algebra mathematical functions.
 /***************************************************************************//**
-  \file   math_vecalg.scad
+  \file   math_vector_algebra.scad
   \author Roy Allen Sutton
   \date   2015-2017
 
@@ -25,24 +25,19 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     02110-1301, USA; or see <http://www.gnu.org/licenses/>.
 
-  \details
-
-  \note Include this library file using the \b include statement.
-
-  \ingroup math math_vecalg
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \page tv_math_vecalg Vector Algebra
-    \li \subpage tv_math_vecalg_s
-    \li \subpage tv_math_vecalg_r
-  \page tv_math_vecalg_s Script
-    \dontinclude math_vecalg_validate.scad
+  \page tv_math_vector_algebra Vector Algebra
+    \li \subpage tv_math_vector_algebra_s
+    \li \subpage tv_math_vector_algebra_r
+  \page tv_math_vector_algebra_s Script
+    \dontinclude math_vector_algebra_validate.scad
     \skip include
     \until end-of-tests
-  \page tv_math_vecalg_r Results
-    \include math_vecalg_validate.log
+  \page tv_math_vector_algebra_r Results
+    \include math_vector_algebra_validate.log
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
@@ -51,12 +46,12 @@
   \addtogroup math
   @{
 
-  \defgroup math_vecalg Vector Algebra
+  \defgroup math_vector_algebra Vector Algebra
   \brief    Algebraic operations on Euclidean vectors.
 
   \details
 
-    See validation \ref tv_math_vecalg_r "results".
+    See validation \ref tv_math_vector_algebra_r "results".
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -425,10 +420,10 @@ function get_pnorm2nv
 /*
 BEGIN_SCOPE validate;
   BEGIN_OPENSCAD;
-    include <math.scad>;
-    use <datatypes/datatypes_table.scad>;
-    use <console.scad>;
-    use <validation.scad>;
+    include <console.scad>;
+    include <datatypes/datatypes_table.scad>;
+    include <math/math_vector_algebra.scad>;
+    include <validation.scad>;
 
     show_passing = true;    // show passing tests
     show_skipped = true;    // show skipped tests

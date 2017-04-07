@@ -30,9 +30,10 @@
   \ingroup tools tools_extrude tools_repeat
 *******************************************************************************/
 
-use <console.scad>;
-include <math.scad>;
-include <math/math_bitwise.scad>;
+include <../console.scad>;
+include <../math/math-base.scad>;
+include <../math/math_oshapes.scad>;
+include <../math/math_bitwise.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**

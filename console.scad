@@ -197,7 +197,7 @@ module log_error( m )
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    use <console.scad>;
+    include <console.scad>;
 
     $log_debug = true;
     message = "console log message";

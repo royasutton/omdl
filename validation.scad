@@ -30,7 +30,7 @@
   \ingroup utilities utilities_validate
 *******************************************************************************/
 
-include <datatypes.scad>;
+include <datatypes/datatypes-base.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -142,8 +142,8 @@ function validate
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    use <validation.scad>;
-    use <console.scad>;
+    include <console.scad>;
+    include <validation.scad>;
 
     //
     // function to validate

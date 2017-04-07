@@ -83,29 +83,32 @@ library_db01_src    := database_src/geometry/polyhedra/Makefile \
 library             := $(library_db01) \
                        \
                        mainpage \
+                       omdl-base \
                        \
                        console \
                        constants \
                        validation \
                        \
-                       datatypes \
+                       datatypes/datatypes-base \
                        datatypes/datatypes_identify_scalar \
                        datatypes/datatypes_identify_iterable \
                        datatypes/datatypes_identify_list \
                        datatypes/datatypes_operate_scalar \
                        datatypes/datatypes_operate_iterable \
                        datatypes/datatypes_operate_list \
+                       \
                        datatypes/datatypes_map \
                        datatypes/datatypes_table \
                        \
-                       math \
+                       math/math-base \
+                       math/math_linear_algebra \
+                       math/math_vector_algebra \
+                       \
                        math/math_bitwise \
-                       math/math_linalg \
                        math/math_oshapes \
                        math/math_polytope \
                        math/math_triangle \
                        math/math_utility \
-                       math/math_vecalg \
                        \
                        shapes/shapes2d \
                        shapes/shapes2de \
@@ -125,7 +128,7 @@ library             := $(library_db01) \
 # Scope excludes
 #------------------------------------------------------------------------------#
 
-# shape manifests: only requred when doing a release
+# shape manifests: only required when doing a release
 scopes_exclude      := manifest
 
 # database: normally pre-built and released by database makefiles

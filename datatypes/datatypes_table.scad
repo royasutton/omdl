@@ -30,8 +30,8 @@
   \ingroup datatypes datatypes_table
 *******************************************************************************/
 
-use <console.scad>;
-include <datatypes.scad>;
+include <../console.scad>;
+include <datatypes-base.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -446,7 +446,7 @@ module table_dump
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <units/units_length.scad>;
-    use     <datatypes/datatypes_table.scad>;
+    include <datatypes/datatypes_table.scad>;
 
     base_unit_length = "mm";
 
