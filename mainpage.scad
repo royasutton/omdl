@@ -571,22 +571,20 @@
     \verbatim
     $ git clone https://github.com/royasutton/omdl.git
     $ cd omdl
-    $ git checkout v0.6
+    $ git checkout v0.6.1
 
-    $ make all
+    $ make scopes_exclude="manifest" all
     $ make install
     \endverbatim
 
-    By default, the release shape manifests, the database tests, and
-    database statistics are not built, as controlled by the design flow
-    variable \c scopes_exclude. To build without exclude them, use the
+    By default, some things are not built, as controlled by the design
+    flow variable \c scopes_exclude. To build everything, use the
     following:
 
     \verbatim
     $ make list-scopes_exclude
 
     $ make scopes_exclude="" all
-    $ make install
     \endverbatim
 
     Now the library should have been installed to the OpenSCAD

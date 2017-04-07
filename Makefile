@@ -54,6 +54,9 @@ project_logo        := mainpage_logo_top_55x55
 seam_defines        := INCLUDE_PATH=include
 
 doxygen_config      := Doxyfile
+doxygen_html_footer := Doxyfooter.html
+doxygen_html_css    := Doxystyle.css
+
 project_files_add   := $(wildcard include/*.mfs)
 
 library_info        := README.md \

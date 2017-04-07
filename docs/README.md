@@ -45,7 +45,7 @@ instructions.
 
 ### Library API ###
 
-* [Current release] ({{ site.vcurrent }}).
+* [Current release] {{ site.vcurrent }} --- (API subject to change).
 * [Release index]
 
 
@@ -55,11 +55,7 @@ Example
 * [A Portable solar panel tripod mount](examples/solar_mount/index.html):
 
   Design took approximately 48 hours from concept to assembly and
-  documentation using [omdl] and [openscad-amu]. Demonstrates the fully
-  automated design flow. Change any design parameter, type **make
-  all**, then print resulting parts. In this design, parts are
-  automatically engraved with the version and part identifier using a
-  simple database scheme. Design is published on
+  documentation using [omdl] and [openscad-amu]. Design is published on
   [thingiverse](http://www.thingiverse.com/thing:2051608).
 
 
