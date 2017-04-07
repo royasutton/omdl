@@ -11,8 +11,8 @@ theme: jekyll-theme-cayman
 
 # omdl api release
 api:            api/html
-vcurrent:       omdl-v0.6
-api_vcurrent:   api/html/omdl-v0.6
+vcurrent:       omdl-v0.6.1
+api_vcurrent:   api/html/omdl-v0.6.1
 
 # omdl groups
 omdl_groups:
