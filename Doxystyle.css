@@ -1,10 +1,6 @@
-//! Mathematical function primitives.
 /***************************************************************************//**
-  \file   math.scad
-  \author Roy Allen Sutton
-  \date   2015-2017
 
-  \copyright
+    Doxystyle.css
 
     This file is part of [omdl] (https://github.com/royasutton/omdl),
     an OpenSCAD mechanical design library.
@@ -25,28 +21,39 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     02110-1301, USA; or see <http://www.gnu.org/licenses/>.
 
-  \details
-
-  \note Include this library file using the \b include statement.
-
-  \ingroup math
 *******************************************************************************/
 
-include <datatypes.scad>;
+table.doxtable {
+  border-collapse:collapse;
+  /* margin-left:auto; */
+  margin-right:auto;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
 
-include <math/math_vecalg.scad>;
-include <math/math_linalg.scad>;
-include <math/math_triangle.scad>;
-include <math/math_oshapes.scad>;
+table.doxtable td, table.doxtable th {
+  border: 1px solid #2D4068;
+  padding: 3px 7px 2px;
+}
 
-//----------------------------------------------------------------------------//
+table.doxtable th {
+  background-color: #374F7F;
+  color: #FFFFFF;
+  font-size: 110%;
+  padding-bottom: 4px;
+  padding-top: 5px;
+}
+
+table.doxtable tr:nth-child(odd) td {
+  background-color: #F7F8FB;
+}
+
+/*
+table.doxtable tr:nth-child(even) td {
+  background-color: #F7F8FB;
+}
+*/
+
 /***************************************************************************//**
-  \page tv_math Math
-    \li \subpage tv_math_vecalg
-    \li \subpage tv_math_bitwise
+// eof
 *******************************************************************************/
-//----------------------------------------------------------------------------//
-
-//----------------------------------------------------------------------------//
-// end of file
-//----------------------------------------------------------------------------//

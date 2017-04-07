@@ -56,20 +56,17 @@ start the install as follows:
 
     $ git clone https://github.com/royasutton/omdl.git
     $ cd omdl
-    $ git checkout v0.6
+    $ git checkout v0.6.1
 
-    $ make all
+    $ make scopes_exclude="manifest" all
     $ make install
 
-By default, the release shape manifests, the database tests, and
-database statistics are not built, as controlled by the design flow
-variable *scopes_exclude*. To build without exclude them, use the
-following:
+By default, some things are not built, as controlled by the design flow
+variable *scopes_exclude*. To build everything, use the following:
 
     $ make list-scopes_exclude
 
     $ make scopes_exclude="" all
-    $ make install
 
 Now the library should have been installed to the OpenSCAD *built-in*
 library location along with the documentation that can be views with a
@@ -83,8 +80,7 @@ Now you may include the desired library primitives in your project as
 follows, replacing the version number as needed:
 
 ```
-include <omdl-v0.6/shapes/shapes2de.scad>;
-include <omdl-v0.6/shapes/shapes3d.scad>;
+include <omdl-v0.6.1/omdl-base.scad>;
 ...
 ```
 

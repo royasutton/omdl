@@ -27,13 +27,11 @@
 
   \details
 
-    Manage a collection of key-value pairs where keys are unique.
-
   \ingroup datatypes datatypes_map
 *******************************************************************************/
 
-use <console.scad>;
-include <datatypes.scad>;
+include <../console.scad>;
+include <datatypes-base.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -262,7 +260,7 @@ module map_dump
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    use <datatypes/datatypes_map.scad>;
+    include <datatypes/datatypes_map.scad>;
 
     map =
     [

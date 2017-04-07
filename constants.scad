@@ -27,8 +27,6 @@
 
   \details
 
-  \note Include this library file using the \b include statement.
-
   \ingroup constants constants_general constants_system constants_euclidean
 *******************************************************************************/
 

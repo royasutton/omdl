@@ -27,12 +27,10 @@
 
   \details
 
-  \note Include this library file using the \b include statement.
-
   \ingroup math math_bitwise
 *******************************************************************************/
 
-include <datatypes.scad>;
+include <../datatypes/datatypes-base.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -303,10 +301,10 @@ function bitwise_rsh
 /*
 BEGIN_SCOPE validate;
   BEGIN_OPENSCAD;
+    include <console.scad>;
+    include <datatypes/datatypes_table.scad>;
     include <math/math_bitwise.scad>;
-    use <datatypes/datatypes_table.scad>;
-    use <console.scad>;
-    use <validation.scad>;
+    include <validation.scad>;
 
     show_passing = true;    // show passing tests
     show_skipped = true;    // show skipped tests

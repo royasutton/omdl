@@ -27,8 +27,6 @@
 
   \details
 
-  \note Include this library file using the \b include statement.
-
   \ingroup units units_length
 *******************************************************************************/
 
@@ -300,7 +298,7 @@ END_SCOPE;
 
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <units_length.scad>;
+    include <units/units_length.scad>;
 
     module dim( uv=1, un="cm" ) {
       mx = 200.0;

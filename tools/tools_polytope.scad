@@ -30,8 +30,8 @@
   \ingroup tools tools_polytope
 *******************************************************************************/
 
-include <math/math_polytope.scad>;
-include <tools/tools_align.scad>;
+include <../math/math_polytope.scad>;
+include <tools_align.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -92,7 +92,7 @@ module polytope_number
   fm = defined_or(f, [consts(len(c))]);
   el = is_defined(e) ? e : polytope_faces2edges(fm);
 
-  bb = polytope_limits (c, fm, d=[0:2], s=true);
+  bb = polytope_limits(c, fm, d=[0:2], s=true);
   pd = all_defined(bb) ? 3 : 2;
 
   fs = defined_or(ts, ceil(max(bb)/50));
@@ -229,7 +229,7 @@ module polytope_frame
   el = is_defined(e) ? e : polytope_faces2edges(fm);
 
   // vertex
-  if (is_between(vc, 0, $children) && ($children > 0))
+  if (is_between(vc, 0, $children-1) && ($children > 0))
   {
     for (i = get_index(c, vi))
     {
@@ -243,7 +243,7 @@ module polytope_frame
   }
 
   // face
-  if (is_between(fc, 0, $children) && ($children > 0))
+  if (is_between(fc, 0, $children-1) && ($children > 0))
   {
     for (i = get_index(fm, fi))
     {
@@ -257,7 +257,7 @@ module polytope_frame
   }
 
   // edge
-  if (is_between(ec, 0, $children) && ($children > 0))
+  if (is_between(ec, 0, $children-1) && ($children > 0))
   {
     for (i = get_index(el, ei))
     {

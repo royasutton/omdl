@@ -27,12 +27,10 @@
 
   \details
 
-  \note Include this library file using the \b include statement.
-
   \ingroup math math_utility
 *******************************************************************************/
 
-include <math/math_bitwise.scad>;
+include <math_bitwise.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**

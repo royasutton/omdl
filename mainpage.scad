@@ -51,7 +51,7 @@
     performed when building the documentation). The library uses a
     common set of conventions for specifying [data types] and is
     divided into individual component modules of functionality,
-    organized into groups, that may be \c included as desired.
+    organized into groups, that may be included as desired.
 
   \section starting Getting Started
 
@@ -429,6 +429,28 @@
     \li \subpage tv_math
 *******************************************************************************/
 
+/***************************************************************************//**
+  \page tv_datatypes Datatypes
+    \li \subpage tv_datatypes_identify
+    \li \subpage tv_datatypes_operate
+
+  \page tv_datatypes_identify Identification
+    \li \subpage tv_datatypes_identify_scalar
+    \li \subpage tv_datatypes_identify_iterable
+    \li \subpage tv_datatypes_identify_list
+
+  \page tv_datatypes_operate Operations
+    \li \subpage tv_datatypes_operate_scalar
+    \li \subpage tv_datatypes_operate_iterable
+    \li \subpage tv_datatypes_operate_list
+*******************************************************************************/
+
+/***************************************************************************//**
+  \page tv_math Math
+    \li \subpage tv_math_vector_algebra
+    \li \subpage tv_math_bitwise
+*******************************************************************************/
+
 //----------------------------------------------------------------------------//
 // group categories.
 //----------------------------------------------------------------------------//
@@ -441,8 +463,6 @@
 /***************************************************************************//**
   \defgroup database Database
   \brief    Design specification data.
-
-  \addtogroup database
   @{
 
   \defgroup database_component Component
@@ -463,9 +483,18 @@
 /***************************************************************************//**
   \defgroup datatypes Datatypes
   \brief    Data type definitions and operators.
+  @{
 
     See \ref dt for nomenclature, assumptions, and conventions used to
     specify values and data types throughout the library.
+
+  \defgroup datatypes_identify Identification
+  \brief    Compile-time data type identification and tests.
+
+  \defgroup datatypes_operate Operations
+  \brief    Data type operation.
+
+  @}
 *******************************************************************************/
 
 /***************************************************************************//**
@@ -542,22 +571,20 @@
     \verbatim
     $ git clone https://github.com/royasutton/omdl.git
     $ cd omdl
-    $ git checkout v0.6
+    $ git checkout v0.6.1
 
-    $ make all
+    $ make scopes_exclude="manifest" all
     $ make install
     \endverbatim
 
-    By default, the release shape manifests, the database tests, and
-    database statistics are not built, as controlled by the design flow
-    variable \c scopes_exclude. To build without exclude them, use the
+    By default, some things are not built, as controlled by the design
+    flow variable \c scopes_exclude. To build everything, use the
     following:
 
     \verbatim
     $ make list-scopes_exclude
 
     $ make scopes_exclude="" all
-    $ make install
     \endverbatim
 
     Now the library should have been installed to the OpenSCAD
@@ -632,8 +659,7 @@ END_SCOPE;
 
 BEGIN_SCOPE quickstart;
   BEGIN_OPENSCAD;
-    include <shapes/shapes2de.scad>;
-    include <shapes/shapes3d.scad>;
+    include <omdl-base.scad>;
 
     $fn = 36;
 

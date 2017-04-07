@@ -25,11 +25,6 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     02110-1301, USA; or see <http://www.gnu.org/licenses/>.
 
-  \details
-
-  \note Include this library file using the \b include statement.
-
-  \ingroup datatypes datatypes_operate datatypes_operate_scalar
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -101,10 +96,10 @@ function circular_index
 /*
 BEGIN_SCOPE validate;
   BEGIN_OPENSCAD;
-    include <datatypes.scad>;
-    use <datatypes/datatypes_table.scad>;
-    use <console.scad>;
-    use <validation.scad>;
+    include <console.scad>;
+    include <datatypes/datatypes-base.scad>;
+    include <datatypes/datatypes_table.scad>;
+    include <validation.scad>;
 
     show_passing = true;    // show passing tests
     show_skipped = true;    // show skipped tests

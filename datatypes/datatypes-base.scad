@@ -1,0 +1,57 @@
+//! Include file wrapper of data types base primitives.
+/***************************************************************************//**
+  \file   datatypes-base.scad
+  \author Roy Allen Sutton
+  \date   2015-2017
+
+  \copyright
+
+    This file is part of [omdl] (https://github.com/royasutton/omdl),
+    an OpenSCAD mechanical design library.
+
+    The \em omdl is free software; you can redistribute it and/or modify
+    it under the terms of the [GNU Lesser General Public License]
+    (http://www.gnu.org/licenses/lgpl.html) as published by the Free
+    Software Foundation; either version 2.1 of the License, or (at
+    your option) any later version.
+
+    The \em omdl is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with the \em omdl; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+    02110-1301, USA; or see <http://www.gnu.org/licenses/>.
+
+  \details
+
+  \ingroup \
+    datatypes \
+    \
+    datatypes_identify \
+    datatypes_identify_scalar \
+    datatypes_identify_iterable \
+    datatypes_identify_list \
+    \
+    datatypes_operate \
+    datatypes_operate_scalar \
+    datatypes_operate_iterable \
+    datatypes_operate_list
+
+*******************************************************************************/
+
+include <../constants.scad>;
+
+include <datatypes_identify_scalar.scad>;
+include <datatypes_identify_iterable.scad>;
+include <datatypes_identify_list.scad>;
+
+include <datatypes_operate_scalar.scad>;
+include <datatypes_operate_iterable.scad>;
+include <datatypes_operate_list.scad>;
+
+//----------------------------------------------------------------------------//
+// end of file
+//----------------------------------------------------------------------------//
