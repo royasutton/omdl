@@ -80,8 +80,7 @@ Now you may include the desired library primitives in your project as
 follows, replacing the version number as needed:
 
 ```
-include <omdl-v0.6/shapes/shapes2de.scad>;
-include <omdl-v0.6/shapes/shapes3d.scad>;
+include <omdl-v0.6.1/omdl-base.scad>;
 ...
 ```
 
