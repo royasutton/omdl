@@ -1,0 +1,176 @@
+.TH "math/math_polytope.scad" 3 "Fri Apr 7 2017" "Version v0.6.1" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+math/math_polytope.scad \- Polygon and polyhedron mathematical functions\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <math-base\&.scad>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBpolytope_faces2edges\fP (f)"
+.br
+.RI "\fIList the edge coordinate index pairs of a polytope\&. \fP"
+.ti -1c
+.RI "function \fBpolytope_limits\fP (c, f, a, d=[0:2], s=true)"
+.br
+.RI "\fIDetermine the bounding limits of a polytope\&. \fP"
+.ti -1c
+.RI "function \fBpolytope_bbox_pf\fP (c, f, a)"
+.br
+.RI "\fIGenerate a bounding box polytope for another polytope in 3d or 2d\&. \fP"
+.ti -1c
+.RI "function \fBpolytope_line\fP (c, f, e, i, l, r=false)"
+.br
+.RI "\fIGet a line from an edge or any two vetices of a polytope\&. \fP"
+.ti -1c
+.RI "function \fBpolytope_vertex_av\fP (f, i)"
+.br
+.RI "\fIList the adjacent vertices for a given polytope vertex\&. \fP"
+.ti -1c
+.RI "function \fBpolytope_vertex_af\fP (f, i)"
+.br
+.RI "\fIList the adjacent face indexes for a polytope vertex\&. \fP"
+.ti -1c
+.RI "function \fBpolytope_edge_af\fP (f, e, i)"
+.br
+.RI "\fIList the adjacent face indexes for a polytope edge\&. \fP"
+.ti -1c
+.RI "function \fBpolytope_vertex_n\fP (c, f, i)"
+.br
+.RI "\fIGet a normal vector for a polytope vertex\&. \fP"
+.ti -1c
+.RI "function \fBpolytope_edge_n\fP (c, f, e, i)"
+.br
+.RI "\fIGet a normal vector for a polytope edge\&. \fP"
+.ti -1c
+.RI "function \fBpolytope_face_n\fP (c, f, i, l, cw=true)"
+.br
+.RI "\fIGet the normal vector of a polytope face\&. \fP"
+.ti -1c
+.RI "function \fBpolytope_face_m\fP (c, f, i, l)"
+.br
+.RI "\fIGet the mean coordinate of all vertices of a polytope face\&. \fP"
+.ti -1c
+.RI "function \fBpolytope_face_mn\fP (c, f, i, l, cw=true)"
+.br
+.RI "\fIGet the mean coordinate and normal vector of a polytope face\&. \fP"
+.ti -1c
+.RI "function \fBpolytope_plane\fP (c, f, i, l, cw=true)"
+.br
+.RI "\fIGet a plane for a polytope face\&. \fP"
+.ti -1c
+.RI "function \fBpolytope_face_vcounts\fP (f)"
+.br
+.RI "\fIList the vertex counts for all polytope faces\&. \fP"
+.ti -1c
+.RI "function \fBpolytope_face_angles\fP (c, f)"
+.br
+.RI "\fIList the angles between all adjacent faces of a polyhedron\&. \fP"
+.ti -1c
+.RI "function \fBpolytope_edge_lengths\fP (c, e)"
+.br
+.RI "\fIList the edge lengths of a polytope\&. \fP"
+.ti -1c
+.RI "function \fBpolytope_edge_angles\fP (c, f)"
+.br
+.RI "\fIList the adjacent edge angles for each polytope vertex\&. \fP"
+.ti -1c
+.RI "function \fBpolytope_faces_are_regular\fP (c, f, e, d=6)"
+.br
+.RI "\fITest if the faces of a polytope are all regular\&. \fP"
+.ti -1c
+.RI "function \fBpolytope_triangulate_ft\fP (f)"
+.br
+.RI "\fITriangulate the faces of a convex polytope using fan triangulation\&. \fP"
+.ti -1c
+.RI "function \fBpolygon2d_perimeter\fP (c, p)"
+.br
+.RI "\fICalculate the perimeter length of a polygon in 2d\&. \fP"
+.ti -1c
+.RI "function \fBpolygon2d_area\fP (c, p, s=false)"
+.br
+.RI "\fICompute the signed area of a polygon in a Euclidean 2d-space\&. \fP"
+.ti -1c
+.RI "function \fBpolygon3d_area\fP (c, p, n)"
+.br
+.RI "\fICompute the area of a polygon in a Euclidean 3d-space\&. \fP"
+.ti -1c
+.RI "function \fBpolygon2d_centroid\fP (c, p)"
+.br
+.RI "\fICompute the center of mass of a polygon in a Euclidean 2d-space\&. \fP"
+.ti -1c
+.RI "function \fBpolygon2d_is_cw\fP (c, p)"
+.br
+.RI "\fITest the vertex ordering of a polygon in a Euclidean 2d-space\&. \fP"
+.ti -1c
+.RI "function \fBpolygon2d_is_convex\fP (c, p)"
+.br
+.RI "\fITest the convexity of a polygon in a Euclidean 2d-space\&. \fP"
+.ti -1c
+.RI "function \fBpolygon2d_winding\fP (c, p, t)"
+.br
+.RI "\fICompute the winding number of a polygon about a point in a Euclidean 2d-space\&. \fP"
+.ti -1c
+.RI "function \fBpolygon2d_is_pip_wn\fP (c, p, t)"
+.br
+.RI "\fITest if a point is inside a polygon in a Euclidean 2d-space using winding number\&. \fP"
+.ti -1c
+.RI "function \fBpolygon2d_is_pip_as\fP (c, p, t)"
+.br
+.RI "\fITest if a point is inside a polygon in a Euclidean 2d-space using angle summation\&. \fP"
+.ti -1c
+.RI "function \fBpolyhedron_area\fP (c, f)"
+.br
+.RI "\fICompute the surface area of a polyhedron in a Euclidean 3d-space\&. \fP"
+.ti -1c
+.RI "function \fBpolyhedron_volume_tf\fP (c, f)"
+.br
+.RI "\fICompute the volume of a triangulated polyhedron in a Euclidean 3d-space\&. \fP"
+.ti -1c
+.RI "function \fBpolyhedron_centroid_tf\fP (c, f)"
+.br
+.RI "\fICompute the center of mass of a triangulated polyhedron in a Euclidean 3d-space\&. \fP"
+.ti -1c
+.RI "function \fBlinear_extrude_pp2pf\fP (c, p, h=1, centroid=false, center=false)"
+.br
+.RI "\fIConvert a polygon to a polyhedron by adding a height dimension\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Polygon and polyhedron mathematical functions\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy Allen Sutton 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2017
+.RE
+.PP
+\fBCopyright:\fP
+.RS 4
+.RE
+.PP
+This file is part of \fComdl\fP, an OpenSCAD mechanical design library\&.
+.PP
+The \fIomdl\fP is free software; you can redistribute it and/or modify it under the terms of the \fCGNU Lesser General Public License\fP as published by the Free Software Foundation; either version 2\&.1 of the License, or (at your option) any later version\&.
+.PP
+The \fIomdl\fP is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE\&. See the GNU Lesser General Public License for more details\&.
+.PP
+You should have received a copy of the GNU Lesser General Public License along with the \fIomdl\fP; if not, write to the Free Software Foundation, Inc\&., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA; or see http://www.gnu.org/licenses/\&. 
+.PP
+Definition in file \fBmath_polytope\&.scad\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

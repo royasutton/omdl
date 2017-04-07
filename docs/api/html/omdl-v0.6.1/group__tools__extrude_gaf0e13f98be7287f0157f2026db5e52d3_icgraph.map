@@ -1,0 +1,5 @@
+<map id="rotate_extrude_tre" name="rotate_extrude_tre">
+<area shape="rect" id="node2" href="$group__shapes__3d.html#gac521ba184d6ac7693df4db67df2499b8" title="A rectangular cross&#45;sectional profile revolved about the z&#45;axis. " alt="" coords="181,5,251,32"/>
+<area shape="rect" id="node3" href="$group__shapes__3d.html#gaa3137155089f4d50c13ebea05402edd0" title="A triangular cross&#45;sectional profile revolved about the z&#45;axis. " alt="" coords="181,56,251,83"/>
+<area shape="rect" id="node4" href="$group__shapes__3d.html#gaf5589d4cfa40aefb7853b4eebc792312" title="An elliptical cross&#45;sectional profile revolved about the z&#45;axis. " alt="" coords="180,107,252,133"/>
+</map>

@@ -1,0 +1,25 @@
+<map id="triangle_ppp" name="triangle_ppp">
+<area shape="rect" id="node2" href="$group__shapes__2d.html#ga9fe8dcb93cf5fca81671a04f1ccb562c" title="A general triangle specified by a list of its three vertices. " alt="" coords="154,183,235,209"/>
+<area shape="rect" id="node4" href="$group__shapes__2d.html#gab40e6edfc3c5ab69a4db26301318cd86" title="A general triangle specified by its three side lengths. " alt="" coords="149,309,241,336"/>
+<area shape="rect" id="node20" href="$group__shapes__2d.html#ga0f93c98a50f652382cce6e2a9080a14d" title="A right&#45;angled triangle specified by its opposite and adjacent side lengths. " alt="" coords="152,411,237,437"/>
+<area shape="rect" id="node22" href="$group__shapes__2d.html#ga84e0a2811547e6c658909671d9e2bc0b" title="A right&#45;angled triangle specified by a side length and an angle. " alt="" coords="152,461,237,488"/>
+<area shape="rect" id="node24" href="$group__shapes__2de.html#ga115ebc47b0630da820f163c0627c9b18" title="An extruded general triangle specified by three vertices. " alt="" coords="145,512,244,539"/>
+<area shape="rect" id="node3" href="$group__shapes__2de.html#ga919151e4d8f40c9218c63b867fb80b7b" title="An extruded general triangle specified by a list of its three vertices. " alt="" coords="297,107,385,133"/>
+<area shape="rect" id="node5" href="$group__shapes__2d.html#ga5321277acf52177e1c7928c13377dd00" title="A general triangle specified by a list of its three side lengths. " alt="" coords="301,157,382,184"/>
+<area shape="rect" id="node12" href="$group__shapes__2d.html#gac6b0e8a6784a03e427d8b14eee7d90ca" title="A general triangle specified by two sides and the included angle. " alt="" coords="295,208,387,235"/>
+<area shape="rect" id="node14" href="$group__shapes__2d.html#gaaefcea1b06acb7b1633e86f657341701" title="A general triangle specified by a side and two adjacent angles. " alt="" coords="295,259,387,285"/>
+<area shape="rect" id="node16" href="$group__shapes__2d.html#gad0730473c871f346877e8ef91e2bdfd4" title="A general triangle specified by a side, one adjacent angle and the opposite angle. " alt="" coords="295,309,387,336"/>
+<area shape="rect" id="node18" href="$group__shapes__2de.html#ga4940596130c3cd1e62fea77569459a52" title="An extruded general triangle specified by its three side lengths. " alt="" coords="292,360,391,387"/>
+<area shape="rect" id="node19" href="$group__shapes__3d.html#ga66f0c4a748f33cc1fff3343655b17f45" title="A cone. " alt="" coords="316,411,367,437"/>
+<area shape="rect" id="node6" href="$group__shapes__2d.html#ga7eefb280ad124a8d35eb4218e5f0bdad" title="A general triangle specified by its sides with a removed triangular core. " alt="" coords="441,56,535,83"/>
+<area shape="rect" id="node9" href="$group__shapes__2d.html#ga7452bf5414a3677ec806a31aed6b61dd" title="A two&#45;dimensional star. " alt="" coords="459,107,517,133"/>
+<area shape="rect" id="node11" href="$group__shapes__2de.html#gace35f9581cef6d5c20c3fd1d922284d1" title="An extruded general triangle specified by a list of its three side lengths. " alt="" coords="444,157,532,184"/>
+<area shape="rect" id="node7" href="$group__shapes__2de.html#ga0c99582ccf3d5b1425c99001b228c202" title="A general triangle specified by its sides with a removed triangular core. " alt="" coords="585,5,688,32"/>
+<area shape="rect" id="node8" href="$group__shapes__3d.html#gaa3137155089f4d50c13ebea05402edd0" title="A triangular cross&#45;sectional profile revolved about the z&#45;axis. " alt="" coords="602,56,671,83"/>
+<area shape="rect" id="node10" href="$group__shapes__2de.html#ga69ece32102ccb27e9985975fa4590251" title="An extruded two&#45;dimensional star. " alt="" coords="604,107,669,133"/>
+<area shape="rect" id="node13" href="$group__shapes__2de.html#gae4dc22fae0c22daa5d4844755cd268ac" title="An extruded general triangle specified by two sides and the included angle. " alt="" coords="439,208,537,235"/>
+<area shape="rect" id="node15" href="$group__shapes__2de.html#ga5b1240a97e34583d10011e5d0044ca28" title="An extruded general triangle specified by a side and two adjacent angles. " alt="" coords="439,259,537,285"/>
+<area shape="rect" id="node17" href="$group__shapes__2de.html#ga8a3300cf4ca82dad9002965960a76a9c" title="An extruded general triangle specified by a side, one adjacent angle and the opposite angle..." alt="" coords="439,309,537,336"/>
+<area shape="rect" id="node21" href="$group__shapes__2de.html#gac86de6d90f92b19be2fda894d97dfad4" title="An extruded right&#45;angled triangle specified by its opposite and adjacent side lengths. " alt="" coords="295,461,387,488"/>
+<area shape="rect" id="node23" href="$group__shapes__2de.html#gaa80e1bde5ce902feba29d0d57169b8d5" title="An extruded right&#45;angled triangle specified by a side length and an angle. " alt="" coords="295,512,387,539"/>
+</map>

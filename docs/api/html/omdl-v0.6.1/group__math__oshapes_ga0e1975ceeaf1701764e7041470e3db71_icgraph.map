@@ -1,0 +1,8 @@
+<map id="rpolygon_lp" name="rpolygon_lp">
+<area shape="rect" id="node2" href="$group__shapes__2d.html#ga523675020d361e525669de448e17cfd7" title="An n&#45;sided equiangular/equilateral regular polygon. " alt="" coords="164,5,215,32"/>
+<area shape="rect" id="node4" href="$group__tools__repeat.html#gaa2529fb73f5660932dd812b457188e32" title="Distribute copies of a 2d or 3d shape equally about a z&#45;axis radius. " alt="" coords="141,56,237,83"/>
+<area shape="rect" id="node3" href="$group__shapes__2de.html#ga67e3b7f863de9d93ec949f5d39a6e04a" title="An extruded n&#45;sided equiangular/equilateral regular polygon. " alt="" coords="286,5,343,32"/>
+<area shape="rect" id="node5" href="$group__shapes__2d.html#ga7452bf5414a3677ec806a31aed6b61dd" title="A two&#45;dimensional star. " alt="" coords="285,56,344,83"/>
+<area shape="rect" id="node7" href="$group__shapes__3d.html#gab99dacd3036b965579d68b1d3b7ee2d8" title="A three&#45;dimensional star. " alt="" coords="285,107,344,133"/>
+<area shape="rect" id="node6" href="$group__shapes__2de.html#ga69ece32102ccb27e9985975fa4590251" title="An extruded two&#45;dimensional star. " alt="" coords="392,56,457,83"/>
+</map>

@@ -1,0 +1,25 @@
+<map id="stack" name="stack">
+<area shape="rect" id="node2" href="$group__utilities__console.html#ga149f54a142f1c69163f45f45bd39797f" title="Output diagnostic message to console. " alt="" coords="108,5,189,32"/>
+<area shape="rect" id="node3" href="$group__utilities__console.html#gacb9540a228d2c15623784ff0b0653722" title="Output information message to console. " alt="" coords="115,107,182,133"/>
+<area shape="rect" id="node7" href="$group__utilities__console.html#ga1ece4e2cff9ae45c85429c226eb8362c" title="Output warning message to console. " alt="" coords="111,157,186,184"/>
+<area shape="rect" id="node24" href="$group__utilities__console.html#ga22d6e9c8a9f751cc5716e4a69188408a" title="Output error message to console. " alt="" coords="113,56,185,83"/>
+<area shape="rect" id="node4" href="$group__datatypes__map.html#ga4a3d0704d80be0d9e8bae1fcb3ab7958" title="Perform some basic validation/checks on a map. " alt="" coords="239,56,328,83"/>
+<area shape="rect" id="node5" href="$group__datatypes__table.html#ga8a4429649e8b06d9f492e1a0d2653656" title="Perform some basic validation/checks on a table. " alt="" coords="237,107,329,133"/>
+<area shape="rect" id="node6" href="$group__tools__repeat.html#ga1bdfb742c5c03621128336c662faee75" title="Distribute copies of 2d or 3d shapes about Cartesian grid. " alt="" coords="240,157,327,184"/>
+<area shape="rect" id="node8" href="$group__shapes__2d.html#gab40e6edfc3c5ab69a4db26301318cd86" title="A general triangle specified by its three side lengths. " alt="" coords="237,259,329,285"/>
+<area shape="rect" id="node18" href="$group__shapes__2d.html#gaaefcea1b06acb7b1633e86f657341701" title="A general triangle specified by a side and two adjacent angles. " alt="" coords="381,132,473,159"/>
+<area shape="rect" id="node20" href="$group__shapes__2d.html#gad0730473c871f346877e8ef91e2bdfd4" title="A general triangle specified by a side, one adjacent angle and the opposite angle. " alt="" coords="381,385,473,412"/>
+<area shape="rect" id="node9" href="$group__shapes__2d.html#ga5321277acf52177e1c7928c13377dd00" title="A general triangle specified by a list of its three side lengths. " alt="" coords="386,233,467,260"/>
+<area shape="rect" id="node16" href="$group__shapes__2d.html#gac6b0e8a6784a03e427d8b14eee7d90ca" title="A general triangle specified by two sides and the included angle. " alt="" coords="381,284,473,311"/>
+<area shape="rect" id="node22" href="$group__shapes__2de.html#ga4940596130c3cd1e62fea77569459a52" title="An extruded general triangle specified by its three side lengths. " alt="" coords="377,183,476,209"/>
+<area shape="rect" id="node23" href="$group__shapes__3d.html#ga66f0c4a748f33cc1fff3343655b17f45" title="A cone. " alt="" coords="401,335,452,361"/>
+<area shape="rect" id="node10" href="$group__shapes__2d.html#ga7eefb280ad124a8d35eb4218e5f0bdad" title="A general triangle specified by its sides with a removed triangular core. " alt="" coords="526,233,621,260"/>
+<area shape="rect" id="node13" href="$group__shapes__2d.html#ga7452bf5414a3677ec806a31aed6b61dd" title="A two&#45;dimensional star. " alt="" coords="544,284,603,311"/>
+<area shape="rect" id="node15" href="$group__shapes__2de.html#gace35f9581cef6d5c20c3fd1d922284d1" title="An extruded general triangle specified by a list of its three side lengths. " alt="" coords="529,183,617,209"/>
+<area shape="rect" id="node11" href="$group__shapes__2de.html#ga0c99582ccf3d5b1425c99001b228c202" title="A general triangle specified by its sides with a removed triangular core. " alt="" coords="671,183,773,209"/>
+<area shape="rect" id="node12" href="$group__shapes__3d.html#gaa3137155089f4d50c13ebea05402edd0" title="A triangular cross&#45;sectional profile revolved about the z&#45;axis. " alt="" coords="687,233,757,260"/>
+<area shape="rect" id="node14" href="$group__shapes__2de.html#ga69ece32102ccb27e9985975fa4590251" title="An extruded two&#45;dimensional star. " alt="" coords="689,284,755,311"/>
+<area shape="rect" id="node17" href="$group__shapes__2de.html#gae4dc22fae0c22daa5d4844755cd268ac" title="An extruded general triangle specified by two sides and the included angle. " alt="" coords="524,335,623,361"/>
+<area shape="rect" id="node19" href="$group__shapes__2de.html#ga5b1240a97e34583d10011e5d0044ca28" title="An extruded general triangle specified by a side and two adjacent angles. " alt="" coords="524,132,623,159"/>
+<area shape="rect" id="node21" href="$group__shapes__2de.html#ga8a3300cf4ca82dad9002965960a76a9c" title="An extruded general triangle specified by a side, one adjacent angle and the opposite angle..." alt="" coords="524,385,623,412"/>
+</map>

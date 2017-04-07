@@ -1,0 +1,8 @@
+<map id="erhombus" name="erhombus">
+<area shape="rect" id="node2" href="$group__tools__extrude.html#ga2cb6eb6927858c6b5e1e2dfadb197bf9" title="Linearly extrude 2d shape with extrusion upper and lower scaling. " alt="" coords="132,31,259,57"/>
+<area shape="rect" id="node5" href="$group__shapes__2d.html#ga89c8cb6f39cf9b045091f8b0434b25d0" title="A rhombus. " alt="" coords="159,81,231,108"/>
+<area shape="rect" id="node3" href="$group__datatypes__identify__scalar.html#ga62dbd35f498bfc2a090812b1cf8a37c4" title="Test if a value is not defined. " alt="" coords="307,5,396,32"/>
+<area shape="rect" id="node4" href="$group__datatypes__identify__scalar.html#ga258e8911375d30ff85a6e52df01dc1c5" title="Test if a value is a single non&#45;iterable value. " alt="" coords="314,56,389,83"/>
+<area shape="rect" id="node6" href="$group__datatypes__operate__iterable.html#ga3d679b4617986e31d5e2803971b37af8" title="Return an iterable element when it exists or a default value when it does not. " alt="" coords="307,107,396,133"/>
+<area shape="rect" id="node7" href="$group__math__vector__algebra.html#ga3a0c4c75047b8003ab09286a77a58c86" title="Compute the angle between two lines (or vectors) in a Euclidean 3d or 2d&#45;space. " alt="" coords="318,157,385,184"/>
+</map>

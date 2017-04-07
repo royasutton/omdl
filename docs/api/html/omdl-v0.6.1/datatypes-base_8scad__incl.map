@@ -1,0 +1,9 @@
+<map id="datatypes/datatypes&#45;base.scad" name="datatypes/datatypes&#45;base.scad">
+<area shape="rect" id="node2" href="$constants_8scad.html" title="Design constant definitions. " alt="" coords="5,102,128,129"/>
+<area shape="rect" id="node3" href="$datatypes__identify__scalar_8scad.html" title="Scalar data type identification. " alt="" coords="152,95,280,136"/>
+<area shape="rect" id="node4" href="$datatypes__identify__iterable_8scad.html" title="Iterable data type identification. " alt="" coords="304,95,432,136"/>
+<area shape="rect" id="node5" href="$datatypes__identify__list_8scad.html" title="List data type identification. " alt="" coords="456,95,584,136"/>
+<area shape="rect" id="node6" href="$datatypes__operate__scalar_8scad.html" title="Scalar data type operations. " alt="" coords="608,102,811,129"/>
+<area shape="rect" id="node7" href="$datatypes__operate__iterable_8scad.html" title="Iterable data type operations. " alt="" coords="835,102,1045,129"/>
+<area shape="rect" id="node8" href="$datatypes__operate__list_8scad.html" title="List data type operations. " alt="" coords="1070,102,1255,129"/>
+</map>

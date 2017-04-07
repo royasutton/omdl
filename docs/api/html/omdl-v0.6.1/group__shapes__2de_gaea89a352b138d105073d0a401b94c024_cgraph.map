@@ -1,0 +1,8 @@
+<map id="eellipse_s" name="eellipse_s">
+<area shape="rect" id="node2" href="$group__tools__extrude.html#ga2cb6eb6927858c6b5e1e2dfadb197bf9" title="Linearly extrude 2d shape with extrusion upper and lower scaling. " alt="" coords="133,56,260,83"/>
+<area shape="rect" id="node5" href="$group__shapes__2d.html#ga8925cd75276266667fbc1f0896482a7a" title="An ellipse sector. " alt="" coords="160,107,233,133"/>
+<area shape="rect" id="node3" href="$group__datatypes__identify__scalar.html#ga62dbd35f498bfc2a090812b1cf8a37c4" title="Test if a value is not defined. " alt="" coords="308,5,397,32"/>
+<area shape="rect" id="node4" href="$group__datatypes__identify__scalar.html#ga258e8911375d30ff85a6e52df01dc1c5" title="Test if a value is a single non&#45;iterable value. " alt="" coords="315,56,390,83"/>
+<area shape="rect" id="node6" href="$group__datatypes__operate__iterable.html#ga3d679b4617986e31d5e2803971b37af8" title="Return an iterable element when it exists or a default value when it does not. " alt="" coords="445,132,535,159"/>
+<area shape="rect" id="node7" href="$group__shapes__2d.html#ga7d62c56f88b839dc7e879ff16f968ea2" title="An ellipse. " alt="" coords="323,157,382,184"/>
+</map>

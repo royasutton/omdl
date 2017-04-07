@@ -1,0 +1,7 @@
+<map id="ellipse_cs" name="ellipse_cs">
+<area shape="rect" id="node2" href="$group__datatypes__identify__iterable.html#ga3fa2b76e04a4c8bba633d9e5e08004e8" title="Test if no element of a list of values is undefined. " alt="" coords="133,5,217,32"/>
+<area shape="rect" id="node3" href="$group__datatypes__identify__scalar.html#ga51d7fdb800c10f4b7479d23b89ab8d22" title="Test if a value is defined. " alt="" coords="135,56,216,83"/>
+<area shape="rect" id="node4" href="$group__shapes__2d.html#ga8925cd75276266667fbc1f0896482a7a" title="An ellipse sector. " alt="" coords="139,107,212,133"/>
+<area shape="rect" id="node6" href="$group__shapes__2d.html#ga7d62c56f88b839dc7e879ff16f968ea2" title="An ellipse. " alt="" coords="265,157,324,184"/>
+<area shape="rect" id="node5" href="$group__datatypes__operate__iterable.html#ga3d679b4617986e31d5e2803971b37af8" title="Return an iterable element when it exists or a default value when it does not. " alt="" coords="372,132,461,159"/>
+</map>

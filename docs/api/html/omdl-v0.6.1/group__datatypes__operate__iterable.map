@@ -1,0 +1,10 @@
+<map id="Iterables" name="Iterables">
+<area shape="rect" id="node1" href="$group__datatypes__operate.html" title="Data type operation. " alt="" coords="5,159,91,185"/>
+<area shape="rect" id="node2" href="$group__datatypes__identify__scalar.html" title="Scalar data type identification. " alt="" coords="516,7,583,33"/>
+<area shape="rect" id="node3" href="$group__datatypes.html" title="Data type definitions and operators. " alt="" coords="508,57,591,84"/>
+<area shape="rect" id="node4" href="$group__datatypes__operate__list.html" title="List data type operations. " alt="" coords="524,108,575,135"/>
+<area shape="rect" id="node6" href="$group__datatypes__identify__list.html" title="List data type identification. " alt="" coords="524,159,575,185"/>
+<area shape="rect" id="node7" href="$group__datatypes__identify__iterable.html" title="Iterable data type identification. " alt="" coords="513,209,585,236"/>
+<area shape="rect" id="node8" href="$group__datatypes__operate__scalar.html" title="Scalar data type operations. " alt="" coords="516,260,583,287"/>
+<area shape="rect" id="node9" href="$group__datatypes__identify.html" title="Compile&#45;time data type identification and tests. " alt="" coords="501,311,597,337"/>
+</map>

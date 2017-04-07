@@ -1,0 +1,101 @@
+.TH "tv_datatypes_operate_scalar_s" 3 "Fri Apr 7 2017" "Version v0.6.1" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tv_datatypes_operate_scalar_s \- Script 
+ 
+.PP
+.nf
+    include <console\&.scad>;
+    include <datatypes/datatypes-base\&.scad>;
+    include <datatypes/datatypes_table\&.scad>;
+    include <validation\&.scad>;
+
+    show_passing = true;    // show passing tests
+    show_skipped = true;    // show skipped tests
+
+    echo( str("OpenSCAD Version ", version()) );
+
+    // test-values columns
+    test_c =
+    [
+      ["id", "identifier"],
+      ["td", "description"],
+      ["tv", "test value"]
+    ];
+
+    // test-values rows
+    test_r =
+    [
+      ["t01", "The undefined value",        undef],
+      ["t02", "The empty list",             empty_lst],
+      ["t03", "A range",                    [0:0\&.5:9]],
+      ["t04", "A string",                   "A string"],
+      ["t05", "Test list 01",               ["orange","apple","grape","banana"]],
+      ["t06", "Test list 02",               ["b","a","n","a","n","a","s"]],
+      ["t07", "Test list 03",               [undef]],
+      ["t08", "Test list 04",               [[1,2],[2,3]]],
+      ["t09", "Test list 05",               ["ab",[1,2],[2,3],[4,5]]],
+      ["t10", "Test list 06",               [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]]],
+      ["t11", "Vector of integers 0 to 15", [for (i=[0:15]) i]]
+    ];
+
+    test_ids = get_table_ridl( test_r );
+
+    // expected columns: ("id" + one column for each test)
+    good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
+
+    // expected rows: ("golden" test results), use 's' to skip test
+    skip = -1;  // skip test
+
+    good_r =
+    [ // function
+      ["defined_or_D",
+        "default",                                          // t01
+        empty_lst,                                          // t02
+        [0:0\&.5:9],                                          // t03
+        "A string",                                         // 04
+        ["orange","apple","grape","banana"],                // t05
+        ["b","a","n","a","n","a","s"],                      // t06
+        [undef],                                            // t07
+        [[1,2],[2,3]],                                      // t08
+        ["ab",[1,2],[2,3],[4,5]],                           // t09
+        [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]],            // t10
+        [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
+      ]
+    ];
+
+    // sanity-test tables
+    table_check( test_r, test_c, false );
+    table_check( good_r, good_c, false );
+
+    // validate helper function and module
+    function get_value( vid ) = get_table_v(test_r, test_c, vid, "tv");
+    module run_test( fname, fresult, vid )
+    {
+      value_text = get_table_v(test_r, test_c, vid, "td");
+      pass_value = get_table_v(good_r, good_c, fname, vid);
+
+      test_pass = validate( cv=fresult, t="equals", ev=pass_value, pf=true );
+      test_text = validate( str(fname, "(", get_value(vid), ")=", pass_value), fresult, "equals", pass_value );
+
+      if ( pass_value != skip )
+      {
+        if ( !test_pass )
+          log_warn( str(vid, "(", value_text, ") ", test_text) );
+        else if ( show_passing )
+          log_info( str(vid, " ", test_text) );
+      }
+      else if ( show_skipped )
+        log_info( str(vid, " *skip*: '", fname, "(", value_text, ")'") );
+    }
+
+    // Indirect function calls would be very useful here!!!
+    for (vid=test_ids) run_test( "defined_or_D", defined_or(get_value(vid),"default"), vid );
+    // circular_index() not tested
+
+    // end-of-tests
+
+.fi
+.PP
+ 

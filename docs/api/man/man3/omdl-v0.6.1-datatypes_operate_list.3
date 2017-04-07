@@ -1,0 +1,557 @@
+.TH "datatypes_operate_list" 3 "Fri Apr 7 2017" "Version v0.6.1" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+datatypes_operate_list \- Lists
+.PP
+List data type operations\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBdatatypes-base\&.scad\fP"
+.br
+.RI "\fIInclude file wrapper of data types base primitives\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBlstr\fP (v)"
+.br
+.RI "\fIConvert a list of values to a concatenated string\&. \fP"
+.ti -1c
+.RI "function \fBlstr_html\fP (v, b, p, a, f, d=false)"
+.br
+.RI "\fIConvert a list of values to a concatenated HTML-formatted string\&. \fP"
+.ti -1c
+.RI "function \fBconsts\fP (l, v, u=false)"
+.br
+.RI "\fICreate a sequence of constant or incrementing elements\&. \fP"
+.ti -1c
+.RI "function \fBget_index\fP (l, s=true, rs)"
+.br
+.RI "\fICreate a sequence for a list index sequence specification\&. \fP"
+.ti -1c
+.RI "function \fBpad\fP (l, w, p=0, r=true)"
+.br
+.RI "\fIPad a list to a constant width of elements\&. \fP"
+.ti -1c
+.RI "function \fBdround\fP (v, d=6)"
+.br
+.RI "\fIRound all numerical values of a list to a fixed number of decimal point digits\&. \fP"
+.ti -1c
+.RI "function \fBsround\fP (v, d=6)"
+.br
+.RI "\fIRound all numerical values of a list to a fixed number of significant figures\&. \fP"
+.ti -1c
+.RI "function \fBlimit\fP (v, l, u)"
+.br
+.RI "\fILimit all numerical values of a list between an upper and lower bounds\&. \fP"
+.ti -1c
+.RI "function \fBsum\fP (v, i1, i2)"
+.br
+.RI "\fICompute the sum of a list of numbers\&. \fP"
+.ti -1c
+.RI "function \fBmean\fP (v)"
+.br
+.RI "\fICompute the mean/average of a list of numbers\&. \fP"
+.ti -1c
+.RI "function \fBciselect\fP (v, i)"
+.br
+.RI "\fICase-like select a value from a list of ordered value options\&. \fP"
+.ti -1c
+.RI "function \fBcmvselect\fP (v, mv)"
+.br
+.RI "\fICase-like select a value from a list of mapped key-value options\&. \fP"
+.ti -1c
+.RI "function \fBeselect\fP (v, f=true, l=false, i)"
+.br
+.RI "\fISelect a specified element from each iterable value of a list\&. \fP"
+.ti -1c
+.RI "function \fBsmerge\fP (v, r=false)"
+.br
+.RI "\fISerial-merge lists of iterable values\&. \fP"
+.ti -1c
+.RI "function \fBpmerge\fP (v, j=true)"
+.br
+.RI "\fIParallel-merge lists of iterable values\&. \fP"
+.ti -1c
+.RI "function \fBqsort\fP (v, i, r=false)"
+.br
+.RI "\fISort the numeric or string elements of a list using quick sort\&. \fP"
+.ti -1c
+.RI "function \fBqsort2\fP (v, i, d=0, r=false, s=true)"
+.br
+.RI "\fIHierarchically sort an arbitrary data list using quick sort\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+List data type operations\&. 
+
+See validation \fBresults\fP\&. 
+.SH "Function Documentation"
+.PP 
+.SS "function ciselect (v, i)"
+
+.PP
+Case-like select a value from a list of ordered value options\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <list> A list of values\&. 
+.br
+\fIi\fP <integer> Element selection index\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<value> The value of the list element at the specified index\&. Returns the default value when \fCi\fP does not map to an element\&.
+.RE
+.PP
+Behaves like a case statement for selecting values from a list of \fIordered options\fP\&. The default value is: \fC\fBlast(v)\fP\fC\&.\fP\fP
+.PP
+\fC\fC \fBExample\fP 
+.PP
+.nf
+ov = [ "value1", "value2", "default" ];
+
+ciselect( ov );     // "default"
+ciselect( ov, 4 );  // "default"
+ciselect( ov, 0 );  // "value1"
+
+.fi
+.PP
+ \fP\fP
+.SS "function cmvselect (v, mv)"
+
+.PP
+Case-like select a value from a list of mapped key-value options\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <matrix-2xN> A matrix of N key-value mapped pairs [[key, value], \&.\&.\&.]\&. 
+.br
+\fImv\fP <value> Element selection key match value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<value> The value from the map that matches the key \fCmv\fP\&. Returns the default value when \fCmv\fP does not match any of the element identifiers of \fCv\fP or when \fCmv\fP is undefined\&.
+.RE
+.PP
+Behaves like a case statement for selecting values from a list of \fImapped options\fP\&. The default value is: \fCsecond(last(v))\fC\&.\fP\fP
+.PP
+\fC\fC \fBExample\fP 
+.PP
+.nf
+ov = [ [0,"value0"], ["a","value1"], ["b","value2"], ["c","default"] ];
+
+cmvselect( ov );      // "default"
+cmvselect( ov, "x" ); // "default"
+cmvselect( ov, 0 );   // "value0"
+cmvselect( ov, "b" ); // "value2"
+
+.fi
+.PP
+ \fP\fP
+.SS "function consts (l, v, u = \fCfalse\fP)"
+
+.PP
+Create a sequence of constant or incrementing elements\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIl\fP <integer> The list length\&. 
+.br
+\fIv\fP <value> The element value\&. 
+.br
+\fIu\fP <boolean> Element values are \fBundef\fP\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<list> A list of \fCl\fP copies of the element\&. Returns \fBempty_lst\fP when \fCl\fP is not a number or if \fC(l < 1)\fP\&.
+.RE
+.PP
+\fBNote:\fP
+.RS 4
+When \fCv\fP is not specified and \fCu\fP is \fBfalse\fP, each element is assigned the value of its index position\&. 
+.RE
+.PP
+
+.SS "function dround (v, d = \fC6\fP)"
+
+.PP
+Round all numerical values of a list to a fixed number of decimal point digits\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <list> A list of values\&. 
+.br
+\fId\fP <integer> The (maximum) number of decimals\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<list> The list with all numeric values truncated to \fCd\fP decimal digits and rounded-up if the following digit is 5 or greater\&. Non-numeric values are unchanged\&. 
+.RE
+.PP
+
+.SS "function eselect (v, f = \fCtrue\fP, l = \fCfalse\fP, i)"
+
+.PP
+Select a specified element from each iterable value of a list\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <list> A list of iterable values\&. 
+.br
+\fIf\fP <boolean> Select the first element\&. 
+.br
+\fIl\fP <boolean> Select the last element\&. 
+.br
+\fIi\fP <integer> Select a numeric element index position\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<list> A list containing the selected element of each iterable value of \fCv\fP\&. Returns \fBempty_lst\fP when \fCv\fP is empty\&. Returns \fBundef\fP when \fCv\fP is not defined or is not iterable\&.
+.RE
+.PP
+\fBNote:\fP
+.RS 4
+When more than one selection criteria is specified, the order of precedence is: \fCi\fP, \fCl\fP, \fCf\fP\&. 
+.RE
+.PP
+
+.SS "function get_index (l, s = \fCtrue\fP, rs)"
+
+.PP
+Create a sequence for a list index sequence specification\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIl\fP <list> The list\&. 
+.br
+\fIs\fP <index> The index sequence \fBspecification\fP\&. 
+.br
+\fIrs\fP <integer> An optional seed for random sequences\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<number-list> An index sequence based on the specification\&. Returns \fBempty_lst\fP for any \fCv\fP that does not fall into one of the specification forms\&.
+.RE
+.PP
+See \fBIndex sequence\fP for argument specification and conventions\&. 
+.SS "function limit (v, l, u)"
+
+.PP
+Limit all numerical values of a list between an upper and lower bounds\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <list> A list of values\&. 
+.br
+\fIl\fP <number> The minimum value\&. 
+.br
+\fIu\fP <number> The maximum value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<list> The list with all numeric values limited to the range \fC[l : u]\fP\&. A value will be assigned \fCl\fP when it is less than \fCl\fP and \fCu\fP when it is greater than \fCu\fP\&. Non-numeric values are unchanged\&. 
+.RE
+.PP
+
+.SS "function lstr (v)"
+
+.PP
+Convert a list of values to a concatenated string\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <list> A list of values\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<string> Constructed by converting each element of the list to a string and concatenating together\&. Returns \fBundef\fP when the list is not defined\&.
+.RE
+.PP
+\fBExample\fP 
+.PP
+.nf
+v1=["a", "b", "c", "d"];
+v2=[1, 2, 3];
+
+echo( lstr(concat(v1, v2)) );
+
+.fi
+.PP
+.PP
+\fBResult\fP 
+.PP
+.nf
+ECHO: "abcd123"
+
+.fi
+.PP
+ 
+.SS "function lstr_html (v, b, p, a, f, d = \fCfalse\fP)"
+
+.PP
+Convert a list of values to a concatenated HTML-formatted string\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <list> A list of values\&.
+.br
+\fIb\fP <tag-list-list> A list of tag lists\&. \fIUnpaired\fP HTML \fCtag(s)\fP to add before the value\&. 
+.br
+\fIp\fP <tag-list-list> A list of tag lists\&. \fIPaired\fP HTML \fCtag(s)\fP to enclose the value\&. 
+.br
+\fIa\fP <tag-list-list> A list of tag lists\&. \fIUnpaired\fP HTML \fCtag(s)\fP to add after the value\&.
+.br
+\fIf\fP <attr-list-list> A list of tag attribute lists for \fCfs\fP, where \fCfs=['color','size','face']\fP is the font tag to enclose the value\&. Not all attributes are required, but the order is significant\&.
+.br
+\fId\fP <boolean> Debug\&. When \fBtrue\fP angle brackets are replaced with curly brackets to prevent console decoding\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<string> Constructed by converting each element of the list to a string with specified HTML markup and concatenating\&. Returns \fBundef\fP when the list is not defined\&.
+.RE
+.PP
+When there are fewer tag lists in \fCb\fP, \fCp\fP, \fCa\fP, or \fCf\fP, than there are value elements in \fCv\fP, the last specified tag list is used for all subsequent value elements\&.
+.PP
+For a list of the \fIpaired\fP and \fIunpaired\fP HTML tags supported by the console see: \fCHTML subset\fP\&.
+.PP
+\fBExample\fP 
+.PP
+.nf
+echo( lstr_html(v="bold text", p="b", d=true) );
+echo( lstr_html(v=[1,"x",3], f=[["red",6,"helvetica"],undef,["blue",10,"courier"]], d=true) );
+
+v = ["result", "=", "mc", "2"];
+b = ["hr", undef];
+p = ["i", undef, ["b", "i"], ["b","sup"]];
+a = concat(consts(3, u=true), "hr");
+f = [undef, ["red"], undef, ["blue",4]];
+
+echo( lstr_html(v=v, b=b, p=p, a=a, f=f, d=true) );
+
+.fi
+.PP
+.PP
+\fBResult\fP 
+.PP
+.nf
+ECHO: "{b}bold text{/b}"
+ECHO: "{font color="red" size="6" face="helvetica"}1{/font}x{font color="blue" size="10" face="courier"}3{/font}"
+ECHO: "{hr}{i}result{/i}{font color="red"}={/font}{b}{i}mc{/i}{/b}{b}{sup}{font color="blue" size="4"}2{/font}{/sup}{/b}{hr}"
+
+.fi
+.PP
+ 
+.SS "function mean (v)"
+
+.PP
+Compute the mean/average of a list of numbers\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <number-list|range> A list of numerical values or a range\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<number|number-list> The sum divided by the number of elements\&. Returns 0 when the list is empty\&. Returns \fBundef\fP when list non-numerical\&.
+.RE
+.PP
+See \fCWikipedia\fP for more information\&. 
+.SS "function pad (l, w, p = \fC0\fP, r = \fCtrue\fP)"
+
+.PP
+Pad a list to a constant width of elements\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIl\fP <list> The list\&. 
+.br
+\fIw\fP <integer> The padded width\&. 
+.br
+\fIp\fP <value> The padding value\&. 
+.br
+\fIr\fP <boolean> Use right padding (\fBfalse\fP for left)\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<list> A list padded to \fCw\fP elements\&.
+.RE
+.PP
+When the list has greater than \fCw\fP elements, the list is returned unchanged\&. The empty list, \fBempty_lst\fP, has zero elements\&. When \fCl\fP is a string, characters are counted as individual elements\&. Use function \fBlstr()\fP to join padded values back into a single string if desired\&. 
+.SS "function pmerge (v, j = \fCtrue\fP)"
+
+.PP
+Parallel-merge lists of iterable values\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <list> A list of iterable values\&. 
+.br
+\fIj\fP <boolean> Join each merge as a separate list\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<list> A list containing the parallel-wise element concatenation of each iterable value in \fCv\fP\&. Returns \fBempty_lst\fP when any element value in \fCv\fP is empty\&. Returns \fBundef\fP when \fCv\fP is not defined or when any element value in \fCv\fP is not iterable\&.
+.RE
+.PP
+\fBExample\fP 
+.PP
+.nf
+v1=["a", "b", "c", "d"];
+v2=[1, 2, 3];
+
+echo( pmerge( [v1, v2], true ) );
+echo( pmerge( [v1, v2], false ) );
+
+.fi
+.PP
+.PP
+\fBResult\fP 
+.PP
+.nf
+ECHO: [["a", 1], ["b", 2], ["c", 3]]
+ECHO: ["a", 1, "b", 2, "c", 3]
+
+.fi
+.PP
+.PP
+\fBNote:\fP
+.RS 4
+The resulting list length will be limited by the iterable value with the shortest length\&. 
+.PP
+A single string, although iterable, is treated as a merged unit\&. 
+.RE
+.PP
+
+.SS "function qsort (v, i, r = \fCfalse\fP)"
+
+.PP
+Sort the numeric or string elements of a list using quick sort\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <number-list|string-list> A list of values\&. 
+.br
+\fIi\fP <integer> The sort column index for iterable elements\&. 
+.br
+\fIr\fP <boolean> Reverse the sort order\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<list> A list with elements sorted in ascending order\&. Returns \fBundef\fP when \fCv\fP is not defined or is not a list\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+This implementation relies on the comparison operators '<' and '>' which expect the operands to be either two scalar numbers or two strings\&. Therefore, this function will not correctly sort lists elements that are not numbers or strings\&. Elements with unknown order are placed at the end of the list\&.
+.RE
+.PP
+See \fCWikipedia\fP for more information\&. 
+.SS "function qsort2 (v, i, d = \fC0\fP, r = \fCfalse\fP, s = \fCtrue\fP)"
+
+.PP
+Hierarchically sort an arbitrary data list using quick sort\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <data> A list of values\&. 
+.br
+\fIi\fP <integer> The sort column index for iterable elements\&. 
+.br
+\fId\fP <integer> The recursive sort depth\&. 
+.br
+\fIr\fP <boolean> Reverse the sort order\&. 
+.br
+\fIs\fP <boolean> Order ranges by their numerical sum\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<list> With all elements sorted in ascending order\&. Returns \fBundef\fP when \fCv\fP is not defined or is not a list\&.
+.RE
+.PP
+Elements are ordered using \fBcompare()\fP\&. See its documentation for a description of the parameter \fCs\fP\&. To recursively sort all elements, set \fCd\fP greater than, or equal to, the maximum level of hierarchy in \fCv\fP\&.
+.PP
+See \fCWikipedia\fP for more information\&. 
+.SS "function smerge (v, r = \fCfalse\fP)"
+
+.PP
+Serial-merge lists of iterable values\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <list> A list of iterable values\&. 
+.br
+\fIr\fP <boolean> Recursively merge elements that are iterable\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<list> A list containing the serial-wise element concatenation of each element in \fCv\fP\&. Returns \fBempty_lst\fP when \fCv\fP is empty\&. Returns \fBundef\fP when \fCv\fP is not defined\&.
+.RE
+.PP
+\fBNote:\fP
+.RS 4
+A single string, although iterable, is treated as a merged unit\&. 
+.RE
+.PP
+
+.SS "function sround (v, d = \fC6\fP)"
+
+.PP
+Round all numerical values of a list to a fixed number of significant figures\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <list> A list of values\&. 
+.br
+\fId\fP <integer> The (maximum) number of significant figures\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<list> The list with all numeric values rounded-up to \fCd\fP significant figures\&. Non-numeric values are unchanged\&.
+.RE
+.PP
+See \fCWikipedia\fP for more information\&. 
+.SS "function sum (v, i1, i2)"
+
+.PP
+Compute the sum of a list of numbers\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <number-list|range> A list of numerical values or a range\&. 
+.br
+\fIi1\fP <integer> The element index at which to begin summation (first when not specified)\&. 
+.br
+\fIi2\fP <integer> The element index at which to end summation (last when not specified)\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<number|number-list> The sum over the index range\&. Returns 0 when \fCthe\fP list is empty\&. Returns \fBundef\fP when list non-numerical\&. 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

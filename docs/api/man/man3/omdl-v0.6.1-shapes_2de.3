@@ -1,0 +1,904 @@
+.TH "shapes_2de" 3 "Fri Apr 7 2017" "Version v0.6.1" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+shapes_2de \- 2d Extrusions
+.PP
+Extruded two-dimensional geometric shapes\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBshapes2de\&.scad\fP"
+.br
+.RI "\fILinearly extruded two-dimensional basic shapes\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "module \fBerectangle\fP (size, h, vr, vrm=0, center=false)"
+.br
+.RI "\fIAn extruded rectangle with edge, fillet, and/or chamfer corners\&. \fP"
+.ti -1c
+.RI "module \fBerectangle_c\fP (size, core, h, t, co, cr=0, vr, vr1, vr2, vrm=0, vrm1, vrm2, center=false)"
+.br
+.RI "\fIAn extruded rectangle with a removed rectangular core\&. \fP"
+.ti -1c
+.RI "module \fBerhombus\fP (size, h, vr, center=false)"
+.br
+.RI "\fIAn extruded rhombus\&. \fP"
+.ti -1c
+.RI "module \fBetriangle_ppp\fP (v1, v2, v3, h, vr, v1r, v2r, v3r, centroid=false, incenter=false, center=false)"
+.br
+.RI "\fIAn extruded general triangle specified by three vertices\&. \fP"
+.ti -1c
+.RI "module \fBetriangle_lp\fP (v, h, vr, centroid=false, incenter=false, center=false)"
+.br
+.RI "\fIAn extruded general triangle specified by a list of its three vertices\&. \fP"
+.ti -1c
+.RI "module \fBetriangle_sss\fP (s1, s2, s3, h, vr, v1r, v2r, v3r, centroid=false, incenter=false, center=false)"
+.br
+.RI "\fIAn extruded general triangle specified by its three side lengths\&. \fP"
+.ti -1c
+.RI "module \fBetriangle_ls\fP (v, h, vr, centroid=false, incenter=false, center=false)"
+.br
+.RI "\fIAn extruded general triangle specified by a list of its three side lengths\&. \fP"
+.ti -1c
+.RI "module \fBetriangle_ls_c\fP (vs, vc, h, co, cr=0, vr, vr1, vr2, centroid=false, incenter=false, center=false)"
+.br
+.RI "\fIA general triangle specified by its sides with a removed triangular core\&. \fP"
+.ti -1c
+.RI "module \fBetriangle_sas\fP (s1, a, s2, h, x=1, vr, v1r, v2r, v3r, centroid=false, incenter=false, center=false)"
+.br
+.RI "\fIAn extruded general triangle specified by two sides and the included angle\&. \fP"
+.ti -1c
+.RI "module \fBetriangle_asa\fP (a1, s, a2, h, x=1, vr, v1r, v2r, v3r, centroid=false, incenter=false, center=false)"
+.br
+.RI "\fIAn extruded general triangle specified by a side and two adjacent angles\&. \fP"
+.ti -1c
+.RI "module \fBetriangle_aas\fP (a1, a2, s, h, x=1, vr, v1r, v2r, v3r, centroid=false, incenter=false, center=false)"
+.br
+.RI "\fIAn extruded general triangle specified by a side, one adjacent angle and the opposite angle\&. \fP"
+.ti -1c
+.RI "module \fBetriangle_ss\fP (x, y, h, vr, v1r, v2r, v3r, centroid=false, incenter=false, center=false)"
+.br
+.RI "\fIAn extruded right-angled triangle specified by its opposite and adjacent side lengths\&. \fP"
+.ti -1c
+.RI "module \fBetriangle_sa\fP (x, y, aa, oa, h, vr, v1r, v2r, v3r, centroid=false, incenter=false, center=false)"
+.br
+.RI "\fIAn extruded right-angled triangle specified by a side length and an angle\&. \fP"
+.ti -1c
+.RI "module \fBengon\fP (n, r, h, vr, center=false)"
+.br
+.RI "\fIAn extruded n-sided equiangular/equilateral regular polygon\&. \fP"
+.ti -1c
+.RI "module \fBeellipse\fP (size, h, center=false)"
+.br
+.RI "\fIAn extruded ellipse\&. \fP"
+.ti -1c
+.RI "module \fBeellipse_c\fP (size, core, h, t, co, cr=0, center=false)"
+.br
+.RI "\fIAn extruded ellipse with a removed elliptical core\&. \fP"
+.ti -1c
+.RI "module \fBeellipse_s\fP (size, h, a1=0, a2=0, center=false)"
+.br
+.RI "\fIAn extruded ellipse sector\&. \fP"
+.ti -1c
+.RI "module \fBeellipse_cs\fP (size, core, h, t, a1=0, a2=0, co, cr=0, center=false)"
+.br
+.RI "\fIAn extruded sector of an ellipse with a removed elliptical core\&. \fP"
+.ti -1c
+.RI "module \fBestar2d\fP (size, h, n=5, vr, center=false)"
+.br
+.RI "\fIAn extruded two-dimensional star\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Extruded two-dimensional geometric shapes\&. 
+
+
+.SH "Function Documentation"
+.PP 
+.SS "module eellipse (size, h, center = \fCfalse\fP)"
+
+.PP
+An extruded ellipse\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsize\fP <decimal-list-2|decimal> A list [rx, ry] of decimals or a single decimal for (rx=ry)\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+\fBExample\fP eellipse eellipse 
+.PP
+.nf
+1       eellipse( size=[25, 40], h=20, center=true );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 777 of file shapes2de\&.scad\&.
+.SS "module eellipse_c (size, core, h, t, co, cr = \fC0\fP, center = \fCfalse\fP)"
+
+.PP
+An extruded ellipse with a removed elliptical core\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsize\fP <decimal-list-2|decimal> A list [rx, ry] of decimals or a single decimal for (rx=ry)\&. 
+.br
+\fIcore\fP <decimal-list-2|decimal> A list [rx, ry] of decimals or a single decimal for (rx=ry)\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIt\fP <decimal-list-2|decimal> A list [x, y] of decimals or a single decimal for (x=y)\&.
+.br
+\fIco\fP <decimal-list-2> Core offset\&. A list [x, y] of decimals\&. 
+.br
+\fIcr\fP <decimal> Core z-rotation\&.
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+Thickness \fCt\fP 
+.PD 0
+
+.IP "\(bu" 2
+\fCcore = size - t\fP; when \fCt\fP and \fCsize\fP are given\&. 
+.IP "\(bu" 2
+\fCsize = core + t\fP; when \fCt\fP and \fCcore\fP are given\&.
+.PP
+\fBExample\fP eellipse_c eellipse_c 
+.PP
+.nf
+1       eellipse_c( size=[25,40], core=[16,10], co=[0,10], cr=45, h=20, center=true );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 817 of file shapes2de\&.scad\&.
+.SS "module eellipse_cs (size, core, h, t, a1 = \fC0\fP, a2 = \fC0\fP, co, cr = \fC0\fP, center = \fCfalse\fP)"
+
+.PP
+An extruded sector of an ellipse with a removed elliptical core\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsize\fP <decimal-list-2|decimal> A list [rx, ry] of decimals or a single decimal for (rx=ry)\&. 
+.br
+\fIcore\fP <decimal-list-2|decimal> A list [rx, ry] of decimals or a single decimal for (rx=ry)\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIt\fP <decimal-list-2|decimal> A list [x, y] of decimals or a single decimal for (x=y)\&.
+.br
+\fIa1\fP <decimal> The start angle in degrees\&. 
+.br
+\fIa2\fP <decimal> The stop angle in degrees\&.
+.br
+\fIco\fP <decimal-list-2> Core offset\&. A list [x, y] of decimals\&. 
+.br
+\fIcr\fP <decimal> Core z-rotation\&.
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+Thickness \fCt\fP 
+.PD 0
+
+.IP "\(bu" 2
+\fCcore = size - t\fP; when \fCt\fP and \fCsize\fP are given\&. 
+.IP "\(bu" 2
+\fCsize = core + t\fP; when \fCt\fP and \fCcore\fP are given\&.
+.PP
+\fBExample\fP eellipse_cs eellipse_cs 
+.PP
+.nf
+1       eellipse_cs( size=[25,40], t=[10,5], a1=90, a2=180, co=[10,0], cr=45, h=20, center=true );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 897 of file shapes2de\&.scad\&.
+.SS "module eellipse_s (size, h, a1 = \fC0\fP, a2 = \fC0\fP, center = \fCfalse\fP)"
+
+.PP
+An extruded ellipse sector\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsize\fP <decimal-list-2|decimal> A list [rx, ry] of decimals or a single decimal for (rx=ry)\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIa1\fP <decimal> The start angle in degrees\&. 
+.br
+\fIa2\fP <decimal> The stop angle in degrees\&.
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+\fBExample\fP eellipse_s eellipse_s 
+.PP
+.nf
+1       eellipse_s( size=[25,40], h=20, a1=90, a2=180, center=true );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 852 of file shapes2de\&.scad\&.
+.SS "module engon (n, r, h, vr, center = \fCfalse\fP)"
+
+.PP
+An extruded n-sided equiangular/equilateral regular polygon\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIn\fP <decimal> The number of sides\&. 
+.br
+\fIr\fP <decimal> The ngon vertex radius\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIvr\fP <decimal> The vertex rounding radius\&.
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+\fBExample\fP engon engon 
+.PP
+.nf
+1       engon( n=6, r=25, h=20, vr=6, center=true );
+
+.fi
+.PP
+.PP
+See \fCWikipedia\fP for more information\&. 
+.PP
+Definition at line 747 of file shapes2de\&.scad\&.
+.SS "module erectangle (size, h, vr, vrm = \fC0\fP, center = \fCfalse\fP)"
+
+.PP
+An extruded rectangle with edge, fillet, and/or chamfer corners\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsize\fP <decimal-list-2|decimal> A list [x, y] of decimals or a single decimal for (x=y)\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIvr\fP <decimal-list-4|decimal> The corner rounding radius\&. A list [v1r, v2r, v3r, v4r] of decimals or a single decimal for (v1r=v2r=v3r=v4r)\&. Unspecified corners are not rounded\&.
+.br
+\fIvrm\fP <integer> The corner radius mode\&. A 4-bit encoded integer that indicates each corner finish\&. Use bit value \fB0\fP for \fIfillet\fP and \fB1\fP for \fIchamfer\fP\&.
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+\fBExample\fP erectangle erectangle 
+.PP
+.nf
+1       erectangle( size=[25,40], vr=5, vrm=3, h=20, center=true );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 114 of file shapes2de\&.scad\&.
+.SS "module erectangle_c (size, core, h, t, co, cr = \fC0\fP, vr, vr1, vr2, vrm = \fC0\fP, vrm1, vrm2, center = \fCfalse\fP)"
+
+.PP
+An extruded rectangle with a removed rectangular core\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsize\fP <decimal-list-2|decimal> A list [x, y] of decimals or a single decimal for (x=y)\&. 
+.br
+\fIcore\fP <decimal-list-2|decimal> A list [x, y] of decimals or a single decimal for (x=y)\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIt\fP <decimal-list-2|decimal> A list [x, y] of decimals or a single decimal for (x=y)\&.
+.br
+\fIco\fP <decimal-list-2> Core offset\&. A list [x, y] of decimals\&. 
+.br
+\fIcr\fP <decimal> Core z-rotation\&.
+.br
+\fIvr\fP <decimal-list-4|decimal> The default corner rounding radius\&. A list [v1r, v2r, v3r, v4r] of decimals or a single decimal for (v1r=v2r=v3r=v4r)\&. Unspecified corners are not rounded\&. 
+.br
+\fIvr1\fP <decimal-list-4|decimal> The outer corner rounding radius\&. 
+.br
+\fIvr2\fP <decimal-list-4|decimal> The core corner rounding radius\&.
+.br
+\fIvrm\fP <integer> The default corner radius mode\&. A 4-bit encoded integer that indicates each corner finish\&. Use bit value \fB0\fP for \fIfillet\fP and \fB1\fP for \fIchamfer\fP\&. 
+.br
+\fIvrm1\fP <integer> The outer corner radius mode\&. 
+.br
+\fIvrm2\fP <integer> The core corner radius mode\&.
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+Thickness \fCt\fP 
+.PD 0
+
+.IP "\(bu" 2
+\fCcore = size - t\fP; when \fCt\fP and \fCsize\fP are given\&. 
+.IP "\(bu" 2
+\fCsize = core + t\fP; when \fCt\fP and \fCcore\fP are given\&.
+.PP
+\fBExample\fP erectangle_c erectangle_c 
+.PP
+.nf
+1       erectangle_c( size=[40,20], t=[10,1], co=[0,-6], cr=10, vr=5, vrm1=12, h=30, center=true );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 168 of file shapes2de\&.scad\&.
+.SS "module erhombus (size, h, vr, center = \fCfalse\fP)"
+
+.PP
+An extruded rhombus\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsize\fP <decimal-list-2|decimal> A list [w, h] of decimals or a single decimal for (w=h)\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIvr\fP <decimal-list-4|decimal> The corner rounding radius\&. A list [v1r, v2r, v3r, v4r] of decimals or a single decimal for (v1r=v2r=v3r=v4r)\&. Unspecified corners are not rounded\&.
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+\fBExample\fP erhombus erhombus 
+.PP
+.nf
+1       erhombus( size=[40,25], h=10, vr=[3,0,3,9], center=true );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 217 of file shapes2de\&.scad\&.
+.SS "module estar2d (size, h, n = \fC5\fP, vr, center = \fCfalse\fP)"
+
+.PP
+An extruded two-dimensional star\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsize\fP <decimal-list-2|decimal> A list [l, w] of decimals or a single decimal for (size=l=2*w)\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIn\fP <decimal> The number of points\&.
+.br
+\fIvr\fP <decimal-list-3|decimal> The vertex rounding radius\&. A list [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r)\&.
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+\fBExample\fP estar2d estar2d 
+.PP
+.nf
+1       estar2d( size=[40, 15], h=15, n=5, vr=2, center=true );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 937 of file shapes2de\&.scad\&.
+.SS "module etriangle_aas (a1, a2, s, h, x = \fC1\fP, vr, v1r, v2r, v3r, centroid = \fCfalse\fP, incenter = \fCfalse\fP, center = \fCfalse\fP)"
+
+.PP
+An extruded general triangle specified by a side, one adjacent angle and the opposite angle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa1\fP <decimal> The opposite angle 1 in degrees\&. 
+.br
+\fIa2\fP <decimal> The adjacent angle 2 in degrees\&. 
+.br
+\fIs\fP <decimal> The side length\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIx\fP <decimal> The side to draw on the positive x-axis (\fCx=1\fP for \fCs\fP)\&.
+.br
+\fIvr\fP <decimal> The default vertex rounding radius\&. 
+.br
+\fIv1r\fP <decimal> Vertex 1 rounding radius\&. 
+.br
+\fIv2r\fP <decimal> Vertex 2 rounding radius\&. 
+.br
+\fIv3r\fP <decimal> Vertex 3 rounding radius\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&. 
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+\fBExample\fP etriangle_aas etriangle_aas 
+.PP
+.nf
+1       etriangle_aas( a1=60, a2=30, s=40, h=20, vr=2, centroid=true, center=true );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 599 of file shapes2de\&.scad\&.
+.SS "module etriangle_asa (a1, s, a2, h, x = \fC1\fP, vr, v1r, v2r, v3r, centroid = \fCfalse\fP, incenter = \fCfalse\fP, center = \fCfalse\fP)"
+
+.PP
+An extruded general triangle specified by a side and two adjacent angles\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa1\fP <decimal> The adjacent angle 1 in degrees\&. 
+.br
+\fIs\fP <decimal> The side length adjacent to the angles\&. 
+.br
+\fIa2\fP <decimal> The adjacent angle 2 in degrees\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIx\fP <decimal> The side to draw on the positive x-axis (\fCx=1\fP for \fCs\fP)\&.
+.br
+\fIvr\fP <decimal> The default vertex rounding radius\&. 
+.br
+\fIv1r\fP <decimal> Vertex 1 rounding radius\&. 
+.br
+\fIv2r\fP <decimal> Vertex 2 rounding radius\&. 
+.br
+\fIv3r\fP <decimal> Vertex 3 rounding radius\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&. 
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+\fBExample\fP etriangle_asa etriangle_asa 
+.PP
+.nf
+1       etriangle_asa( a1=30, s=50, a2=60, h=20, vr=2, centroid=true, center=true );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 546 of file shapes2de\&.scad\&.
+.SS "module etriangle_lp (v, h, vr, centroid = \fCfalse\fP, incenter = \fCfalse\fP, center = \fCfalse\fP)"
+
+.PP
+An extruded general triangle specified by a list of its three vertices\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <point-2d-list-3> A list [v1, v2, v3] of points [x, y]\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIvr\fP <decimal-list-3|decimal> The vertex rounding radius\&. A list [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r)\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&. 
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+\fBExample\fP 
+.PP
+.nf
+t = triangle_sss2lp( 30, 40, 50 );
+r = [2, 4, 6];
+etriangle_lp( v=t, h=5, vr=r );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 304 of file shapes2de\&.scad\&.
+.SS "module etriangle_ls (v, h, vr, centroid = \fCfalse\fP, incenter = \fCfalse\fP, center = \fCfalse\fP)"
+
+.PP
+An extruded general triangle specified by a list of its three side lengths\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <decimal-list-3> A list [s1, s2, s3] of decimals\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIvr\fP <decimal-list-3|decimal> The vertex rounding radius\&. A list [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r)\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&. 
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+\fBExample\fP 
+.PP
+.nf
+t = triangle_sss2lp( 3, 4, 5 );
+s = triangle_lp2ls( t );
+etriangle_ls( v=s, h=5, vr=2 );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 393 of file shapes2de\&.scad\&.
+.SS "module etriangle_ls_c (vs, vc, h, co, cr = \fC0\fP, vr, vr1, vr2, centroid = \fCfalse\fP, incenter = \fCfalse\fP, center = \fCfalse\fP)"
+
+.PP
+A general triangle specified by its sides with a removed triangular core\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIvs\fP <decimal-list-3|decimal> The size\&. A list [s1, s2, s3] of decimals or a single decimal for (s1=s2=s3)\&. 
+.br
+\fIvc\fP <decimal-list-3|decimal> The core\&. A list [s1, s2, s3] of decimals or a single decimal for (s1=s2=s3)\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIco\fP <decimal-list-2> Core offset\&. A list [x, y] of decimals\&. 
+.br
+\fIcr\fP <decimal> Core z-rotation\&.
+.br
+\fIvr\fP <decimal-list-3|decimal> The default vertex rounding radius\&. A list [v1r, v2r, v3r] of decimals or a single decimal for (v1r=v2r=v3r)\&. 
+.br
+\fIvr1\fP <decimal-list-3|decimal> The outer vertex rounding radius\&. 
+.br
+\fIvr2\fP <decimal-list-3|decimal> The core vertex rounding radius\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&. 
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+\fBExample\fP etriangle_ls_c etriangle_ls_c 
+.PP
+.nf
+1       etriangle_ls_c(vs=50, vc=30, h=15, co=[0,-10], cr=180, vr=[2,2,8], centroid=true, center=true);
+
+.fi
+.PP
+.PP
+\fBNote:\fP
+.RS 4
+The outer and inner triangles centroids are aligned prior to the core removal\&. 
+.RE
+.PP
+
+.PP
+Definition at line 440 of file shapes2de\&.scad\&.
+.SS "module etriangle_ppp (v1, v2, v3, h, vr, v1r, v2r, v3r, centroid = \fCfalse\fP, incenter = \fCfalse\fP, center = \fCfalse\fP)"
+
+.PP
+An extruded general triangle specified by three vertices\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv1\fP <point-2d> A point [x, y] for vertex 1\&. 
+.br
+\fIv2\fP <point-2d> A point [x, y] for vertex 2\&. 
+.br
+\fIv3\fP <point-2d> A point [x, y] for vertex 3\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIvr\fP <decimal> The default vertex rounding radius\&. 
+.br
+\fIv1r\fP <decimal> Vertex 1 rounding radius\&. 
+.br
+\fIv2r\fP <decimal> Vertex 2 rounding radius\&. 
+.br
+\fIv3r\fP <decimal> Vertex 3 rounding radius\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&. 
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+\fBExample\fP etriangle_ppp etriangle_ppp 
+.PP
+.nf
+1       etriangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], h=20, vr=2, centroid=true, center=true );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 254 of file shapes2de\&.scad\&.
+.SS "module etriangle_sa (x, y, aa, oa, h, vr, v1r, v2r, v3r, centroid = \fCfalse\fP, incenter = \fCfalse\fP, center = \fCfalse\fP)"
+
+.PP
+An extruded right-angled triangle specified by a side length and an angle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP <decimal> The length of the side along the x-axis\&. 
+.br
+\fIy\fP <decimal> The length of the side along the y-axis\&. 
+.br
+\fIaa\fP <decimal> The adjacent angle in degrees\&. 
+.br
+\fIoa\fP <decimal> The opposite angle in degrees\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIvr\fP <decimal> The default vertex rounding radius\&. 
+.br
+\fIv1r\fP <decimal> Vertex 1 rounding radius\&. 
+.br
+\fIv2r\fP <decimal> Vertex 2 rounding radius\&. 
+.br
+\fIv3r\fP <decimal> Vertex 3 rounding radius\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&. 
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+\fBExample\fP etriangle_sa etriangle_sa 
+.PP
+.nf
+1       etriangle_sa( x=40, aa=30, h=20, vr=2, centroid=true, center=true );
+
+.fi
+.PP
+.PP
+\fBNote:\fP
+.RS 4
+When both \fCx\fP and \fCy\fP are given, both triangles are rendered\&. 
+.PP
+When both \fCaa\fP and \fCoa\fP are given, \fCaa\fP is used\&. 
+.RE
+.PP
+
+.PP
+Definition at line 700 of file shapes2de\&.scad\&.
+.SS "module etriangle_sas (s1, a, s2, h, x = \fC1\fP, vr, v1r, v2r, v3r, centroid = \fCfalse\fP, incenter = \fCfalse\fP, center = \fCfalse\fP)"
+
+.PP
+An extruded general triangle specified by two sides and the included angle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs1\fP <decimal> The length of the side 1\&. 
+.br
+\fIa\fP <decimal> The included angle in degrees\&. 
+.br
+\fIs2\fP <decimal> The length of the side 2\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIx\fP <decimal> The side to draw on the positive x-axis (\fCx=1\fP for \fCs1\fP)\&.
+.br
+\fIvr\fP <decimal> The default vertex rounding radius\&. 
+.br
+\fIv1r\fP <decimal> Vertex 1 rounding radius\&. 
+.br
+\fIv2r\fP <decimal> Vertex 2 rounding radius\&. 
+.br
+\fIv3r\fP <decimal> Vertex 3 rounding radius\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&. 
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+\fBExample\fP etriangle_sas etriangle_sas 
+.PP
+.nf
+1       etriangle_sas( s1=50, a=60, s2=30, h=20, vr=2, centroid=true, center=true );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 493 of file shapes2de\&.scad\&.
+.SS "module etriangle_ss (x, y, h, vr, v1r, v2r, v3r, centroid = \fCfalse\fP, incenter = \fCfalse\fP, center = \fCfalse\fP)"
+
+.PP
+An extruded right-angled triangle specified by its opposite and adjacent side lengths\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIx\fP <decimal> The length of the side along the x-axis\&. 
+.br
+\fIy\fP <decimal> The length of the side along the y-axis\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIvr\fP <decimal> The default vertex rounding radius\&. 
+.br
+\fIv1r\fP <decimal> Vertex 1 rounding radius\&. 
+.br
+\fIv2r\fP <decimal> Vertex 2 rounding radius\&. 
+.br
+\fIv3r\fP <decimal> Vertex 3 rounding radius\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&. 
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+\fBExample\fP etriangle_ss etriangle_ss 
+.PP
+.nf
+1       etriangle_ss( x=30, y=40, h=20, vr=2, centroid=true, center=true );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 648 of file shapes2de\&.scad\&.
+.SS "module etriangle_sss (s1, s2, s3, h, vr, v1r, v2r, v3r, centroid = \fCfalse\fP, incenter = \fCfalse\fP, center = \fCfalse\fP)"
+
+.PP
+An extruded general triangle specified by its three side lengths\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs1\fP <decimal> The length of the side 1 (along the x-axis)\&. 
+.br
+\fIs2\fP <decimal> The length of the side 2\&. 
+.br
+\fIs3\fP <decimal> The length of the side 3\&.
+.br
+\fIh\fP <decimal-list-3:9|decimal> A list of decimals or a single decimal to specify simple extrusion height\&.
+.br
+\fIvr\fP <decimal> The default vertex rounding radius\&. 
+.br
+\fIv1r\fP <decimal> Vertex 1 rounding radius\&. 
+.br
+\fIv2r\fP <decimal> Vertex 2 rounding radius\&. 
+.br
+\fIv3r\fP <decimal> Vertex 3 rounding radius\&.
+.br
+\fIcentroid\fP <boolean> Center centroid at origin\&. 
+.br
+\fIincenter\fP <boolean> Center incenter at origin\&. 
+.br
+\fIcenter\fP <boolean> Center about origin\&.
+.RE
+.PP
+\fBSee also:\fP
+.RS 4
+\fBlinear_extrude_uls\fP for a description on specifying \fCh\fP\&.
+.RE
+.PP
+\fBExample\fP etriangle_sss etriangle_sss 
+.PP
+.nf
+1       etriangle_sss( s1=30, s2=40, s3=50, h=20, vr=2, centroid=true, center=true );
+
+.fi
+.PP
+ 
+.PP
+Definition at line 343 of file shapes2de\&.scad\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

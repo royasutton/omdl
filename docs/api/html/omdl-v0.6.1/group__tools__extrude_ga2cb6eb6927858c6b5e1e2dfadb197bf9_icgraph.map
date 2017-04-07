@@ -1,0 +1,21 @@
+<map id="linear_extrude_uls" name="linear_extrude_uls">
+<area shape="rect" id="node2" href="$group__shapes__2de.html#ga5fd9b6fca4860ae7c54cbeb9024e74f0" title="An extruded rectangle with edge, fillet, and/or chamfer corners. " alt="" coords="190,5,273,32"/>
+<area shape="rect" id="node3" href="$group__shapes__2de.html#gaa24ca5f53d00f33d356f40f740a1d7f7" title="An extruded rectangle with a removed rectangular core. " alt="" coords="183,56,279,83"/>
+<area shape="rect" id="node4" href="$group__shapes__2de.html#gadc20c762def9f625af7141e22229ff55" title="An extruded rhombus. " alt="" coords="192,107,271,133"/>
+<area shape="rect" id="node5" href="$group__shapes__2de.html#ga115ebc47b0630da820f163c0627c9b18" title="An extruded general triangle specified by three vertices. " alt="" coords="182,157,281,184"/>
+<area shape="rect" id="node6" href="$group__shapes__2de.html#ga919151e4d8f40c9218c63b867fb80b7b" title="An extruded general triangle specified by a list of its three vertices. " alt="" coords="187,208,275,235"/>
+<area shape="rect" id="node7" href="$group__shapes__2de.html#ga4940596130c3cd1e62fea77569459a52" title="An extruded general triangle specified by its three side lengths. " alt="" coords="182,259,281,285"/>
+<area shape="rect" id="node8" href="$group__shapes__2de.html#gace35f9581cef6d5c20c3fd1d922284d1" title="An extruded general triangle specified by a list of its three side lengths. " alt="" coords="187,309,275,336"/>
+<area shape="rect" id="node9" href="$group__shapes__2de.html#ga0c99582ccf3d5b1425c99001b228c202" title="A general triangle specified by its sides with a removed triangular core. " alt="" coords="180,360,283,387"/>
+<area shape="rect" id="node10" href="$group__shapes__2de.html#gae4dc22fae0c22daa5d4844755cd268ac" title="An extruded general triangle specified by two sides and the included angle. " alt="" coords="182,411,281,437"/>
+<area shape="rect" id="node11" href="$group__shapes__2de.html#ga5b1240a97e34583d10011e5d0044ca28" title="An extruded general triangle specified by a side and two adjacent angles. " alt="" coords="182,461,281,488"/>
+<area shape="rect" id="node12" href="$group__shapes__2de.html#ga8a3300cf4ca82dad9002965960a76a9c" title="An extruded general triangle specified by a side, one adjacent angle and the opposite angle..." alt="" coords="182,512,281,539"/>
+<area shape="rect" id="node13" href="$group__shapes__2de.html#gac86de6d90f92b19be2fda894d97dfad4" title="An extruded right&#45;angled triangle specified by its opposite and adjacent side lengths. " alt="" coords="185,563,277,589"/>
+<area shape="rect" id="node14" href="$group__shapes__2de.html#gaa80e1bde5ce902feba29d0d57169b8d5" title="An extruded right&#45;angled triangle specified by a side length and an angle. " alt="" coords="185,613,277,640"/>
+<area shape="rect" id="node15" href="$group__shapes__2de.html#ga67e3b7f863de9d93ec949f5d39a6e04a" title="An extruded n&#45;sided equiangular/equilateral regular polygon. " alt="" coords="203,664,260,691"/>
+<area shape="rect" id="node16" href="$group__shapes__2de.html#ga8a0fdbbb045a70b7207fd84abeb7b18a" title="An extruded ellipse. " alt="" coords="198,715,265,741"/>
+<area shape="rect" id="node17" href="$group__shapes__2de.html#ga3189db3471cd678cc0f8d88f325186eb" title="An extruded ellipse with a removed elliptical core. " alt="" coords="191,765,271,792"/>
+<area shape="rect" id="node18" href="$group__shapes__2de.html#gaea89a352b138d105073d0a401b94c024" title="An extruded ellipse sector. " alt="" coords="191,816,271,843"/>
+<area shape="rect" id="node19" href="$group__shapes__2de.html#gae015f9c06a0ad064212475dcd1c1eb5c" title="An extruded sector of an ellipse with a removed elliptical core. " alt="" coords="188,867,275,893"/>
+<area shape="rect" id="node20" href="$group__shapes__2de.html#ga69ece32102ccb27e9985975fa4590251" title="An extruded two&#45;dimensional star. " alt="" coords="199,917,264,944"/>
+</map>

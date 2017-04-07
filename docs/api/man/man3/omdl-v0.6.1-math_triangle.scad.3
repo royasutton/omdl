@@ -1,0 +1,112 @@
+.TH "math/math_triangle.scad" 3 "Fri Apr 7 2017" "Version v0.6.1" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+math/math_triangle.scad \- Triangle solutions mathematical functions\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <math-base\&.scad>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBtriangle_sss2lp\fP (s1, s2, s3, cw=true)"
+.br
+.RI "\fICompute the vertex coordinates of a triangle given its side lengths\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_ls2lp\fP (v, cw=true)"
+.br
+.RI "\fICompute the vertex coordinates of a triangle given its side lengths\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_ppp2ls\fP (v1, v2, v3)"
+.br
+.RI "\fICompute the side lengths of a triangle given its vertex coordinates\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_lp2ls\fP (v)"
+.br
+.RI "\fICompute the side lengths of a triangle given its vertex coordinates\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_area_ppp\fP (v1, v2, v3, s=false)"
+.br
+.RI "\fICompute the signed area of a triangle given its vertex coordinates\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_area_lp\fP (v, s=false)"
+.br
+.RI "\fICompute the signed area of a triangle given its vertex coordinates\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_centroid_ppp\fP (v1, v2, v3)"
+.br
+.RI "\fICompute the centroid (geometric center) of a triangle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_centroid_lp\fP (v)"
+.br
+.RI "\fICompute the centroid (geometric center) of a triangle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_incenter_ppp\fP (v1, v2, v3)"
+.br
+.RI "\fICompute the coordinate for the triangle's incircle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_incenter_lp\fP (v)"
+.br
+.RI "\fICompute the coordinate for the triangle's incircle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_inradius_ppp\fP (v1, v2, v3)"
+.br
+.RI "\fICompute the inradius of a triangle's incircle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_inradius_lp\fP (v)"
+.br
+.RI "\fICompute the inradius of a triangle's incircle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_is_cw_ppp\fP (v1, v2, v3)"
+.br
+.RI "\fITest the vertex ordering, or orientation, of a triangle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_is_cw_lp\fP (v)"
+.br
+.RI "\fITest the vertex ordering, or orientation, of a triangle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_is_pit_ppp\fP (v1, v2, v3, t)"
+.br
+.RI "\fITest if a point is inside a triangle in a Euclidean 2d-space using Barycentric\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_is_pit_lp\fP (v, t)"
+.br
+.RI "\fITest if a point is inside a triangle in a Euclidean 2d-space using Barycentric\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Triangle solutions mathematical functions\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy Allen Sutton 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2015-2017
+.RE
+.PP
+\fBCopyright:\fP
+.RS 4
+.RE
+.PP
+This file is part of \fComdl\fP, an OpenSCAD mechanical design library\&.
+.PP
+The \fIomdl\fP is free software; you can redistribute it and/or modify it under the terms of the \fCGNU Lesser General Public License\fP as published by the Free Software Foundation; either version 2\&.1 of the License, or (at your option) any later version\&.
+.PP
+The \fIomdl\fP is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE\&. See the GNU Lesser General Public License for more details\&.
+.PP
+You should have received a copy of the GNU Lesser General Public License along with the \fIomdl\fP; if not, write to the Free Software Foundation, Inc\&., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA; or see http://www.gnu.org/licenses/\&. 
+.PP
+Definition in file \fBmath_triangle\&.scad\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

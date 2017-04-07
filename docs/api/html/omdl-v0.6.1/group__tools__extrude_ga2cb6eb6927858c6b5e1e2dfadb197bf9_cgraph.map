@@ -1,0 +1,4 @@
+<map id="linear_extrude_uls" name="linear_extrude_uls">
+<area shape="rect" id="node2" href="$group__datatypes__identify__scalar.html#ga62dbd35f498bfc2a090812b1cf8a37c4" title="Test if a value is not defined. " alt="" coords="180,5,269,32"/>
+<area shape="rect" id="node3" href="$group__datatypes__identify__scalar.html#ga258e8911375d30ff85a6e52df01dc1c5" title="Test if a value is a single non&#45;iterable value. " alt="" coords="187,56,262,83"/>
+</map>

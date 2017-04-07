@@ -1,0 +1,13 @@
+<map id="torus_ep" name="torus_ep">
+<area shape="rect" id="node2" href="$group__tools__extrude.html#gaf0e13f98be7287f0157f2026db5e52d3" title="Translate, rotate, and revolve the 2d shape about the z&#45;axis with linear elongation. " alt="" coords="125,132,252,159"/>
+<area shape="rect" id="node8" href="$group__shapes__2d.html#ga3e186b32450bffe183da7422f0b19f95" title="A sector of an ellipse with a removed elliptical core. " alt="" coords="149,309,229,336"/>
+<area shape="rect" id="node3" href="$group__datatypes__identify__scalar.html#ga62dbd35f498bfc2a090812b1cf8a37c4" title="Test if a value is not defined. " alt="" coords="315,5,405,32"/>
+<area shape="rect" id="node4" href="$group__tools__extrude.html#ga485bf7d4456a1599bd170a40d6123d79" title="Translate, rotate, and revolve the 2d shape about the z&#45;axis. " alt="" coords="300,56,420,83"/>
+<area shape="rect" id="node5" href="$group__datatypes__identify__scalar.html#ga258e8911375d30ff85a6e52df01dc1c5" title="Test if a value is a single non&#45;iterable value. " alt="" coords="323,107,397,133"/>
+<area shape="rect" id="node6" href="$group__datatypes__operate__iterable.html#ga3d679b4617986e31d5e2803971b37af8" title="Return an iterable element when it exists or a default value when it does not. " alt="" coords="575,335,664,361"/>
+<area shape="rect" id="node7" href="$group__math__bitwise.html#ga31b8c7bc875d9fadd86b49a1ba39d1a4" title="Test if a base&#45;two bit position of an integer value equals a test bit. " alt="" coords="301,208,419,235"/>
+<area shape="rect" id="node9" href="$group__datatypes__identify__iterable.html#ga3fa2b76e04a4c8bba633d9e5e08004e8" title="Test if no element of a list of values is undefined. " alt="" coords="318,259,402,285"/>
+<area shape="rect" id="node10" href="$group__datatypes__identify__scalar.html#ga51d7fdb800c10f4b7479d23b89ab8d22" title="Test if a value is defined. " alt="" coords="319,309,401,336"/>
+<area shape="rect" id="node11" href="$group__shapes__2d.html#ga8925cd75276266667fbc1f0896482a7a" title="An ellipse sector. " alt="" coords="323,360,397,387"/>
+<area shape="rect" id="node12" href="$group__shapes__2d.html#ga7d62c56f88b839dc7e879ff16f968ea2" title="An ellipse. " alt="" coords="468,385,527,412"/>
+</map>

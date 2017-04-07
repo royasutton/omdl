@@ -1,0 +1,19 @@
+<map id="tools/tools_edge.scad" name="tools/tools_edge.scad">
+<area shape="rect" id="node2" href="$shapes2d_8scad.html" title="Two&#45;dimensional basic shapes. " alt="" coords="240,80,408,107"/>
+<area shape="rect" id="node3" href="$math__triangle_8scad.html" title="Triangle solutions mathematical functions. " alt="" coords="138,155,315,181"/>
+<area shape="rect" id="node15" href="$tools__utility_8scad.html" title="Shape transformation utility tools. " alt="" coords="339,155,503,181"/>
+<area shape="rect" id="node4" href="$math-base_8scad.html" title="Include file wrapper of math base primitives. " alt="" coords="169,229,284,256"/>
+<area shape="rect" id="node5" href="$datatypes-base_8scad.html" title="Include file wrapper of data types base primitives. " alt="" coords="460,304,612,345"/>
+<area shape="rect" id="node13" href="$math__linear__algebra_8scad.html" title="Linear algebra mathematical functions. " alt="" coords="5,311,176,338"/>
+<area shape="rect" id="node14" href="$math__vector__algebra_8scad.html" title="Vector algebra mathematical functions. " alt="" coords="201,311,375,338"/>
+<area shape="rect" id="node6" href="$constants_8scad.html" title="Design constant definitions. " alt="" coords="21,401,144,427"/>
+<area shape="rect" id="node7" href="$datatypes__identify__scalar_8scad.html" title="Scalar data type identification. " alt="" coords="168,393,296,435"/>
+<area shape="rect" id="node8" href="$datatypes__identify__iterable_8scad.html" title="Iterable data type identification. " alt="" coords="320,393,448,435"/>
+<area shape="rect" id="node9" href="$datatypes__identify__list_8scad.html" title="List data type identification. " alt="" coords="472,393,600,435"/>
+<area shape="rect" id="node10" href="$datatypes__operate__scalar_8scad.html" title="Scalar data type operations. " alt="" coords="624,401,827,427"/>
+<area shape="rect" id="node11" href="$datatypes__operate__iterable_8scad.html" title="Iterable data type operations. " alt="" coords="851,401,1061,427"/>
+<area shape="rect" id="node12" href="$datatypes__operate__list_8scad.html" title="List data type operations. " alt="" coords="1086,401,1271,427"/>
+<area shape="rect" id="node16" href="$console_8scad.html" title="Message logging functions. " alt="" coords="309,229,419,256"/>
+<area shape="rect" id="node17" href="$math__oshapes_8scad.html" title="Other shapes mathematical functions. " alt="" coords="444,229,628,256"/>
+<area shape="rect" id="node18" href="$math__bitwise_8scad.html" title="Mathematical base&#45;two bitwise binary functions. " alt="" coords="652,229,828,256"/>
+</map>

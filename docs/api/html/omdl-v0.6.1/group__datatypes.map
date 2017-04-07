@@ -1,0 +1,12 @@
+<map id="Datatypes" name="Datatypes">
+<area shape="rect" id="node1" href="$group__datatypes__operate.html" title="Data type operation. " alt="" coords="267,14,352,40"/>
+<area shape="rect" id="node2" href="$group__datatypes__identify__scalar.html" title="Scalar data type identification. " alt="" coords="276,79,343,106"/>
+<area shape="rect" id="node4" href="$group__datatypes__map.html" title="Map data type operations. " alt="" coords="282,135,337,162"/>
+<area shape="rect" id="node5" href="$group__datatypes__operate__list.html" title="List data type operations. " alt="" coords="284,192,335,219"/>
+<area shape="rect" id="node6" href="$group__datatypes__operate__iterable.html" title="Iterable data type operations. " alt="" coords="273,243,345,270"/>
+<area shape="rect" id="node7" href="$group__datatypes__identify__list.html" title="List data type identification. " alt="" coords="284,294,335,320"/>
+<area shape="rect" id="node8" href="$group__datatypes__identify__iterable.html" title="Iterable data type identification. " alt="" coords="273,344,345,371"/>
+<area shape="rect" id="node9" href="$group__datatypes__operate__scalar.html" title="Scalar data type operations. " alt="" coords="276,395,343,422"/>
+<area shape="rect" id="node10" href="$group__datatypes__identify.html" title="Compile&#45;time data type identification and tests. " alt="" coords="261,455,357,482"/>
+<area shape="rect" id="node11" href="$group__datatypes__table.html" title="Table data type operations. " alt="" coords="279,519,340,546"/>
+</map>

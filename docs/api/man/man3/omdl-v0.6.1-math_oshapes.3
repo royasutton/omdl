@@ -1,0 +1,122 @@
+.TH "math_oshapes" 3 "Fri Apr 7 2017" "Version v0.6.1" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+math_oshapes \- Other Shapes
+.PP
+Mathematical functions for other shapes\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBmath_oshapes\&.scad\fP"
+.br
+.RI "\fIOther shapes mathematical functions\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBrpolygon_lp\fP (n, r, a, vr, cw=true)"
+.br
+.RI "\fICompute the coordinates for an n-sided regular polygon\&. \fP"
+.ti -1c
+.RI "function \fBrpolygon_area\fP (n, r, a)"
+.br
+.RI "\fICompute the area of an n-sided regular polygon\&. \fP"
+.ti -1c
+.RI "function \fBrpolygon_perimeter\fP (n, r, a)"
+.br
+.RI "\fICompute the perimeter of an n-sided regular polygon\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Mathematical functions for other shapes\&. 
+
+
+.SH "Function Documentation"
+.PP 
+.SS "function rpolygon_area (n, r, a)"
+
+.PP
+Compute the area of an n-sided regular polygon\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIn\fP <integer> The number of sides\&. 
+.br
+\fIr\fP <decimal> The vertex circumradius of the circumcircle\&. 
+.br
+\fIa\fP <decimal> The inradius of the incircle\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> Area of the n-sided regular polygon\&.
+.RE
+.PP
+The radius can be specified by either the circumradius \fCr\fP or the inradius \fCa\fP\&. If both are specified, \fCr\fP is used\&. 
+.SS "function rpolygon_lp (n, r, a, vr, cw = \fCtrue\fP)"
+
+.PP
+Compute the coordinates for an n-sided regular polygon\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIn\fP <integer> The number of sides\&. 
+.br
+\fIr\fP <decimal> The vertex circumradius of the circumcircle\&. 
+.br
+\fIa\fP <decimal> The inradius of the incircle\&. 
+.br
+\fIvr\fP <decimal> The vertex rounding radius\&. 
+.br
+\fIcw\fP <boolean> Use clockwise point ordering\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<coords-2d> A list of coordinates points [[x, y], \&.\&.\&.]\&.
+.RE
+.PP
+The radius can be specified by either the circumradius \fCr\fP or the inradius \fCa\fP\&. If both are specified, \fCr\fP is used\&.
+.PP
+\fBExample\fP 
+.PP
+.nf
+vr=5;
+
+hull()
+{
+  for ( p = rpolygon_lp( r=20, n=5, vr=vr ) )
+    translate( p )
+    circle( r=vr );
+}
+
+.fi
+.PP
+ 
+.SS "function rpolygon_perimeter (n, r, a)"
+
+.PP
+Compute the perimeter of an n-sided regular polygon\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIn\fP <integer> The number of sides\&. 
+.br
+\fIr\fP <decimal> The vertex circumradius of the circumcircle\&. 
+.br
+\fIa\fP <decimal> The inradius of the incircle\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> Perimeter length of the n-sided regular polygon\&.
+.RE
+.PP
+The radius can be specified by either the circumradius \fCr\fP or the inradius \fCa\fP\&. If both are specified, \fCr\fP is used\&. 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

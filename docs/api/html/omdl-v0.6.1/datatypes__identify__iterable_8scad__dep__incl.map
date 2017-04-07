@@ -1,0 +1,20 @@
+<map id="datatypes/datatypes_identify_iterable.scad" name="datatypes/datatypes_identify_iterable.scad">
+<area shape="rect" id="node2" href="$datatypes-base_8scad.html" title="Include file wrapper of data types base primitives. " alt="" coords="308,95,448,136"/>
+<area shape="rect" id="node3" href="$datatypes__map_8scad.html" title="Map data type operations. " alt="" coords="5,333,145,375"/>
+<area shape="rect" id="node5" href="$datatypes__table_8scad.html" title="Table data type operations. " alt="" coords="169,333,309,375"/>
+<area shape="rect" id="node6" href="$validation_8scad.html" title="Function validation methods. " alt="" coords="247,184,357,211"/>
+<area shape="rect" id="node7" href="$math-base_8scad.html" title="Include file wrapper of math base primitives. " alt="" coords="381,184,529,211"/>
+<area shape="rect" id="node17" href="$math__bitwise_8scad.html" title="Mathematical base&#45;two bitwise binary functions. " alt="" coords="749,184,913,211"/>
+<area shape="rect" id="node19" href="$math__oshapes_8scad.html" title="Other shapes mathematical functions. " alt="" coords="553,184,725,211"/>
+<area shape="rect" id="node4" href="$omdl-base_8scad.html" title="Include file wrapper of omdl base primitives. " alt="" coords="351,497,466,524"/>
+<area shape="rect" id="node8" href="$math__polytope_8scad.html" title="Polygon and polyhedron mathematical functions. " alt="" coords="185,259,357,285"/>
+<area shape="rect" id="node10" href="$math__triangle_8scad.html" title="Triangle solutions mathematical functions. " alt="" coords="554,259,719,285"/>
+<area shape="rect" id="node15" href="$tools__align_8scad.html" title="Shape alignment tools. " alt="" coords="381,259,529,285"/>
+<area shape="rect" id="node16" href="$tools__utility_8scad.html" title="Shape transformation utility tools. " alt="" coords="743,259,895,285"/>
+<area shape="rect" id="node9" href="$tools__polytope_8scad.html" title="Polygon and polyhedron tools. " alt="" coords="334,341,505,367"/>
+<area shape="rect" id="node11" href="$shapes2d_8scad.html" title="Two&#45;dimensional basic shapes. " alt="" coords="559,341,715,367"/>
+<area shape="rect" id="node12" href="$shapes2de_8scad.html" title="Linearly extruded two&#45;dimensional basic shapes. " alt="" coords="327,423,490,449"/>
+<area shape="rect" id="node13" href="$shapes3d_8scad.html" title="Three&#45;dimensional basic shapes. " alt="" coords="515,423,671,449"/>
+<area shape="rect" id="node14" href="$tools__edge_8scad.html" title="Shape edge finishing tools. " alt="" coords="695,423,845,449"/>
+<area shape="rect" id="node18" href="$math__utility_8scad.html" title="Miscellaneous mathematical utilities. " alt="" coords="869,423,1023,449"/>
+</map>

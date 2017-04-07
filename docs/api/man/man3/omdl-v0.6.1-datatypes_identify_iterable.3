@@ -1,0 +1,261 @@
+.TH "datatypes_identify_iterable" 3 "Fri Apr 7 2017" "Version v0.6.1" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+datatypes_identify_iterable \- Iterables
+.PP
+Iterable data type identification\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBdatatypes-base\&.scad\fP"
+.br
+.RI "\fIInclude file wrapper of data types base primitives\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBall_equal\fP (v, cv)"
+.br
+.RI "\fITest if a list of values equal a comparison value\&. \fP"
+.ti -1c
+.RI "function \fBany_equal\fP (v, cv)"
+.br
+.RI "\fITest if any element of a list of values equal a comparison value\&. \fP"
+.ti -1c
+.RI "function \fBall_defined\fP (v)"
+.br
+.RI "\fITest if no element of a list of values is undefined\&. \fP"
+.ti -1c
+.RI "function \fBany_undefined\fP (v)"
+.br
+.RI "\fITest if any element of a list of values is undefined\&. \fP"
+.ti -1c
+.RI "function \fBall_scalars\fP (v)"
+.br
+.RI "\fITest if all elements of a list of values are scalars\&. \fP"
+.ti -1c
+.RI "function \fBall_lists\fP (v)"
+.br
+.RI "\fITest if all elements of a list of values are lists\&. \fP"
+.ti -1c
+.RI "function \fBall_strings\fP (v)"
+.br
+.RI "\fITest if all elements of a list of values are strings\&. \fP"
+.ti -1c
+.RI "function \fBall_numbers\fP (v)"
+.br
+.RI "\fITest if all elements of a list of values are numbers\&. \fP"
+.ti -1c
+.RI "function \fBall_len\fP (v, l)"
+.br
+.RI "\fITest if all elements of a list of values are lists of a specified length\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Iterable data type identification\&. 
+
+See validation \fBresults\fP\&. 
+.SH "Function Documentation"
+.PP 
+.SS "function all_defined (v)"
+
+.PP
+Test if no element of a list of values is undefined\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <list> A list of values\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when no element is undefined and \fBfalse\fP otherwise\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBtrue\fP when the list is empty\&. 
+.RE
+.PP
+
+.SS "function all_equal (v, cv)"
+
+.PP
+Test if a list of values equal a comparison value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <list> A list of values\&. 
+.br
+\fIcv\fP <value> A comparison value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when all elements equal the value \fCcv\fP and \fBfalse\fP otherwise\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBtrue\fP when the list is empty\&. 
+.RE
+.PP
+
+.SS "function all_len (v, l)"
+
+.PP
+Test if all elements of a list of values are lists of a specified length\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <list> A list of values\&. 
+.br
+\fIl\fP <integer> The test length\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when all elements are lists of the specified length and \fBfalse\fP otherwise\&. Returns \fBtrue\fP when the list is a single list of length \fCl\fP\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBtrue\fP when \fCv\fP is empty\&. 
+.RE
+.PP
+
+.SS "function all_lists (v)"
+
+.PP
+Test if all elements of a list of values are lists\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <list> A list of values\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when all elements are lists and \fBfalse\fP otherwise\&. Returns \fBtrue\fP when the list is a single list value\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBtrue\fP when the list is empty\&. 
+.RE
+.PP
+
+.SS "function all_numbers (v)"
+
+.PP
+Test if all elements of a list of values are numbers\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <list> A list of values\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when all elements are numerical values and \fBfalse\fP otherwise\&. Returns \fBtrue\fP when the list is a single numerical value\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBtrue\fP when the list is empty\&. 
+.RE
+.PP
+
+.SS "function all_scalars (v)"
+
+.PP
+Test if all elements of a list of values are scalars\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <list> A list of values\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when all elements are scalar values and \fBfalse\fP otherwise\&. Returns \fBtrue\fP when the list is a single scalar value\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBtrue\fP when the list is empty\&. 
+.RE
+.PP
+
+.SS "function all_strings (v)"
+
+.PP
+Test if all elements of a list of values are strings\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <list> A list of values\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when all elements are string values and \fBfalse\fP otherwise\&. Returns \fBtrue\fP when the list is a single string value\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBtrue\fP when the list is empty\&. 
+.RE
+.PP
+
+.SS "function any_equal (v, cv)"
+
+.PP
+Test if any element of a list of values equal a comparison value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <list> A list of values\&. 
+.br
+\fIcv\fP <value> A comparison value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when any element equals the value \fCcv\fP and \fBfalse\fP otherwise\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBfalse\fP when the list is empty\&. 
+.RE
+.PP
+
+.SS "function any_undefined (v)"
+
+.PP
+Test if any element of a list of values is undefined\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <list> A list of values\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when any element is undefined and \fBfalse\fP otherwise\&.
+.RE
+.PP
+\fBWarning:\fP
+.RS 4
+Always returns \fBfalse\fP when the list is empty\&. 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

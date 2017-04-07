@@ -1,0 +1,335 @@
+.TH "tv_math_vector_algebra_s" 3 "Fri Apr 7 2017" "Version v0.6.1" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+tv_math_vector_algebra_s \- Script 
+ 
+.PP
+.nf
+    include <console\&.scad>;
+    include <datatypes/datatypes_table\&.scad>;
+    include <math/math_vector_algebra\&.scad>;
+    include <validation\&.scad>;
+
+    show_passing = true;    // show passing tests
+    show_skipped = true;    // show skipped tests
+
+    echo( str("OpenSCAD Version ", version()) );
+
+    // test-values columns
+    test_c =
+    [
+      ["id", "identifier"],
+      ["td", "description"],
+      ["tv", "test value"]
+    ];
+
+    // test-values rows
+    test_r =
+    [
+      ["fac", "Function argument count",    undef],
+      ["crp", "Result precision",           undef],
+      ["t01", "All undefined",              [undef,undef,undef,undef,undef,undef]],
+      ["t02", "All empty lists",            [empty_lst,empty_lst,empty_lst,empty_lst,empty_lst,empty_lst]],
+      ["t03", "All scalars",                [60, 50, 40, 30, 20, 10]],
+      ["t04", "All 1d vectors",             [[99], [58], [12], [42], [15], [1]]],
+      ["t05", "All 2d vectors",             [
+                                              [99,2], [58,16], [12,43],
+                                              [42,13], [15,59], [1,85]
+                                            ]],
+      ["t06", "All 3d vectors",             [
+                                              [199,20,55], [158,116,75], [12,43,90],
+                                              [42,13,34], [15,59,45], [62,33,69]
+                                            ]],
+      ["t07", "All 4d vectors",             [
+                                              [169,27,35,10], [178,016,25,20], [12,43,90,30],
+                                              [42,13,34,60], [15,059,45,50], [62,33,69,40]
+                                            ]],
+      ["t08", "Orthogonal vectors",         [
+                                              +x_axis3d_uv, +y_axis3d_uv, +z_axis3d_uv,
+                                              -x_axis3d_uv, -y_axis3d_uv, -z_axis3d_uv,
+                                            ]],
+      ["t09", "Coplanar vectors",           [
+                                              +x_axis3d_uv, +y_axis3d_uv, [2,2,0],
+                                              origin3d, origin3d, origin3d,
+                                            ]]
+    ];
+
+    test_ids = get_table_ridl( test_r );
+
+    // expected columns: ("id" + one column for each test)
+    good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
+
+    // expected rows: ("golden" test results), use 'skip' to skip test
+    skip = -1;  // skip test
+
+    good_r =
+    [ // function
+      ["distance_pp",
+        2,                                                  // fac
+        4,                                                  // crp
+        undef,                                              // t01
+        undef,                                              // t02
+        10,                                                 // t03
+        41,                                                 // t04
+        43\&.3244,                                            // t05
+        106\&.2873,                                           // t06
+        20\&.0499,                                            // t07
+        1\&.4142,                                             // t08
+        1\&.4142                                              // t09
+      ],
+      ["is_left_ppp",
+        3,                                                  // fac
+        4,                                                  // crp
+        undef,                                              // t01
+        undef,                                              // t02
+        undef,                                              // t03
+        undef,                                              // t04
+        -463,                                               // t05
+        17009,                                              // t06
+        -1583,                                              // t07
+        1,                                                  // t08
+        -3                                                  // t09
+      ],
+      ["dimension_2to3_v",
+        1,                                                  // fac
+        4,                                                  // crp
+        [undef,undef,0],                                    // t01
+        [undef,undef,0],                                    // t02
+        [undef,undef,0],                                    // t03
+        [99,undef,0],                                       // t04
+        [99,2,0],                                           // t05
+        [199,20,55],                                        // t06
+        [169,27,0],                                         // t07
+        x_axis3d_uv,                                        // t08
+        x_axis3d_uv                                         // t09
+      ],
+      ["get_line_dim",
+        2,                                                  // fac
+        4,                                                  // crp
+        2,                                                  // t01
+        0,                                                  // t02
+        2,                                                  // t03
+        1,                                                  // t04
+        2,                                                  // t05
+        3,                                                  // t06
+        4,                                                  // t07
+        3,                                                  // t08
+        3                                                   // t09
+      ],
+      ["get_line_tp",
+        2,                                                  // fac
+        4,                                                  // crp
+        [undef,undef],                                      // t01
+        empty_lst,                                          // t02
+        [60,50],                                            // t03
+        [58],                                               // t04
+        [58,16],                                            // t05
+        [158,116,75],                                       // t06
+        [178,16,25,20],                                     // t07
+        y_axis3d_uv,                                        // t08
+        y_axis3d_uv                                         // t09
+      ],
+      ["get_line_ip",
+        2,                                                  // fac
+        4,                                                  // crp
+        origin2d,                                           // t01
+        empty_lst,                                          // t02
+        origin2d,                                           // t03
+        [99],                                               // t04
+        [99,2],                                             // t05
+        [199,20,55],                                        // t06
+        [169,27,35,10],                                     // t07
+        x_axis3d_uv,                                        // t08
+        x_axis3d_uv                                         // t09
+      ],
+      ["get_line2origin",
+        2,                                                  // fac
+        4,                                                  // crp
+        [undef, undef],                                     // t01
+        empty_lst,                                          // t02
+        [60,50],                                            // t03
+        [-41],                                              // t04
+        [-41,14],                                           // t05
+        [-41,96,20],                                        // t06
+        [9,-11,-10,10],                                     // t07
+        [-1,1,0],                                           // t08
+        [-1,1,0]                                            // t09
+      ],
+      ["dot_ll",
+        4,                                                  // fac
+        4,                                                  // crp
+        undef,                                              // t01
+        undef,                                              // t02
+        3900,                                               // t03
+        -1230,                                              // t04
+        -1650,                                              // t05
+        -5230,                                              // t06
+        1460,                                               // t07
+        1,                                                  // t08
+        0                                                   // t09
+      ],
+      ["cross_ll",
+        4,                                                  // fac
+        4,                                                  // crp
+        skip,                                               // t01
+        skip,                                               // t02
+        skip,                                               // t03
+        skip,                                               // t04
+        810,                                                // t05
+        [-4776,-1696,-1650],                                // t06
+        skip,                                               // t07
+        [-1,-1,1],                                          // t08
+        [0,0,4]                                             // t09
+      ],
+      ["striple_lll",
+        6,                                                  // fac
+        4,                                                  // crp
+        skip,                                               // t01
+        skip,                                               // t02
+        skip,                                               // t03
+        skip,                                               // t04
+        [-14760,5040],                                      // t05
+        -219976,                                            // t06
+        skip,                                               // t07
+        -2,                                                 // t08
+        0                                                   // t09
+      ],
+      ["angle_ll",
+        4,                                                  // fac
+        4,                                                  // crp
+        undef,                                              // t01
+        undef,                                              // t02
+        -2\&.9357,                                            // t03
+        undef,                                              // t04
+        153\&.8532,                                           // t05
+        134\&.4573,                                           // t06
+        undef,                                              // t07
+        60,                                                 // t08
+        90                                                  // t09
+      ],
+      ["angle_lll",
+        6,                                                  // fac
+        4,                                                  // crp
+        skip,                                               // t01
+        skip,                                               // t02
+        skip,                                               // t03
+        skip,                                               // t04
+        skip,                                               // t05
+        -91\&.362,                                            // t06
+        skip,                                               // t07
+        -63\&.4349,                                           // t08
+        0                                                   // t09
+      ],
+      ["unit_l",
+        2,                                                  // fac
+        4,                                                  // crp
+        undef,                                              // t01
+        undef,                                              // t02
+        [\&.7682,0\&.6402],                                     // t03
+        [-1],                                               // t04
+        [-0\&.9464,0\&.3231],                                   // t05
+        [-0\&.3857,0\&.9032,0\&.1882],                            // t06
+        [0\&.44888,-0\&.5486,-0\&.4988,0\&.4988],                   // t07
+        [-0\&.7071,0\&.7071,0],                                 // t08
+        [-0\&.7071,0\&.7071,0]                                  // t09
+      ],
+      ["are_coplanar_lll",
+        6,                                                  // fac
+        4,                                                  // crp
+        skip,                                               // t01
+        skip,                                               // t02
+        skip,                                               // t03
+        skip,                                               // t04
+        skip,                                               // t05
+        false,                                              // t06
+        skip,                                               // t07
+        false,                                              // t08
+        true                                                // t09
+      ],
+      ["get_pnorm2nv",
+        2,                                                  // fac
+        4,                                                  // crp
+        skip,                                               // t01
+        skip,                                               // t02
+        [60,50,0],                                          // t03
+        skip,                                               // t04
+        [0,0,1468],                                         // t05
+        [-4880,-6235,19924],                                // t06
+        skip,                                               // t07
+        z_axis3d_uv,                                        // t08
+        z_axis3d_uv                                         // t09
+      ]
+    ];
+
+    // sanity-test tables
+    table_check( test_r, test_c, false );
+    table_check( good_r, good_c, false );
+
+    // validate helper function and module
+    function get_value( vid ) = get_table_v(test_r, test_c, vid, "tv");
+    function gv( vid, e ) = get_value( vid )[e];
+    module run( fname, vid )
+    {
+      value_text = get_table_v(test_r, test_c, vid, "td");
+
+      if ( get_table_v(good_r, good_c, fname, vid) != skip )
+        children();
+      else if ( show_skipped )
+        log_info( str("*skip*: ", vid, " '", fname, "(", value_text, ")'") );
+    }
+    module test( fname, fresult, vid, pair )
+    {
+      value_text = get_table_v(test_r, test_c, vid, "td");
+      fname_argc = get_table_v(good_r, good_c, fname, "fac");
+      comp_prcsn = get_table_v(good_r, good_c, fname, "crp");
+      pass_value = get_table_v(good_r, good_c, fname, vid);
+
+      test_pass = validate(cv=fresult, t="almost", ev=pass_value, p=comp_prcsn, pf=true);
+      farg_text = (pair == true)
+                ? lstr(eappend(", ", nssequence(rselect(get_value(vid), [0:fname_argc-1]), n=2, s=2), r=false, j=false, l=false))
+                : lstr(eappend(", ", rselect(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
+      test_text = validate(str(fname, "(", farg_text, ")=~", pass_value), fresult, "almost", pass_value, comp_prcsn);
+
+      if ( pass_value != skip )
+      {
+        if ( !test_pass )
+          log_warn( str(vid, "(", value_text, ") ", test_text) );
+        else if ( show_passing )
+          log_info( str(vid, " ", test_text) );
+      }
+      else if ( show_skipped )
+        log_info( str(vid, " *skip*: '", fname, "(", value_text, ")'") );
+    }
+
+    // Indirect function calls would be very useful here!!!
+    run_ids = delete( test_ids, mv=["fac", "crp"] );
+
+    // group 1: point
+    for (vid=run_ids) run("distance_pp",vid) test( "distance_pp", distance_pp(gv(vid,0),gv(vid,1)), vid, false );
+    for (vid=run_ids) run("is_left_ppp",vid) test( "is_left_ppp", is_left_ppp(gv(vid,0),gv(vid,1),gv(vid,2)), vid, false );
+
+    // group 2: vector
+    for (vid=run_ids) run("dimension_2to3_v",vid) test( "dimension_2to3_v", dimension_2to3_v(gv(vid,0)), vid, false );
+
+    // group 3: line (or vector)
+    for (vid=run_ids) run("get_line_dim",vid) test( "get_line_dim", get_line_dim([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("get_line_tp",vid) test( "get_line_tp", get_line_tp([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("get_line_ip",vid) test( "get_line_ip", get_line_ip([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("get_line2origin",vid) test( "get_line2origin", get_line2origin([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("dot_ll",vid) test( "dot_ll", dot_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
+    for (vid=run_ids) run("cross_ll",vid) test( "cross_ll", cross_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
+    for (vid=run_ids) run("striple_lll",vid) test( "striple_lll", striple_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
+    for (vid=run_ids) run("angle_ll",vid) test( "angle_ll", angle_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
+    for (vid=run_ids) run("angle_lll",vid) test( "angle_lll", angle_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
+    for (vid=run_ids) run("unit_l",vid) test( "unit_l", unit_l([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("are_coplanar_lll",vid) test( "are_coplanar_lll", are_coplanar_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
+
+    // group 4: plane and pnorm
+    for (vid=run_ids) run("get_pnorm2nv",vid) test( "get_pnorm2nv", get_pnorm2nv([gv(vid,0),gv(vid,1)]), vid, true );
+
+    // end-of-tests
+
+.fi
+.PP
+ 

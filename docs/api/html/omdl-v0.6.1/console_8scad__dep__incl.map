@@ -1,0 +1,11 @@
+<map id="console.scad" name="console.scad">
+<area shape="rect" id="node2" href="$units__resolution_8scad.html" title="An abstraction for arc rendering resolution control. " alt="" coords="5,177,183,203"/>
+<area shape="rect" id="node4" href="$datatypes__map_8scad.html" title="Map data type operations. " alt="" coords="207,169,347,211"/>
+<area shape="rect" id="node5" href="$datatypes__table_8scad.html" title="Table data type operations. " alt="" coords="315,80,455,121"/>
+<area shape="rect" id="node6" href="$tools__utility_8scad.html" title="Shape transformation utility tools. " alt="" coords="545,87,697,114"/>
+<area shape="rect" id="node3" href="$omdl-base_8scad.html" title="Include file wrapper of omdl base primitives. " alt="" coords="386,333,501,360"/>
+<area shape="rect" id="node7" href="$shapes2d_8scad.html" title="Two&#45;dimensional basic shapes. " alt="" coords="576,177,732,203"/>
+<area shape="rect" id="node8" href="$shapes2de_8scad.html" title="Linearly extruded two&#45;dimensional basic shapes. " alt="" coords="422,259,585,285"/>
+<area shape="rect" id="node9" href="$shapes3d_8scad.html" title="Three&#45;dimensional basic shapes. " alt="" coords="609,259,765,285"/>
+<area shape="rect" id="node10" href="$tools__edge_8scad.html" title="Shape edge finishing tools. " alt="" coords="790,259,939,285"/>
+</map>

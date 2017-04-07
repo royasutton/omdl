@@ -1,0 +1,5 @@
+<map id="log_info" name="log_info">
+<area shape="rect" id="node2" href="$group__datatypes__map.html#ga4a3d0704d80be0d9e8bae1fcb3ab7958" title="Perform some basic validation/checks on a map. " alt="" coords="121,5,211,32"/>
+<area shape="rect" id="node3" href="$group__datatypes__table.html#ga8a4429649e8b06d9f492e1a0d2653656" title="Perform some basic validation/checks on a table. " alt="" coords="120,56,212,83"/>
+<area shape="rect" id="node4" href="$group__tools__repeat.html#ga1bdfb742c5c03621128336c662faee75" title="Distribute copies of 2d or 3d shapes about Cartesian grid. " alt="" coords="123,107,209,133"/>
+</map>

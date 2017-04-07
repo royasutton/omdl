@@ -1,0 +1,106 @@
+.TH "datatypes/datatypes_table.scad" 3 "Fri Apr 7 2017" "Version v0.6.1" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+datatypes/datatypes_table.scad \- Table data type operations\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <\&.\&./console\&.scad>\fP
+.br
+\fC#include <datatypes-base\&.scad>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBget_table_ri\fP (r, ri)"
+.br
+.RI "\fIGet the table row index that matches a table row identifier\&. \fP"
+.ti -1c
+.RI "function \fBget_table_r\fP (r, ri)"
+.br
+.RI "\fIGet the table row that matches a table row identifier\&. \fP"
+.ti -1c
+.RI "function \fBget_table_ci\fP (c, ci)"
+.br
+.RI "\fIGet the table column index that matches a table column identifier\&. \fP"
+.ti -1c
+.RI "function \fBget_table_c\fP (c, ci)"
+.br
+.RI "\fIGet the table column that matches a table column identifier\&. \fP"
+.ti -1c
+.RI "function \fBget_table_v\fP (r, c, ri, ci)"
+.br
+.RI "\fIGet the table cell value for a specified row and column identifier\&. \fP"
+.ti -1c
+.RI "function \fBget_table_crl\fP (r, c, ci)"
+.br
+.RI "\fIForm a list of a select column across all table rows\&. \fP"
+.ti -1c
+.RI "function \fBget_table_ridl\fP (r)"
+.br
+.RI "\fIForm a list of all table row identifiers\&. \fP"
+.ti -1c
+.RI "function \fBget_table_cidl\fP (c)"
+.br
+.RI "\fIForm a list of all table column identifiers\&. \fP"
+.ti -1c
+.RI "function \fBtable_exists\fP (r, c, ri, ci)"
+.br
+.RI "\fITest the existence of a table row and column identifier\&. \fP"
+.ti -1c
+.RI "function \fBget_table_size\fP (r, c)"
+.br
+.RI "\fIGet the size of a table\&. \fP"
+.ti -1c
+.RI "function \fBget_table_copy\fP (r, c, rl, cl)"
+.br
+.RI "\fICreate a new matrix from select rows and columns of a table\&. \fP"
+.ti -1c
+.RI "function \fBget_table_sum\fP (r, c, rl, cl)"
+.br
+.RI "\fISum select rows and columns of a table\&. \fP"
+.ti -1c
+.RI "module \fBtable_check\fP (r, c, verbose=false)"
+.br
+.RI "\fIPerform some basic validation/checks on a table\&. \fP"
+.ti -1c
+.RI "module \fBtable_dump\fP (r, c, rl, cl, number=true)"
+.br
+.RI "\fIDump a table to the console\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Table data type operations\&. 
+
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy Allen Sutton 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2015-2017
+.RE
+.PP
+\fBCopyright:\fP
+.RS 4
+.RE
+.PP
+This file is part of \fComdl\fP, an OpenSCAD mechanical design library\&.
+.PP
+The \fIomdl\fP is free software; you can redistribute it and/or modify it under the terms of the \fCGNU Lesser General Public License\fP as published by the Free Software Foundation; either version 2\&.1 of the License, or (at your option) any later version\&.
+.PP
+The \fIomdl\fP is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE\&. See the GNU Lesser General Public License for more details\&.
+.PP
+You should have received a copy of the GNU Lesser General Public License along with the \fIomdl\fP; if not, write to the Free Software Foundation, Inc\&., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA; or see http://www.gnu.org/licenses/\&. 
+.PP
+Definition in file \fBdatatypes_table\&.scad\fP\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

@@ -1,0 +1,379 @@
+.TH "datatypes_identify_scalar" 3 "Fri Apr 7 2017" "Version v0.6.1" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+datatypes_identify_scalar \- Scalars
+.PP
+Scalar data type identification\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBdatatypes-base\&.scad\fP"
+.br
+.RI "\fIInclude file wrapper of data types base primitives\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBis_defined\fP (v)"
+.br
+.RI "\fITest if a value is defined\&. \fP"
+.ti -1c
+.RI "function \fBnot_defined\fP (v)"
+.br
+.RI "\fITest if a value is not defined\&. \fP"
+.ti -1c
+.RI "function \fBis_nan\fP (v)"
+.br
+.RI "\fITest if a numerical value is invalid\&. \fP"
+.ti -1c
+.RI "function \fBis_inf\fP (v)"
+.br
+.RI "\fITest if a numerical value is infinite\&. \fP"
+.ti -1c
+.RI "function \fBis_scalar\fP (v)"
+.br
+.RI "\fITest if a value is a single non-iterable value\&. \fP"
+.ti -1c
+.RI "function \fBis_iterable\fP (v)"
+.br
+.RI "\fITest if a value has multiple parts and is iterable\&. \fP"
+.ti -1c
+.RI "function \fBis_empty\fP (v)"
+.br
+.RI "\fITest if an iterable value is empty\&. \fP"
+.ti -1c
+.RI "function \fBis_number\fP (v)"
+.br
+.RI "\fITest if a value is a number\&. \fP"
+.ti -1c
+.RI "function \fBis_integer\fP (v)"
+.br
+.RI "\fITest if a value is an integer\&. \fP"
+.ti -1c
+.RI "function \fBis_decimal\fP (v)"
+.br
+.RI "\fITest if a value is a decimal\&. \fP"
+.ti -1c
+.RI "function \fBis_boolean\fP (v)"
+.br
+.RI "\fITest if a value is a predefined boolean constant\&. \fP"
+.ti -1c
+.RI "function \fBis_string\fP (v)"
+.br
+.RI "\fITest if a value is a string\&. \fP"
+.ti -1c
+.RI "function \fBis_list\fP (v)"
+.br
+.RI "\fITest if a value is an iterable list of values\&. \fP"
+.ti -1c
+.RI "function \fBis_range\fP (v)"
+.br
+.RI "\fITest if a value is a range definition\&. \fP"
+.ti -1c
+.RI "function \fBis_even\fP (v)"
+.br
+.RI "\fITest if a numerical value is even\&. \fP"
+.ti -1c
+.RI "function \fBis_odd\fP (v)"
+.br
+.RI "\fITest if a numerical value is odd\&. \fP"
+.ti -1c
+.RI "function \fBis_between\fP (v, l, u)"
+.br
+.RI "\fITest if a numerical value is between an upper and lower bounds\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Scalar data type identification\&. 
+
+See validation \fBresults\fP\&. 
+.SH "Function Documentation"
+.PP 
+.SS "function is_between (v, l, u)"
+
+.PP
+Test if a numerical value is between an upper and lower bounds\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <number> A numerical value\&. 
+.br
+\fIl\fP <number> The minimum value\&. 
+.br
+\fIu\fP <number> The maximum value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is between the upper and lower bounds and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function is_boolean (v)"
+
+.PP
+Test if a value is a predefined boolean constant\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is one of the predefined boolean constants \fC[true|false]\fP and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function is_decimal (v)"
+
+.PP
+Test if a value is a decimal\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is a decimal and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function is_defined (v)"
+
+.PP
+Test if a value is defined\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is defined and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function is_empty (v)"
+
+.PP
+Test if an iterable value is empty\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> An iterable value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the iterable value has zero elements and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function is_even (v)"
+
+.PP
+Test if a numerical value is even\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A numerical value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is determined to be \fIeven\fP and \fBfalse\fP otherwise (The value may be positive or negative)\&. 
+.RE
+.PP
+
+.SS "function is_inf (v)"
+
+.PP
+Test if a numerical value is infinite\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A numerical value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is determined to be \fBinf\fP (greater than the largest representable number) and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function is_integer (v)"
+
+.PP
+Test if a value is an integer\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is an integer and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function is_iterable (v)"
+
+.PP
+Test if a value has multiple parts and is iterable\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is an iterable multi-part value and \fBfalse\fP otherwise\&.
+.RE
+.PP
+data type defined  number(s) \fBfalse\fP boolean \fBfalse\fP string \fBtrue\fP list \fBtrue\fP range not defined \fBundef\fP \fBfalse\fP \fBinf\fP \fBfalse\fP \fBnan\fP \fBfalse\fP 
+.SS "function is_list (v)"
+
+.PP
+Test if a value is an iterable list of values\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is a list and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function is_nan (v)"
+
+.PP
+Test if a numerical value is invalid\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A numerical value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is determined to be \fBnan\fP (Not A Number) and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function is_number (v)"
+
+.PP
+Test if a value is a number\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is a number and \fBfalse\fP otherwise\&.
+.RE
+.PP
+\fBNote:\fP
+.RS 4
+Returns \fBtrue\fP for \fBinf\fP and \fBnan\fP values\&. 
+.RE
+.PP
+
+.SS "function is_odd (v)"
+
+.PP
+Test if a numerical value is odd\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A numerical value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is determined to be \fIodd\fP and \fBfalse\fP otherwise (The value may be positive or negative)\&. 
+.RE
+.PP
+
+.SS "function is_range (v)"
+
+.PP
+Test if a value is a range definition\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is a range definition and \fBfalse\fP otherwise\&.
+.RE
+.PP
+
+.SS "function is_scalar (v)"
+
+.PP
+Test if a value is a single non-iterable value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is a single non-iterable value and \fBfalse\fP otherwise\&.
+.RE
+.PP
+data type defined  number(s) \fBtrue\fP boolean \fBtrue\fP string \fBfalse\fP list \fBfalse\fP range not defined \fBundef\fP \fBtrue\fP \fBinf\fP \fBtrue\fP \fBnan\fP \fBtrue\fP 
+.SS "function is_string (v)"
+
+.PP
+Test if a value is a string\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is a string and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function not_defined (v)"
+
+.PP
+Test if a value is not defined\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <value> A value\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the value is not defined and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

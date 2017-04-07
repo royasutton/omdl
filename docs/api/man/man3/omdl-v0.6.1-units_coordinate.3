@@ -1,0 +1,276 @@
+.TH "units_coordinate" 3 "Fri Apr 7 2017" "Version v0.6.1" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+units_coordinate \- Coordinates
+.PP
+Coordinate systems and conversions\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBunits_coordinate\&.scad\fP"
+.br
+.RI "\fICoordinate systems and conversions\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBcoordinates_name\fP (s=\fBbase_coordinates\fP)"
+.br
+.RI "\fIReturn the name of the given coordinate system identifier\&. \fP"
+.ti -1c
+.RI "function \fBconvert_coordinate\fP (c, from=\fBbase_coordinates\fP, to=\fBbase_coordinates\fP)"
+.br
+.RI "\fIConvert point from one coordinate system to another\&. \fP"
+.ti -1c
+.RI "function \fBcoordinates_cpc\fP (c, r, t=false)"
+.br
+.RI "\fIRadially scale a list of 2d cartesian coordinates\&. \fP"
+.ti -1c
+.RI "function \fBcoordinates_pc\fP (p, r, t=false)"
+.br
+.RI "\fIRadially scale and convert a list of 2d polar coordinates to cartesian\&. \fP"
+.ti -1c
+.RI "function \fBcoordinates_csc\fP (c, r, t=false)"
+.br
+.RI "\fIRadially scale a list of 3d cartesian coordinates\&. \fP"
+.ti -1c
+.RI "function \fBcoordinates_sc\fP (s, r, t=false)"
+.br
+.RI "\fIRadially scale and convert a list of 3d spherical coordinates to cartesian\&. \fP"
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "\fBbase_coordinates\fP = 'c'"
+.br
+.RI "\fI<string> The base coordinate system\&. \fP"
+.ti -1c
+.RI "\fBcoordinates_positive_angles\fP = true"
+.br
+.RI "\fI<boolean> When converting to angular measures add 360 to negative angles\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Coordinate systems and conversions\&. 
+
+These functions allow for geometric points in space to be specified using multiple coordinate systems\&. Some geometric calculations are specified more naturally in one or another coordinate system\&. These conversion functions allow for the movement between the most convenient for a particular application\&.
+.PP
+For more information see Wikipedia on \fCcoordinate system\fP\&.
+.PP
+The table below enumerates the supported coordinate systems\&.
+.PP
+system id description dimensions point convention  c \fCcartesian\fP 2d or 3d [x, y] or [x, y, z] p \fCpolar\fP 2d [r, aa] y \fCcylindrical\fP 3d [r, aa, z] s \fCspherical\fP 3d [r, aa, pa] The symbols used in the convention column are as follows:
+.PP
+symbol description units reference  x, y, z coordinate distance any xyz-axis r radial distance any z-axis / xyz-origin aa \fCazimuthal\fP angle degrees positive x-axis pa polar / \fCzenith\fP angle degrees positive z-axis 
+.PP
+\fBNote:\fP
+.RS 4
+The \fCazimuthal\fP angle is a measure of the radial vector orthogonal projection onto the xy-plane measured from the positive x-axis\&. 
+.PP
+The polar angle is measured from the z-axis (\fCzenith\fP) to the radial vector\&.
+.RE
+.PP
+\fBExample\fP 
+.PP
+ 
+.PP
+.nf
+    include <units/units_coordinate\&.scad>;
+
+    base_coordinates = "c";
+
+    // get the base coordinate system name
+    cs = coordinates_name();
+
+    // absolute coordinates in a specified coordinate system\&.
+    c1 = convert_coordinate([1, 1, 1], "c");
+    c2 = convert_coordinate([1, 180], "p");
+    c3 = convert_coordinate([1, 90, -1], "y");
+    c4 = convert_coordinate([1, 5, 50], "s");
+
+    // convert between system\&.
+    c5 = convert_coordinate([10*sqrt(2), 45, 45], from="s", to="y");
+    c6 = convert_coordinate([sqrt(2), 45], from="p", to="c");
+
+.fi
+.PP
+.PP
+\fBResult\fP (base_coordinates = \fBc\fP): 
+.PP
+.nf
+1 ECHO: cs = "cartesian"
+2 ECHO: c1 = [1, 1, 1]
+3 ECHO: c2 = [-1, 0]
+4 ECHO: c3 = [0, 1, -1]
+5 ECHO: c4 = [0\&.763129, 0\&.0667652, 0\&.642788]
+6 ECHO: c5 = [10, 45, 10]
+7 ECHO: c6 = [1, 1]
+
+.fi
+.PP
+ \fBResult\fP (base_coordinates = \fBp\fP): 
+.PP
+.nf
+1 ECHO: cs = "polar"
+2 ECHO: c1 = [1\&.41421, 45]
+3 ECHO: c2 = [1, 180]
+4 ECHO: c3 = [1, 90]
+5 ECHO: c4 = [0\&.766044, 5]
+6 ECHO: c5 = [10, 45, 10]
+7 ECHO: c6 = [1, 1]
+
+.fi
+.PP
+ \fBResult\fP (base_coordinates = \fBy\fP): 
+.PP
+.nf
+1 ECHO: cs = "cylindrical"
+2 ECHO: c1 = [1\&.41421, 45, 1]
+3 ECHO: c2 = [1, 180, 0]
+4 ECHO: c3 = [1, 90, -1]
+5 ECHO: c4 = [0\&.766044, 5, 0\&.642788]
+6 ECHO: c5 = [10, 45, 10]
+7 ECHO: c6 = [1, 1]
+
+.fi
+.PP
+ \fBResult\fP (base_coordinates = \fBs\fP): 
+.PP
+.nf
+1 ECHO: cs = "spherical"
+2 ECHO: c1 = [1\&.73205, 45, 54\&.7356]
+3 ECHO: c2 = [undef, 180, undef]
+4 ECHO: c3 = [1\&.41421, 90, 135]
+5 ECHO: c4 = [1, 5, 50]
+6 ECHO: c5 = [10, 45, 10]
+7 ECHO: c6 = [1, 1]
+
+.fi
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "function convert_coordinate (c, from = \fC\fBbase_coordinates\fP\fP, to = \fC\fBbase_coordinates\fP\fP)"
+
+.PP
+Convert point from one coordinate system to another\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIc\fP <point> A point to convert\&. 
+.br
+\fIfrom\fP <string> The coordinate system identifier of the point to be converted\&. 
+.br
+\fIto\fP <string> The coordinate system identifier to which the point should be converted\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<point> The converted result\&. Returns \fBundef\fP for identifiers that are not defined\&. 
+.RE
+.PP
+
+.SS "function coordinates_cpc (c, r, t = \fCfalse\fP)"
+
+.PP
+Radially scale a list of 2d cartesian coordinates\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIc\fP <coords-2d> A list of cartesian coordinates [[x, y], \&.\&.\&.]\&. 
+.br
+\fIr\fP <decimal> A polar radius\&. 
+.br
+\fIt\fP <boolean> Translate or scale radius\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<coords-2d> A list of scaled cartesian coordinates\&.
+.RE
+.PP
+When \fCt\fP is \fBtrue\fP, all coordinates will terminate on a circle of radius \fCr\fP\&. When \fCt\fP is \fBfalse\fP, the radius of each coordinate is scaled by \fCr\fP\&. 
+.SS "function coordinates_csc (c, r, t = \fCfalse\fP)"
+
+.PP
+Radially scale a list of 3d cartesian coordinates\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIc\fP <coords-3d> A list of cartesian coordinates [[x, y, z], \&.\&.\&.]\&. 
+.br
+\fIr\fP <decimal> A spherical radius\&. 
+.br
+\fIt\fP <boolean> Translate or scale radius\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<coords-3d> A list of scaled cartesian coordinates\&.
+.RE
+.PP
+When \fCt\fP is \fBtrue\fP, all coordinates will terminate on a sphere of radius \fCr\fP\&. When \fCt\fP is \fBfalse\fP, the radius of each coordinate is scaled by \fCr\fP\&. 
+.SS "function coordinates_name (s = \fC\fBbase_coordinates\fP\fP)"
+
+.PP
+Return the name of the given coordinate system identifier\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP <string> A coordinate system identifier\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<string> The system name for the given identifier\&. Returns \fBundef\fP for identifiers that are not defined\&. 
+.RE
+.PP
+
+.SS "function coordinates_pc (p, r, t = \fCfalse\fP)"
+
+.PP
+Radially scale and convert a list of 2d polar coordinates to cartesian\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIc\fP <coords-2d> A list of polar coordinates [[r, aa], \&.\&.\&.]\&. 
+.br
+\fIr\fP <decimal> A polar radius\&. 
+.br
+\fIt\fP <boolean> Translate or scale radius\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<coords-2d> A list of scaled cartesian coordinates\&.
+.RE
+.PP
+When \fCt\fP is \fBtrue\fP, all coordinates will terminate on a circle of radius \fCr\fP\&. When \fCt\fP is \fBfalse\fP, the radius of each coordinate is scaled by \fCr\fP\&. 
+.SS "function coordinates_sc (s, r, t = \fCfalse\fP)"
+
+.PP
+Radially scale and convert a list of 3d spherical coordinates to cartesian\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIc\fP <coords-3d> A list of spherical coordinates [[r, aa, pa], \&.\&.\&.]\&. 
+.br
+\fIr\fP <decimal> A spherical radius\&. 
+.br
+\fIt\fP <boolean> Translate or scale radius\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<coords-3d> A list of scaled cartesian coordinates\&.
+.RE
+.PP
+When \fCt\fP is \fBtrue\fP, all coordinates will terminate on a sphere of radius \fCr\fP\&. When \fCt\fP is \fBfalse\fP, the radius of each coordinate is scaled by \fCr\fP\&. 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.

@@ -1,0 +1,4 @@
+<map id="polytope_limits" name="polytope_limits">
+<area shape="rect" id="node2" href="$group__tools__polytope.html#ga00b574079f19251be7281151d11db8fa" title="Label the vertices, paths, and edges of a polytope. " alt="" coords="163,5,284,32"/>
+<area shape="rect" id="node3" href="$group__tools__polytope.html#gab09ae9f383e69c9b02514c6be6f8f9e7" title="The 3d or 2d bounding box shape for a polytope. " alt="" coords="170,56,277,83"/>
+</map>

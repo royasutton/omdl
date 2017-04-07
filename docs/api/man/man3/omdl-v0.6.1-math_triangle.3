@@ -1,0 +1,418 @@
+.TH "math_triangle" 3 "Fri Apr 7 2017" "Version v0.6.1" "omdl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+math_triangle \- Triangles
+.PP
+Triangle mathematical functions\&.  
+
+.SS "Files"
+
+.in +1c
+.ti -1c
+.RI "file \fBmath_triangle\&.scad\fP"
+.br
+.RI "\fITriangle solutions mathematical functions\&. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "function \fBtriangle_sss2lp\fP (s1, s2, s3, cw=true)"
+.br
+.RI "\fICompute the vertex coordinates of a triangle given its side lengths\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_ls2lp\fP (v, cw=true)"
+.br
+.RI "\fICompute the vertex coordinates of a triangle given its side lengths\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_ppp2ls\fP (v1, v2, v3)"
+.br
+.RI "\fICompute the side lengths of a triangle given its vertex coordinates\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_lp2ls\fP (v)"
+.br
+.RI "\fICompute the side lengths of a triangle given its vertex coordinates\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_area_ppp\fP (v1, v2, v3, s=false)"
+.br
+.RI "\fICompute the signed area of a triangle given its vertex coordinates\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_area_lp\fP (v, s=false)"
+.br
+.RI "\fICompute the signed area of a triangle given its vertex coordinates\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_centroid_ppp\fP (v1, v2, v3)"
+.br
+.RI "\fICompute the centroid (geometric center) of a triangle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_centroid_lp\fP (v)"
+.br
+.RI "\fICompute the centroid (geometric center) of a triangle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_incenter_ppp\fP (v1, v2, v3)"
+.br
+.RI "\fICompute the coordinate for the triangle's incircle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_incenter_lp\fP (v)"
+.br
+.RI "\fICompute the coordinate for the triangle's incircle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_inradius_ppp\fP (v1, v2, v3)"
+.br
+.RI "\fICompute the inradius of a triangle's incircle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_inradius_lp\fP (v)"
+.br
+.RI "\fICompute the inradius of a triangle's incircle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_is_cw_ppp\fP (v1, v2, v3)"
+.br
+.RI "\fITest the vertex ordering, or orientation, of a triangle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_is_cw_lp\fP (v)"
+.br
+.RI "\fITest the vertex ordering, or orientation, of a triangle\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_is_pit_ppp\fP (v1, v2, v3, t)"
+.br
+.RI "\fITest if a point is inside a triangle in a Euclidean 2d-space using Barycentric\&. \fP"
+.ti -1c
+.RI "function \fBtriangle_is_pit_lp\fP (v, t)"
+.br
+.RI "\fITest if a point is inside a triangle in a Euclidean 2d-space using Barycentric\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Triangle mathematical functions\&. 
+
+See \fCWikipedia\fP for more information\&. 
+.SH "Function Documentation"
+.PP 
+.SS "function triangle_area_lp (v, s = \fCfalse\fP)"
+
+.PP
+Compute the signed area of a triangle given its vertex coordinates\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <coords-2d> A list of vertex coordinates [v1, v2, v3]\&. 
+.br
+\fIs\fP <boolean> Return the vertex ordering sign\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> The area of the given triangle\&. 
+.RE
+.PP
+
+.SS "function triangle_area_ppp (v1, v2, v3, s = \fCfalse\fP)"
+
+.PP
+Compute the signed area of a triangle given its vertex coordinates\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv1\fP <point-2d> A vertex coordinate [x, y] for vertex 1\&. 
+.br
+\fIv2\fP <point-2d> A vertex coordinate [x, y] for vertex 2\&. 
+.br
+\fIv3\fP <point-2d> A vertex coordinate [x, y] for vertex 3\&. 
+.br
+\fIs\fP <boolean> Return the vertex ordering sign\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> The area of the given triangle\&. 
+.RE
+.PP
+
+.SS "function triangle_centroid_lp (v)"
+
+.PP
+Compute the centroid (geometric center) of a triangle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <coords-2d> A list of vertex coordinates [v1, v2, v3]\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<point-2d> The centroid coordinate point [x, y]\&. 
+.RE
+.PP
+
+.SS "function triangle_centroid_ppp (v1, v2, v3)"
+
+.PP
+Compute the centroid (geometric center) of a triangle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv1\fP <point-2d> A vertex coordinate [x, y] for vertex 1\&. 
+.br
+\fIv2\fP <point-2d> A vertex coordinate [x, y] for vertex 2\&. 
+.br
+\fIv3\fP <point-2d> A vertex coordinate [x, y] for vertex 3\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<point-2d> The centroid coordinate point [x, y]\&. 
+.RE
+.PP
+
+.SS "function triangle_incenter_lp (v)"
+
+.PP
+Compute the coordinate for the triangle's incircle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <coords-2d> A list of vertex coordinates [v1, v2, v3]\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<point-2d> The incircle coordinate point [x, y]\&.
+.RE
+.PP
+The interior point for which distances to the sides of the triangle are equal\&. 
+.SS "function triangle_incenter_ppp (v1, v2, v3)"
+
+.PP
+Compute the coordinate for the triangle's incircle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv1\fP <point-2d> A vertex coordinate [x, y] for vertex 1\&. 
+.br
+\fIv2\fP <point-2d> A vertex coordinate [x, y] for vertex 2\&. 
+.br
+\fIv3\fP <point-2d> A vertex coordinate [x, y] for vertex 3\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<point-2d> The incircle coordinate point [x, y]\&.
+.RE
+.PP
+The interior point for which distances to the sides of the triangle are equal\&. 
+.SS "function triangle_inradius_lp (v)"
+
+.PP
+Compute the inradius of a triangle's incircle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <coords-2d> A list of vertex coordinates [v1, v2, v3]\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> The incircle radius\&. 
+.RE
+.PP
+
+.SS "function triangle_inradius_ppp (v1, v2, v3)"
+
+.PP
+Compute the inradius of a triangle's incircle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv1\fP <point-2d> A vertex coordinate [x, y] for vertex 1\&. 
+.br
+\fIv2\fP <point-2d> A vertex coordinate [x, y] for vertex 2\&. 
+.br
+\fIv3\fP <point-2d> A vertex coordinate [x, y] for vertex 3\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal> The incircle radius\&. 
+.RE
+.PP
+
+.SS "function triangle_is_cw_lp (v)"
+
+.PP
+Test the vertex ordering, or orientation, of a triangle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <coords-2d> A list of vertex coordinates [v1, v2, v3]\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP if the vertices are ordered clockwise, \fBfalse\fP if the vertices are ordered counterclockwise, and \fBundef\fP if the ordering can not be determined\&. 
+.RE
+.PP
+
+.SS "function triangle_is_cw_ppp (v1, v2, v3)"
+
+.PP
+Test the vertex ordering, or orientation, of a triangle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv1\fP <point-2d> A vertex coordinate [x, y] for vertex 1\&. 
+.br
+\fIv2\fP <point-2d> A vertex coordinate [x, y] for vertex 2\&. 
+.br
+\fIv3\fP <point-2d> A vertex coordinate [x, y] for vertex 3\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP if the vertices are ordered clockwise, \fBfalse\fP if the vertices are ordered counterclockwise, and \fBundef\fP if the ordering can not be determined\&. 
+.RE
+.PP
+
+.SS "function triangle_is_pit_lp (v, t)"
+
+.PP
+Test if a point is inside a triangle in a Euclidean 2d-space using Barycentric\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <coords-2d> A list of vertex coordinates [v1, v2, v3]\&. 
+.br
+\fIt\fP <point-2d> A test point coordinate [x, y]\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the point is inside the polygon and \fBfalse\fP otherwise\&. 
+.RE
+.PP
+
+.SS "function triangle_is_pit_ppp (v1, v2, v3, t)"
+
+.PP
+Test if a point is inside a triangle in a Euclidean 2d-space using Barycentric\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv1\fP <point-2d> A vertex coordinate [x, y] for vertex 1\&. 
+.br
+\fIv2\fP <point-2d> A vertex coordinate [x, y] for vertex 2\&. 
+.br
+\fIv3\fP <point-2d> A vertex coordinate [x, y] for vertex 3\&. 
+.br
+\fIt\fP <point-2d> A test point coordinate [x, y]\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<boolean> \fBtrue\fP when the point is inside the polygon and \fBfalse\fP otherwise\&.
+.RE
+.PP
+See \fCWikipedia\fP for more information\&. 
+.SS "function triangle_lp2ls (v)"
+
+.PP
+Compute the side lengths of a triangle given its vertex coordinates\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <coords-2d> A list of vertex coordinates [v1, v2, v3]\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal-list-3> A list of side lengths [s1, s2, s3]\&.
+.RE
+.PP
+\fBNote:\fP
+.RS 4
+Side lengths ordered according to vertex ordering\&. 
+.RE
+.PP
+
+.SS "function triangle_ls2lp (v, cw = \fCtrue\fP)"
+
+.PP
+Compute the vertex coordinates of a triangle given its side lengths\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv\fP <decimal-list-3> The list of side lengths [s1, s2, s3]\&. 
+.br
+\fIcw\fP <boolean> Order vertices clockwise\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<coords-2d> A list of vertex coordinates [v1, v2, v3]\&.
+.RE
+.PP
+Geometry requires that \fCs1\fP + \fCs2\fP is greater then \fCs3\fP\&. A coordinates will be \fB'nan'\fP when specified triangle does not exists\&.
+.PP
+\fBNote:\fP
+.RS 4
+Vertex \fCv1\fP at the origin\&. Side length \fCs1\fP is measured along the positive x-axis\&. 
+.RE
+.PP
+
+.SS "function triangle_ppp2ls (v1, v2, v3)"
+
+.PP
+Compute the side lengths of a triangle given its vertex coordinates\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIv1\fP <point-2d> A vertex coordinate [x, y] for vertex 1\&. 
+.br
+\fIv2\fP <point-2d> A vertex coordinate [x, y] for vertex 2\&. 
+.br
+\fIv3\fP <point-2d> A vertex coordinate [x, y] for vertex 3\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<decimal-list-3> A list of side lengths [s1, s2, s3]\&.
+.RE
+.PP
+\fBNote:\fP
+.RS 4
+Side lengths ordered according to vertex ordering\&. 
+.RE
+.PP
+
+.SS "function triangle_sss2lp (s1, s2, s3, cw = \fCtrue\fP)"
+
+.PP
+Compute the vertex coordinates of a triangle given its side lengths\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs1\fP <decimal> The length of the side 1\&. 
+.br
+\fIs2\fP <decimal> The length of the side 2\&. 
+.br
+\fIs3\fP <decimal> The length of the side 3\&. 
+.br
+\fIcw\fP <boolean> Order vertices clockwise\&.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+<coords-2d> A list of vertex coordinates [v1, v2, v3]\&.
+.RE
+.PP
+Geometry requires that \fCs1\fP + \fCs2\fP is greater then \fCs3\fP\&. A coordinates will be \fB'nan'\fP when specified triangle does not exists\&.
+.PP
+\fBNote:\fP
+.RS 4
+Vertex \fCv1\fP at the origin\&. Side length \fCs1\fP is measured along the positive x-axis\&. 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for omdl from the source code\&.
