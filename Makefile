@@ -145,8 +145,6 @@ scopes_exclude      += db_autotest db_autostat
 
 release_files_add    = $(library_info) \
                        \
-                       $(output_path)latex/refman.pdf \
-                       \
                        $(output_path)stl/mainpage_quickstart.stl \
                        $(output_path)svg/shapes2d_manifest.svg \
                        $(output_path)stl/shapes2de_manifest.stl \
