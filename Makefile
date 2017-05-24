@@ -28,7 +28,7 @@ output_path_add_project_version         := $(false)
 
 targets_depends_project                 := $(false)
 version_checks                          := $(true)
-generate_latex                          := $(true)
+generate_latex                          := $(false)
 
 release_project                         := $(false)
 release_library                         := $(false)
@@ -36,10 +36,16 @@ release_archive_doxygen                 := $(true)
 release_archive_scopes                  := $(false)
 
 #------------------------------------------------------------------------------#
-# Version Checks
+# Project Version Checks
 #------------------------------------------------------------------------------#
 ifeq ($(version_checks),$(true))
+
 $(call check_version,amuseam,ge,1.8.2,$(true),requires openscad-amu v1.8.2 or later.)
+
+ifeq ($(generate_latex),$(true))
+$(call check_version,doxygen,le,1.8.9.1,$(true),latex output broken since v1.8.9.1.)
+endif
+
 endif
 
 #------------------------------------------------------------------------------#
