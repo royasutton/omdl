@@ -45,19 +45,34 @@ instructions.
 ### Library API ###
 
 * [Current release] {{ site.vcurrent }} --- (API subject to change).
-* [Release index]
+* [Other releases]
 
 
-Examples
---------
+Design Examples
+---------------
 
-* [A Portable solar panel tripod mount](http://www.thingiverse.com/thing:2051608):
+* <a href="examples/solar_mount.jpg">
+    <img src="examples/solar_mount.jpg" alt="solar mount" height="42" />
+  </a>
+  [A Portable solar panel tripod mount](http://www.thingiverse.com/thing:2051608):
   Design took approximately 48 hours from concept to assembly and
   documentation using [omdl] and [openscad-amu].
-* [Quad HP-USB video adapter monitor post mount](https://www.thingiverse.com/thing:2807314)
-* [Webcam tripod mount](https://www.thingiverse.com/thing:2811619)
-* [PCI Bracket Generator](https://www.thingiverse.com/thing:2836187)
-* [PCI-E 1x Riser Card Bracket](https://www.thingiverse.com/thing:2841089)
+* <a href="examples/hp_usb_vid.jpg">
+    <img src="examples/hp_usb_vid.jpg" alt="solar mount" height="42" />
+  </a>
+  [Quad HP-USB video adapter monitor post mount](https://www.thingiverse.com/thing:2807314).
+* <a href="examples/webcam_mount.jpg">
+    <img src="examples/webcam_mount.jpg" alt="solar mount" height="42" />
+  </a>
+  [Webcam tripod mount](https://www.thingiverse.com/thing:2811619).
+* <a href="examples/pci_bracket.jpg">
+    <img src="examples/pci_bracket.jpg" alt="solar mount" height="42" />
+  </a>
+  [PCI Bracket Generator](https://www.thingiverse.com/thing:2836187).
+* <a href="examples/pcie_riser.jpg">
+    <img src="examples/pcie_riser.jpg" alt="solar mount" height="42" />
+  </a>
+  [PCI-E 1x Riser Card Bracket](https://www.thingiverse.com/thing:2841089).
 
 Contributing
 ------------
@@ -86,7 +101,7 @@ you can contact the maintainer of the project or file an [issue].
 [data types]: {{ site.api_vcurrent }}/dt.html
 [modules]: {{ site.api_vcurrent }}/modules.html
 [current release]: {{ site.api_vcurrent }}/index.html
-[Release index]: {{ site.api }}/index.html
+[Other releases]: {{ site.api }}/index.html
 
 
 [GNU Lesser General Public License]: https://www.gnu.org/licenses/lgpl.html
