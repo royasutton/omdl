@@ -5,9 +5,9 @@
 #
 ################################################################################
 
-AMU_LIB_PATH        := /usr/local/share/openscad-amu/v1.8.2
+AMU_LIB_PATH        := /usr/local/share/openscad-amu/v1.9
 AMU_TOOL_PREFIX     := /usr/local/bin/
-AMU_TOOL_VERSION    := v1.8.2
+AMU_TOOL_VERSION    := v1.9
 
 AMU_PM_PREFIX       := $(AMU_LIB_PATH)/include/pmf/
 
@@ -40,7 +40,7 @@ release_archive_scopes                  := $(false)
 #------------------------------------------------------------------------------#
 ifeq ($(version_checks),$(true))
 
-$(call check_version,amuseam,ge,1.8.2,$(true),requires openscad-amu v1.8.2 or later.)
+$(call check_version,amuseam,ge,1.9,$(true),requires openscad-amu v1.9 or later.)
 
 ifeq ($(generate_latex),$(true))
 $(call check_version,doxygen,le,1.8.9.1,$(true),latex output broken since v1.8.9.1.)
@@ -136,6 +136,8 @@ library             := $(library_db01) \
 #------------------------------------------------------------------------------#
 # Scope excludes
 #------------------------------------------------------------------------------#
+# to exclude nothing (ie: build everything) from the command line, use:
+# make scopes_exclude="" all
 
 # shape manifests: only required when doing a release
 scopes_exclude      := manifest
