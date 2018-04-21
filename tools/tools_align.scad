@@ -156,7 +156,7 @@ module align_ll
     The origin will be a translated to the specified alignment point
     for the reference line \p rl.
 
-    | ap, rp  | alignment point       |
+    | rp      | alignment point       |
     |:-------:|:----------------------|
     |  0      | none (no translation) |
     |  1      | initial               |

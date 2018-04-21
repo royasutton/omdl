@@ -11,83 +11,70 @@ View live docs on [GitHib Pages](https://royasutton.github.io/omdl).
 Setup
 -----
 
-To use [omdl] the library files must be copied to an OpenSCAD
-[library location]. This can be done manually, as described in the
-OpenSCAD documentation, or can be automated using [openscad-amu].
+In order to use [omdl], it must be first be installed to an OpenSCAD
+[library location] on your system. It can be copied manually, as
+described in the OpenSCAD documentation, or can be installed via
+[openscad-amu], the framework used to develop [omdl]. If [openscad-amu]
+is used, the documentation is also generated and added to an index of
+[installed libraries] for convenient design reference.
 
-The ladder has several advantages and is recommended. When using
-[openscad-amu], the library documentation is installed together with
-the library source code. This documentation is also added to a local
-[browsable index], which facilitates reference use. Moreover, with
-openscad-amu installed, one can develop documentation for other
-OpenSCAD design scripts.
 
 ### Recommended install method ###
 
 #### Prerequisites ####
 
-First install [openscad-amu]. A build script exists for *Linux* and
-*Cygwin* (pull requests for *macOS* are welcome). If *wget* is not
-available, here is a downloadable link to the [bootstrap] script
-
-If the last step below reports the tool build version, then the install
-likely completed successfully and the temporary directory may be
-removed when desired. Dependent on your operating system, file system,
-and/or user credentials, the install may require or may not elevated
-privileges as indicated by *sudo*:
+First setup and verify the [openscad-amu] development environment, as
+follows:
 
     $ mkdir tmp && cd tmp
+    $ wget https://git.io/setup-amu.bash
+    $ chmod +x setup-amu.bash
 
-    $ wget https://raw.githubusercontent.com/royasutton/openscad-amu/master/snapshots/bootstrap.{bash,conf} .
-    $ chmod +x bootstrap.bash
-
-    $ sudo ./bootstrap.bash --yes --install
-
+    $ sudo ./setup-amu.bash --branch-list tags1 --reconfigure --install
     $ openscad-seam -v -V
 
-More information can be found in the GitHib [amu repository], where the
-source is maintained, and at [amu on Thingiverse].
+The last command should report the version of the [openscad-amu]
+tool-chain installed. More information can be found in the GitHib
+[amu repository], where the source is maintained, or at
+[amu on Thingiverse].
+
 
 #### omdl ####
 
-Now [omdl] can be compiled, verified, and installed. First download the
-source from the GitHub [repository], select the branch version, and
-start the install as follows:
+Now you are ready to install [omdl].
+
+The following will clone the source repository, checkout the latest
+release, run library validation and build the documentation, and
+install the library and documentation to an OS-dependent location.
+Validation and build may take some time.
 
     $ git clone https://github.com/royasutton/omdl.git
     $ cd omdl
-    $ git checkout v0.6.1
-
-    $ make scopes_exclude="manifest" all
-    $ make install
-
-By default, some things are not built, as controlled by the design flow
-variable *scopes_exclude*. To build everything, use the following:
-
-    $ make list-scopes_exclude
+    $ git checkout `git describe --tags --abbrev=0`
 
     $ make scopes_exclude="" all
+    $ make install
 
-Now the library should have been installed to the OpenSCAD *built-in*
-library location along with the documentation that can be views with a
-web browser. Multiple versions can be installed simultaneously.
+Other release versions can be checked-out and installed concurrently
+with existing versions using these steps replacing the argument to
+`git checkout` with the version of interest. To see a list of release
+versions type `git tag`.
 
-Have a look in:
-* **Linux:** $HOME/.local/share/OpenSCAD/libraries
-* **Windows:** My Documents\\OpenSCAD\\libraries
+Thats it, your done. To browse the library or its documentation, type:
 
-Now you may include the desired library primitives in your project as
-follows, replacing the version number as needed:
+    $ make print-install_prefix_scad
+    $ ls <install_prefix_scad>
+
+    $ make print-install_prefix_html
+    $ firefox <install_prefix_html>/index.html
+
+Use library components in your project as expected, replacing the
+version number as needed:
 
 ```
 include <omdl-v0.6.1/omdl-base.scad>;
 ...
 ```
-
-##### Snapshots #####
-
-Library source release [snapshots] are periodically made available
-in the repository and at [omdl on Thingiverse].
 
 
 Contributing
@@ -119,12 +106,10 @@ you can contact the maintainer of the project or file an [issue].
 [repository]: https://github.com/royasutton/omdl
 [issue]: https://github.com/royasutton/omdl/issues
 
-[snapshots]: https://github.com/royasutton/omdl/tree/master/snapshots
-[browsable index]: https://royasutton.github.io/omdl/api/html
+[installed libraries]: https://royasutton.github.io/omdl/api/html
 
 [openscad-amu]: https://royasutton.github.io/openscad-amu
 [amu repository]: https://github.com/royasutton/openscad-amu
-[bootstrap]: https://raw.githubusercontent.com/royasutton/openscad-amu/master/snapshots/bootstrap.bash
 
 [Doxygen]: http://www.stack.nl/~dimitri/doxygen/index.html
 
