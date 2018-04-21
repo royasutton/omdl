@@ -23,13 +23,14 @@ is used, the documentation is also generated and added to an index of
 
 #### Prerequisites ####
 
-First [bootstrap] and verify the development environment, as follows:
+First setup and verify the [openscad-amu] development environment, as
+follows:
 
     $ mkdir tmp && cd tmp
-    $ wget https://raw.githubusercontent.com/royasutton/openscad-amu/master/snapshots/bootstrap.{bash,conf} .
-    $ chmod +x bootstrap.bash
+    $ wget https://git.io/setup-amu.bash
+    $ chmod +x setup-amu.bash
 
-    $ sudo ./bootstrap.bash --branch-list tags1 --reconfigure --install
+    $ sudo ./setup-amu.bash --branch-list tags1 --reconfigure --install
     $ openscad-seam -v -V
 
 The last command should report the version of the [openscad-amu]
@@ -109,7 +110,6 @@ you can contact the maintainer of the project or file an [issue].
 
 [openscad-amu]: https://royasutton.github.io/openscad-amu
 [amu repository]: https://github.com/royasutton/openscad-amu
-[bootstrap]: https://raw.githubusercontent.com/royasutton/openscad-amu/master/snapshots/bootstrap.bash
 
 [Doxygen]: http://www.stack.nl/~dimitri/doxygen/index.html
 
