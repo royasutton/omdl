@@ -131,6 +131,7 @@ declare packages_installed
 declare packages_missing
 
 declare templates
+declare setup_amu_yes
 
 declare repo_cache_apt_cyg
 declare repo_cache
@@ -732,8 +733,8 @@ function toolchain_prepare() {
 
       # setup toolchain in cache
       print_m "running toolchain setup script..."
-      print_m "${setup_amu_bash} --fetch --reconfigure --cache --branch ${amu_version} --install"
-      ${setup_amu_bash} --fetch --reconfigure --cache --branch ${amu_version} --install
+      print_m ${setup_amu_bash} \-\-fetch \-\-reconfigure \-\-cache \-\-branch ${amu_version} ${setup_amu_yes} \-\-install
+      ${setup_amu_bash} --fetch --reconfigure --cache --branch ${amu_version} ${setup_amu_yes} --install
 
       # test setup script return code
       if [[ $? -eq 0 ]] ; then
@@ -863,6 +864,8 @@ function parse_commands_branch() {
         print_h2 "adding: apt-get install option [${opt}]"
         [[ -n "${apt_get_opts}" ]] && apt_get_opts+=" ${opt}"
         [[ -z "${apt_get_opts}" ]] && apt_get_opts="${opt}"
+
+        setup_amu_yes="$2"
       ;;
 
       --no-excludes)
@@ -1118,11 +1121,11 @@ print_m -j "${base_name}: (Examples)" -l
 cat << EOF
 (1) Build and install branch v0.6.1 to the OpenSCAD user library path.
 
-    $ ./setup-omdl.bash --branch v0.6.1 --install
+    $ ./setup-omdl.bash --branch v0.6.1 --yes --install
 
 (2) Build and install the latest source branch to a local cache.
 
-    $ ./setup-omdl.bash --cache --branch-list tags1 --install
+    $ ./setup-omdl.bash --cache --branch-list tags1 --yes --install
 
 (3) Build and install the latest source branch to the OpenSCAD user
     library path.
