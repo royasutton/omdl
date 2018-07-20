@@ -130,7 +130,6 @@ declare packages
 declare packages_installed
 declare packages_missing
 
-declare templates
 declare setup_amu_yes
 
 declare repo_cache_apt_cyg
