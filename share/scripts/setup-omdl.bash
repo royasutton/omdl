@@ -864,7 +864,7 @@ function parse_commands_branch() {
         [[ -n "${apt_get_opts}" ]] && apt_get_opts+=" ${opt}"
         [[ -z "${apt_get_opts}" ]] && apt_get_opts="${opt}"
 
-        setup_amu_yes="$2"
+        setup_amu_yes="$1"
       ;;
 
       --no-excludes)
