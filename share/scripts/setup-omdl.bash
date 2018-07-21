@@ -229,10 +229,10 @@ function update_prerequisite_list() {
   local packages_CYGWIN_NT
 
   packages_Common="
-    git
     bash
-    make
     wget
+    git
+    make
   "
 
   packages_Linux="
@@ -1129,7 +1129,7 @@ cat << EOF
 (3) Build and install the latest source branch to the OpenSCAD user
     library path.
 
-    $ ./setup-omdl.bash --branch-list tags1 --install
+    $ ./setup-omdl.bash --branch-list tags1 --yes --install
 
 (4) Build all scopes and install select tagged release versions, to the
     OpenSCAD user library path.
