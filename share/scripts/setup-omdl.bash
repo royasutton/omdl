@@ -601,9 +601,9 @@ function repository_update() {
     print_m "ERROR: please install git:"
 
     case "${sysname}" in
-      Linux)        print_m "ex: sudo apt-get install git" ;;
-      CYGWIN_NT)    print_m "ex: run Cygwin setup and select Devel/git." ;;
-      *)            print_m "ERROR: Configuration for [$sysname] required." ;;
+      Linux)        print_m "info: sudo apt-get install git" ;;
+      CYGWIN_NT)    print_m "info: run Cygwin setup.exe and select Devel/git." ;;
+      *)            print_m "info: does not exists for [$sysname]." ;;
     esac
 
     print_m "aborting..."
