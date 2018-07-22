@@ -603,6 +603,7 @@ function repository_update() {
     case "${sysname}" in
       Linux)        print_m "ex: sudo apt-get install git" ;;
       CYGWIN_NT)    print_m "ex: run Cygwin setup and select Devel/git." ;;
+      *)            print_m "ERROR: Configuration for [$sysname] required." ;;
     esac
 
     print_m "aborting..."
