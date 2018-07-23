@@ -233,6 +233,8 @@ function update_prerequisite_list() {
     wget
     git
     make
+    unzip
+    openscad-nightly
   "
 
   packages_Linux="
@@ -281,6 +283,52 @@ function prerequisites_install.Linux() {
   fi
 }
 
+function openscad_nightly_install.Linux() {
+  local name="openscad-development-snapshots"
+  local desc="OpenSCAD development snapshots"
+  local repo="deb http://download.opensuse.org/repositories/home:/t-paul/xUbuntu_$(lsb_release -sr)/ ./"
+  local rkey="http://files.openscad.org/OBS-Repository-Key.pub"
+  local keyf="5F4A 8A2C 8BB1 1716 F294  82BB 75F3 214F 30EB 8E08"
+
+  local list="/etc/apt/sources.list.d/${name}.list"
+  local update
+
+  # setup repository key
+  print_m "repository: [${desc}]"
+  print_m "checking for repository source key..."
+  if [[ -n $(apt-key finger | grep "$keyf") ]] ; then
+    print_m "key found."
+  else
+    print_m "key not found, retreaving..."
+    wget --quiet --output-document - "$rkey" | sudo apt-key add -
+
+    update="true"
+  fi
+
+  # setup repository source file
+  print_m "checking for source file: [$list]..."
+  if [[ -f $list ]] ; then
+    print_m "source file exists."
+  else
+    print_m "source file not found, adding..."
+    echo "$repo" | sudo tee $list
+
+    update="true"
+  fi
+
+  # resynchronize package index files
+  if [[ "$update" == "true" ]] ; then
+    print_m "resynchronizing package index files..."
+    sudo apt-get --quiet update
+  else
+    print_m "package index resynchronization not required."
+  fi
+
+  # install package
+  print_m "installing [$*]..."
+  prerequisites_install.${sysname} $*
+}
+
 #==============================================================================
 # Cygwin
 #==============================================================================
@@ -303,6 +351,122 @@ function prerequisites_install.CYGWIN_NT() {
   if ! ${apt_cyg_path} install $* ; then
     print_m "ERROR: install failed. aborting..."
     exit 1
+  fi
+}
+
+function openscad_nightly_install.CYGWIN_NT() {
+  local    ldir="openscad"
+  local    lcmd="openscad-nightly"
+
+  local    arch="x86-32"
+  local    surl="http://files.openscad.org/snapshots"
+  local    dist="${repo_cache_root}/distrib"
+  local    path="${repo_cache_root}/local"
+  local    fext=".zip"
+
+  local    inst
+  local    fpat
+  local -i lcnt=1
+  local    list
+  local    pick
+
+  if [[ -x ${path}/${ldir}/${lcmd}.exe ]] ; then
+    print_m "using ${lcmd} installed in cache."
+  else
+    # determine machine hardware
+    [[ $(arch) == "x86_64" ]] && arch="x86-64"
+
+    # file selection filter pattern (regular expression)
+    fpat="OpenSCAD-....\...\...-${arch}${fext}"
+
+    # get list of development snapshots
+    list=$( \
+      wget --quiet --output-document - ${surl} |
+      grep --only-matching "${fpat}" |
+      sort --uniq |
+      tail --lines=${lcnt} \
+    )
+
+    # downloads snapshot(s)
+    print_m "downloading latest [$lcnt] development snapshot(s):"
+    for f in ${list} ; do
+      print_m "--> $f"
+      if [[ -e "${dist}/${f}" ]] ; then
+        print_m "[${dist}/${f}] exists."
+      else
+        wget --quiet --show-progress --directory-prefix=${dist} "${surl}/${f}"
+      fi
+
+      pick="$f"
+    done
+
+    # set install path for 'picked' snapshot
+    inst=${pick,,}
+    inst=${inst/-${arch}${fext}/}
+
+    print_m "unpacking: [$pick]..."
+    unzip -q -u -d ${path} ${dist}/${pick}
+
+    # create path links
+    print_m "creating symbolic links..."
+    (
+      cd ${path} &&
+      ln --force --symbolic --verbose --no-target-directory \
+        ${inst} ${ldir}
+    )
+    (
+      cd ${path}/${inst} &&
+      ln --force --symbolic --verbose --no-target-directory \
+        openscad.exe ${lcmd}.exe
+    )
+    (
+      cd ${path}/${inst} &&
+      ln --force --symbolic --verbose --no-target-directory \
+        openscad.com ${lcmd}.com
+    )
+  fi
+
+  # add temporary path
+  if [[ -z $(which 2>/dev/null ${lcmd}) ]] ; then
+    print_m "adding (temporary) shell path [${work_path}/${path}/${ldir}]."
+    PATH="${work_path}/${path}/${ldir}:${PATH}"
+
+    if [[ -z $(which 2>/dev/null ${lcmd}) ]] ; then
+      print_m "ERROR: unable to locate or setup requirement: [${lcmd}]. aborting..."
+      exit 1
+    else
+      print_m "confirmed ${lcmd} added to shell path"
+    fi
+  else
+    print_m "${lcmd} exists in shell path"
+  fi
+
+  # output and record install note
+  local note="${path}/${ldir}/${lcmd}.note"
+
+  if [[ -e ${note} ]] ; then
+    print_m "install note exists: [${note}]."
+  else
+    print_m -j
+    cat << EOF | tee ${note}
+    #####################################################################
+    #####################################################################
+    ##                                                                 ##
+    ## note:                                                           ##
+    ##                                                                 ##
+    ## openscad-omdl requires a recent build of OpenSCAD. One has been ##
+    ## downloaded and installed to a cache at:                         ##
+    ##                                                                 ##
+    ##   PATH += ${work_path}/${path}/${ldir}
+    ##                                                                 ##
+    ## You should add the location to permanent install to your shell  ##
+    ## path if you plan to work with omdl from the command line.       ##
+    ##                                                                 ##
+    #####################################################################
+    #####################################################################
+EOF
+    print_m -j
+    sleep 10
   fi
 }
 
@@ -574,7 +738,12 @@ function prerequisites_install() {
     for r in ${packages_missing} ; do
       print_h2 "installing: [ $r ]"
       print_m -j $r
-      prerequisites_install.${sysname} $r
+
+      # handle exceptions
+      case "$r" in
+        openscad-nightly)   openscad_nightly_install.${sysname} $r ;;
+        *)                  prerequisites_install.${sysname} $r ;;
+      esac
     done
     print_hb "="
   else
