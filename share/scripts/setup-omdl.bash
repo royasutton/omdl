@@ -361,7 +361,7 @@ function openscad_nightly_install.CYGWIN_NT() {
   local    arch="x86-32"
   local    surl="http://files.openscad.org/snapshots"
   local    dist="${repo_cache_root}/distrib"
-  local    path="${repo_cache_root}/local"
+  local    path="${repo_cache_root}"
   local    fext=".zip"
 
   local    inst
