@@ -15,14 +15,14 @@ In order to use [omdl], it must be first be installed to an OpenSCAD
 [library location] on your system. It can be copied manually, as
 described in the OpenSCAD documentation, or can be installed via
 [openscad-amu], the framework used to develop [omdl]. If [openscad-amu]
-is used, the documentation is also generated and added to an index of
-[installed libraries] for convenient design reference.
+is used, the library documentation will be generated and added to an
+index of [installed libraries] for convenient design reference.
 
 
 ### Evaluation ###
 
-A script is available to bootstrap the development environment and setup
-the library in a temporary directory:
+A setup script is available to build the development environment and
+install the library to a temporary directory:
 
     $ mkdir tmp && cd tmp
     $ wget https://git.io/setup-omdl.bash
@@ -35,35 +35,49 @@ installation of each required package (see: `setup-omdl.bash --help`).
 If you don't like shortened URLs, here is the full URL to
 [setup-omdl.bash].
 
-If all goes well, the library will have been installed into a directory
-named `cache`. The library documentation can be viewed by typing:
+If all goes well, the library (and development framework) will have
+been installed into a temporary directory named `cache`. Subsequently,
+the omdl library documentation can be viewed by typing:
 
     $ firefox cache/local/share/OpenSCAD/docs/html/index.html
 
 
 ### Installing ###
 
-To install the latest omdl to the OpenSCAD user library path on your
-system, use these script options:
+To install the latest tagged release of [omdl] to the OpenSCAD user
+library path on your system, use these options:
 
     $ ./setup-omdl.bash --branch-list tags1 --no-excludes --yes --install
 
-To install a specific version of the library, for example v0.6.1:
+To install a specific [omdl] library version, for example v0.6.1, use:
 
     $ ./setup-omdl.bash --branch v0.6.1 --no-excludes --yes --install
 
-To identify the location of the installed library documentation:
-
-    $ cd cache/omdl
-    $ make print-install_prefix_html
-
-Use library components in your project as expected, replacing the
-version number as needed:
+Use library components in your OpenSCAD designs as expected, replacing
+the version number as appropriate:
 
 ```
 include <omdl-v0.6.1/omdl-base.scad>;
 ...
 ```
+
+### Development ###
+
+To make changes to [omdl] or rebuild it manually, make sure the
+variables `AMU_LIB_PATH` and `AMU_TOOL_PREFIX` (trailing directory
+slash required for the latter) are set to the *absolute paths* to your
+installation of [openscad-amu] in the project `Makefile`. See
+[installing openscad-amu] for more information.
+
+To update project Makefile and build HTML documentation:
+
+    $ cd cache/omdl
+    $ vi Makefile                   # (set AMU_* variables absolute paths)
+
+    $ make help
+    $ make info
+    $ make generate_latex="" all    # skips latex generation
+    ...
 
 
 Contributing
@@ -100,6 +114,7 @@ you can contact the maintainer of the project or file an [issue].
 [installed libraries]: https://royasutton.github.io/omdl/api/html
 
 [openscad-amu]: https://royasutton.github.io/openscad-amu
+[installing openscad-amu]: https://github.com/royasutton/openscad-amu#installing
 
 [Doxygen]: http://www.stack.nl/~dimitri/doxygen/index.html
 
