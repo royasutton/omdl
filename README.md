@@ -19,7 +19,8 @@ is used, the library documentation will be generated and added to an
 index of [installed libraries] for convenient design reference.
 
 
-### Evaluation ###
+Evaluation
+----------
 
 A setup script is available to build the development environment and
 install the library to a temporary directory:
@@ -42,7 +43,8 @@ the omdl library documentation can be viewed by typing:
     $ firefox cache/local/share/OpenSCAD/docs/html/index.html
 
 
-### Installing ###
+Installing
+----------
 
 To install the latest tagged release of [omdl] to the OpenSCAD user
 library path on your system, use these options:
@@ -61,11 +63,12 @@ include <omdl-v0.6.1/omdl-base.scad>;
 ...
 ```
 
-### Development ###
+Manual Compilation
+------------------
 
 To make changes to [omdl] or rebuild it manually, make sure the
 variables `AMU_LIB_PATH` and `AMU_TOOL_PREFIX` (trailing directory
-slash required for the latter) are set to the *absolute paths* to your
+slash required for the latter) are set to the *absolute paths* for your
 installation of [openscad-amu] in the project `Makefile`. See
 [installing openscad-amu] for more information.
 
