@@ -19,54 +19,43 @@ is used, the documentation is also generated and added to an index of
 [installed libraries] for convenient design reference.
 
 
-### Recommended install method ###
+### Evaluation ###
 
-#### Prerequisites ####
-
-First setup and verify the [openscad-amu] development environment, as
-follows:
+A script is available to bootstrap the development environment and setup
+the library in a temporary directory:
 
     $ mkdir tmp && cd tmp
-    $ wget https://git.io/setup-amu.bash
-    $ chmod +x setup-amu.bash
+    $ wget https://git.io/setup-omdl.bash
+    $ chmod +x setup-omdl.bash
 
-    $ sudo ./setup-amu.bash --branch-list tags1 --reconfigure --install
-    $ openscad-seam -v -V
+    $ ./setup-omdl.bash --cache --branch-list tags1 --yes --install
 
-The last command should report the version of the [openscad-amu]
-tool-chain installed. More information can be found in the GitHib
-[amu repository], where the source is maintained, or at
-[amu on Thingiverse].
+The option `--yes` can be omitted if you prefer to confirm the
+installation of each required package (see: `setup-omdl.bash --help`).
+If you don't like shortened URLs, here is the full URL to
+[setup-omdl.bash].
+
+If all goes well, the library will have been installed into a directory
+named `cache`. The library documentation can be viewed by typing:
+
+    $ firefox cache/local/share/OpenSCAD/docs/html/index.html
 
 
-#### omdl ####
+### Installing ###
 
-Now you are ready to install [omdl].
+To install the latest omdl to the OpenSCAD user library path on your
+system, use these script options:
 
-The following will clone the source repository, checkout the latest
-release, run library validation and build the documentation, and
-install the library and documentation to an OS-dependent location.
-Validation and build may take some time.
+    $ ./setup-omdl.bash --branch-list tags1 --yes --install
 
-    $ git clone https://github.com/royasutton/omdl.git
-    $ cd omdl
-    $ git checkout `git describe --tags --abbrev=0`
+To install a specific version of the library, for example v0.6.1:
 
-    $ make scopes_exclude="" all
-    $ make install
+    $ ./setup-omdl.bash --branch v0.6.1 --yes --install
 
-Other release versions can be checked-out and installed concurrently
-with existing versions using these steps replacing the argument to
-`git checkout` with the version of interest. To see a list of release
-versions type `git tag`.
+To identify the location of the installed library documentation:
 
-Thats it, your done. To browse the library or its documentation, type:
-
-    $ make print-install_prefix_scad
-    $ ls <install_prefix_scad>
-
+    $ cd cache/omdl
     $ make print-install_prefix_html
-    $ firefox <install_prefix_html>/index.html
 
 Use library components in your project as expected, replacing the
 version number as needed:
@@ -102,6 +91,8 @@ you can contact the maintainer of the project or file an [issue].
 
 [GNU Lesser General Public License]: https://www.gnu.org/licenses/lgpl.html
 
+[setup-omdl.bash]: https://raw.githubusercontent.com/royasutton/omdl/master/share/scripts/setup-omdl.bash
+
 [omdl]: https://royasutton.github.io/omdl
 [repository]: https://github.com/royasutton/omdl
 [issue]: https://github.com/royasutton/omdl/issues
@@ -109,16 +100,11 @@ you can contact the maintainer of the project or file an [issue].
 [installed libraries]: https://royasutton.github.io/omdl/api/html
 
 [openscad-amu]: https://royasutton.github.io/openscad-amu
-[amu repository]: https://github.com/royasutton/openscad-amu
 
 [Doxygen]: http://www.stack.nl/~dimitri/doxygen/index.html
 
 [OpenSCAD]: http://www.openscad.org
 [library location]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Libraries
-
-[Thingiverse]: http://www.thingiverse.com
-[amu on Thingiverse]: http://www.thingiverse.com/thing:1858181
-[omdl on Thingiverse]: http://www.thingiverse.com/thing:1934498
 
 [git]: http://git-scm.com
 [GitHub]: http://github.com
