@@ -38,8 +38,7 @@ Getting Started
 
 ### Setup ###
 
-See the GitHub source [repository] for setup and [installation]
-instructions.
+See the GitHub source [repository] for [setup instructions].
 
 
 ### Library API ###
@@ -110,7 +109,7 @@ you can contact the maintainer of the project or file an [issue].
 [repository]: https://github.com/royasutton/omdl
 [issue]: https://github.com/royasutton/omdl/issues
 
-[installation]: https://github.com/royasutton/omdl#recommended-install-method
+[setup instructions]: https://github.com/royasutton/omdl#setup
 
 [openscad-amu]: https://royasutton.github.io/openscad-amu
 
