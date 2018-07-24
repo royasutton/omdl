@@ -454,7 +454,7 @@ function openscad_nightly_install.CYGWIN_NT() {
     ##                                                                 ##
     ## note:                                                           ##
     ##                                                                 ##
-    ## openscad-omdl requires a recent build of OpenSCAD. One has been ##
+    ## omdl requires a recent build of OpenSCAD. One has been          ##
     ## downloaded and installed to a cache at:                         ##
     ##                                                                 ##
     ##   PATH=${work_path}/${path}/${ldir}:\${PATH}
@@ -620,7 +620,7 @@ function update_build_variables() {
   print_m "${FUNCNAME} begin"
 
   repo_cache_apt_cyg=${repo_cache_root}/apt-cyg
-  repo_cache=${repo_cache_root}/openscad-omdl
+  repo_cache=${repo_cache_root}/omdl
 
   build_dir="build/${repo_branch}/"
 
@@ -868,7 +868,7 @@ function toolchain_prepare() {
 
   # identify toolchain version
   amu_version=$(grep 'AMU_TOOL_VERSION' ${repo_cache}/Makefile | awk '{print $3}')
-  print_m "openscad-omdl ${repo_branch} uses openscad-amu ${amu_version}."
+  print_m "omdl ${repo_branch} uses openscad-amu ${amu_version}."
 
   # locate toolchain
   print_m "searching for specified toolchain in shell path..."
@@ -1068,17 +1068,17 @@ function parse_commands_branch() {
 
       -b|--build)
         local targets="all"
-        print_h1 "Building openscad-omdl: make target=[${targets}]"
+        print_h1 "Building omdl: make target=[${targets}]"
         source_make ${targets}
       ;;
       -i|--install)
         local targets="install"
-        print_h1 "Building openscad-omdl: make target=[${targets}]"
+        print_h1 "Building omdl: make target=[${targets}]"
         source_make ${targets}
       ;;
       -u|--uninstall)
         local targets="uninstall"
-        print_h1 "Building openscad-omdl: make target=[${targets}]"
+        print_h1 "Building omdl: make target=[${targets}]"
         source_make ${targets}
       ;;
 
@@ -1090,7 +1090,7 @@ function parse_commands_branch() {
         fi
         # get list and tokenize with [,]
         local targets="${2//,/ }" ; shift 1
-        print_h1 "Building openscad-omdl: make target=[${targets}]"
+        print_h1 "Building omdl: make target=[${targets}]"
         source_make ${targets}
       ;;
 
@@ -1122,7 +1122,7 @@ function parse_commands_repo() {
   while [[ $# -gt 0 ]]; do
       case $1 in
       --fetch)
-        print_h1 "Updating openscad-omdl source cache"
+        print_h1 "Updating omdl source cache"
         update_build_variables
         repository_update "${repo_url}" "${repo_cache}"
       ;;
@@ -1225,10 +1225,10 @@ function print_help() {
 print_m -j "${base_name}: (Help)" -l
 
 cat << EOF
-This script attempts to setup the openscad-omdl OpenSCAD library. It
-downloads the source, builds, and installs the library include files
-and documentation. Detected missing prerequisites are installed prior
-when possible, including the openscad-amu toolchain.
+This script attempts to setup the omdl OpenSCAD library. It downloads
+the source, builds, and installs the library include files and
+documentation. Detected missing prerequisites are installed prior when
+possible, including the openscad-amu toolchain.
 
  [ branch options ]
 
@@ -1241,7 +1241,7 @@ when possible, including the openscad-amu toolchain.
       --required            : Install missing prerequisites.
       --yes                 : Automatic 'yes' to install prompts.
 
-      --no-excludes         : Build all openscad-omdl scopes.
+      --no-excludes         : Build all omdl scopes.
 
  -c | --cache               : Configure source to install to cache.
       --cache-root          : Set the cache root directory.
@@ -1311,13 +1311,13 @@ cat << EOF
 
     $ ./setup-omdl.bash --branch-list tags --no-excludes --install
 
-(6) See openscad-omdl library documentation.
+(6) See omdl library documentation.
 
     [cache]
     $ firefox cache/local/share/OpenSCAD/docs/html/index.html
 
     [OpenSCAD user library]
-    $ (cd cache/openscad-omdl; make print-install_prefix_html)
+    $ (cd cache/omdl; make print-install_prefix_html)
     $ firefox <install_prefix_html>/index.html
 
 
@@ -1331,7 +1331,7 @@ function print_info() {
 print_m -j "${base_name}: (Info)" -l
 
 cat << EOF
-     package: openscad-omdl
+     package: omdl
   bug report: royasutton@hotmail.com
     site url: https://royasutton.github.io/omdl
 
