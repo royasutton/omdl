@@ -457,7 +457,7 @@ function openscad_nightly_install.CYGWIN_NT() {
     ## openscad-omdl requires a recent build of OpenSCAD. One has been ##
     ## downloaded and installed to a cache at:                         ##
     ##                                                                 ##
-    ##   PATH += ${work_path}/${path}/${ldir}
+    ##   PATH=${work_path}/${path}/${ldir}:\${PATH}
     ##                                                                 ##
     ## You should add the location to permanent install to your shell  ##
     ## path if you plan to work with omdl from the command line.       ##
