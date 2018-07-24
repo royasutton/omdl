@@ -46,11 +46,11 @@ named `cache`. The library documentation can be viewed by typing:
 To install the latest omdl to the OpenSCAD user library path on your
 system, use these script options:
 
-    $ ./setup-omdl.bash --branch-list tags1 --yes --install
+    $ ./setup-omdl.bash --branch-list tags1 --no-excludes --yes --install
 
 To install a specific version of the library, for example v0.6.1:
 
-    $ ./setup-omdl.bash --branch v0.6.1 --yes --install
+    $ ./setup-omdl.bash --branch v0.6.1 --no-excludes --yes --install
 
 To identify the location of the installed library documentation:
 
