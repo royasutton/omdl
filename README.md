@@ -26,11 +26,11 @@ A setup script is available to build the development environment and
 install the library to a temporary directory:
 
 ```bash
-$ mkdir tmp && cd tmp
-$ wget https://git.io/setup-omdl.bash
-$ chmod +x setup-omdl.bash
+mkdir tmp && cd tmp
+wget https://git.io/setup-omdl.bash
+chmod +x setup-omdl.bash
 
-$ ./setup-omdl.bash --cache --branch-list tags1 --yes --install
+./setup-omdl.bash --cache --branch-list tags1 --yes --install
 ```
 
 The option `--yes` can be omitted if you prefer to confirm the
@@ -43,7 +43,7 @@ been installed into a temporary directory named `cache`. Subsequently,
 the omdl library documentation can be viewed by typing:
 
 ```bash
-$ firefox cache/local/share/OpenSCAD/docs/html/index.html
+firefox cache/local/share/OpenSCAD/docs/html/index.html
 ```
 
 
@@ -54,13 +54,13 @@ To install the latest tagged release of [omdl] to the OpenSCAD user
 library path on your system, use these options:
 
 ```bash
-$ ./setup-omdl.bash --branch-list tags1 --no-excludes --yes --install
+./setup-omdl.bash --branch-list tags1 --no-excludes --yes --install
 ```
 
 To install a specific [omdl] library version, for example v0.6.1, use:
 
 ```bash
-$ ./setup-omdl.bash --branch v0.6.1 --no-excludes --yes --install
+./setup-omdl.bash --branch v0.6.1 --no-excludes --yes --install
 ```
 
 Use library components in your OpenSCAD designs as expected, replacing
@@ -83,12 +83,12 @@ installation of [openscad-amu] in the project `Makefile`. See
 To update project Makefile and build HTML documentation:
 
 ```bash
-$ cd cache/omdl
-$ vi Makefile                   # (set AMU_* variables absolute paths)
+cd cache/omdl
+vi Makefile                   # (set AMU_* variables absolute paths)
 
-$ make help
-$ make info
-$ make generate_latex="" all    # skips latex generation
+make help
+make info
+make generate_latex="" all    # skips latex generation
 ...
 ```
 
