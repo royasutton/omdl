@@ -5,9 +5,9 @@
 #
 ################################################################################
 
-AMU_LIB_PATH        := /usr/local/share/openscad-amu/v1.9
+AMU_LIB_PATH        := /usr/local/share/openscad-amu/v2.1
 AMU_TOOL_PREFIX     := /usr/local/bin/
-AMU_TOOL_VERSION    := v1.9
+AMU_TOOL_VERSION    := v2.1
 
 AMU_PM_PREFIX       := $(AMU_LIB_PATH)/include/pmf/
 
