@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 ################################################################################
 #
-#  (openscad-amu): Project Makefile omdl
+# omdl Project Makefile (openscad-amu df1)
 #
 ################################################################################
 
@@ -19,7 +19,7 @@ AMU_PM_RULES        := $(AMU_PM_PREFIX)amu_pm_rules
 # AMU_PM_DEBUG      := defined
 
 #------------------------------------------------------------------------------#
-# Project Makefile Init (DO NO EDIT THIS SECTION)
+# Setup Announcements
 #------------------------------------------------------------------------------#
 define AMU_SETUP_ANNOUNCE
 
@@ -35,6 +35,19 @@ define AMU_SETUP_ANNOUNCE
 
 endef
 
+define OPENSCAD_SETUP_ANNOUNCE
+
+  This library uses language features only available in recent versions
+  of OpenSCAD. Please install a development snapshots released after
+  $1.
+
+  See: http://www.openscad.org/downloads.html#snapshots
+
+endef
+
+#------------------------------------------------------------------------------#
+# Project Makefile Init (DO NO EDIT THIS SECTION)
+#------------------------------------------------------------------------------#
 ifeq ($(wildcard $(AMU_PM_INIT)),)
 $(info $(call AMU_SETUP_ANNOUNCE,Init file,$(AMU_PM_INIT)))
 $(error unable to continue.)
@@ -65,6 +78,8 @@ release_archive_scopes                  := $(false)
 # Project Version Checks
 #------------------------------------------------------------------------------#
 ifeq ($(version_checks),$(true))
+
+$(call check_version,openscad,gt,2018.01,$(true),$(call OPENSCAD_SETUP_ANNOUNCE,2018.01))
 
 $(call check_version,amuseam,ge,$(subst v,,$(AMU_TOOL_VERSION)),$(true),requires openscad-amu $(AMU_TOOL_VERSION) or later.)
 
@@ -160,7 +175,7 @@ library             := $(library_db01) \
                        units/units_resolution
 
 #------------------------------------------------------------------------------#
-# Scope excludes
+# Scope Excludes
 #------------------------------------------------------------------------------#
 # to exclude nothing (ie: build everything) from the command line, use:
 # make scopes_exclude="" all
@@ -172,7 +187,7 @@ scopes_exclude      := manifest
 scopes_exclude      += db_autotest db_autostat
 
 #------------------------------------------------------------------------------#
-# Release and backup additions
+# Release and Backup Additions
 #------------------------------------------------------------------------------#
 # use recursive assignment '=' for references that use derived paths
 # such as: $(output_path), $(release_path), etc.
