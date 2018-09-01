@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file   polyhedra_all.scad
   \author Roy Allen Sutton
-  \date   2017
+  \date   2017-2018
 
   \copyright
 

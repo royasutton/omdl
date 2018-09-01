@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file   archimedean.scad
   \author Roy Allen Sutton
-  \date   2017
+  \date   2017-2018
 
   \copyright
 
@@ -94,9 +94,11 @@
         )
     \endlatexonly
 
+    \amu_scope scope_id (index=1 ++make)
+    \amu_find scope_log (files="${scope_id}.log")
     \amu_shell data
       (
-        "grep -Po 'ECHO: \"\K[^\"]*' build/csg/archimedean_db_autostat.log" --rmnl
+        "grep -Po 'ECHO: \"\K[^\"]*' ${scope_log}" --rmnl
       )
     \amu_shell columns ("echo '${data}' | awk -F '^' 'NR==1 {print NF;exit}'")
     \amu_shell heading ("echo '${data}' | awk -F '^' 'NR==1 {print;exit}'")
