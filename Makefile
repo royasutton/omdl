@@ -5,16 +5,42 @@
 #
 ################################################################################
 
-AMU_LIB_PATH        := /usr/local/share/openscad-amu/v2.1
-AMU_TOOL_PREFIX     := /usr/local/bin/
 AMU_TOOL_VERSION    := v2.1
 
+AMU_TOOL_PREFIX     := /usr/local/bin/
+AMU_LIB_PATH        := /usr/local/share/openscad-amu/$(AMU_TOOL_VERSION)
+
 AMU_PM_PREFIX       := $(AMU_LIB_PATH)/include/pmf/
+AMU_PM_INIT         := $(AMU_PM_PREFIX)amu_pm_init
+AMU_PM_RULES        := $(AMU_PM_PREFIX)amu_pm_rules
 
-#AMU_PM_VERBOSE     := defined
-#AMU_PM_DEBUG       := defined
+# Uncomment for increased verbosity or debugging.
+# AMU_PM_VERBOSE    := defined
+# AMU_PM_DEBUG      := defined
 
-include $(AMU_PM_PREFIX)amu_pm_init
+#------------------------------------------------------------------------------#
+# Project Makefile Init (DO NO EDIT THIS SECTION)
+#------------------------------------------------------------------------------#
+define AMU_SETUP_ANNOUNCE
+
+ $1 not found...
+ Tried [$2].
+
+ Please update AMU_TOOL_PREFIX and AMU_LIB_PATH in $(lastword $(MAKEFILE_LIST))
+ as needed for your installation or setup openscad-amu ($(AMU_TOOL_VERSION))
+ using the following:
+
+ $$ wget http://git.io/setup-amu.bash && chmod +x setup-amu.bash
+ $$ sudo ./setup-amu.bash --branch $(AMU_TOOL_VERSION) --yes --install
+
+endef
+
+ifeq ($(wildcard $(AMU_PM_INIT)),)
+$(info $(call AMU_SETUP_ANNOUNCE,Init file,$(AMU_PM_INIT)))
+$(error unable to continue.)
+else
+include $(AMU_PM_INIT)
+endif
 
 #------------------------------------------------------------------------------#
 # Default Overrides
@@ -40,7 +66,7 @@ release_archive_scopes                  := $(false)
 #------------------------------------------------------------------------------#
 ifeq ($(version_checks),$(true))
 
-$(call check_version,amuseam,ge,1.9,$(true),requires openscad-amu v1.9 or later.)
+$(call check_version,amuseam,ge,$(subst v,,$(AMU_TOOL_VERSION)),$(true),requires openscad-amu $(AMU_TOOL_VERSION) or later.)
 
 ifeq ($(generate_latex),$(true))
 $(call check_version,doxygen,le,1.8.9.1,$(true),latex output broken since v1.8.9.1.)
@@ -167,7 +193,15 @@ backup_files_add    := $(library_info) \
                        $(library_db01_src)
 
 #------------------------------------------------------------------------------#
-include $(AMU_PM_PREFIX)amu_pm_rules
+# Project Makefile Rules (DO NO EDIT THIS SECTION)
+#------------------------------------------------------------------------------#
+ifeq ($(wildcard $(AMU_PM_RULES)),)
+$(info $(call AMU_SETUP_ANNOUNCE,Rules file,$(AMU_PM_RULES)))
+$(error unable to continue.)
+else
+include $(AMU_PM_RULES)
+endif
+
 ################################################################################
 # eof
 ################################################################################
