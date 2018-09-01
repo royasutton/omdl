@@ -867,7 +867,13 @@ function toolchain_prepare() {
   local amu_tool_prefix
 
   # identify toolchain version
-  amu_version=$(grep 'AMU_TOOL_VERSION' ${repo_cache}/Makefile | awk '{print $3}')
+  amu_version=$( \
+    grep --invert-match '#' ${repo_cache}/Makefile |
+    grep 'AMU_TOOL_VERSION[[:space:]]*:=' |
+    head -1 |
+    awk -F '=' '{print $2}' \
+  )
+
   print_m "omdl ${repo_branch} uses openscad-amu ${amu_version}."
 
   # locate toolchain
