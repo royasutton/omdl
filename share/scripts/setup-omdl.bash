@@ -926,7 +926,11 @@ function toolchain_prepare() {
   # identify toolchain paths
   if [[ -n ${test_cmd_path} && -x ${test_cmd_path} ]] ; then
     # without trailing directory slash
-    amu_lib_path=$(${test_cmd_path} --version --verbose  | grep "lib path" | awk '{print $4}')
+    amu_lib_path=$( \
+      ${test_cmd_path} --version --verbose  |
+      grep 'lib path' |
+      awk '{print $4}' \
+    )
 
     # with trailing directory slash
     amu_tool_prefix=${test_cmd_path%/*}/
