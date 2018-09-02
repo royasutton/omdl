@@ -871,7 +871,8 @@ function toolchain_prepare() {
     grep --invert-match '#' ${repo_cache}/Makefile |
     grep 'AMU_TOOL_VERSION[[:space:]]*:=' |
     head -1 |
-    awk -F '=' '{print $2}' \
+    awk -F '=' '{print $2}' |
+    sed -s 's/[[:space:]]*//g' \
   )
 
   print_m "omdl ${repo_branch} uses openscad-amu ${amu_version}."
