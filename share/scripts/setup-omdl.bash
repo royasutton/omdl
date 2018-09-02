@@ -67,7 +67,7 @@ declare setup_amu_url="https://git.io/setup-amu.bash"
 declare cache_install="no"
 declare repo_cache_root="cache"
 
-declare scopes_exclude="manifest db_autotest db_autostat"
+declare scopes_exclude="manifest db_autotest"
 declare make_opts_add="generate_latex="
 
 declare commands
