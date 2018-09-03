@@ -19,7 +19,7 @@ AMU_PM_RULES        := $(AMU_PM_PREFIX)amu_pm_rules
 # AMU_PM_DEBUG      := defined
 
 #------------------------------------------------------------------------------#
-# Setup Announcements
+# Announcements
 #------------------------------------------------------------------------------#
 define AMU_SETUP_ANNOUNCE
 
@@ -75,7 +75,7 @@ release_archive_doxygen                 := $(true)
 release_archive_scopes                  := $(false)
 
 #------------------------------------------------------------------------------#
-# Project Version Checks
+# Version Checks
 #------------------------------------------------------------------------------#
 ifeq ($(version_checks),$(true))
 
