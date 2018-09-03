@@ -79,12 +79,18 @@ release_archive_scopes                  := $(false)
 #------------------------------------------------------------------------------#
 ifeq ($(version_checks),$(true))
 
-$(call check_version,openscad,gt,2018.01,$(true),$(call OPENSCAD_SETUP_ANNOUNCE,2018.01))
+$(call check_version,openscad,gt,2018.01,$(true), \
+  $(call OPENSCAD_SETUP_ANNOUNCE,2018.01) \
+)
 
-$(call check_version,amuseam,ge,$(subst v,,$(AMU_TOOL_VERSION)),$(true),requires openscad-amu $(AMU_TOOL_VERSION) or later.)
+$(call check_version,amuseam,ge,$(subst v,,$(AMU_TOOL_VERSION)),$(true), \
+  requires openscad-amu $(AMU_TOOL_VERSION) or later. \
+)
 
 ifeq ($(generate_latex),$(true))
-$(call check_version,doxygen,le,1.8.9.1,$(true),latex output broken since v1.8.9.1.)
+$(call check_version,doxygen,le,1.8.9.1,$(true), \
+  latex output broken since v1.8.9.1. \
+)
 endif
 
 endif
