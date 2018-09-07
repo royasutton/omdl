@@ -249,8 +249,8 @@ module rectangle_c
   center = false
 )
 {
-  od = all_defined([t, core]) ? (core + t) : size;
-  id = all_defined([t, size]) ? (size - t) : core;
+  od = all_defined([t, core]) ? (core + t*2) : size;
+  id = all_defined([t, size]) ? (size - t*2) : core;
 
   rx = edefined_or(od, 0, od);
   ry = edefined_or(od, 1, od);
