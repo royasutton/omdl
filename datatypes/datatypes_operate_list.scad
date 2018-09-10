@@ -502,6 +502,43 @@ function eselect
   : (f == true) ? concat( [first(first(v))], eselect(ntail(v), f, l, i) )
   : undef;
 
+//! Select n specified elements from each iterable value of a list.
+/***************************************************************************//**
+  \param    v \<list> A list of iterable values.
+  \param    f <boolean> Select the first element.
+  \param    l <boolean> Select the last element.
+  \param    i <integer> Select a numeric element index position.
+  \param    n <integer> The element count.
+
+  \returns  \<list> A list containing lists of the n selected elements
+            of each iterable value of \p v.
+            Returns \b empty_lst when \p v is empty.
+            Returns \b undef when \p v is not defined or is not iterable.
+
+  \details
+
+  \note     When more than one selection criteria is specified, the
+            order of precedence is: \p i, \p l, \p f.
+*******************************************************************************/
+function enselect
+(
+  v,
+  f = true,
+  l = false,
+  i,
+  n = 1
+) = not_defined(v) ? undef
+  : !is_iterable(v) ? undef
+  : is_empty(v) ? empty_lst
+  : is_defined(i) ? concat
+                    (
+                      [nfirst(rselect(v[0], [i:len(v[0])-1]), n)],
+                      enselect(ntail(v), f, l, i, n)
+                    )
+  : (l == true) ? concat( [nlast(first(v), n)], enselect(ntail(v), f, l, i, n) )
+  : (f == true) ? concat( [nfirst(first(v), n)], enselect(ntail(v), f, l, i, n) )
+  : undef;
+
 //! Serial-merge lists of iterable values.
 /***************************************************************************//**
   \param    v \<list> A list of iterable values.
@@ -894,6 +931,48 @@ BEGIN_SCOPE validate;
         [2,5,8,"b"],                                        // t10
         skip                                                // t11
       ],
+      ["enselect_F2",
+        undef,                                              // t01
+        empty_lst,                                          // t02
+        undef,                                              // t03
+        [["A"],[" "],["s"],["t"],["r"],["i"],["n"],["g"]],  // t04
+        [["o","r"],["a","p"],["g","r"],["b","a"]],          // t05
+        [["b"],["a"],["n"],["a"],["n"],["a"],["s"]],        // t06
+        [undef],                                            // t07
+        [[1,2],[2,3]],                                      // t08
+        [["a","b"],[1,2],[2,3],[4,5]],                      // t09
+        [[1,2],[4,5],[7,8],["a","b"]],                      // t10
+        skip                                                // t11
+      ],
+      ["enselect_L3",
+        undef,                                              // t01
+        empty_lst,                                          // t02
+        undef,                                              // t03
+        [["A"],[" "],["s"],["t"],["r"],["i"],["n"],["g"]],  // t04
+        [
+          ["n","g","e"],["p","l","e"],
+          ["a","p","e"],["a","n","a"]
+        ],                                                  // t05
+        [["b"],["a"],["n"],["a"],["n"],["a"],["s"]],        // t06
+        [undef],                                            // t07
+        [[1,2],[2,3]],                                      // t08
+        [["a","b"],[1,2],[2,3],[4,5]],                      // t09
+        [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]],            // t10
+        skip                                                // t11
+      ],
+      ["enselect_12",
+        undef,                                              // t01
+        empty_lst,                                          // t02
+        undef,                                              // t03
+        skip,                                               // t04 (DEPRECATED WARNING)
+        [["r","a"],["p","p"],["r","a"],["a","n"]],          // t05
+        skip,                                               // t06
+        [undef],                                            // t07
+        [[2],[3]],                                          // t08
+        [["b"],[2],[3],[5]],                                // t09
+        [[2,3],[5,6],[8,9],["b","c"]],                      // t10
+        skip                                                // t11
+      ],
       ["smerge",
         undef,                                              // t01
         empty_lst,                                          // t02
@@ -1019,6 +1098,9 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "eselect_F", eselect(get_value(vid),f=true), vid );
     for (vid=test_ids) run_test( "eselect_L", eselect(get_value(vid),l=true), vid );
     for (vid=test_ids) run_test( "eselect_1", eselect(get_value(vid),i=1), vid );
+    for (vid=test_ids) run_test( "enselect_F2", enselect(get_value(vid),f=true,n=2), vid );
+    for (vid=test_ids) run_test( "enselect_L3", enselect(get_value(vid),l=true,n=3), vid );
+    for (vid=test_ids) run_test( "enselect_12", enselect(get_value(vid),i=1,n=2), vid );
     for (vid=test_ids) run_test( "smerge", smerge(get_value(vid)), vid );
     for (vid=test_ids) run_test( "pmerge", pmerge(get_value(vid)), vid );
     for (vid=test_ids) run_test( "qsort", qsort(get_value(vid)), vid );
