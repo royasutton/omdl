@@ -255,6 +255,78 @@ function third( v ) = v[2];
 *******************************************************************************/
 function last( v ) = v[len(v)-1];
 
+//! Return the middle element of an iterable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+
+  \returns  \<value> The middle element of \p v.
+            Returns \b undef when \p v is not defined, is not iterable,
+            or is empty.
+*******************************************************************************/
+function middle( v ) = v[len(v)/2];
+
+//! Return a list containing the first two elements of an iterable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+
+  \returns  \<list> A list containing the first two elements of \p v.
+            Returns \b undef when \p v is not defined, is not iterable,
+            or is empty.
+
+  \details
+
+  \note     Value may also be a range.
+*******************************************************************************/
+function first2( v ) = [v[0], v[1]];
+
+//! Return a list containing the first three elements of an iterable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+
+  \returns  \<list> A list containing the first three elements of \p v.
+            Returns \b undef when \p v is not defined, is not iterable,
+            or is empty.
+
+  \details
+
+  \note     Value may also be a range.
+*******************************************************************************/
+function first3( v ) = [v[0], v[1], v[2]];
+
+//! Return a list containing the last two elements of an iterable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+
+  \returns  \<list> A list containing the last two elements of \p v.
+            Returns \b undef when \p v is not defined, is not iterable,
+            or is empty.
+*******************************************************************************/
+function last2
+(
+  v
+) = let
+    (
+      l = len(v)
+    )
+    [v[l-2], v[l-1]];
+
+//! Return a list containing the last three elements of an iterable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+
+  \returns  \<list> A list containing the last three elements of \p v.
+            Returns \b undef when \p v is not defined, is not iterable,
+            or is empty.
+*******************************************************************************/
+function last3
+(
+  v
+) = let
+    (
+      l = len(v)
+    )
+    [v[l-3], v[l-2], v[l-1]];
+
 //! Return a list containing the first n elements of an iterable value.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
@@ -1012,6 +1084,11 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "second", second(get_value(vid)), vid );
     for (vid=test_ids) run_test( "third", third(get_value(vid)), vid );
     for (vid=test_ids) run_test( "last", last(get_value(vid)), vid );
+    log_info( "not testing: middle()" );
+    log_info( "not testing: first2()" );
+    log_info( "not testing: first3()" );
+    log_info( "not testing: last2()" );
+    log_info( "not testing: last3()" );
     for (vid=test_ids) run_test( "nfirst_1", nfirst(get_value(vid),n=1), vid );
     for (vid=test_ids) run_test( "nlast_1", nlast(get_value(vid),n=1), vid );
     for (vid=test_ids) run_test( "nhead_1", nhead(get_value(vid),n=1), vid );
