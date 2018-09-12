@@ -704,6 +704,42 @@ function strip
   : (first(v) == mv) ? concat(strip(ntail(v), mv))
   : concat(nfirst(v), strip(ntail(v), mv));
 
+//! Apply a mask to an interable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+  \param    m \<value> An element mask.
+  \param    r <boolean> Right align the mask and value.
+  \param    o <integer> A positive or negative mask offset.
+  \param    u \<value> The value assigned to undefined and non-existing
+            elements.
+  \param    z \<value> The value assigned to zeroed elements.
+
+  \returns  \<value> The resulting masked value.
+            Returns \b undef when \p m is not defined or is not iterable.
+            Returns \b empty_lst when \p m is empty.
+*******************************************************************************/
+function mask
+(
+  v,
+  m,
+  r = false,
+  o = 0,
+  u = undef,
+  z = 0
+) = not_defined(m) ? undef
+  : !is_iterable(m) ? undef
+  : is_empty(m) ? empty_lst
+  : let
+    (
+      j = ((r == true) ? len(v) - len(m) : 0) + o
+    )
+    [
+      for (i = [0 : len(m)-1])
+        (m[i] == 1) ?
+          edefined_or(v, i+j, u)
+        : eexists(i+j, v) ? z : u
+    ];
+
 //! Return the unique elements of an iterable value.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
@@ -1065,6 +1101,19 @@ BEGIN_SCOPE validate;
         [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]],            // t10
         [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
       ],
+      ["mask_01R",
+        [undef,undef],                                      // t01
+        [undef,undef],                                      // t02
+        [undef,undef],                                      // t03
+        [0,"g"],                                            // t04
+        [0,"banana"],                                       // t05
+        [0,"s"],                                            // t06
+        [undef,undef],                                      // t07
+        [0,[2,3]],                                          // t08
+        [0,[4,5]],                                          // t09
+        [0,["a","b","c"]],                                  // t10
+        [0,15]                                              // t11
+      ],
       ["unique",
         undef,                                              // t01
         empty_lst,                                          // t02
@@ -1131,6 +1180,7 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "insert_T0", insert(0,get_value(vid),mv=["x","r","apple","s",[2,3],5]), vid );
     for (vid=test_ids) run_test( "delete_T0", delete(get_value(vid),mv=["x","r","apple","s",[2,3],5]), vid );
     for (vid=test_ids) run_test( "strip", strip(get_value(vid)), vid );
+    for (vid=test_ids) run_test( "mask_01R", mask(get_value(vid),[0,1],r=true), vid );
     for (vid=test_ids) run_test( "unique", unique(get_value(vid)), vid );
 
     // end-of-tests
