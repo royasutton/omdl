@@ -180,6 +180,23 @@ function count
     len(find(mv, v, 0, i))
   : len(smerge(search(mv, v, 0, i)));
 
+//! Test if an element exists at a specified index of an iterable value.
+/***************************************************************************//**
+  \param    i <integer> An element index.
+  \param    v \<value> An iterable value.
+
+  \returns  <boolean> \b true when the element \p i of \p v, \p v[i],
+            exists and \b false otherwise.
+            Returns \b undef when \p i is not an integer.
+*******************************************************************************/
+function eexists
+(
+  i,
+  v
+) = !is_integer( i ) ? undef
+  : (i < 0) ? false
+  : (len(v) > i);
+
 //! Check for the existence of a match value in an iterable value.
 /***************************************************************************//**
   \param    mv \<value> A match value.
@@ -798,6 +815,19 @@ BEGIN_SCOPE validate;
         1,                                                  // t10
         1                                                   // t11
       ],
+      ["eexists_5",
+        false,                                              // t01
+        false,                                              // t02
+        false,                                              // t03
+        true,                                               // t04
+        false,                                              // t05
+        true,                                               // t06
+        false,                                              // t07
+        false,                                              // t08
+        false,                                              // t09
+        false,                                              // t10
+        true                                                // t11
+      ],
       ["exists_S1",
         false,                                              // t01
         false,                                              // t02
@@ -1079,6 +1109,7 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "edefined_or_DE3", edefined_or(get_value(vid),3,"default"), vid );
     for (vid=test_ids) run_test( "find_12", find([1,2],get_value(vid)), vid );
     for (vid=test_ids) run_test( "count_S1", count(1,get_value(vid),true), vid );
+    for (vid=test_ids) run_test( "eexists_5", eexists(5,get_value(vid)), vid );
     for (vid=test_ids) run_test( "exists_S1", exists(1,get_value(vid),true), vid );
     for (vid=test_ids) run_test( "first", first(get_value(vid)), vid );
     for (vid=test_ids) run_test( "second", second(get_value(vid)), vid );
