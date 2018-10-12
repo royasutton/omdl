@@ -452,9 +452,15 @@
 
   \defgroup database_component Component
   \brief    Component specifications.
+  @{
 
   \defgroup database_electrical Electrical
-  \brief    Electrical specifications.
+  \brief    Electrical component specifications.
+
+  \defgroup database_mechanical Mechanical
+  \brief    Mechanical component specifications.
+
+  @}
 
   \defgroup database_geometry Geometry
   \brief    Predefined geometry.
@@ -489,7 +495,7 @@
 
 /***************************************************************************//**
   \defgroup parts Parts
-  \brief    Parametric parts and assemblies.
+  \brief    Parts and assemblies.
 *******************************************************************************/
 
 /***************************************************************************//**
