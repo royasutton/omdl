@@ -1,7 +1,9 @@
 #!/usr/bin/make -f
 ################################################################################
 #
-# omdl Project Makefile (openscad-amu df1)
+# Project Makefile
+# OpenSCAD Mechanical Design Library (omdl)
+# requires openscad-amu Design Flow.
 #
 ################################################################################
 
@@ -14,12 +16,12 @@ AMU_PM_PREFIX       := $(AMU_LIB_PATH)/include/pmf/
 AMU_PM_INIT         := $(AMU_PM_PREFIX)amu_pm_init
 AMU_PM_RULES        := $(AMU_PM_PREFIX)amu_pm_rules
 
-# Uncomment for increased verbosity or debugging.
+# Uncomment following for increased verbosity and/or debugging.
 # AMU_PM_VERBOSE    := defined
 # AMU_PM_DEBUG      := defined
 
 #------------------------------------------------------------------------------#
-# Announcements
+# Project Announcements
 #------------------------------------------------------------------------------#
 define AMU_SETUP_ANNOUNCE
 
@@ -56,7 +58,7 @@ include $(AMU_PM_INIT)
 endif
 
 #------------------------------------------------------------------------------#
-# Default Overrides
+# Overrides to Design Flow Configuration Defaults
 #------------------------------------------------------------------------------#
 #parallel_jobs                          := $(true)
 #target_headings                        := $(false)
@@ -75,7 +77,7 @@ release_archive_doxygen                 := $(true)
 release_archive_scopes                  := $(false)
 
 #------------------------------------------------------------------------------#
-# Version Checks
+# Design Flow Tools Version Checks
 #------------------------------------------------------------------------------#
 ifeq ($(version_checks),$(true))
 
@@ -96,7 +98,7 @@ endif
 endif
 
 #------------------------------------------------------------------------------#
-# Project
+# Library Project
 #------------------------------------------------------------------------------#
 project_name        := omdl
 project_version     := $(shell git describe --tags --dirty --always)
@@ -181,7 +183,7 @@ library             := $(library_db01) \
                        units/units_resolution
 
 #------------------------------------------------------------------------------#
-# Scope Excludes
+# Design Flow Scope Excludes
 #------------------------------------------------------------------------------#
 # to exclude nothing (ie: build everything) from the command line, use:
 # make scopes_exclude="" all
@@ -193,7 +195,7 @@ scopes_exclude      := manifest
 scopes_exclude      += db_autotest db_autostat
 
 #------------------------------------------------------------------------------#
-# Release and Backup Additions
+# Design Flow Release and Backup Additions
 #------------------------------------------------------------------------------#
 # use recursive assignment '=' for references that use derived paths
 # such as: $(output_path), $(release_path), etc.
