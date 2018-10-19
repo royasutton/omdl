@@ -117,70 +117,10 @@ project_files_add   := $(wildcard include/*.mfs)
 library_info        := README.md \
                        lgpl-2.1.txt
 
-# Polyhedra
-library_db01        := database/geometry/polyhedra/anti_prisms \
-                       database/geometry/polyhedra/archimedean_duals \
-                       database/geometry/polyhedra/archimedean \
-                       database/geometry/polyhedra/cupolas \
-                       database/geometry/polyhedra/dipyramids \
-                       database/geometry/polyhedra/johnson \
-                       database/geometry/polyhedra/platonic \
-                       database/geometry/polyhedra/prisms \
-                       database/geometry/polyhedra/pyramids \
-                       database/geometry/polyhedra/trapezohedron \
-                       database/geometry/polyhedra/polyhedra_all
-
-library_db01_src    := database_src/geometry/polyhedra/Makefile \
-                       database_src/geometry/polyhedra/src/Makefile \
-                       database_src/geometry/polyhedra/src/convert \
-                       database_src/geometry/polyhedra/src/convert.conf \
-                       database_src/geometry/polyhedra/src/convert.text \
-                       database_src/geometry/polyhedra/src/dist/fetch.bash \
-                       database_src/geometry/polyhedra/src/dist/rename
-
-library             := $(library_db01) \
-                       \
-                       mainpage \
-                       omdl-base \
-                       \
-                       console \
-                       constants \
-                       validation \
-                       \
-                       datatypes/datatypes-base \
-                       datatypes/datatypes_identify_scalar \
-                       datatypes/datatypes_identify_iterable \
-                       datatypes/datatypes_identify_list \
-                       datatypes/datatypes_operate_scalar \
-                       datatypes/datatypes_operate_iterable \
-                       datatypes/datatypes_operate_list \
-                       \
-                       datatypes/datatypes_map \
-                       datatypes/datatypes_table \
-                       \
-                       math/math-base \
-                       math/math_linear_algebra \
-                       math/math_vector_algebra \
-                       \
-                       math/math_bitwise \
-                       math/math_oshapes \
-                       math/math_polytope \
-                       math/math_triangle \
-                       math/math_utility \
-                       \
-                       shapes/shapes2d \
-                       shapes/shapes2de \
-                       shapes/shapes3d \
-                       \
-                       tools/tools_align \
-                       tools/tools_edge \
-                       tools/tools_polytope \
-                       tools/tools_utility \
-                       \
-                       units/units_angle \
-                       units/units_coordinate \
-                       units/units_length \
-                       units/units_resolution
+#------------------------------------------------------------------------------#
+# Include Library Modules
+#------------------------------------------------------------------------------#
+include rootmodule.mk
 
 #------------------------------------------------------------------------------#
 # Design Flow Scope Excludes
@@ -213,7 +153,7 @@ release_archive_files_add := $(library_info)
 
 backup_files_add    := $(library_info) \
                        \
-                       $(library_db01_src)
+                       $(library_files_add)
 
 #------------------------------------------------------------------------------#
 # Project Makefile Rules (DO NO EDIT THIS SECTION)

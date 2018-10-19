@@ -1,0 +1,45 @@
+################################################################################
+# Module
+################################################################################
+
+local_path        :=  database/geometry/polyhedra
+
+local_library     :=  polyhedra_all \
+                      \
+                      anti_prisms \
+                      archimedean_duals \
+                      archimedean \
+                      cupolas \
+                      dipyramids \
+                      johnson \
+                      platonic \
+                      prisms \
+                      pyramids \
+                      trapezohedron
+
+local_files_add   :=
+
+local_submodules  :=
+
+#------------------------------------------------------------------------------#
+# add module
+#------------------------------------------------------------------------------#
+
+$(eval \
+  $(call add-module, \
+    $(local_path), \
+    $(local_library), \
+    $(local_files_add), \
+    $(local_submodules) \
+  ) \
+)
+
+# local cleanup
+undefine local_path
+undefine local_library
+undefine local_files_add
+undefine local_submodules
+
+################################################################################
+# eof
+################################################################################
