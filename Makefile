@@ -3,7 +3,7 @@
 #
 # Project Makefile
 # OpenSCAD Mechanical Design Library (omdl)
-# requires openscad-amu Design Flow.
+# requires the openscad-amu Design Flow.
 #
 ################################################################################
 
@@ -48,7 +48,7 @@ define OPENSCAD_SETUP_ANNOUNCE
 endef
 
 #------------------------------------------------------------------------------#
-# Project Makefile Init (DO NO EDIT THIS SECTION)
+# Design Flow Init (DO NO EDIT THIS SECTION)
 #------------------------------------------------------------------------------#
 ifeq ($(wildcard $(AMU_PM_INIT)),)
 $(info $(call AMU_SETUP_ANNOUNCE,Init file,$(AMU_PM_INIT)))
@@ -77,7 +77,7 @@ release_archive_doxygen                 := $(true)
 release_archive_scopes                  := $(false)
 
 #------------------------------------------------------------------------------#
-# Design Flow Tools Version Checks
+# Version Checks on Design Flow Tools
 #------------------------------------------------------------------------------#
 ifeq ($(version_checks),$(true))
 
@@ -98,7 +98,7 @@ endif
 endif
 
 #------------------------------------------------------------------------------#
-# Library Project
+# Library Project Basics
 #------------------------------------------------------------------------------#
 project_name        := omdl
 project_version     := $(shell git describe --tags --dirty --always)
@@ -128,18 +128,18 @@ include rootmodule.mk
 # to exclude nothing (ie: build everything) from the command line, use:
 # make scopes_exclude="" all
 
-# shape manifests: only required when doing a release
+# exclude shape manifests; required only when doing a library "release."
 scopes_exclude      := manifest
 
-# database: normally pre-built and released by database makefiles
+# exclude database tests and statitics; required for complete documentation
+# build, but may be skipped during routine library development.
 scopes_exclude      += db_autotest db_autostat
 
 #------------------------------------------------------------------------------#
-# Design Flow Release and Backup Additions
+# Design Flow Release
 #------------------------------------------------------------------------------#
 # use recursive assignment '=' for references that use derived paths
 # such as: $(output_path), $(release_path), etc.
-
 release_files_add    = $(library_info) \
                        \
                        $(output_path)stl/mainpage_quickstart.stl \
@@ -151,12 +151,15 @@ release_files_add    = $(library_info) \
 
 release_archive_files_add := $(library_info)
 
+#------------------------------------------------------------------------------#
+# Backup Additions
+#------------------------------------------------------------------------------#
 backup_files_add    := $(library_info) \
                        \
                        $(library_backup_add)
 
 #------------------------------------------------------------------------------#
-# Project Makefile Rules (DO NO EDIT THIS SECTION)
+# Design Flow Rules (DO NO EDIT THIS SECTION)
 #------------------------------------------------------------------------------#
 ifeq ($(wildcard $(AMU_PM_RULES)),)
 $(info $(call AMU_SETUP_ANNOUNCE,Rules file,$(AMU_PM_RULES)))
