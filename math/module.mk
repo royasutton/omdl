@@ -15,7 +15,7 @@ local_library     :=  math-base \
                       math_triangle \
                       math_utility
 
-local_files_add   :=
+local_backup_add  :=
 
 local_submodules  :=
 
@@ -27,7 +27,7 @@ $(eval \
   $(call add-module, \
     $(local_path), \
     $(local_library), \
-    $(local_files_add), \
+    $(local_backup_add), \
     $(local_submodules) \
   ) \
 )
@@ -35,7 +35,7 @@ $(eval \
 # local cleanup
 undefine local_path
 undefine local_library
-undefine local_files_add
+undefine local_backup_add
 undefine local_submodules
 
 ################################################################################

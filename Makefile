@@ -153,7 +153,7 @@ release_archive_files_add := $(library_info)
 
 backup_files_add    := $(library_info) \
                        \
-                       $(library_files_add)
+                       $(library_backup_add)
 
 #------------------------------------------------------------------------------#
 # Project Makefile Rules (DO NO EDIT THIS SECTION)
