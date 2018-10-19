@@ -60,10 +60,10 @@ endif
 #------------------------------------------------------------------------------#
 # Overrides to Design Flow Configuration Defaults
 #------------------------------------------------------------------------------#
-#parallel_jobs                          := $(true)
-#target_headings                        := $(false)
-#verbose_seam                           := $(false)
-#debug_dif_filter                       := $(true)
+# parallel_jobs                         := $(true)
+# target_headings                       := $(false)
+# verbose_seam                          := $(false)
+# debug_dif_filter                      := $(true)
 
 output_path_add_project_version         := $(false)
 
@@ -123,7 +123,7 @@ library_info        := README.md \
 include rootmodule.mk
 
 #------------------------------------------------------------------------------#
-# Design Flow Scope Excludes
+# Excluded Design Flow Scopes
 #------------------------------------------------------------------------------#
 # to exclude nothing (ie: build everything) from the command line, use:
 # make scopes_exclude="" all
@@ -136,7 +136,7 @@ scopes_exclude      := manifest
 scopes_exclude      += db_autotest db_autostat
 
 #------------------------------------------------------------------------------#
-# Design Flow Release
+# Design Flow Release Additions
 #------------------------------------------------------------------------------#
 # use recursive assignment '=' for references that use derived paths
 # such as: $(output_path), $(release_path), etc.
@@ -152,7 +152,7 @@ release_files_add    = $(library_info) \
 release_archive_files_add := $(library_info)
 
 #------------------------------------------------------------------------------#
-# Backup Additions
+# Library Source Backup Additions
 #------------------------------------------------------------------------------#
 backup_files_add    := $(library_info) \
                        \
