@@ -1,8 +1,8 @@
 //! Shape edge finishing tools.
 /***************************************************************************//**
-  \file   tools_edge.scad
+  \file
   \author Roy Allen Sutton
-  \date   2017
+  \date   2017-2018
 
   \copyright
 

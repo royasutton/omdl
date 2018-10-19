@@ -1,8 +1,8 @@
 //! Shape transformation utility tools.
 /***************************************************************************//**
-  \file   tools_utility.scad
+  \file
   \author Roy Allen Sutton
-  \date   2015-2017
+  \date   2015-2018
 
   \copyright
 

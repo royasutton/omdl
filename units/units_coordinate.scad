@@ -1,8 +1,8 @@
 //! Coordinate systems and conversions.
 /***************************************************************************//**
-  \file   units_coordinate.scad
+  \file
   \author Roy Allen Sutton
-  \date   2017
+  \date   2017-2018
 
   \copyright
 

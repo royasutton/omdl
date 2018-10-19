@@ -1,8 +1,8 @@
 //! Polygon and polyhedron tools.
 /***************************************************************************//**
-  \file   tools_polytope.scad
+  \file
   \author Roy Allen Sutton
-  \date   2017
+  \date   2017-2018
 
   \copyright
 

@@ -1,8 +1,8 @@
 //! Scalar data type operations.
 /***************************************************************************//**
-  \file   datatypes_operate_scalar.scad
+  \file
   \author Roy Allen Sutton
-  \date   2015-2017
+  \date   2015-2018
 
   \copyright
 

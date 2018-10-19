@@ -1,8 +1,8 @@
 //! Polygon and polyhedron mathematical functions.
 /***************************************************************************//**
-  \file   math_polytope.scad
+  \file
   \author Roy Allen Sutton
-  \date   2017
+  \date   2017-2018
 
   \copyright
 
