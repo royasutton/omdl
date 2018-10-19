@@ -15,23 +15,10 @@ local_backup_add  :=
 local_submodules  :=
 
 #------------------------------------------------------------------------------#
-# add module
+# add local module
 #------------------------------------------------------------------------------#
-
-$(eval \
-  $(call add-module, \
-    $(local_path), \
-    $(local_library), \
-    $(local_backup_add), \
-    $(local_submodules) \
-  ) \
-)
-
-# local cleanup
-undefine local_path
-undefine local_library
-undefine local_backup_add
-undefine local_submodules
+$(eval $(call add-local-module))
+$(eval $(call clear-local-module))
 
 ################################################################################
 # eof

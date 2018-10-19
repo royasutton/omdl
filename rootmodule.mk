@@ -40,6 +40,24 @@ define add-module
   include $(addsuffix /module.mk,$(addprefix $(if $(strip $1),$1/),$4))
 endef
 
+# macro: simplified addition using assumed local variable names
+define add-local-module
+  $(call add-module, \
+    $(local_path), \
+    $(local_library), \
+    $(local_backup_add), \
+    $(local_submodules) \
+  )
+endef
+
+# macro: simplified cleanup using assumed local variable names
+define clear-local-module
+  undefine local_path
+  undefine local_library
+  undefine local_backup_add
+  undefine local_submodules
+endef
+
 #------------------------------------------------------------------------------#
 # target rule: info-modules
 #------------------------------------------------------------------------------#
@@ -61,23 +79,10 @@ undefine library_modules
 library_modules   :=  $(lastword $(MAKEFILE_LIST))
 
 #------------------------------------------------------------------------------#
-# add module
+# add root module
 #------------------------------------------------------------------------------#
-
-$(eval \
-  $(call add-module, \
-    $(local_path), \
-    $(local_library), \
-    $(local_backup_add), \
-    $(local_submodules) \
-  ) \
-)
-
-# local cleanup
-undefine local_path
-undefine local_library
-undefine local_backup_add
-undefine local_submodules
+$(eval $(call add-local-module))
+$(eval $(call clear-local-module))
 
 ################################################################################
 # eof
