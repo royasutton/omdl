@@ -4,7 +4,9 @@
 
 local_path        :=  shapes
 
-local_library     :=  shapes2d \
+local_library     :=  module \
+                      \
+                      shapes2d \
                       shapes2de \
                       shapes3d
 

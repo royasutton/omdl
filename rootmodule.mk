@@ -5,6 +5,7 @@
 local_path        :=
 
 local_library     :=  mainpage \
+                      rootmodule \
                       \
                       omdl-base \
                       \
@@ -16,6 +17,7 @@ local_backup_add  :=
 
 local_submodules  :=  datatypes \
                       math \
+                      parts \
                       shapes \
                       tools \
                       units \

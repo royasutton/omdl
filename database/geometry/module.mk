@@ -4,7 +4,7 @@
 
 local_path        :=  database/geometry
 
-local_library     :=
+local_library     :=  module
 
 local_backup_add  :=
 

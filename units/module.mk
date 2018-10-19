@@ -4,7 +4,9 @@
 
 local_path        :=  units
 
-local_library     :=  units_angle \
+local_library     :=  module \
+                      \
+                      units_angle \
                       units_coordinate \
                       units_length \
                       units_resolution

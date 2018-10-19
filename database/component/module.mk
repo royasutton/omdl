@@ -2,15 +2,14 @@
 # Module
 ################################################################################
 
-local_path        :=  database
+local_path        :=  database/component
 
 local_library     :=  module
 
 local_backup_add  :=
 
-local_submodules  :=  component \
-                      geometry \
-                      material
+local_submodules  :=  electrical \
+                      mechanical
 
 #------------------------------------------------------------------------------#
 # add module

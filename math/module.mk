@@ -4,7 +4,9 @@
 
 local_path        :=  math
 
-local_library     :=  math-base \
+local_library     :=  module \
+                      \
+                      math-base \
                       \
                       math_linear_algebra \
                       math_vector_algebra \

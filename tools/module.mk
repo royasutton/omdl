@@ -4,7 +4,9 @@
 
 local_path        :=  tools
 
-local_library     :=  tools_align \
+local_library     :=  module \
+                      \
+                      tools_align \
                       tools_edge \
                       tools_polytope \
                       tools_utility

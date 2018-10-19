@@ -4,7 +4,9 @@
 
 local_path        :=  datatypes
 
-local_library     :=  datatypes-base \
+local_library     :=  module \
+                      \
+                      datatypes-base \
                       \
                       datatypes_identify_scalar \
                       datatypes_identify_iterable \
