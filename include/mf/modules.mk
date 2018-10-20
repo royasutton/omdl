@@ -1,34 +1,18 @@
 ################################################################################
-# Library Root Module
+#
+# Library Local-Modules
+#
+# Nonrecursive multi-directory scheme for modular library construction.
 ################################################################################
 
-local_path        :=
-
-local_library     :=  mainpage \
-                      rootmodule \
-                      \
-                      omdl-base \
-                      \
-                      console \
-                      constants \
-                      validation
-
-local_backup_add  :=
-
-local_submodules  :=  datatypes \
-                      math \
-                      parts \
-                      shapes \
-                      tools \
-                      units \
-                      \
-                      database
-
-# add only when present
-local_submodules  +=  $(wildcard database_src)
-
+# append local module files to library file lists
 #------------------------------------------------------------------------------#
-# macro: add-module (local-path, local-libs, files-add, submodules)
+# macro: add-module (arg1,arg2,arg3,arg4)
+#------------------------------------------------------------------------------#
+# arg1: local directory path
+# arg2: list of local library files
+# arg3: list of local files add to library backups
+# arg4: list of submodules
 #------------------------------------------------------------------------------#
 define add-module
   # append module
@@ -40,7 +24,10 @@ define add-module
   include $(addsuffix /module.mk,$(addprefix $(if $(strip $1),$1/),$4))
 endef
 
-# macro: simplified addition using assumed local variable names
+# simplified local module addition using assumed local variable names
+#------------------------------------------------------------------------------#
+# macro: add-local-module ()
+#------------------------------------------------------------------------------#
 define add-local-module
   $(call add-module, \
     $(local_path), \
@@ -50,7 +37,10 @@ define add-local-module
   )
 endef
 
-# macro: simplified cleanup using assumed local variable names
+# simplified local module cleanup using assumed local variable names
+#------------------------------------------------------------------------------#
+# macro: clear-local-module ()
+#------------------------------------------------------------------------------#
 define clear-local-module
   undefine local_path
   undefine local_library
@@ -59,7 +49,18 @@ define clear-local-module
 endef
 
 #------------------------------------------------------------------------------#
-# target rule: info-modules
+# initialize library file lists
+#------------------------------------------------------------------------------#
+library             :=
+library_backup_add  :=
+library_modules     :=
+
+################################################################################
+# target rules
+################################################################################
+
+#------------------------------------------------------------------------------#
+# target: info-modules
 #------------------------------------------------------------------------------#
 .PHONY: info-modules
 info-modules: | silent
@@ -67,22 +68,6 @@ info-modules: | silent
 	$(call enumerate_variable,library,$(false),$(false))
 	$(call enumerate_variable,library_backup_add,$(false),$(false))
 	$(call enumerate_variable,library_modules,$(false),$(false))
-
-#------------------------------------------------------------------------------#
-# initialize library file lists
-#------------------------------------------------------------------------------#
-undefine library
-undefine library_backup_add
-undefine library_modules
-
-# add (this) rootmodule
-library_modules   :=  $(lastword $(MAKEFILE_LIST))
-
-#------------------------------------------------------------------------------#
-# add root module
-#------------------------------------------------------------------------------#
-$(eval $(call add-local-module))
-$(eval $(call clear-local-module))
 
 ################################################################################
 # eof

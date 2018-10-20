@@ -126,13 +126,14 @@ project_brief       := OpenSCAD Mechanical Design Library
 
 docs_group_id       := primitives
 project_logo        := mainpage_logo_top_55x55
-seam_defines        := INCLUDE_PATH=include
+seam_defines        := INCLUDE_PATH=include/mfs
 
 doxygen_config      := Doxyfile
 doxygen_html_footer := Doxyfooter.html
 doxygen_html_css    := Doxystyle.css
 
-project_files_add   := $(wildcard include/*.mfs)
+project_files_add   := $(wildcard include/mfs/*.mfs) \
+                       $(wildcard include/mf/*.mk)
 
 library_info        := README.md \
                        lgpl-2.1.txt
@@ -140,7 +141,11 @@ library_info        := README.md \
 #------------------------------------------------------------------------------#
 # Include Library Modules
 #------------------------------------------------------------------------------#
-include rootmodule.mk
+# load module macros
+include include/mf/modules.mk
+
+# load root module
+include module.mk
 
 #------------------------------------------------------------------------------#
 # Excluded Design Flow Scopes
