@@ -5,6 +5,13 @@
 # Nonrecursive multi-directory scheme for modular library construction.
 ################################################################################
 
+#------------------------------------------------------------------------------#
+# default local module name
+#------------------------------------------------------------------------------#
+ifndef local_module_name
+  local_module_name := module
+endif
+
 # append local module files to library file lists
 #------------------------------------------------------------------------------#
 # macro: add-module (arg1,arg2,arg3,arg4)
@@ -18,10 +25,10 @@ define add-module
   # append module
   library             += $(if $(strip $2),$(addprefix $(if $(strip $1),$1/),$2))
   library_backup_add  += $(if $(strip $3),$(addprefix $(if $(strip $1),$1/),$3))
-  library_modules     += $(if $(strip $4),$(addsuffix /module.mk,$(addprefix $(if $(strip $1),$1/),$4)))
+  library_modules     += $(if $(strip $4),$(addsuffix /$(local_module_name).mk,$(addprefix $(if $(strip $1),$1/),$4)))
 
   # include submodules
-  include $(addsuffix /module.mk,$(addprefix $(if $(strip $1),$1/),$4))
+  include $(addsuffix /$(local_module_name).mk,$(addprefix $(if $(strip $1),$1/),$4))
 endef
 
 # simplified local module addition using assumed local variable names
