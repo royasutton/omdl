@@ -47,6 +47,18 @@ define OPENSCAD_SETUP_ANNOUNCE
 
 endef
 
+define IMAGEMAGICK_CODER_ANNOUNCE
+
+  The current ImageMagick security policy denies access rights ($2)
+  to the $1 coder required to compile this library.
+
+  Please grant these rights by editing /etc/ImageMagick*/policy.xml.
+  set: <policy domain="coder" rights="$3" pattern="$1" />
+
+  See: http://imagemagick.org/script/security-policy.php
+
+endef
+
 #------------------------------------------------------------------------------#
 # Design Flow Init (DO NO EDIT THIS SECTION)
 #------------------------------------------------------------------------------#
@@ -77,7 +89,7 @@ release_archive_doxygen                 := $(true)
 release_archive_scopes                  := $(false)
 
 #------------------------------------------------------------------------------#
-# Version Checks on Design Flow Tools
+# Design Flow Tools Assertions
 #------------------------------------------------------------------------------#
 ifeq ($(version_checks),$(true))
 
@@ -93,6 +105,14 @@ ifeq ($(generate_latex),$(true))
 $(call check_version,doxygen,le,1.8.9.1,$(true), \
   latex output broken since v1.8.9.1. \
 )
+endif
+
+ifneq ($(strip $(shell \
+        identify -list policy \
+        | sed -n '/pattern: EPS/{x;p;d;}; x' \
+        | sed -n 's/^.*rights:[[:space:]]*//p' \
+     )),Read Write)
+  $(error $(call IMAGEMAGICK_CODER_ANNOUNCE,EPS,Read Write,read|write))
 endif
 
 endif
