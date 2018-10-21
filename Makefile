@@ -112,12 +112,14 @@ $(call check_version,doxygen,le,1.8.9.1,$(true), \
 )
 endif
 
-ifneq ($(strip $(shell \
-        identify -list policy \
-        | sed -n '/pattern: EPS/{x;p;d;}; x' \
-        | sed -n 's/^.*rights:[[:space:]]*//p' \
-     )),Read Write)
-  $(error $(call IMAGEMAGICK_CODER_ANNOUNCE,EPS,Read Write,read|write))
+ifneq ($(shell identify -list policy | $(grep) EPS),)
+  ifneq ($(strip $(shell \
+          identify -list policy \
+          | $(sed) -n '/pattern: EPS/{x;p;d;}; x' \
+          | $(sed) -n 's/^.*rights:[[:space:]]*//p' \
+       )),Read Write)
+    $(error $(call IMAGEMAGICK_CODER_ANNOUNCE,EPS,Read Write,read|write))
+  endif
 endif
 
 endif
