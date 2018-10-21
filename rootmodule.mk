@@ -5,7 +5,7 @@
 local_path        :=
 
 local_library     :=  mainpage \
-                      module \
+                      rootmodule \
                       \
                       omdl-base \
                       \

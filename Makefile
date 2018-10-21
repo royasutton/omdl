@@ -156,7 +156,7 @@ library_info        := README.md \
 include include/mf/modules.mk
 
 # library root module
-include $(local_module_name).mk
+include rootmodule.mk
 
 #------------------------------------------------------------------------------#
 # Excluded Design Flow Scopes
