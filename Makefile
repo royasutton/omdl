@@ -56,8 +56,9 @@ define IMAGEMAGICK_CODER_ANNOUNCE
   text: <policy domain="coder" rights="$3" pattern="$1" />
 
   example:
-  $$ sed -i.orig '/$1/ s/rights="[^"]*"/rights="$3"/' $\\
-                /etc/ImageMagick-6/policy.xml
+  $$ sudo sed -i.orig $\\
+         '/$1/s/rights="[^"]*"/rights="$3"/' $\\
+         /etc/ImageMagick-6/policy.xml
 
   See: http://imagemagick.org/script/security-policy.php
 
