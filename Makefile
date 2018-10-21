@@ -68,10 +68,10 @@ endef
 # Design Flow Init (DO NO EDIT THIS SECTION)
 #------------------------------------------------------------------------------#
 ifeq ($(wildcard $(AMU_PM_INIT)),)
-$(info $(call AMU_SETUP_ANNOUNCE,Init file,$(AMU_PM_INIT)))
-$(error unable to continue.)
+  $(info $(call AMU_SETUP_ANNOUNCE,Init file,$(AMU_PM_INIT)))
+  $(error unable to continue.)
 else
-include $(AMU_PM_INIT)
+  include $(AMU_PM_INIT)
 endif
 
 #------------------------------------------------------------------------------#
@@ -98,20 +98,24 @@ release_archive_scopes                  := $(false)
 #------------------------------------------------------------------------------#
 ifeq ($(version_checks),$(true))
 
+# require recent OpenSCAD version.
 $(call check_version,openscad,gt,2018.01,$(true), \
   $(call OPENSCAD_SETUP_ANNOUNCE,2018.01) \
 )
 
+# require openscad-amu version stated by $(AMU_TOOL_VERSION).
 $(call check_version,amuseam,ge,$(subst v,,$(AMU_TOOL_VERSION)),$(true), \
   requires openscad-amu $(AMU_TOOL_VERSION) or later. \
 )
 
+# warn of known build issue when latax output configured.
 ifeq ($(generate_latex),$(true))
 $(call check_version,doxygen,le,1.8.9.1,$(true), \
   latex output broken since v1.8.9.1. \
 )
 endif
 
+# require imagemagick/convert utility has eps-coder access rights.
 ifneq ($(shell identify -list policy | $(grep) EPS),)
   ifneq ($(strip $(shell \
           identify -list policy \
@@ -146,12 +150,12 @@ library_info        := README.md \
                        lgpl-2.1.txt
 
 #------------------------------------------------------------------------------#
-# Include Library Modules
+# Include Library Modules Makefiles
 #------------------------------------------------------------------------------#
-# load module macros
+# use modules
 include include/mf/modules.mk
 
-# load root module
+# library root module
 include $(local_module_name).mk
 
 #------------------------------------------------------------------------------#
@@ -194,10 +198,10 @@ backup_files_add    := $(library_info) \
 # Design Flow Rules (DO NO EDIT THIS SECTION)
 #------------------------------------------------------------------------------#
 ifeq ($(wildcard $(AMU_PM_RULES)),)
-$(info $(call AMU_SETUP_ANNOUNCE,Rules file,$(AMU_PM_RULES)))
-$(error unable to continue.)
+  $(info $(call AMU_SETUP_ANNOUNCE,Rules file,$(AMU_PM_RULES)))
+  $(error unable to continue.)
 else
-include $(AMU_PM_RULES)
+  include $(AMU_PM_RULES)
 endif
 
 ################################################################################
