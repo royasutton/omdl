@@ -1,7 +1,9 @@
 #!/usr/bin/make -f
 ################################################################################
 #
-# omdl Project Makefile (openscad-amu df1)
+# Project Makefile
+# OpenSCAD Mechanical Design Library (omdl)
+# requires the openscad-amu Design Flow.
 #
 ################################################################################
 
@@ -14,12 +16,12 @@ AMU_PM_PREFIX       := $(AMU_LIB_PATH)/include/pmf/
 AMU_PM_INIT         := $(AMU_PM_PREFIX)amu_pm_init
 AMU_PM_RULES        := $(AMU_PM_PREFIX)amu_pm_rules
 
-# Uncomment for increased verbosity or debugging.
+# Uncomment following for increased verbosity and/or debugging.
 # AMU_PM_VERBOSE    := defined
 # AMU_PM_DEBUG      := defined
 
 #------------------------------------------------------------------------------#
-# Setup Announcements
+# Project Announcements
 #------------------------------------------------------------------------------#
 define AMU_SETUP_ANNOUNCE
 
@@ -45,23 +47,44 @@ define OPENSCAD_SETUP_ANNOUNCE
 
 endef
 
+define IMAGEMAGICK_CODER_ANNOUNCE
+
+  The current ImageMagick security policy denies access rights ($2)
+  to a coder ($1) required to compile this library. Please grant
+  these rights in the policy.xml file as follows;
+
+    <policy domain="coder" rights="$3" pattern="$1" />
+
+  command:
+
+    $$ policy_path=$$(identify -list configure |
+        sed -n "/CONFIGURE_PATH/s/CONFIGURE_PATH[[:space:]]*//p")
+
+    $$ sudo sed -i.orig $\\
+        '/"$1"/s/rights="[^"]*"/rights="$3"/' $\\
+        $${policy_path}policy.xml
+
+  See: http://imagemagick.org/script/security-policy.php
+
+endef
+
 #------------------------------------------------------------------------------#
-# Project Makefile Init (DO NO EDIT THIS SECTION)
+# Design Flow Init (DO NO EDIT THIS SECTION)
 #------------------------------------------------------------------------------#
 ifeq ($(wildcard $(AMU_PM_INIT)),)
-$(info $(call AMU_SETUP_ANNOUNCE,Init file,$(AMU_PM_INIT)))
-$(error unable to continue.)
+  $(info $(call AMU_SETUP_ANNOUNCE,Init file,$(AMU_PM_INIT)))
+  $(error unable to continue.)
 else
-include $(AMU_PM_INIT)
+  include $(AMU_PM_INIT)
 endif
 
 #------------------------------------------------------------------------------#
-# Default Overrides
+# Overrides to Design Flow Configuration Defaults
 #------------------------------------------------------------------------------#
-#parallel_jobs                          := $(true)
-#target_headings                        := $(false)
-#verbose_seam                           := $(false)
-#debug_dif_filter                       := $(true)
+# parallel_jobs                         := $(true)
+# target_headings                       := $(false)
+# verbose_seam                          := $(false)
+# debug_dif_filter                      := $(true)
 
 output_path_add_project_version         := $(false)
 
@@ -75,22 +98,42 @@ release_archive_doxygen                 := $(true)
 release_archive_scopes                  := $(false)
 
 #------------------------------------------------------------------------------#
-# Project Version Checks
+# Design Flow Tools Assertions
 #------------------------------------------------------------------------------#
 ifeq ($(version_checks),$(true))
 
-$(call check_version,openscad,gt,2018.01,$(true),$(call OPENSCAD_SETUP_ANNOUNCE,2018.01))
+# require recent OpenSCAD version.
+$(call check_version,openscad,gt,2018.01,$(true), \
+  $(call OPENSCAD_SETUP_ANNOUNCE,2018.01) \
+)
 
-$(call check_version,amuseam,ge,$(subst v,,$(AMU_TOOL_VERSION)),$(true),requires openscad-amu $(AMU_TOOL_VERSION) or later.)
+# require openscad-amu version stated by $(AMU_TOOL_VERSION).
+$(call check_version,amuseam,ge,$(subst v,,$(AMU_TOOL_VERSION)),$(true), \
+  requires openscad-amu $(AMU_TOOL_VERSION) or later. \
+)
 
+# warn of known build issue when latax output configured.
 ifeq ($(generate_latex),$(true))
-$(call check_version,doxygen,le,1.8.9.1,$(true),latex output broken since v1.8.9.1.)
+$(call check_version,doxygen,le,1.8.9.1,$(true), \
+  latex output broken since v1.8.9.1. \
+)
+endif
+
+# require imagemagick/convert utility has eps-coder access rights.
+ifneq ($(shell identify -list policy | $(grep) EPS),)
+  ifneq ($(strip $(shell \
+          identify -list policy \
+          | $(sed) -n '/pattern: EPS/{x;p;d;}; x' \
+          | $(sed) -n 's/^.*rights:[[:space:]]*//p' \
+       )),Read Write)
+    $(error $(call IMAGEMAGICK_CODER_ANNOUNCE,EPS,Read Write,read|write))
+  endif
 endif
 
 endif
 
 #------------------------------------------------------------------------------#
-# Project
+# Library Project Basics
 #------------------------------------------------------------------------------#
 project_name        := omdl
 project_version     := $(shell git describe --tags --dirty --always)
@@ -98,100 +141,45 @@ project_brief       := OpenSCAD Mechanical Design Library
 
 docs_group_id       := primitives
 project_logo        := mainpage_logo_top_55x55
-seam_defines        := INCLUDE_PATH=include
+seam_defines        := INCLUDE_PATH=include/mfs
 
 doxygen_config      := Doxyfile
 doxygen_html_footer := Doxyfooter.html
 doxygen_html_css    := Doxystyle.css
 
-project_files_add   := $(wildcard include/*.mfs)
+project_files_add   := $(wildcard include/mfs/*.mfs) \
+                       $(wildcard include/mf/*.mk)
 
 library_info        := README.md \
                        lgpl-2.1.txt
 
-# Polyhedra
-library_db01        := database/geometry/polyhedra/anti_prisms \
-                       database/geometry/polyhedra/archimedean_duals \
-                       database/geometry/polyhedra/archimedean \
-                       database/geometry/polyhedra/cupolas \
-                       database/geometry/polyhedra/dipyramids \
-                       database/geometry/polyhedra/johnson \
-                       database/geometry/polyhedra/platonic \
-                       database/geometry/polyhedra/prisms \
-                       database/geometry/polyhedra/pyramids \
-                       database/geometry/polyhedra/trapezohedron \
-                       database/geometry/polyhedra/polyhedra_all
+#------------------------------------------------------------------------------#
+# Include Library Modules Makefiles
+#------------------------------------------------------------------------------#
+# use modules
+include include/mf/modules.mk
 
-library_db01_src    := database_src/geometry/polyhedra/Makefile \
-                       database_src/geometry/polyhedra/src/Makefile \
-                       database_src/geometry/polyhedra/src/convert \
-                       database_src/geometry/polyhedra/src/convert.conf \
-                       database_src/geometry/polyhedra/src/convert.text \
-                       database_src/geometry/polyhedra/src/dist/fetch.bash \
-                       database_src/geometry/polyhedra/src/dist/rename
-
-library             := $(library_db01) \
-                       \
-                       mainpage \
-                       omdl-base \
-                       \
-                       console \
-                       constants \
-                       validation \
-                       \
-                       datatypes/datatypes-base \
-                       datatypes/datatypes_identify_scalar \
-                       datatypes/datatypes_identify_iterable \
-                       datatypes/datatypes_identify_list \
-                       datatypes/datatypes_operate_scalar \
-                       datatypes/datatypes_operate_iterable \
-                       datatypes/datatypes_operate_list \
-                       \
-                       datatypes/datatypes_map \
-                       datatypes/datatypes_table \
-                       \
-                       math/math-base \
-                       math/math_linear_algebra \
-                       math/math_vector_algebra \
-                       \
-                       math/math_bitwise \
-                       math/math_oshapes \
-                       math/math_polytope \
-                       math/math_triangle \
-                       math/math_utility \
-                       \
-                       shapes/shapes2d \
-                       shapes/shapes2de \
-                       shapes/shapes3d \
-                       \
-                       tools/tools_align \
-                       tools/tools_edge \
-                       tools/tools_polytope \
-                       tools/tools_utility \
-                       \
-                       units/units_angle \
-                       units/units_coordinate \
-                       units/units_length \
-                       units/units_resolution
+# library root module
+include rootmodule.mk
 
 #------------------------------------------------------------------------------#
-# Scope Excludes
+# Excluded Design Flow Scopes
 #------------------------------------------------------------------------------#
 # to exclude nothing (ie: build everything) from the command line, use:
 # make scopes_exclude="" all
 
-# shape manifests: only required when doing a release
+# exclude shape manifests; required only when doing a library "release."
 scopes_exclude      := manifest
 
-# database: normally pre-built and released by database makefiles
+# exclude database tests and statitics; required for complete documentation
+# build, but may be skipped during routine library development.
 scopes_exclude      += db_autotest db_autostat
 
 #------------------------------------------------------------------------------#
-# Release and Backup Additions
+# Design Flow Release Additions
 #------------------------------------------------------------------------------#
 # use recursive assignment '=' for references that use derived paths
 # such as: $(output_path), $(release_path), etc.
-
 release_files_add    = $(library_info) \
                        \
                        $(output_path)stl/mainpage_quickstart.stl \
@@ -203,18 +191,21 @@ release_files_add    = $(library_info) \
 
 release_archive_files_add := $(library_info)
 
+#------------------------------------------------------------------------------#
+# Library Source Backup Additions
+#------------------------------------------------------------------------------#
 backup_files_add    := $(library_info) \
                        \
-                       $(library_db01_src)
+                       $(library_backup_add)
 
 #------------------------------------------------------------------------------#
-# Project Makefile Rules (DO NO EDIT THIS SECTION)
+# Design Flow Rules (DO NO EDIT THIS SECTION)
 #------------------------------------------------------------------------------#
 ifeq ($(wildcard $(AMU_PM_RULES)),)
-$(info $(call AMU_SETUP_ANNOUNCE,Rules file,$(AMU_PM_RULES)))
-$(error unable to continue.)
+  $(info $(call AMU_SETUP_ANNOUNCE,Rules file,$(AMU_PM_RULES)))
+  $(error unable to continue.)
 else
-include $(AMU_PM_RULES)
+  include $(AMU_PM_RULES)
 endif
 
 ################################################################################

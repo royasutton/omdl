@@ -1,8 +1,8 @@
 //! Polygon and polyhedron mathematical functions.
 /***************************************************************************//**
-  \file   math_polytope.scad
+  \file
   \author Roy Allen Sutton
-  \date   2017
+  \date   2017-2018
 
   \copyright
 
@@ -194,7 +194,8 @@ function polytope_bbox_pf
   \param    l <integer-list-2> A line specified as a list of coordinate
             index pairs.
 
-  \param    r <boolean> Reverse the line start and end points.
+  \param    r <boolean> Reverse the start and end points of the line
+            specified as an edge index \p i.
 
   \returns  <line-3d|line-2d> The line as a pair of coordinates.
 
@@ -353,7 +354,7 @@ function polytope_vertex_n
             given, the listed order of the coordinates \p c establishes
             the polygon path.
   \note     When \p e is not specified, it is computed from \p f using
-            polytope_faces2edges() iff the line is identified by \p i.
+            polytope_faces2edges().
 *******************************************************************************/
 function polytope_edge_n
 (

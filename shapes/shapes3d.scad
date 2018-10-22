@@ -1,8 +1,8 @@
 //! Three-dimensional basic shapes.
 /***************************************************************************//**
-  \file   shapes3d.scad
+  \file
   \author Roy Allen Sutton
-  \date   2015-2017
+  \date   2015-2018
 
   \copyright
 

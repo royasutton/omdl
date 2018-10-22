@@ -1,8 +1,8 @@
 //! Two-dimensional basic shapes.
 /***************************************************************************//**
-  \file   shapes2d.scad
+  \file
   \author Roy Allen Sutton
-  \date   2015-2017
+  \date   2015-2018
 
   \copyright
 
@@ -249,11 +249,11 @@ module rectangle_c
   center = false
 )
 {
-  rx = edefined_or(size, 0, size);
-  ry = edefined_or(size, 1, rx);
+  od = all_defined([t, core]) ? (core + t*2) : size;
+  id = all_defined([t, size]) ? (size - t*2) : core;
 
-  od = all_defined([t, core]) ? (core + t) : size;
-  id = all_defined([t, size]) ? (size - t) : core;
+  rx = edefined_or(od, 0, od);
+  ry = edefined_or(od, 1, od);
 
   or = defined_or(vr1, vr);
   ir = defined_or(vr2, vr);

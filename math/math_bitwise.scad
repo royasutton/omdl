@@ -1,8 +1,8 @@
 //! Mathematical base-two bitwise binary functions.
 /***************************************************************************//**
-  \file   math_bitwise.scad
+  \file
   \author Roy Allen Sutton
-  \date   2017
+  \date   2017-2018
 
   \copyright
 

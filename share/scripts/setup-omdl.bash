@@ -754,6 +754,108 @@ function prerequisites_install() {
 }
 
 #------------------------------------------------------------------------------
+# assertions on prerequisite packages
+#------------------------------------------------------------------------------
+function prerequisites_assert() {
+  print_m "${FUNCNAME} begin"
+
+  function imagemagick_coder_rights_assert() {
+    local name="$1"
+    local rights="$2"
+
+    local coder_rights=$( \
+      identify -list policy |
+      sed -n "/pattern: ${name}/{x;p;d;}; x" |
+      sed -n 's/^.*rights:[[:space:]]*//p' \
+    )
+
+    # convert to lowercase
+    coder_rights=${coder_rights,,}
+
+    # rights defaults to all granted, so done if empty.
+    if [[ -n "${coder_rights}" ]] ; then
+      print_m "ImageMagick/convert ${name} coder rights = ${coder_rights}"
+
+      local failed_rights
+
+      for r in ${rights} ; do
+        [[ -n "${coder_rights##*${r}*}" ]] && failed_rights+="$r ";
+      done
+
+      if [[ -n "${failed_rights}" ]] ; then
+        print_m "--> failed rights = ${failed_rights}"
+
+        return 1
+      fi
+    else
+      print_m "ImageMagick/convert ${name} coder rights unlimited."
+    fi
+
+    return 0
+  }
+
+  function imagemagick_coder_rights_configure() {
+    local name="$1"
+    local rights="$2"
+
+    local policy_file=$( \
+      identify -list configure |
+      sed -n "/CONFIGURE_PATH/s/CONFIGURE_PATH[[:space:]]*//p" \
+    )policy.xml
+
+    print_m "Attempting to configure ImageMagick coder rights"
+    print_m "+ policy file = ${policy_file},"
+    print_m "+ coder = ${name},"
+    print_m "+ rights = ${rights}..."
+
+    local as_root="sudo"
+    local sed_edit="/\"${name}\"/s/rights=\"[^\"]*\"/rights=\"${rights}\"/"
+
+    print_m ${as_root} sed -i.orig \'${sed_edit}\' ${policy_file}
+
+    ${as_root} sed -i.orig ${sed_edit} ${policy_file} || return 1
+
+    return 0
+  }
+
+  #
+  # ImageMagick/convert coder rights policy
+  #
+  local imagemagick_coder_rights_list="
+    EPS=read|write
+  "
+
+  for icr in ${imagemagick_coder_rights_list} ; do
+    local name=${icr%=*}
+    local rights=${icr##*=}
+    local rlist=${rights//|/ }
+
+    print_m "Assert ImageMagick/convert coder rights ${name}=[${rlist}]"
+
+    if ! imagemagick_coder_rights_assert "${name}" "${rlist}" ; then
+      if ! imagemagick_coder_rights_configure "${name}" "${rights}" ; then
+        print_m "Attempt to configure ImageMagick/convert ${name} coder rights failed..."
+        print_m "Please correct before continuing."
+        print_m "See: http://imagemagick.org/script/security-policy.php"
+        exit 1
+      else
+        if imagemagick_coder_rights_assert "${name}" "${rlist}" ; then
+          print_m "--> Rights configured successfully..."
+        else
+          print_m "Unable to configure ImageMagick/convert ${name} coder rights..."
+          print_m "Please correct before continuing."
+          print_m "See: http://imagemagick.org/script/security-policy.php"
+          exit 1
+        fi
+      fi
+    fi
+
+  done
+
+  print_m "${FUNCNAME} end"
+}
+
+#------------------------------------------------------------------------------
 # clone or update a Git repository
 #------------------------------------------------------------------------------
 function repository_update() {
@@ -970,6 +1072,7 @@ function source_make() {
     print_m "checking system for prerequisites."
     prerequisites_check
     prerequisites_install
+    prerequisites_assert
   fi
 
   if [[ "${skip_prep}" == "yes" ]] ; then

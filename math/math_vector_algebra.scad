@@ -1,8 +1,8 @@
 //! Vector algebra mathematical functions.
 /***************************************************************************//**
-  \file   math_vector_algebra.scad
+  \file
   \author Roy Allen Sutton
-  \date   2015-2017
+  \date   2015-2018
 
   \copyright
 

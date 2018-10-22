@@ -1,8 +1,8 @@
 //! Length units and conversions.
 /***************************************************************************//**
-  \file   units_length.scad
+  \file
   \author Roy Allen Sutton
-  \date   2015-2017
+  \date   2015-2018
 
   \copyright
 

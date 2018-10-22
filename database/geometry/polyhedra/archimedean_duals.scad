@@ -1,6 +1,6 @@
-//! Table of polyhedra data group: \c archimedean_duals
+//! Polyhedra data table: \c archimedean_duals.
 /***************************************************************************//**
-  \file   archimedean_duals.scad
+  \file
   \author Roy Allen Sutton
   \date   2017-2018
 
@@ -34,7 +34,7 @@
     form, which is convenient when scaling. The data originates from
     one of three sources:
 
-      \li [Exact Mathematics] as presented by [Anthony Thyssen],
+      \li Exact Mathematics as presented by [Anthony Thyssen],
       \li the [Polyhedron Database] maintained by [Netlib], and
       \li an [Encyclopedia of Polyhedra] by [George W. Hart].
 
@@ -44,7 +44,6 @@
 
   [Anthony Thyssen]: http://www.ict.griffith.edu.au/anthony/anthony.html
   [Studies into Polyhedra]: http://www.ict.griffith.edu.au/anthony/graphics/polyhedra
-  [Exact Mathematics]: http://www.ict.griffith.edu.au/anthony/graphics/polyhedra/maths.shtml
 
   [George W. Hart]: http://www.georgehart.com
   [Encyclopedia of Polyhedra]: http://www.georgehart.com/virtual-polyhedra/vp.html

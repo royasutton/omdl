@@ -1,8 +1,8 @@
 //! Iterable data type operations.
 /***************************************************************************//**
-  \file   datatypes_operate_iterable.scad
+  \file
   \author Roy Allen Sutton
-  \date   2015-2017
+  \date   2015-2018
 
   \copyright
 
@@ -180,6 +180,23 @@ function count
     len(find(mv, v, 0, i))
   : len(smerge(search(mv, v, 0, i)));
 
+//! Test if an element exists at a specified index of an iterable value.
+/***************************************************************************//**
+  \param    i <integer> An element index.
+  \param    v \<value> An iterable value.
+
+  \returns  <boolean> \b true when the element \p i of \p v, \p v[i],
+            exists and \b false otherwise.
+            Returns \b undef when \p i is not an integer.
+*******************************************************************************/
+function eexists
+(
+  i,
+  v
+) = !is_integer( i ) ? undef
+  : (i < 0) ? false
+  : (len(v) > i);
+
 //! Check for the existence of a match value in an iterable value.
 /***************************************************************************//**
   \param    mv \<value> A match value.
@@ -254,6 +271,78 @@ function third( v ) = v[2];
             or is empty.
 *******************************************************************************/
 function last( v ) = v[len(v)-1];
+
+//! Return the middle element of an iterable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+
+  \returns  \<value> The middle element of \p v.
+            Returns \b undef when \p v is not defined, is not iterable,
+            or is empty.
+*******************************************************************************/
+function middle( v ) = v[len(v)/2];
+
+//! Return a list containing the first two elements of an iterable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+
+  \returns  \<list> A list containing the first two elements of \p v.
+            Returns \b undef when \p v is not defined, is not iterable,
+            or is empty.
+
+  \details
+
+  \note     Value may also be a range.
+*******************************************************************************/
+function first2( v ) = [v[0], v[1]];
+
+//! Return a list containing the first three elements of an iterable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+
+  \returns  \<list> A list containing the first three elements of \p v.
+            Returns \b undef when \p v is not defined, is not iterable,
+            or is empty.
+
+  \details
+
+  \note     Value may also be a range.
+*******************************************************************************/
+function first3( v ) = [v[0], v[1], v[2]];
+
+//! Return a list containing the last two elements of an iterable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+
+  \returns  \<list> A list containing the last two elements of \p v.
+            Returns \b undef when \p v is not defined, is not iterable,
+            or is empty.
+*******************************************************************************/
+function last2
+(
+  v
+) = let
+    (
+      l = len(v)
+    )
+    [v[l-2], v[l-1]];
+
+//! Return a list containing the last three elements of an iterable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+
+  \returns  \<list> A list containing the last three elements of \p v.
+            Returns \b undef when \p v is not defined, is not iterable,
+            or is empty.
+*******************************************************************************/
+function last3
+(
+  v
+) = let
+    (
+      l = len(v)
+    )
+    [v[l-3], v[l-2], v[l-1]];
 
 //! Return a list containing the first n elements of an iterable value.
 /***************************************************************************//**
@@ -615,6 +704,42 @@ function strip
   : (first(v) == mv) ? concat(strip(ntail(v), mv))
   : concat(nfirst(v), strip(ntail(v), mv));
 
+//! Apply a mask to an interable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+  \param    m \<value> An element mask.
+  \param    r <boolean> Right align the mask and value.
+  \param    o <integer> A positive or negative mask offset.
+  \param    u \<value> The value assigned to undefined and non-existing
+            elements.
+  \param    z \<value> The value assigned to zeroed elements.
+
+  \returns  \<value> The resulting masked value.
+            Returns \b undef when \p m is not defined or is not iterable.
+            Returns \b empty_lst when \p m is empty.
+*******************************************************************************/
+function mask
+(
+  v,
+  m,
+  r = false,
+  o = 0,
+  u = undef,
+  z = 0
+) = not_defined(m) ? undef
+  : !is_iterable(m) ? undef
+  : is_empty(m) ? empty_lst
+  : let
+    (
+      j = ((r == true) ? len(v) - len(m) : 0) + o
+    )
+    [
+      for (i = [0 : len(m)-1])
+        (m[i] == 1) ?
+          edefined_or(v, i+j, u)
+        : eexists(i+j, v) ? z : u
+    ];
+
 //! Return the unique elements of an iterable value.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
@@ -725,6 +850,19 @@ BEGIN_SCOPE validate;
         1,                                                  // t09
         1,                                                  // t10
         1                                                   // t11
+      ],
+      ["eexists_5",
+        false,                                              // t01
+        false,                                              // t02
+        false,                                              // t03
+        true,                                               // t04
+        false,                                              // t05
+        true,                                               // t06
+        false,                                              // t07
+        false,                                              // t08
+        false,                                              // t09
+        false,                                              // t10
+        true                                                // t11
       ],
       ["exists_S1",
         false,                                              // t01
@@ -963,6 +1101,19 @@ BEGIN_SCOPE validate;
         [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]],            // t10
         [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
       ],
+      ["mask_01R",
+        [undef,undef],                                      // t01
+        [undef,undef],                                      // t02
+        [undef,undef],                                      // t03
+        [0,"g"],                                            // t04
+        [0,"banana"],                                       // t05
+        [0,"s"],                                            // t06
+        [undef,undef],                                      // t07
+        [0,[2,3]],                                          // t08
+        [0,[4,5]],                                          // t09
+        [0,["a","b","c"]],                                  // t10
+        [0,15]                                              // t11
+      ],
       ["unique",
         undef,                                              // t01
         empty_lst,                                          // t02
@@ -1007,11 +1158,17 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "edefined_or_DE3", edefined_or(get_value(vid),3,"default"), vid );
     for (vid=test_ids) run_test( "find_12", find([1,2],get_value(vid)), vid );
     for (vid=test_ids) run_test( "count_S1", count(1,get_value(vid),true), vid );
+    for (vid=test_ids) run_test( "eexists_5", eexists(5,get_value(vid)), vid );
     for (vid=test_ids) run_test( "exists_S1", exists(1,get_value(vid),true), vid );
     for (vid=test_ids) run_test( "first", first(get_value(vid)), vid );
     for (vid=test_ids) run_test( "second", second(get_value(vid)), vid );
     for (vid=test_ids) run_test( "third", third(get_value(vid)), vid );
     for (vid=test_ids) run_test( "last", last(get_value(vid)), vid );
+    log_info( "not testing: middle()" );
+    log_info( "not testing: first2()" );
+    log_info( "not testing: first3()" );
+    log_info( "not testing: last2()" );
+    log_info( "not testing: last3()" );
     for (vid=test_ids) run_test( "nfirst_1", nfirst(get_value(vid),n=1), vid );
     for (vid=test_ids) run_test( "nlast_1", nlast(get_value(vid),n=1), vid );
     for (vid=test_ids) run_test( "nhead_1", nhead(get_value(vid),n=1), vid );
@@ -1023,6 +1180,7 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "insert_T0", insert(0,get_value(vid),mv=["x","r","apple","s",[2,3],5]), vid );
     for (vid=test_ids) run_test( "delete_T0", delete(get_value(vid),mv=["x","r","apple","s",[2,3],5]), vid );
     for (vid=test_ids) run_test( "strip", strip(get_value(vid)), vid );
+    for (vid=test_ids) run_test( "mask_01R", mask(get_value(vid),[0,1],r=true), vid );
     for (vid=test_ids) run_test( "unique", unique(get_value(vid)), vid );
 
     // end-of-tests

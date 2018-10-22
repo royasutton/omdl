@@ -1,8 +1,8 @@
 //! Iterable data type identification.
 /***************************************************************************//**
-  \file   datatypes_identify_iterable.scad
+  \file
   \author Roy Allen Sutton
-  \date   2015-2017
+  \date   2015-2018
 
   \copyright
 

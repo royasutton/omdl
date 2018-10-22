@@ -1,8 +1,8 @@
-//! Documentation main page.
+//! Library Documentation: main page.
 /***************************************************************************//**
-  \file   mainpage.scad
+  \file
   \author Roy Allen Sutton
-  \date   2015-2017
+  \date   2015-2018
 
   \copyright
 
@@ -26,6 +26,10 @@
     02110-1301, USA; or see <http://www.gnu.org/licenses/>.
 
 *******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// Introduction.
+//----------------------------------------------------------------------------//
 
 /***************************************************************************//**
   \mainpage omdl
@@ -434,82 +438,6 @@
   \page tv_math Math
     \li \subpage tv_math_vector_algebra
     \li \subpage tv_math_bitwise
-*******************************************************************************/
-
-//----------------------------------------------------------------------------//
-// group categories.
-//----------------------------------------------------------------------------//
-
-/***************************************************************************//**
-  \defgroup constants Constants
-  \brief    Design constant definitions.
-*******************************************************************************/
-
-/***************************************************************************//**
-  \defgroup database Database
-  \brief    Design specification data.
-  @{
-
-  \defgroup database_component Component
-  \brief    Component specifications.
-
-  \defgroup database_electrical Electrical
-  \brief    Electrical specifications.
-
-  \defgroup database_geometry Geometry
-  \brief    Predefined geometry.
-
-  \defgroup database_material Material
-  \brief    Material specifications.
-
-  @}
-*******************************************************************************/
-
-/***************************************************************************//**
-  \defgroup datatypes Datatypes
-  \brief    Data type definitions and operators.
-  @{
-
-    See \ref dt for nomenclature, assumptions, and conventions used to
-    specify values and data types throughout the library.
-
-  \defgroup datatypes_identify Identification
-  \brief    Compile-time data type identification and tests.
-
-  \defgroup datatypes_operate Operations
-  \brief    Data type operation.
-
-  @}
-*******************************************************************************/
-
-/***************************************************************************//**
-  \defgroup math Math
-  \brief    Mathematical functions.
-*******************************************************************************/
-
-/***************************************************************************//**
-  \defgroup parts Parts
-  \brief    Parametric parts and assemblies.
-*******************************************************************************/
-
-/***************************************************************************//**
-  \defgroup shapes Shapes
-  \brief    2d and 3d shapes.
-*******************************************************************************/
-
-/***************************************************************************//**
-  \defgroup tools Tools
-  \brief    Design tools and techniques.
-*******************************************************************************/
-
-/***************************************************************************//**
-  \defgroup units Units
-  \brief    Units and unit conversions.
-*******************************************************************************/
-
-/***************************************************************************//**
-  \defgroup utilities Utilities
-  \brief    General utilities.
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
