@@ -50,15 +50,19 @@ endef
 define IMAGEMAGICK_CODER_ANNOUNCE
 
   The current ImageMagick security policy denies access rights ($2)
-  to the $1 coder required to compile this library.
+  to a coder ($1) required to compile this library. Please grant
+  these rights in the policy.xml file as follows;
 
-  Please grant these rights by editing /etc/ImageMagick*/policy.xml.
-  text: <policy domain="coder" rights="$3" pattern="$1" />
+    <policy domain="coder" rights="$3" pattern="$1" />
 
-  example:
-  $$ sudo sed -i.orig $\\
-         '/$1/s/rights="[^"]*"/rights="$3"/' $\\
-         /etc/ImageMagick-6/policy.xml
+  command:
+
+    $$ policy_path=$$(identify -list configure |
+        sed -n "/CONFIGURE_PATH/s/CONFIGURE_PATH[[:space:]]*//p")
+
+    $$ sudo sed -i.orig $\\
+        '/"$1"/s/rights="[^"]*"/rights="$3"/' $\\
+        $${policy_path}policy.xml
 
   See: http://imagemagick.org/script/security-policy.php
 
