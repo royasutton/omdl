@@ -9,21 +9,31 @@
 # Defaults
 ################################################################################
 
-#------------------------------------------------------------------------------#
-# default local-module name
-#------------------------------------------------------------------------------#
-
-ifndef local_module_name
-  local_module_name := module
+# default module name (predefine before calling AMU_PM_INIT)
+ifndef modules_name
+  modules_name                          := module
+else
+  $(call amu_pm_m,using predefined value for $$(modules_name))
 endif
 
 #------------------------------------------------------------------------------#
-# initialize empty library file lists
+# initialize file lists
+#------------------------------------------------------------------------------#
+# use recursive assignment '=' for references that use derived paths
+
+design                                  :=
+library                                 :=
+
+modules                                 :=
+
+modules_release_add                      =
+modules_backup_add                      :=
+
+#------------------------------------------------------------------------------#
+# Modules Control Variable List
 #------------------------------------------------------------------------------#
 
-library             :=
-library_backup_add  :=
-library_modules     :=
+modules_control_variables :=
 
 ################################################################################
 # eof

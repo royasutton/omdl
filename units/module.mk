@@ -1,6 +1,8 @@
 ################################################################################
-# Library Module
+# Module
 ################################################################################
+$(eval $(call clear-local-module))
+#------------------------------------------------------------------------------#
 
 local_path        :=  units
 
@@ -11,6 +13,8 @@ local_library     :=  module \
                       units_length \
                       units_resolution
 
+local_release_add :=
+
 local_backup_add  :=
 
 local_submodules  :=
@@ -19,7 +23,6 @@ local_submodules  :=
 # add local module
 #------------------------------------------------------------------------------#
 $(eval $(call add-local-module))
-$(eval $(call clear-local-module))
 
 ################################################################################
 # eof

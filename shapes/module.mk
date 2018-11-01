@@ -1,6 +1,8 @@
 ################################################################################
-# Library Module
+# Module
 ################################################################################
+$(eval $(call clear-local-module))
+#------------------------------------------------------------------------------#
 
 local_path        :=  shapes
 
@@ -10,6 +12,13 @@ local_library     :=  module \
                       shapes2de \
                       shapes3d
 
+local_release_add :=  svg/shapes2d_manifest.svg \
+                      \
+                      stl/shapes2de_manifest.stl \
+                      stl/shapes3d_manifest_1.stl \
+                      stl/shapes3d_manifest_2.stl \
+
+
 local_backup_add  :=
 
 local_submodules  :=
@@ -18,7 +27,6 @@ local_submodules  :=
 # add local module
 #------------------------------------------------------------------------------#
 $(eval $(call add-local-module))
-$(eval $(call clear-local-module))
 
 ################################################################################
 # eof

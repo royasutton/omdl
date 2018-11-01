@@ -1,6 +1,8 @@
 ################################################################################
-# Library Module
+# Module
 ################################################################################
+$(eval $(call clear-local-module))
+#------------------------------------------------------------------------------#
 
 local_path        :=  datatypes
 
@@ -18,6 +20,8 @@ local_library     :=  module \
                       datatypes_map \
                       datatypes_table
 
+local_release_add :=
+
 local_backup_add  :=
 
 local_submodules  :=
@@ -26,7 +30,6 @@ local_submodules  :=
 # add local module
 #------------------------------------------------------------------------------#
 $(eval $(call add-local-module))
-$(eval $(call clear-local-module))
 
 ################################################################################
 # eof

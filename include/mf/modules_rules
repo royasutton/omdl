@@ -13,7 +13,7 @@
 # Build Targets
 #------------------------------------------------------------------------------#
 
-.PHONY:	all-modules
+.PHONY: all-modules
 all-modules: | silent
 	$(call target_end)
 
@@ -43,10 +43,16 @@ uninstall-modules: | silent
 
 .PHONY: info-modules
 info-modules: | silent
-	$(call heading1, Project Modules)
-	$(call enumerate_variable,library,$(false),$(false))
-	$(call enumerate_variable,library_backup_add,$(false),$(false))
-	$(call enumerate_variable,library_modules,$(false),$(false))
+	$(call heading1, Modules)
+	$(call list_variables,$(modules_control_variables),$(true), control)
+	$(call list_variables,$(modules_config_variables),$(false), variables)
+	$(foreach x, \
+		design \
+		library \
+		modules \
+		modules_release_add \
+		modules_backup_add \
+	,$(call enumerate_variable,$x,$(false),$(false)))
 
 ################################################################################
 # eof

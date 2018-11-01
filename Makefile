@@ -182,34 +182,27 @@ include rootmodule.mk
 # make scopes_exclude="" all
 
 # exclude shape manifests; required only when doing a library "release."
-scopes_exclude      := manifest
+scopes_exclude                := manifest
 
 # exclude database tests and statitics; required for complete documentation
 # build, but may be skipped during routine library development.
-scopes_exclude      += db_autotest db_autostat
+scopes_exclude                += db_autotest \
+                                 db_autostat
 
 #------------------------------------------------------------------------------#
 # Design Flow Release Additions
 #------------------------------------------------------------------------------#
 # use recursive assignment '=' for references that use derived paths
-# such as: $(output_path), $(release_path), etc.
-release_files_add    = $(library_info) \
-                       \
-                       $(output_path)stl/mainpage_quickstart.stl \
-                       $(output_path)svg/shapes2d_manifest.svg \
-                       $(output_path)stl/shapes2de_manifest.stl \
-                       $(output_path)stl/shapes3d_manifest_1.stl \
-                       $(output_path)stl/shapes3d_manifest_2.stl \
-                       $(output_path)stl/tools_edge_manifest.stl
+release_files_add              = $(library_info) \
+                                 $(modules_release_add)
 
-release_archive_files_add := $(library_info)
+release_archive_files_add      = $(library_info)
 
 #------------------------------------------------------------------------------#
 # Library Source Backup Additions
 #------------------------------------------------------------------------------#
-backup_files_add    := $(library_info) \
-                       \
-                       $(library_backup_add)
+backup_files_add              := $(library_info) \
+                                 $(modules_backup_add)
 
 #------------------------------------------------------------------------------#
 # Design Flow Rules (DO NO EDIT THIS SECTION)
