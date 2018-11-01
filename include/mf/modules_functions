@@ -1,16 +1,13 @@
+#!/usr/bin/make -f
 ################################################################################
 #
-# Library Local-Modules
+# Modules
 #
-# Nonrecursive multi-directory scheme for modular library construction.
 ################################################################################
 
-#------------------------------------------------------------------------------#
-# default local module name
-#------------------------------------------------------------------------------#
-ifndef local_module_name
-  local_module_name := module
-endif
+################################################################################
+# Functions
+################################################################################
 
 # append local module files to library file lists
 #------------------------------------------------------------------------------#
@@ -54,27 +51,6 @@ define clear-local-module
   undefine local_backup_add
   undefine local_submodules
 endef
-
-#------------------------------------------------------------------------------#
-# initialize library file lists
-#------------------------------------------------------------------------------#
-library             :=
-library_backup_add  :=
-library_modules     :=
-
-################################################################################
-# target rules
-################################################################################
-
-#------------------------------------------------------------------------------#
-# target: info-modules
-#------------------------------------------------------------------------------#
-.PHONY: info-modules
-info-modules: | silent
-	$(call heading1, Project Modules)
-	$(call enumerate_variable,library,$(false),$(false))
-	$(call enumerate_variable,library_backup_add,$(false),$(false))
-	$(call enumerate_variable,library_modules,$(false),$(false))
 
 ################################################################################
 # eof

@@ -3,22 +3,24 @@
 #
 # Project Makefile
 # OpenSCAD Mechanical Design Library (omdl)
-# requires the openscad-amu Design Flow.
 #
 ################################################################################
 
-AMU_TOOL_VERSION    := v2.1
+AMU_TOOL_VERSION              := v2.2
 
-AMU_TOOL_PREFIX     := /usr/local/bin/
-AMU_LIB_PATH        := /usr/local/share/openscad-amu/$(AMU_TOOL_VERSION)
+AMU_TOOL_PREFIX               := /usr/local/bin/
+AMU_LIB_PATH                  := /usr/local/share/openscad-amu/$(AMU_TOOL_VERSION)
 
-AMU_PM_PREFIX       := $(AMU_LIB_PATH)/include/pmf/
-AMU_PM_INIT         := $(AMU_PM_PREFIX)amu_pm_init
-AMU_PM_RULES        := $(AMU_PM_PREFIX)amu_pm_rules
+AMU_PM_PREFIX                 := $(AMU_LIB_PATH)/include/pmf/
+AMU_PM_INIT                   := $(AMU_PM_PREFIX)amu_pm_init
+AMU_PM_RULES                  := $(AMU_PM_PREFIX)amu_pm_rules
+
+AMU_PM_COMPONENTS_LOCAL_PATH  := include/mf
+AMU_PM_COMPONENTS_LOCAL       := modules
 
 # Uncomment following for increased verbosity and/or debugging.
-# AMU_PM_VERBOSE    := defined
-# AMU_PM_DEBUG      := defined
+# AMU_PM_VERBOSE              := defined
+# AMU_PM_DEBUG                := defined
 
 #------------------------------------------------------------------------------#
 # Project Announcements
@@ -81,21 +83,34 @@ endif
 #------------------------------------------------------------------------------#
 # Overrides to Design Flow Configuration Defaults
 #------------------------------------------------------------------------------#
-# parallel_jobs                         := $(true)
 # target_headings                       := $(false)
 # verbose_seam                          := $(false)
 # debug_dif_filter                      := $(true)
 
+output_root                             := build
 output_path_add_project_version         := $(false)
+
+scopes_output_prefix                    := omdl-amu/
+prefix_scopes_output_path               := $(true)
+prefix_scopes_output_prefix             := $(true)
+prefix_scopes_input_prefix              := $(true)
+
+doxygen_output_prefix                   := docs/
+prefix_doxygen_output_path              := $(true)
+prefix_doxygen_output_prefix            := $(true)
 
 targets_depends_project                 := $(false)
 version_checks                          := $(true)
+version_checks_skip_warnings            := $(true)
 generate_latex                          := $(false)
 
+release_root                            := release
 release_project                         := $(false)
 release_library                         := $(false)
 release_archive_doxygen                 := $(true)
 release_archive_scopes                  := $(false)
+
+backup_root                             := backups
 
 #------------------------------------------------------------------------------#
 # Design Flow Tools Assertions
@@ -154,12 +169,10 @@ library_info        := README.md \
                        lgpl-2.1.txt
 
 #------------------------------------------------------------------------------#
-# Include Library Modules Makefiles
+# Include Library Modules
 #------------------------------------------------------------------------------#
-# use modules
-include include/mf/modules.mk
 
-# library root module
+# root module
 include rootmodule.mk
 
 #------------------------------------------------------------------------------#
