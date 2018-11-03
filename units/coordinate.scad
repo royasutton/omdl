@@ -79,10 +79,10 @@ include <../constants.scad>;
       \skip include
       \until to="c");
 
-    \b Result (base_coordinates = \b c): \include coordinate_example_c.log
-    \b Result (base_coordinates = \b p): \include coordinate_example_p.log
-    \b Result (base_coordinates = \b y): \include coordinate_example_y.log
-    \b Result (base_coordinates = \b s): \include coordinate_example_s.log
+    \b Result (base_unit_coordinate = \b c): \include coordinate_example_c.log
+    \b Result (base_unit_coordinate = \b p): \include coordinate_example_p.log
+    \b Result (base_unit_coordinate = \b y): \include coordinate_example_y.log
+    \b Result (base_unit_coordinate = \b s): \include coordinate_example_s.log
 
     [coordinate system]: https://en.wikipedia.org/wiki/Coordinate_system
     [cartesian]: https://en.wikipedia.org/wiki/Cartesian_coordinate_system
@@ -97,7 +97,7 @@ include <../constants.scad>;
 //----------------------------------------------------------------------------//
 
 //! <string> The base coordinate system.
-base_coordinates = "c";
+base_unit_coordinate = "c";
 
 //! <boolean> When converting to angular measures add 360 to negative angles.
 coordinates_positive_angles = true;
@@ -111,7 +111,7 @@ coordinates_positive_angles = true;
 *******************************************************************************/
 function coordinates_name
 (
-  s = base_coordinates
+  s = base_unit_coordinate
 ) = (s == "c") ? "cartesian"
   : (s == "p") ? "polar"
   : (s == "y") ? "cylindrical"
@@ -229,8 +229,8 @@ function coordinate_to_c
 function convert_coordinate
 (
   c,
-  from = base_coordinates,
-  to   = base_coordinates
+  from = base_unit_coordinate,
+  to   = base_unit_coordinate
 ) = coordinate_c_to( coordinate_to_c( c, from ), to );
 
 //! Radially scale a list of 2d cartesian coordinates.
@@ -347,7 +347,7 @@ BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <units/coordinate.scad>;
 
-    base_coordinates = "c";
+    base_unit_coordinate = "c";
 
     // get the base coordinate system name
     cs = coordinates_name();
@@ -374,7 +374,7 @@ BEGIN_SCOPE example;
   BEGIN_MFSCRIPT;
     include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
 
-    defines   name "system" define "base_coordinates" strings "c p y s";
+    defines   name "system" define "base_unit_coordinate" strings "c p y s";
     variables add_opts_combine "system";
 
     include --path "${INCLUDE_PATH}" script_std.mfs;
