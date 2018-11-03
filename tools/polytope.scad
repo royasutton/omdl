@@ -30,8 +30,8 @@
   \ingroup tools tools_polytope
 *******************************************************************************/
 
-include <../math/math_polytope.scad>;
-include <tools_align.scad>;
+include <../math/polytope.scad>;
+include <align.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -188,7 +188,7 @@ module polytope_number
     \b Example
 
     \code{.c}
-    include <tools/tools_polytope.scad>;
+    include <tools/polytope.scad>;
 
     s = second(xy_plane_os) * 25;
     p = linear_extrude_pp2pf(s, h=50);

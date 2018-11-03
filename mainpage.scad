@@ -447,8 +447,8 @@
 /*
 BEGIN_SCOPE logo;
   BEGIN_OPENSCAD;
-    include <shapes/shapes2de.scad>;
-    include <shapes/shapes3d.scad>;
+    include <shapes/derivative_2de.scad>;
+    include <shapes/derivative_3d.scad>;
 
     $fn = 36;
 

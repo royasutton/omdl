@@ -1,4 +1,4 @@
-//! Three-dimensional basic shapes.
+//! Common three-dimensional derivative shapes.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -29,10 +29,10 @@
 
   \todo Complete rounded cylinder.
 
-  \ingroup shapes shapes_3d
+  \ingroup shapes shapes_derivative_3d
 *******************************************************************************/
 
-include <shapes2d.scad>;
+include <derivative_2d.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -65,8 +65,8 @@ include <shapes2d.scad>;
   \addtogroup shapes
   @{
 
-  \defgroup shapes_3d 3d Shapes
-  \brief    Three-dimensional geometric shapes.
+  \defgroup shapes_derivative_3d 3d Shapes
+  \brief    Three-dimensional derivative shapes.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -75,7 +75,7 @@ include <shapes2d.scad>;
 // openscad-amu macros
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \amu_define scope (shapes3d_dim)
+  \amu_define scope (derivative_3d_dim)
   \amu_define tuple (qvga_diag)
 
   \amu_define example_dim
@@ -691,7 +691,7 @@ module torus_ep
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <shapes/shapes3d.scad>;
+    include <shapes/derivative_3d.scad>;
 
     shape = "cuboid";
     $fn = 72;
@@ -744,7 +744,7 @@ END_SCOPE;
 
 BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
-    include <shapes/shapes3d.scad>;
+    include <shapes/derivative_3d.scad>;
 
     group = 1;
     $fn = 72;

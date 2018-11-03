@@ -43,7 +43,7 @@
     \b Example
 
       \dontinclude console_example.scad
-      \skip use
+      \skip include
       \until log_error( message );
 
     \b Result \include console_example.log

@@ -1,6 +1,8 @@
 ################################################################################
-# Library Root Module
+# Root Module
 ################################################################################
+$(eval $(call clear-local-module))
+#------------------------------------------------------------------------------#
 
 local_path        :=
 
@@ -12,6 +14,8 @@ local_library     :=  mainpage \
                       console \
                       constants \
                       validation
+
+local_release_add :=  stl/mainpage_quickstart.stl
 
 local_backup_add  :=
 
@@ -27,13 +31,17 @@ local_submodules  :=  datatypes \
 # add only when present
 local_submodules  +=  $(wildcard database_src)
 
-# add (this) root module
-library_modules   +=  $(lastword $(MAKEFILE_LIST))
+#------------------------------------------------------------------------------#
+# add local module
+#------------------------------------------------------------------------------#
 
-#------------------------------------------------------------------------------#
-# add root module
-#------------------------------------------------------------------------------#
+# add (this) root module
+modules +=  $(lastword $(MAKEFILE_LIST))
+
+# root module
 $(eval $(call add-local-module))
+
+# cleanup after last module
 $(eval $(call clear-local-module))
 
 ################################################################################

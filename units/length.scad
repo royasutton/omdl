@@ -65,19 +65,19 @@
 
     \b Example
 
-      \dontinclude units_length_example.scad
+      \dontinclude length_example.scad
       \skip include
       \until to="mm");
 
-    \b Result (base_unit_length = \b mm):  \include units_length_example_mm.log
-    \b Result (base_unit_length = \b cm):  \include units_length_example_cm.log
-    \b Result (base_unit_length = \b mil): \include units_length_example_mil.log
-    \b Result (base_unit_length = \b in):  \include units_length_example_in.log
+    \b Result (base_unit_length = \b mm):  \include length_example_mm.log
+    \b Result (base_unit_length = \b cm):  \include length_example_cm.log
+    \b Result (base_unit_length = \b mil): \include length_example_mil.log
+    \b Result (base_unit_length = \b in):  \include length_example_in.log
 
     \b Example (equivalent lengths)
 
-    \image html  units_length_dim_qvga_top.png "Unit Lengths"
-    \image latex units_length_dim_qvga_top.eps "Unit Lengths" width=4in
+    \image html  length_dim_qvga_top.png "Unit Lengths"
+    \image latex length_dim_qvga_top.eps "Unit Lengths" width=4in
 
   @{
 *******************************************************************************/
@@ -260,7 +260,7 @@ function convert_length
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <units/units_length.scad>;
+    include <units/length.scad>;
 
     base_unit_length = "mm";
 
@@ -298,7 +298,7 @@ END_SCOPE;
 
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <units/units_length.scad>;
+    include <units/length.scad>;
 
     module dim( uv=1, un="cm" ) {
       mx = 200.0;

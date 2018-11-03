@@ -1,4 +1,4 @@
-//! Other shapes mathematical functions.
+//! Mathematical functions for other shapes.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,7 +27,7 @@
 
   \details
 
-  \ingroup math math_oshapes
+  \ingroup math math_other_shape
 *******************************************************************************/
 
 include <../datatypes/datatypes-base.scad>;
@@ -37,7 +37,7 @@ include <../datatypes/datatypes-base.scad>;
   \addtogroup math
   @{
 
-  \defgroup math_oshapes Other Shapes
+  \defgroup math_other_shape Other Shapes
   \brief    Mathematical functions for other shapes.
   @{
 *******************************************************************************/

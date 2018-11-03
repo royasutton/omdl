@@ -45,7 +45,7 @@ include <datatypes/datatypes-base.scad>;
     \b Example
 
       \dontinclude validation_example.scad
-      \skip use
+      \skip include
       \until tvae2, 4) );
 
     \b Result \include validation_example.log

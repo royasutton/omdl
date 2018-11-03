@@ -396,9 +396,9 @@ dtr_polyhedra_pyramids =
 BEGIN_SCOPE db;
 BEGIN_SCOPE autostat;
   BEGIN_OPENSCAD;
-    include <math/math_polytope.scad>;
-    include <math/math_utility.scad>;
-    include <datatypes/datatypes_table.scad>;
+    include <math/polytope.scad>;
+    include <math/utility.scad>;
+    include <datatypes/table.scad>;
     include <database/geometry/polyhedra/pyramids.scad>;
 
     fs  = "^";
@@ -468,9 +468,9 @@ END_SCOPE;
 BEGIN_SCOPE db;
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <units/units_coordinate.scad>;
-    include <tools/tools_polytope.scad>;
-    include <datatypes/datatypes_table.scad>;
+    include <units/coordinate.scad>;
+    include <tools/polytope.scad>;
+    include <datatypes/table.scad>;
     include <database/geometry/polyhedra/pyramids.scad>;
 
     config = 0;
