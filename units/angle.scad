@@ -57,13 +57,13 @@ include <../constants.scad>;
 
     \b Example
 
-      \dontinclude units_angle_example.scad
+      \dontinclude angle_example.scad
       \skip include
       \until to="dms");
 
-    \b Result (base_angle_length = \b r):  \include units_angle_example_r.log
-    \b Result (base_angle_length = \b d):  \include units_angle_example_d.log
-    \b Result (base_angle_length = \b dms): \include units_angle_example_dms.log
+    \b Result (base_angle_length = \b r):   \include angle_example_r.log
+    \b Result (base_angle_length = \b d):   \include angle_example_d.log
+    \b Result (base_angle_length = \b dms): \include angle_example_dms.log
 
   @{
 *******************************************************************************/
@@ -154,7 +154,7 @@ function convert_angle
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <units/units_angle.scad>;
+    include <units/angle.scad>;
 
     base_unit_angle = "d";
 

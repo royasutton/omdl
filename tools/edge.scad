@@ -30,7 +30,7 @@
   \ingroup tools tools_edge
 *******************************************************************************/
 
-include <../shapes/shapes2d.scad>;
+include <../shapes/derivative_2d.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -73,7 +73,7 @@ include <../shapes/shapes2d.scad>;
 // openscad-amu macros
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \amu_define scope (tools_edge_dim)
+  \amu_define scope (edge_dim)
   \amu_define size  (qvga)
   \amu_define view  (diag)
 
@@ -269,7 +269,7 @@ module edge_add_r
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <tools/tools_edge.scad>;
+    include <tools/edge.scad>;
 
     shape = "edge_profile_r";
     $fn = 72;
@@ -298,7 +298,7 @@ END_SCOPE;
 
 BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
-    include <tools/tools_edge.scad>;
+    include <tools/edge.scad>;
 
     $fn = 72;
 

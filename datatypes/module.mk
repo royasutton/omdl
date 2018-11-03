@@ -10,15 +10,16 @@ local_library     :=  module \
                       \
                       datatypes-base \
                       \
-                      datatypes_identify_scalar \
-                      datatypes_identify_iterable \
-                      datatypes_identify_list \
-                      datatypes_operate_scalar \
-                      datatypes_operate_iterable \
-                      datatypes_operate_list \
+                      identify_scalar \
+                      identify_iterable \
+                      identify_list \
                       \
-                      datatypes_map \
-                      datatypes_table
+                      operate_scalar \
+                      operate_iterable \
+                      operate_list \
+                      \
+                      map \
+                      table
 
 local_release_add :=
 

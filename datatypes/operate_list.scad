@@ -34,11 +34,11 @@
     \li \subpage tv_datatypes_operate_list_r
 
   \page tv_datatypes_operate_list_s Script
-    \dontinclude datatypes_operate_list_validate.scad
+    \dontinclude operate_list_validate.scad
     \skip include
     \until end-of-tests
   \page tv_datatypes_operate_list_r Results
-    \include datatypes_operate_list_validate.log
+    \include operate_list_validate.log
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
@@ -746,7 +746,7 @@ BEGIN_SCOPE validate;
   BEGIN_OPENSCAD;
     include <console.scad>;
     include <datatypes/datatypes-base.scad>;
-    include <datatypes/datatypes_table.scad>;
+    include <datatypes/table.scad>;
     include <validation.scad>;
 
     show_passing = true;    // show passing tests

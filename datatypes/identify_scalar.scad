@@ -34,11 +34,11 @@
     \li \subpage tv_datatypes_identify_scalar_r
 
   \page tv_datatypes_identify_scalar_s Script
-    \dontinclude datatypes_identify_scalar_validate.scad
+    \dontinclude identify_scalar_validate.scad
     \skip include
     \until end-of-tests
   \page tv_datatypes_identify_scalar_r Results
-    \include datatypes_identify_scalar_validate.log
+    \include identify_scalar_validate.log
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
@@ -302,7 +302,7 @@ BEGIN_SCOPE validate;
   BEGIN_OPENSCAD;
     include <console.scad>;
     include <datatypes/datatypes-base.scad>;
-    include <datatypes/datatypes_table.scad>;
+    include <datatypes/table.scad>;
     include <validation.scad>;
 
     show_passing = true;    // show passing tests

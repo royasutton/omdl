@@ -33,11 +33,11 @@
     \li \subpage tv_math_vector_algebra_s
     \li \subpage tv_math_vector_algebra_r
   \page tv_math_vector_algebra_s Script
-    \dontinclude math_vector_algebra_validate.scad
+    \dontinclude vector_algebra_validate.scad
     \skip include
     \until end-of-tests
   \page tv_math_vector_algebra_r Results
-    \include math_vector_algebra_validate.log
+    \include vector_algebra_validate.log
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
@@ -421,8 +421,8 @@ function get_pnorm2nv
 BEGIN_SCOPE validate;
   BEGIN_OPENSCAD;
     include <console.scad>;
-    include <datatypes/datatypes_table.scad>;
-    include <math/math_vector_algebra.scad>;
+    include <datatypes/table.scad>;
+    include <math/vector_algebra.scad>;
     include <validation.scad>;
 
     show_passing = true;    // show passing tests

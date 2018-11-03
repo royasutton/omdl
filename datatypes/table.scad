@@ -45,11 +45,11 @@ include <datatypes-base.scad>;
 
     \b Example
 
-      \dontinclude datatypes_table_example.scad
-      \skip use
+      \dontinclude table_example.scad
+      \skip include
       \until ( tsum=tsum );
 
-    \b Result \include datatypes_table_example.log
+    \b Result \include table_example.log
 
   @{
 *******************************************************************************/
@@ -445,8 +445,8 @@ module table_dump
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <units/units_length.scad>;
-    include <datatypes/datatypes_table.scad>;
+    include <units/length.scad>;
+    include <datatypes/table.scad>;
 
     base_unit_length = "mm";
 

@@ -1,4 +1,4 @@
-//! Shape transformation utility tools.
+//! Shape transformation utilities.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -32,8 +32,8 @@
 
 include <../console.scad>;
 include <../math/math-base.scad>;
-include <../math/math_oshapes.scad>;
-include <../math/math_bitwise.scad>;
+include <../math/other_shape.scad>;
+include <../math/bitwise.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -76,7 +76,7 @@ include <../math/math_bitwise.scad>;
 // openscad-amu macros
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \amu_define scope (tools_utility_dim)
+  \amu_define scope (utility_dim)
   \amu_define tuple (qvga_diag)
 
   \amu_define example_dim
@@ -438,7 +438,7 @@ module grid_repeat
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <tools/tools_utility.scad>;
+    include <tools/utility.scad>;
 
     shape = "rotate_extrude_tr";
     $fn = 72;

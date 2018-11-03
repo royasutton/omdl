@@ -90,7 +90,7 @@ endif
 output_root                             := build
 output_path_add_project_version         := $(false)
 
-scopes_output_prefix                    := omdl-amu/
+scopes_output_prefix                    := amu/
 prefix_scopes_output_path               := $(true)
 prefix_scopes_output_prefix             := $(true)
 prefix_scopes_input_prefix              := $(true)

@@ -34,7 +34,7 @@
 
 include <../console.scad>;
 include <../constants.scad>;
-include <units_length.scad>;
+include <length.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -53,14 +53,14 @@ include <units_length.scad>;
 
     \b Example
 
-      \dontinclude units_resolution_example.scad
+      \dontinclude resolution_example.scad
       \skip include
       \until f));
 
-    \b Result (base_unit_length = \b mm):  \include units_resolution_example_mm.log
-    \b Result (base_unit_length = \b cm):  \include units_resolution_example_cm.log
-    \b Result (base_unit_length = \b mil): \include units_resolution_example_mil.log
-    \b Result (base_unit_length = \b in):  \include units_resolution_example_in.log
+    \b Result (base_unit_length = \b mm):  \include resolution_example_mm.log
+    \b Result (base_unit_length = \b cm):  \include resolution_example_cm.log
+    \b Result (base_unit_length = \b mil): \include resolution_example_mil.log
+    \b Result (base_unit_length = \b in):  \include resolution_example_in.log
 
   @{
 *******************************************************************************/
@@ -428,7 +428,7 @@ function resolution_facetsv
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <units/units_resolution.scad>;
+    include <units/resolution.scad>;
 
     base_unit_length = "in";
 

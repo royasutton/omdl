@@ -75,14 +75,14 @@ include <../constants.scad>;
 
     \b Example
 
-      \dontinclude units_coordinate_example.scad
+      \dontinclude coordinate_example.scad
       \skip include
       \until to="c");
 
-    \b Result (base_coordinates = \b c): \include units_coordinate_example_c.log
-    \b Result (base_coordinates = \b p): \include units_coordinate_example_p.log
-    \b Result (base_coordinates = \b y): \include units_coordinate_example_y.log
-    \b Result (base_coordinates = \b s): \include units_coordinate_example_s.log
+    \b Result (base_coordinates = \b c): \include coordinate_example_c.log
+    \b Result (base_coordinates = \b p): \include coordinate_example_p.log
+    \b Result (base_coordinates = \b y): \include coordinate_example_y.log
+    \b Result (base_coordinates = \b s): \include coordinate_example_s.log
 
     [coordinate system]: https://en.wikipedia.org/wiki/Coordinate_system
     [cartesian]: https://en.wikipedia.org/wiki/Cartesian_coordinate_system
@@ -345,7 +345,7 @@ function coordinates_sc
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <units/units_coordinate.scad>;
+    include <units/coordinate.scad>;
 
     base_coordinates = "c";
 

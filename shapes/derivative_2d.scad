@@ -1,4 +1,4 @@
-//! Two-dimensional basic shapes.
+//! Common two-dimensional derivative shapes.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,11 +27,11 @@
 
   \details
 
-  \ingroup shapes shapes_2d
+  \ingroup shapes shapes_derivative_2d
 *******************************************************************************/
 
-include <../math/math_triangle.scad>;
-include <../tools/tools_utility.scad>;
+include <../math/triangle.scad>;
+include <../tools/utility.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -64,8 +64,8 @@ include <../tools/tools_utility.scad>;
   \addtogroup shapes
   @{
 
-  \defgroup shapes_2d 2d Shapes
-  \brief    Two-dimensional geometric shapes.
+  \defgroup shapes_derivative_2d 2d Shapes
+  \brief    Two-dimensional derivative shapes.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -74,7 +74,7 @@ include <../tools/tools_utility.scad>;
 // openscad-amu macros
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \amu_define scope (shapes2d_dim)
+  \amu_define scope (derivative_2d_dim)
   \amu_define tuple (qvga_top)
 
   \amu_define example_dim
@@ -1323,7 +1323,7 @@ module star2d
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <shapes/shapes2d.scad>;
+    include <shapes/derivative_2d.scad>;
 
     shape = "ellipse_cs";
     $fn = 72;
@@ -1397,7 +1397,7 @@ END_SCOPE;
 
 BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
-    include <shapes/shapes2d.scad>;
+    include <shapes/derivative_2d.scad>;
 
     $fn = 72;
 

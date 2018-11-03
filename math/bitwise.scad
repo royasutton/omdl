@@ -38,11 +38,11 @@ include <../datatypes/datatypes-base.scad>;
     \li \subpage tv_math_bitwise_s
     \li \subpage tv_math_bitwise_r
   \page tv_math_bitwise_s Script
-    \dontinclude math_bitwise_validate.scad
+    \dontinclude bitwise_validate.scad
     \skip include
     \until end-of-tests
   \page tv_math_bitwise_r Results
-    \include math_bitwise_validate.log
+    \include bitwise_validate.log
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
@@ -302,8 +302,8 @@ function bitwise_rsh
 BEGIN_SCOPE validate;
   BEGIN_OPENSCAD;
     include <console.scad>;
-    include <datatypes/datatypes_table.scad>;
-    include <math/math_bitwise.scad>;
+    include <datatypes/table.scad>;
+    include <math/bitwise.scad>;
     include <validation.scad>;
 
     show_passing = true;    // show passing tests

@@ -34,11 +34,11 @@
     \li \subpage tv_datatypes_operate_scalar_r
 
   \page tv_datatypes_operate_scalar_s Script
-    \dontinclude datatypes_operate_scalar_validate.scad
+    \dontinclude operate_scalar_validate.scad
     \skip include
     \until end-of-tests
   \page tv_datatypes_operate_scalar_r Results
-    \include datatypes_operate_scalar_validate.log
+    \include operate_scalar_validate.log
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
@@ -98,7 +98,7 @@ BEGIN_SCOPE validate;
   BEGIN_OPENSCAD;
     include <console.scad>;
     include <datatypes/datatypes-base.scad>;
-    include <datatypes/datatypes_table.scad>;
+    include <datatypes/table.scad>;
     include <validation.scad>;
 
     show_passing = true;    // show passing tests
@@ -144,7 +144,7 @@ BEGIN_SCOPE validate;
         "default",                                          // t01
         empty_lst,                                          // t02
         [0:0.5:9],                                          // t03
-        "A string",                                         // 04
+        "A string",                                         // t04
         ["orange","apple","grape","banana"],                // t05
         ["b","a","n","a","n","a","s"],                      // t06
         [undef],                                            // t07

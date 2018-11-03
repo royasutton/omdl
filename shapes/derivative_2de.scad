@@ -1,4 +1,4 @@
-//! Linearly extruded two-dimensional basic shapes.
+//! Common two-dimensional derivative shapes linearly extruded.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,10 +27,10 @@
 
   \details
 
-  \ingroup shapes shapes_2de
+  \ingroup shapes shapes_derivative_2de
 *******************************************************************************/
 
-include <shapes2d.scad>;
+include <derivative_2d.scad>;
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
@@ -63,8 +63,8 @@ include <shapes2d.scad>;
   \addtogroup shapes
   @{
 
-  \defgroup shapes_2de 2d Extrusions
-  \brief    Extruded two-dimensional geometric shapes.
+  \defgroup shapes_derivative_2de 2d Extrusions
+  \brief    Linearly extruded two-dimensional derivative shapes.
   @{
 *******************************************************************************/
 //----------------------------------------------------------------------------//
@@ -73,7 +73,7 @@ include <shapes2d.scad>;
 // openscad-amu macros
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \amu_define scope (shapes2de_dim)
+  \amu_define scope (derivative_2de_dim)
   \amu_define tuple (qvga_diag)
 
   \amu_define example_dim
@@ -956,7 +956,7 @@ module estar2d
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <shapes/shapes2de.scad>;
+    include <shapes/derivative_2de.scad>;
 
     shape = "eellipse_cs";
     $fn = 72;
@@ -1030,7 +1030,7 @@ END_SCOPE;
 
 BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
-    include <shapes/shapes2de.scad>;
+    include <shapes/derivative_2de.scad>;
 
     $fn = 72;
 

@@ -45,11 +45,11 @@ include <datatypes-base.scad>;
 
     \b Example
 
-      \dontinclude datatypes_map_example.scad
-      \skip use
+      \dontinclude map_example.scad
+      \skip include
       \until map_dump(map);
 
-    \b Result \include datatypes_map_example.log
+    \b Result \include map_example.log
 
   @{
 *******************************************************************************/
@@ -260,7 +260,7 @@ module map_dump
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <datatypes/datatypes_map.scad>;
+    include <datatypes/map.scad>;
 
     map =
     [

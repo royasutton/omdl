@@ -84,14 +84,14 @@
     Use the functions get_table_v() to retrieve feild data as show in
     the following example. To see a list of table identifiers consider
     the function get_table_ridl(), get_table_cidl(), or module
-    table_dump(). See datatypes_table.scad for other available table
+    table_dump(). See datatypes/table.scad for other available table
     functions.
 
     \b Example
     \code{.C}
-    include <units/units_coordinate.scad>;
-    include <tools/tools_polytope.scad>;
-    include <datatypes/datatypes_table.scad>;
+    include <units/coordinate.scad>;
+    include <tools/polytope.scad>;
+    include <datatypes/table.scad>;
     include <database/geometry/polyhedra/platonic.scad>;
 
     tc = dtc_polyhedra_platonic;
@@ -21498,9 +21498,9 @@ dtr_polyhedra_polyhedra_all =
 BEGIN_SCOPE db;
 BEGIN_SCOPE autotest;
   BEGIN_OPENSCAD;
-    include <math/math_polytope.scad>;
-    include <units/units_coordinate.scad>;
-    include <datatypes/datatypes_table.scad>;
+    include <math/polytope.scad>;
+    include <units/coordinate.scad>;
+    include <datatypes/table.scad>;
     include <database/geometry/polyhedra/polyhedra_all.scad>;
 
     coordinates_positive_angles = false;

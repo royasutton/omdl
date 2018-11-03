@@ -8,10 +8,10 @@ local_path        :=  units
 
 local_library     :=  module \
                       \
-                      units_angle \
-                      units_coordinate \
-                      units_length \
-                      units_resolution
+                      angle \
+                      coordinate \
+                      length \
+                      resolution
 
 local_release_add :=
 
