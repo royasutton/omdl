@@ -33,20 +33,30 @@
 include <../datatypes/datatypes-base.scad>;
 
 //----------------------------------------------------------------------------//
+// validation.
+//----------------------------------------------------------------------------//
+
 /***************************************************************************//**
+  \page tv_math
+    \li \subpage tv_math_bitwise
+
   \page tv_math_bitwise Bitwise
     \li \subpage tv_math_bitwise_s
     \li \subpage tv_math_bitwise_r
+
   \page tv_math_bitwise_s Script
     \dontinclude bitwise_validate.scad
     \skip include
     \until end-of-tests
+
   \page tv_math_bitwise_r Results
     \include bitwise_validate.log
 *******************************************************************************/
-//----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
+// group.
+//----------------------------------------------------------------------------//
+
 /***************************************************************************//**
   \addtogroup math
   @{
@@ -63,6 +73,7 @@ include <../datatypes/datatypes-base.scad>;
     See validation \ref tv_math_bitwise_r "results".
   @{
 *******************************************************************************/
+
 //----------------------------------------------------------------------------//
 
 //! Test if a base-two bit position of an integer value equals a test bit.

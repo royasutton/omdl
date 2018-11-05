@@ -28,7 +28,7 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// Introduction.
+// introduction.
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
@@ -406,38 +406,6 @@
   [plane]: \ref dt_plane
   [coords]: https://en.wikipedia.org/wiki/Coordinate_system
   [matrix]: https://en.wikipedia.org/wiki/Matrix_(mathematics)
-*******************************************************************************/
-
-//----------------------------------------------------------------------------//
-// validation results.
-//----------------------------------------------------------------------------//
-
-/***************************************************************************//**
-  \page validation Validation
-    \li \subpage tv_datatypes
-    \li \subpage tv_math
-*******************************************************************************/
-
-/***************************************************************************//**
-  \page tv_datatypes Datatypes
-    \li \subpage tv_datatypes_identify
-    \li \subpage tv_datatypes_operate
-
-  \page tv_datatypes_identify Identification
-    \li \subpage tv_datatypes_identify_scalar
-    \li \subpage tv_datatypes_identify_iterable
-    \li \subpage tv_datatypes_identify_list
-
-  \page tv_datatypes_operate Operations
-    \li \subpage tv_datatypes_operate_scalar
-    \li \subpage tv_datatypes_operate_iterable
-    \li \subpage tv_datatypes_operate_list
-*******************************************************************************/
-
-/***************************************************************************//**
-  \page tv_math Math
-    \li \subpage tv_math_vector_algebra
-    \li \subpage tv_math_bitwise
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

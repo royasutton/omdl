@@ -28,20 +28,30 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+// validation.
+//----------------------------------------------------------------------------//
+
 /***************************************************************************//**
+  \page tv_math
+    \li \subpage tv_math_vector_algebra
+
   \page tv_math_vector_algebra Vector Algebra
     \li \subpage tv_math_vector_algebra_s
     \li \subpage tv_math_vector_algebra_r
+
   \page tv_math_vector_algebra_s Script
     \dontinclude vector_algebra_validate.scad
     \skip include
     \until end-of-tests
+
   \page tv_math_vector_algebra_r Results
     \include vector_algebra_validate.log
 *******************************************************************************/
-//----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
+// group.
+//----------------------------------------------------------------------------//
+
 /***************************************************************************//**
   \addtogroup math
   @{
@@ -54,10 +64,11 @@
     See validation \ref tv_math_vector_algebra_r "results".
   @{
 *******************************************************************************/
+
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
-// group 1: point
+// set 1: point
 //----------------------------------------------------------------------------//
 
 //! Compute the distance between two Euclidean points.
@@ -109,7 +120,7 @@ function is_left_ppp
 ) = ((p2[0]-p1[0]) * (p3[1]-p1[1]) - (p3[0]-p1[0]) * (p2[1]-p1[1]));
 
 //----------------------------------------------------------------------------//
-// group 2: vector
+// set 2: vector
 //----------------------------------------------------------------------------//
 
 //! Return 3d vector unchanged or add a zeroed third dimension to 2d vector.
@@ -128,7 +139,7 @@ function dimension_2to3_v
 ) = (len(v) == 3) ? v : [v[0], v[1], 0];
 
 //----------------------------------------------------------------------------//
-// group 3: line (or vector)
+// set 3: line (or vector)
 //----------------------------------------------------------------------------//
 
 //! Return the number of dimensions of a Euclidean line (or vector).
@@ -378,7 +389,7 @@ function are_coplanar_lll
 ) = (dround(striple_lll(l1, l2, l3), d) ==  0);
 
 //----------------------------------------------------------------------------//
-// group 4: plane and pnorm
+// set 4: plane and pnorm
 //----------------------------------------------------------------------------//
 
 //! Convert a planes' normal specification into a normal vector.
@@ -719,14 +730,14 @@ BEGIN_SCOPE validate;
     // Indirect function calls would be very useful here!!!
     run_ids = delete( test_ids, mv=["fac", "crp"] );
 
-    // group 1: point
+    // set 1: point
     for (vid=run_ids) run("distance_pp",vid) test( "distance_pp", distance_pp(gv(vid,0),gv(vid,1)), vid, false );
     for (vid=run_ids) run("is_left_ppp",vid) test( "is_left_ppp", is_left_ppp(gv(vid,0),gv(vid,1),gv(vid,2)), vid, false );
 
-    // group 2: vector
+    // set 2: vector
     for (vid=run_ids) run("dimension_2to3_v",vid) test( "dimension_2to3_v", dimension_2to3_v(gv(vid,0)), vid, false );
 
-    // group 3: line (or vector)
+    // set 3: line (or vector)
     for (vid=run_ids) run("get_line_dim",vid) test( "get_line_dim", get_line_dim([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("get_line_tp",vid) test( "get_line_tp", get_line_tp([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("get_line_ip",vid) test( "get_line_ip", get_line_ip([gv(vid,0),gv(vid,1)]), vid, true );
@@ -739,7 +750,7 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("unit_l",vid) test( "unit_l", unit_l([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("are_coplanar_lll",vid) test( "are_coplanar_lll", are_coplanar_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
 
-    // group 4: plane and pnorm
+    // set 4: plane and pnorm
     for (vid=run_ids) run("get_pnorm2nv",vid) test( "get_pnorm2nv", get_pnorm2nv([gv(vid,0),gv(vid,1)]), vid, true );
 
     // end-of-tests

@@ -28,7 +28,13 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+// validation.
+//----------------------------------------------------------------------------//
+
 /***************************************************************************//**
+  \page tv_datatypes_operate
+    \li \subpage tv_datatypes_operate_iterable
+
   \page tv_datatypes_operate_iterable Iterables
     \li \subpage tv_datatypes_operate_iterable_s
     \li \subpage tv_datatypes_operate_iterable_r
@@ -37,12 +43,15 @@
     \dontinclude operate_iterable_validate.scad
     \skip include
     \until end-of-tests
+
   \page tv_datatypes_operate_iterable_r Results
     \include operate_iterable_validate.log
 *******************************************************************************/
-//----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
+// group.
+//----------------------------------------------------------------------------//
+
 /***************************************************************************//**
   \addtogroup datatypes_operate
   @{
@@ -55,6 +64,7 @@
     See validation \ref tv_datatypes_operate_iterable_r "results".
   @{
 *******************************************************************************/
+
 //----------------------------------------------------------------------------//
 
 //! Return an iterable element when it exists or a default value when it does not.
