@@ -32,6 +32,9 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
+  \page tv_datatypes_identify
+    \li \subpage tv_datatypes_identify_scalar
+
   \page tv_datatypes_identify_scalar Scalar
     \li \subpage tv_datatypes_identify_scalar_s
     \li \subpage tv_datatypes_identify_scalar_r
