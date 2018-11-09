@@ -25,6 +25,11 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     02110-1301, USA; or see <http://www.gnu.org/licenses/>.
 
+  \details
+
+    \amu_pathid parent  (++path_parent)
+    \amu_pathid group   (++path)
+
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -33,15 +38,15 @@
 
 /***************************************************************************//**
   \page validation
-    \li \subpage tv_datatypes
+    \li \subpage tv_\amu_eval(${group})
 
-  \page tv_datatypes Datatypes
-    \li \subpage tv_datatypes_identify
-    \li \subpage tv_datatypes_operate
+  \page tv_\amu_eval(${group}) Datatypes
+    \li \subpage tv_\amu_eval(${group})_identify
+    \li \subpage tv_\amu_eval(${group})_operate
 
-  \page tv_datatypes_identify Identification
+  \page tv_\amu_eval(${group})_identify Identification
 
-  \page tv_datatypes_operate Operations
+  \page tv_\amu_eval(${group})_operate Operations
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -49,18 +54,18 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \defgroup datatypes Datatypes
-  \brief    Data type definitions and operators.
+  \defgroup \amu_eval(${group}) Datatypes
+  \brief    Data types and operators.
   @{
 
     See \ref dt for nomenclature, assumptions, and conventions used to
     specify values and data types throughout the library.
 
-  \defgroup datatypes_identify Identification
-  \brief    Compile-time data type identification and tests.
+  \defgroup \amu_eval(${group})_identify Identification
+  \brief    Basic data type tests.
 
-  \defgroup datatypes_operate Operations
-  \brief    Data type operations.
+  \defgroup \amu_eval(${group})_operate Operations
+  \brief    Basic data type operations.
 
   @}
 *******************************************************************************/

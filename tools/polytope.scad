@@ -27,7 +27,10 @@
 
   \details
 
-  \ingroup tools tools_polytope
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 include <../math/polytope.scad>;
@@ -38,10 +41,10 @@ include <align.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup tools
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup tools_polytope Polytope
+  \defgroup \amu_eval(${group}) Polytope
   \brief    Polygon and polyhedron tools.
   @{
 *******************************************************************************/

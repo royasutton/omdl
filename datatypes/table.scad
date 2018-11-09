@@ -27,7 +27,10 @@
 
   \details
 
-  \ingroup datatypes datatypes_table
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 include <../console.scad>;
@@ -38,21 +41,21 @@ include <datatypes-base.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup datatypes
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup datatypes_table Tables
-  \brief    Table data type operations.
+  \defgroup \amu_eval(${group}) Tables
+  \brief    Table data type and operations.
 
   \details
 
     \b Example
 
-      \dontinclude table_example.scad
+      \dontinclude \amu_scope(index=1).scad
       \skip include
       \until ( tsum=tsum );
 
-    \b Result \include table_example.log
+    \b Result \include \amu_scope(index=1).log
 
   @{
 *******************************************************************************/

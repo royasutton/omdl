@@ -27,7 +27,10 @@
 
   \details
 
-  \ingroup tools tools_edge
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 include <../shapes/derivative_2d.scad>;
@@ -37,7 +40,7 @@ include <../shapes/derivative_2d.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup tools
+  \addtogroup \amu_eval(${parent})
 
     \amu_define caption (Edge)
 
@@ -63,10 +66,10 @@ include <../shapes/derivative_2d.scad>;
 *******************************************************************************/
 
 /***************************************************************************//**
-  \addtogroup tools
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup tools_edge Edge
+  \defgroup \amu_eval(${group}) Edge
   \brief    Shape edge finishing tools.
   @{
 *******************************************************************************/
@@ -76,15 +79,18 @@ include <../shapes/derivative_2d.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_define scope (edge_dim)
+  \amu_scope  mfs   (index=1)
+  \amu_source stem  (++stem)
+  \amu_define scope (dim)
   \amu_define size  (qvga)
   \amu_define view  (diag)
+  \amu_define image (${stem}_${scope}_${size}_${view}_${function})
 
   \amu_define example_dim
   (
-    \image html  ${scope}_${size}_${view}_${function}.png "${function}"
-    \image latex ${scope}_${size}_${view}_${function}.eps "${function}" width=2.5in
-    \dontinclude ${scope}.scad \skipline ${function}(
+    \image html  ${image}.png "${function}"
+    \image latex ${image}.eps "${function}" width=2.5in
+    \dontinclude ${mfs}.scad \skipline ${function}(
   )
 *******************************************************************************/
 

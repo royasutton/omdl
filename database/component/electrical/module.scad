@@ -25,6 +25,11 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     02110-1301, USA; or see <http://www.gnu.org/licenses/>.
 
+  \details
+
+    \amu_pathid parent  (++path_parent)
+    \amu_pathid group   (++path)
+
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -32,10 +37,10 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup database_component
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup database_electrical Electrical
+  \defgroup \amu_eval(${group}) Electrical
   \brief    Electrical component specifications.
 
   @}

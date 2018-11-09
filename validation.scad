@@ -27,7 +27,10 @@
 
   \details
 
-  \ingroup utilities utilities_validate
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 include <datatypes/datatypes-base.scad>;
@@ -37,23 +40,18 @@ include <datatypes/datatypes-base.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup utilities
-  @{
-
-  \defgroup utilities_validate Validation
+  \defgroup \amu_eval(${group}) Validation
   \brief    Function validation methods.
 
   \details
 
     \b Example
 
-      \dontinclude validation_example.scad
+      \dontinclude \amu_scope(index=1).scad
       \skip include
       \until tvae2, 4) );
 
-    \b Result \include validation_example.log
-
-  @{
+    \b Result \include \amu_scope(index=1).log
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

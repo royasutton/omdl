@@ -61,7 +61,7 @@
 
     \b Example:
 
-    \dontinclude mainpage_quickstart.scad
+    \dontinclude \amu_scope(index=2).scad
     \skip include
     \until valign="center" );
 

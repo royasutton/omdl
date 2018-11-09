@@ -25,6 +25,12 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     02110-1301, USA; or see <http://www.gnu.org/licenses/>.
 
+  \details
+
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -32,20 +38,20 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page tv_math
-    \li \subpage tv_math_vector_algebra
+  \page tv_\amu_eval(${parent})
+    \li \subpage tv_\amu_eval(${group})
 
-  \page tv_math_vector_algebra Vector Algebra
-    \li \subpage tv_math_vector_algebra_s
-    \li \subpage tv_math_vector_algebra_r
+  \page tv_\amu_eval(${group}) Bitwise
+    \li \subpage tv_\amu_eval(${group})_s
+    \li \subpage tv_\amu_eval(${group})_r
 
-  \page tv_math_vector_algebra_s Script
-    \dontinclude vector_algebra_validate.scad
+  \page tv_\amu_eval(${group})_s Script
+    \dontinclude \amu_scope(index=1).scad
     \skip include
     \until end-of-tests
 
-  \page tv_math_vector_algebra_r Results
-    \include vector_algebra_validate.log
+  \page tv_\amu_eval(${group})_r Results
+    \include \amu_scope(index=1).log
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -53,10 +59,10 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup math
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup math_vector_algebra Vector Algebra
+  \defgroup \amu_eval(${group}) Vector Algebra
   \brief    Algebraic operations on Euclidean vectors.
 
   \details

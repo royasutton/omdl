@@ -27,7 +27,10 @@
 
   \details
 
-  \ingroup math math_bitwise
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 include <../datatypes/datatypes-base.scad>;
@@ -37,20 +40,20 @@ include <../datatypes/datatypes-base.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page tv_math
-    \li \subpage tv_math_bitwise
+  \page tv_\amu_eval(${parent})
+    \li \subpage tv_\amu_eval(${group})
 
-  \page tv_math_bitwise Bitwise
-    \li \subpage tv_math_bitwise_s
-    \li \subpage tv_math_bitwise_r
+  \page tv_\amu_eval(${group}) Bitwise
+    \li \subpage tv_\amu_eval(${group})_s
+    \li \subpage tv_\amu_eval(${group})_r
 
-  \page tv_math_bitwise_s Script
-    \dontinclude bitwise_validate.scad
+  \page tv_\amu_eval(${group})_s Script
+    \dontinclude \amu_scope(index=1).scad
     \skip include
     \until end-of-tests
 
-  \page tv_math_bitwise_r Results
-    \include bitwise_validate.log
+  \page tv_\amu_eval(${group})_r Results
+    \include \amu_scope(index=1).log
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -58,10 +61,10 @@ include <../datatypes/datatypes-base.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup math
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup math_bitwise Bitwise
+  \defgroup \amu_eval(${group}) Bitwise
   \brief    Base-two bitwise binary operations.
 
   \details

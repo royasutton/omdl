@@ -27,7 +27,10 @@
 
   \details
 
-  \ingroup utilities utilities_console
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -35,23 +38,18 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup utilities
-  @{
-
-  \defgroup utilities_console Console
+  \defgroup \amu_eval(${group}) Console
   \brief    Console message logging.
 
   \details
 
     \b Example
 
-      \dontinclude console_example.scad
+      \dontinclude \amu_scope(index=1).scad
       \skip include
       \until log_error( message );
 
-    \b Result \include console_example.log
-
-  @{
+    \b Result \include \amu_scope(index=1).log
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

@@ -27,7 +27,10 @@
 
   \details
 
-  \ingroup units units_coordinate
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 include <../constants.scad>;
@@ -37,10 +40,10 @@ include <../constants.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup units
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup units_coordinate Coordinates
+  \defgroup \amu_eval(${group}) Coordinates
   \brief    Coordinate systems and conversions.
 
   \details
@@ -78,14 +81,14 @@ include <../constants.scad>;
 
     \b Example
 
-      \dontinclude coordinate_example.scad
+      \dontinclude \amu_scope(index=1).scad
       \skip include
       \until to="c");
 
-    \b Result (base_unit_coordinate = \b c): \include coordinate_example_c.log
-    \b Result (base_unit_coordinate = \b p): \include coordinate_example_p.log
-    \b Result (base_unit_coordinate = \b y): \include coordinate_example_y.log
-    \b Result (base_unit_coordinate = \b s): \include coordinate_example_s.log
+    \b Result (base_unit_coordinate = \b c): \include \amu_scope(index=1)_c.log
+    \b Result (base_unit_coordinate = \b p): \include \amu_scope(index=1)_p.log
+    \b Result (base_unit_coordinate = \b y): \include \amu_scope(index=1)_y.log
+    \b Result (base_unit_coordinate = \b s): \include \amu_scope(index=1)_s.log
 
     [coordinate system]: https://en.wikipedia.org/wiki/Coordinate_system
     [cartesian]: https://en.wikipedia.org/wiki/Cartesian_coordinate_system

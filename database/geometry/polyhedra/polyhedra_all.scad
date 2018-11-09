@@ -51,15 +51,18 @@
   [Netlib]: http://www.netlib.org
   [Polyhedron Database]: http://www.netlib.org/polyhedra
 
-  \ingroup database_polyhedra
+    \amu_pathid parent  (++path_parent)
+    \amu_pathid group   (++path)
+
+  \ingroup \amu_eval(${group})
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup database_geometry
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup database_polyhedra Polyhedra
+  \defgroup \amu_eval(${group}) Polyhedra
   \brief    Tables of polyhedra vertices, faces, and edges.
 
   \details

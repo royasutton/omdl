@@ -27,7 +27,10 @@
 
   \details
 
-  \ingroup units units_angle
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 include <../constants.scad>;
@@ -37,10 +40,10 @@ include <../constants.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup units
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup units_angle Angles
+  \defgroup \amu_eval(${group}) Angles
   \brief    Angle units and conversions.
 
   \details
@@ -60,13 +63,13 @@ include <../constants.scad>;
 
     \b Example
 
-      \dontinclude angle_example.scad
+      \dontinclude \amu_scope(index=1).scad
       \skip include
       \until to="dms");
 
-    \b Result (base_angle_length = \b r):   \include angle_example_r.log
-    \b Result (base_angle_length = \b d):   \include angle_example_d.log
-    \b Result (base_angle_length = \b dms): \include angle_example_dms.log
+    \b Result (base_angle_length = \b r):   \include \amu_scope(index=1)_r.log
+    \b Result (base_angle_length = \b d):   \include \amu_scope(index=1)_d.log
+    \b Result (base_angle_length = \b dms): \include \amu_scope(index=1)_dms.log
 
   @{
 *******************************************************************************/

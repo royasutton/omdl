@@ -25,6 +25,12 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     02110-1301, USA; or see <http://www.gnu.org/licenses/>.
 
+  \details
+
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -32,10 +38,10 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup math
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup math_linear_algebra Linear Algebra
+  \defgroup \amu_eval(${group}) Linear Algebra
   \brief    Linear algebra transformations on Euclidean coordinates.
   @{
 *******************************************************************************/

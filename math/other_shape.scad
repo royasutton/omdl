@@ -27,7 +27,10 @@
 
   \details
 
-  \ingroup math math_other_shape
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 include <../datatypes/datatypes-base.scad>;
@@ -37,10 +40,10 @@ include <../datatypes/datatypes-base.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup math
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup math_other_shape Other Shapes
+  \defgroup \amu_eval(${group}) Other Shapes
   \brief    Mathematical functions for other shapes.
   @{
 *******************************************************************************/

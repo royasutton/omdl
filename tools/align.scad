@@ -27,7 +27,10 @@
 
   \details
 
-  \ingroup tools tools_align
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 include <../math/math-base.scad>;
@@ -37,10 +40,10 @@ include <../math/math-base.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup tools
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup tools_align Alignment
+  \defgroup \amu_eval(${group}) Alignment
   \brief    Shape alignment tools.
   @{
 *******************************************************************************/

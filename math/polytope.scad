@@ -27,7 +27,10 @@
 
   \details
 
-  \ingroup math math_polytope
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 include <math-base.scad>;
@@ -37,10 +40,10 @@ include <math-base.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup math
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup math_polytope Polytopes
+  \defgroup \amu_eval(${group}) Polytopes
   \brief    Polygon and polyhedron mathematical functions.
   @{
 *******************************************************************************/

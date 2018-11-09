@@ -27,19 +27,10 @@
 
   \details
 
-  \ingroup \
-    datatypes \
-    \
-    datatypes_identify \
-    datatypes_identify_scalar \
-    datatypes_identify_iterable \
-    datatypes_identify_list \
-    \
-    datatypes_operate \
-    datatypes_operate_scalar \
-    datatypes_operate_iterable \
-    datatypes_operate_list
+    \amu_pathid parent  (++path_parent)
+    \amu_pathid group   (++path)
 
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 include <../constants.scad>;

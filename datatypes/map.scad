@@ -27,7 +27,10 @@
 
   \details
 
-  \ingroup datatypes datatypes_map
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 include <../console.scad>;
@@ -38,21 +41,21 @@ include <datatypes-base.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup datatypes
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup datatypes_map Maps
-  \brief    Map data type operations.
+  \defgroup \amu_eval(${group}) Maps
+  \brief    Map data type and operations.
 
   \details
 
     \b Example
 
-      \dontinclude map_example.scad
+      \dontinclude \amu_scope(index=1).scad
       \skip include
       \until map_dump(map);
 
-    \b Result \include map_example.log
+    \b Result \include \amu_scope(index=1).log
 
   @{
 *******************************************************************************/

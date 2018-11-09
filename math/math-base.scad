@@ -27,12 +27,10 @@
 
   \details
 
-  \ingroup \
-    math \
-    \
-    math_vector_algebra \
-    math_linear_algebra
+    \amu_pathid parent  (++path_parent)
+    \amu_pathid group   (++path)
 
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 include <../datatypes/datatypes-base.scad>;

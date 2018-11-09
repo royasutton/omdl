@@ -25,6 +25,14 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     02110-1301, USA; or see <http://www.gnu.org/licenses/>.
 
+  \details
+
+    \amu_pathid path    (++path)
+
+    \amu_define parent  (${path}_operate)
+    \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -32,20 +40,20 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page tv_datatypes_operate
-    \li \subpage tv_datatypes_operate_iterable
+  \page tv_\amu_eval(${parent})
+    \li \subpage tv_\amu_eval(${group})
 
-  \page tv_datatypes_operate_iterable Iterables
-    \li \subpage tv_datatypes_operate_iterable_s
-    \li \subpage tv_datatypes_operate_iterable_r
+  \page tv_\amu_eval(${group}) Iterables
+    \li \subpage tv_\amu_eval(${group})_s
+    \li \subpage tv_\amu_eval(${group})_r
 
-  \page tv_datatypes_operate_iterable_s Script
-    \dontinclude operate_iterable_validate.scad
+  \page tv_\amu_eval(${group})_s Script
+    \dontinclude \amu_scope(index=1).scad
     \skip include
     \until end-of-tests
 
-  \page tv_datatypes_operate_iterable_r Results
-    \include operate_iterable_validate.log
+  \page tv_\amu_eval(${group})_r Results
+    \include \amu_scope(index=1).log
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -53,15 +61,15 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup datatypes_operate
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup datatypes_operate_iterable Iterables
+  \defgroup \amu_eval(${group}) Iterables
   \brief    Iterable data type operations.
 
   \details
 
-    See validation \ref tv_datatypes_operate_iterable_r "results".
+    See validation \ref tv_\amu_eval(${group})_r "results".
   @{
 *******************************************************************************/
 

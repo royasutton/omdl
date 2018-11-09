@@ -27,9 +27,10 @@
 
   \details
 
-  \test Review model for accuracy.
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
 
-  \ingroup units units_resolution
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 include <../console.scad>;
@@ -41,10 +42,10 @@ include <length.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup units
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup units_resolution Resolutions
+  \defgroup \amu_eval(${group}) Resolutions
   \brief    Arch rendering resolution management.
 
   \details
@@ -56,14 +57,14 @@ include <length.scad>;
 
     \b Example
 
-      \dontinclude resolution_example.scad
+      \dontinclude \amu_scope(index=1).scad
       \skip include
       \until f));
 
-    \b Result (base_unit_length = \b mm):  \include resolution_example_mm.log
-    \b Result (base_unit_length = \b cm):  \include resolution_example_cm.log
-    \b Result (base_unit_length = \b mil): \include resolution_example_mil.log
-    \b Result (base_unit_length = \b in):  \include resolution_example_in.log
+    \b Result (base_unit_length = \b mm):  \include \amu_scope(index=1)_mm.log
+    \b Result (base_unit_length = \b cm):  \include \amu_scope(index=1)_cm.log
+    \b Result (base_unit_length = \b mil): \include \amu_scope(index=1)_mil.log
+    \b Result (base_unit_length = \b in):  \include \amu_scope(index=1)_in.log
 
   @{
 *******************************************************************************/

@@ -1,4 +1,4 @@
-//! Design constant definitions.
+//! Constant definitions.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,7 +27,14 @@
 
   \details
 
-  \ingroup constants constants_general constants_system constants_euclidean
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+    \amu_define group1  (${group}_general)
+    \amu_define group2  (${group}_system)
+    \amu_define group3  (${group}_euclidean)
+
+  \ingroup \amu_eval(${parent} ${group} ${group1} ${group2} ${group3})
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -35,11 +42,20 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup constants
+  \defgroup \amu_eval(${group}) Constants
+  \brief    Design constants.
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// group1.
+//----------------------------------------------------------------------------//
+
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
   @{
 
-  \defgroup constants_general General
-  \brief    General design constants.
+  \defgroup \amu_eval(${group1}) General
+  \brief    General mathematical constants.
   @{
 *******************************************************************************/
 
@@ -61,14 +77,14 @@ phi = (1 + sqrt(5)) / 2;
 //! @}
 
 //----------------------------------------------------------------------------//
-// group.
+// group2.
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup constants
+  \addtogroup \amu_eval(${group})
   @{
 
-  \defgroup constants_system System
+  \defgroup \amu_eval(${group2}) System
   \brief    System and program limits.
   @{
 *******************************************************************************/
@@ -91,14 +107,14 @@ empty_lst = [];
 //! @}
 
 //----------------------------------------------------------------------------//
-// group.
+// group3.
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup constants
+  \addtogroup \amu_eval(${group})
   @{
 
-  \defgroup constants_euclidean Euclidean
+  \defgroup \amu_eval(${group3}) Euclidean
   \brief    Euclidean space axis mapping.
   @{
 *******************************************************************************/

@@ -51,12 +51,15 @@
   [Netlib]: http://www.netlib.org
   [Polyhedron Database]: http://www.netlib.org/polyhedra
 
-  \ingroup database_polyhedra
+    \amu_pathid parent  (++path_parent)
+    \amu_pathid group   (++path)
+
+  \ingroup \amu_eval(${group})
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup database_polyhedra
+  \addtogroup \amu_eval(${group})
   @{
     <br>
     ### Group: cupolas ###

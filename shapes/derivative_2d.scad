@@ -1,4 +1,4 @@
-//! Common two-dimensional derivative shapes.
+//! Common 2D derivative shapes.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,7 +27,10 @@
 
   \details
 
-  \ingroup shapes shapes_derivative_2d
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 include <../math/triangle.scad>;
@@ -38,7 +41,7 @@ include <../tools/utility.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup shapes
+  \addtogroup \amu_eval(${parent})
 
     \amu_define caption (2d Shapes)
 
@@ -64,11 +67,11 @@ include <../tools/utility.scad>;
 *******************************************************************************/
 
 /***************************************************************************//**
-  \addtogroup shapes
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup shapes_derivative_2d 2d Shapes
-  \brief    Two-dimensional derivative shapes.
+  \defgroup \amu_eval(${group}) 2d Shapes
+  \brief    Common 2D derivative shapes.
   @{
 *******************************************************************************/
 
@@ -77,14 +80,18 @@ include <../tools/utility.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_define scope (derivative_2d_dim)
-  \amu_define tuple (qvga_top)
+  \amu_scope  mfs   (index=1)
+  \amu_source stem  (++stem)
+  \amu_define scope (dim)
+  \amu_define size  (qvga)
+  \amu_define view  (top)
+  \amu_define image (${stem}_${scope}_${size}_${view}_${function})
 
   \amu_define example_dim
   (
-    \image html  ${scope}_${tuple}_${function}.png "${function}"
-    \image latex ${scope}_${tuple}_${function}.eps "${function}" width=2.5in
-    \dontinclude ${scope}.scad \skipline ${function}(
+    \image html  ${image}.png "${function}"
+    \image latex ${image}.eps "${function}" width=2.5in
+    \dontinclude ${mfs}.scad \skipline ${function}(
   )
 *******************************************************************************/
 

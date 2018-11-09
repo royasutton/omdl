@@ -27,7 +27,10 @@
 
   \details
 
-  \ingroup math math_utility
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 include <bitwise.scad>;
@@ -37,10 +40,10 @@ include <bitwise.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup math
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup math_utility Utilities
+  \defgroup \amu_eval(${group}) Utilities
   \brief    Miscellaneous mathematical utilities.
   @{
 *******************************************************************************/

@@ -27,7 +27,13 @@
 
   \details
 
-  \ingroup tools tools_extrude tools_repeat
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+    \amu_define group1  (${group}_extrude)
+    \amu_define group2  (${group}_repeat)
+
+  \ingroup \amu_eval(${parent} ${group} ${group1} ${group2})
 *******************************************************************************/
 
 include <../console.scad>;
@@ -36,13 +42,13 @@ include <../math/other_shape.scad>;
 include <../math/bitwise.scad>;
 
 //----------------------------------------------------------------------------//
-// group.
+// group1.
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup tools
+  \addtogroup \amu_eval(${parent})
 
-    \amu_define caption (Transformation Utilities)
+    \amu_define caption (Rotate, Copy, Extrude)
 
     \amu_make png_files (append=dim extension=png)
     \amu_make eps_files (append=dim extension=png2eps)
@@ -66,10 +72,10 @@ include <../math/bitwise.scad>;
 *******************************************************************************/
 
 /***************************************************************************//**
-  \addtogroup tools
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup tools_extrude Extrude
+  \defgroup \amu_eval(${group1}) Extrude
   \brief    Shape extrusion tools.
   @{
 *******************************************************************************/
@@ -79,14 +85,18 @@ include <../math/bitwise.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_define scope (utility_dim)
-  \amu_define tuple (qvga_diag)
+  \amu_scope  mfs   (index=1)
+  \amu_source stem  (++stem)
+  \amu_define scope (dim)
+  \amu_define size  (qvga)
+  \amu_define view  (diag)
+  \amu_define image (${stem}_${scope}_${size}_${view}_${function})
 
   \amu_define example_dim
   (
-    \image html  ${scope}_${tuple}_${function}.png "${function}"
-    \image latex ${scope}_${tuple}_${function}.eps "${function}" width=2.5in
-    \dontinclude ${scope}.scad \skipline ${function}(
+    \image html  ${image}.png "${function}"
+    \image latex ${image}.eps "${function}" width=2.5in
+    \dontinclude ${mfs}.scad \skipline ${function}(
   )
 *******************************************************************************/
 
@@ -304,14 +314,14 @@ module linear_extrude_uls
 //! @}
 
 //----------------------------------------------------------------------------//
-// group.
+// group2.
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup tools
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup tools_repeat Repeat
+  \defgroup \amu_eval(${group2}) Repeat
   \brief    Shape repetition and distribution tools.
   @{
 *******************************************************************************/

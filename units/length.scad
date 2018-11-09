@@ -27,7 +27,10 @@
 
   \details
 
-  \ingroup units units_length
+    \amu_pathid parent  (++path)
+    \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -35,10 +38,10 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup units
+  \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup units_length Lengths
+  \defgroup \amu_eval(${group}) Lengths
   \brief    Length units and conversions.
 
   \details
@@ -68,14 +71,14 @@
 
     \b Example
 
-      \dontinclude length_example.scad
+      \dontinclude \amu_scope(index=1).scad
       \skip include
       \until to="mm");
 
-    \b Result (base_unit_length = \b mm):  \include length_example_mm.log
-    \b Result (base_unit_length = \b cm):  \include length_example_cm.log
-    \b Result (base_unit_length = \b mil): \include length_example_mil.log
-    \b Result (base_unit_length = \b in):  \include length_example_in.log
+    \b Result (base_unit_length = \b mm):  \include \amu_scope(index=1)_mm.log
+    \b Result (base_unit_length = \b cm):  \include \amu_scope(index=1)_cm.log
+    \b Result (base_unit_length = \b mil): \include \amu_scope(index=1)_mil.log
+    \b Result (base_unit_length = \b in):  \include \amu_scope(index=1)_in.log
 
     \b Example (equivalent lengths)
 
