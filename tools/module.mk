@@ -10,8 +10,9 @@ local_library     :=  module \
                       \
                       align \
                       edge \
+                      extrude \
                       polytope \
-                      utility
+                      repeat
 
 local_release_add :=  stl/edge_manifest.stl
 

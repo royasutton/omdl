@@ -77,8 +77,9 @@ include <shapes/derivative_3d.scad>;
 //----------------------------------------------------------------------------//
 //  include <tools/align.scad>;
 include <tools/edge.scad>;
+//  include <tools/extrude.scad>;
 include <tools/polytope.scad>;
-//  include <tools/utility.scad>;
+//  include <tools/repeat.scad>;
 
 //----------------------------------------------------------------------------//
 // end of file

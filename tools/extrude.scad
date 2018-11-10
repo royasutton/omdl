@@ -1,4 +1,4 @@
-//! Shape transformation utilities.
+//! Shape extrusion tools.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -30,25 +30,19 @@
     \amu_pathid parent  (++path)
     \amu_pathid group   (++path ++stem)
 
-    \amu_define group1  (${group}_extrude)
-    \amu_define group2  (${group}_repeat)
-
-  \ingroup \amu_eval(${parent} ${group} ${group1} ${group2})
+  \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
 
-include <../console.scad>;
-include <../math/math-base.scad>;
-include <../math/other_shape.scad>;
 include <../math/bitwise.scad>;
 
 //----------------------------------------------------------------------------//
-// group1.
+// group.
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
   \addtogroup \amu_eval(${parent})
 
-    \amu_define caption (Rotate, Copy, Extrude)
+    \amu_define caption (Extrude)
 
     \amu_make png_files (append=dim extension=png)
     \amu_make eps_files (append=dim extension=png2eps)
@@ -75,7 +69,7 @@ include <../math/bitwise.scad>;
   \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup \amu_eval(${group1}) Extrude
+  \defgroup \amu_eval(${group}) Extrude
   \brief    Shape extrusion tools.
   @{
 *******************************************************************************/
@@ -314,149 +308,13 @@ module linear_extrude_uls
 //! @}
 
 //----------------------------------------------------------------------------//
-// group2.
-//----------------------------------------------------------------------------//
-
-/***************************************************************************//**
-  \addtogroup \amu_eval(${parent})
-  @{
-
-  \defgroup \amu_eval(${group2}) Repeat
-  \brief    Shape repetition and distribution tools.
-  @{
-*******************************************************************************/
-
-//----------------------------------------------------------------------------//
-
-//! Distribute copies of a 2d or 3d shape equally about a z-axis radius.
-/***************************************************************************//**
-  \param    n <integer> The number of equally spaced radii.
-  \param    r <decimal> The shape move radius.
-  \param    angle <boolean> Rotate each copy about z-axis.
-  \param    move <boolean> Move each shape copy to radii coordinate.
-
-  \details
-
-    \b Example
-    \amu_eval ( function=radial_repeat ${example_dim} )
-*******************************************************************************/
-module radial_repeat
-(
-  n,
-  r = 1,
-  angle = true,
-  move = false
-)
-{
-  for ( p = rpolygon_lp( r=r, n=n ) )
-  {
-    translate(move==true ? p : origin2d)
-    rotate(angle==true ? [0, 0, angle_ll(x_axis2d_uv, p)] : origin3d)
-    children();
-  }
-}
-
-//! Distribute copies of 2d or 3d shapes about Cartesian grid.
-/***************************************************************************//**
-  \param    g <integer-list-3|integer> The grid division count. A list
-            [x, y, z] of integers or a single integer for (x=y=z).
-  \param    i <decimal-list-3|decimal> The grid increment size. A list
-            [x, y, z] of decimals or a single decimal for (x=y=z).
-  \param    c <integer> The number of copies. Number of times to iterate
-            over children.
-  \param    center <boolean> Center distribution about origin.
-
-  \details
-
-    \b Example
-    \amu_eval ( function=grid_repeat ${example_dim} )
-*******************************************************************************/
-module grid_repeat
-(
-  g,
-  i,
-  c = 1,
-  center = false
-)
-{
-  gridd = is_scalar(g) ? g : 1;
-
-  gridx = edefined_or(g, 0, gridd);
-  gridy = edefined_or(g, 1, gridd);
-  gridz = edefined_or(g, 2, gridd);
-
-  incrd = is_scalar(i) ? i : 0;
-
-  incrx = edefined_or(i, 0, incrd);
-  incry = edefined_or(i, 1, incrd);
-  incrz = edefined_or(i, 2, incrd);
-
-  if ( ( $children * c ) > ( gridx * gridy * gridz ) )
-  {
-    log_warn("more objects than grid capacity, shapes will overlap.");
-    log_info
-    (
-      str
-      (
-        "children=", $children,
-        ", copies=", c,
-        ", objects=", $children * c
-      )
-    );
-    log_info
-    (
-      str
-      (
-        "grid[x,y,z]=[", gridx, ", ", gridy, ", ", gridz, "]",
-        ", capacity=", gridx * gridy * gridz
-      )
-    );
-  }
-
-  translate
-  (
-    center==true
-    ? [
-        -( min($children * c, gridx) -1 )                   * incrx / 2,
-        -( min(ceil($children * c/gridx), gridy) -1 )       * incry / 2,
-        -( min(ceil($children * c/gridx/gridy), gridz) -1 ) * incrz / 2
-      ]
-    : origin3d
-  )
-  if ( c > 0 )
-  {
-    for
-    (
-      y = [0 : (c-1)],
-      x = [0 : ($children-1)]
-    )
-    {
-      j = y * $children + x;
-
-      translate
-      (
-        [
-          incrx * (j%gridx),
-          incry * (floor(j/gridx)%gridy),
-          incrz * (floor(floor(j/gridx)/gridy)%gridz)
-        ]
-      )
-      children([x]);
-    }
-  }
-}
-
-//! @}
-//! @}
-
-//----------------------------------------------------------------------------//
 // openscad-amu auxiliary scripts
 //----------------------------------------------------------------------------//
 
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <tools/utility.scad>;
+    include <tools/extrude.scad>;
 
     shape = "rotate_extrude_tr";
     $fn = 72;
@@ -467,10 +325,6 @@ BEGIN_SCOPE dim;
       rotate_extrude_tre( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
     else if (shape == "linear_extrude_uls")
       linear_extrude_uls( [5,10,15,-5], center=true ) square( [20,15], center=true );
-    else if (shape == "radial_repeat")
-      radial_repeat( n=7, r=6, move=true ) square( [20,1], center=true );
-    else if (shape == "grid_repeat")
-      grid_repeat( g=[5,5,4], i=10, c=50, center=true ) {cube(10, center=true); sphere(10);}
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -482,8 +336,6 @@ BEGIN_SCOPE dim;
                 rotate_extrude_tr
                 rotate_extrude_tre
                 linear_extrude_uls
-                radial_repeat
-                grid_repeat
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter";
