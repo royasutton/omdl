@@ -37,6 +37,24 @@ include <../math/vector_algebra.scad>;
 include <../math/other_shape.scad>;
 
 //----------------------------------------------------------------------------//
+// openscad-amu macros
+//----------------------------------------------------------------------------//
+
+/***************************************************************************//**
+  \amu_scope  mfs     (index=1)
+  \amu_source stem    (++stem)
+  \amu_eval           (++global scope=dim size=qvga view=diag)
+  \amu_define prefix  (${stem}_${scope}_${size}_${view})
+
+  \amu_define example_dim
+  (
+    \image html  ${prefix}_${function}.png "${function}"
+    \image latex ${prefix}_${function}.eps "${function}" width=2.5in
+    \dontinclude ${mfs}.scad \skipline ${function}(
+  )
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
 // group.
 //----------------------------------------------------------------------------//
 
@@ -73,26 +91,6 @@ include <../math/other_shape.scad>;
   \defgroup \amu_eval(${group}) Repeat
   \brief    Shape repetition tools.
   @{
-*******************************************************************************/
-
-//----------------------------------------------------------------------------//
-// openscad-amu macros
-//----------------------------------------------------------------------------//
-
-/***************************************************************************//**
-  \amu_scope  mfs   (index=1)
-  \amu_source stem  (++stem)
-  \amu_define scope (dim)
-  \amu_define size  (qvga)
-  \amu_define view  (diag)
-  \amu_define image (${stem}_${scope}_${size}_${view}_${function})
-
-  \amu_define example_dim
-  (
-    \image html  ${image}.png "${function}"
-    \image latex ${image}.eps "${function}" width=2.5in
-    \dontinclude ${mfs}.scad \skipline ${function}(
-  )
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
