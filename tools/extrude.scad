@@ -40,16 +40,15 @@ include <../math/bitwise.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_scope  mfs     (index=1)
-  \amu_source stem    (++stem)
-  \amu_eval           (++global scope=dim size=qvga view=diag)
-  \amu_define prefix  (${stem}_${scope}_${size}_${view})
-
+  \amu_scope  mfscript  (index=1)
+  \amu_source stem      (++stem)
+  \amu_eval             (++global scope=dim size=qvga view=diag)
+  \amu_define img_stem  (${stem}_${scope}_${size}_${view}_${function})
   \amu_define example_dim
   (
-    \image html  ${prefix}_${function}.png "${function}"
-    \image latex ${prefix}_${function}.eps "${function}" width=2.5in
-    \dontinclude ${mfs}.scad \skipline ${function}(
+    \image html  ${img_stem}.png "${function}"
+    \image latex ${img_stem}.eps "${function}" width=2.5in
+    \dontinclude ${mfscript}.scad \skipline ${function}(
   )
 *******************************************************************************/
 
