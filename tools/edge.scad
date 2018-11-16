@@ -63,16 +63,21 @@ include <../shapes/derivative_2d.scad>;
 
     \amu_make png_files (append=dim extension=png)
     \amu_make eps_files (append=dim extension=png2eps)
-    \amu_shell file_cnt ("echo ${png_files} | wc -w")
-    \amu_shell cell_num ("seq -f '(%g)' -s '^' ${file_cnt}")
+    \amu_word  file_cnt (words="${png_files}" ++count)
+    \amu_seq   cell_num (last="${file_cnt}" ++roman)
 
-    \htmlonly
-      \amu_image_table
-        (
-          type=html columns=4 image_width="200" cell_files="${png_files}"
-          table_caption="${caption}" cell_captions="${cell_num}"
-        )
-    \endhtmlonly
+    \amu_eval  fprefix1 (function="" ${img_stem})
+    \amu_eval  fprefix2 (function="" view=top ${img_stem})
+    \amu_filename fname (files="${png_files}" ++stem)
+    \amu_replace  fname (text="${fname}" search="${fprefix1}|${fprefix2}")
+    \amu_combine  fname ("${fname}" p="<center>" s="()</center>" j="" f="^")
+
+    \amu_image_table
+      (
+        type=html columns=4 image_width="200" cell_files="${png_files}"
+        table_caption="${caption}" cell_captions="${cell_num}"
+        cell_end="${fname}"
+      )
     \latexonly
       \amu_image_table
         (
