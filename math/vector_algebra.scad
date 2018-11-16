@@ -41,7 +41,7 @@
   \page tv_\amu_eval(${parent})
     \li \subpage tv_\amu_eval(${group})
 
-  \page tv_\amu_eval(${group}) Bitwise
+  \page tv_\amu_eval(${group}) Vector Algebra
     \li \subpage tv_\amu_eval(${group})_s
     \li \subpage tv_\amu_eval(${group})_r
 
