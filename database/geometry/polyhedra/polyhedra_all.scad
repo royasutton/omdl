@@ -112,7 +112,7 @@
     polyhedron(sv, pf);
     \endcode
 
-    \b Autotests \include polyhedra_all_db_autotest.log
+    \b Autotests \include \amu_scope(index=1).log
 
     For more information see Wikipedia on [Polyhedron].
 

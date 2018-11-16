@@ -62,49 +62,51 @@
   \addtogroup \amu_eval(${group})
   @{
     <br>
-    ### Group: platonic ###
+    ### File: platonic.scad ###
 
-    \amu_define caption (platonic)
-    \amu_make png_files (append=db_dim extension=png)
-    \amu_make stl_files (append=db_dim extension=stl)
-
-    \amu_shell file_cnt ("echo ${png_files} | wc -w")
-    \amu_shell cell_num ("seq -f '(%g)' -s '^' ${file_cnt}")
-
-    \amu_shell html_cell_titles
+    \amu_eval
       (
-        "echo ${stl_files} | grep -Po 'db_dim_\K[^.]*' | tr '\n' '^'"
+        ++global
+        title="Platonic"
+        stem=platonic scope=db_dim size=qvga view=diag
       )
+
+    \amu_define  image_stem (${stem}_${scope}_${size}_${view}_${shape})
+    \amu_make     png_files (append=db_dim extension=png)
+    \amu_make     stl_files (append=db_dim extension=stl)
+    \amu_word      file_cnt (words="${png_files}" ++count)
+    \amu_seq       cell_num (p="(" s=")" l="${file_cnt}" ++n)
+    \amu_eval       iprefix (shape="" ${image_stem})
+    \amu_filename  cell_txt (f="${png_files}" r="^" ++stem)
+    \amu_replace    cell_id (t="${cell_txt}" s="${iprefix}" r="id: ")
+    \amu_replace   cell_end (t="${cell_txt}" s="${iprefix}")
+    \amu_replace   cell_end (t="${cell_end}" s="_" replace="<br>")
+    \amu_combine   cell_end (p="<center>" s="</center>" j="" f="^" t="^" ${cell_end})
 
     \htmlonly
       \amu_image_table
         (
           type=html columns=4 image_width="200" cell_files="${png_files}"
-          table_caption="${caption}" cell_captions="${cell_num}"
-          cell_titles="${html_cell_titles}" cell_urls="${stl_files}"
+          table_caption="${title}" cell_captions="${cell_num}"
+          cell_titles="${cell_id}" cell_end="${cell_end}"
+          cell_urls="${stl_files}"
         )
     \endhtmlonly
 
-    \amu_define caption (platonic)
-    \amu_make eps_files (append=db_dim extension=png2eps)
+    \amu_make     eps_files (append=db_dim extension=png2eps)
 
     \latexonly
       \amu_image_table
         (
           type=latex columns=4 image_width="1.25in" cell_files="${eps_files}"
-          table_caption="${caption}" cell_captions="${cell_num}"
+          table_caption="${title}" cell_captions="${cell_num}"
         )
     \endlatexonly
 
-    \amu_scope scope_id (index=1 ++make)
-    \amu_find scope_log (files="${scope_id}.log")
-    \amu_shell data
-      (
-        "grep -Po 'ECHO: \"\K[^\"]*' ${scope_log}" --rmnl
-      )
-    \amu_shell columns ("echo '${data}' | awk -F '^' 'NR==1 {print NF;exit}'")
-    \amu_shell heading ("echo '${data}' | awk -F '^' 'NR==1 {print;exit}'")
-    \amu_shell texts   ("echo '${data}' | awk -F '^' 'NR>1 {print}'")
+    \amu_scope        scope (index=1)
+    \amu_file       heading (file="${scope}.log"  last=1 ++rmecho ++rmnl ++read)
+    \amu_file         texts (file="${scope}.log" first=2 ++rmecho ++rmnl ++read)
+    \amu_word       columns (tokenizer="^" words="${heading}" ++count)
 
     \amu_table
       (
