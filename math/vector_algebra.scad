@@ -442,7 +442,7 @@ BEGIN_SCOPE validate;
     include <math/vector_algebra.scad>;
     include <validation.scad>;
 
-    echo( str("OpenSCAD Version ", version()) );
+    echo( str("openscad version ", version()) );
 
     // test-values columns
     test_c =

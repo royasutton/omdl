@@ -320,7 +320,7 @@ BEGIN_SCOPE validate;
     include <math/bitwise.scad>;
     include <validation.scad>;
 
-    echo( str("OpenSCAD Version ", version()) );
+    echo( str("openscad version ", version()) );
 
     // test-values columns
     test_c =
