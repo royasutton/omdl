@@ -102,8 +102,8 @@ function validate
       ? (pf?true  : str("passed: '", d, "'"))
       : (pf?false : str
                     (
-                      "FAILED: '", d, "'.  Got '", cv,
-                      "'. Expected to equal '", ev, "'"
+                      "failed: '", d, "'; got '", cv,
+                      "', expected to equal '", ev, "'."
                     )
         )
     )
@@ -113,8 +113,8 @@ function validate
       ? (pf?true  : str("passed: '", d, "'"))
       : (pf?false : str
                     (
-                      "FAILED: '", d, "'.  Got '", cv,
-                      "'. Expected to not equal '", ev, "'"
+                      "failed: '", d, "'; got '", cv,
+                      "', expected to not equal '", ev, "'."
                     )
         )
     )
@@ -126,13 +126,13 @@ function validate
       ? (pf?true  : str("passed: '", d, "'"))
       : (pf?false : str
                     (
-                      "FAILED: '", d, "'.  Got '", cv,
-                      "'. Expected to almost equal '", ev, "'",
+                      "failed: '", d, "'; got '", cv,
+                      "', expected to almost equal '", ev, "'.",
                       " to ", p, " digits"
                     )
         )
     )
-  : (pf?false : str("FAILED: '", d, "'.  Unknown test '", t, "'"));
+  : (pf?false : str("failed: '", d, "';  unknown test '", t, "'."));
 
 //! @}
 //! @}
