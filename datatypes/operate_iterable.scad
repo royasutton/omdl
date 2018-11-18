@@ -1150,6 +1150,8 @@ BEGIN_SCOPE validate;
 
     // validate helper function and module
     function get_value( vid ) = get_table_v(test_r, test_c, vid, "tv");
+    module log_test( m ) { log_type ( "test", m ); }
+    module log_notest( f ) { log_test ( str("not tested: '", f, "'") ); }
     module run_test( fname, fresult, vid )
     {
       value_text = get_table_v(test_r, test_c, vid, "td");
@@ -1161,12 +1163,12 @@ BEGIN_SCOPE validate;
       if ( pass_value != skip )
       {
         if ( !test_pass )
-          log_warn( str(vid, "(", value_text, ") ", test_text) );
+          log_test( str(vid, " ", test_text, " (", value_text, ")") );
         else
-          log_info( str(vid, " ", test_text) );
+          log_test( str(vid, " ", test_text) );
       }
       else
-        log_info( str(vid, " *skip*: '", fname, "(", value_text, ")'") );
+        log_test( str(vid, " -skip-: '", fname, "(", value_text, ")'") );
     }
 
     // Indirect function calls would be very useful here!!!
@@ -1179,11 +1181,11 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "second", second(get_value(vid)), vid );
     for (vid=test_ids) run_test( "third", third(get_value(vid)), vid );
     for (vid=test_ids) run_test( "last", last(get_value(vid)), vid );
-    log_info( "not testing: middle()" );
-    log_info( "not testing: first2()" );
-    log_info( "not testing: first3()" );
-    log_info( "not testing: last2()" );
-    log_info( "not testing: last3()" );
+    log_notest( "middle()" );
+    log_notest( "first2()" );
+    log_notest( "first3()" );
+    log_notest( "last2()" );
+    log_notest( "last3()" );
     for (vid=test_ids) run_test( "nfirst_1", nfirst(get_value(vid),n=1), vid );
     for (vid=test_ids) run_test( "nlast_1", nlast(get_value(vid),n=1), vid );
     for (vid=test_ids) run_test( "nhead_1", nhead(get_value(vid),n=1), vid );

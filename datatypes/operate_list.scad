@@ -1078,6 +1078,8 @@ BEGIN_SCOPE validate;
 
     // validate helper function and module
     function get_value( vid ) = get_table_v(test_r, test_c, vid, "tv");
+    module log_test( m ) { log_type ( "test", m ); }
+    module log_notest( f ) { log_test ( str("not tested: '", f, "'") ); }
     module run_test( fname, fresult, vid )
     {
       value_text = get_table_v(test_r, test_c, vid, "td");
@@ -1089,12 +1091,12 @@ BEGIN_SCOPE validate;
       if ( pass_value != skip )
       {
         if ( !test_pass )
-          log_warn( str(vid, "(", value_text, ") ", test_text) );
+          log_test( str(vid, " ", test_text, " (", value_text, ")") );
         else
-          log_info( str(vid, " ", test_text) );
+          log_test( str(vid, " ", test_text) );
       }
       else
-        log_info( str(vid, " *skip*: '", fname, "(", value_text, ")'") );
+        log_test( str(vid, " -skip-: '", fname, "(", value_text, ")'") );
     }
 
     // Indirect function calls would be very useful here!!!
@@ -1103,13 +1105,13 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "consts", consts(get_value(vid)), vid );
     for (vid=test_ids) run_test( "get_index", get_index(get_value(vid)), vid );
     for (vid=test_ids) run_test( "pad_9", pad(get_value(vid), w=9), vid );
-    log_info( "not testing: dround()" );
-    log_info( "not testing: sround()" );
+    log_notest( "dround()" );
+    log_notest( "sround()" );
     for (vid=test_ids) run_test( "limit_12", limit(get_value(vid),1,2), vid );
     for (vid=test_ids) run_test( "sum", sum(get_value(vid)), vid );
     for (vid=test_ids) run_test( "mean", mean(get_value(vid)), vid );
-    log_info( "not testing: ciselect()" );
-    log_info( "not testing: cmvselect()" );
+    log_notest( "ciselect()" );
+    log_notest( "cmvselect()" );
     for (vid=test_ids) run_test( "eselect_F", eselect(get_value(vid),f=true), vid );
     for (vid=test_ids) run_test( "eselect_L", eselect(get_value(vid),l=true), vid );
     for (vid=test_ids) run_test( "eselect_1", eselect(get_value(vid),i=1), vid );

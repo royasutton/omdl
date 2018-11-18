@@ -397,6 +397,8 @@ BEGIN_SCOPE validate;
 
     // validate helper function and module
     function get_value( vid ) = get_table_v(test_r, test_c, vid, "tv");
+    module log_test( m ) { log_type ( "test", m ); }
+    module log_notest( f ) { log_test ( str("not tested: '", f, "'") ); }
     module run_test( fname, fresult, vid )
     {
       value_text = get_table_v(test_r, test_c, vid, "td");
@@ -405,16 +407,15 @@ BEGIN_SCOPE validate;
       test_pass = validate( cv=fresult, t=pass_value, pf=true );
       test_text = validate( str(fname, "(", get_value(vid), ")=", pass_value), fresult, pass_value );
 
-
       if ( pass_value != s )
       {
         if ( !test_pass )
-          log_warn( str(vid, "(", value_text, ") ", test_text) );
+          log_test( str(vid, " ", test_text, " (", value_text, ")") );
         else
-          log_info( str(vid, " ", test_text) );
+          log_test( str(vid, " ", test_text) );
       }
       else
-        log_info( str(vid, " *skip*: '", fname, "(", value_text, ")'") );
+        log_test( str(vid, " -skip-: '", fname, "(", value_text, ")'") );
     }
 
     // Indirect function calls would be very useful here!!!
