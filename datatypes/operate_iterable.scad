@@ -791,9 +791,6 @@ BEGIN_SCOPE validate;
     include <datatypes/table.scad>;
     include <validation.scad>;
 
-    show_passing = true;    // show passing tests
-    show_skipped = true;    // show skipped tests
-
     echo( str("OpenSCAD Version ", version()) );
 
     // test-values columns
@@ -1165,10 +1162,10 @@ BEGIN_SCOPE validate;
       {
         if ( !test_pass )
           log_warn( str(vid, "(", value_text, ") ", test_text) );
-        else if ( show_passing )
+        else
           log_info( str(vid, " ", test_text) );
       }
-      else if ( show_skipped )
+      else
         log_info( str(vid, " *skip*: '", fname, "(", value_text, ")'") );
     }
 

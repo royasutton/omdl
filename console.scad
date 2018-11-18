@@ -98,6 +98,21 @@ module log_echo( m )
 
 //! Output diagnostic message to console.
 /***************************************************************************//**
+  \param    t <string> An output message type.
+  \param    m <string> An output message.
+*******************************************************************************/
+module log_type( t, m )
+{
+  um = (m==undef) ? "" : m;
+  mt = (t==undef) ? "NO_TYPE" : t;
+
+  sp = chr( 32 );
+
+  echo ( str("[", sp, mt, sp, "]", sp, um) );
+}
+
+//! Output diagnostic message to console.
+/***************************************************************************//**
   \param    m <string> An output message.
 
   \details
@@ -114,7 +129,6 @@ module log_debug( m )
 
   if ( $log_debug == true )
     echo ( str(mt, sp, cs, ";", sp, um) );
-
 }
 
 //! Output information message to console.
@@ -206,6 +220,9 @@ BEGIN_SCOPE example;
 
     // general
     log_echo( message );
+
+    // type
+    log_type( "MY_TYPE", message );
 
     // debugging
     log_debug( message );
