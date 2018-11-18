@@ -703,7 +703,7 @@ BEGIN_SCOPE validate;
 
       if ( get_table_v(good_r, good_c, fname, vid) != skip )
         children();
-      else if ( show_skipped )
+      else
         log_info( str("*skip*: ", vid, " '", fname, "(", value_text, ")'") );
     }
     module test( fname, fresult, vid, pair )
