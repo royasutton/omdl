@@ -75,12 +75,12 @@
     \amu_make     png_files (append=db_dim extension=png)
     \amu_make     stl_files (append=db_dim extension=stl)
     \amu_word      file_cnt (words="${png_files}" ++count)
-    \amu_seq       cell_num (p="(" s=")" l="${file_cnt}" ++n)
+    \amu_seq       cell_num (prefix="(" suffix=")" last="${file_cnt}" ++number)
     \amu_eval       iprefix (shape="" ${image_stem})
-    \amu_filename  cell_txt (f="${png_files}" r="^" ++stem)
-    \amu_replace    cell_id (t="${cell_txt}" s="${iprefix}" r="id: ")
-    \amu_replace   cell_end (t="${cell_txt}" s="${iprefix}")
-    \amu_replace   cell_end (t="${cell_end}" s="_" replace="<br>")
+    \amu_filename  cell_txt (files="${png_files}" separator="^" ++stem)
+    \amu_replace    cell_id (text="${cell_txt}" search="${iprefix}" replace="id: ")
+    \amu_replace   cell_end (text="${cell_txt}" search="${iprefix}")
+    \amu_replace   cell_end (text="${cell_end}" search="_" replace="<br>")
     \amu_combine   cell_end (p="<center>" s="</center>" j="" f="^" t="^" ${cell_end})
 
     \htmlonly
