@@ -194,11 +194,11 @@ function lstr_html
       cs =
       concat
       (
-        [for (i=cb) str(bb, i, ba)],
-        [for (i=cp) str(bb, i, ba)],
+        [for (i=is_string(cb)?[cb]:cb) str(bb, i, ba)],
+        [for (i=is_string(cp)?[cp]:cp) str(bb, i, ba)],
         fb, cv, fa,
-        [for (i=rp) str(bb, "/", i, ba)],
-        [for (i=ca) str(bb, i, ba)]
+        [for (i=is_string(rp)?[rp]:rp) str(bb, "/", i, ba)],
+        [for (i=is_string(ca)?[ca]:ca) str(bb, i, ba)]
       ),
 
       nv = is_list(v) ? ntail(v) : empty_str,

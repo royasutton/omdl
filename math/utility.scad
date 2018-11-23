@@ -137,7 +137,7 @@ function hist
          : (sm==4) ? [undef, undef, ["i", "sup"], ["b", "sup"], undef]
          :           cp,
       fa = (sm==1) ? undef
-         : (sm==4) ? [undef, undef, undef, undef, undef, "br"]
+         : (sm==4) ? [undef, undef, undef, undef, undef, ["br"]]
          :           ca,
       ff = (sm==1) ? undef
          : (sm==4) ? undef
