@@ -30,8 +30,8 @@
     \amu_pathid parent      (++path)
     \amu_pathid group       (++path ++stem)
 
-    \amu_define group_name  ()
-    \amu_define group_brief ()
+    \amu_define group_name  (3d Shapes)
+    \amu_define group_brief (Common 3D derivative shapes.)
 
   \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/

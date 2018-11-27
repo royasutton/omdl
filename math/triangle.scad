@@ -30,8 +30,8 @@
     \amu_pathid parent      (++path)
     \amu_pathid group       (++path ++stem)
 
-    \amu_define group_name  ()
-    \amu_define group_brief ()
+    \amu_define group_name  (Triangles)
+    \amu_define group_brief (Triangle mathematical functions.)
 
   \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/

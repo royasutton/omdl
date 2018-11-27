@@ -30,8 +30,8 @@
     \amu_pathid parent      (++path)
     \amu_pathid group       (++path ++stem)
 
-    \amu_define group_name  ()
-    \amu_define group_brief ()
+    \amu_define group_name  (Utilities)
+    \amu_define group_brief (Miscellaneous mathematical utilities.)
 
   \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/

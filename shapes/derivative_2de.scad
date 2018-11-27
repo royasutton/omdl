@@ -30,8 +30,8 @@
     \amu_pathid parent      (++path)
     \amu_pathid group       (++path ++stem)
 
-    \amu_define group_name  ()
-    \amu_define group_brief ()
+    \amu_define group_name  (2d Extrusions)
+    \amu_define group_brief (Common 2D derivative shapes linearly extruded.)
 
   \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/

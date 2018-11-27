@@ -32,8 +32,8 @@
     \amu_define parent      (${path}_operate)
     \amu_pathid group       (++path ++stem)
 
-    \amu_define group_name  ()
-    \amu_define group_brief ()
+    \amu_define group_name  (Lists)
+    \amu_define group_brief (List data type operations.)
 
   \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/

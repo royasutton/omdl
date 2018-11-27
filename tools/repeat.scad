@@ -30,8 +30,8 @@
     \amu_pathid parent      (++path)
     \amu_pathid group       (++path ++stem)
 
-    \amu_define group_name  ()
-    \amu_define group_brief ()
+    \amu_define group_name  (Repeat)
+    \amu_define group_brief (Shape repetition tools.)
 
   \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/

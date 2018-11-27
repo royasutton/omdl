@@ -30,8 +30,8 @@
     \amu_pathid parent      (++path)
     \amu_pathid group       (++path ++stem)
 
-    \amu_define group_name  ()
-    \amu_define group_brief ()
+    \amu_define group_name  (Linear Algebra)
+    \amu_define group_brief (Linear algebra transformations on Euclidean coordinates.)
 
   \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/

@@ -30,8 +30,8 @@
     \amu_pathid parent      (++path_parent)
     \amu_pathid group       (++path)
 
-    \amu_define group_name  ()
-    \amu_define group_brief ()
+    \amu_define group_name  (Units)
+    \amu_define group_brief (Units and unit conversions.)
 
 *******************************************************************************/
 

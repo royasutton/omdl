@@ -30,8 +30,8 @@
     \amu_pathid parent      (++path)
     \amu_pathid group       (++path ++stem)
 
-    \amu_define group_name  ()
-    \amu_define group_brief ()
+    \amu_define group_name  (Lengths)
+    \amu_define group_brief (Length units and conversions.)
 
   \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/

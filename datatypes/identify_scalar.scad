@@ -32,8 +32,8 @@
     \amu_define parent      (${path}_identify)
     \amu_pathid group       (++path ++stem)
 
-    \amu_define group_name  ()
-    \amu_define group_brief ()
+    \amu_define group_name  (Scalars)
+    \amu_define group_brief (Scalar data type tests.)
 
   \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/

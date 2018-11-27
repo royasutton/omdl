@@ -32,8 +32,8 @@
     \amu_define parent      (${path}_identify)
     \amu_pathid group       (++path ++stem)
 
-    \amu_define group_name  ()
-    \amu_define group_brief ()
+    \amu_define group_name  (Iterables)
+    \amu_define group_brief (Iterable data type tests.)
 
   \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/

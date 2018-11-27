@@ -30,8 +30,8 @@
     \amu_pathid parent      (++path)
     \amu_pathid group       (++path ++stem)
 
-    \amu_define group_name  ()
-    \amu_define group_brief ()
+    \amu_define group_name  (Maps)
+    \amu_define group_brief (Map data type and operations.)
 
   \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
