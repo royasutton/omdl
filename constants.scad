@@ -27,12 +27,15 @@
 
   \details
 
-    \amu_pathid parent  (++path)
-    \amu_pathid group   (++path ++stem)
+    \amu_pathid parent      (++path)
+    \amu_pathid group       (++path ++stem)
 
-    \amu_define group1  (${group}_general)
-    \amu_define group2  (${group}_system)
-    \amu_define group3  (${group}_euclidean)
+    \amu_define group1      (${group}_general)
+    \amu_define group2      (${group}_system)
+    \amu_define group3      (${group}_euclidean)
+
+    \amu_define group_name  ()
+    \amu_define group_brief ()
 
   \ingroup \amu_eval(${parent} ${group} ${group1} ${group2} ${group3})
 *******************************************************************************/

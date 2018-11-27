@@ -27,8 +27,11 @@
 
   \details
 
-    \amu_pathid parent  (++path)
-    \amu_pathid group   (++path ++stem)
+    \amu_pathid parent      (++path)
+    \amu_pathid group       (++path ++stem)
+
+    \amu_define group_name  ()
+    \amu_define group_brief ()
 
   \ingroup \amu_eval(${parent} ${group})
 *******************************************************************************/
