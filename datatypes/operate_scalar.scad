@@ -67,8 +67,8 @@
   \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup \amu_eval(${group}) Scalars
-  \brief    Scalar data type operations.
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
 
   \details
 

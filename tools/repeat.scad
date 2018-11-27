@@ -94,8 +94,8 @@ include <../math/other_shape.scad>;
   \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup \amu_eval(${group}) Repeat
-  \brief    Shape repetition tools.
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
   @{
 *******************************************************************************/
 

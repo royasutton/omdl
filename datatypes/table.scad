@@ -47,8 +47,8 @@ include <datatypes-base.scad>;
   \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup \amu_eval(${group}) Tables
-  \brief    Table data type and operations.
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
 
   \details
 

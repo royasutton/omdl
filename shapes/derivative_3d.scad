@@ -94,8 +94,8 @@ include <../tools/extrude.scad>;
   \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup \amu_eval(${group}) 3d Shapes
-  \brief    Common 3D derivative shapes.
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
   @{
 *******************************************************************************/
 

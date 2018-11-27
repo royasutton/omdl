@@ -44,8 +44,8 @@
   \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup \amu_eval(${group}) Lengths
-  \brief    Length units and conversions.
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
 
   \details
 

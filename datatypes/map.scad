@@ -47,8 +47,8 @@ include <datatypes-base.scad>;
   \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup \amu_eval(${group}) Maps
-  \brief    Map data type and operations.
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
 
   \details
 

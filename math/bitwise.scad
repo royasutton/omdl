@@ -67,8 +67,8 @@ include <../datatypes/datatypes-base.scad>;
   \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup \amu_eval(${group}) Bitwise
-  \brief    Base-two bitwise binary operations.
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
 
   \details
 

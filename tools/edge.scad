@@ -94,8 +94,8 @@ include <../shapes/derivative_2d.scad>;
   \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup \amu_eval(${group}) Edge
-  \brief    Shape edge finishing tools.
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
   @{
 *******************************************************************************/
 

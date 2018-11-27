@@ -47,8 +47,8 @@ include <align.scad>;
   \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup \amu_eval(${group}) Polytope
-  \brief    Polygon and polyhedron tools.
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
   @{
 *******************************************************************************/
 

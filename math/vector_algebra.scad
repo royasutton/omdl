@@ -65,8 +65,8 @@
   \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup \amu_eval(${group}) Vector Algebra
-  \brief    Algebraic operations on Euclidean vectors.
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
 
   \details
 

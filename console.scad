@@ -41,8 +41,8 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \defgroup \amu_eval(${group}) Console
-  \brief    Console message logging.
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
 
   \details
 

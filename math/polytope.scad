@@ -46,8 +46,8 @@ include <math-base.scad>;
   \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup \amu_eval(${group}) Polytopes
-  \brief    Polygon and polyhedron mathematical functions.
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
   @{
 *******************************************************************************/
 

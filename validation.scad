@@ -43,8 +43,8 @@ include <datatypes/datatypes-base.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \defgroup \amu_eval(${group}) Validation
-  \brief    Function validation methods.
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
 
   \details
 

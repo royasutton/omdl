@@ -43,8 +43,8 @@
   \addtogroup \amu_eval(${parent})
   @{
 
-  \defgroup \amu_eval(${group}) Material
-  \brief    Material specifications.
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
 
   @}
 *******************************************************************************/

@@ -57,8 +57,8 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \defgroup \amu_eval(${group}) Datatypes
-  \brief    Data types and operators.
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
   @{
 
     See \ref dt for nomenclature, assumptions, and conventions used to
