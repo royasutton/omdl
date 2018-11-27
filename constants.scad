@@ -34,15 +34,14 @@
     \amu_define group_brief (Design constants.)
 
       \amu_define group1        (${group}_general)
-      \amu_define group2        (${group}_system)
-      \amu_define group3        (${group}_euclidean)
-
       \amu_define group1_name   (General)
       \amu_define group1_brief  (General mathematical constants.)
 
+      \amu_define group2        (${group}_system)
       \amu_define group2_name   (System)
       \amu_define group2_brief  (System and program limits.)
 
+      \amu_define group3        (${group}_euclidean)
       \amu_define group3_name   (Euclidean)
       \amu_define group3_brief  (Euclidean space axis mapping.)
 
@@ -66,8 +65,8 @@
   \addtogroup \amu_eval(${group})
   @{
 
-  \defgroup \amu_eval(${group1}) General
-  \brief    General mathematical constants.
+  \defgroup \amu_eval(${group1} ${group1_name})
+  \brief    \amu_eval(${group1_brief})
   @{
 *******************************************************************************/
 
@@ -96,8 +95,8 @@ phi = (1 + sqrt(5)) / 2;
   \addtogroup \amu_eval(${group})
   @{
 
-  \defgroup \amu_eval(${group2}) System
-  \brief    System and program limits.
+  \defgroup \amu_eval(${group2} ${group2_name})
+  \brief    \amu_eval(${group2_brief})
   @{
 *******************************************************************************/
 
@@ -126,8 +125,8 @@ empty_lst = [];
   \addtogroup \amu_eval(${group})
   @{
 
-  \defgroup \amu_eval(${group3}) Euclidean
-  \brief    Euclidean space axis mapping.
+  \defgroup \amu_eval(${group3} ${group3_name})
+  \brief    \amu_eval(${group3_brief})
   @{
 *******************************************************************************/
 

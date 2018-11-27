@@ -33,6 +33,14 @@
     \amu_define group_name  (Datatypes)
     \amu_define group_brief (Data types and operators.)
 
+      \amu_define group1        (${group}_identify)
+      \amu_define group1_name   (Identification)
+      \amu_define group1_brief  (Basic data type tests.)
+
+      \amu_define group2        (${group}_operate)
+      \amu_define group2_name   (Operations)
+      \amu_define group2_brief  (Basic data type operations.)
+
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -64,11 +72,11 @@
     See \ref dt for nomenclature, assumptions, and conventions used to
     specify values and data types throughout the library.
 
-  \defgroup \amu_eval(${group})_identify Identification
-  \brief    Basic data type tests.
+  \defgroup \amu_eval(${group1} ${group1_name})
+  \brief    \amu_eval(${group1_brief})
 
-  \defgroup \amu_eval(${group})_operate Operations
-  \brief    Basic data type operations.
+  \defgroup \amu_eval(${group2} ${group2_name})
+  \brief    \amu_eval(${group2_brief})
 
   @}
 *******************************************************************************/
