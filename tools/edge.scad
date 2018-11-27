@@ -62,8 +62,6 @@ include <../shapes/derivative_2d.scad>;
 /***************************************************************************//**
   \addtogroup \amu_eval(${parent})
 
-    \amu_define caption (Edge)
-
     \amu_make png_files (append=dim extension=png)
     \amu_make eps_files (append=dim extension=png2eps)
     \amu_word  file_cnt (words="${png_files}" ++count)
@@ -78,14 +76,14 @@ include <../shapes/derivative_2d.scad>;
     \amu_image_table
       (
         type=html columns=4 image_width="200" cell_files="${png_files}"
-        table_caption="${caption}" cell_captions="${cell_num}"
+        table_caption="${group_name}" cell_captions="${cell_num}"
         cell_end="${fname}"
       )
     \latexonly
       \amu_image_table
         (
           type=latex columns=4 image_width="1.25in" cell_files="${eps_files}"
-          table_caption="${caption}" cell_captions="${cell_num}"
+          table_caption="${group_name}" cell_captions="${cell_num}"
         )
     \endlatexonly
 *******************************************************************************/
