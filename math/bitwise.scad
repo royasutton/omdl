@@ -46,7 +46,7 @@ include <../datatypes/datatypes-base.scad>;
   \page tv_\amu_eval(${parent})
     \li \subpage tv_\amu_eval(${group})
 
-  \page tv_\amu_eval(${group}) Bitwise
+  \page tv_\amu_eval(${group} ${group_name})
     \li \subpage tv_\amu_eval(${group})_s
     \li \subpage tv_\amu_eval(${group})_r
 
@@ -72,11 +72,11 @@ include <../datatypes/datatypes-base.scad>;
 
   \details
 
+    See validation \ref tv_\amu_eval(${group})_r "results".
+
     See Wikipedia binary [numbers](https://en.wikipedia.org/wiki/Binary_number)
     and [operations](https://en.wikipedia.org/wiki/Bitwise_operation)
     for more information.
-
-    See validation \ref tv_math_bitwise_r "results".
   @{
 *******************************************************************************/
 

@@ -51,13 +51,13 @@
   \page validation
     \li \subpage tv_\amu_eval(${group})
 
-  \page tv_\amu_eval(${group}) Datatypes
-    \li \subpage tv_\amu_eval(${group})_identify
-    \li \subpage tv_\amu_eval(${group})_operate
+  \page tv_\amu_eval(${group} ${group_name})
+    \li \subpage tv_\amu_eval(${group1})
+    \li \subpage tv_\amu_eval(${group2})
 
-  \page tv_\amu_eval(${group})_identify Identification
+  \page tv_\amu_eval(${group1} ${group1_name})
 
-  \page tv_\amu_eval(${group})_operate Operations
+  \page tv_\amu_eval(${group2} ${group2_name})
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

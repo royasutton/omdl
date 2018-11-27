@@ -44,7 +44,7 @@
   \page tv_\amu_eval(${parent})
     \li \subpage tv_\amu_eval(${group})
 
-  \page tv_\amu_eval(${group}) Vector Algebra
+  \page tv_\amu_eval(${group} ${group_name})
     \li \subpage tv_\amu_eval(${group})_s
     \li \subpage tv_\amu_eval(${group})_r
 
@@ -70,7 +70,7 @@
 
   \details
 
-    See validation \ref tv_math_vector_algebra_r "results".
+    See validation \ref tv_\amu_eval(${group})_r "results".
   @{
 *******************************************************************************/
 

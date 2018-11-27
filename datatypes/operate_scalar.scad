@@ -46,7 +46,7 @@
   \page tv_\amu_eval(${parent})
     \li \subpage tv_\amu_eval(${group})
 
-  \page tv_\amu_eval(${group}) Scalars
+  \page tv_\amu_eval(${group} ${group_name})
     \li \subpage tv_\amu_eval(${group})_s
     \li \subpage tv_\amu_eval(${group})_r
 
