@@ -43,6 +43,22 @@ include <../datatypes/datatypes-base.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
+  \amu_scope       tv_scope (index=1)
+  \amu_file          tv_log (file="${tv_scope}.log" ++rmecho ++read)
+  \amu_replace      tv_pass (t=${tv_log} s="passed:" r="1," ++fnc)
+  \amu_replace      tv_skip (t=${tv_log} s="-skip-:" r="1," ++fnc)
+  \amu_replace      tv_fail (t=${tv_log} s="failed:" r="1," ++fnc)
+  \amu_source       tv_file (++file)
+  \amu_word           tv_td (t="," w=${tv_file} ++s w="\ref ${group}" ++s
+                             w="\ref tv_${group}_s" ++s w="\ref tv_${group}_r" ++s
+                             w=${tv_pass} ++c w=${tv_skip} ++c w=${tv_fail} ++c)
+  \amu_define         tv_th (file^group^script^results^passed^skipped^failed)
+  \amu_word           tv_tc (w=${tv_th} ++c)
+  \amu_word       tv_fail_c (w=${tv_fail} ++c)
+  \amu_replace   tv_fail_td (t=${tv_log} s="^.*failed:.*$" r="&^" ++snl ++fsd ++fnc)
+*******************************************************************************/
+
+/***************************************************************************//**
   \page tv_\amu_eval(${parent})
     \li \subpage tv_\amu_eval(${group})
 
@@ -51,12 +67,27 @@ include <../datatypes/datatypes-base.scad>;
     \li \subpage tv_\amu_eval(${group})_r
 
   \page tv_\amu_eval(${group})_s Script
-    \dontinclude \amu_scope(index=1).scad
+    \dontinclude \amu_eval(${tv_scope}).scad
     \skip include
     \until end-of-tests
 
   \page tv_\amu_eval(${group})_r Results
-    \include \amu_scope(index=1).log
+    ### Summary ###
+    \amu_table(columns=${tv_tc} column_headings=${tv_th} cell_texts=${tv_td})
+
+    ### \amu_if( -z ${tv_fail_td} ) {All Passed} else {Failed} endif ###
+    \amu_table(columns=1 cell_texts=${tv_fail_td})
+
+    ### All ###
+    \code
+    \amu_eval(${tv_log})
+    \endcode
+
+  \page tv_summary
+    \amu_table(columns=${tv_tc} cell_texts=${tv_td})
+
+  \page validation
+    \amu_if( -n ${tv_fail} ) {\ref ${group} failed ${tv_fail_c}} endif
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -72,7 +103,13 @@ include <../datatypes/datatypes-base.scad>;
 
   \details
 
-    See validation \ref tv_\amu_eval(${group})_r "results".
+    ### Validation Summary ###
+    \amu_table(columns=${tv_tc} column_headings=${tv_th} cell_texts=${tv_td})
+
+    ### \amu_if( -z ${tv_fail_td} ) {No Failures} else {Failures} endif ###
+    \amu_table(columns=1 cell_texts=${tv_fail_td})
+
+    See complete validation \ref tv_\amu_eval(${group})_r "results".
 
     See Wikipedia binary [numbers](https://en.wikipedia.org/wiki/Binary_number)
     and [operations](https://en.wikipedia.org/wiki/Bitwise_operation)
