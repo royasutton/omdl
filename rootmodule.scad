@@ -41,6 +41,30 @@
 
 /***************************************************************************//**
   \page validation Validation
+
+  ### Scripts and Results ###
+
+    The documentation for [omdl] is produced by [openscad-amu]. An
+    integral part of building the library documentation is verifying
+    that the basic operations work as expected. As [OpenSCAD] evolves,
+    changes in the language and/or compiler may break basic library
+    behavior. These validations are performed to identify library
+    routines that require updating to conform to any such changes.
+
+    | category            | description
+    |:-------------------:|:----------------------------------------
+    | \subpage tv_details | Tree of test scripts and test results.
+    | \subpage tv_summary | A flat summary of test results.
+
+  ### Current Failures ###
+
+  [omdl]: https://royasutton.github.io/omdl
+  [openscad-amu]: https://royasutton.github.io/openscad-amu
+  [OpenSCAD]: http://www.openscad.org
+
+  \page tv_details Details
+
+  \page tv_summary Summary
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

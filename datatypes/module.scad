@@ -48,11 +48,12 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page validation
+  \page tv_details
     \li \subpage tv_\amu_eval(${group})
 
   \page tv_\amu_eval(${group} ${group_name})
     \li \subpage tv_\amu_eval(${group1})
+
     \li \subpage tv_\amu_eval(${group2})
 
   \page tv_\amu_eval(${group1} ${group1_name})
