@@ -51,10 +51,10 @@
     behavior. These validations are performed to identify library
     routines that require updating to conform to any such changes.
 
-    | category            | description
-    |:-------------------:|:----------------------------------------
-    | \subpage tv_details | Tree of test scripts and test results.
-    | \subpage tv_summary | A flat summary of test results.
+    | category                | description
+    |:-----------------------:|:----------------------------------------
+    | \subpage tv_tree "Tree" | Tree of test scripts and test results.
+    | \subpage tv_list "List" | A summary list of test results.
 
   ### Current Failures ###
 
@@ -62,9 +62,12 @@
   [openscad-amu]: https://royasutton.github.io/openscad-amu
   [OpenSCAD]: http://www.openscad.org
 
-  \page tv_details Details
+  \page tv_tree Validation Tests and Results
 
-  \page tv_summary Summary
+  \page tv_list Validation Summary
+    \amu_define tv_th (file^group^script^results^passed^skipped^failed)
+    \amu_word   tv_tc (w=${tv_th} ++c)
+    \amu_table(columns=${tv_tc} column_headings=${tv_th})
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

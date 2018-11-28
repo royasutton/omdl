@@ -83,7 +83,7 @@
     \amu_eval(${tv_log})
     \endcode
 
-  \page tv_summary
+  \page tv_list
     \amu_table(columns=${tv_tc} cell_texts=${tv_td})
 
   \page validation
