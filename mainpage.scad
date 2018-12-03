@@ -120,8 +120,8 @@
 
   [openscad-amu]: https://royasutton.github.io/openscad-amu
 
-  [Doxygen]: http://www.stack.nl/~dimitri/doxygen/index.html
-  [markups]: http://www.stack.nl/~dimitri/doxygen/manual/commands.html
+  [Doxygen]: http://www.doxygen.nl
+  [markups]: http://www.doxygen.nl/manual/commands.html
 
   [OpenSCAD]: http://www.openscad.org
   [library location]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Libraries
