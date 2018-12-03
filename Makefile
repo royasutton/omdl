@@ -107,6 +107,7 @@ generate_latex                          := $(false)
 release_root                            := release
 release_project                         := $(false)
 release_library                         := $(false)
+release_archive_project                 := $(false)
 release_archive_doxygen                 := $(true)
 release_archive_scopes                  := $(false)
 
