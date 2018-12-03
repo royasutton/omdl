@@ -25,16 +25,20 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     02110-1301, USA; or see <http://www.gnu.org/licenses/>.
 
+  \details
+
+    \amu_define group_name  (Mechanical)
+    \amu_define group_brief (Mechanical component specifications.)
+
+  \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
 
+//----------------------------------------------------------------------------//
+// group.
+//----------------------------------------------------------------------------//
+
 /***************************************************************************//**
-  \addtogroup database_component
-  @{
-
-  \defgroup database_mechanical Mechanical
-  \brief    Mechanical component specifications.
-
-  @}
+  \amu_include (include/amu/group_in_parent.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

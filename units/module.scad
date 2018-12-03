@@ -25,11 +25,20 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     02110-1301, USA; or see <http://www.gnu.org/licenses/>.
 
+  \details
+
+    \amu_define group_name  (Units)
+    \amu_define group_brief (Units and unit conversions.)
+
+  \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
 
+//----------------------------------------------------------------------------//
+// group.
+//----------------------------------------------------------------------------//
+
 /***************************************************************************//**
-  \defgroup units Units
-  \brief    Units and unit conversions.
+  \amu_include (include/amu/group.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

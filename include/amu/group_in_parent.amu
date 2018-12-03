@@ -1,0 +1,18 @@
+/+
+
+  define a group and add to a parent group.
+
+  requires:
+    definitions from one of pgid_*.
+
+ +/
+
+  \addtogroup \amu_eval(${parent})
+  @{
+
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
+
+  @}
+
+/+ end of file  +/

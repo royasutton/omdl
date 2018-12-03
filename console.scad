@@ -27,29 +27,30 @@
 
   \details
 
-  \ingroup utilities utilities_console
+    \amu_define group_name  (Console)
+    \amu_define group_brief (Console message logging.)
+
+  \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-/***************************************************************************//**
-  \addtogroup utilities
-  @{
+// group.
+//----------------------------------------------------------------------------//
 
-  \defgroup utilities_console Console
-  \brief    Console message logging.
+/***************************************************************************//**
+  \amu_include (include/amu/group_start.amu)
 
   \details
 
     \b Example
 
-      \dontinclude console_example.scad
-      \skip use
+      \dontinclude \amu_scope(index=1).scad
+      \skip include
       \until log_error( message );
 
-    \b Result \include console_example.log
-
-  @{
+    \b Result \include \amu_scope(index=1).log
 *******************************************************************************/
+
 //----------------------------------------------------------------------------//
 
 //! Format the function call stack as a string.
@@ -96,6 +97,21 @@ module log_echo( m )
 
 //! Output diagnostic message to console.
 /***************************************************************************//**
+  \param    t <string> An output message type.
+  \param    m <string> An output message.
+*******************************************************************************/
+module log_type( t, m )
+{
+  um = (m==undef) ? "" : m;
+  mt = (t==undef) ? "NO_TYPE" : t;
+
+  sp = chr( 32 );
+
+  echo ( str("[", sp, mt, sp, "]", sp, um) );
+}
+
+//! Output diagnostic message to console.
+/***************************************************************************//**
   \param    m <string> An output message.
 
   \details
@@ -112,7 +128,6 @@ module log_debug( m )
 
   if ( $log_debug == true )
     echo ( str(mt, sp, cs, ";", sp, um) );
-
 }
 
 //! Output information message to console.
@@ -188,7 +203,6 @@ module log_error( m )
 }
 
 //! @}
-//! @}
 
 //----------------------------------------------------------------------------//
 // openscad-amu auxiliary scripts
@@ -204,6 +218,9 @@ BEGIN_SCOPE example;
 
     // general
     log_echo( message );
+
+    // type
+    log_type( "MY_TYPE", message );
 
     // debugging
     log_debug( message );

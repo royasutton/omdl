@@ -25,11 +25,20 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     02110-1301, USA; or see <http://www.gnu.org/licenses/>.
 
+  \details
+
+    \amu_define group_name  (Shapes)
+    \amu_define group_brief (Basic geometric shapes.)
+
+  \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
 
+//----------------------------------------------------------------------------//
+// group.
+//----------------------------------------------------------------------------//
+
 /***************************************************************************//**
-  \defgroup shapes Shapes
-  \brief    2d and 3d shapes.
+  \amu_include (include/amu/group.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

@@ -1,0 +1,42 @@
+/+
+
+  output validation results details.
+
+  requires:
+    definitions from one of pgid_*.
+    definitions from validate_log_{th,td}.amu.
+
+ +/
+
+  \page tv_\amu_eval(${parent})
+    \li \subpage tv_\amu_eval(${group})
+
+  \page tv_\amu_eval(${group} ${group_name})
+    \li \subpage tv_\amu_eval(${group})_s
+    \li \subpage tv_\amu_eval(${group})_r
+
+  \page tv_\amu_eval(${group})_s Script
+    \dontinclude \amu_eval(${tv_scope}).scad
+    \skip include
+    \until end-of-tests
+
+  \page tv_\amu_eval(${group})_r Results
+
+    ### Summary ###
+    \amu_table (columns=${tv_tc} column_headings=${tv_th} cell_texts=${tv_td})
+
+    ### \amu_if( -z ${tv_fail_td} ) {All Passed} else {Failed} endif ###
+    \amu_table (columns=1 cell_texts=${tv_fail_td})
+
+    ### All ###
+    \code
+    \amu_eval(${tv_log})
+    \endcode
+
+  \page tv_list
+    \amu_table (columns=${tv_tc} cell_texts=${tv_td})
+
+  \page validation
+    \amu_if ( -n ${tv_fail} ) {\ref ${group} failed ${tv_fail_c}} endif
+
+/+ end of file  +/

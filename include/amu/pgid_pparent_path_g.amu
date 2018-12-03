@@ -1,0 +1,15 @@
+/+
+
+  define parent and group. add to group.
+
+  requires:
+    none.
+
+ +/
+
+  \amu_pathid parent  (++path_parent)
+  \amu_pathid group   (++path)
+
+  \ingroup \amu_eval(${group})
+
+/+ end of file  +/

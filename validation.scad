@@ -27,31 +27,32 @@
 
   \details
 
-  \ingroup utilities utilities_validate
+    \amu_define group_name  (Validation)
+    \amu_define group_brief (Function validation methods.)
+
+  \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
 include <datatypes/datatypes-base.scad>;
 
 //----------------------------------------------------------------------------//
-/***************************************************************************//**
-  \addtogroup utilities
-  @{
+// group.
+//----------------------------------------------------------------------------//
 
-  \defgroup utilities_validate Validation
-  \brief    Function validation methods.
+/***************************************************************************//**
+  \amu_include (include/amu/group_start.amu)
 
   \details
 
     \b Example
 
-      \dontinclude validation_example.scad
-      \skip use
+      \dontinclude \amu_scope(index=1).scad
+      \skip include
       \until tvae2, 4) );
 
-    \b Result \include validation_example.log
-
-  @{
+    \b Result \include \amu_scope(index=1).log
 *******************************************************************************/
+
 //----------------------------------------------------------------------------//
 
 //! Compare a computed test value with an known good result.
@@ -100,8 +101,8 @@ function validate
       ? (pf?true  : str("passed: '", d, "'"))
       : (pf?false : str
                     (
-                      "FAILED: '", d, "'.  Got '", cv,
-                      "'. Expected to equal '", ev, "'"
+                      "failed: '", d, "'; got '", cv,
+                      "', expected to equal '", ev, "'."
                     )
         )
     )
@@ -111,8 +112,8 @@ function validate
       ? (pf?true  : str("passed: '", d, "'"))
       : (pf?false : str
                     (
-                      "FAILED: '", d, "'.  Got '", cv,
-                      "'. Expected to not equal '", ev, "'"
+                      "failed: '", d, "'; got '", cv,
+                      "', expected to not equal '", ev, "'."
                     )
         )
     )
@@ -124,15 +125,14 @@ function validate
       ? (pf?true  : str("passed: '", d, "'"))
       : (pf?false : str
                     (
-                      "FAILED: '", d, "'.  Got '", cv,
-                      "'. Expected to almost equal '", ev, "'",
+                      "failed: '", d, "'; got '", cv,
+                      "', expected to almost equal '", ev, "'.",
                       " to ", p, " digits"
                     )
         )
     )
-  : (pf?false : str("FAILED: '", d, "'.  Unknown test '", t, "'"));
+  : (pf?false : str("failed: '", d, "';  unknown test '", t, "'."));
 
-//! @}
 //! @}
 
 //----------------------------------------------------------------------------//

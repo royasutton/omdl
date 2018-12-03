@@ -25,16 +25,43 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     02110-1301, USA; or see <http://www.gnu.org/licenses/>.
 
+  \details
+
+  \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
 
-/***************************************************************************//**
-  \defgroup constants Constants
-  \brief    Design constant definitions.
-*******************************************************************************/
+//----------------------------------------------------------------------------//
+// validation.
+//----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \defgroup utilities Utilities
-  \brief    General utilities.
+  \page validation Validation
+
+  ### Scripts and Results ###
+
+    The documentation for [omdl] is produced by [openscad-amu]. An
+    integral part of building the library documentation is verifying
+    that the basic operations work as expected. As [OpenSCAD] evolves,
+    changes in the language and/or compiler may break basic library
+    behavior. These validations are performed to identify library
+    routines that require updating to conform to any such changes.
+
+    | category                | description
+    |:-----------------------:|:----------------------------------------
+    | \subpage tv_tree "Tree" | Tree of test scripts and test results.
+    | \subpage tv_list "List" | A summary list of test results.
+
+  ### Current Failures ###
+
+  [omdl]: https://royasutton.github.io/omdl
+  [openscad-amu]: https://royasutton.github.io/openscad-amu
+  [OpenSCAD]: http://www.openscad.org
+
+  \page tv_tree Validation Tests and Results
+
+  \page tv_list Validation Summary
+    \amu_include (include/amu/validate_log_th.amu)
+    \amu_table(columns=${tv_tc} column_headings=${tv_th})
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

@@ -1,4 +1,4 @@
-//! Include file wrapper of omdl base primitives.
+//! Include wrapper of base omdl includes files.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -25,6 +25,9 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     02110-1301, USA; or see <http://www.gnu.org/licenses/>.
 
+  \details
+
+  \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -36,44 +39,45 @@
 //----------------------------------------------------------------------------//
 // units
 //----------------------------------------------------------------------------//
-//  include <units/units_length.scad>;
-include <units/units_angle.scad>;
-include <units/units_coordinate.scad>;
-include <units/units_resolution.scad>;
+//  include <units/length.scad>;
+include <units/angle.scad>;
+include <units/coordinate.scad>;
+include <units/resolution.scad>;
 
 //----------------------------------------------------------------------------//
 // data types
 //----------------------------------------------------------------------------//
 //  include <datatypes/datatypes-base.scad>;
 
-include <datatypes/datatypes_map.scad>;
-include <datatypes/datatypes_table.scad>;
+include <datatypes/map.scad>;
+include <datatypes/table.scad>;
 
 //----------------------------------------------------------------------------//
 // math
 //----------------------------------------------------------------------------//
 //  include <math/math-base.scad>;
 
-//  include <math/math_triangle.scad>;
-//  include <math/math_oshapes.scad>;
-//  include <math/math_polytope.scad>;
-//  include <math/math_bitwise.scad>;
-include <math/math_utility.scad>;
+//  include <math/triangle.scad>;
+//  include <math/other_shape.scad>;
+//  include <math/polytope.scad>;
+//  include <math/bitwise.scad>;
+include <math/utility.scad>;
 
 //----------------------------------------------------------------------------//
 // shapes
 //----------------------------------------------------------------------------//
-//  include <shapes/shapes2d.scad>;
-include <shapes/shapes2de.scad>;
-include <shapes/shapes3d.scad>;
+//  include <shapes/derivative_2d.scad>;
+include <shapes/derivative_2de.scad>;
+include <shapes/derivative_3d.scad>;
 
 //----------------------------------------------------------------------------//
 // tools
 //----------------------------------------------------------------------------//
-//  include <tools/tools_align.scad>;
-include <tools/tools_edge.scad>;
-include <tools/tools_polytope.scad>;
-//  include <tools/tools_utility.scad>;
+//  include <tools/align.scad>;
+include <tools/edge.scad>;
+//  include <tools/extrude.scad>;
+include <tools/polytope.scad>;
+//  include <tools/repeat.scad>;
 
 //----------------------------------------------------------------------------//
 // end of file

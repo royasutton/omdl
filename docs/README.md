@@ -113,8 +113,8 @@ you can contact the maintainer of the project or file an [issue].
 
 [openscad-amu]: https://royasutton.github.io/openscad-amu
 
-[Doxygen]: http://www.stack.nl/~dimitri/doxygen/index.html
-[Doxygen markups]: http://www.stack.nl/~dimitri/doxygen/manual/commands.html
+[Doxygen]: http://www.doxygen.nl
+[Doxygen markups]: http://www.doxygen.nl/manual/commands.html
 
 [OpenSCAD]: http://www.openscad.org
 

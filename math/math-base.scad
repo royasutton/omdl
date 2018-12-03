@@ -1,4 +1,4 @@
-//! Include file wrapper of math base primitives.
+//! Include wrapper of base math includes files.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,18 +27,13 @@
 
   \details
 
-  \ingroup \
-    math \
-    \
-    math_vector_algebra \
-    math_linear_algebra
-
+  \amu_include (include/amu/pgid_pparent_path_pg.amu)
 *******************************************************************************/
 
 include <../datatypes/datatypes-base.scad>;
 
-include <math_linear_algebra.scad>;
-include <math_vector_algebra.scad>;
+include <linear_algebra.scad>;
+include <vector_algebra.scad>;
 
 //----------------------------------------------------------------------------//
 // end of file

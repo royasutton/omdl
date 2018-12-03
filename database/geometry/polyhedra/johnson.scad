@@ -51,57 +51,62 @@
   [Netlib]: http://www.netlib.org
   [Polyhedron Database]: http://www.netlib.org/polyhedra
 
-  \ingroup database_polyhedra
+    \amu_pathid parent  (++path_parent)
+    \amu_pathid group   (++path)
+
+  \ingroup \amu_eval(${group})
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
 /***************************************************************************//**
-  \addtogroup database_polyhedra
+  \addtogroup \amu_eval(${group})
   @{
     <br>
-    ### Group: johnson ###
+    ### File: johnson.scad ###
 
-    \amu_define caption (johnson)
-    \amu_make png_files (append=db_dim extension=png)
-    \amu_make stl_files (append=db_dim extension=stl)
-
-    \amu_shell file_cnt ("echo ${png_files} | wc -w")
-    \amu_shell cell_num ("seq -f '(%g)' -s '^' ${file_cnt}")
-
-    \amu_shell html_cell_titles
+    \amu_eval
       (
-        "echo ${stl_files} | grep -Po 'db_dim_\K[^.]*' | tr '\n' '^'"
+        ++global
+        title="Johnson"
+        stem=johnson scope=db_dim size=qvga view=diag
       )
+
+    \amu_define  image_stem (${stem}_${scope}_${size}_${view}_${shape})
+    \amu_make     png_files (append=db_dim extension=png)
+    \amu_make     stl_files (append=db_dim extension=stl)
+    \amu_word      file_cnt (words="${png_files}" ++count)
+    \amu_seq       cell_num (prefix="(" suffix=")" last="${file_cnt}" ++number)
+    \amu_eval       iprefix (shape="" ${image_stem})
+    \amu_filename  cell_txt (files="${png_files}" separator="^" ++stem)
+    \amu_replace    cell_id (text="${cell_txt}" search="${iprefix}" replace="id: ")
+    \amu_replace   cell_end (text="${cell_txt}" search="${iprefix}")
+    \amu_replace   cell_end (text="${cell_end}" search="_" replace="<br>")
+    \amu_combine   cell_end (p="<center>" s="</center>" j="" f="^" t="^" ${cell_end})
 
     \htmlonly
       \amu_image_table
         (
           type=html columns=4 image_width="200" cell_files="${png_files}"
-          table_caption="${caption}" cell_captions="${cell_num}"
-          cell_titles="${html_cell_titles}" cell_urls="${stl_files}"
+          table_caption="${title}" cell_captions="${cell_num}"
+          cell_titles="${cell_id}" cell_end="${cell_end}"
+          cell_urls="${stl_files}"
         )
     \endhtmlonly
 
-    \amu_define caption (johnson)
-    \amu_make eps_files (append=db_dim extension=png2eps)
+    \amu_make     eps_files (append=db_dim extension=png2eps)
 
     \latexonly
       \amu_image_table
         (
           type=latex columns=4 image_width="1.25in" cell_files="${eps_files}"
-          table_caption="${caption}" cell_captions="${cell_num}"
+          table_caption="${title}" cell_captions="${cell_num}"
         )
     \endlatexonly
 
-    \amu_scope scope_id (index=1 ++make)
-    \amu_find scope_log (files="${scope_id}.log")
-    \amu_shell data
-      (
-        "grep -Po 'ECHO: \"\K[^\"]*' ${scope_log}" --rmnl
-      )
-    \amu_shell columns ("echo '${data}' | awk -F '^' 'NR==1 {print NF;exit}'")
-    \amu_shell heading ("echo '${data}' | awk -F '^' 'NR==1 {print;exit}'")
-    \amu_shell texts   ("echo '${data}' | awk -F '^' 'NR>1 {print}'")
+    \amu_scope        scope (index=1)
+    \amu_file       heading (file="${scope}.log"  last=1 ++rmecho ++rmnl ++read)
+    \amu_file         texts (file="${scope}.log" first=2 ++rmecho ++rmnl ++read)
+    \amu_word       columns (tokenizer="^" words="${heading}" ++count)
 
     \amu_table
       (
@@ -12851,9 +12856,9 @@ dtr_polyhedra_johnson =
 BEGIN_SCOPE db;
 BEGIN_SCOPE autostat;
   BEGIN_OPENSCAD;
-    include <math/math_polytope.scad>;
-    include <math/math_utility.scad>;
-    include <datatypes/datatypes_table.scad>;
+    include <math/polytope.scad>;
+    include <math/utility.scad>;
+    include <datatypes/table.scad>;
     include <database/geometry/polyhedra/johnson.scad>;
 
     fs  = "^";
@@ -12923,9 +12928,9 @@ END_SCOPE;
 BEGIN_SCOPE db;
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <units/units_coordinate.scad>;
-    include <tools/tools_polytope.scad>;
-    include <datatypes/datatypes_table.scad>;
+    include <units/coordinate.scad>;
+    include <tools/polytope.scad>;
+    include <datatypes/table.scad>;
     include <database/geometry/polyhedra/johnson.scad>;
 
     config = 0;

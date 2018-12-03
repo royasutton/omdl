@@ -28,7 +28,7 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// Introduction.
+// introduction.
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
@@ -61,7 +61,7 @@
 
     \b Example:
 
-    \dontinclude mainpage_quickstart.scad
+    \dontinclude \amu_scope(index=2).scad
     \skip include
     \until valign="center" );
 
@@ -120,8 +120,8 @@
 
   [openscad-amu]: https://royasutton.github.io/openscad-amu
 
-  [Doxygen]: http://www.stack.nl/~dimitri/doxygen/index.html
-  [markups]: http://www.stack.nl/~dimitri/doxygen/manual/commands.html
+  [Doxygen]: http://www.doxygen.nl
+  [markups]: http://www.doxygen.nl/manual/commands.html
 
   [OpenSCAD]: http://www.openscad.org
   [library location]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Libraries
@@ -409,46 +409,14 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// validation results.
-//----------------------------------------------------------------------------//
-
-/***************************************************************************//**
-  \page validation Validation
-    \li \subpage tv_datatypes
-    \li \subpage tv_math
-*******************************************************************************/
-
-/***************************************************************************//**
-  \page tv_datatypes Datatypes
-    \li \subpage tv_datatypes_identify
-    \li \subpage tv_datatypes_operate
-
-  \page tv_datatypes_identify Identification
-    \li \subpage tv_datatypes_identify_scalar
-    \li \subpage tv_datatypes_identify_iterable
-    \li \subpage tv_datatypes_identify_list
-
-  \page tv_datatypes_operate Operations
-    \li \subpage tv_datatypes_operate_scalar
-    \li \subpage tv_datatypes_operate_iterable
-    \li \subpage tv_datatypes_operate_list
-*******************************************************************************/
-
-/***************************************************************************//**
-  \page tv_math Math
-    \li \subpage tv_math_vector_algebra
-    \li \subpage tv_math_bitwise
-*******************************************************************************/
-
-//----------------------------------------------------------------------------//
 // openscad-amu auxiliary scripts
 //----------------------------------------------------------------------------//
 
 /*
 BEGIN_SCOPE logo;
   BEGIN_OPENSCAD;
-    include <shapes/shapes2de.scad>;
-    include <shapes/shapes3d.scad>;
+    include <shapes/derivative_2de.scad>;
+    include <shapes/derivative_3d.scad>;
 
     $fn = 36;
 

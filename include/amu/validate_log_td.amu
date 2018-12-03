@@ -1,0 +1,51 @@
+/+
+
+  define the validation result table data.
+
+  requires:
+    definitions from one of pgid_*.
+
+ +/
+
+  \amu_scope   tv_scope (index=1)
+  \amu_file      tv_log (file="${tv_scope}.log" ++rmecho ++read)
+
+  \amu_source   tv_file (++file)
+
+  \amu_replace  tv_nott (text=${tv_log} search="not tested:" replace="1," ++format_no_copy)
+  \amu_replace  tv_pass (text=${tv_log} search="passed:" replace="1," ++format_no_copy)
+  \amu_replace  tv_skip (text=${tv_log} search="-skip-:" replace="1," ++format_no_copy)
+  \amu_replace  tv_fail (text=${tv_log} search="failed:" replace="1," ++format_no_copy)
+
+  \amu_word tv_td
+  (
+    tokenizer=","
+
+    words=${tv_file} ++list
+
+    words="\ref ${group}" ++list
+    words="\ref tv_${group}_s" ++list
+    words="\ref tv_${group}_r" ++list
+
+    words=${tv_nott} ++count
+    words=${tv_pass} ++count
+    words=${tv_skip} ++count
+    words=${tv_fail} ++count
+  )
+
+/+
+
+  define list of failed tests
+
+ +/
+
+  \amu_word    tv_fail_c (words=${tv_fail} ++count)
+  \amu_replace tv_fail_td
+  (
+    text=${tv_log} search="^.*failed:.*$" replace="&^"
+    ++not_dot_newline
+    ++format_sed
+    ++format_no_copy
+  )
+
+/+ end of file  +/

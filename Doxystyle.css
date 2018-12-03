@@ -44,6 +44,12 @@ table.doxtable th {
   padding-top: 5px;
 }
 
+/* table link styling */
+table.doxtable th a         { color: white; }
+table.doxtable th a:visited { color: lightgray; }
+table.doxtable th a:hover   { color: gray; }
+table.doxtable th a:active  { color: black; }
+
 table.doxtable tr:nth-child(odd) td {
   background-color: #F7F8FB;
 }

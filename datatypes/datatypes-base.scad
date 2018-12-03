@@ -1,4 +1,4 @@
-//! Include file wrapper of data types base primitives.
+//! Include wrapper of base data types includes files.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,30 +27,18 @@
 
   \details
 
-  \ingroup \
-    datatypes \
-    \
-    datatypes_identify \
-    datatypes_identify_scalar \
-    datatypes_identify_iterable \
-    datatypes_identify_list \
-    \
-    datatypes_operate \
-    datatypes_operate_scalar \
-    datatypes_operate_iterable \
-    datatypes_operate_list
-
+  \amu_include (include/amu/pgid_pparent_path_pg.amu)
 *******************************************************************************/
 
 include <../constants.scad>;
 
-include <datatypes_identify_scalar.scad>;
-include <datatypes_identify_iterable.scad>;
-include <datatypes_identify_list.scad>;
+include <identify_scalar.scad>;
+include <identify_iterable.scad>;
+include <identify_list.scad>;
 
-include <datatypes_operate_scalar.scad>;
-include <datatypes_operate_iterable.scad>;
-include <datatypes_operate_list.scad>;
+include <operate_scalar.scad>;
+include <operate_iterable.scad>;
+include <operate_list.scad>;
 
 //----------------------------------------------------------------------------//
 // end of file

@@ -25,11 +25,20 @@
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
     02110-1301, USA; or see <http://www.gnu.org/licenses/>.
 
+  \details
+
+    \amu_define group_name  (Tools)
+    \amu_define group_brief (Design tools.)
+
+  \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
 
+//----------------------------------------------------------------------------//
+// group.
+//----------------------------------------------------------------------------//
+
 /***************************************************************************//**
-  \defgroup tools Tools
-  \brief    Design tools and techniques.
+  \amu_include (include/amu/group.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
