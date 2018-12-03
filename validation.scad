@@ -40,7 +40,7 @@ include <datatypes/datatypes-base.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group.amu)
+  \amu_include (include/amu/group_start.amu)
 
   \details
 
@@ -133,7 +133,6 @@ function validate
     )
   : (pf?false : str("failed: '", d, "';  unknown test '", t, "'."));
 
-//! @}
 //! @}
 
 //----------------------------------------------------------------------------//
