@@ -1,0 +1,19 @@
+/+
+
+  output validation results summary table.
+
+  requires:
+    definitions from one of pgid_*.
+    definitions from validate_log_{th,td}.amu.
+
+ +/
+
+    ### Validation Summary ###
+    \amu_table (columns=${tv_tc} column_headings=${tv_th} cell_texts=${tv_td})
+
+    ### \amu_if( -z ${tv_fail_td} ) {No Failures} else {Failures} endif ###
+    \amu_table (columns=1 cell_texts=${tv_fail_td})
+
+    See complete validation \ref tv_\amu_eval(${group})_r "results".
+
+/+ end of file  +/

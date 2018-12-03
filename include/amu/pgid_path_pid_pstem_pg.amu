@@ -1,0 +1,16 @@
+/+
+
+  define parent and group. add to parent and group.
+
+  requires:
+    parent_id must be set.
+
+ +/
+
+  \amu_pathid path    (++path)
+  \amu_define parent  (${path}_${parent_id})
+  \amu_pathid group   (++path ++stem)
+
+  \ingroup \amu_eval(${parent} ${group})
+
+/+ end of file  +/

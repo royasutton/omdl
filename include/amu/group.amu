@@ -1,0 +1,13 @@
+/+
+
+  define a group.
+
+  requires:
+    definitions from one of pgid_*.
+
+ +/
+
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
+
+/+ end of file  +/

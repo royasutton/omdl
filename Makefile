@@ -162,8 +162,9 @@ doxygen_config      := Doxyfile
 doxygen_html_footer := Doxyfooter.html
 doxygen_html_css    := Doxystyle.css
 
-project_files_add   := $(wildcard include/mfs/*.mfs) \
-                       $(wildcard include/mf/*.mk)
+project_files_add   := $(wildcard include/mf/*) \
+                       $(wildcard include/mfs/*.mfs) \
+                       $(wildcard include/amu/*.amu)
 
 library_info        := README.md \
                        lgpl-2.1.txt
