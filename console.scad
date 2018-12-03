@@ -27,13 +27,10 @@
 
   \details
 
-    \amu_pathid parent      (++path)
-    \amu_pathid group       (++path ++stem)
-
     \amu_define group_name  (Console)
     \amu_define group_brief (Console message logging.)
 
-  \ingroup \amu_eval(${parent} ${group})
+  \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -41,8 +38,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \defgroup \amu_eval(${group} ${group_name})
-  \brief    \amu_eval(${group_brief})
+  \amu_include (include/amu/group.amu)
 
   \details
 

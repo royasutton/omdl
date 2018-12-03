@@ -27,8 +27,7 @@
 
   \details
 
-    \amu_pathid parent      (++path)
-    \amu_pathid group       (++path ++stem)
+  \amu_include (include/amu/pgid_path_pstem_pg.amu)
 
     \amu_define group_name  (Constants)
     \amu_define group_brief (Design constants.)
@@ -45,7 +44,7 @@
       \amu_define group3_name   (Euclidean)
       \amu_define group3_brief  (Euclidean space axis mapping.)
 
-  \ingroup \amu_eval(${parent} ${group} ${group1} ${group2} ${group3})
+  \ingroup \amu_eval(${group1} ${group2} ${group3})
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -53,8 +52,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \defgroup \amu_eval(${group} ${group_name})
-  \brief    \amu_eval(${group_brief})
+  \amu_include (include/amu/group.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

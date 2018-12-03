@@ -27,12 +27,7 @@
 
   \details
 
-    \amu_pathid parent      (++path_parent)
-    \amu_pathid group       (++path)
-
-    \amu_define group_name  ()
-    \amu_define group_brief ()
-
+  \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -65,8 +60,7 @@
   \page tv_tree Validation Tests and Results
 
   \page tv_list Validation Summary
-    \amu_define tv_th (file^group^script^results^passed^skipped^failed)
-    \amu_word   tv_tc (w=${tv_th} ++c)
+    \amu_include (include/amu/validate_log_th.amu)
     \amu_table(columns=${tv_tc} column_headings=${tv_th})
 *******************************************************************************/
 

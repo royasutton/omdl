@@ -27,8 +27,7 @@
 
   \details
 
-    \amu_pathid parent      (++path_parent)
-    \amu_pathid group       (++path)
+  \amu_include (include/amu/pgid_pparent_path_n.amu)
 
     \amu_define group_name  (Datatypes)
     \amu_define group_brief (Data types and operators.)
@@ -66,9 +65,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \defgroup \amu_eval(${group} ${group_name})
-  \brief    \amu_eval(${group_brief})
-  @{
+  \amu_include (include/amu/group_start.amu)
 
     See \ref dt for nomenclature, assumptions, and conventions used to
     specify values and data types throughout the library.

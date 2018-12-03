@@ -27,13 +27,10 @@
 
   \details
 
-    \amu_pathid parent      (++path)
-    \amu_pathid group       (++path ++stem)
-
     \amu_define group_name  (Polytopes)
     \amu_define group_brief (Polygon and polyhedron mathematical functions.)
 
-  \ingroup \amu_eval(${parent} ${group})
+  \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
 include <math-base.scad>;
@@ -43,12 +40,7 @@ include <math-base.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup \amu_eval(${parent})
-  @{
-
-  \defgroup \amu_eval(${group} ${group_name})
-  \brief    \amu_eval(${group_brief})
-  @{
+  \amu_include (include/amu/group_in_parent_start.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

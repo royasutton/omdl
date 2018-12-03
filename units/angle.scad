@@ -27,13 +27,10 @@
 
   \details
 
-    \amu_pathid parent      (++path)
-    \amu_pathid group       (++path ++stem)
-
     \amu_define group_name  (Angles)
     \amu_define group_brief (Angle units and conversions.)
 
-  \ingroup \amu_eval(${parent} ${group})
+  \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
 include <../constants.scad>;
@@ -43,11 +40,7 @@ include <../constants.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup \amu_eval(${parent})
-  @{
-
-  \defgroup \amu_eval(${group} ${group_name})
-  \brief    \amu_eval(${group_brief})
+  \amu_include (include/amu/group_in_parent_start.amu)
 
   \details
 
@@ -73,8 +66,6 @@ include <../constants.scad>;
     \b Result (base_angle_length = \b r):   \include \amu_scope(index=1)_r.log
     \b Result (base_angle_length = \b d):   \include \amu_scope(index=1)_d.log
     \b Result (base_angle_length = \b dms): \include \amu_scope(index=1)_dms.log
-
-  @{
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

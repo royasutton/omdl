@@ -27,13 +27,10 @@
 
   \details
 
-    \amu_pathid parent      (++path)
-    \amu_pathid group       (++path ++stem)
-
     \amu_define group_name  (Coordinates)
     \amu_define group_brief (Coordinate systems and conversions.)
 
-  \ingroup \amu_eval(${parent} ${group})
+  \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
 include <../constants.scad>;
@@ -43,11 +40,7 @@ include <../constants.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup \amu_eval(${parent})
-  @{
-
-  \defgroup \amu_eval(${group} ${group_name})
-  \brief    \amu_eval(${group_brief})
+  \amu_include (include/amu/group_in_parent_start.amu)
 
   \details
 
@@ -100,8 +93,6 @@ include <../constants.scad>;
     [spherical]: https://en.wikipedia.org/wiki/Spherical_coordinate_system
     [azimuthal]: https://en.wikipedia.org/wiki/Azimuth
     [zenith]: https://en.wikipedia.org/wiki/Zenith
-
-  @{
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

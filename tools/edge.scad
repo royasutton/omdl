@@ -27,13 +27,11 @@
 
   \details
 
-    \amu_pathid parent      (++path)
-    \amu_pathid group       (++path ++stem)
-
     \amu_define group_name  (Edge)
     \amu_define group_brief (Shape edge finishing tools.)
+    \amu_define view        (diag)
 
-  \ingroup \amu_eval(${parent} ${group})
+  \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
 include <../shapes/derivative_2d.scad>;
@@ -43,58 +41,9 @@ include <../shapes/derivative_2d.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_scope  mfscript  (index=1)
-  \amu_source stem      (++stem)
-  \amu_eval             (++global scope=dim size=qvga view=diag)
-  \amu_define img_stem  (${stem}_${scope}_${size}_${view}_${function})
-  \amu_define example_dim
-  (
-    \image html  ${img_stem}.png "${function}"
-    \image latex ${img_stem}.eps "${function}" width=2.5in
-    \dontinclude ${mfscript}.scad \skipline ${function}(
-  )
-*******************************************************************************/
+  \amu_include (include/amu/example_dim_table.amu)
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
-
-/***************************************************************************//**
-  \addtogroup \amu_eval(${parent})
-
-    \amu_make png_files (append=dim extension=png)
-    \amu_make eps_files (append=dim extension=png2eps)
-    \amu_word  file_cnt (words="${png_files}" ++count)
-    \amu_seq   cell_num (last="${file_cnt}" ++roman)
-
-    \amu_eval  fprefix1 (function="" ${img_stem})
-    \amu_eval  fprefix2 (function="" view=top ${img_stem})
-    \amu_filename fname (files="${png_files}" ++stem)
-    \amu_replace  fname (text="${fname}" search="${fprefix1}|${fprefix2}")
-    \amu_combine  fname ("${fname}" p="<center>" s="()</center>" j="" f="^")
-
-    \amu_image_table
-      (
-        type=html columns=4 image_width="200" cell_files="${png_files}"
-        table_caption="${group_name}" cell_captions="${cell_num}"
-        cell_end="${fname}"
-      )
-    \latexonly
-      \amu_image_table
-        (
-          type=latex columns=4 image_width="1.25in" cell_files="${eps_files}"
-          table_caption="${group_name}" cell_captions="${cell_num}"
-        )
-    \endlatexonly
-*******************************************************************************/
-
-/***************************************************************************//**
-  \addtogroup \amu_eval(${parent})
-  @{
-
-  \defgroup \amu_eval(${group} ${group_name})
-  \brief    \amu_eval(${group_brief})
-  @{
+  \amu_include (include/amu/group_in_parent_start.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -109,7 +58,7 @@ include <../shapes/derivative_2d.scad>;
   \details
 
     \b Example
-    \amu_eval ( function=edge_profile_r view=top ${example_dim} )
+    \amu_eval ( function=edge_profile_r ${example_dim} )
 
   \b Profiles:
 
@@ -296,7 +245,7 @@ BEGIN_SCOPE dim;
   BEGIN_MFSCRIPT;
     include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
 
-    views     name "views" views "top diag";
+    views     name "views" views "diag";
     defines   name "shapes" define "shape"
               strings "
                 edge_profile_r

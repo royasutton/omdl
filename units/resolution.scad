@@ -27,13 +27,10 @@
 
   \details
 
-    \amu_pathid parent      (++path)
-    \amu_pathid group       (++path ++stem)
-
     \amu_define group_name  (Resolutions)
     \amu_define group_brief (Arch rendering resolution management.)
 
-  \ingroup \amu_eval(${parent} ${group})
+  \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
 include <../console.scad>;
@@ -45,11 +42,7 @@ include <length.scad>;
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup \amu_eval(${parent})
-  @{
-
-  \defgroup \amu_eval(${group} ${group_name})
-  \brief    \amu_eval(${group_brief})
+  \amu_include (include/amu/group_in_parent_start.amu)
 
   \details
 
@@ -68,8 +61,6 @@ include <length.scad>;
     \b Result (base_unit_length = \b cm):  \include \amu_scope(index=1)_cm.log
     \b Result (base_unit_length = \b mil): \include \amu_scope(index=1)_mil.log
     \b Result (base_unit_length = \b in):  \include \amu_scope(index=1)_in.log
-
-  @{
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

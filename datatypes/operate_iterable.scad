@@ -27,15 +27,11 @@
 
   \details
 
-    \amu_pathid path        (++path)
-
-    \amu_define parent      (${path}_operate)
-    \amu_pathid group       (++path ++stem)
-
     \amu_define group_name  (Iterables)
     \amu_define group_brief (Iterable data type operations.)
+    \amu_define parent_id   (operate)
 
-  \ingroup \amu_eval(${parent} ${group})
+  \amu_include (include/amu/pgid_path_pid_pstem_pg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -43,51 +39,9 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_scope       tv_scope (index=1)
-  \amu_file          tv_log (file="${tv_scope}.log" ++rmecho ++read)
-  \amu_replace      tv_pass (t=${tv_log} s="passed:" r="1," ++fnc)
-  \amu_replace      tv_skip (t=${tv_log} s="-skip-:" r="1," ++fnc)
-  \amu_replace      tv_fail (t=${tv_log} s="failed:" r="1," ++fnc)
-  \amu_source       tv_file (++file)
-  \amu_word           tv_td (t="," w=${tv_file} ++s w="\ref ${group}" ++s
-                             w="\ref tv_${group}_s" ++s w="\ref tv_${group}_r" ++s
-                             w=${tv_pass} ++c w=${tv_skip} ++c w=${tv_fail} ++c)
-  \amu_define         tv_th (file^group^script^results^passed^skipped^failed)
-  \amu_word           tv_tc (w=${tv_th} ++c)
-  \amu_word       tv_fail_c (w=${tv_fail} ++c)
-  \amu_replace   tv_fail_td (t=${tv_log} s="^.*failed:.*$" r="&^" ++snl ++fsd ++fnc)
-*******************************************************************************/
-
-/***************************************************************************//**
-  \page tv_\amu_eval(${parent})
-    \li \subpage tv_\amu_eval(${group})
-
-  \page tv_\amu_eval(${group} ${group_name})
-    \li \subpage tv_\amu_eval(${group})_s
-    \li \subpage tv_\amu_eval(${group})_r
-
-  \page tv_\amu_eval(${group})_s Script
-    \dontinclude \amu_eval(${tv_scope}).scad
-    \skip include
-    \until end-of-tests
-
-  \page tv_\amu_eval(${group})_r Results
-    ### Summary ###
-    \amu_table(columns=${tv_tc} column_headings=${tv_th} cell_texts=${tv_td})
-
-    ### \amu_if( -z ${tv_fail_td} ) {All Passed} else {Failed} endif ###
-    \amu_table(columns=1 cell_texts=${tv_fail_td})
-
-    ### All ###
-    \code
-    \amu_eval(${tv_log})
-    \endcode
-
-  \page tv_list
-    \amu_table(columns=${tv_tc} cell_texts=${tv_td})
-
-  \page validation
-    \amu_if( -n ${tv_fail} ) {\ref ${group} failed ${tv_fail_c}} endif
+  \amu_include (include/amu/validate_log_th.amu)
+  \amu_include (include/amu/validate_log_td.amu)
+  \amu_include (include/amu/validate_results.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -95,22 +49,11 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \addtogroup \amu_eval(${parent})
-  @{
-
-  \defgroup \amu_eval(${group} ${group_name})
-  \brief    \amu_eval(${group_brief})
+  \amu_include (include/amu/group_in_parent_start.amu)
 
   \details
 
-    ### Validation Summary ###
-    \amu_table(columns=${tv_tc} column_headings=${tv_th} cell_texts=${tv_td})
-
-    ### \amu_if( -z ${tv_fail_td} ) {No Failures} else {Failures} endif ###
-    \amu_table(columns=1 cell_texts=${tv_fail_td})
-
-    See complete validation \ref tv_\amu_eval(${group})_r "results".
-  @{
+  \amu_include (include/amu/validate_summary.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
