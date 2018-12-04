@@ -315,7 +315,6 @@ module pyramid_t
   a = size*sqrt(3)/2;
 
   translate(center==true ? origin3d : [0,0,o])
-
   polyhedron
   (
     points =
