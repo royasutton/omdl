@@ -56,9 +56,6 @@ include <../math/bitwise.scad>;
   \param    profile <boolean> Show profile only (do not extrude).
 
   \details
-
-    \b Example
-    \amu_eval ( function=rotate_extrude_tr ${example_dim} )
 *******************************************************************************/
 module rotate_extrude_tr
 (
@@ -89,9 +86,6 @@ module rotate_extrude_tr
   \param    profile <boolean> Show profile only (do not extrude).
 
   \details
-
-    \b Example
-    \amu_eval ( function=rotate_extrude_tre ${example_dim} )
 
   \note When elongating <tt>(l > 0)</tt>, \p ra is ignored. However, \p m
         may be used to control which complete revolution section to render.
@@ -180,9 +174,6 @@ module rotate_extrude_tre
       y2  |  8   |  y1     | (-z) y-dimension scale percentage
 
   \details
-
-    \b Example
-    \amu_eval ( function=linear_extrude_uls ${example_dim} )
 
   \note When symmetrical scaling is desired, shape must be centered about
         origin.
