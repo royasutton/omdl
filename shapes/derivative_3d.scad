@@ -642,6 +642,87 @@ module torus_ep
   );
 }
 
+//! A rectangular profile revolved about the z-axis for generating cylinders.
+/***************************************************************************//**
+  \param    cr <decimal-list-2|decimal> The lower and upper radius. A
+            list [cr1, cr2] of decimals or a single decimal for (cr1=cr2).
+  \param    h <decimal> The height.
+
+  \param    r <decimal> The rotation radius.
+  \param    l <decimal-list-2|decimal> The elongation length.
+            A list [x, y] of decimals or a single decimal for (x=y)
+
+  \param    vr <decimal-list-2|decimal> The profile corner rounding
+            radius. A list [vr1, vr2] of decimals or a single decimal
+            for (vr1=vr2). Unspecified corners are not rounded.
+
+  \param    pa <decimal> The profile pitch angle in degrees.
+  \param    ra <decimal> The rotation sweep angle in degrees.
+  \param    m <integer> The section render mode. An 8-bit encoded integer
+            that indicates the revolution sections to render.
+
+  \param    center <boolean> Center profile height.
+  \param    profile <boolean> Show profile only (do not extrude).
+
+  \details
+
+    \sa rotate_extrude_tre for description of extrude parameters.
+
+    \b Example
+    \amu_eval ( function=torus_cp ${example_dim} )
+*******************************************************************************/
+module torus_cp
+(
+  cr,
+  h,
+  r,
+  l,
+  vr = 0,
+  pa = 0,
+  ra = 360,
+  m = 255,
+  center = false,
+  profile = false
+)
+{
+  cr1  = edefined_or(cr, 0, cr);
+  cr2  = edefined_or(cr, 1, cr1);
+
+  // limit corner rounding to [0, cr1/2]
+  vr1 = limit(edefined_or(vr, 0, vr), 0, cr1/2);
+  vr2 = limit(edefined_or(vr, 1, vr1), 0, cr2/2);
+
+  pc1 = [cr1-vr1,   vr1];
+  pc2 = [cr2-vr2, h-vr2];
+
+  a  = 90
+     + angle_ll (x_axis2d_ul, [pc2, pc1])
+     - angle_ll (x_axis2d_ul, [distance_pp(pc2, pc1), vr2-vr1]);
+
+  p =
+  [
+    [0, 0],
+    [cr1-vr1, 0],
+    pc1 + vr1*[cos(a), sin(a)],
+    pc2 + vr2*[cos(a), sin(a)],
+    [cr2-vr2, h],
+    [0, h]
+  ];
+
+  translate(center==true ? [0, 0, -h/2] : origin3d)
+  rotate_extrude_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
+  union()
+  {
+    translate(pc1)
+    circle(r=vr1);
+
+    translate(pc2)
+    circle(r=vr2);
+
+    polygon(points=p, paths=[[0,1,2,3,4,5,6]]);
+  }
+}
+
 //! @}
 //! @}
 
@@ -677,6 +758,8 @@ BEGIN_SCOPE dim;
       torus_tp( size=40, core=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
     else if (shape == "torus_ep")
       torus_ep( size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
+    else if (shape == "torus_cp")
+      torus_cp( cr=[15,10], h=30, vr=[5,2], r=40, l=[90,60], center=true );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -691,10 +774,11 @@ BEGIN_SCOPE dim;
                 ellipsoid_s
                 pyramid_t
                 pyramid_q
+                star3d
                 torus_rp
                 torus_tp
                 torus_ep
-                star3d
+                torus_cp
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter";
@@ -719,7 +803,7 @@ BEGIN_SCOPE manifest;
       ellipsoid_s( size=[60,15], a1=0, a2=270 );
       pyramid_t( size=15, center=true );
       pyramid_q( size=[35,40,25], center=true );
-      star3d(size=40, n=5, half=false);
+      star3d( size=40, n=5, half=false );
     }
 
     if (group == 2)
@@ -728,6 +812,7 @@ BEGIN_SCOPE manifest;
       torus_rp( size=[40,20], core=[35,20], r=40, l=[25,60], co=[0,2.5], vr=4, vrm=15, center=true );
       torus_tp( size=40, core=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
       torus_ep( size=[20,15], t=[2,4], r=60, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
+      torus_cp( cr=[15,10], h=30, vr=[5,2], r=40, l=[25,60], center=true );
     }
   END_OPENSCAD;
 
