@@ -48,7 +48,7 @@ include <../math/bitwise.scad>;
 
 //----------------------------------------------------------------------------//
 
-//! Translate, rotate, and revolve the 2d shape about the z-axis.
+//! Translate, rotate, and revolve a 2d shape about the z-axis.
 /***************************************************************************//**
   \param    r <decimal> The rotation radius.
   \param    pa <decimal> The profile pitch angle in degrees.
@@ -74,7 +74,7 @@ module rotate_extrude_tr
   children();
 }
 
-//! Translate, rotate, and revolve the 2d shape about the z-axis with linear elongation.
+//! Translate, rotate, and revolve a 2d shape about the z-axis with linear elongation.
 /***************************************************************************//**
   \copydetails rotate_extrude_tr()
 
@@ -153,38 +153,36 @@ module rotate_extrude_tre
   }
 }
 
-//! Linearly extrude 2d shape with extrusion upper and lower scaling.
+//! Linearly extrude a 2d shape with upper and lower scaling.
 /***************************************************************************//**
   \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
+            decimal.
   \param    center <boolean> Center extrusion about origin.
 
   \details
 
     When \p h is a decimal, the shape is extruded linearly as normal.
     To scale the upper and lower slices of the extrusion, \p h must be
-    assigned a list with a minimum of three decimal values as described
-    in the following table.
+    a list with a minimum of three decimal values as described in the
+    following table. For symmetrical scaling, shape must be centered
+    about origin.
 
-      sym | h[n] | default | description
-    :----:|:----:|:-------:|:---------------------------------------
-      h   |  0   |         | total extrusion height
-      n1  |  1   |         | (+z) number of scaled extrusion slices
-      h1  |  2   |         | (+z) extrusion scale percentage
-      x1  |  3   | -h1     | (+z) x-dimension scale percentage
-      y1  |  4   |  x1     | (+z) y-dimension scale percentage
-      n2  |  5   |  n1     | (-z) number of scaled extrusion slices
-      h2  |  6   |  h1     | (-z) extrusion scale percentage
-      x2  |  7   |  x1     | (-z) x-dimension scale percentage
-      y2  |  8   |  y1     | (-z) y-dimension scale percentage
+     h[n] | default | description
+    :----:|:-------:|:---------------------------------------
+      0   |         | total extrusion height
+      1   |         | (+z) number of scaled extrusion slices
+      2   |         | (+z) extrusion scale percentage
+      3   | -h[2]   | (+z) x-dimension scale percentage
+      4   |  h[3]   | (+z) y-dimension scale percentage
+      5   |  h[1]   | (-z) number of scaled extrusion slices
+      6   |  h[2]   | (-z) extrusion scale percentage
+      7   |  h[3]   | (-z) x-dimension scale percentage
+      8   |  h[4]   | (-z) y-dimension scale percentage
 
   \details
 
     \b Example
     \amu_eval ( function=linear_extrude_uls ${example_dim} )
-
-  \note When symmetrical scaling is desired, shape must be centered about
-        origin.
 
   \todo This function should be rewritten to use the built-in scaling
         provided by linear_extrude() in the upper and lower scaling zones.
