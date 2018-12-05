@@ -58,7 +58,7 @@ include <datatypes/table.scad>;
 //  include <math/math-base.scad>;
 
 //  include <math/triangle.scad>;
-//  include <math/other_shape.scad>;
+//  include <math/polygon_shapes.scad>;
 //  include <math/polytope.scad>;
 //  include <math/bitwise.scad>;
 include <math/utility.scad>;
