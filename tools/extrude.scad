@@ -56,6 +56,9 @@ include <../math/bitwise.scad>;
   \param    profile <boolean> Show profile only (do not extrude).
 
   \details
+
+    \b Example
+    \amu_eval ( function=rotate_extrude_tr ${example_dim} )
 *******************************************************************************/
 module rotate_extrude_tr
 (
@@ -73,19 +76,20 @@ module rotate_extrude_tr
 
 //! Translate, rotate, and revolve the 2d shape about the z-axis with linear elongation.
 /***************************************************************************//**
-  \param    r <decimal> The rotation radius.
+  \copydetails rotate_extrude_tr()
+
   \param    l <decimal-list-2|decimal> The elongation length.
             A list [x, y] of decimals or a single decimal for (x=y)
-  \param    pa <decimal> The profile pitch angle in degrees.
-  \param    ra <decimal> The rotation sweep angle in degrees.
   \param    m <integer> The section render mode. An 8-bit encoded integer
             that indicates the revolution sections to render.
             Bit values \b 1 enables the corresponding section and bit values
             \b 0 are disabled. Sections are assigned to the bit position in
             counter-clockwise order.
-  \param    profile <boolean> Show profile only (do not extrude).
 
   \details
+
+    \b Example
+    \amu_eval ( function=rotate_extrude_tre ${example_dim} )
 
   \note When elongating <tt>(l > 0)</tt>, \p ra is ignored. However, \p m
         may be used to control which complete revolution section to render.
@@ -93,11 +97,12 @@ module rotate_extrude_tr
 module rotate_extrude_tre
 (
   r,
-  l,
   pa = 0,
   ra = 360,
-  m = 255,
-  profile = false
+  profile = false,
+
+  l,
+  m = 255
 )
 {
   if ( not_defined(l) || (profile==true) )
@@ -174,6 +179,9 @@ module rotate_extrude_tre
       y2  |  8   |  y1     | (-z) y-dimension scale percentage
 
   \details
+
+    \b Example
+    \amu_eval ( function=linear_extrude_uls ${example_dim} )
 
   \note When symmetrical scaling is desired, shape must be centered about
         origin.

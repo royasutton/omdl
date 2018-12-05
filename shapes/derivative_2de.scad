@@ -51,36 +51,23 @@ include <../tools/extrude.scad>;
 
 //! An extruded rectangle with edge, fillet, and/or chamfer corners.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> A list [x, y] of decimals
-            or a single decimal for (x=y).
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    vr <decimal-list-4|decimal> The corner rounding radius.
-            A list [v1r, v2r, v3r, v4r] of decimals or a single decimal
-            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
-
-  \param    vrm <integer> The corner radius mode.
-            A 4-bit encoded integer that indicates each corner finish.
-            Use bit value \b 0 for \em fillet and \b 1 for \em chamfer.
-
-  \param    center <boolean> Center about origin.
+  \copydoc rectangle()
 
   \details
-
-    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=erectangle ${example_dim} )
 *******************************************************************************/
 module erectangle
 (
-  size,
   h,
+  center = false,
+
+  size,
   vr,
-  vrm = 0,
-  center = false
+  vrm = 0
 )
 {
   linear_extrude_uls(h=h, center=center)
@@ -89,50 +76,22 @@ module erectangle
 
 //! An extruded rectangle with a removed rectangular core.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> A list [x, y] of decimals
-            or a single decimal for (x=y).
-  \param    core <decimal-list-2|decimal> A list [x, y] of decimals
-            or a single decimal for (x=y).
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    t <decimal-list-2|decimal> A list [x, y] of decimals
-            or a single decimal for (x=y).
-
-  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
-  \param    cr <decimal> Core z-rotation.
-
-  \param    vr <decimal-list-4|decimal> The default corner rounding radius.
-            A list [v1r, v2r, v3r, v4r] of decimals or a single decimal
-            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
-  \param    vr1 <decimal-list-4|decimal> The outer corner rounding radius.
-  \param    vr2 <decimal-list-4|decimal> The core corner rounding radius.
-
-  \param    vrm <integer> The default corner radius mode.
-            A 4-bit encoded integer that indicates each corner finish.
-            Use bit value \b 0 for \em fillet and \b 1 for \em chamfer.
-  \param    vrm1 <integer> The outer corner radius mode.
-  \param    vrm2 <integer> The core corner radius mode.
-
-  \param    center <boolean> Center about origin.
+  \copydoc rectangle_c()
 
   \details
-
-    \sa linear_extrude_uls for a description on specifying \p h.
-
-    Thickness \p t
-    \li <tt>core = size - t</tt>; when \p t and \p size are given.
-    \li <tt>size = core + t</tt>; when \p t and \p core are given.
 
     \b Example
     \amu_eval ( function=erectangle_c ${example_dim} )
 *******************************************************************************/
 module erectangle_c
 (
+  h,
+  center = false,
+
   size,
   core,
-  h,
   t,
   co,
   cr = 0,
@@ -141,8 +100,7 @@ module erectangle_c
   vr2,
   vrm = 0,
   vrm1,
-  vrm2,
-  center = false
+  vrm2
 )
 {
   linear_extrude_uls(h=h, center=center)
@@ -158,31 +116,22 @@ module erectangle_c
 
 //! An extruded rhombus.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> A list [w, h] of decimals
-            or a single decimal for (w=h).
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    vr <decimal-list-4|decimal> The corner rounding radius.
-            A list [v1r, v2r, v3r, v4r] of decimals or a single decimal
-            for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
-
-  \param    center <boolean> Center about origin.
+  \copydoc rhombus()
 
   \details
-
-    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=erhombus ${example_dim} )
 *******************************************************************************/
 module erhombus
 (
-  size,
   h,
-  vr,
-  center = false
+  center = false,
+
+  size,
+  vr
 )
 {
   linear_extrude_uls(h=h, center=center)
@@ -191,42 +140,29 @@ module erhombus
 
 //! An extruded general triangle specified by three vertices.
 /***************************************************************************//**
-  \param    v1 <point-2d> A point [x, y] for vertex 1.
-  \param    v2 <point-2d> A point [x, y] for vertex 2.
-  \param    v3 <point-2d> A point [x, y] for vertex 3.
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    vr <decimal> The default vertex rounding radius.
-  \param    v1r <decimal> Vertex 1 rounding radius.
-  \param    v2r <decimal> Vertex 2 rounding radius.
-  \param    v3r <decimal> Vertex 3 rounding radius.
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-  \param    center <boolean> Center about origin.
+  \copydoc triangle_ppp()
 
   \details
-
-    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=etriangle_ppp ${example_dim} )
 *******************************************************************************/
 module etriangle_ppp
 (
+  h,
+  center = false,
+
   v1,
   v2,
   v3,
-  h,
   vr,
   v1r,
   v2r,
   v3r,
   centroid = false,
-  incenter = false,
-  center = false
+  incenter = false
 )
 {
   linear_extrude_uls(h=h, center=center)
@@ -240,38 +176,21 @@ module etriangle_ppp
 
 //! An extruded general triangle specified by a list of its three vertices.
 /***************************************************************************//**
-  \param    v <point-2d-list-3> A list [v1, v2, v3] of points [x, y].
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    vr <decimal-list-3|decimal> The vertex rounding radius. A
-            list [v1r, v2r, v3r] of decimals or a single decimal for
-            (v1r=v2r=v3r).
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-  \param    center <boolean> Center about origin.
+  \copydoc triangle_lp()
 
   \details
-
-    \sa linear_extrude_uls for a description on specifying \p h.
-
-    \b Example
-    \code{.C}
-    t = triangle_sss2lp( 30, 40, 50 );
-    r = [2, 4, 6];
-    etriangle_lp( v=t, h=5, vr=r );
-    \endcode
 *******************************************************************************/
 module etriangle_lp
 (
-  v,
   h,
+  center = false,
+
+  v,
   vr,
   centroid = false,
-  incenter = false,
-  center = false
+  incenter = false
 )
 {
   linear_extrude_uls(h=h, center=center)
@@ -280,42 +199,29 @@ module etriangle_lp
 
 //! An extruded general triangle specified by its three side lengths.
 /***************************************************************************//**
-  \param    s1 <decimal> The length of the side 1 (along the x-axis).
-  \param    s2 <decimal> The length of the side 2.
-  \param    s3 <decimal> The length of the side 3.
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    vr <decimal> The default vertex rounding radius.
-  \param    v1r <decimal> Vertex 1 rounding radius.
-  \param    v2r <decimal> Vertex 2 rounding radius.
-  \param    v3r <decimal> Vertex 3 rounding radius.
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-  \param    center <boolean> Center about origin.
+  \copydoc triangle_sss()
 
   \details
-
-    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=etriangle_sss ${example_dim} )
 *******************************************************************************/
 module etriangle_sss
 (
+  h,
+  center = false,
+
   s1,
   s2,
   s3,
-  h,
   vr,
   v1r,
   v2r,
   v3r,
   centroid = false,
-  incenter = false,
-  center = false
+  incenter = false
 )
 {
   linear_extrude_uls(h=h, center=center)
@@ -329,38 +235,21 @@ module etriangle_sss
 
 //! An extruded general triangle specified by a list of its three side lengths.
 /***************************************************************************//**
-  \param    v <decimal-list-3> A list [s1, s2, s3] of decimals.
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    vr <decimal-list-3|decimal> The vertex rounding radius. A
-            list [v1r, v2r, v3r] of decimals or a single decimal for
-            (v1r=v2r=v3r).
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-  \param    center <boolean> Center about origin.
+  \copydoc triangle_ls()
 
   \details
-
-    \sa linear_extrude_uls for a description on specifying \p h.
-
-    \b Example
-    \code{.C}
-    t = triangle_sss2lp( 3, 4, 5 );
-    s = triangle_lp2ls( t );
-    etriangle_ls( v=s, h=5, vr=2 );
-    \endcode
 *******************************************************************************/
 module etriangle_ls
 (
-  v,
   h,
+  center = false,
+
+  v,
   vr,
   centroid = false,
-  incenter = false,
-  center = false
+  incenter = false
 )
 {
   linear_extrude_uls(h=h, center=center)
@@ -369,50 +258,29 @@ module etriangle_ls
 
 //! A general triangle specified by its sides with a removed triangular core.
 /***************************************************************************//**
-  \param    vs <decimal-list-3|decimal> The size. A list [s1, s2, s3] of
-            decimals or a single decimal for (s1=s2=s3).
-  \param    vc <decimal-list-3|decimal> The core. A list [s1, s2, s3] of
-            decimals or a single decimal for (s1=s2=s3).
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
-  \param    cr <decimal> Core z-rotation.
-
-  \param    vr <decimal-list-3|decimal> The default vertex rounding radius.
-            A list [v1r, v2r, v3r] of decimals or a single decimal for
-            (v1r=v2r=v3r).
-  \param    vr1 <decimal-list-3|decimal> The outer vertex rounding radius.
-  \param    vr2 <decimal-list-3|decimal> The core vertex rounding radius.
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-  \param    center <boolean> Center about origin.
+  \copydoc triangle_ls_c()
 
   \details
 
-    \sa linear_extrude_uls for a description on specifying \p h.
-
     \b Example
     \amu_eval ( function=etriangle_ls_c ${example_dim} )
-
-  \note The outer and inner triangles centroids are aligned prior to the
-        core removal.
 *******************************************************************************/
 module etriangle_ls_c
 (
+  h,
+  center = false,
+
   vs,
   vc,
-  h,
   co,
   cr = 0,
   vr,
   vr1,
   vr2,
   centroid = false,
-  incenter = false,
-  center = false
+  incenter = false
 )
 {
   linear_extrude_uls(h=h, center=center)
@@ -427,46 +295,30 @@ module etriangle_ls_c
 
 //! An extruded general triangle specified by two sides and the included angle.
 /***************************************************************************//**
-  \param    s1 <decimal> The length of the side 1.
-  \param    a <decimal> The included angle in degrees.
-  \param    s2 <decimal> The length of the side 2.
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    x <decimal> The side to draw on the positive x-axis
-            (\p x=1 for \p s1).
-
-  \param    vr <decimal> The default vertex rounding radius.
-  \param    v1r <decimal> Vertex 1 rounding radius.
-  \param    v2r <decimal> Vertex 2 rounding radius.
-  \param    v3r <decimal> Vertex 3 rounding radius.
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-  \param    center <boolean> Center about origin.
+  \copydoc triangle_sas()
 
   \details
-
-    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=etriangle_sas ${example_dim} )
 *******************************************************************************/
 module etriangle_sas
 (
+  h,
+  center = false,
+
   s1,
   a,
   s2,
-  h,
   x = 1,
   vr,
   v1r,
   v2r,
   v3r,
   centroid = false,
-  incenter = false,
-  center = false
+  incenter = false
 )
 {
   linear_extrude_uls(h=h, center=center)
@@ -480,46 +332,30 @@ module etriangle_sas
 
 //! An extruded general triangle specified by a side and two adjacent angles.
 /***************************************************************************//**
-  \param    a1 <decimal> The adjacent angle 1 in degrees.
-  \param    s <decimal> The side length adjacent to the angles.
-  \param    a2 <decimal> The adjacent angle 2 in degrees.
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    x <decimal> The side to draw on the positive x-axis
-            (\p x=1 for \p s).
-
-  \param    vr <decimal> The default vertex rounding radius.
-  \param    v1r <decimal> Vertex 1 rounding radius.
-  \param    v2r <decimal> Vertex 2 rounding radius.
-  \param    v3r <decimal> Vertex 3 rounding radius.
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-  \param    center <boolean> Center about origin.
+  \copydoc triangle_asa()
 
   \details
-
-    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=etriangle_asa ${example_dim} )
 *******************************************************************************/
 module etriangle_asa
 (
+  h,
+  center = false,
+
   a1,
   s,
   a2,
-  h,
   x = 1,
   vr,
   v1r,
   v2r,
   v3r,
   centroid = false,
-  incenter = false,
-  center = false
+  incenter = false
 )
 {
   linear_extrude_uls(h=h, center=center)
@@ -533,46 +369,30 @@ module etriangle_asa
 
 //! An extruded general triangle specified by a side, one adjacent angle and the opposite angle.
 /***************************************************************************//**
-  \param    a1 <decimal> The opposite angle 1 in degrees.
-  \param    a2 <decimal> The adjacent angle 2 in degrees.
-  \param    s <decimal> The side length.
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    x <decimal> The side to draw on the positive x-axis
-            (\p x=1 for \p s).
-
-  \param    vr <decimal> The default vertex rounding radius.
-  \param    v1r <decimal> Vertex 1 rounding radius.
-  \param    v2r <decimal> Vertex 2 rounding radius.
-  \param    v3r <decimal> Vertex 3 rounding radius.
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-  \param    center <boolean> Center about origin.
+  \copydoc triangle_aas()
 
   \details
-
-    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=etriangle_aas ${example_dim} )
 *******************************************************************************/
 module etriangle_aas
 (
+  h,
+  center = false,
+
   a1,
   a2,
   s,
-  h,
   x = 1,
   vr,
   v1r,
   v2r,
   v3r,
   centroid = false,
-  incenter = false,
-  center = false
+  incenter = false
 )
 {
   linear_extrude_uls(h=h, center=center)
@@ -586,40 +406,28 @@ module etriangle_aas
 
 //! An extruded right-angled triangle specified by its opposite and adjacent side lengths.
 /***************************************************************************//**
-  \param    x <decimal> The length of the side along the x-axis.
-  \param    y <decimal> The length of the side along the y-axis.
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    vr <decimal> The default vertex rounding radius.
-  \param    v1r <decimal> Vertex 1 rounding radius.
-  \param    v2r <decimal> Vertex 2 rounding radius.
-  \param    v3r <decimal> Vertex 3 rounding radius.
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-  \param    center <boolean> Center about origin.
+  \copydoc triangle_ss()
 
   \details
-
-    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=etriangle_ss ${example_dim} )
 *******************************************************************************/
 module etriangle_ss
 (
+  h,
+  center = false,
+
   x,
   y,
-  h,
   vr,
   v1r,
   v2r,
   v3r,
   centroid = false,
-  incenter = false,
-  center = false
+  incenter = false
 )
 {
   linear_extrude_uls(h=h, center=center)
@@ -633,47 +441,30 @@ module etriangle_ss
 
 //! An extruded right-angled triangle specified by a side length and an angle.
 /***************************************************************************//**
-  \param    x <decimal> The length of the side along the x-axis.
-  \param    y <decimal> The length of the side along the y-axis.
-  \param    aa <decimal> The adjacent angle in degrees.
-  \param    oa <decimal> The opposite angle in degrees.
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    vr <decimal> The default vertex rounding radius.
-  \param    v1r <decimal> Vertex 1 rounding radius.
-  \param    v2r <decimal> Vertex 2 rounding radius.
-  \param    v3r <decimal> Vertex 3 rounding radius.
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-  \param    center <boolean> Center about origin.
+  \copydoc triangle_sa()
 
   \details
 
-    \sa linear_extrude_uls for a description on specifying \p h.
-
     \b Example
     \amu_eval ( function=etriangle_sa ${example_dim} )
-
-  \note     When both \p x and \p y are given, both triangles are rendered.
-  \note     When both \p aa and \p oa are given, \p aa is used.
 *******************************************************************************/
 module etriangle_sa
 (
+  h,
+  center = false,
+
   x,
   y,
   aa,
   oa,
-  h,
   vr,
   v1r,
   v2r,
   v3r,
   centroid = false,
-  incenter = false,
-  center = false
+  incenter = false
 )
 {
   linear_extrude_uls(h=h, center=center)
@@ -687,33 +478,23 @@ module etriangle_sa
 
 //! An extruded n-sided equiangular/equilateral regular polygon.
 /***************************************************************************//**
-  \param    n <decimal> The number of sides.
-  \param    r <decimal> The ngon vertex radius.
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    vr <decimal> The vertex rounding radius.
-
-  \param    center <boolean> Center about origin.
+  \copydoc ngon()
 
   \details
 
-    \sa linear_extrude_uls for a description on specifying \p h.
-
     \b Example
     \amu_eval ( function=engon ${example_dim} )
-
-    See [Wikipedia](https://en.wikipedia.org/wiki/Regular_polygon)
-    for more information.
 *******************************************************************************/
 module engon
 (
+  h,
+  center = false,
+
   n,
   r,
-  h,
-  vr,
-  center = false
+  vr
 )
 {
   linear_extrude_uls(h=h, center=center)
@@ -722,26 +503,21 @@ module engon
 
 //! An extruded ellipse.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
-            or a single decimal for (rx=ry).
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    center <boolean> Center about origin.
+  \copydoc ellipse()
 
   \details
-
-    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=eellipse ${example_dim} )
 *******************************************************************************/
 module eellipse
 (
-  size,
   h,
-  center = false
+  center = false,
+
+  size
 )
 {
   linear_extrude_uls(h=h, center=center)
@@ -750,42 +526,25 @@ module eellipse
 
 //! An extruded ellipse with a removed elliptical core.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
-            or a single decimal for (rx=ry).
-  \param    core <decimal-list-2|decimal> A list [rx, ry] of decimals
-            or a single decimal for (rx=ry).
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    t <decimal-list-2|decimal> A list [x, y] of decimals
-            or a single decimal for (x=y).
-
-  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
-  \param    cr <decimal> Core z-rotation.
-
-  \param    center <boolean> Center about origin.
+  \copydoc ellipse_c()
 
   \details
-
-    \sa linear_extrude_uls for a description on specifying \p h.
-
-    Thickness \p t
-    \li <tt>core = size - t</tt>; when \p t and \p size are given.
-    \li <tt>size = core + t</tt>; when \p t and \p core are given.
 
     \b Example
     \amu_eval ( function=eellipse_c ${example_dim} )
 *******************************************************************************/
 module eellipse_c
 (
+  h,
+  center = false,
+
   size,
   core,
-  h,
   t,
   co,
-  cr = 0,
-  center = false
+  cr = 0
 )
 {
   linear_extrude_uls(h=h, center=center)
@@ -794,31 +553,23 @@ module eellipse_c
 
 //! An extruded ellipse sector.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
-            or a single decimal for (rx=ry).
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    a1 <decimal> The start angle in degrees.
-  \param    a2 <decimal> The stop angle in degrees.
-
-  \param    center <boolean> Center about origin.
+  \copydoc ellipse_s()
 
   \details
-
-    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=eellipse_s ${example_dim} )
 *******************************************************************************/
 module eellipse_s
 (
-  size,
   h,
+  center = false,
+
+  size,
   a1 = 0,
-  a2 = 0,
-  center = false
+  a2 = 0
 )
 {
   linear_extrude_uls(h=h, center=center)
@@ -827,47 +578,27 @@ module eellipse_s
 
 //! An extruded sector of an ellipse with a removed elliptical core.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
-            or a single decimal for (rx=ry).
-  \param    core <decimal-list-2|decimal> A list [rx, ry] of decimals
-            or a single decimal for (rx=ry).
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    t <decimal-list-2|decimal> A list [x, y] of decimals
-            or a single decimal for (x=y).
-
-  \param    a1 <decimal> The start angle in degrees.
-  \param    a2 <decimal> The stop angle in degrees.
-
-  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
-  \param    cr <decimal> Core z-rotation.
-
-  \param    center <boolean> Center about origin.
+  \copydoc ellipse_cs()
 
   \details
-
-    \sa linear_extrude_uls for a description on specifying \p h.
-
-    Thickness \p t
-    \li <tt>core = size - t</tt>; when \p t and \p size are given.
-    \li <tt>size = core + t</tt>; when \p t and \p core are given.
 
     \b Example
     \amu_eval ( function=eellipse_cs ${example_dim} )
 *******************************************************************************/
 module eellipse_cs
 (
+  h,
+  center = false,
+
   size,
   core,
-  h,
   t,
   a1 = 0,
   a2 = 0,
   co,
-  cr = 0,
-  center = false
+  cr = 0
 )
 {
   linear_extrude_uls(h=h, center=center)
@@ -876,34 +607,23 @@ module eellipse_cs
 
 //! An extruded two-dimensional star.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> A list [l, w] of decimals
-            or a single decimal for (size=l=2*w).
+  \copydoc linear_extrude_uls()
 
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
-
-  \param    n <decimal> The number of points.
-
-  \param    vr <decimal-list-3|decimal> The vertex rounding radius.
-            A list [v1r, v2r, v3r] of decimals or a single decimal for
-            (v1r=v2r=v3r).
-
-  \param    center <boolean> Center about origin.
+  \copydoc star2d()
 
   \details
-
-    \sa linear_extrude_uls for a description on specifying \p h.
 
     \b Example
     \amu_eval ( function=estar2d ${example_dim} )
 *******************************************************************************/
 module estar2d
 (
-  size,
   h,
+  center = false,
+
+  size,
   n = 5,
-  vr,
-  center = false
+  vr
 )
 {
   linear_extrude_uls(h=h, center=center)

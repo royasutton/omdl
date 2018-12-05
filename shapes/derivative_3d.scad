@@ -431,58 +431,26 @@ module star3d
 
 //! A rectangular cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> The profile size. A list [x, y]
-            of decimals or a single decimal for (x=y).
-  \param    core <decimal-list-2|decimal> The profile core. A list [x, y]
-            of decimals or a single decimal for (x=y).
+  \copydoc rotate_extrude_tre()
 
-  \param    r <decimal> The rotation radius.
-  \param    l <decimal-list-2|decimal> The elongation length.
-            A list [x, y] of decimals or a single decimal for (x=y)
-
-  \param    t <decimal-list-2|decimal> The profile thickness. A list [x, y]
-            of decimals or a single decimal for (x=y).
-
-  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
-  \param    cr <decimal> Core z-rotation.
-
-  \param    vr <decimal-list-4|decimal> The profile default corner rounding
-            radius. A list [v1r, v2r, v3r, v4r] of decimals or a single
-            decimal for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
-  \param    vr1 <decimal-list-4|decimal> The profile outer corner rounding radius.
-  \param    vr2 <decimal-list-4|decimal> The profile core corner rounding radius.
-
-  \param    vrm <integer> The default corner radius mode.
-            A 4-bit encoded integer that indicates each corner finish.
-            Use bit value \b 0 for \em fillet and \b 1 for \em chamfer.
-  \param    vrm1 <integer> The outer corner radius mode.
-  \param    vrm2 <integer> The core corner radius mode.
-
-  \param    pa <decimal> The profile pitch angle in degrees.
-  \param    ra <decimal> The rotation sweep angle in degrees.
-  \param    m <integer> The section render mode. An 8-bit encoded integer
-            that indicates the revolution sections to render.
-
-  \param    center <boolean> Rotate about profile center.
-  \param    profile <boolean> Show profile only (do not extrude).
+  \copydoc rectangle_c()
 
   \details
-
-    \sa rotate_extrude_tre for description of extrude parameters.
-
-    Thickness \p t
-    \li <tt>core = size - t</tt>; when \p t and \p size are given.
-    \li <tt>size = core + t</tt>; when \p t and \p core are given.
 
     \b Example
     \amu_eval ( function=torus_rp ${example_dim} )
 *******************************************************************************/
 module torus_rp
 (
+  r,
+  pa = 0,
+  ra = 360,
+  profile = false,
+  l,
+  m = 255,
+
   size,
   core,
-  r,
-  l,
   t,
   co,
   cr = 0,
@@ -492,11 +460,7 @@ module torus_rp
   vrm = 0,
   vrm1,
   vrm2,
-  pa = 0,
-  ra = 360,
-  m = 255,
-  center = false,
-  profile = false
+  center = false
 )
 {
   rotate_extrude_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
@@ -512,66 +476,39 @@ module torus_rp
 
 //! A triangular cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
-  \param    size <decimal-list-3|decimal> The size. A list [s1, s2, s3]
-            of decimals or a single decimal for (s1=s2=s3).
-  \param    core <decimal-list-3|decimal> The core. A list [s1, s2, s3]
-            of decimals or a single decimal for (s1=s2=s3).
+  \copydoc rotate_extrude_tre()
 
-  \param    r <decimal> The rotation radius.
-  \param    l <decimal-list-2|decimal> The elongation length.
-            A list [x, y] of decimals or a single decimal for (x=y)
-
-  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
-  \param    cr <decimal> Core z-rotation.
-
-  \param    vr <decimal-list-3|decimal> The default vertex rounding radius.
-            A list [v1r, v2r, v3r] of decimals or a single decimal for
-            (v1r=v2r=v3r).
-  \param    vr1 <decimal-list-3|decimal> The outer vertex rounding radius.
-  \param    vr2 <decimal-list-3|decimal> The core vertex rounding radius.
-
-  \param    pa <decimal> The profile pitch angle in degrees.
-  \param    ra <decimal> The rotation sweep angle in degrees.
-  \param    m <integer> The section render mode. An 8-bit encoded integer
-            that indicates the revolution sections to render.
-
-  \param    centroid <boolean> Rotate about profile centroid.
-  \param    incenter <boolean> Rotate about profile incenter.
-  \param    profile <boolean> Show profile only (do not extrude).
+  \copydoc triangle_ls_c()
 
   \details
 
-    \sa rotate_extrude_tre for description of extrude parameters.
-
     \b Example
     \amu_eval ( function=torus_tp ${example_dim} )
-
-  \note The outer and inner triangles centroids are aligned prior to the
-        core removal.
 *******************************************************************************/
 module torus_tp
 (
-  size,
-  core,
   r,
+  pa = 0,
+  ra = 360,
+  profile = false,
   l,
+  m = 255,
+
+  vs,
+  vc,
   co,
   cr = 0,
   vr,
   vr1,
   vr2,
-  pa = 0,
-  ra = 360,
-  m = 255,
   centroid = false,
-  incenter = false,
-  profile = false,
+  incenter = false
 )
 {
   rotate_extrude_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
   triangle_ls_c
   (
-    vs=size, vc=core,
+    vs=vs, vc=vc,
     co=co, cr=cr,
     vr=vr, vr1=vr1, vr2=vr2,
     centroid=centroid, incenter=incenter
@@ -580,57 +517,31 @@ module torus_tp
 
 //! An elliptical cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> The profile size. A list [x, y]
-            of decimals or a single decimal for (x=y).
-  \param    core <decimal-list-2|decimal> The profile core. A list [x, y]
-            of decimals or a single decimal for (x=y).
+  \copydoc rotate_extrude_tre()
 
-  \param    r <decimal> The rotation radius.
-  \param    l <decimal-list-2|decimal> The elongation length.
-            A list [x, y] of decimals or a single decimal for (x=y)
-
-  \param    t <decimal-list-2|decimal> The profile thickness. A list [x, y]
-            of decimals or a single decimal for (x=y).
-
-  \param    a1 <decimal> The profile start angle in degrees.
-  \param    a2 <decimal> The profile stop angle in degrees.
-
-  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
-  \param    cr <decimal> Core z-rotation.
-
-  \param    pa <decimal> The profile pitch angle in degrees.
-  \param    ra <decimal> The rotation sweep angle in degrees.
-  \param    m <integer> The section render mode. An 8-bit encoded integer
-            that indicates the revolution sections to render.
-
-  \param    profile <boolean> Show profile only (do not extrude).
+  \copydoc ellipse_cs()
 
   \details
-
-    \sa rotate_extrude_tre for description of extrude parameters.
-
-    Thickness \p t
-    \li <tt>core = size - t</tt>; when \p t and \p size are given.
-    \li <tt>size = core + t</tt>; when \p t and \p core are given.
 
     \b Example
     \amu_eval ( function=torus_ep ${example_dim} )
 *******************************************************************************/
 module torus_ep
 (
+  r,
+  pa = 0,
+  ra = 360,
+  profile = false,
+  l,
+  m = 255,
+
   size,
   core,
-  r,
-  l,
   t,
   a1 = 0,
   a2 = 0,
   co,
-  cr = 0,
-  pa = 0,
-  ra = 360,
-  m = 255,
-  profile = false
+  cr = 0
 )
 {
   rotate_extrude_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
@@ -644,45 +555,36 @@ module torus_ep
 
 //! A rectangular profile revolved about the z-axis for generating cylinders.
 /***************************************************************************//**
+  \copydoc rotate_extrude_tre()
+
   \param    cr <decimal-list-2|decimal> The lower and upper radius. A
             list [cr1, cr2] of decimals or a single decimal for (cr1=cr2).
   \param    h <decimal> The height.
-
-  \param    r <decimal> The rotation radius.
-  \param    l <decimal-list-2|decimal> The elongation length.
-            A list [x, y] of decimals or a single decimal for (x=y)
 
   \param    vr <decimal-list-2|decimal> The profile corner rounding
             radius. A list [vr1, vr2] of decimals or a single decimal
             for (vr1=vr2). Unspecified corners are not rounded.
 
-  \param    pa <decimal> The profile pitch angle in degrees.
-  \param    ra <decimal> The rotation sweep angle in degrees.
-  \param    m <integer> The section render mode. An 8-bit encoded integer
-            that indicates the revolution sections to render.
-
   \param    center <boolean> Center profile height.
-  \param    profile <boolean> Show profile only (do not extrude).
 
   \details
-
-    \sa rotate_extrude_tre for description of extrude parameters.
 
     \b Example
     \amu_eval ( function=torus_cp ${example_dim} )
 *******************************************************************************/
 module torus_cp
 (
-  cr,
-  h,
   r,
-  l,
-  vr = 0,
   pa = 0,
   ra = 360,
+  profile = false,
+  l,
   m = 255,
-  center = false,
-  profile = false
+
+  cr,
+  h,
+  vr = 0,
+  center = false
 )
 {
   cr1  = edefined_or(cr, 0, cr);
@@ -755,7 +657,7 @@ BEGIN_SCOPE dim;
     else if (shape == "torus_rp")
       torus_rp( size=[40,20], core=[35,20], r=40, l=[90,60], co=[0,2.5], vr=4, vrm=15, center=true );
     else if (shape == "torus_tp")
-      torus_tp( size=40, core=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
+      torus_tp( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
     else if (shape == "torus_ep")
       torus_ep( size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
     else if (shape == "torus_cp")
@@ -810,7 +712,7 @@ BEGIN_SCOPE manifest;
     grid_repeat( g=4, i=150, center=true )
     {
       torus_rp( size=[40,20], core=[35,20], r=40, l=[25,60], co=[0,2.5], vr=4, vrm=15, center=true );
-      torus_tp( size=40, core=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
+      torus_tp( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
       torus_ep( size=[20,15], t=[2,4], r=60, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
       torus_cp( cr=[15,10], h=30, vr=[5,2], r=40, l=[25,60], center=true );
     }
