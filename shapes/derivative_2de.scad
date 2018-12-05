@@ -1,4 +1,4 @@
-//! Common 2D derivative shapes linearly extruded.
+//! Common 2D derivative shapes linearly extruded along the z-axis.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (2d Extrusions)
-    \amu_define group_brief (Common 2D derivative shapes linearly extruded.)
+    \amu_define group_brief (Common 2D derivative shapes linearly extruded along the z-axis.)
     \amu_define view        (diag)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)

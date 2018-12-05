@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (3d Torus)
+    \amu_define group_name  (2d Revolutions)
     \amu_define group_brief (Common 2D shapes revolved about the z-axis.)
     \amu_define view        (diag)
 
@@ -257,7 +257,7 @@ module trapezoidal_torus
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <shapes/derivative_torus.scad>;
+    include <shapes/derivative_2dr.scad>;
 
     shape = "rectangular_torus";
     $fn = 72;
@@ -292,7 +292,7 @@ END_SCOPE;
 
 BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
-    include <shapes/derivative_torus.scad>;
+    include <shapes/derivative_2dr.scad>;
 
     $fn = 72;
 
