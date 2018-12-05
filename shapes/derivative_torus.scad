@@ -58,9 +58,9 @@ include <../tools/extrude.scad>;
   \details
 
     \b Example
-    \amu_eval ( function=torus_rp ${example_dim} )
+    \amu_eval ( function=rectangular_torus ${example_dim} )
 *******************************************************************************/
-module torus_rp
+module rectangular_torus
 (
   r,
   pa = 0,
@@ -103,9 +103,9 @@ module torus_rp
   \details
 
     \b Example
-    \amu_eval ( function=torus_tp ${example_dim} )
+    \amu_eval ( function=triangular_torus ${example_dim} )
 *******************************************************************************/
-module torus_tp
+module triangular_torus
 (
   r,
   pa = 0,
@@ -144,9 +144,9 @@ module torus_tp
   \details
 
     \b Example
-    \amu_eval ( function=torus_ep ${example_dim} )
+    \amu_eval ( function=elliptical_torus ${example_dim} )
 *******************************************************************************/
-module torus_ep
+module elliptical_torus
 (
   r,
   pa = 0,
@@ -173,7 +173,7 @@ module torus_ep
   );
 }
 
-//! A rectangular profile revolved about the z-axis for generating cylinders.
+//! A trapezoidal cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
   \copydoc rotate_extrude_tre()
 
@@ -190,11 +190,11 @@ module torus_ep
   \details
 
     \b Example
-    \amu_eval ( function=torus_cp ${example_dim} )
+    \amu_eval ( function=trapezoidal_torus ${example_dim} )
 
   \todo Use generic rounded trapezoid function for profile.
 *******************************************************************************/
-module torus_cp
+module trapezoidal_torus
 (
   r,
   pa = 0,
@@ -259,17 +259,17 @@ BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
     include <shapes/derivative_torus.scad>;
 
-    shape = "torus_rp";
+    shape = "rectangular_torus";
     $fn = 72;
 
-    if (shape == "torus_rp")
-      torus_rp( size=[40,20], core=[35,20], r=40, l=[90,60], co=[0,2.5], vr=4, vrm=15, center=true );
-    else if (shape == "torus_tp")
-      torus_tp( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
-    else if (shape == "torus_ep")
-      torus_ep( size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
-    else if (shape == "torus_cp")
-      torus_cp( cr=[15,10], h=30, vr=[5,2], r=40, l=[90,60], center=true );
+    if (shape == "rectangular_torus")
+      rectangular_torus( size=[40,20], core=[35,20], r=40, l=[90,60], co=[0,2.5], vr=4, vrm=15, center=true );
+    else if (shape == "triangular_torus")
+      triangular_torus( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
+    else if (shape == "elliptical_torus")
+      elliptical_torus( size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
+    else if (shape == "trapezoidal_torus")
+      trapezoidal_torus( cr=[15,10], h=30, vr=[5,2], r=40, l=[90,60], center=true );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -278,10 +278,10 @@ BEGIN_SCOPE dim;
     views     name "views" views "diag";
     defines   name "shapes" define "shape"
               strings "
-                torus_rp
-                torus_tp
-                torus_ep
-                torus_cp
+                rectangular_torus
+                triangular_torus
+                elliptical_torus
+                trapezoidal_torus
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter";
@@ -298,10 +298,10 @@ BEGIN_SCOPE manifest;
 
     grid_repeat( g=4, i=150, center=true )
     {
-      torus_rp( size=[40,20], core=[35,20], r=40, l=[25,60], co=[0,2.5], vr=4, vrm=15, center=true );
-      torus_tp( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
-      torus_ep( size=[20,15], t=[2,4], r=60, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
-      torus_cp( cr=[15,10], h=30, vr=[5,2], r=40, l=[25,60], center=true );
+      rectangular_torus( size=[40,20], core=[35,20], r=40, l=[25,60], co=[0,2.5], vr=4, vrm=15, center=true );
+      triangular_torus( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
+      elliptical_torus( size=[20,15], t=[2,4], r=60, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
+      trapezoidal_torus( cr=[15,10], h=30, vr=[5,2], r=40, l=[25,60], center=true );
     }
   END_OPENSCAD;
 
