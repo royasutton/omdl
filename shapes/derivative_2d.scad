@@ -258,8 +258,9 @@ module rectangle_c
     \b Example
     \amu_eval ( function=rhombus ${example_dim} )
 
-    See [Wikipedia](https://en.wikipedia.org/wiki/Rhombus)
-    for more information.
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Rhombus
 *******************************************************************************/
 module rhombus
 (
@@ -486,8 +487,9 @@ module triangle_lp
     \b Example
     \amu_eval ( function=triangle_sss ${example_dim} )
 
-    See [Wikipedia](https://en.wikipedia.org/wiki/Solution_of_triangles)
-    for more information.
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
 *******************************************************************************/
 module triangle_sss
 (
