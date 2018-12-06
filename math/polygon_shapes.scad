@@ -66,13 +66,17 @@ include <../datatypes/datatypes-base.scad>;
 
     hull()
     {
-      for ( p = polygon2d_regular_lp( r=20, n=5, vr=vr ) )
+      for ( p = polygon_regular_lp( r=20, n=5, vr=vr ) )
         translate( p )
         circle( r=vr );
     }
     \endcode
+
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Regular_polygon
 *******************************************************************************/
-function polygon2d_regular_lp
+function polygon_regular_lp
 (
   n,
   r,
@@ -107,7 +111,7 @@ function polygon2d_regular_lp
     The radius can be specified by either the circumradius \p r or the
     inradius \p a. If both are specified, \p r is used.
 *******************************************************************************/
-function polygon2d_regular_area
+function polygon_regular_area
 (
   n,
   r,
@@ -129,7 +133,7 @@ function polygon2d_regular_area
     The radius can be specified by either the circumradius \p r or the
     inradius \p a. If both are specified, \p r is used.
 *******************************************************************************/
-function polygon2d_regular_perimeter
+function polygon_regular_perimeter
 (
   n,
   r,
