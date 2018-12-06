@@ -1,4 +1,4 @@
-//! Mathematical functions for other shapes.
+//! Mathematical functions of polygon shapes.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Other Shapes)
-    \amu_define group_brief (Mathematical functions for other shapes.)
+    \amu_define group_name  (Polygon Shapes)
+    \amu_define group_brief (Mathematical functions of polygon shapes.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -66,13 +66,13 @@ include <../datatypes/datatypes-base.scad>;
 
     hull()
     {
-      for ( p = rpolygon_lp( r=20, n=5, vr=vr ) )
+      for ( p = polygon2d_regular_lp( r=20, n=5, vr=vr ) )
         translate( p )
         circle( r=vr );
     }
     \endcode
 *******************************************************************************/
-function rpolygon_lp
+function polygon2d_regular_lp
 (
   n,
   r,
@@ -107,7 +107,7 @@ function rpolygon_lp
     The radius can be specified by either the circumradius \p r or the
     inradius \p a. If both are specified, \p r is used.
 *******************************************************************************/
-function rpolygon_area
+function polygon2d_regular_area
 (
   n,
   r,
@@ -129,7 +129,7 @@ function rpolygon_area
     The radius can be specified by either the circumradius \p r or the
     inradius \p a. If both are specified, \p r is used.
 *******************************************************************************/
-function rpolygon_perimeter
+function polygon2d_regular_perimeter
 (
   n,
   r,
