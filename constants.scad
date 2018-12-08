@@ -112,6 +112,12 @@ empty_str = "";
 //! \<list> A list with no values (the empty list).
 empty_lst = [];
 
+//! OpenSCAD coarse grid limit.
+grid_coarse = 0.001;
+
+//! OpenSCAD fine grid limit.
+grid_fine = 0.000001;
+
 //! @}
 //! @}
 
