@@ -48,7 +48,7 @@ include <../datatypes/datatypes-base.scad>;
 //! Compute the coordinates for an n-sided regular polygon.
 /***************************************************************************//**
   \param    n <integer> The number of sides.
-  \param    r <decimal> The vertex circumradius of the circumcircle.
+  \param    r <decimal> The circumradius of the circumcircle.
   \param    a <decimal> The inradius of the incircle.
   \param    vr <decimal> The vertex rounding radius.
   \param    cw <boolean> Use clockwise point ordering.
@@ -141,6 +141,58 @@ function polygon_regular_perimeter
 ) = is_defined(r) ? 2 * n * r * sin(180/n)
   : is_defined(a) ? 2 * n * a * tan(180/n)
   : 0;
+
+//! Compute the coordinates of an arc with radius \p r between two vectors.
+/***************************************************************************//**
+  \param    r <decimal> The arc radius.
+  \param    c <point-2d> The arc radius center [x, y].
+  \param    l1 <line-2d> A 2d line (or vector) 1.
+  \param    l2 <line-2d> A 2d line (or vector) 2.
+  \param    cw <boolean> Use clockwise point ordering.
+
+  \returns  <coords-2d> A list of coordinates points [[x, y], ...].
+
+  \details
+
+    The arc coordinates will be at radius \p r centered about \p c
+    contained within the end points of vector \p l1 and \p l2. When
+    vectors \p l1 and \p l2 are parallel, the arc will be a complete
+    circle.
+*******************************************************************************/
+function polygon_arc_lp
+(
+  r,
+  c  = origin2d,
+  l1 = x_axis2d_ul,
+  l2 = x_axis2d_ul,
+  cw = true
+) =
+  let
+  (
+    // number of arc segments
+    ns    = (r < grid_fine) ? 3
+          : ($fn > 0.0) ? ($fn >= 3) ? $fn : 3
+          : ceil( max( min(360/$fa, r*tau/$fs), 5 ) ),
+
+    // arc starting angle
+    ia    = angle_ll(x_axis2d_ul, l1),
+    ia360 = (ia  < 0) ? 360 + ia
+          : ia,
+
+    // angle bwetween vectors
+    va    = angle_ll(l2, l1),
+    va360 = (va == 0) ? 360
+          : (va  < 0) ? 360 + va
+          : va,
+
+    // generate cw arc coordinate points
+    acp   =
+    [
+      for (a = [ia360 : -va360/ns : ia360-va360])
+        c + r * [cos(a), sin(a)]
+    ]
+  )
+  (cw == true) ? acp : reverse(acp);
 
 //! @}
 //! @}
