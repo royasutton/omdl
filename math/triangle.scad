@@ -177,6 +177,12 @@ function triangle_area_lp
   \param    v3 <point-2d> A vertex coordinate [x, y] for vertex 3.
 
   \returns  <point-2d> The centroid coordinate point [x, y].
+
+  \details
+
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Centroid
 *******************************************************************************/
 function triangle_centroid_ppp
 (
@@ -190,24 +196,32 @@ function triangle_centroid_ppp
   \param    v <coords-2d> A list of vertex coordinates [v1, v2, v3].
 
   \returns  <point-2d> The centroid coordinate point [x, y].
+
+  \details
+
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Centroid
 *******************************************************************************/
 function triangle_centroid_lp
 (
   v
 ) = triangle_centroid_ppp( v1=v[0], v2=v[1], v3=v[2]);
 
-//! Compute the coordinate for the triangle's incircle.
+//! Compute the center coordinate for the triangle's incircle.
 /***************************************************************************//**
   \param    v1 <point-2d> A vertex coordinate [x, y] for vertex 1.
   \param    v2 <point-2d> A vertex coordinate [x, y] for vertex 2.
   \param    v3 <point-2d> A vertex coordinate [x, y] for vertex 3.
 
-  \returns  <point-2d> The incircle coordinate point [x, y].
+  \returns  <point-2d> The incircle center coordinate point [x, y].
 
   \details
 
     The interior point for which distances to the sides of the triangle
-    are equal.
+    are equal. See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
 *******************************************************************************/
 function triangle_incenter_ppp
 (
@@ -226,16 +240,18 @@ let
   ( (v1[1] * d1 + v2[1] * d2 + v3[1] * d3) / (d3 + d1 + d2) )
 ];
 
-//! Compute the coordinate for the triangle's incircle.
+//! Compute the center coordinate for the triangle's incircle.
 /***************************************************************************//**
   \param    v <coords-2d> A list of vertex coordinates [v1, v2, v3].
 
-  \returns  <point-2d> The incircle coordinate point [x, y].
+  \returns  <point-2d> The incircle center coordinate point [x, y].
 
   \details
 
     The interior point for which distances to the sides of the triangle
-    are equal.
+    are equal. See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
 *******************************************************************************/
 function triangle_incenter_lp
 (
@@ -249,6 +265,12 @@ function triangle_incenter_lp
   \param    v3 <point-2d> A vertex coordinate [x, y] for vertex 3.
 
   \returns  <decimal> The incircle radius.
+
+  \details
+
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
 *******************************************************************************/
 function triangle_inradius_ppp
 (
@@ -269,11 +291,171 @@ sqrt( ((-d3+d1+d2) * (+d3-d1+d2) * (+d3+d1-d2)) / (d3+d1+d2) ) / 2;
   \param    v <coords-2d> A list of vertex coordinates [v1, v2, v3].
 
   \returns  <decimal> The incircle radius.
+
+  \details
+
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
 *******************************************************************************/
 function triangle_inradius_lp
 (
   v
 ) = triangle_inradius_ppp( v1=v[0], v2=v[1], v3=v[2]);
+
+//! Compute the center coordinate for the triangle's excircle.
+/***************************************************************************//**
+  \param    v1 <point-2d> A vertex coordinate [x, y] for vertex 1.
+  \param    v2 <point-2d> A vertex coordinate [x, y] for vertex 2.
+  \param    v3 <point-2d> A vertex coordinate [x, y] for vertex 3.
+
+  \returns  <point-2d> The excircle center coordinate point [x, y]
+            opposite \p v1.
+
+  \details
+
+    A circle outside of the triangle specified by \p v1, \p v2, and \p
+    v3, tangent to the side opposite v1 and tangent to the extensions
+    of the other two sides away from \p v1. See [Wikipedia] for more
+    information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
+*******************************************************************************/
+function triangle_excenter_ppp
+(
+  v1,
+  v2,
+  v3
+) =
+let
+(
+  d1 = distance_pp(v2, v3),
+  d2 = distance_pp(v3, v1),
+  d3 = distance_pp(v1, v2)
+)
+[
+  ( (-d1*v1[0] +d2*v2[0] +d3*v3[0])/(-d1+d2+d3) ),
+  ( (-d1*v1[1] +d2*v2[1] +d3*v3[1])/(-d1+d2+d3) )
+];
+
+//! Compute the center coordinate for the triangle's excircle.
+/***************************************************************************//**
+  \param    v <coords-2d> A list of vertex coordinates [v1, v2, v3].
+
+  \returns  <point-2d> The excircle center coordinate point [x, y]
+            opposite \p v1.
+
+  \details
+
+    A circle outside of the triangle specified by \p v1, \p v2, and \p
+    v3, tangent to the side opposite v1 and tangent to the extensions
+    of the other two sides away from \p v1. See [Wikipedia] for more
+    information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
+*******************************************************************************/
+function triangle_excenter_lp
+(
+  v
+) = triangle_excenter_ppp( v1=v[0], v2=v[1], v3=v[2]);
+
+//! Compute the exradius of a triangle's excircle.
+/***************************************************************************//**
+  \param    v1 <point-2d> A vertex coordinate [x, y] for vertex 1.
+  \param    v2 <point-2d> A vertex coordinate [x, y] for vertex 2.
+  \param    v3 <point-2d> A vertex coordinate [x, y] for vertex 3.
+
+  \returns  <decimal> The excircle radius of the excircle opposite \p v1.
+
+  \details
+
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
+*******************************************************************************/
+function triangle_exradius_ppp
+(
+  v1,
+  v2,
+  v3
+) =
+let
+(
+  d1 = distance_pp(v2, v3),
+  d2 = distance_pp(v3, v1),
+  d3 = distance_pp(v1, v2),
+   s = (+d1+d2+d3)/2
+)
+sqrt( s * (s-d2) * (s-d3) / (s - d1) );
+
+//! Compute the exradius of a triangle's excircle.
+/***************************************************************************//**
+  \param    v <coords-2d> A list of vertex coordinates [v1, v2, v3].
+
+  \returns  <decimal> The excircle radius of the excircle opposite \p v1.
+
+  \details
+
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
+*******************************************************************************/
+function triangle_exradius_lp
+(
+  v
+) = triangle_exradius_ppp( v1=v[0], v2=v[1], v3=v[2]);
+
+//! Compute the coordinate for the triangle's circumcenter.
+/***************************************************************************//**
+  \param    v1 <point-2d> A vertex coordinate [x, y] for vertex 1.
+  \param    v2 <point-2d> A vertex coordinate [x, y] for vertex 2.
+  \param    v3 <point-2d> A vertex coordinate [x, y] for vertex 3.
+
+  \returns  <point-2d> The circumcenter coordinate point [x, y].
+
+  \details
+
+    A circle that passes through all of the vertices of the triangle.
+    The radius is the distance from the circumcenter to any of vertex.
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Circumscribed_circle
+*******************************************************************************/
+function triangle_circumcenter_ppp
+(
+  v1,
+  v2,
+  v3
+) =
+let
+(
+  s2a = sin( 2 * angle_ll([v1, v3], [v1, v2]) ),
+  s2b = sin( 2 * angle_ll([v2, v1], [v2, v3]) ),
+  s2c = sin( 2 * angle_ll([v3, v2], [v3, v1]) )
+)
+[
+  ( (v1[0]*s2a + v2[0]*s2b + v3[0]*s2c)/(s2a+s2b+s2c) ),
+  ( (v1[1]*s2a + v2[1]*s2b + v3[1]*s2c)/(s2a+s2b+s2c) )
+];
+
+//! Compute the coordinate for the triangle's circumcenter.
+/***************************************************************************//**
+  \param    v <coords-2d> A list of vertex coordinates [v1, v2, v3].
+
+  \returns  <point-2d> The circumcenter coordinate point [x, y].
+
+  \details
+
+    A circle that passes through all of the vertices of the triangle.
+    The radius is the distance from the circumcenter to any of vertex.
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Circumscribed_circle
+*******************************************************************************/
+function triangle_circumcenter_lp
+(
+  v
+) = triangle_circumcenter_ppp( v1=v[0], v2=v[1], v3=v[2]);
 
 //! Test the vertex ordering, or orientation, of a triangle.
 /***************************************************************************//**
