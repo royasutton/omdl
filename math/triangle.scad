@@ -215,23 +215,15 @@ function triangle_incenter_ppp
   v2,
   v3
 ) =
+let
+(
+  d1 = distance_pp(v2, v3),
+  d2 = distance_pp(v3, v1),
+  d3 = distance_pp(v1, v2)
+)
 [
-  (
-    (
-        v1[0] * distance_pp(v2, v3)
-      + v2[0] * distance_pp(v3, v1)
-      + v3[0] * distance_pp(v1, v2)
-    )
-    / ( distance_pp(v1, v2) + distance_pp(v2, v3) + distance_pp(v3, v1) )
-  ),
-  (
-    (
-        v1[1] * distance_pp(v2, v3)
-      + v2[1] * distance_pp(v3, v1)
-      + v3[1] * distance_pp(v1, v2)
-    )
-    / ( distance_pp(v1, v2) + distance_pp(v2, v3) + distance_pp(v3, v1) )
-  )
+  ( (v1[0] * d1 + v2[0] * d2 + v3[0] * d3) / (d3 + d1 + d2) ),
+  ( (v1[1] * d1 + v2[1] * d2 + v3[1] * d3) / (d3 + d1 + d2) )
 ];
 
 //! Compute the coordinate for the triangle's incircle.
@@ -264,15 +256,13 @@ function triangle_inradius_ppp
   v2,
   v3
 ) =
-sqrt
+let
 (
-  (
-      ( - distance_pp(v1, v2) + distance_pp(v2, v3) + distance_pp(v3, v1) )
-    * ( + distance_pp(v1, v2) - distance_pp(v2, v3) + distance_pp(v3, v1) )
-    * ( + distance_pp(v1, v2) + distance_pp(v2, v3) - distance_pp(v3, v1) )
-  )
-  / ( distance_pp(v1, v2) + distance_pp(v2, v3) + distance_pp(v3, v1) )
-) / 2;
+  d1 = distance_pp(v2, v3),
+  d2 = distance_pp(v3, v1),
+  d3 = distance_pp(v1, v2)
+)
+sqrt( ((-d3+d1+d2) * (+d3-d1+d2) * (+d3+d1-d2)) / (d3+d1+d2) ) / 2;
 
 //! Compute the inradius of a triangle's incircle.
 /***************************************************************************//**
