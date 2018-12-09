@@ -49,7 +49,7 @@ include <../tools/repeat.scad>;
 
 //----------------------------------------------------------------------------//
 
-//! A rectangle with edge, fillet, and/or chamfer corners.
+//! A rectangle with edge, round, or chamfer corners.
 /***************************************************************************//**
   \param    size <decimal-list-2|decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
@@ -60,7 +60,7 @@ include <../tools/repeat.scad>;
 
   \param    vrm <integer> The corner radius mode.
             A 4-bit encoded integer that indicates each corner finish.
-            Use bit value \b 0 for \em fillet and \b 1 for \em chamfer.
+            Use bit value \b 0 for \em round and \b 1 for \em chamfer.
 
   \param    center <boolean> Center about origin.
 
@@ -69,7 +69,7 @@ include <../tools/repeat.scad>;
     \b Example
     \amu_eval ( function=rectangle ${example_dim} )
 
-  \note     A corner \em fillet replaces an edge with a quarter circle of
+  \note     A corner \em round replaces an edge with a quarter circle of
             radius \p vr, inset <tt>[vr, vr]</tt> from the corner vertex.
   \note     A corner \em chamfer replaces an edge with an isosceles right
             triangle with side lengths equal to the corresponding corner
@@ -181,7 +181,7 @@ module rectangle
 
   \param    vrm <integer> The default corner radius mode.
             A 4-bit encoded integer that indicates each corner finish.
-            Use bit value \b 0 for \em fillet and \b 1 for \em chamfer.
+            Use bit value \b 0 for \em round and \b 1 for \em chamfer.
   \param    vrm1 <integer> The outer corner radius mode.
   \param    vrm2 <integer> The core corner radius mode.
 

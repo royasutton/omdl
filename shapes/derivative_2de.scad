@@ -49,7 +49,7 @@ include <../tools/extrude.scad>;
 
 //----------------------------------------------------------------------------//
 
-//! An extruded rectangle with edge, fillet, and/or chamfer corners.
+//! An extruded rectangle with edge, round, or chamfer corners.
 /***************************************************************************//**
   \copydoc linear_extrude_uls()
 

@@ -97,7 +97,7 @@ module cone
   }
 }
 
-//! A cuboid with edge, fillet, or chamfer corners.
+//! A cuboid with edge, round, or chamfer corners.
 /***************************************************************************//**
   \param    size <decimal-list-3|decimal> A list [x, y, z] of decimals
             or a single decimal for (x=y=z).
@@ -117,12 +117,12 @@ module cone
 
     | vrm | B1  | B0  | Description                                 |
     |:---:|:---:|:---:|:--------------------------------------------|
-    |  0  |  0  |  0  | \em fillet edges with \em fillet vertexes   |
+    |  0  |  0  |  0  | \em round edges with \em round vertexes     |
     |  1  |  0  |  1  | \em chamfer edges with \em sphere vertexes  |
-    |  2  |  1  |  0  | \em fillet edges with \em chamfer vertexes  |
+    |  2  |  1  |  0  | \em round edges with \em chamfer vertexes   |
     |  3  |  1  |  1  | \em chamfer edges with \em chamfer vertexes |
 
-  \note     Using \em fillet replaces all edges with a quarter circle
+  \note     Using \em round replaces all edges with a quarter circle
             of radius \p vr, inset <tt>[vr, vr]</tt> from the each edge.
   \note     Using \em chamfer replaces all edges with isosceles right
             triangles with side lengths equal to the corner rounding
