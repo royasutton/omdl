@@ -441,7 +441,7 @@ BEGIN_SCOPE dim;
     include <shapes/derivative_3d.scad>;
 
     shape = "cone";
-    $fn = 72;
+    $fn = 36;
 
     if (shape == "cone")
       cone( h=25, r=10, vr=2 );
@@ -484,7 +484,7 @@ BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
     include <shapes/derivative_3d.scad>;
 
-    $fn = 72;
+    $fn = 36;
 
     grid_repeat( g=4, i=60, center=true )
     {

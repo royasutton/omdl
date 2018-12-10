@@ -266,7 +266,7 @@ BEGIN_SCOPE dim;
     include <tools/extrude.scad>;
 
     shape = "rotate_extrude_tr";
-    $fn = 72;
+    $fn = 36;
 
     if (shape == "rotate_extrude_tr")
       rotate_extrude_tr( r=50, pa=45, ra=270 ) square( [10,5], center=true );

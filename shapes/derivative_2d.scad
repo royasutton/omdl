@@ -1291,7 +1291,7 @@ BEGIN_SCOPE dim;
     include <shapes/derivative_2d.scad>;
 
     shape = "ellipse_cs";
-    $fn = 72;
+    $fn = 36;
 
     if (shape == "rectangle")
       rectangle( size=[25,40], vr=[0,10,10,5], vrm=4, center=true );
@@ -1364,7 +1364,7 @@ BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
     include <shapes/derivative_2d.scad>;
 
-    $fn = 72;
+    $fn = 36;
 
     grid_repeat( g=5, i=60, center=true )
     {

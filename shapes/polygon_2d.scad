@@ -92,7 +92,7 @@ BEGIN_SCOPE dim;
     include <omdl-base.scad>;
 
     shape = "polygon_trapezoid";
-    $fn = 72;
+    $fn = 36;
 
     if (shape == "polygon_trapezoid")
       polygon_trapezoid( b1=40, b2=40, l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
@@ -117,7 +117,7 @@ BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
 
-    $fn = 72;
+    $fn = 36;
 
     grid_repeat( g=5, i=60, center=true )
     {

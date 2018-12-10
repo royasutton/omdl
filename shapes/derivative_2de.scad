@@ -643,7 +643,7 @@ BEGIN_SCOPE dim;
     include <shapes/derivative_2de.scad>;
 
     shape = "eellipse_cs";
-    $fn = 72;
+    $fn = 36;
 
     if (shape == "erectangle")
       erectangle( size=[25,40], vr=5, vrm=3, h=20, center=true );
@@ -716,7 +716,7 @@ BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
     include <shapes/derivative_2de.scad>;
 
-    $fn = 72;
+    $fn = 36;
 
     grid_repeat( g=5, i=60, center=true )
     {

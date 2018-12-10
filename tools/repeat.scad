@@ -180,7 +180,7 @@ BEGIN_SCOPE dim;
     include <tools/repeat.scad>;
 
     shape = "radial_repeat";
-    $fn = 72;
+    $fn = 36;
 
     if (shape == "radial_repeat")
       radial_repeat( n=7, r=6, move=true ) square( [20,1], center=true );

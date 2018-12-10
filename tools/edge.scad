@@ -234,7 +234,7 @@ BEGIN_SCOPE dim;
     include <tools/edge.scad>;
 
     shape = "edge_profile_r";
-    $fn = 72;
+    $fn = 36;
 
     if (shape == "edge_profile_r")
       edge_profile_r( r=5, p=1, f=1+10/100, a=75 );
@@ -262,7 +262,7 @@ BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
     include <tools/edge.scad>;
 
-    $fn = 72;
+    $fn = 36;
 
     grid_repeat( g=5, i=10, center=true )
     {

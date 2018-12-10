@@ -260,7 +260,7 @@ BEGIN_SCOPE dim;
     include <shapes/derivative_2dr.scad>;
 
     shape = "rectangular_torus";
-    $fn = 72;
+    $fn = 36;
 
     if (shape == "rectangular_torus")
       rectangular_torus( size=[40,20], core=[35,20], r=40, l=[90,60], co=[0,2.5], vr=4, vrm=15, m=63, center=true );
@@ -294,7 +294,7 @@ BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
     include <shapes/derivative_2dr.scad>;
 
-    $fn = 72;
+    $fn = 36;
 
     grid_repeat( g=4, i=150, center=true )
     {
