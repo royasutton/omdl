@@ -154,6 +154,63 @@ function polygon2d_arc_p
       c + r * [cos(a), sin(a)]
   ];
 
+//! Compute the coordinates for a rounded trapezoid in 2D space.
+/***************************************************************************//**
+  \param    b1 <decimal> The lower base length.
+  \param    b2 <decimal> The upper base length.
+  \param    a <decimal> The angle between the lower base and left leg.
+  \param    h <decimal> The perpendicular height between bases.
+  \param    l <decimal> The left side leg length.
+  \param    vr <decimal-list-4|decimal> The vertex rounding radius.
+            A list [v1r, v2r, v3r, v4r] of 4 decimals or a single
+            decimal for (v1r=v2r=v3r=v4r). Unspecified corners are not
+            rounded.
+  \param    vrm <integer-list-4|integer> The vertex rounding mode.
+            A list [v1rm, v2rm, v3rm,v4rm] of 4 integers or a single
+            integer for (v1rm=v2rm=v3rm=v4rm). Unspecified vertices are
+            not rounded.
+  \param    cw <boolean> Polygon vertex ordering.
+
+  \returns  <coords-2d> A list of coordinates points [[x, y], ...]
+            that define the rounded trapezoid.
+
+  \details
+
+    When both \p h and \p l are specified, \p h has precedence.
+    Each vertex may be assigned one of the available rounding
+    \ref polygon2d_vertex_round3_p "modes". See [Wikipedia] for
+    more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Trapezoid
+*******************************************************************************/
+function polygon2d_trapezoid_p
+(
+  b1,
+  b2,
+  a = 90,
+  h,
+  l,
+  vr = 0,
+  vrm = 0,
+  cw = true
+) =
+  let
+  (
+    // trapezoid vertices from origin
+    p1 = [0, 0],
+    p2 = is_defined(h)
+       ? h*[cos(a), 1]
+       : l*[cos(a), sin(a)],
+    p3 = p2 + [b2, 0],
+    p4 = [b1, 0],
+
+    // cw ordering
+    c  = [p4, p1, p2, p3],
+
+    pp = polygon2d_vertex_round3_p(c=c, vr=vr, vrm=vrm, cw=true)
+  )
+  (cw == true) ? pp : reverse(pp);
+
 //! @}
 //! @}
 
