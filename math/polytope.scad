@@ -1237,6 +1237,128 @@ function polygon2d_linear_extrude_pf
   )
   [pp, pf];
 
+//! Round the vertices of a polygon in 2d space.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of \em n 2d cartesian coordinates
+            [[x1, y1], [x2, y2], ..., [xn, yn]].
+  \param    vr <decimal-list-n|decimal> The vertex rounding radius.
+            A list [v1r, v2r, v3r, ... vnr] of \em n decimals or a
+            single decimal for (v1r=v2r=v3r= ... =vnr). Unspecified
+            corners are not rounded.
+  \param    vrm <integer-list-n|integer> The vertex rounding mode.
+            A list [v1rm, v2rm, v3rm, ... vnrm] of \em n integers or a
+            single integer for (v1rm=v2rm=v3rm= ... =vnrm). Unspecified
+            vertices are not rounded.
+  \param    cw <boolean> Polygon vertex ordering.
+
+  \returns  <coords-2d> A new list of coordinates points [[x, y], ...]
+            that define the polygon with rounded vertices.
+
+  \details
+
+    Assumes polygon is defined in 2D space on the x-y plane. Each
+    vertex may be rounded using one of the following modes.
+
+     mode | description
+     :---:|:----------------------
+      0   | no rounding
+      1   | round vertex
+      2   | inverse round
+      3   | fillet previous edge
+      4   | fillet next edge
+      5   | chamfer vertex
+
+    Each vertex is processed using 3-point triangular rounding.
+    The triangle \ref triangle_incenter_lp "incircles" and
+    \ref triangle_excenter_lp "excircles" are used to create the
+    round and fillet \ref polygon2d_arc_p "arc" segments.
+
+    \b Example:
+    \code{.C}
+    c  = [[1,1], [1,10], [10,12], p[18,2];
+
+    p  = polygon2d_vertex_round3_p(c=c, vr=[1,1,2,1], vrm=[1,1,4,3]);
+
+    polygon( p );
+    \endcode
+*******************************************************************************/
+function polygon2d_vertex_round3_p
+(
+  c,
+  vr = 0,
+  vrm = 0,
+  cw = true
+) =
+  let
+  (
+    // constant vertex rounding radius and mode
+    crr = is_scalar(vr) ? vr : 0,
+    crm = is_scalar(vrm) ? vrm : 0,
+
+    // function assumes cw order, reverse if required
+    cp  = (cw == true) ? c : reverse(c),
+
+    // adjacent vertices sequence [ [v[n-1], v[n], v[n+1]] ... ]
+    avl = nssequence(cp, 3, w=true),
+
+    // polygon coordinate point list
+    ppl =
+    [
+      for ( i = [0 : len(avl)-1] )
+      let
+      (
+        av  = avl[i],                     // vertices [v[n-1], v[n], v[n+1]]
+        vc  = second(av),                 // vertex coordinate v[n]
+        rr  = edefined_or(vr, i, crr),    // vertex rounding radius
+        rm  = (rr == 0) ? 0               // vertex rounding mode
+            : edefined_or(vrm, i, crm),
+
+        // tangent circle radius
+        tcr = (rm == 0) ? 0
+            : (rm == 3) ? triangle_exradius_lp(av, 1)
+            : (rm == 4) ? triangle_exradius_lp(av, 3)
+            : (rm == 5) ? 0
+            : triangle_inradius_lp( av ),
+
+        // tangent circle center coordinate
+        tcc = (rm == 0) ? origin2d
+            : (rm == 3) ? (vc - rr/(rr-tcr) * triangle_excenter_lp(av, 1)) * (tcr-rr)/tcr
+            : (rm == 4) ? (vc - rr/(rr-tcr) * triangle_excenter_lp(av, 3)) * (tcr-rr)/tcr
+            : (rm == 5) ? origin2d
+            : (vc - rr/(rr-tcr) * triangle_incenter_lp(av)) * (tcr-rr)/tcr,
+
+        // distance from vertex to inflection points
+        vim = (rm == 0) ? 0
+            : (rm == 5) ? rr
+            : sqrt( pow(distance_pp(vc, tcc),2) - pow(rr,2) ),
+
+        // inflection coordinates
+        tc1 = (rm == 0) ? origin2d
+            : (rm == 3) ? vc + vim * unit_l( [first(av), second(av)] )
+            : (rm == 4) ? vc + vim * unit_l( [second(av), first(av)] )
+            : vc + vim * unit_l( [second(av), first(av)] ),
+
+        tc2 = (rm == 0) ? origin2d
+            : (rm == 3) ? vc + vim * unit_l( [second(av), third(av)] )
+            : (rm == 4) ? vc + vim * unit_l( [third(av), second(av)] )
+            : vc + vim * unit_l( [second(av), third(av)] ),
+
+        // vertex rounding coordinate point list
+        vpl = (rm == 1) ? concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], cw=true), [tc2])
+            : (rm == 2) ? concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], cw=false), [tc2])
+            : (rm == 3) ? concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], cw=false), [tc2])
+            : (rm == 4) ? concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], cw=false), [tc2])
+            : (rm == 5) ? [tc1, tc2]
+            : [vc]
+      )
+      vpl
+    ],
+
+    // polygon points
+    pp = smerge( ppl )
+  )
+  (cw == true) ? pp : reverse(pp);
+
 //! @}
 //! @}
 
