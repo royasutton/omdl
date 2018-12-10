@@ -102,10 +102,10 @@ function polygon2d_regular_p
 /***************************************************************************//**
   \param    r <decimal> The arc radius.
   \param    c <point-2d> The arc center coordinate [x, y].
-  \param    l1 <line-2d> A 2d line (or vector) 1.
-  \param    l2 <line-2d> A 2d line (or vector) 2.
+  \param    v1 <vector-2d> A 2d vector 1. The start angle.
+  \param    v2 <vector-2d> A 2d vector 2. The end angle.
   \param    cw <boolean> Sweep clockwise along arc from the head of vector
-            \p l1 to the head of vector \p l2 when \p cw = \b true,
+            \p v1 to the head of vector \p v2 when \p cw = \b true,
             otherwise sweep counter clockwise.
 
   \returns  <coords-2d> A list of arc coordinates points [[x, y], ...].
@@ -113,15 +113,17 @@ function polygon2d_regular_p
   \details
 
     The arc coordinates will be at radius \p r centered about \p c
-    contained within the heads of vectors \p l1 and \p l2. When vectors
-    \p l1 and \p l2 are parallel, the arc will be a complete circle.
+    contained within the heads of vectors \p v1 and \p v2. When vectors
+    \p v1 and \p v2 are parallel, the arc will be a complete circle.
+    The arc segment count is controlled by the special variables \p $fa,
+    \p $fs, and \p $fn.
 *******************************************************************************/
 function polygon2d_arc_p
 (
   r,
   c  = origin2d,
-  l1 = x_axis2d_ul,
-  l2 = x_axis2d_ul,
+  v1 = x_axis2d_ul,
+  v2 = x_axis2d_ul,
   cw = true
 ) =
   let
@@ -132,12 +134,12 @@ function polygon2d_arc_p
          : ceil( max( min(360/$fa, r*tau/$fs), 5 ) ),
 
     // arc starting angle (signed and positive)
-    ia_s = angle_ll(x_axis2d_ul, l1),
+    ia_s = angle_ll(x_axis2d_ul, v1),
     ia_p = (ia_s  < 0) ? 360 + ia_s
          : ia_s,
 
     // angle bwetween vectors (signed and positive)
-    va_s = angle_ll(l2, l1),
+    va_s = angle_ll(v2, v1),
     va_p = (va_s == 0) ? 360
          : (va_s  < 0) ? 360 + va_s
          : va_s,
