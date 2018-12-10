@@ -636,6 +636,50 @@ function polytope_triangulate_ft
 // polygon
 //----------------------------------------------------------------------------//
 
+//! Compute the perimeter of an n-sided regular polygon in 2D.
+/***************************************************************************//**
+  \param    n <integer> The number of sides.
+  \param    r <decimal> The vertex circumradius of the circumcircle.
+  \param    a <decimal> The inradius of the incircle.
+
+  \returns  <decimal> Perimeter length of the n-sided regular polygon.
+
+  \details
+
+    The radius can be specified by either the circumradius \p r or the
+    inradius \p a. If both are specified, \p r is used.
+*******************************************************************************/
+function polygon2d_regular_perimeter
+(
+  n,
+  r,
+  a
+) = is_defined(r) ? 2 * n * r * sin(180/n)
+  : is_defined(a) ? 2 * n * a * tan(180/n)
+  : 0;
+
+//! Compute the area of an n-sided regular polygon in 2D.
+/***************************************************************************//**
+  \param    n <integer> The number of sides.
+  \param    r <decimal> The vertex circumradius of the circumcircle.
+  \param    a <decimal> The inradius of the incircle.
+
+  \returns  <decimal> Area of the n-sided regular polygon.
+
+  \details
+
+    The radius can be specified by either the circumradius \p r or the
+    inradius \p a. If both are specified, \p r is used.
+*******************************************************************************/
+function polygon2d_regular_area
+(
+  n,
+  r,
+  a
+) = is_defined(r) ? pow(r, 2) * n * sin(360/n) / 2
+  : is_defined(a) ? pow(a, 2) * n * tan(180/n)
+  : 0;
+
 //! Calculate the perimeter length of a polygon in 2d.
 /***************************************************************************//**
   \param    c <coords-2d> A list of 2d cartesian coordinates
