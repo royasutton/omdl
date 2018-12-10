@@ -308,16 +308,16 @@ function triangle_inradius_lp
   \param    v1 <point-2d> A vertex coordinate [x, y] for vertex 1.
   \param    v2 <point-2d> A vertex coordinate [x, y] for vertex 2.
   \param    v3 <point-2d> A vertex coordinate [x, y] for vertex 3.
+  \param    ov <integer> Return coordinate opposite vertex \p ov.
 
-  \returns  <point-2d> The excircle center coordinate point [x, y]
-            opposite \p v1.
+  \returns  <point-2d> The excircle center coordinate point [x, y].
 
   \details
 
     A circle outside of the triangle specified by \p v1, \p v2, and \p
-    v3, tangent to the side opposite v1 and tangent to the extensions
-    of the other two sides away from \p v1. See [Wikipedia] for more
-    information.
+    v3, tangent to the side opposite \p ov and tangent to the
+    extensions of the other two sides away from \p ov. See [Wikipedia]
+    for more information.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
 *******************************************************************************/
@@ -325,7 +325,8 @@ function triangle_excenter_ppp
 (
   v1,
   v2,
-  v3
+  v3,
+  ov = 1
 ) =
 let
 (
@@ -333,39 +334,44 @@ let
   d2 = distance_pp(v3, v1),
   d3 = distance_pp(v1, v2)
 )
-[
-  ( (-d1*v1[0] +d2*v2[0] +d3*v3[0])/(-d1+d2+d3) ),
-  ( (-d1*v1[1] +d2*v2[1] +d3*v3[1])/(-d1+d2+d3) )
-];
+    (ov == 1) ? [ ((-d1*v1[0]+d2*v2[0]+d3*v3[0])/(-d1+d2+d3)),
+                  ((-d1*v1[1]+d2*v2[1]+d3*v3[1])/(-d1+d2+d3)) ]
+  : (ov == 2) ? [ ((+d1*v1[0]-d2*v2[0]+d3*v3[0])/(+d1-d2+d3)),
+                  ((+d1*v1[1]-d2*v2[1]+d3*v3[1])/(+d1-d2+d3)) ]
+  : (ov == 3) ? [ ((+d1*v1[0]+d2*v2[0]-d3*v3[0])/(+d1+d2-d3)),
+                  ((+d1*v1[1]+d2*v2[1]-d3*v3[1])/(+d1+d2-d3)) ]
+  : origin2d;
 
 //! Compute the center coordinate for the triangle's excircle.
 /***************************************************************************//**
   \param    v <coords-2d> A list of vertex coordinates [v1, v2, v3].
+  \param    ov <integer> Return coordinate opposite vertex \p ov.
 
-  \returns  <point-2d> The excircle center coordinate point [x, y]
-            opposite \p v1.
+  \returns  <point-2d> The excircle center coordinate point [x, y].
 
   \details
 
     A circle outside of the triangle specified by \p v1, \p v2, and \p
-    v3, tangent to the side opposite v1 and tangent to the extensions
-    of the other two sides away from \p v1. See [Wikipedia] for more
-    information.
+    v3, tangent to the side opposite \p ov and tangent to the
+    extensions of the other two sides away from \p ov. See [Wikipedia]
+    for more information.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
 *******************************************************************************/
 function triangle_excenter_lp
 (
-  v
-) = triangle_excenter_ppp( v1=v[0], v2=v[1], v3=v[2]);
+  v,
+  ov = 1
+) = triangle_excenter_ppp( v1=v[0], v2=v[1], v3=v[2], ov=ov);
 
 //! Compute the exradius of a triangle's excircle.
 /***************************************************************************//**
   \param    v1 <point-2d> A vertex coordinate [x, y] for vertex 1.
   \param    v2 <point-2d> A vertex coordinate [x, y] for vertex 2.
   \param    v3 <point-2d> A vertex coordinate [x, y] for vertex 3.
+  \param    ov <integer> Return coordinate opposite vertex \p ov.
 
-  \returns  <decimal> The excircle radius of the excircle opposite \p v1.
+  \returns  <decimal> The excircle radius of the excircle opposite \p ov.
 
   \details
 
@@ -377,7 +383,8 @@ function triangle_exradius_ppp
 (
   v1,
   v2,
-  v3
+  v3,
+  ov = 1
 ) =
 let
 (
@@ -386,13 +393,17 @@ let
   d3 = distance_pp(v1, v2),
    s = (+d1+d2+d3)/2
 )
-sqrt( s * (s-d2) * (s-d3) / (s - d1) );
+    (ov == 1) ? sqrt(s * (s-d2) * (s-d3) / (s-d1))
+  : (ov == 2) ? sqrt(s * (s-d1) * (s-d3) / (s-d2))
+  : (ov == 3) ? sqrt(s * (s-d1) * (s-d2) / (s-d3))
+  : 0;
 
 //! Compute the exradius of a triangle's excircle.
 /***************************************************************************//**
   \param    v <coords-2d> A list of vertex coordinates [v1, v2, v3].
+  \param    ov <integer> Return coordinate opposite vertex \p ov.
 
-  \returns  <decimal> The excircle radius of the excircle opposite \p v1.
+  \returns  <decimal> The excircle radius of the excircle opposite \p ov.
 
   \details
 
@@ -402,8 +413,9 @@ sqrt( s * (s-d2) * (s-d3) / (s - d1) );
 *******************************************************************************/
 function triangle_exradius_lp
 (
-  v
-) = triangle_exradius_ppp( v1=v[0], v2=v[1], v3=v[2]);
+  v,
+  ov = 1
+) = triangle_exradius_ppp( v1=v[0], v2=v[1], v3=v[2], ov=ov);
 
 //! Compute the coordinate for the triangle's circumcenter.
 /***************************************************************************//**
