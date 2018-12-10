@@ -120,8 +120,7 @@ function is_left_ppp
   \returns  <vector-3d> The 3d vector or the 2d vector converted to 3d
             with its third dimension assigned zero.
 
-  \warning  To reduce overhead, this function assumes any vector that is
-            not 3d to be 2d.
+  \warning  This function assumes any vector that is not 3d to be 2d.
 *******************************************************************************/
 function dimension_2to3_v
 (
