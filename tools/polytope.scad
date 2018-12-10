@@ -193,7 +193,7 @@ module polytope_number
     include <tools/polytope.scad>;
 
     s = second(xy_plane_os) * 25;
-    p = linear_extrude_pp2pf(s, h=50);
+    p = polygon2d_linear_extrude_pf(s, h=50);
 
     polytope_frame(first(p), second(p))
     {

@@ -1182,10 +1182,10 @@ function polyhedron_centroid_tf
   ws/(24*tv);
 
 //----------------------------------------------------------------------------//
-// other: polygon to polyhedron
+// shape transformations
 //----------------------------------------------------------------------------//
 
-//! Convert a polygon to a polyhedron by adding a height dimension.
+//! Convert a polygon in 2D to a polyhedron by adding a height dimension.
 /***************************************************************************//**
   \param    c <coords-2d> A list of 2d cartesian coordinates
             [[x, y], ...].
@@ -1206,7 +1206,7 @@ function polyhedron_centroid_tf
   \note     When \p p is not given, the listed order of the coordinates
             \p c establishes the path.
 *******************************************************************************/
-function linear_extrude_pp2pf
+function polygon2d_linear_extrude_pf
 (
   c,
   p,

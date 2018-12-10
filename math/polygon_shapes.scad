@@ -66,7 +66,7 @@ include <../datatypes/datatypes-base.scad>;
 
     hull()
     {
-      for ( p = polygon2d_regular_lp( r=20, n=5, vr=vr ) )
+      for ( p = polygon2d_regular_p( r=20, n=5, vr=vr ) )
         translate( p )
         circle( r=vr );
     }
@@ -76,7 +76,7 @@ include <../datatypes/datatypes-base.scad>;
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Regular_polygon
 *******************************************************************************/
-function polygon2d_regular_lp
+function polygon2d_regular_p
 (
   n,
   r,
@@ -116,7 +116,7 @@ function polygon2d_regular_lp
     contained within the heads of vectors \p l1 and \p l2. When vectors
     \p l1 and \p l2 are parallel, the arc will be a complete circle.
 *******************************************************************************/
-function polygon2d_arc_lp
+function polygon2d_arc_p
 (
   r,
   c  = origin2d,
