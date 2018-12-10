@@ -85,7 +85,6 @@ function polygon2d_regular_p
   vr,
   cw = true
 ) =
-[
   let
   (
     s = is_defined(r) ? r
@@ -94,10 +93,11 @@ function polygon2d_regular_p
 
     b = (cw == true) ? [360:-(360/n):1] : [0:(360/n):359]
   )
-  for ( a = b )
-    let( v = [s*cos(a), s*sin(a)] )
-    not_defined(vr) ? v : v - vr/cos(180/n) * unit_l(v)
-];
+  [
+    for (a = b)
+      let( v = [s*cos(a), s*sin(a)] )
+      not_defined(vr) ? v : v - vr/cos(180/n) * unit_l(v)
+  ];
 
 //! Compute the coordinates of an arc with radius \p r between two vectors in 2D.
 /***************************************************************************//**
