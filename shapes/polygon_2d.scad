@@ -53,7 +53,9 @@ include <../tools/repeat.scad>;
 /***************************************************************************//**
   \copydetails polygon2d_trapezoid_p()
 
-  \param    centroid <boolean> Center centroid at origin.
+  The coordinate points are rendered using polygon().
+
+  \param    centroid <boolean> Center polygon centroid at origin.
 
   \details
 
