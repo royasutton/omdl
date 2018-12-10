@@ -11,13 +11,16 @@ local_library     :=  module \
                       derivative_2d \
                       derivative_2de \
                       derivative_2dr \
-                      derivative_3d
+                      derivative_3d \
+                      \
+                      polygon_2d
 
 local_release_add :=  svg/derivative_2d_manifest.svg \
                       \
                       stl/derivative_2de_manifest.stl \
                       stl/derivative_2dr_manifest.stl \
-                      stl/derivative_3d_manifest.stl
+                      stl/derivative_3d_manifest.stl \
+                      stl/polygon_2d_manifest.stl
 
 
 local_backup_add  :=
