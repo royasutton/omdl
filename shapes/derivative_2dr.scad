@@ -35,6 +35,7 @@
 *******************************************************************************/
 
 include <derivative_2d.scad>;
+include <polygon_2d.scad>;
 include <../tools/extrude.scad>;
 
 //----------------------------------------------------------------------------//
@@ -177,15 +178,10 @@ module elliptical_torus
 /***************************************************************************//**
   \copydoc rotate_extrude_tre()
 
-  \param    cr <decimal-list-2|decimal> The lower and upper radius. A
-            list [cr1, cr2] of decimals or a single decimal for (cr1=cr2).
-  \param    h <decimal> The height.
+  \copydoc polygon_trapezoid()
 
-  \param    vr <decimal-list-2|decimal> The profile corner rounding
-            radius. A list [vr1, vr2] of decimals or a single decimal
-            for (vr1=vr2). Unspecified corners are not rounded.
-
-  \param    center <boolean> Center profile height.
+  \param    sl <decimal> The left side leg length of the trapezoid
+            polygon \p l.
 
   \details
 
@@ -203,48 +199,30 @@ module trapezoidal_torus
   l,
   m = 255,
 
-  cr,
+  b1,
+  b2,
+  a = 90,
   h,
+  sl,
   vr = 0,
-  center = false
+  vrm = 0,
+  cw = true,
+  centroid = false
 )
 {
-  cr1  = edefined_or(cr, 0, cr);
-  cr2  = edefined_or(cr, 1, cr1);
-
-  // limit corner rounding to [0, cr1/2]
-  vr1 = limit(edefined_or(vr, 0, vr), 0, cr1/2);
-  vr2 = limit(edefined_or(vr, 1, vr1), 0, cr2/2);
-
-  pc1 = [cr1-vr1,   vr1];
-  pc2 = [cr2-vr2, h-vr2];
-
-  a  = 90
-     + angle_ll (x_axis2d_ul, [pc2, pc1])
-     - angle_ll (x_axis2d_ul, [distance_pp(pc2, pc1), vr2-vr1]);
-
-  p =
-  [
-    [0, 0],
-    [cr1-vr1, 0],
-    pc1 + vr1*[cos(a), sin(a)],
-    pc2 + vr2*[cos(a), sin(a)],
-    [cr2-vr2, h],
-    [0, h]
-  ];
-
-  translate(center==true ? [0, 0, -h/2] : origin3d)
   rotate_extrude_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
-  union()
-  {
-    translate(pc1)
-    circle(r=vr1);
-
-    translate(pc2)
-    circle(r=vr2);
-
-    polygon(points=p, paths=[[0,1,2,3,4,5,6]]);
-  }
+  polygon_trapezoid
+  (
+    b1=b1,
+    b2=b2,
+    a=a,
+    h=h,
+    l=sl,
+    vr=vr,
+    vrm=vrm,
+    cw=cw,
+    centroid=centroid
+  );
 }
 
 //! @}
@@ -269,7 +247,7 @@ BEGIN_SCOPE dim;
     else if (shape == "elliptical_torus")
       elliptical_torus( size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
     else if (shape == "trapezoidal_torus")
-      trapezoidal_torus( cr=[15,10], h=30, vr=[5,2], r=40, l=[90,60], m=63, center=true );
+      trapezoidal_torus( b1=20, b2=30, a=45, sl=30, vr=[5,5,5,5], vrm=[3,2,1,4], r=40, l=[90,60], m=63, centroid=true );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -301,7 +279,7 @@ BEGIN_SCOPE manifest;
       rectangular_torus( size=[40,20], core=[35,20], r=40, l=[25,60], co=[0,2.5], vr=4, vrm=15, m=63, center=true );
       triangular_torus( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
       elliptical_torus( size=[20,15], t=[2,4], r=60, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
-      trapezoidal_torus( cr=[15,10], h=30, vr=[5,2], r=40, l=[25,60], m=63, center=true );
+      trapezoidal_torus( b1=20, b2=30, a=45, sl=30, vr=[5,5,5,5], vrm=[3,2,1,4], r=40, l=[25,60], m=63, centroid=true );
     }
   END_OPENSCAD;
 

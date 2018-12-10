@@ -70,7 +70,7 @@ include <math/utility.scad>;
 include <shapes/derivative_2de.scad>;
 include <shapes/derivative_2dr.scad>;
 include <shapes/derivative_3d.scad>;
-include <shapes/polygon_2d.scad>;
+// include <shapes/polygon_2d.scad>;
 
 //----------------------------------------------------------------------------//
 // tools
