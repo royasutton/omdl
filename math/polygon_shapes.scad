@@ -45,7 +45,7 @@ include <../datatypes/datatypes-base.scad>;
 
 //----------------------------------------------------------------------------//
 
-//! Compute the coordinates for an n-sided regular polygon.
+//! Compute the coordinates for an n-sided regular polygon in 2D.
 /***************************************************************************//**
   \param    n <integer> The number of sides.
   \param    r <decimal> The circumradius of the circumcircle.
@@ -66,7 +66,7 @@ include <../datatypes/datatypes-base.scad>;
 
     hull()
     {
-      for ( p = polygon_regular_lp( r=20, n=5, vr=vr ) )
+      for ( p = polygon2d_regular_lp( r=20, n=5, vr=vr ) )
         translate( p )
         circle( r=vr );
     }
@@ -76,7 +76,7 @@ include <../datatypes/datatypes-base.scad>;
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Regular_polygon
 *******************************************************************************/
-function polygon_regular_lp
+function polygon2d_regular_lp
 (
   n,
   r,
@@ -98,7 +98,7 @@ function polygon_regular_lp
     not_defined(vr) ? v : v - vr/cos(180/n) * unit_l(v)
 ];
 
-//! Compute the area of an n-sided regular polygon.
+//! Compute the area of an n-sided regular polygon in 2D.
 /***************************************************************************//**
   \param    n <integer> The number of sides.
   \param    r <decimal> The vertex circumradius of the circumcircle.
@@ -111,7 +111,7 @@ function polygon_regular_lp
     The radius can be specified by either the circumradius \p r or the
     inradius \p a. If both are specified, \p r is used.
 *******************************************************************************/
-function polygon_regular_area
+function polygon2d_regular_area
 (
   n,
   r,
@@ -120,7 +120,7 @@ function polygon_regular_area
   : is_defined(a) ? pow(a, 2) * n * tan(180/n)
   : 0;
 
-//! Compute the perimeter of an n-sided regular polygon.
+//! Compute the perimeter of an n-sided regular polygon in 2D.
 /***************************************************************************//**
   \param    n <integer> The number of sides.
   \param    r <decimal> The vertex circumradius of the circumcircle.
@@ -133,7 +133,7 @@ function polygon_regular_area
     The radius can be specified by either the circumradius \p r or the
     inradius \p a. If both are specified, \p r is used.
 *******************************************************************************/
-function polygon_regular_perimeter
+function polygon2d_regular_perimeter
 (
   n,
   r,
@@ -142,7 +142,7 @@ function polygon_regular_perimeter
   : is_defined(a) ? 2 * n * a * tan(180/n)
   : 0;
 
-//! Compute the coordinates of an arc with radius \p r between two vectors.
+//! Compute the coordinates of an arc with radius \p r between two vectors in 2D.
 /***************************************************************************//**
   \param    r <decimal> The arc radius.
   \param    c <point-2d> The arc center coordinate [x, y].
@@ -160,7 +160,7 @@ function polygon_regular_perimeter
     contained within the heads of vectors \p l1 and \p l2. When vectors
     \p l1 and \p l2 are parallel, the arc will be a complete circle.
 *******************************************************************************/
-function polygon_arc_lp
+function polygon2d_arc_lp
 (
   r,
   c  = origin2d,
