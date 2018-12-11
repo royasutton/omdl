@@ -52,20 +52,19 @@ include <math-base.scad>;
 
 //! Compute the vertex coordinates of a triangle given its side lengths.
 /***************************************************************************//**
-  \param    s1 <decimal> The length of the side 1.
-  \param    s2 <decimal> The length of the side 2.
-  \param    s3 <decimal> The length of the side 3.
+  \param    s1 <decimal> The length of the side 1 opposite v1.
+  \param    s2 <decimal> The length of the side 2 opposite v2.
+  \param    s3 <decimal> The length of the side 3 opposite v3.
   \param    cw <boolean> Order vertices clockwise.
 
   \returns  <coords-2d> A list of vertex coordinates [v1, v2, v3].
 
   \details
 
-    Geometry requires that \p s1 + \p s2 is greater then \p s3. A
-    coordinates will be \b 'nan' when specified triangle does not
-    exists.
+    Coordinates will be \b 'nan' when specified triangle does not
+    exist.
 
-  \note     Vertex \p v1 at the origin. Side length \p s1 is measured
+  \note     Vertex \p v1 at the origin. Side length \p s2 is constructed
             along the positive x-axis.
 *******************************************************************************/
 function triangle_sss2lp
@@ -78,11 +77,11 @@ function triangle_sss2lp
   let
   (
     v1 = origin2d,
-    v2 = [s1, 0],
-    v3 = [(s1*s1 + s3*s3 - (s2*s2)) / (2*s1),
-          sqrt(s3*s3 - pow((s1*s1 + s3*s3 - (s2*s2)) / (2*s1), 2))]
+    v2 = [(-s1*s1 + s2*s2 + s3*s3) / (2*s2),
+          sqrt(s3*s3 - pow((-s1*s1 + s2*s2 + s3*s3) / (2*s2), 2))],
+    v3 = [s2, 0]
   )
-  (cw == true) ? [v1, v3, v2] : [v1, v2, v3];
+  (cw == true) ? [v1, v2, v3] : [v3, v2, v1];
 
 //! Compute the vertex coordinates of a triangle given its side lengths.
 /***************************************************************************//**
@@ -93,11 +92,10 @@ function triangle_sss2lp
 
   \details
 
-    Geometry requires that \p s1 + \p s2 is greater then \p s3. A
-    coordinates will be \b 'nan' when specified triangle does not
-    exists.
+    Coordinates will be \b 'nan' when specified triangle does not
+    exist.
 
-  \note     Vertex \p v1 at the origin. Side length \p s1 is measured
+  \note     Vertex \p v1 at the origin. Side length \p s2 is constructed
             along the positive x-axis.
 *******************************************************************************/
 function triangle_ls2lp
@@ -111,30 +109,36 @@ function triangle_ls2lp
   \param    v1 <point-2d> A vertex coordinate [x, y] for vertex 1.
   \param    v2 <point-2d> A vertex coordinate [x, y] for vertex 2.
   \param    v3 <point-2d> A vertex coordinate [x, y] for vertex 3.
+  \param    cw <boolean> Order vertices clockwise.
 
   \returns  <decimal-list-3> A list of side lengths [s1, s2, s3].
 
-  \note     Side lengths ordered according to vertex ordering.
+  \note     Each side length is opposite the corresponding vertex.
 *******************************************************************************/
 function triangle_ppp2ls
 (
   v1,
   v2,
-  v3
-) = [ distance_pp(v1, v2), distance_pp(v2, v3), distance_pp(v3, v1) ];
+  v3,
+  cw = true
+) = (cw == true)
+  ? [ distance_pp(v2, v3), distance_pp(v3, v1), distance_pp(v1, v2) ]
+  : [ distance_pp(v1, v2), distance_pp(v3, v1), distance_pp(v2, v3) ];
 
 //! Compute the side lengths of a triangle given its vertex coordinates.
 /***************************************************************************//**
   \param    v <coords-2d> A list of vertex coordinates [v1, v2, v3].
+  \param    cw <boolean> Order vertices clockwise.
 
   \returns  <decimal-list-3> A list of side lengths [s1, s2, s3].
 
-  \note     Side lengths ordered according to vertex ordering.
+  \note     Each side length is opposite the corresponding vertex.
 *******************************************************************************/
 function triangle_lp2ls
 (
-  v
-) = triangle_ppp2ls( v1=v[0], v2=v[1], v3=v[2]);
+  v,
+  cw = true
+) = triangle_ppp2ls( v1=v[0], v2=v[1], v3=v[2], cw=cw );
 
 //! Compute the signed area of a triangle given its vertex coordinates.
 /***************************************************************************//**
@@ -206,7 +210,7 @@ function triangle_centroid_ppp
 function triangle_centroid_lp
 (
   v
-) = triangle_centroid_ppp( v1=v[0], v2=v[1], v3=v[2]);
+) = triangle_centroid_ppp( v1=v[0], v2=v[1], v3=v[2] );
 
 //! Compute the center coordinate for the triangle's incircle.
 /***************************************************************************//**
@@ -229,16 +233,16 @@ function triangle_incenter_ppp
   v2,
   v3
 ) =
-let
-(
-  d1 = distance_pp(v2, v3),
-  d2 = distance_pp(v3, v1),
-  d3 = distance_pp(v1, v2)
-)
-[
-  ( (v1[0] * d1 + v2[0] * d2 + v3[0] * d3) / (d3 + d1 + d2) ),
-  ( (v1[1] * d1 + v2[1] * d2 + v3[1] * d3) / (d3 + d1 + d2) )
-];
+  let
+  (
+    d1 = distance_pp(v2, v3),
+    d2 = distance_pp(v3, v1),
+    d3 = distance_pp(v1, v2)
+  )
+  [
+    ( (v1[0] * d1 + v2[0] * d2 + v3[0] * d3) / (d3 + d1 + d2) ),
+    ( (v1[1] * d1 + v2[1] * d2 + v3[1] * d3) / (d3 + d1 + d2) )
+  ];
 
 //! Compute the center coordinate for the triangle's incircle.
 /***************************************************************************//**
@@ -256,7 +260,7 @@ let
 function triangle_incenter_lp
 (
   v
-) = triangle_incenter_ppp( v1=v[0], v2=v[1], v3=v[2]);
+) = triangle_incenter_ppp( v1=v[0], v2=v[1], v3=v[2] );
 
 //! Compute the inradius of a triangle's incircle.
 /***************************************************************************//**
@@ -278,13 +282,13 @@ function triangle_inradius_ppp
   v2,
   v3
 ) =
-let
-(
-  d1 = distance_pp(v2, v3),
-  d2 = distance_pp(v3, v1),
-  d3 = distance_pp(v1, v2)
-)
-sqrt( ((-d3+d1+d2) * (+d3-d1+d2) * (+d3+d1-d2)) / (d3+d1+d2) ) / 2;
+  let
+  (
+    d1 = distance_pp(v2, v3),
+    d2 = distance_pp(v3, v1),
+    d3 = distance_pp(v1, v2)
+  )
+  sqrt( ((-d3+d1+d2) * (+d3-d1+d2) * (+d3+d1-d2)) / (d3+d1+d2) ) / 2;
 
 //! Compute the inradius of a triangle's incircle.
 /***************************************************************************//**
@@ -301,7 +305,7 @@ sqrt( ((-d3+d1+d2) * (+d3-d1+d2) * (+d3+d1-d2)) / (d3+d1+d2) ) / 2;
 function triangle_inradius_lp
 (
   v
-) = triangle_inradius_ppp( v1=v[0], v2=v[1], v3=v[2]);
+) = triangle_inradius_ppp( v1=v[0], v2=v[1], v3=v[2] );
 
 //! Compute the center coordinate for the triangle's excircle.
 /***************************************************************************//**
@@ -328,12 +332,12 @@ function triangle_excenter_ppp
   v3,
   ov = 1
 ) =
-let
-(
-  d1 = distance_pp(v2, v3),
-  d2 = distance_pp(v3, v1),
-  d3 = distance_pp(v1, v2)
-)
+  let
+  (
+    d1 = distance_pp(v2, v3),
+    d2 = distance_pp(v3, v1),
+    d3 = distance_pp(v1, v2)
+  )
     (ov == 1) ? [ ((-d1*v1[0]+d2*v2[0]+d3*v3[0])/(-d1+d2+d3)),
                   ((-d1*v1[1]+d2*v2[1]+d3*v3[1])/(-d1+d2+d3)) ]
   : (ov == 2) ? [ ((+d1*v1[0]-d2*v2[0]+d3*v3[0])/(+d1-d2+d3)),
@@ -362,7 +366,7 @@ function triangle_excenter_lp
 (
   v,
   ov = 1
-) = triangle_excenter_ppp( v1=v[0], v2=v[1], v3=v[2], ov=ov);
+) = triangle_excenter_ppp( v1=v[0], v2=v[1], v3=v[2], ov=ov );
 
 //! Compute the exradius of a triangle's excircle.
 /***************************************************************************//**
@@ -386,13 +390,13 @@ function triangle_exradius_ppp
   v3,
   ov = 1
 ) =
-let
-(
-  d1 = distance_pp(v2, v3),
-  d2 = distance_pp(v3, v1),
-  d3 = distance_pp(v1, v2),
-   s = (+d1+d2+d3)/2
-)
+  let
+  (
+    d1 = distance_pp(v2, v3),
+    d2 = distance_pp(v3, v1),
+    d3 = distance_pp(v1, v2),
+     s = (+d1+d2+d3)/2
+  )
     (ov == 1) ? sqrt(s * (s-d2) * (s-d3) / (s-d1))
   : (ov == 2) ? sqrt(s * (s-d1) * (s-d3) / (s-d2))
   : (ov == 3) ? sqrt(s * (s-d1) * (s-d2) / (s-d3))
@@ -415,7 +419,7 @@ function triangle_exradius_lp
 (
   v,
   ov = 1
-) = triangle_exradius_ppp( v1=v[0], v2=v[1], v3=v[2], ov=ov);
+) = triangle_exradius_ppp( v1=v[0], v2=v[1], v3=v[2], ov=ov );
 
 //! Compute the coordinate for the triangle's circumcenter.
 /***************************************************************************//**
@@ -439,16 +443,16 @@ function triangle_circumcenter_ppp
   v2,
   v3
 ) =
-let
-(
-  s2a = sin( 2 * angle_ll([v1, v3], [v1, v2]) ),
-  s2b = sin( 2 * angle_ll([v2, v1], [v2, v3]) ),
-  s2c = sin( 2 * angle_ll([v3, v2], [v3, v1]) )
-)
-[
-  ( (v1[0]*s2a + v2[0]*s2b + v3[0]*s2c)/(s2a+s2b+s2c) ),
-  ( (v1[1]*s2a + v2[1]*s2b + v3[1]*s2c)/(s2a+s2b+s2c) )
-];
+  let
+  (
+    s2a = sin( 2 * angle_ll([v1, v3], [v1, v2]) ),
+    s2b = sin( 2 * angle_ll([v2, v1], [v2, v3]) ),
+    s2c = sin( 2 * angle_ll([v3, v2], [v3, v1]) )
+  )
+  [
+    ( (v1[0]*s2a + v2[0]*s2b + v3[0]*s2c)/(s2a+s2b+s2c) ),
+    ( (v1[1]*s2a + v2[1]*s2b + v3[1]*s2c)/(s2a+s2b+s2c) )
+  ];
 
 //! Compute the coordinate for the triangle's circumcenter.
 /***************************************************************************//**
@@ -467,7 +471,7 @@ let
 function triangle_circumcenter_lp
 (
   v
-) = triangle_circumcenter_ppp( v1=v[0], v2=v[1], v3=v[2]);
+) = triangle_circumcenter_ppp( v1=v[0], v2=v[1], v3=v[2] );
 
 //! Test the vertex ordering, or orientation, of a triangle.
 /***************************************************************************//**
@@ -555,7 +559,7 @@ function triangle_is_pit_lp
 (
   v,
   t
-) = triangle_is_pit_ppp(v1=v[0], v2=v[1], v3=v[2], t=t);
+) = triangle_is_pit_ppp( v1=v[0], v2=v[1], v3=v[2], t=t );
 
 //! @}
 //! @}
