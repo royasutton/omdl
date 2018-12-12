@@ -1,4 +1,4 @@
-//! Common 3D derivative shapes.
+//! Basic 3D derivative shapes.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,13 +28,13 @@
   \details
 
     \amu_define group_name  (3d Shapes)
-    \amu_define group_brief (Common 3D derivative shapes.)
+    \amu_define group_brief (Basic 3D derivative shapes.)
     \amu_define view        (diag)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
-include <derivative_2d.scad>;
+include <basic_2d.scad>;
 
 //----------------------------------------------------------------------------//
 // dim macro, dim table, and group.
@@ -438,7 +438,7 @@ module star3d
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <shapes/derivative_3d.scad>;
+    include <shapes/basic_3d.scad>;
 
     shape = "cone";
     $fn = 36;
@@ -482,7 +482,7 @@ END_SCOPE;
 
 BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
-    include <shapes/derivative_3d.scad>;
+    include <shapes/basic_3d.scad>;
 
     $fn = 36;
 

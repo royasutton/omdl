@@ -34,7 +34,7 @@
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
-include <../shapes/derivative_2d.scad>;
+include <../shapes/basic_2d.scad>;
 
 //----------------------------------------------------------------------------//
 // dim macro, dim table, and group.

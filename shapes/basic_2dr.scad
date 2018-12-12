@@ -1,4 +1,4 @@
-//! Common 2D shapes revolved about the z-axis.
+//! Basic 2D shapes revolved about the z-axis.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,13 +28,13 @@
   \details
 
     \amu_define group_name  (2d Revolutions)
-    \amu_define group_brief (Common 2D shapes revolved about the z-axis.)
+    \amu_define group_brief (Basic 2D shapes revolved about the z-axis.)
     \amu_define view        (diag)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
-include <derivative_2d.scad>;
+include <basic_2d.scad>;
 include <polygon_2d.scad>;
 include <../tools/extrude.scad>;
 
@@ -235,7 +235,7 @@ module trapezoidal_torus
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <shapes/derivative_2dr.scad>;
+    include <shapes/basic_2dr.scad>;
 
     shape = "rectangular_torus";
     $fn = 36;
@@ -270,7 +270,7 @@ END_SCOPE;
 
 BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
-    include <shapes/derivative_2dr.scad>;
+    include <shapes/basic_2dr.scad>;
 
     $fn = 36;
 

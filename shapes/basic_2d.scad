@@ -1,4 +1,4 @@
-//! Common 2D derivative shapes.
+//! Basic 2D derivative shapes.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (2d Shapes)
-    \amu_define group_brief (Common 2D derivative shapes.)
+    \amu_define group_brief (Basic 2D derivative shapes.)
     \amu_define view        (top)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
@@ -1288,7 +1288,7 @@ module star2d
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <shapes/derivative_2d.scad>;
+    include <shapes/basic_2d.scad>;
 
     shape = "ellipse_cs";
     $fn = 36;
@@ -1362,7 +1362,7 @@ END_SCOPE;
 
 BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
-    include <shapes/derivative_2d.scad>;
+    include <shapes/basic_2d.scad>;
 
     $fn = 36;
 

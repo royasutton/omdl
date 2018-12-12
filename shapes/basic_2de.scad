@@ -1,4 +1,4 @@
-//! Common 2D derivative shapes linearly extruded along the z-axis.
+//! Basic 2D derivative shapes linearly extruded along the z-axis.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,13 +28,13 @@
   \details
 
     \amu_define group_name  (2d Extrusions)
-    \amu_define group_brief (Common 2D derivative shapes linearly extruded along the z-axis.)
+    \amu_define group_brief (Basic 2D derivative shapes linearly extruded along the z-axis.)
     \amu_define view        (diag)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
-include <derivative_2d.scad>;
+include <basic_2d.scad>;
 include <../tools/extrude.scad>;
 
 //----------------------------------------------------------------------------//
@@ -640,7 +640,7 @@ module estar2d
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <shapes/derivative_2de.scad>;
+    include <shapes/basic_2de.scad>;
 
     shape = "eellipse_cs";
     $fn = 36;
@@ -714,7 +714,7 @@ END_SCOPE;
 
 BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
-    include <shapes/derivative_2de.scad>;
+    include <shapes/basic_2de.scad>;
 
     $fn = 36;
 
