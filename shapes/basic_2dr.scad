@@ -204,7 +204,8 @@ module trapezoidal_torus
   sl = 1,
   a = 90,
   vr = 0,
-  vrm = 0,
+  vrm = 1,
+  vfn,
   cw = true,
   centroid = false
 )
@@ -218,6 +219,7 @@ module trapezoidal_torus
     a=a,
     vr=vr,
     vrm=vrm,
+    vfn=vfn,
     cw=cw,
     centroid=centroid
   );

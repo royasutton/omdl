@@ -70,12 +70,13 @@ module polygon_trapezoid
   l = 1,
   a = 90,
   vr = 0,
-  vrm = 0,
+  vrm = 1,
+  vfn,
   cw = true,
   centroid = false
 )
 {
-  c = polygon2d_trapezoid_p(b=b, h=h, l=l, a=a, vr=vr, vrm=vrm, cw=cw);
+  c = polygon2d_trapezoid_p(b=b, h=h, l=l, a=a, vr=vr, vrm=vrm, vfn=vfn, cw=cw);
 
   translate ( (centroid==true) ? -polygon2d_centroid(c) : origin2d )
   polygon( c );

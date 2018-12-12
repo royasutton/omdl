@@ -1241,14 +1241,16 @@ function polygon2d_linear_extrude_pf
 /***************************************************************************//**
   \param    c <coords-2d> A list of \em n 2d cartesian coordinates
             [[x1, y1], [x2, y2], ..., [xn, yn]].
-  \param    vr <decimal-list-n|decimal> The vertex rounding radius.
+  \param    vr <decimal-list-n|decimal> The vertices rounding radius.
             A list [v1r, v2r, v3r, ... vnr] of \em n decimals or a
             single decimal for (v1r=v2r=v3r= ... =vnr). Unspecified
-            corners are not rounded.
-  \param    vrm <integer-list-n|integer> The vertex rounding mode.
+            vertices are not rounded.
+  \param    vrm <integer-list-n|integer> The vertices rounding mode.
             A list [v1rm, v2rm, v3rm, ... vnrm] of \em n integers or a
             single integer for (v1rm=v2rm=v3rm= ... =vnrm). Unspecified
             vertices are not rounded.
+  \param    vfn <integer-list-n> The vertices arc fragment number.
+            A list [v1fn, v2fn, v3fn, ... vnfn] of \em n integers.
   \param    cw <boolean> Polygon vertex ordering.
 
   \returns  <coords-2d> A new list of coordinates points [[x, y], ...]
@@ -1257,7 +1259,7 @@ function polygon2d_linear_extrude_pf
   \details
 
     Assumes polygon is defined in 2D space on the x-y plane. Each
-    vertex may be rounded using one of the following modes.
+    vertex may be rounded using one of the following modes:
 
      mode | description
      :---:|:----------------------
@@ -1268,16 +1270,22 @@ function polygon2d_linear_extrude_pf
       4   | fillet next edge
       5   | chamfer vertex
 
-    Each vertex is processed using 3-point triangular rounding.
-    The triangle \ref triangle_incenter_lp "incircles" and
-    \ref triangle_excenter_lp "excircles" are used to create the
-    round and fillet \ref polygon2d_arc_p "arc" segments.
+    Vertex arc fragments can be controlled individually using \p vfn.
+    When any \p vnfn is \b undef, the special variables \p $fa, \p $fs,
+    and \p $fn control facet generation. Each vertex is processed using
+    3-point (the previous and following vertex). The resulting triangle
+    \ref triangle_incenter_lp "incircles" and \ref triangle_excenter_lp
+    "excircles" are used to create the round and fillet \ref
+    polygon2d_arc_p "arc" segments.
 
     \b Example:
     \code{.C}
-    c  = [[1,1], [1,10], [10,12], p[18,2];
+    c = [[1,1], [1,10], [10,12], [18,2]];
+    r = [1,1,5,8];
+    m = [2,3,4,3];
+    n = [3, 8, undef, undef];
 
-    p  = polygon2d_vertices_round3_p(c=c, vr=[1,1,2,1], vrm=[1,1,4,3]);
+    p = polygon2d_vertices_round3_p(c=c, vr=r, vrm=m, vfn=n);
 
     polygon( p );
     \endcode
@@ -1286,7 +1294,8 @@ function polygon2d_vertices_round3_p
 (
   c,
   vr = 0,
-  vrm = 0,
+  vrm = 1,
+  vfn,
   cw = true
 ) =
   let
@@ -1312,6 +1321,7 @@ function polygon2d_vertices_round3_p
         rr  = edefined_or(vr, i, crr),    // vertex rounding radius
         rm  = (rr == 0) ? 0               // vertex rounding mode
             : edefined_or(vrm, i, crm),
+        fn  = vfn[i],                     // vertex rounding arc fragments
 
         // tangent circle radius
         tcr = (rm == 0) ? 0
@@ -1344,10 +1354,10 @@ function polygon2d_vertices_round3_p
             : vc + vim * unit_l( [second(av), third(av)] ),
 
         // vertex rounding coordinate point list
-        vpl = (rm == 1) ? concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], cw=true), [tc2])
-            : (rm == 2) ? concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], cw=false), [tc2])
-            : (rm == 3) ? concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], cw=false), [tc2])
-            : (rm == 4) ? concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], cw=false), [tc2])
+        vpl = (rm == 1) ? concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], n=fn, cw=true), [tc2])
+            : (rm == 2) ? concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], n=fn, cw=false), [tc2])
+            : (rm == 3) ? concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], n=fn, cw=false), [tc2])
+            : (rm == 4) ? concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], n=fn, cw=false), [tc2])
             : (rm == 5) ? [tc1, tc2]
             : [vc]
       )

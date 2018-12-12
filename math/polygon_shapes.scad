@@ -105,6 +105,7 @@ function polygon2d_regular_p
   \param    c <point-2d> The arc center coordinate [x, y].
   \param    v1 <vector-2d> A 2d vector 1. The start angle.
   \param    v2 <vector-2d> A 2d vector 2. The end angle.
+  \param    n <integer> The number of arc fragments.
   \param    cw <boolean> Sweep clockwise along arc from the head of vector
             \p v1 to the head of vector \p v2 when \p cw = \b true,
             otherwise sweep counter clockwise.
@@ -116,21 +117,23 @@ function polygon2d_regular_p
     The arc coordinates will be at radius \p r centered about \p c
     contained within the heads of vectors \p v1 and \p v2. When vectors
     \p v1 and \p v2 are parallel, the arc will be a complete circle.
-    The arc segment count is controlled by the special variables \p $fa,
-    \p $fs, and \p $fn.
+    When \p n is not specified, the arc facets are controlled by the
+    special variables \p $fa, \p $fs, and \p $fn.
 *******************************************************************************/
 function polygon2d_arc_p
 (
-  r,
+  r  = 1,
   c  = origin2d,
   v1 = x_axis2d_ul,
   v2 = x_axis2d_ul,
+  n,
   cw = true
 ) =
   let
   (
-    // number of arc segments
-    ns   = (r < grid_fine) ? 3
+    // number of arc facets
+    fn   = is_defined(n) ? n
+         : (r < grid_fine) ? 3
          : ($fn > 0.0) ? ($fn >= 3) ? $fn : 3
          : ceil( max( min(360/$fa, r*tau/$fs), 5 ) ),
 
@@ -147,8 +150,8 @@ function polygon2d_arc_p
 
     // arc angle sweep sequence cw and ccw
     aas  = (cw == true)
-         ? [ia_p : -va_p/ns : ia_p-va_p]
-         : [ia_p : (360-va_p)/ns : 360+ia_p-va_p]
+         ? [ia_p : -va_p/fn : ia_p-va_p]
+         : [ia_p : (360-va_p)/fn : 360+ia_p-va_p]
   )
   [
     for (a = aas)
@@ -162,14 +165,16 @@ function polygon2d_arc_p
   \param    h <decimal> The perpendicular height between bases.
   \param    l <decimal> The left side leg length.
   \param    a <decimal> The angle between the lower base and left leg.
-  \param    vr <decimal-list-4|decimal> The vertex rounding radius.
+  \param    vr <decimal-list-4|decimal> The vertices rounding radius.
             A list [v1r, v2r, v3r, v4r] of 4 decimals or a single
             decimal for (v1r=v2r=v3r=v4r). Unspecified corners are not
             rounded.
-  \param    vrm <integer-list-4|integer> The vertex rounding mode.
+  \param    vrm <integer-list-4|integer> The vertices rounding mode.
             A list [v1rm, v2rm, v3rm,v4rm] of 4 integers or a single
             integer for (v1rm=v2rm=v3rm=v4rm). Unspecified vertices are
             not rounded.
+  \param    vfn <integer-list-4> The vertices arc fragment number.
+            A list [v1fn, v2fn, v3fn, v4fn] of 4 integers.
   \param    cw <boolean> Polygon vertex ordering.
 
   \returns  <coords-2d> A list of coordinates points [[x, y], ...]
@@ -191,7 +196,8 @@ function polygon2d_trapezoid_p
   l = 1,
   a = 90,
   vr = 0,
-  vrm = 0,
+  vrm = 1,
+  vfn,
   cw = true
 ) =
   let
@@ -210,7 +216,7 @@ function polygon2d_trapezoid_p
     // cw ordering
     c  = [p4, p1, p2, p3],
 
-    pp = polygon2d_vertices_round3_p(c=c, vr=vr, vrm=vrm, cw=true)
+    pp = polygon2d_vertices_round3_p(c=c, vr=vr, vrm=vrm, vfn=vfn, cw=true)
   )
   (cw == true) ? pp : reverse(pp);
 
