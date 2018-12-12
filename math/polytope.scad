@@ -1250,7 +1250,8 @@ function polygon2d_linear_extrude_pf
             single integer for (v1rm=v2rm=v3rm= ... =vnrm). Unspecified
             vertices are not rounded.
   \param    vfn <integer-list-n> The vertices arc fragment number.
-            A list [v1fn, v2fn, v3fn, ... vnfn] of \em n integers.
+            A list [v1fn, v2fn, v3fn, ... vnfn] of \em n integers or a
+            single integer for (v1fn=v2fn=v3fn= ... =vnfn).
   \param    cw <boolean> Polygon vertex ordering.
 
   \returns  <coords-2d> A new list of coordinates points [[x, y], ...]
@@ -1300,9 +1301,10 @@ function polygon2d_vertices_round3_p
 ) =
   let
   (
-    // constant vertex rounding radius and mode
+    // constant vertex rounding radius, mode, and facets
     crr = is_scalar(vr) ? vr : 0,
     crm = is_scalar(vrm) ? vrm : 0,
+    cfn = is_scalar(vfn) ? vfn : undef,
 
     // function assumes cw order, reverse if required
     cp  = (cw == true) ? c : reverse(c),
@@ -1321,7 +1323,7 @@ function polygon2d_vertices_round3_p
         rr  = edefined_or(vr, i, crr),    // vertex rounding radius
         rm  = (rr == 0) ? 0               // vertex rounding mode
             : edefined_or(vrm, i, crm),
-        fn  = vfn[i],                     // vertex rounding arc fragments
+        fn  = edefined_or(vfn, i, cfn),   // vertex rounding arc fragments
 
         // tangent circle radius
         tcr = (rm == 0) ? 0

@@ -174,7 +174,8 @@ function polygon2d_arc_p
             integer for (v1rm=v2rm=v3rm=v4rm). Unspecified vertices are
             not rounded.
   \param    vfn <integer-list-4> The vertices arc fragment number.
-            A list [v1fn, v2fn, v3fn, v4fn] of 4 integers.
+            A list [v1fn, v2fn, v3fn, v4fn] of 4 integers or a single
+            integer for (v1fn=v2fn=v3fn=v4fn).
   \param    cw <boolean> Polygon vertex ordering.
 
   \returns  <coords-2d> A list of coordinates points [[x, y], ...]
