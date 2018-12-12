@@ -415,8 +415,7 @@
 /*
 BEGIN_SCOPE logo;
   BEGIN_OPENSCAD;
-    include <shapes/derivative_2de.scad>;
-    include <shapes/derivative_3d.scad>;
+    include <omdl-base.scad>;
 
     $fn = 36;
 
