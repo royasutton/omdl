@@ -199,11 +199,10 @@ module trapezoidal_torus
   l,
   m = 255,
 
-  b1,
-  b2,
-  a = 90,
+  b = 1,
   h,
-  sl,
+  sl = 1,
+  a = 90,
   vr = 0,
   vrm = 0,
   cw = true,
@@ -213,11 +212,10 @@ module trapezoidal_torus
   rotate_extrude_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
   polygon_trapezoid
   (
-    b1=b1,
-    b2=b2,
-    a=a,
+    b=b,
     h=h,
     l=sl,
+    a=a,
     vr=vr,
     vrm=vrm,
     cw=cw,
@@ -247,7 +245,7 @@ BEGIN_SCOPE dim;
     else if (shape == "elliptical_torus")
       elliptical_torus( size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
     else if (shape == "trapezoidal_torus")
-      trapezoidal_torus( b1=20, b2=30, a=45, sl=30, vr=[5,5,5,5], vrm=[3,2,1,4], r=40, l=[90,60], m=63, centroid=true );
+      trapezoidal_torus( b=[20,30], sl=30, a=45, vr=[5,5,5,5], vrm=[3,2,1,4], r=40, l=[90,60], m=63, centroid=true );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -279,7 +277,7 @@ BEGIN_SCOPE manifest;
       rectangular_torus( size=[40,20], core=[35,20], r=40, l=[25,60], co=[0,2.5], vr=4, vrm=15, m=63, center=true );
       triangular_torus( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
       elliptical_torus( size=[20,15], t=[2,4], r=60, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
-      trapezoidal_torus( b1=20, b2=30, a=45, sl=30, vr=[5,5,5,5], vrm=[3,2,1,4], r=40, l=[25,60], m=63, centroid=true );
+      trapezoidal_torus( b=[20,30], sl=30, a=45, vr=[5,5,5,5], vrm=[3,2,1,4], r=40, l=[25,60], m=63, centroid=true );
     }
   END_OPENSCAD;
 

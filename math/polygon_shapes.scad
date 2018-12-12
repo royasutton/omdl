@@ -157,11 +157,11 @@ function polygon2d_arc_p
 
 //! Compute the coordinates for a rounded trapezoid in 2D space.
 /***************************************************************************//**
-  \param    b1 <decimal> The lower base length.
-  \param    b2 <decimal> The upper base length.
-  \param    a <decimal> The angle between the lower base and left leg.
+  \param    b <decimal-list-2|decimal> The base lengths. A list [b1, b2]
+            of 2 decimals or a single decimal for (b1=b2).
   \param    h <decimal> The perpendicular height between bases.
   \param    l <decimal> The left side leg length.
+  \param    a <decimal> The angle between the lower base and left leg.
   \param    vr <decimal-list-4|decimal> The vertex rounding radius.
             A list [v1r, v2r, v3r, v4r] of 4 decimals or a single
             decimal for (v1r=v2r=v3r=v4r). Unspecified corners are not
@@ -186,17 +186,19 @@ function polygon2d_arc_p
 *******************************************************************************/
 function polygon2d_trapezoid_p
 (
-  b1,
-  b2,
-  a = 90,
+  b = 1,
   h,
-  l,
+  l = 1,
+  a = 90,
   vr = 0,
   vrm = 0,
   cw = true
 ) =
   let
   (
+    b1 = edefined_or(b, 0, b),
+    b2 = edefined_or(b, 1, b1),
+
     // trapezoid vertices from origin
     p1 = [0, 0],
     p2 = is_defined(h)

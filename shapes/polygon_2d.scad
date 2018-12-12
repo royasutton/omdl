@@ -65,18 +65,17 @@ include <../tools/repeat.scad>;
 *******************************************************************************/
 module polygon_trapezoid
 (
-  b1,
-  b2,
-  a = 90,
+  b = 1,
   h,
-  l,
+  l = 1,
+  a = 90,
   vr = 0,
   vrm = 0,
   cw = true,
   centroid = false
 )
 {
-  c = polygon2d_trapezoid_p(b1=b1, b2=b2, a=a, h=h, l=l, vr=vr, vrm=vrm, cw=cw);
+  c = polygon2d_trapezoid_p(b=b, h=h, l=l, a=a, vr=vr, vrm=vrm, cw=cw);
 
   translate ( (centroid==true) ? -polygon2d_centroid(c) : origin2d )
   polygon( c );
@@ -98,7 +97,7 @@ BEGIN_SCOPE dim;
     $fn = 36;
 
     if (shape == "polygon_trapezoid")
-      polygon_trapezoid( b1=40, b2=40, l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
+      polygon_trapezoid( b=[40,40], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -124,7 +123,7 @@ BEGIN_SCOPE manifest;
 
     grid_repeat( g=5, i=60, center=true )
     {
-      polygon_trapezoid( b1=40, b2=40, l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
+      polygon_trapezoid( b=[40,40], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
     }
   END_OPENSCAD;
 
