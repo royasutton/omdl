@@ -1277,12 +1277,12 @@ function polygon2d_linear_extrude_pf
     \code{.C}
     c  = [[1,1], [1,10], [10,12], p[18,2];
 
-    p  = polygon2d_vertex_round3_p(c=c, vr=[1,1,2,1], vrm=[1,1,4,3]);
+    p  = polygon2d_vertices_round3_p(c=c, vr=[1,1,2,1], vrm=[1,1,4,3]);
 
     polygon( p );
     \endcode
 *******************************************************************************/
-function polygon2d_vertex_round3_p
+function polygon2d_vertices_round3_p
 (
   c,
   vr = 0,
