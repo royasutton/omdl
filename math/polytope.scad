@@ -1260,24 +1260,31 @@ function polygon2d_linear_extrude_pf
   \details
 
     Assumes polygon is defined in 2D space on the x-y plane. Each
-    vertex may be rounded using one of the following modes:
+    vertex may be individually rounded using one of the following
+    modes:
 
-     mode | description
-     :---:|:----------------------
-      0   | no rounding
-      1   | round vertex
-      2   | inverse round
-      3   | fillet previous edge
-      4   | fillet next edge
-      5   | chamfer vertex
+     mode | name        | description
+     :---:|:-----------:|:------------------------------------------
+       0  | none        | no rounding
+       1  | i-round     | round from previos into next edge
+       2  | hollow      | inverse round from previos into next edge
+       3  | en-fillet   | exterior fillet next edge
+       4  | ep-fillet   | exterior fillet previous edge
+       5  | i-chamfer   | bevel from previos into next edge
+       6  | circle      | exterior round previos to next edge
+       7  | en-round    | exterior round next edge
+       8  | ep-round    | exterior round previous edge
+       9  | en-chamfer  | exterior bevel next edge
+      10  | ep-chamfer  | exterior bevel previous edge
 
-    Vertex arc fragments can be controlled individually using \p vfn.
-    When any \p vnfn is \b undef, the special variables \p $fa, \p $fs,
-    and \p $fn control facet generation. Each vertex is processed using
-    3-point (the previous and following vertex). The resulting triangle
-    \ref triangle_incenter_lp "incircles" and \ref triangle_excenter_lp
+    Vertex arc fragments can be specified using \p vfn. When any \p
+    vnfn is \b undef, the special variables \p $fa, \p $fs, and \p $fn
+    control facet generation. Each vertex is processed using 3-point
+    (the previous and following vertex). The resulting triangle \ref
+    triangle_incenter_lp "incircles" and \ref triangle_excenter_lp
     "excircles" are used to create the round and fillet \ref
-    polygon2d_arc_p "arc" segments.
+    polygon2d_arc_p "arc" segments. All arcs and chamfers use constant
+    radius.
 
     \b Example:
     \code{.C}
@@ -1327,41 +1334,50 @@ function polygon2d_vertices_round3_p
 
         // tangent circle radius
         tcr = (rm == 0) ? 0
-            : (rm == 3) ? triangle_exradius_lp(av, 1)
-            : (rm == 4) ? triangle_exradius_lp(av, 3)
-            : (rm == 5) ? 0
-            : triangle_inradius_lp( av ),
+            : (rm == 1 || rm == 2) ?
+              triangle_inradius_lp(av)
+            : (rm == 3) ?
+              triangle_exradius_lp(av, 1)
+            : (rm == 4) ?
+              triangle_exradius_lp(av, 3)
+            : 0,
 
         // tangent circle center coordinate
         tcc = (rm == 0) ? origin2d
-            : (rm == 3) ? (vc - rr/(rr-tcr) * triangle_excenter_lp(av, 1)) * (tcr-rr)/tcr
-            : (rm == 4) ? (vc - rr/(rr-tcr) * triangle_excenter_lp(av, 3)) * (tcr-rr)/tcr
-            : (rm == 5) ? origin2d
-            : (vc - rr/(rr-tcr) * triangle_incenter_lp(av)) * (tcr-rr)/tcr,
+            : (rm == 1 || rm == 2) ?
+              (vc-rr/(rr-tcr) * triangle_incenter_lp(av)) * (tcr-rr)/tcr
+            : (rm == 3) ?
+              (vc-rr/(rr-tcr) * triangle_excenter_lp(av, 1)) * (tcr-rr)/tcr
+            : (rm == 4) ?
+              (vc-rr/(rr-tcr) * triangle_excenter_lp(av, 3)) * (tcr-rr)/tcr
+            : origin2d,
 
         // distance from vertex to inflection points
         vim = (rm == 0) ? 0
-            : (rm == 5) ? rr
-            : sqrt( pow(distance_pp(vc, tcc),2) - pow(rr,2) ),
+            : (rm <= 4) ?
+              sqrt( pow(distance_pp(vc, tcc),2) - pow(rr,2) )
+            : rr,
 
         // inflection coordinates
-        tc1 = (rm == 0) ? origin2d
-            : (rm == 3) ? vc + vim * unit_l( [first(av), second(av)] )
-            : (rm == 4) ? vc + vim * unit_l( [second(av), first(av)] )
-            : vc + vim * unit_l( [second(av), first(av)] ),
+        tc1 = (rm == 0 || rm > 10) ? origin2d
+            : (rm == 3 || rm == 7 || rm == 9) ?
+              vc + vim * unit_l([first(av), second(av)])
+            : vc + vim * unit_l([second(av), first(av)]),
 
-        tc2 = (rm == 0) ? origin2d
-            : (rm == 3) ? vc + vim * unit_l( [second(av), third(av)] )
-            : (rm == 4) ? vc + vim * unit_l( [third(av), second(av)] )
-            : vc + vim * unit_l( [second(av), third(av)] ),
+        tc2 = (rm == 0 || rm > 10) ? origin2d
+            : (rm == 4 || rm == 8 || rm == 10) ?
+              vc + vim * unit_l([third(av), second(av)])
+            : vc + vim * unit_l([second(av), third(av)]),
 
         // vertex rounding coordinate point list
-        vpl = (rm == 1) ? concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], n=fn, cw=true), [tc2])
-            : (rm == 2) ? concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], n=fn, cw=false), [tc2])
-            : (rm == 3) ? concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], n=fn, cw=false), [tc2])
-            : (rm == 4) ? concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], n=fn, cw=false), [tc2])
-            : (rm == 5) ? [tc1, tc2]
-            : [vc]
+        vpl = (rm == 0 || rm > 10) ? [vc]
+            : (rm == 1) ?
+              concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], n=fn, cw=true), [tc2])
+            : (rm == 2 || rm == 3 || rm == 4) ?
+              concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], n=fn, cw=false), [tc2])
+            : (rm == 6 || rm == 7 || rm == 8) ?
+              concat([tc1], polygon2d_arc_p(r=rr, c=vc, v1=[vc, tc1], v2=[vc, tc2], n=fn, cw=true), [tc2])
+            : [tc1, tc2]
       )
       vpl
     ],
