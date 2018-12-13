@@ -82,6 +82,32 @@ module polygon_trapezoid
   polygon( c );
 }
 
+//! A wedge with rounded arc.
+/***************************************************************************//**
+  \copydetails polygon2d_wedge_p()
+
+  The coordinate points are rendered using polygon().
+
+  \details
+
+    \b Example
+    \amu_eval ( function=polygon_wedge ${example_dim} )
+*******************************************************************************/
+module polygon_wedge
+(
+  r  = 1,
+  c  = origin2d,
+  v1 = x_axis2d_ul,
+  v2 = x_axis2d_ul,
+  n,
+  cw = true
+)
+{
+  c = polygon2d_wedge_p(r=r, c=c, v1=v1, v2=v2, n=n, cw=cw);
+
+  polygon( c );
+}
+
 //! @}
 //! @}
 
@@ -99,6 +125,8 @@ BEGIN_SCOPE dim;
 
     if (shape == "polygon_trapezoid")
       polygon_trapezoid( b=[40,40], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
+    else if (shape == "polygon_wedge")
+      polygon_wedge( r=10, v1=[1,1], v2=[-1,1], n=4, cw=false );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -108,6 +136,7 @@ BEGIN_SCOPE dim;
     defines   name "shapes" define "shape"
               strings "
                 polygon_trapezoid
+                polygon_wedge
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter";
@@ -125,6 +154,7 @@ BEGIN_SCOPE manifest;
     grid_repeat( g=5, i=60, center=true )
     {
       polygon_trapezoid( b=[40,40], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
+      polygon_wedge( r=10, v1=[1,1], v2=[-1,1], n=4, cw=false );
     }
   END_OPENSCAD;
 
