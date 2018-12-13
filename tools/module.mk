@@ -9,7 +9,6 @@ local_path        :=  tools
 local_library     :=  module \
                       \
                       align \
-                      edge \
                       extrude \
                       polytope \
                       repeat

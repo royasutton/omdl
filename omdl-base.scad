@@ -76,7 +76,6 @@ include <shapes/basic_3d.scad>;
 // tools
 //----------------------------------------------------------------------------//
 //  include <tools/align.scad>;
-include <tools/edge.scad>;
 //  include <tools/extrude.scad>;
 include <tools/polytope.scad>;
 //  include <tools/repeat.scad>;
