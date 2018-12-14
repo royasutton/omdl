@@ -158,15 +158,20 @@ function polygon2d_arc_p
       c + r * [cos(a), sin(a)]
   ];
 
-//! Compute the coordinates of a wedge with radius \p r between two vectors in 2D.
+//! Compute the coordinates of a circular sector in 2D.
 /***************************************************************************//**
   \copydetails polygon2d_arc_p()
 
   \details
 
-    The wedge will start and end at coordinate \p c.
+    The polygon of the circular sector will start and end at the
+    specified coordinate \p c.
+
+    See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Circular_sector
 *******************************************************************************/
-function polygon2d_wedge_p
+function polygon2d_circular_sector_p
 (
   r  = 1,
   c  = origin2d,
