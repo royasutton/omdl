@@ -13,8 +13,8 @@
   \amu_source   tv_file (++file)
 
   \amu_replace  tv_nott (text=${tv_log} search="not tested:" replace="1," ++format_no_copy)
-  \amu_replace  tv_pass (text=${tv_log} search="passed:" replace="1," ++format_no_copy)
   \amu_replace  tv_skip (text=${tv_log} search="-skip-:" replace="1," ++format_no_copy)
+  \amu_replace  tv_pass (text=${tv_log} search="passed:" replace="1," ++format_no_copy)
   \amu_replace  tv_fail (text=${tv_log} search="failed:" replace="1," ++format_no_copy)
 
   \amu_word tv_td
@@ -28,8 +28,8 @@
     words="\ref tv_${group}_r" ++list
 
     words=${tv_nott} ++count
-    words=${tv_pass} ++count
     words=${tv_skip} ++count
+    words=${tv_pass} ++count
     words=${tv_fail} ++count
   )
 

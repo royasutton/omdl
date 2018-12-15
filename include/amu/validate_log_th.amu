@@ -7,7 +7,7 @@
 
  +/
 
-  \amu_define tv_th (file^group^script^results^no test^passed^skipped^failed)
+  \amu_define tv_th (file^group^script^results^no test^skipped^passed^failed)
   \amu_word   tv_tc (tokenizer="^" words=${tv_th} ++count)
 
 
