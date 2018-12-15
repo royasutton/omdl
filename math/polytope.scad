@@ -137,52 +137,6 @@ function polytope_limits
       (s == true) ? b[j][1] - b[j][0] : [b[j][0], b[j][1]]
   ];
 
-//! Generate a bounding box polytope for another polytope in 3d or 2d.
-/***************************************************************************//**
-  \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
-            coordinates [[x, y (, z)], ...].
-  \param    f <integer-list-list> A list of faces (or paths) that enclose
-            the shape where each face is a list of coordinate indexes.
-  \param    a <decimal-list-1:3|decimal> The box padding.
-            A list of lengths to equally pad the box dimensions.
-
-  \returns  <datastruct> A structure: (1) <tt>[points, faces]</tt>,
-            where \c points are <coords-3d> and \c faces are a
-            <integer-list-list>, that define the bounding box of the
-            given polyhedron. Or: (2) <tt>[points, path]</tt>, where
-            \c points are <coords-2d> and \c path is a
-            <integer-list-list>, that define the bounding box of the
-            given polygon.
-
-  \details
-
-    Polyhedron faces will be ordered \em clockwise when looking from
-    outside the shape inwards. Polygon path will be ordered clockwise
-    when looking from the top (positive z) downwards.
-
-  \note     When \p f is not specified, all coordinates are used to
-            determine the geometric limits, which, simplifies the
-            calculation. Parameter \p f is needed when a subset of the
-            coordinates should be considered.
-
-    \sa polytope_limits for warning about secondary shapes.
-*******************************************************************************/
-function polytope_bbox_pf
-(
-  c,
-  f,
-  a
-) = let
-    (
-      b = polytope_limits(c=c, f=f, a=a, d=[0:2], s=false),
-      d  = len([for (i=b) if (i != [undef, undef]) i])
-    )
-    (d == 3) ?
-      [ [for (x=b[0], y=b[1], z=b[2]) [x, y, z]],
-        [[0,2,3,1], [4,0,1,5], [6,4,5,7], [2,6,7,3], [0,4,6,2], [3,7,5,1]] ]
-    : [ [for (x=b[0], y=b[1]) [x, y]],
-        [[0,1,3,2]] ];
-
 //! Get a line from an edge or any two vetices of a polytope.
 /***************************************************************************//**
   \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
@@ -1182,8 +1136,54 @@ function polyhedron_centroid_tf
   ws/(24*tv);
 
 //----------------------------------------------------------------------------//
-// shape transformations
+// shape generation and transformation
 //----------------------------------------------------------------------------//
+
+//! Generate a bounding box polytope for another polytope in 3d or 2d.
+/***************************************************************************//**
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
+            coordinates [[x, y (, z)], ...].
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+  \param    a <decimal-list-1:3|decimal> The box padding.
+            A list of lengths to equally pad the box dimensions.
+
+  \returns  <datastruct> A structure: (1) <tt>[points, faces]</tt>,
+            where \c points are <coords-3d> and \c faces are a
+            <integer-list-list>, that define the bounding box of the
+            given polyhedron. Or: (2) <tt>[points, path]</tt>, where
+            \c points are <coords-2d> and \c path is a
+            <integer-list-list>, that define the bounding box of the
+            given polygon.
+
+  \details
+
+    Polyhedron faces will be ordered \em clockwise when looking from
+    outside the shape inwards. Polygon path will be ordered clockwise
+    when looking from the top (positive z) downwards.
+
+  \note     When \p f is not specified, all coordinates are used to
+            determine the geometric limits, which, simplifies the
+            calculation. Parameter \p f is needed when a subset of the
+            coordinates should be considered.
+
+    \sa polytope_limits for warning about secondary shapes.
+*******************************************************************************/
+function polytope_bbox_pf
+(
+  c,
+  f,
+  a
+) = let
+    (
+      b = polytope_limits(c=c, f=f, a=a, d=[0:2], s=false),
+      d  = len([for (i=b) if (i != [undef, undef]) i])
+    )
+    (d == 3) ?
+      [ [for (x=b[0], y=b[1], z=b[2]) [x, y, z]],
+        [[0,2,3,1], [4,0,1,5], [6,4,5,7], [2,6,7,3], [0,4,6,2], [3,7,5,1]] ]
+    : [ [for (x=b[0], y=b[1]) [x, y]],
+        [[0,1,3,2]] ];
 
 //! Convert a polygon in 2D to a polyhedron by adding a height dimension.
 /***************************************************************************//**
