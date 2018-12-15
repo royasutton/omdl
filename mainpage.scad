@@ -419,7 +419,7 @@ BEGIN_SCOPE logo;
 
     $fn = 36;
 
-    frame = triangle_lp2ls( [ [30,0], [0,40], [30,40] ] );
+    frame = triangle_p2s( [ [30,0], [0,40], [30,40] ] );
     core  = 2 * frame / 3;
     vrnd  = [1, 2, 4];
 
@@ -446,7 +446,7 @@ BEGIN_SCOPE quickstart;
 
     $fn = 36;
 
-    frame = triangle_lp2ls( [ [30,0], [0,40], [30,40] ] );
+    frame = triangle_p2s( [ [30,0], [0,40], [30,40] ] );
     core  = 2 * frame / 3;
     vrnd  = [1, 2, 4];
 

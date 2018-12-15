@@ -1281,7 +1281,7 @@ function polygon2d_linear_extrude_pf
     vnfn is \b undef, the special variables \p $fa, \p $fs, and \p $fn
     control facet generation. Each vertex is processed using 3-point
     (the previous and following vertex). The resulting triangle \ref
-    triangle_incenter_lp "incircles" and \ref triangle_excenter_lp
+    triangle2d_incenter "incircles" and \ref triangle2d_excenter
     "excircles" are used to create the round and fillet \ref
     polygon2d_arc_p "arc" segments. All arcs and chamfers use constant
     radius.
@@ -1335,21 +1335,21 @@ function polygon2d_vertices_round3_p
         // tangent circle radius
         tcr = (rm == 0) ? 0
             : (rm == 1 || rm == 2) ?
-              triangle_inradius_lp(av)
+              triangle2d_inradius(av)
             : (rm == 3) ?
-              triangle_exradius_lp(av, 1)
+              triangle2d_exradius(av, 1)
             : (rm == 4) ?
-              triangle_exradius_lp(av, 3)
+              triangle2d_exradius(av, 3)
             : 0,
 
         // tangent circle center coordinate
         tcc = (rm == 0) ? origin2d
             : (rm == 1 || rm == 2) ?
-              (vc-rr/(rr-tcr) * triangle_incenter_lp(av)) * (tcr-rr)/tcr
+              (vc-rr/(rr-tcr) * triangle2d_incenter(av)) * (tcr-rr)/tcr
             : (rm == 3) ?
-              (vc-rr/(rr-tcr) * triangle_excenter_lp(av, 1)) * (tcr-rr)/tcr
+              (vc-rr/(rr-tcr) * triangle2d_excenter(av, 1)) * (tcr-rr)/tcr
             : (rm == 4) ?
-              (vc-rr/(rr-tcr) * triangle_excenter_lp(av, 3)) * (tcr-rr)/tcr
+              (vc-rr/(rr-tcr) * triangle2d_excenter(av, 3)) * (tcr-rr)/tcr
             : origin2d,
 
         // distance from vertex to inflection points

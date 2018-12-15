@@ -383,13 +383,13 @@ module triangle_ppp
   translate
   (
     ( centroid==false ) && ( incenter==true )
-      ? -triangle_incenter_ppp( v1=v1, v2=v2, v3=v3 )
+      ? -triangle2d_incenter( [v1, v2, v3] )
       : origin2d
   )
   translate
   (
     ( centroid==true ) && ( incenter==false )
-      ? -triangle_centroid_ppp( v1=v1, v2=v2, v3=v3 )
+      ? -triangle_centroid( [v1, v2, v3] )
       : origin2d
   )
   if ( any_undefined([cr1, cr2, cr3]) )
@@ -398,7 +398,7 @@ module triangle_ppp
   }
   else
   {
-    ic = triangle_incenter_ppp( v1=v1, v2=v2, v3=v3 );
+    ic = triangle2d_incenter( [v1, v2, v3] );
 
     a1 = angle_ll([v1, v2], [v1, ic]);
     a2 = angle_ll([v2, v3], [v2, ic]);
@@ -435,7 +435,7 @@ module triangle_ppp
 
     \b Example
     \code{.C}
-    t = triangle_sss2lp( 30, 40, 50 );
+    t = triangle2d_s2p( [30, 40, 50] );
     r = [2, 4, 6];
     triangle_lp( v=t, vr=r  );
     \endcode
@@ -547,8 +547,8 @@ module triangle_sss
 
     \b Example
     \code{.C}
-    t = triangle_sss2lp( 3, 4, 5 );
-    s = triangle_lp2ls( t );
+    t = triangle2d_s2p( [3, 4, 5] );
+    s = triangle_p2s( t );
     triangle_ls( v=s, vr=2, centroid=true );
     \endcode
 *******************************************************************************/
@@ -636,14 +636,14 @@ module triangle_ls_c
     translate
     (
       ( centroid==false ) && ( incenter==true )
-        ? -triangle_incenter_lp( triangle_sss2lp(s1=ts1, s2=ts2, s3=ts3) )
+        ? -triangle2d_incenter( triangle2d_s2p([ts1, ts2, ts3]) )
         : origin2d
     )
     translate
     (
       ( centroid==true ) && ( incenter==false )
         ? origin2d
-        : triangle_centroid_lp( triangle_sss2lp(s1=ts1, s2=ts2, s3=ts3) )
+        : triangle_centroid( triangle2d_s2p([ts1, ts2, ts3]) )
     )
     difference()
     {
