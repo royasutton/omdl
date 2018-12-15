@@ -296,7 +296,7 @@ module polytope_frame
 
     \sa polytope_limits for warning about secondary shapes.
 *******************************************************************************/
-module polytope_bbox
+module polytope_bounding_box
 (
   c,
   f,
