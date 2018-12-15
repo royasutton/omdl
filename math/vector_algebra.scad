@@ -61,7 +61,7 @@
 // set 1: point
 //----------------------------------------------------------------------------//
 
-//! Compute the distance between two Euclidean points.
+//! Compute the distance between two points.
 /***************************************************************************//**
   \param    p1 <point> A point coordinate 1.
   \param    p2 <point> A point coordinate 2.
@@ -86,7 +86,7 @@ function distance_pp
     sqrt(sum([for (i=[0:d-1]) (p1[i]-p2[i])*(p1[i]-p2[i])]))
   : sqrt(sum([for (i=[0:d-1]) p1[i]*p1[i]]));
 
-//! Test if a point is left, on, or right of an infinite line in a Euclidean 2d-space.
+//! Test if a point is left, on, or right of an infinite line in a 2d-space.
 /***************************************************************************//**
   \param    p1 <point-2d> A 2d point coordinate 1.
   \param    p2 <point-2d> A 2d point coordinate 2.
@@ -128,14 +128,14 @@ function dimension_2to3_v
 ) = (len(v) == 3) ? v : [v[0], v[1], 0];
 
 //----------------------------------------------------------------------------//
-// set 3: line (or vector)
+// set 3: line or vector
 //----------------------------------------------------------------------------//
 
-//! Return the number of dimensions of a Euclidean line (or vector).
+//! Return the number of dimensions of a line or vector.
 /***************************************************************************//**
-  \param    l <line> A line (or vector).
+  \param    l <line> A line or vector.
 
-  \returns  <integer> The number of dimensions for the line (or vector).
+  \returns  <integer> The number of dimensions for the line or vector.
 
   \details
 
@@ -146,11 +146,11 @@ function get_line_dim
   l
 ) = is_defined(len(l[0])) ? len(l[0]) : len(l);
 
-//! Return the terminal point of a Euclidean line (or vector).
+//! Return the terminal point of a line or vector.
 /***************************************************************************//**
-  \param    l <line> A line (or vector).
+  \param    l <line> A line or vector.
 
-  \returns  <point> The terminal point of the line (or vector).
+  \returns  <point> The terminal point of the line or vector.
 
   \details
 
@@ -161,11 +161,11 @@ function get_line_tp
   l
 ) = is_iterable(l[0]) ? (len(l)>1) ? l[1] : l[0] : l;
 
-//! Return the initial point of a Euclidean line (or vector).
+//! Return the initial point of a line or vector.
 /***************************************************************************//**
-  \param    l <line> A line (or vector).
+  \param    l <line> A line or vector.
 
-  \returns  <point> The initial point of the line (or vector).
+  \returns  <point> The initial point of the line or vector.
 
   \details
 
@@ -177,11 +177,11 @@ function get_line_ip
 ) = is_iterable(l[0]) ? (len(l)>1) ? l[0] : consts(len(l[0]), 0)
   : is_iterable(l) ? consts(len(l), 0) : 0;
 
-//! Shift a Euclidean line (or vector) to the origin.
+//! Shift a line or vector to the origin.
 /***************************************************************************//**
-  \param    l <line> A line (or vector).
+  \param    l <line> A line or vector.
 
-  \returns  <vector> The line (or vector) shifted to the origin.
+  \returns  <vector> The line or vector shifted to the origin.
 
   \details
 
@@ -195,13 +195,13 @@ function get_line2origin
   : (len(l) == 2) ? (l[1]-l[0])
   : undef;
 
-//! Compute the dot product of two lines (or vectors).
+//! Compute the dot product of two lines or vectors.
 /***************************************************************************//**
-  \param    l1 <line> A n-dimensional line (or vector) 1.
-  \param    l2 <line> A n-dimensional line (or vector) 2.
+  \param    l1 <line> A n-dimensional line or vector 1.
+  \param    l2 <line> A n-dimensional line or vector 2.
 
   \returns  <decimal> The dot product of \p l1 with \p l2.
-            Returns \b undef when lines (or vectors) have different
+            Returns \b undef when lines or vectors have different
             dimensions.
 
   \details
@@ -210,8 +210,8 @@ function get_line2origin
     The built-in operation will be more efficient in situations that do
     not make use of the aforementioned abstraction.
 
-    See \ref dt_line for argument specification and conventions.
-    See [Wikipedia] for more information.
+    See \ref dt_line for argument specification and conventions. See
+    [Wikipedia] for more information.
 
     [Wikipedia]: https://en.wikipedia.org/wiki/Dot_product
 *******************************************************************************/
@@ -221,13 +221,13 @@ function dot_ll
   l2
 ) = (get_line2origin(l1) * get_line2origin(l2));
 
-//! Compute the cross product of two lines (or vectors) in a Euclidean 3d or 2d-space.
+//! Compute the cross product of two lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
-  \param    l1 <line-3d|line-2d> A 3d or 2d line (or vector) 1.
-  \param    l2 <line-3d|line-2d> A 3d or 2d line (or vector) 2.
+  \param    l1 <line-3d|line-2d> A 3d or 2d line or vector 1.
+  \param    l2 <line-3d|line-2d> A 3d or 2d line or vector 2.
 
   \returns  <decimal|vector-2d> The cross product of \p l1 with \p l2.
-            Returns \b undef when lines (or vectors) have different
+            Returns \b undef when lines or vectors have different
             dimensions.
 
   \details
@@ -236,8 +236,8 @@ function dot_ll
     The built-in operation will be more efficient in situations that do
     not make use of the aforementioned abstraction.
 
-    See \ref dt_line for argument specification and conventions.
-    See Wikipedia [cross] and [determinant] for more information.
+    See \ref dt_line for argument specification and conventions. See
+    Wikipedia [cross] and [determinant] for more information.
 
   \note     This function returns the 2x2 determinant for 2d vectors.
 
@@ -250,22 +250,22 @@ function cross_ll
   l2
 ) = cross(get_line2origin(l1), get_line2origin(l2));
 
-//! Compute the scalar triple product of three lines (or vectors) in a Euclidean 3d or 2d-space.
+//! Compute the scalar triple product of three lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
-  \param    l1 <line-3d|line-2d> A 3d or 2d line (or vector) 1.
-  \param    l2 <line-3d|line-2d> A 3d or 2d line (or vector) 2.
-  \param    l3 <line-3d|line-2d> A 3d or 2d line (or vector) 3.
+  \param    l1 <line-3d|line-2d> A 3d or 2d line or vector 1.
+  \param    l2 <line-3d|line-2d> A 3d or 2d line or vector 2.
+  \param    l3 <line-3d|line-2d> A 3d or 2d line or vector 3.
 
   \returns  <decimal|vector-2d> The scalar triple product.
-            Returns \b undef when lines (or vectors) have different
+            Returns \b undef when lines or vectors have different
             dimensions.
 
   \details
 
     [l1, l2, l3] = l1 * (l2 x l3)
 
-    See \ref dt_line for argument specification and conventions.
-    See [Wikipedia] for more information.
+    See \ref dt_line for argument specification and conventions. See
+    [Wikipedia] for more information.
 
   \warning  Returns a 2d vector result for 2d vectors. The cross product
             computes the 2x2 determinant of the vectors <tt>(l2 x l3)</tt>,
@@ -280,20 +280,20 @@ function striple_lll
   l3
 ) = (get_line2origin(l1) * cross_ll(l2, l3));
 
-//! Compute the angle between two lines (or vectors) in a Euclidean 3d or 2d-space.
+//! Compute the angle between two lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
-  \param    l1 <line-3d|line-2d> A 3d or 2d line (or vector) 1.
-  \param    l2 <line-3d|line-2d> A 3d or 2d line (or vector) 2.
+  \param    l1 <line-3d|line-2d> A 3d or 2d line or vector 1.
+  \param    l2 <line-3d|line-2d> A 3d or 2d line or vector 2.
 
-  \returns  <decimal> The angle between the two lines (or vectors) in
-            degrees. Returns \b undef when lines (or vectors) have
+  \returns  <decimal> The angle between the two lines or vectors in
+            degrees. Returns \b undef when lines or vectors have
             different dimensions or when they do not intersect.
 
   \details
 
     See \ref dt_line for argument specification and conventions.
 
-  \note     For 3d lines (or vectors), a normal is required to uniquely
+  \note     For 3d lines or vectors, a normal is required to uniquely
             identify the perpendicular plane and axis of rotation. This
             function calculates the positive angle, and the plane and
             axis of rotation will be that which fits this assumed
@@ -310,14 +310,14 @@ function angle_ll
   : (d == 3) ? atan2(distance_pp(cross_ll(l1, l2)), dot_ll(l1, l2))
   : undef;
 
-//! Compute the angle between two lines (or vectors) in a Euclidean 3d-space.
+//! Compute the angle between two lines or vectors in a 3d-space.
 /***************************************************************************//**
-  \param    l1 <line-3d> A 3d line (or vector) 1.
-  \param    l2 <line-3d> A 3d line (or vector) 2.
-  \param    n <line-3d> A 3d normal line (or vector).
+  \param    l1 <line-3d> A 3d line or vector 1.
+  \param    l2 <line-3d> A 3d line or vector 2.
+  \param    n <line-3d> A 3d normal line or vector.
 
-  \returns  <decimal> The angle between the two lines (or vectors) in
-            degrees. Returns \b undef when lines (or vectors) have
+  \returns  <decimal> The angle between the two lines or vectors in
+            degrees. Returns \b undef when lines or vectors have
             different dimensions or when they do not intersect.
 
   \details
@@ -333,9 +333,9 @@ function angle_lll
   n
 ) = atan2(striple_lll(n, l1, l2), dot_ll(l1, l2));
 
-//! Compute the normalized unit vector of a Euclidean line (or vector).
+//! Compute the normalized unit vector of a line or vector.
 /***************************************************************************//**
-  \param    l <line> A line (or vector).
+  \param    l <line> A line or vector.
 
   \returns  <vector> The normalized unit vector.
 
@@ -348,22 +348,22 @@ function unit_l
   l
 ) = get_line2origin(l) / distance_pp(get_line2origin(l));
 
-//! Test if three lines (or vectors) are coplanar in Euclidean 3d-space.
+//! Test if three lines or vectors are coplanar in 3d-space.
 /***************************************************************************//**
-  \param    l1 <line-3d> A 3d line (or vector) 1.
-  \param    l2 <line-3d> A 3d line (or vector) 2.
-  \param    l3 <line-3d> A 3d line (or vector) 3.
+  \param    l1 <line-3d> A 3d line or vector 1.
+  \param    l2 <line-3d> A 3d line or vector 2.
+  \param    l3 <line-3d> A 3d line or vector 3.
   \param    d <integer> The number of decimal places to consider.
 
-  \returns  <boolean> \b true when all three lines (or vectors) are
+  \returns  <boolean> \b true when all three lines or vectors are
             coplanar, and \b false otherwise.
 
   \details
 
-    See \ref dt_line for argument specification and conventions.
-    See [Wikipedia] for more information.
+    See \ref dt_line for argument specification and conventions. See
+    [Wikipedia] for more information.
 
-  \note     When lines (or vectors) are specified with start and end
+  \note     When lines or vectors are specified with start and end
             points, this function tests if they are in a planes
             parallel to the coplanar.
 
@@ -725,7 +725,7 @@ BEGIN_SCOPE validate;
     // set 2: vector
     for (vid=run_ids) run("dimension_2to3_v",vid) test( "dimension_2to3_v", dimension_2to3_v(gv(vid,0)), vid, false );
 
-    // set 3: line (or vector)
+    // set 3: line or vector
     for (vid=run_ids) run("get_line_dim",vid) test( "get_line_dim", get_line_dim([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("get_line_tp",vid) test( "get_line_tp", get_line_tp([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("get_line_ip",vid) test( "get_line_ip", get_line_ip([gv(vid,0),gv(vid,1)]), vid, true );
