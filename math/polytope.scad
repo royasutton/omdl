@@ -202,7 +202,7 @@ function polytope_line
             given, the listed order of the coordinates \p c establishes
             the polygon path.
 *******************************************************************************/
-function polytope_vertex_av
+function polytope_vertex_adjacent_vertices
 (
   f,
   i
@@ -229,7 +229,7 @@ function polytope_vertex_av
   \returns  <integer-list> The list of face indexes adjacent to the
             given polytope vertex.
 *******************************************************************************/
-function polytope_vertex_af
+function polytope_vertex_adjacent_faces
 (
   f,
   i
@@ -251,7 +251,7 @@ function polytope_vertex_af
   \note     When \p e is not specified, it is computed from \p f using
             polytope_faces2edges().
 *******************************************************************************/
-function polytope_edge_af
+function polytope_edge_adjacent_faces
 (
   f,
   e,
@@ -280,7 +280,7 @@ function polytope_edge_af
             given, the listed order of the coordinates \p c establishes
             the polygon path.
 *******************************************************************************/
-function polytope_vertex_n
+function polytope_vertex_normal
 (
   c,
   f,
@@ -289,7 +289,7 @@ function polytope_vertex_n
     (
       fm = defined_or(f, [consts(len(c))])
     )
-    mean([for (j=polytope_vertex_af(fm, i)) unit_l(polytope_face_n(c, l=fm[j]))]);
+    mean([for (j=polytope_vertex_adjacent_faces(fm, i)) unit_l(polytope_face_normal(c, l=fm[j]))]);
 
 //! Get a normal vector for a polytope edge.
 /***************************************************************************//**
@@ -312,7 +312,7 @@ function polytope_vertex_n
   \note     When \p e is not specified, it is computed from \p f using
             polytope_faces2edges().
 *******************************************************************************/
-function polytope_edge_n
+function polytope_edge_normal
 (
   c,
   f,
@@ -323,7 +323,7 @@ function polytope_edge_n
       fm = defined_or(f, [consts(len(c))]),
       el = is_defined(e) ? e : polytope_faces2edges(fm)
     )
-    mean([for (j=polytope_edge_af(fm, el, i)) unit_l(polytope_face_n(c, l=fm[j]))]);
+    mean([for (j=polytope_edge_adjacent_faces(fm, el, i)) unit_l(polytope_face_normal(c, l=fm[j]))]);
 
 //! Get the normal vector of a polytope face.
 /***************************************************************************//**
@@ -348,7 +348,7 @@ function polytope_edge_n
             given, the listed order of the coordinates \p c establishes
             the polygon path.
 *******************************************************************************/
-function polytope_face_n
+function polytope_face_normal
 (
   c,
   f,
@@ -383,7 +383,7 @@ function polytope_face_n
             given, the listed order of the coordinates \p c establishes
             the polygon path.
 *******************************************************************************/
-function polytope_face_m
+function polytope_face_mean
 (
   c,
   f,
@@ -421,18 +421,18 @@ function polytope_face_m
             given, the listed order of the coordinates \p c establishes
             the polygon path.
 *******************************************************************************/
-function polytope_face_mn
+function polytope_face_mean_normal
 (
   c,
   f,
   i,
   l,
   cw = true
-) = [polytope_face_m(c, f, i, l), polytope_face_n(c, f, i, l, cw)];
+) = [polytope_face_mean(c, f, i, l), polytope_face_normal(c, f, i, l, cw)];
 
 //! Get a plane for a polytope face.
 /***************************************************************************//**
-  \copydetails polytope_face_mn()
+  \copydetails polytope_face_mean_normal()
 *******************************************************************************/
 function polytope_plane
 (
@@ -441,7 +441,7 @@ function polytope_plane
   i,
   l,
   cw=true
-) = polytope_face_mn(c, f, i, l, cw);
+) = polytope_face_mean_normal(c, f, i, l, cw);
 
 //! List the vertex counts for all polytope faces.
 /***************************************************************************//**
@@ -450,7 +450,7 @@ function polytope_plane
 
   \returns  <integer-list> A list with a vertex count of every face.
 *******************************************************************************/
-function polytope_face_vcounts
+function polytope_face_vertex_counts
 (
   f
 ) = [for (fi=f) len(fi)];
@@ -577,7 +577,7 @@ function polytope_faces_are_regular
 
   \warning  This method does not support concave polytopes.
 *******************************************************************************/
-function polytope_triangulate_ft
+function polytope_ft_triangulate
 (
   f
 ) =
@@ -831,7 +831,7 @@ function polygon2d_centroid
   \note     When \p p is not given, the listed order of the coordinates
             \p c establishes the path.
 *******************************************************************************/
-function polygon2d_is_cw
+function polygon2d_is_clockwise
 (
   c,
   p
@@ -969,7 +969,7 @@ function polygon2d_winding
 
     \sa polygon2d_winding for warning about secondary shapes.
 *******************************************************************************/
-function polygon2d_is_pip_wn
+function polygon2d_wn_is_point_inside
 (
   c,
   p,
@@ -999,7 +999,7 @@ function polygon2d_is_pip_wn
 
     [Wikipedia]: https://en.wikipedia.org/wiki/Point_in_polygon
 *******************************************************************************/
-function polygon2d_is_pip_as
+function polygon2d_as_is_point_inside
 (
   c,
   p,
@@ -1064,7 +1064,7 @@ function polyhedron_area
   [Wikipedia]: https://en.wikipedia.org/wiki/Polyhedron#Volume
   [divergence theorem]: https://en.wikipedia.org/wiki/Divergence_theorem
 *******************************************************************************/
-function polyhedron_volume_tf
+function polyhedron_tf_volume
 (
   c,
   f
@@ -1109,7 +1109,7 @@ function polyhedron_volume_tf
   [Wikipedia]: https://en.wikipedia.org/wiki/Centroid
   [divergence theorem]: https://en.wikipedia.org/wiki/Divergence_theorem
 *******************************************************************************/
-function polyhedron_centroid_tf
+function polyhedron_tf_centroid
 (
   c,
   f
@@ -1131,7 +1131,7 @@ function polyhedron_centroid_tf
     ],
 
     ws = sum(wv),
-    tv = polyhedron_volume_tf(c, f)
+    tv = polyhedron_tf_volume(c, f)
   )
   ws/(24*tv);
 
@@ -1169,7 +1169,7 @@ function polyhedron_centroid_tf
 
     \sa polytope_limits for warning about secondary shapes.
 *******************************************************************************/
-function polytope_bbox_pf
+function polytope_bounding_box_pf
 (
   c,
   f,
@@ -1222,7 +1222,7 @@ function polygon2d_linear_extrude_pf
     po = (centroid == true) ? polygon2d_centroid(c, p) : origin2d,
     zr = (center == true) ? [-h/2, h/2] : [0, h],
 
-    cw = polygon2d_is_cw (c, p),
+    cw = polygon2d_is_clockwise (c, p),
 
     pp = [for (zi = zr) for (pi = pm) for (ci = pi) concat(c[ci] - po, zi)],
     pf =

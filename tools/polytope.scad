@@ -106,7 +106,7 @@ module polytope_number
   for (i = get_index(c, vi))
   {
     p = c[i];
-    n = polytope_vertex_n(c, fm, i);
+    n = polytope_vertex_normal(c, fm, i);
 
     translate(p)
     orient_ll(rl=is_nan(n) ? z_axis3d_uv : n)
@@ -122,8 +122,8 @@ module polytope_number
   color("red")
   for (i = get_index(fm, fi))
   {
-    p = polytope_face_m(c, l=fm[i]);
-    n = polytope_face_n(c, l=fm[i]);
+    p = polytope_face_mean(c, l=fm[i]);
+    n = polytope_face_normal(c, l=fm[i]);
 
     translate(p)
     orient_ll(rl=is_nan(n) ? z_axis3d_uv : n)
@@ -140,7 +140,7 @@ module polytope_number
   for (i = get_index(el, ei))
   {
     p = mean([c[first(el[i])], c[second(el[i])]]);
-    n = polytope_edge_n(c, fm, el, i);
+    n = polytope_edge_normal(c, fm, el, i);
 
     translate(p)
     orient_ll(rl=is_nan(n) ? z_axis3d_uv : n)
@@ -236,7 +236,7 @@ module polytope_frame
     for (i = get_index(c, vi))
     {
       p = c[i];
-      n = polytope_vertex_n(c, fm, i);
+      n = polytope_vertex_normal(c, fm, i);
 
       translate(p)
       orient_ll(rl=is_nan(n) ? z_axis3d_uv : n)
@@ -249,8 +249,8 @@ module polytope_frame
   {
     for (i = get_index(fm, fi))
     {
-      p = polytope_face_m(c, l=fm[i]);
-      n = polytope_face_n(c, l=fm[i]);
+      p = polytope_face_mean(c, l=fm[i]);
+      n = polytope_face_normal(c, l=fm[i]);
 
       translate(p)
       orient_ll(rl=is_nan(n) ? z_axis3d_uv : n)
