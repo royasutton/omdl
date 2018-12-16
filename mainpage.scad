@@ -291,7 +291,7 @@
     |  3  | [p1, p2]  | line or vector from 'p1' to 'p2'              |
 
     The functions get_line_dim(), get_line_tp(), get_line_ip(), and
-    get_line2origin(), are available to identify the dimension of and
+    move_line2origin(), are available to identify the dimension of and
     convert a line into a vector or point.
 
     \b Example

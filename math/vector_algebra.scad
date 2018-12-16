@@ -187,7 +187,7 @@ function get_line_ip
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function get_line2origin
+function move_line2origin
 (
   l
 ) = not_defined(len(l[0])) ? l
@@ -219,7 +219,7 @@ function dot_ll
 (
   l1,
   l2
-) = (get_line2origin(l1) * get_line2origin(l2));
+) = (move_line2origin(l1) * move_line2origin(l2));
 
 //! Compute the cross product of two lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
@@ -248,7 +248,7 @@ function cross_ll
 (
   l1,
   l2
-) = cross(get_line2origin(l1), get_line2origin(l2));
+) = cross(move_line2origin(l1), move_line2origin(l2));
 
 //! Compute the scalar triple product of three lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
@@ -278,7 +278,7 @@ function striple_lll
   l1,
   l2,
   l3
-) = (get_line2origin(l1) * cross_ll(l2, l3));
+) = (move_line2origin(l1) * cross_ll(l2, l3));
 
 //! Compute the angle between two lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
@@ -346,7 +346,7 @@ function angle_lll
 function unit_l
 (
   l
-) = get_line2origin(l) / distance_pp(get_line2origin(l));
+) = move_line2origin(l) / distance_pp(move_line2origin(l));
 
 //! Test if three lines or vectors are coplanar in 3d-space.
 /***************************************************************************//**
@@ -554,7 +554,7 @@ BEGIN_SCOPE validate;
         x_axis3d_uv,                                        // t08
         x_axis3d_uv                                         // t09
       ],
-      ["get_line2origin",
+      ["move_line2origin",
         2,                                                  // fac
         4,                                                  // crp
         [undef, undef],                                     // t01
@@ -729,7 +729,7 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("get_line_dim",vid) test( "get_line_dim", get_line_dim([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("get_line_tp",vid) test( "get_line_tp", get_line_tp([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("get_line_ip",vid) test( "get_line_ip", get_line_ip([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("get_line2origin",vid) test( "get_line2origin", get_line2origin([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("move_line2origin",vid) test( "move_line2origin", move_line2origin([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("dot_ll",vid) test( "dot_ll", dot_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("cross_ll",vid) test( "cross_ll", cross_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("striple_lll",vid) test( "striple_lll", striple_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
