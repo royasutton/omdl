@@ -63,8 +63,8 @@ module orient_ll
   r  = 0
 )
 {
-  ll = move_line2origin(l);
-  lr = move_line2origin(rl);
+  ll = line_move2origin(l);
+  lr = line_move2origin(rl);
 
   rotate(r, lr)
   rotate(angle_ll(ll, lr), cross(ll, lr))
@@ -111,11 +111,11 @@ module align_ll
   ro = zero3d
 )
 {
-  li = dimension_2to3_v(get_line_ip( l));
-  lt = dimension_2to3_v(get_line_tp( l));
+  li = dimension_2to3_v(line_get_ip( l));
+  lt = dimension_2to3_v(line_get_tp( l));
 
-  ri = dimension_2to3_v(get_line_ip(rl));
-  rt = dimension_2to3_v(get_line_tp(rl));
+  ri = dimension_2to3_v(line_get_ip(rl));
+  rt = dimension_2to3_v(line_get_tp(rl));
 
   ll = [li, lt];
   lm = mean(ll);
@@ -127,7 +127,7 @@ module align_ll
   translate(ciselect([origin3d, ri, rm, rt, ri+rt, rm], rp))
 
   // orient and roll line about reference
-  rotate(r, move_line2origin(lr))
+  rotate(r, line_move2origin(lr))
   rotate(angle_ll(ll, lr), cross_ll(ll, lr))
 
   // apply offsets

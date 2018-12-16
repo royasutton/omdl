@@ -137,13 +137,13 @@ function dimension_2to3_v
   \param    m <decimal> The magnitude.
   \param    a <decimal> The azmuthal angle.
 
-  \returns  <line-3d> The 2d directed line or vector.
+  \returns  <line-2d> The 2d directed line or vector.
 
   \details
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function new_line2d
+function line2d_new
 (
   p = origin2d,
   m = 1,
@@ -163,7 +163,7 @@ function new_line2d
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function new_line3d
+function line3d_new
 (
   p = origin3d,
   m = 1,
@@ -181,7 +181,7 @@ function new_line3d
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function get_line_dim
+function line_get_dim
 (
   l
 ) = is_defined(len(l[0])) ? len(l[0]) : len(l);
@@ -196,7 +196,7 @@ function get_line_dim
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function get_line_tp
+function line_get_tp
 (
   l
 ) = is_iterable(l[0]) ? (len(l)>1) ? l[1] : l[0] : l;
@@ -211,7 +211,7 @@ function get_line_tp
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function get_line_ip
+function line_get_ip
 (
   l
 ) = is_iterable(l[0]) ? (len(l)>1) ? l[0] : consts(len(l[0]), 0)
@@ -227,7 +227,7 @@ function get_line_ip
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function move_line2origin
+function line_move2origin
 (
   l
 ) = not_defined(len(l[0])) ? l
@@ -259,7 +259,7 @@ function dot_ll
 (
   l1,
   l2
-) = (move_line2origin(l1) * move_line2origin(l2));
+) = (line_move2origin(l1) * line_move2origin(l2));
 
 //! Compute the cross product of two lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
@@ -288,7 +288,7 @@ function cross_ll
 (
   l1,
   l2
-) = cross(move_line2origin(l1), move_line2origin(l2));
+) = cross(line_move2origin(l1), line_move2origin(l2));
 
 //! Compute the scalar triple product of three lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
@@ -318,7 +318,7 @@ function striple_lll
   l1,
   l2,
   l3
-) = (move_line2origin(l1) * cross_ll(l2, l3));
+) = (line_move2origin(l1) * cross_ll(l2, l3));
 
 //! Compute the angle between two lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
@@ -345,7 +345,7 @@ function angle_ll
 (
   l1,
   l2
-) = let(d = get_line_dim(l1))
+) = let(d = line_get_dim(l1))
     (d == 2) ? atan2(cross_ll(l1, l2), dot_ll(l1, l2))
   : (d == 3) ? atan2(distance_pp(cross_ll(l1, l2)), dot_ll(l1, l2))
   : undef;
@@ -386,7 +386,7 @@ function angle_lll
 function unit_l
 (
   l
-) = move_line2origin(l) / distance_pp(move_line2origin(l));
+) = line_move2origin(l) / distance_pp(line_move2origin(l));
 
 //! Test if three lines or vectors are coplanar in 3d-space.
 /***************************************************************************//**
@@ -434,7 +434,7 @@ function are_coplanar_lll
 
     See \ref dt_pnorm for argument specification and conventions.
 *******************************************************************************/
-function get_pnorm2nv
+function plane_pnorm2normal
 (
   pn,
   cw = true
@@ -555,7 +555,7 @@ BEGIN_SCOPE validate;
         x_axis3d_uv,                                        // t08
         x_axis3d_uv                                         // t09
       ],
-      ["get_line_dim",
+      ["line_get_dim",
         2,                                                  // fac
         4,                                                  // crp
         2,                                                  // t01
@@ -568,7 +568,7 @@ BEGIN_SCOPE validate;
         3,                                                  // t08
         3                                                   // t09
       ],
-      ["get_line_tp",
+      ["line_get_tp",
         2,                                                  // fac
         4,                                                  // crp
         [undef,undef],                                      // t01
@@ -581,7 +581,7 @@ BEGIN_SCOPE validate;
         y_axis3d_uv,                                        // t08
         y_axis3d_uv                                         // t09
       ],
-      ["get_line_ip",
+      ["line_get_ip",
         2,                                                  // fac
         4,                                                  // crp
         origin2d,                                           // t01
@@ -594,7 +594,7 @@ BEGIN_SCOPE validate;
         x_axis3d_uv,                                        // t08
         x_axis3d_uv                                         // t09
       ],
-      ["move_line2origin",
+      ["line_move2origin",
         2,                                                  // fac
         4,                                                  // crp
         [undef, undef],                                     // t01
@@ -698,7 +698,7 @@ BEGIN_SCOPE validate;
         false,                                              // t08
         true                                                // t09
       ],
-      ["get_pnorm2nv",
+      ["plane_pnorm2normal",
         2,                                                  // fac
         4,                                                  // crp
         skip,                                               // t01
@@ -766,12 +766,12 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("dimension_2to3_v",vid) test( "dimension_2to3_v", dimension_2to3_v(gv(vid,0)), vid, false );
 
     // set 3: line or vector
-    log_notest( "new_line2d()" );
-    log_notest( "new_line3d()" );
-    for (vid=run_ids) run("get_line_dim",vid) test( "get_line_dim", get_line_dim([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("get_line_tp",vid) test( "get_line_tp", get_line_tp([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("get_line_ip",vid) test( "get_line_ip", get_line_ip([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("move_line2origin",vid) test( "move_line2origin", move_line2origin([gv(vid,0),gv(vid,1)]), vid, true );
+    log_notest( "line2d_new()" );
+    log_notest( "line3d_new()" );
+    for (vid=run_ids) run("line_get_dim",vid) test( "line_get_dim", line_get_dim([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("line_get_tp",vid) test( "line_get_tp", line_get_tp([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("line_get_ip",vid) test( "line_get_ip", line_get_ip([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("line_move2origin",vid) test( "line_move2origin", line_move2origin([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("dot_ll",vid) test( "dot_ll", dot_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("cross_ll",vid) test( "cross_ll", cross_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("striple_lll",vid) test( "striple_lll", striple_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
@@ -781,7 +781,7 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("are_coplanar_lll",vid) test( "are_coplanar_lll", are_coplanar_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
 
     // set 4: plane and pnorm
-    for (vid=run_ids) run("get_pnorm2nv",vid) test( "get_pnorm2nv", get_pnorm2nv([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("plane_pnorm2normal",vid) test( "plane_pnorm2normal", plane_pnorm2normal([gv(vid,0),gv(vid,1)]), vid, true );
 
     // end-of-tests
   END_OPENSCAD;

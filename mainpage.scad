@@ -290,8 +290,8 @@
     |  2  | [p2]      | a line or vector from the origin to 'p2'      |
     |  3  | [p1, p2]  | line or vector from 'p1' to 'p2'              |
 
-    The functions get_line_dim(), get_line_tp(), get_line_ip(), and
-    move_line2origin(), are available to identify the dimension of and
+    The functions line_get_dim(), line_get_tp(), line_get_ip(), and
+    line_move2origin(), are available to identify the dimension of and
     convert a line into a vector or point.
 
     \b Example
@@ -337,8 +337,8 @@
     |  3  | [v1, v2]      | two distinct but intersecting vectors         |
     |  4  | [p1, p2, p3]  | three (or more) non-collinear coplanar points |
 
-    The function get_pnorm2nv() can be used to convert a value of this
-    data type into a normal vector.
+    The function plane_pnorm2normal() can be used to convert a value of
+    this data type into a normal vector.
 
     \b Example
 
