@@ -131,45 +131,65 @@ function dimension_2to3_v
 // set 3: line or vector
 //----------------------------------------------------------------------------//
 
-//! Construct a 2 dimension line or vector.
+//! Construct a 2 dimensional line or vector.
 /***************************************************************************//**
-  \param    p <point-2d> The initial point.
   \param    m <decimal> The magnitude.
   \param    a <decimal> The azmuthal angle.
+  \param    p1 <point-2d> The initial point.
+  \param    p2 <point-2d> The terminal point.
+  \param    v <vector-2d> An orientation vector.
 
   \returns  <line-2d> The 2d directed line or vector.
 
   \details
 
+    The starting point of the line or vector is specified by \p p1. The
+    terminal point can be specified by one of, in order of precedence,
+    \p p2, \p v, or \p a.
+
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
 function line2d_new
 (
-  p = origin2d,
   m = 1,
-  a = 0
-) = [p, p + m*[cos(a), sin(a)]];
+  a = 0,
+  p1 = origin2d,
+  p2,
+  v
+) = is_defined(p2) ? [p1, p2]
+  : is_defined(v) ? [p1, p1 + m*unit_l(v)]
+  : [p1, p1 + m*[cos(a), sin(a)]];
 
-//! Construct a 3 dimension line or vector.
+//! Construct a 3 dimensional line or vector.
 /***************************************************************************//**
-  \param    p <point-3d> The initial point.
   \param    m <decimal> The magnitude.
   \param    a <decimal> The azmuthal angle.
   \param    t <decimal> The polar angle.
+  \param    p1 <point-3d> The initial point.
+  \param    p2 <point-3d> The terminal point.
+  \param    v <vector-3d> An orientation vector.
 
   \returns  <line-3d> The 3d directed line or vector.
 
   \details
 
+    The starting point of the line or vector is specified by \p p1. The
+    terminal point can be specified by one of, in order of precedence,
+    \p p2, \p v, or \p a and \p t.
+
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
 function line3d_new
 (
-  p = origin3d,
   m = 1,
   a = 0,
-  t = 90
-) = [p, p + m*[sin(t)*cos(a), sin(t)*sin(a), cos(t)]];
+  t = 90,
+  p1 = origin3d,
+  p2,
+  v
+) = is_defined(p2) ? [p1, p2]
+  : is_defined(v) ? [p1, p1 + m*unit_l(v)]
+  : [p1, p1 + m*[sin(t)*cos(a), sin(t)*sin(a), cos(t)]];
 
 //! Return the number of dimensions of a line or vector.
 /***************************************************************************//**
