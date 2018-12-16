@@ -131,6 +131,46 @@ function dimension_2to3_v
 // set 3: line or vector
 //----------------------------------------------------------------------------//
 
+//! Construct a 2 dimension line or vector.
+/***************************************************************************//**
+  \param    p <point-2d> The initial point.
+  \param    m <decimal> The magnitude.
+  \param    a <decimal> The azmuthal angle.
+
+  \returns  <line-3d> The 2d directed line or vector.
+
+  \details
+
+    See \ref dt_line for argument specification and conventions.
+*******************************************************************************/
+function new_line2d
+(
+  p = origin2d,
+  m = 1,
+  a = 0
+) = [p, p + m*[cos(a), sin(a)]];
+
+//! Construct a 3 dimension line or vector.
+/***************************************************************************//**
+  \param    p <point-3d> The initial point.
+  \param    m <decimal> The magnitude.
+  \param    a <decimal> The azmuthal angle.
+  \param    t <decimal> The polar angle.
+
+  \returns  <line-3d> The 3d directed line or vector.
+
+  \details
+
+    See \ref dt_line for argument specification and conventions.
+*******************************************************************************/
+function new_line3d
+(
+  p = origin3d,
+  m = 1,
+  a = 0,
+  t = 90
+) = [p, p + m*[sin(t)*cos(a), sin(t)*sin(a), cos(t)]];
+
 //! Return the number of dimensions of a line or vector.
 /***************************************************************************//**
   \param    l <line> A line or vector.
@@ -726,6 +766,8 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("dimension_2to3_v",vid) test( "dimension_2to3_v", dimension_2to3_v(gv(vid,0)), vid, false );
 
     // set 3: line or vector
+    log_notest( "new_line2d()" );
+    log_notest( "new_line3d()" );
     for (vid=run_ids) run("get_line_dim",vid) test( "get_line_dim", get_line_dim([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("get_line_tp",vid) test( "get_line_tp", get_line_tp([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("get_line_ip",vid) test( "get_line_ip", get_line_ip([gv(vid,0),gv(vid,1)]), vid, true );
