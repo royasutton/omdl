@@ -403,6 +403,7 @@ function striple_lll
 /***************************************************************************//**
   \param    l1 <line-3d|line-2d> A 3d or 2d line or vector 1.
   \param    l2 <line-3d|line-2d> A 3d or 2d line or vector 2.
+  \param    s <boolean> Return the 2d signed angle.
 
   \returns  <decimal> The angle between the two lines or vectors in
             degrees. Returns \b undef when lines or vectors have
@@ -410,23 +411,27 @@ function striple_lll
 
   \details
 
-    See \ref dt_line for argument specification and conventions.
+    For 2d lines or vectors, the signed angle is calculated. The
+    parameter \p s determines if the \em signed (\p s == \b true) or
+    \em positive (\p s == \b false) angle is returned. For 3d lines or
+    vectors, a normal is required to uniquely identify the
+    perpendicular plane and axis of rotation. This function calculates
+    the positive angle, and the plane and axis of rotation will be that
+    which fits this assumed positive angle.
 
-  \note     For 3d lines or vectors, a normal is required to uniquely
-            identify the perpendicular plane and axis of rotation. This
-            function calculates the positive angle, and the plane and
-            axis of rotation will be that which fits this assumed
-            positive angle.
+    See \ref dt_line for argument specification and conventions.
 
   \sa angle_lll().
 *******************************************************************************/
 function angle_ll
 (
   l1,
-  l2
-) = let(d = line_get_dim(l1))
-    (d == 2) ? atan2(cross_ll(l1, l2), dot_ll(l1, l2))
-  : (d == 3) ? atan2(distance_pp(cross_ll(l1, l2)), dot_ll(l1, l2))
+  l2,
+  s = true
+) = let(d = line_get_dim(l1) + line_get_dim(l2))
+    (d == 4) ? let (sa = atan2(cross_ll(l1, l2), dot_ll(l1, l2)))
+    ((sa < 0) && (s == false)) ? sa+360 : sa
+  : (d == 6) ? atan2(distance_pp(cross_ll(l1, l2)), dot_ll(l1, l2))
   : undef;
 
 //! Compute the angle between two lines or vectors in a 3d-space.
