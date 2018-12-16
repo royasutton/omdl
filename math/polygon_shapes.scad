@@ -132,26 +132,22 @@ function polygon2d_arc_p
   let
   (
     // number of arc facets
-    naf  = is_defined(fn) ? fn
-         : (r < grid_fine) ? 3
-         : ($fn > 0.0) ? ($fn >= 3) ? $fn : 3
-         : ceil( max( min(360/$fa, r*tau/$fs), 5 ) ),
+    naf = is_defined(fn) ? fn
+        : (r < grid_fine) ? 3
+        : ($fn > 0.0) ? ($fn >= 3) ? $fn : 3
+        : ceil( max( min(360/$fa, r*tau/$fs), 5 ) ),
 
-    // arc starting angle (signed and positive)
-    ia_s = angle_ll(x_axis2d_ul, v1),
-    ia_p = (ia_s  < 0) ? 360 + ia_s
-         : ia_s,
+    // arc starting angle
+    iap = angle_ll(x_axis2d_ul, v1, false),
 
-    // angle bwetween vectors (signed and positive)
-    va_s = angle_ll(v2, v1),
-    va_p = (va_s == 0) ? 360
-         : (va_s  < 0) ? 360 + va_s
-         : va_s,
+    // angle bwetween vectors
+    vas = angle_ll(v2, v1, false),
+    vap = (vas == 0) ? 360 : vas,
 
     // arc angle sweep sequence cw and ccw
-    aas  = (cw == true)
-         ? [ia_p : -va_p/naf : ia_p-va_p]
-         : [ia_p : (360-va_p)/naf : 360+ia_p-va_p]
+    aas = (cw == true)
+        ? [iap : -vap/naf : iap-vap]
+        : [iap : (360-vap)/naf : 360+iap-vap]
   )
   [
     for (a = aas)
