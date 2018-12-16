@@ -105,7 +105,7 @@ function polygon2d_regular_p
   \param    c <point-2d> The arc center coordinate [x, y].
   \param    v1 <vector-2d> A 2d vector 1. The start angle.
   \param    v2 <vector-2d> A 2d vector 2. The end angle.
-  \param    n <integer> The number of arc fragments.
+  \param    fn <integer> The number of arc fragments.
   \param    cw <boolean> Sweep clockwise along arc from the head of vector
             \p v1 to the head of vector \p v2 when \p cw = \b true,
             otherwise sweep counter clockwise.
@@ -117,7 +117,7 @@ function polygon2d_regular_p
     The arc coordinates will be at radius \p r centered about \p c
     contained within the heads of vectors \p v1 and \p v2. When vectors
     \p v1 and \p v2 are parallel, the arc will be a complete circle.
-    When \p n is not specified, the arc facets are controlled by the
+    When \p fn is not specified, the arc facets are controlled by the
     special variables \p $fa, \p $fs, and \p $fn.
 *******************************************************************************/
 function polygon2d_arc_p
@@ -126,13 +126,13 @@ function polygon2d_arc_p
   c  = origin2d,
   v1 = x_axis2d_ul,
   v2 = x_axis2d_ul,
-  n,
+  fn,
   cw = true
 ) =
   let
   (
     // number of arc facets
-    fn   = is_defined(n) ? n
+    naf  = is_defined(fn) ? fn
          : (r < grid_fine) ? 3
          : ($fn > 0.0) ? ($fn >= 3) ? $fn : 3
          : ceil( max( min(360/$fa, r*tau/$fs), 5 ) ),
@@ -150,8 +150,8 @@ function polygon2d_arc_p
 
     // arc angle sweep sequence cw and ccw
     aas  = (cw == true)
-         ? [ia_p : -va_p/fn : ia_p-va_p]
-         : [ia_p : (360-va_p)/fn : 360+ia_p-va_p]
+         ? [ia_p : -va_p/naf : ia_p-va_p]
+         : [ia_p : (360-va_p)/naf : 360+ia_p-va_p]
   )
   [
     for (a = aas)
@@ -177,9 +177,9 @@ function polygon2d_circular_sector_p
   c  = origin2d,
   v1 = x_axis2d_ul,
   v2 = x_axis2d_ul,
-  n,
+  fn,
   cw = true
-) = concat([c], polygon2d_arc_p(r=r, c=c, v1=v1, v2=v2, n=n, cw=cw));
+) = concat([c], polygon2d_arc_p(r=r, c=c, v1=v1, v2=v2, fn=fn, cw=cw));
 
 //! Compute the coordinates for a rounded trapezoid in 2D space.
 /***************************************************************************//**

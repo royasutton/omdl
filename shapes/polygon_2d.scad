@@ -99,11 +99,11 @@ module polygon_circular_sector
   c  = origin2d,
   v1 = x_axis2d_ul,
   v2 = x_axis2d_ul,
-  n,
+  fn,
   cw = true
 )
 {
-  c = polygon2d_circular_sector_p(r=r, c=c, v1=v1, v2=v2, n=n, cw=cw);
+  c = polygon2d_circular_sector_p(r=r, c=c, v1=v1, v2=v2, fn=fn, cw=cw);
 
   polygon( c );
 }
@@ -126,7 +126,7 @@ BEGIN_SCOPE dim;
     if (shape == "polygon_trapezoid")
       polygon_trapezoid( b=[20,20], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
     else if (shape == "polygon_circular_sector")
-      polygon_circular_sector( r=20, v1=[1,1], v2=[-1,1], n=4, cw=false );
+      polygon_circular_sector( r=20, v1=[1,1], v2=[-1,1], fn=4, cw=false );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -154,7 +154,7 @@ BEGIN_SCOPE manifest;
     grid_repeat( g=5, i=60, center=true )
     {
       polygon_trapezoid( b=[20,20], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
-      polygon_circular_sector( r=20, v1=[1,1], v2=[-1,1], n=4, cw=false );
+      polygon_circular_sector( r=20, v1=[1,1], v2=[-1,1], fn=4, cw=false );
     }
   END_OPENSCAD;
 

@@ -1372,11 +1372,11 @@ function polygon2d_vertices_round3_p
         // vertex rounding coordinate point list
         vpl = (rm == 0 || rm > 10) ? [vc]
             : (rm == 1) ?
-              concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], n=fn, cw=true), [tc2])
+              concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=true), [tc2])
             : (rm == 2 || rm == 3 || rm == 4) ?
-              concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], n=fn, cw=false), [tc2])
+              concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=false), [tc2])
             : (rm == 6 || rm == 7 || rm == 8) ?
-              concat([tc1], polygon2d_arc_p(r=rr, c=vc, v1=[vc, tc1], v2=[vc, tc2], n=fn, cw=true), [tc2])
+              concat([tc1], polygon2d_arc_p(r=rr, c=vc, v1=[vc, tc1], v2=[vc, tc2], fn=fn, cw=true), [tc2])
             : [tc1, tc2]
       )
       vpl
