@@ -143,9 +143,9 @@ function dimension_2to3_v
 
   \details
 
-    The starting point of the line or vector is specified by \p p1. The
-    terminal point can be specified by one of, in order of precedence,
-    \p p2, \p v, or \p a.
+    The initial point (or tail) of the line or vector is specified by
+    \p p1. The terminal point (or head) can be specified by one of, in
+    order of precedence, \p p2, \p v, or \p a.
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
@@ -173,9 +173,9 @@ function line2d_new
 
   \details
 
-    The starting point of the line or vector is specified by \p p1. The
-    terminal point can be specified by one of, in order of precedence,
-    \p p2, \p v, or \p a and \p t.
+    The initial point (or tail) of the line or vector is specified by
+    \p p1. The terminal point (or head) can be specified by one of, in
+    order of precedence, \p p2, \p v, or \p a and \p t.
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
@@ -190,6 +190,65 @@ function line3d_new
 ) = is_defined(p2) ? [p1, p2]
   : is_defined(v) ? [p1, p1 + m*unit_l(v)]
   : [p1, p1 + m*[sin(t)*cos(a), sin(t)*sin(a), cos(t)]];
+
+//! Construct a 2 or 3 dimensional line or vector.
+/***************************************************************************//**
+  \param    m <decimal> The magnitude.
+  \param    a <decimal> The azmuthal angle.
+  \param    t <decimal> The polar angle.
+  \param    p1 <point-2d|point-3d> The initial point.
+  \param    p2 <point-2d|point-3d> The terminal point.
+  \param    v <vector-2d|point-3d> An orientation vector.
+
+  \returns  <line-2d|line-3d> The 2d or 3d directed line or vector.
+
+  \details
+
+    The initial point (or tail) of the line or vector is specified by
+    \p p1. The terminal point (or head) can be specified by one of, in
+    order of precedence, \p p2, \p v, or \p a and \p t.
+
+    This function will construct a 2d or 3d line as required based on
+    the supplied arguments. A 3d line is constructed only when
+    required. Because the argument dimensions are inspected, this
+    function has more overhead when compared to line2d_new() and
+    line3d_new().
+
+    See \ref dt_line for argument specification and conventions.
+*******************************************************************************/
+function line_new
+(
+  m = 1,
+  a = 0,
+  t,
+  p1,
+  p2,
+  v
+) = is_defined(p2) ?
+    let
+    (
+      pd = is_defined(p1) ? p1
+         : (len(p2) == 2) ? origin2d : origin3d
+    )
+    [pd, p2]
+  : is_defined(v) ?
+    let
+    (
+      pd = is_defined(p1) ? p1
+         : (len(v) == 2) ? origin2d : origin3d
+    )
+    [pd, pd + m*unit_l(v)]
+  : not_defined(t) ?
+    let
+    (
+      pd = is_defined(p1) ? p1 : origin2d
+    )
+    [pd, pd + m*[cos(a), sin(a)]]
+  : let
+    (
+      pd = is_defined(p1) ? p1 : origin3d
+    )
+    [pd, pd + m*[sin(t)*cos(a), sin(t)*sin(a), cos(t)]];
 
 //! Return the number of dimensions of a line or vector.
 /***************************************************************************//**
