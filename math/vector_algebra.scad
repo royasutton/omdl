@@ -58,7 +58,11 @@
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
-// set 1: point
+// set 1: identify
+//----------------------------------------------------------------------------//
+
+//----------------------------------------------------------------------------//
+// set 2: point
 //----------------------------------------------------------------------------//
 
 //! Compute the distance between two points.
@@ -110,7 +114,7 @@ function is_left_ppp
 ) = ((p2[0]-p1[0]) * (p3[1]-p1[1]) - (p3[0]-p1[0]) * (p2[1]-p1[1]));
 
 //----------------------------------------------------------------------------//
-// set 2: vector
+// set 3: vector
 //----------------------------------------------------------------------------//
 
 //! Return 3d vector unchanged or add a zeroed third dimension to 2d vector.
@@ -130,7 +134,7 @@ function dimension_2to3_v
 ) = (len(v) == 3) ? v : [v[0], v[1], 0];
 
 //----------------------------------------------------------------------------//
-// set 3: line (or vector)
+// set 4: line (or vector)
 //----------------------------------------------------------------------------//
 
 //! Construct a 2 dimensional directed line.
@@ -528,7 +532,7 @@ function are_coplanar_lll
 ) = (dround(striple_lll(l1, l2, l3), d) ==  0);
 
 //----------------------------------------------------------------------------//
-// set 4: plane and pnorm
+// set 5: plane and pnorm
 //----------------------------------------------------------------------------//
 
 //! Convert a planes' normal specification into a normal vector.
@@ -868,14 +872,16 @@ BEGIN_SCOPE validate;
     // Indirect function calls would be very useful here!!!
     run_ids = delete( test_ids, mv=["fac", "crp"] );
 
-    // set 1: point
+    // set 1: identify
+
+    // set 2: point
     for (vid=run_ids) run("distance_pp",vid) test( "distance_pp", distance_pp(gv(vid,0),gv(vid,1)), vid, false );
     for (vid=run_ids) run("is_left_ppp",vid) test( "is_left_ppp", is_left_ppp(gv(vid,0),gv(vid,1),gv(vid,2)), vid, false );
 
-    // set 2: vector
+    // set 3: vector
     for (vid=run_ids) run("dimension_2to3_v",vid) test( "dimension_2to3_v", dimension_2to3_v(gv(vid,0)), vid, false );
 
-    // set 3: line (or vector)
+    // set 4: line (or vector)
     log_notest( "line2d_new()" );
     log_notest( "line3d_new()" );
     log_notest( "line_new()" );
@@ -892,7 +898,7 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("unit_l",vid) test( "unit_l", unit_l([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("are_coplanar_lll",vid) test( "are_coplanar_lll", are_coplanar_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
 
-    // set 4: plane and pnorm
+    // set 5: plane and pnorm
     for (vid=run_ids) run("plane_pnorm2normal",vid) test( "plane_pnorm2normal", plane_pnorm2normal([gv(vid,0),gv(vid,1)]), vid, true );
 
     // end-of-tests
