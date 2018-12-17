@@ -94,7 +94,7 @@ function is_vector
 (
   v
 ) = ((len(v) == 1) && is_point(v[0])) ? true
-  : ((len(v) <= 3) && is_point(v))? true
+  : is_point(v) ? true
   : false;
 
 //! Test if a value defines a line.
@@ -111,7 +111,11 @@ function is_vector
 function is_line
 (
   l
-) = (len(l) == 2) && is_point(l[0]) && is_point(l[1]);
+) = (len(l) != 2) ? false
+  : (len(l[0]) != len(l[1])) ? false
+  : !is_point(l[0]) ? false
+  : !is_point(l[1]) ? false
+  : true;
 
 //! Test if a value defines a plane.
 /***************************************************************************//**
@@ -127,10 +131,15 @@ function is_line
 function is_plane
 (
   n
-) = is_vector(n) ? true   // predetermined normal vector
-  : is_line(n) ? true     // intersecting vectors [v1, v2] same form as a line.
-  : ((len(n) == 3) && is_point(n[0]) && is_point(n[1]) && is_point(n[2]))? true
-  : false;
+) = is_vector(n) ? true               // predetermined normal vector
+  : is_line(n) ? true                 // intersecting vectors [v1, v2] like line.
+  : (len(n) != 3) ? false             // otherwise, 3 points of same dimension.
+  : !is_point(n[0]) ? false
+  : !is_point(n[1]) ? false
+  : !is_point(n[2]) ? false
+  : (len(n[0]) != len(n[1])) ? false
+  : (len(n[0]) != len(n[2])) ? false
+  : true;
 
 //----------------------------------------------------------------------------//
 // set 2: point
