@@ -289,10 +289,9 @@
     |  2  | [p2]      | a vector from the origin to 'p2'  |
     |  3  | [p1, p2]  | a line from 'p1' to 'p2'          |
 
-    The functions is_point(), is_vector(), is_line(), line_get_dim(),
-    line_get_tp(), line_get_ip(), vector_to_line(), and
-    line_to_vector(), are available for type identification and
-    convertion.
+    The functions is_point(), is_vector(), is_line(), line_dim(),
+    line_tp(), line_ip(), vector_to_line(), and line_to_vector(), are
+    available for type identification and convertion.
 
     \b Example
 

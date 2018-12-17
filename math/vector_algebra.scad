@@ -337,7 +337,7 @@ function line_new
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function line_get_dim
+function line_dim
 (
   l
 ) = is_defined(len(l[0])) ? len(l[0]) : len(l);
@@ -352,7 +352,7 @@ function line_get_dim
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function line_get_tp
+function line_tp
 (
   l
 ) = is_iterable(l[0]) ? (len(l)>1) ? l[1] : l[0] : l;
@@ -367,7 +367,7 @@ function line_get_tp
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function line_get_ip
+function line_ip
 (
   l
 ) = is_iterable(l[0]) ? (len(l)>1) ? l[0] : consts(len(l[0]), 0)
@@ -410,7 +410,7 @@ function vector_to_line
   l,
   p
 ) =
-  let (pd = is_defined(p) ? p : (line_get_dim(l) == 2) ? origin2d : origin3d)
+  let (pd = is_defined(p) ? p : (line_dim(l) == 2) ? origin2d : origin3d)
   [pd, pd + line_to_vector(l)];
 
 //! Compute the dot product of two lines or vectors.
@@ -529,7 +529,7 @@ function angle_ll
   l1,
   l2,
   s = true
-) = let(d = line_get_dim(l1) + line_get_dim(l2))
+) = let(d = line_dim(l1) + line_dim(l2))
     (d == 4) ? let (sa = atan2(cross_ll(l1, l2), dot_ll(l1, l2)))
     ((sa < 0) && (s == false)) ? sa+360 : sa
   : (d == 6) ? atan2(distance_pp(cross_ll(l1, l2)), dot_ll(l1, l2))
@@ -740,7 +740,7 @@ BEGIN_SCOPE validate;
         x_axis3d_uv,                                        // t08
         x_axis3d_uv                                         // t09
       ],
-      ["line_get_dim",
+      ["line_dim",
         2,                                                  // fac
         4,                                                  // crp
         2,                                                  // t01
@@ -753,7 +753,7 @@ BEGIN_SCOPE validate;
         3,                                                  // t08
         3                                                   // t09
       ],
-      ["line_get_tp",
+      ["line_tp",
         2,                                                  // fac
         4,                                                  // crp
         [undef,undef],                                      // t01
@@ -766,7 +766,7 @@ BEGIN_SCOPE validate;
         y_axis3d_uv,                                        // t08
         y_axis3d_uv                                         // t09
       ],
-      ["line_get_ip",
+      ["line_ip",
         2,                                                  // fac
         4,                                                  // crp
         origin2d,                                           // t01
@@ -960,9 +960,9 @@ BEGIN_SCOPE validate;
     log_notest( "line2d_new()" );
     log_notest( "line3d_new()" );
     log_notest( "line_new()" );
-    for (vid=run_ids) run("line_get_dim",vid) test( "line_get_dim", line_get_dim([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("line_get_tp",vid) test( "line_get_tp", line_get_tp([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("line_get_ip",vid) test( "line_get_ip", line_get_ip([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("line_dim",vid) test( "line_dim", line_dim([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("line_tp",vid) test( "line_tp", line_tp([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("line_ip",vid) test( "line_ip", line_ip([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("line_to_vector",vid) test( "line_to_vector", line_to_vector([gv(vid,0),gv(vid,1)]), vid, true );
     log_notest( "vector_to_line()" );
     for (vid=run_ids) run("dot_ll",vid) test( "dot_ll", dot_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );

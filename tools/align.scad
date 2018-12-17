@@ -111,11 +111,11 @@ module align_ll
   ro = zero3d
 )
 {
-  li = dimension_2to3_v(line_get_ip( l));
-  lt = dimension_2to3_v(line_get_tp( l));
+  li = dimension_2to3_v(line_ip( l));
+  lt = dimension_2to3_v(line_tp( l));
 
-  ri = dimension_2to3_v(line_get_ip(rl));
-  rt = dimension_2to3_v(line_get_tp(rl));
+  ri = dimension_2to3_v(line_ip(rl));
+  rt = dimension_2to3_v(line_tp(rl));
 
   ll = [li, lt];
   lm = mean(ll);
