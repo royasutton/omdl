@@ -61,6 +61,77 @@
 // set 1: identify
 //----------------------------------------------------------------------------//
 
+//! Test if a value defines a point.
+/***************************************************************************//**
+  \param    p \<value> A value.
+
+  \returns  <boolean> \b true when the value defines a point and
+            \b false otherwise.
+
+  \details
+
+    See \ref dt_line for argument specification and conventions.
+*******************************************************************************/
+function is_point
+(
+  p
+) = (len(p) == 2) ? not_defined(p[0] % p[1]) ? false : true
+  : (len(p) == 3) ? not_defined(p[0] % p[1] % p[2]) ? false : true
+  : false;
+
+//! Test if a value defines a Euclidean vector.
+/***************************************************************************//**
+  \param    p \<value> A value.
+
+  \returns  <boolean> \b true when the value defines a Euclidean vector
+                      and \b false otherwise.
+
+  \details
+
+    See \ref dt_line for argument specification and conventions.
+*******************************************************************************/
+function is_vector
+(
+  v
+) = ((len(v) == 1) && is_point(v[0])) ? true
+  : ((len(v) <= 3) && is_point(v))? true
+  : false;
+
+//! Test if a value defines a line.
+/***************************************************************************//**
+  \param    p \<value> A value.
+
+  \returns  <boolean> \b true when the value defines a line and
+            \b false otherwise.
+
+  \details
+
+    See \ref dt_line for argument specification and conventions.
+*******************************************************************************/
+function is_line
+(
+  l
+) = (len(l) == 2) && is_point(l[0]) && is_point(l[1]);
+
+//! Test if a value defines a plane.
+/***************************************************************************//**
+  \param    p \<value> A value.
+
+  \returns  <boolean> \b true when the value defines a plane and
+            \b false otherwise.
+
+  \details
+
+    See \ref dt_line for argument specification and conventions.
+*******************************************************************************/
+function is_plane
+(
+  n
+) = is_vector(n) ? true   // predetermined normal vector
+  : is_line(n) ? true     // intersecting vectors [v1, v2] same form as a line.
+  : ((len(n) == 3) && is_point(n[0]) && is_point(n[1]) && is_point(n[2]))? true
+  : false;
+
 //----------------------------------------------------------------------------//
 // set 2: point
 //----------------------------------------------------------------------------//
@@ -873,6 +944,10 @@ BEGIN_SCOPE validate;
     run_ids = delete( test_ids, mv=["fac", "crp"] );
 
     // set 1: identify
+    log_notest( "is_point()" );
+    log_notest( "is_vector()" );
+    log_notest( "is_line()" );
+    log_notest( "is_plane()" );
 
     // set 2: point
     for (vid=run_ids) run("distance_pp",vid) test( "distance_pp", distance_pp(gv(vid,0),gv(vid,1)), vid, false );
