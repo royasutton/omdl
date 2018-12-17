@@ -275,24 +275,24 @@
 
   \subsubsection dt_line Lines and vectors
 
-    The data type \b line refers to a convention for specifying a line
-    or a vector. A vector is a direction and magnitude in space. A
-    line, too, has direction and magnitude, but also has location, as
-    it starts at one point in space and ends at another. Operators in
-    [omdl] make use of a common convention for specifying Euclidean
-    vectors and straight lines as summarized in the following table:
+    A \b vector has a direction and magnitude in space. A \b line, too,
+    has direction and magnitude, but also has location, as it starts at
+    one point in space and ends at another. Operators in [omdl] make
+    use of a common convention for specifying Euclidean vectors and
+    straight lines as summarized in the following table:
 
     Given two points \c 'p1' and \c 'p2', in space:
 
-    | no. | form      | description                                   |
-    |:---:|:---------:|:----------------------------------------------|
-    |  1  | p2        | a line or vector from the origin to 'p2'      |
-    |  2  | [p2]      | a line or vector from the origin to 'p2'      |
-    |  3  | [p1, p2]  | line or vector from 'p1' to 'p2'              |
+    | no. | form      | description                       |
+    |:---:|:---------:|:----------------------------------|
+    |  1  | p2        | a vector from the origin to 'p2'  |
+    |  2  | [p2]      | a vector from the origin to 'p2'  |
+    |  3  | [p1, p2]  | a line from 'p1' to 'p2'          |
 
-    The functions line_get_dim(), line_get_tp(), line_get_ip(), and
-    line_to_vector(), are available to identify the dimension of and
-    convert a line into a vector or point.
+    The functions is_point(), is_vector(), is_line(), line_get_dim(),
+    line_get_tp(), line_get_ip(), vector_to_line(), and
+    line_to_vector(), are available for type identification and
+    convertion.
 
     \b Example
 
@@ -301,9 +301,11 @@
     p1 = [a,b,c]
     p2 = [d,e,f]
 
-    // lines and vectors
+    // vectors
     v1 = p2       = [d,e,f]
     v2 = [p2]     = [[d,e,f]]
+
+    // lines
     v3 = [p1, p2] = [[a,b,c], [d,e,f]]
 
     v1 == v2
@@ -337,8 +339,8 @@
     |  3  | [v1, v2]      | two distinct but intersecting vectors         |
     |  4  | [p1, p2, p3]  | three (or more) non-collinear coplanar points |
 
-    The function plane_pnorm2normal() can be used to convert a value of
-    this data type into a normal vector.
+    The functions is_plane() and plane_pnorm2normal() are available for
+    type identification and convertion.
 
     \b Example
 
