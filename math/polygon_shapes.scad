@@ -160,29 +160,6 @@ function polygon2d_arc_p
       c + r * [cos(a), sin(a)]
   ];
 
-//! Compute the coordinates of a circular sector in 2D.
-/***************************************************************************//**
-  \copydetails polygon2d_arc_p()
-
-  \details
-
-    The circular sector polygon will start and end at the specified
-    coordinate \p c.
-
-    See [Wikipedia] for more information.
-
-  [Wikipedia]: https://en.wikipedia.org/wiki/Circular_sector
-*******************************************************************************/
-function polygon2d_circular_sector_p
-(
-  r  = 1,
-  c  = origin2d,
-  v1 = x_axis2d_ul,
-  v2 = x_axis2d_ul,
-  fn,
-  cw = true
-) = concat([c], polygon2d_arc_p(r=r, c=c, v1=v1, v2=v2, fn=fn, cw=cw));
-
 //! Compute the coordinates for a rounded trapezoid in 2D space.
 /***************************************************************************//**
   \param    b <decimal-list-2|decimal> The base lengths. A list [b1, b2]
