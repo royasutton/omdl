@@ -103,12 +103,14 @@ function polygon2d_regular_p
 /***************************************************************************//**
   \param    r <decimal> The arc radius.
   \param    c <point-2d> The arc center coordinate [x, y].
-  \param    v1 <vector-2d> A 2d vector 1. The start angle.
-  \param    v2 <vector-2d> A 2d vector 2. The end angle.
+  \param    v1 <line-2d|decimal> The arc start angle.
+            A 2d line, vector, or decimal angle 1.
+  \param    v2 <line-2d|decimal> The arc end angle.
+            A 2d line,  vector, or decimal angle 2.
   \param    fn <integer> The number of arc fragments.
-  \param    cw <boolean> Sweep clockwise along arc from the head of vector
-            \p v1 to the head of vector \p v2 when \p cw = \b true,
-            otherwise sweep counter clockwise.
+  \param    cw <boolean> Sweep clockwise along arc from the head of
+            vector \p v1 to the head of vector \p v2 when \p cw =
+            \b true, and counter clockwise when \p cw = \b false.
 
   \returns  <coords-2d> A list of arc coordinates points [[x, y], ...].
 
@@ -137,11 +139,15 @@ function polygon2d_arc_p
         : ($fn > 0.0) ? ($fn >= 3) ? $fn : 3
         : ceil( max( min(360/$fa, r*tau/$fs), 5 ) ),
 
-    // arc starting angle
-    iap = angle_ll(x_axis2d_ul, v1, false),
+    // create vectors if numerical angles have been specified.
+    va1 = is_number(v1) ? [cos(v1), sin(v1)] : v1,
+    va2 = is_number(v2) ? [cos(v2), sin(v2)] : v2,
 
-    // angle bwetween vectors
-    vas = angle_ll(v2, v1, false),
+    // arc positive start angle
+    iap = angle_ll(x_axis2d_ul, va1, false),
+
+    // positive arc sweep angle
+    vas = angle_ll(va2, va1, false),
     vap = (vas == 0) ? 360 : vas,
 
     // arc angle sweep sequence cw and ccw
@@ -160,8 +166,8 @@ function polygon2d_arc_p
 
   \details
 
-    The polygon of the circular sector will start and end at the
-    specified coordinate \p c.
+    The circular sector polygon will start and end at the specified
+    coordinate \p c.
 
     See [Wikipedia] for more information.
 
