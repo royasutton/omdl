@@ -298,7 +298,7 @@ function line_get_ip
 ) = is_iterable(l[0]) ? (len(l)>1) ? l[0] : consts(len(l[0]), 0)
   : is_iterable(l) ? consts(len(l), 0) : 0;
 
-//! Shift a line to the origin.
+//! Convert line to vector by shifting it to the origin.
 /***************************************************************************//**
   \param    l <line> A line or vector.
 
@@ -316,7 +316,7 @@ function line_to_vector
   : (len(l) == 2) ? (l[1]-l[0])
   : undef;
 
-//! Move a line or vector to another coordinate point.
+//! Convert a vector to a line or move a line to another coordinate point.
 /***************************************************************************//**
   \param    l <line> A line or vector.
   \param    p <point> The new initial point.
@@ -330,7 +330,7 @@ function line_to_vector
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function line_move
+function vector_to_line
 (
   l,
   p
@@ -883,7 +883,7 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("line_get_tp",vid) test( "line_get_tp", line_get_tp([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("line_get_ip",vid) test( "line_get_ip", line_get_ip([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("line_to_vector",vid) test( "line_to_vector", line_to_vector([gv(vid,0),gv(vid,1)]), vid, true );
-    log_notest( "line_move()" );
+    log_notest( "vector_to_line()" );
     for (vid=run_ids) run("dot_ll",vid) test( "dot_ll", dot_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("cross_ll",vid) test( "cross_ll", cross_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("striple_lll",vid) test( "striple_lll", striple_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
