@@ -117,6 +117,24 @@ function is_line
   : !is_point(l[1]) ? false
   : true;
 
+//! Test if a value defines a vector or a line.
+/***************************************************************************//**
+  \param    p \<value> A value.
+
+  \returns  <boolean> \b true when the value defines a vector or a line
+            and \b false otherwise.
+
+  \details
+
+    See \ref dt_line for argument specification and conventions.
+*******************************************************************************/
+function is_vector_or_line
+(
+  l
+) = is_vector(l) ? true
+  : is_line(l) ? true
+  : false;
+
 //! Test if a value defines a plane.
 /***************************************************************************//**
   \param    p \<value> A value.
@@ -959,6 +977,7 @@ BEGIN_SCOPE validate;
     log_notest( "is_point()" );
     log_notest( "is_vector()" );
     log_notest( "is_line()" );
+    log_notest( "is_vector_or_line()" );
     log_notest( "is_plane()" );
 
     // set 2: point
