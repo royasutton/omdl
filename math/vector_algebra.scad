@@ -344,6 +344,9 @@ function line_new
 
   \details
 
+    When \p l is a line, only the dimension of the initial point is
+    considered to determine the line dimension.
+
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
 function line_dim
@@ -390,6 +393,8 @@ function line_ip
 
   \details
 
+    This functions does not test if \p l is a valid line or vector.
+
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
 function line_to_vector
@@ -409,8 +414,9 @@ function line_to_vector
 
   \details
 
-    When \p p is not specified, the line or vector is moved to the
-    origin.
+    This functions does not test if \p l is a valid line or vector or
+    if \p p is a valid point. When \p p is not specified, the line or
+    vector is moved to the origin.
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
@@ -625,6 +631,9 @@ function are_coplanar_lll
   \returns  <normal> A vector-3d normal to the plane.
 
   \details
+
+    When \p n is not a valid plane, \b undef is returned. The computed
+    normal vector is not normalized to its unit vector.
 
     See \ref dt_pnorm for argument specification and conventions.
 *******************************************************************************/
