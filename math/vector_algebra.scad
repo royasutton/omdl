@@ -120,7 +120,9 @@ function is_left_ppp
   \returns  <vector-3d> The 3d vector or the 2d vector converted to 3d
             with its third dimension assigned zero.
 
-  \warning  This function assumes any vector that is not 3d to be 2d.
+  \details
+
+    This function assumes any vector that is not 3d to be 2d.
 *******************************************************************************/
 function dimension_2to3_v
 (
@@ -128,24 +130,24 @@ function dimension_2to3_v
 ) = (len(v) == 3) ? v : [v[0], v[1], 0];
 
 //----------------------------------------------------------------------------//
-// set 3: line or vector
+// set 3: line (or vector)
 //----------------------------------------------------------------------------//
 
-//! Construct a 2 dimensional line or vector.
+//! Construct a 2 dimensional directed line.
 /***************************************************************************//**
   \param    m <decimal> The magnitude.
   \param    a <decimal> The azmuthal angle.
   \param    p1 <point-2d> The initial point.
   \param    p2 <point-2d> The terminal point.
-  \param    v <vector-2d> An orientation vector.
+  \param    v <vector-2d> An orientation line or vector.
 
-  \returns  <line-2d> The 2d directed line or vector.
+  \returns  <line-2d> The 2d directed line.
 
   \details
 
-    The initial point (or tail) of the line or vector is specified by
-    \p p1. The terminal point (or head) can be specified by one of, in
-    order of precedence, \p p2, \p v, or \p a.
+    The initial point (or tail) of the line is specified by \p p1. The
+    terminal point (or head) can be specified by one of, in order of
+    precedence, \p p2, \p v, or \p a.
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
@@ -160,22 +162,22 @@ function line2d_new
   : is_defined(v) ? [p1, p1 + m*unit_l(v)]
   : [p1, p1 + m*[cos(a), sin(a)]];
 
-//! Construct a 3 dimensional line or vector.
+//! Construct a 3 dimensional directed line.
 /***************************************************************************//**
   \param    m <decimal> The magnitude.
   \param    a <decimal> The azmuthal angle.
   \param    t <decimal> The polar angle.
   \param    p1 <point-3d> The initial point.
   \param    p2 <point-3d> The terminal point.
-  \param    v <vector-3d> An orientation vector.
+  \param    v <vector-3d> An orientation line or vector.
 
-  \returns  <line-3d> The 3d directed line or vector.
+  \returns  <line-3d> The 3d directed line.
 
   \details
 
-    The initial point (or tail) of the line or vector is specified by
-    \p p1. The terminal point (or head) can be specified by one of, in
-    order of precedence, \p p2, \p v, or \p a and \p t.
+    The initial point (or tail) of the line is specified by \p p1. The
+    terminal point (or head) can be specified by one of, in order of
+    precedence, \p p2, \p v, or \p a and \p t.
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
@@ -191,22 +193,22 @@ function line3d_new
   : is_defined(v) ? [p1, p1 + m*unit_l(v)]
   : [p1, p1 + m*[sin(t)*cos(a), sin(t)*sin(a), cos(t)]];
 
-//! Construct a 2 or 3 dimensional line or vector.
+//! Construct a directed line.
 /***************************************************************************//**
   \param    m <decimal> The magnitude.
   \param    a <decimal> The azmuthal angle.
   \param    t <decimal> The polar angle.
-  \param    p1 <point-2d|point-3d> The initial point.
-  \param    p2 <point-2d|point-3d> The terminal point.
-  \param    v <vector-2d|point-3d> An orientation vector.
+  \param    p1 <point> The initial point.
+  \param    p2 <point> The terminal point.
+  \param    v <vector> An orientation line or vector.
 
-  \returns  <line-2d|line-3d> The 2d or 3d directed line or vector.
+  \returns  <line> The directed line.
 
   \details
 
-    The initial point (or tail) of the line or vector is specified by
-    \p p1. The terminal point (or head) can be specified by one of, in
-    order of precedence, \p p2, \p v, or \p a and \p t.
+    The initial point (or tail) of the line is specified by \p p1. The
+    terminal point (or head) can be specified by one of, in order of
+    precedence, \p p2, \p v, or \p a and \p t.
 
     This function will construct a 2d or 3d line as required based on
     the supplied arguments. A 3d line is constructed only when
@@ -296,11 +298,11 @@ function line_get_ip
 ) = is_iterable(l[0]) ? (len(l)>1) ? l[0] : consts(len(l[0]), 0)
   : is_iterable(l) ? consts(len(l), 0) : 0;
 
-//! Shift a line or vector to the origin.
+//! Shift a line to the origin.
 /***************************************************************************//**
   \param    l <line> A line or vector.
 
-  \returns  <vector> The line or vector shifted to the origin.
+  \returns  <vector> The line shifted to the origin.
 
   \details
 
@@ -403,14 +405,16 @@ function cross_ll
 
   \details
 
+    Returns a 2d vector result for 2d vectors. The cross product
+    computes the 2x2 determinant of the vectors <tt>(l2 x l3)</tt>, a
+    scalar value, which is then \e multiplied by \c l1.
+
+    \verbatim
     [l1, l2, l3] = l1 * (l2 x l3)
+    \endverbatim
 
     See \ref dt_line for argument specification and conventions. See
     [Wikipedia] for more information.
-
-  \warning  Returns a 2d vector result for 2d vectors. The cross product
-            computes the 2x2 determinant of the vectors <tt>(l2 x l3)</tt>,
-            a scalar value, which is then \e multiplied by \c l1.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Triple_product
 *******************************************************************************/
@@ -871,7 +875,7 @@ BEGIN_SCOPE validate;
     // set 2: vector
     for (vid=run_ids) run("dimension_2to3_v",vid) test( "dimension_2to3_v", dimension_2to3_v(gv(vid,0)), vid, false );
 
-    // set 3: line or vector
+    // set 3: line (or vector)
     log_notest( "line2d_new()" );
     log_notest( "line3d_new()" );
     log_notest( "line_new()" );
