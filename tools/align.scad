@@ -63,8 +63,8 @@ module orient_ll
   r  = 0
 )
 {
-  ll = line_move2origin(l);
-  lr = line_move2origin(rl);
+  ll = line_to_vector(l);
+  lr = line_to_vector(rl);
 
   rotate(r, lr)
   rotate(angle_ll(ll, lr), cross(ll, lr))
@@ -127,7 +127,7 @@ module align_ll
   translate(ciselect([origin3d, ri, rm, rt, ri+rt, rm], rp))
 
   // orient and roll line about reference
-  rotate(r, line_move2origin(lr))
+  rotate(r, line_to_vector(lr))
   rotate(angle_ll(ll, lr), cross_ll(ll, lr))
 
   // apply offsets

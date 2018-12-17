@@ -306,7 +306,7 @@ function line_get_ip
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function line_move2origin
+function line_to_vector
 (
   l
 ) = not_defined(len(l[0])) ? l
@@ -334,7 +334,7 @@ function line_move
   p
 ) =
   let (pd = is_defined(p) ? p : (line_get_dim(l) == 2) ? origin2d : origin3d)
-  [pd, pd + line_move2origin(l)];
+  [pd, pd + line_to_vector(l)];
 
 //! Compute the dot product of two lines or vectors.
 /***************************************************************************//**
@@ -360,7 +360,7 @@ function dot_ll
 (
   l1,
   l2
-) = (line_move2origin(l1) * line_move2origin(l2));
+) = (line_to_vector(l1) * line_to_vector(l2));
 
 //! Compute the cross product of two lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
@@ -389,7 +389,7 @@ function cross_ll
 (
   l1,
   l2
-) = cross(line_move2origin(l1), line_move2origin(l2));
+) = cross(line_to_vector(l1), line_to_vector(l2));
 
 //! Compute the scalar triple product of three lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
@@ -419,7 +419,7 @@ function striple_lll
   l1,
   l2,
   l3
-) = (line_move2origin(l1) * cross_ll(l2, l3));
+) = (line_to_vector(l1) * cross_ll(l2, l3));
 
 //! Compute the angle between two lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
@@ -492,7 +492,7 @@ function angle_lll
 function unit_l
 (
   l
-) = line_move2origin(l) / distance_pp(line_move2origin(l));
+) = line_to_vector(l) / distance_pp(line_to_vector(l));
 
 //! Test if three lines or vectors are coplanar in 3d-space.
 /***************************************************************************//**
@@ -700,7 +700,7 @@ BEGIN_SCOPE validate;
         x_axis3d_uv,                                        // t08
         x_axis3d_uv                                         // t09
       ],
-      ["line_move2origin",
+      ["line_to_vector",
         2,                                                  // fac
         4,                                                  // crp
         [undef, undef],                                     // t01
@@ -878,7 +878,7 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("line_get_dim",vid) test( "line_get_dim", line_get_dim([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("line_get_tp",vid) test( "line_get_tp", line_get_tp([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("line_get_ip",vid) test( "line_get_ip", line_get_ip([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("line_move2origin",vid) test( "line_move2origin", line_move2origin([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("line_to_vector",vid) test( "line_to_vector", line_to_vector([gv(vid,0),gv(vid,1)]), vid, true );
     log_notest( "line_move()" );
     for (vid=run_ids) run("dot_ll",vid) test( "dot_ll", dot_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("cross_ll",vid) test( "cross_ll", cross_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
