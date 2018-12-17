@@ -339,7 +339,7 @@
     |  3  | [v1, v2]      | two distinct but intersecting vectors         |
     |  4  | [p1, p2, p3]  | three (or more) non-collinear coplanar points |
 
-    The functions is_plane() and plane_pnorm2normal() are available for
+    The functions is_plane() and plane_to_normal() are available for
     type identification and convertion.
 
     \b Example

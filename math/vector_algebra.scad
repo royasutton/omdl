@@ -619,7 +619,7 @@ function are_coplanar_lll
 
     See \ref dt_pnorm for argument specification and conventions.
 *******************************************************************************/
-function plane_pnorm2normal
+function plane_to_normal
 (
   pn,
   cw = true
@@ -883,7 +883,7 @@ BEGIN_SCOPE validate;
         false,                                              // t08
         true                                                // t09
       ],
-      ["plane_pnorm2normal",
+      ["plane_to_normal",
         2,                                                  // fac
         4,                                                  // crp
         skip,                                               // t01
@@ -974,7 +974,7 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("are_coplanar_lll",vid) test( "are_coplanar_lll", are_coplanar_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
 
     // set 5: plane and pnorm
-    for (vid=run_ids) run("plane_pnorm2normal",vid) test( "plane_pnorm2normal", plane_pnorm2normal([gv(vid,0),gv(vid,1)]), vid, true );
+    for (vid=run_ids) run("plane_to_normal",vid) test( "plane_to_normal", plane_to_normal([gv(vid,0),gv(vid,1)]), vid, true );
 
     // end-of-tests
   END_OPENSCAD;
