@@ -314,6 +314,28 @@ function line_move2origin
   : (len(l) == 2) ? (l[1]-l[0])
   : undef;
 
+//! Move a line or vector to another coordinate point.
+/***************************************************************************//**
+  \param    l <line> A line or vector.
+  \param    p <point> The new initial point.
+
+  \returns  <line> The line or vector moved to \p p.
+
+  \details
+
+    When \p p is not specified, the line or vector is moved to the
+    origin.
+
+    See \ref dt_line for argument specification and conventions.
+*******************************************************************************/
+function line_move
+(
+  l,
+  p
+) =
+  let (pd = is_defined(p) ? p : (line_get_dim(l) == 2) ? origin2d : origin3d)
+  [pd, pd + line_move2origin(l)];
+
 //! Compute the dot product of two lines or vectors.
 /***************************************************************************//**
   \param    l1 <line> A n-dimensional line or vector 1.
@@ -852,10 +874,12 @@ BEGIN_SCOPE validate;
     // set 3: line or vector
     log_notest( "line2d_new()" );
     log_notest( "line3d_new()" );
+    log_notest( "line_new()" );
     for (vid=run_ids) run("line_get_dim",vid) test( "line_get_dim", line_get_dim([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("line_get_tp",vid) test( "line_get_tp", line_get_tp([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("line_get_ip",vid) test( "line_get_ip", line_get_ip([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("line_move2origin",vid) test( "line_move2origin", line_move2origin([gv(vid,0),gv(vid,1)]), vid, true );
+    log_notest( "line_move()" );
     for (vid=run_ids) run("dot_ll",vid) test( "dot_ll", dot_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("cross_ll",vid) test( "cross_ll", cross_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("striple_lll",vid) test( "striple_lll", striple_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
