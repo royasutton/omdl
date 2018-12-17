@@ -641,17 +641,11 @@ function plane_to_normal
 (
   n,
   cw = true
-) = not_defined(len(n[0])) ?
-    (
-      (len(n) == 3) ? n : (len(n) == 2) ? [n[0], n[1], 0]: undef
-    )
-  : let
-    (
-      q = [for (i=n) (len(i) == 3) ? i : (len(i) == 2) ? [i[0], i[1], 0]: undef]
-    )
-    (len(n) == 1) ? q[0]
-  : (len(n) == 2) ? cross(q[0], q[1])
-  : cross(q[0]-q[1], q[2]-q[1]) * ((cw == true) ? 1 : -1);
+) = !is_plane(n) ? undef
+  : is_vector(n) ? dimension_2to3_v(line_to_vector(n))      // n is normal.
+  : let (q = [for (i=n) dimension_2to3_v(i)])               // make 3d
+    (len(n) == 2) ? cross(q[0], q[1])                       // vectors [v1, v2].
+  : cross(q[0]-q[1], q[2]-q[1]) * ((cw == true) ? 1 : -1);  // 3 points.
 
 //! @}
 //! @}
