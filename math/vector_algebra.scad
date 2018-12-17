@@ -608,7 +608,7 @@ function are_coplanar_lll
 
 //! Convert a planes' normal specification into a normal vector.
 /***************************************************************************//**
-  \param    pn <pnorm> A plane normal \ref dt_pnorm "specification".
+  \param    n <pnorm> A plane normal \ref dt_pnorm "specification".
 
   \param    cw <boolean> Point ordering. When the plane specified as
             non-collinear points, this indicates ordering.
@@ -621,18 +621,18 @@ function are_coplanar_lll
 *******************************************************************************/
 function plane_to_normal
 (
-  pn,
+  n,
   cw = true
-) = not_defined(len(pn[0])) ?
+) = not_defined(len(n[0])) ?
     (
-      (len(pn) == 3) ? pn : (len(pn) == 2) ? [pn[0], pn[1], 0]: undef
+      (len(n) == 3) ? n : (len(n) == 2) ? [n[0], n[1], 0]: undef
     )
   : let
     (
-      q = [for (i=pn) (len(i) == 3) ? i : (len(i) == 2) ? [i[0], i[1], 0]: undef]
+      q = [for (i=n) (len(i) == 3) ? i : (len(i) == 2) ? [i[0], i[1], 0]: undef]
     )
-    (len(pn) == 1) ? q[0]
-  : (len(pn) == 2) ? cross(q[0], q[1])
+    (len(n) == 1) ? q[0]
+  : (len(n) == 2) ? cross(q[0], q[1])
   : cross(q[0]-q[1], q[2]-q[1]) * ((cw == true) ? 1 : -1);
 
 //! @}
