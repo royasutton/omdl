@@ -193,25 +193,25 @@ function is_left_ppp
   p3
 ) = ((p2[0]-p1[0]) * (p3[1]-p1[1]) - (p3[0]-p1[0]) * (p2[1]-p1[1]));
 
-//----------------------------------------------------------------------------//
-// set 3: vector
-//----------------------------------------------------------------------------//
-
-//! Return 3d vector unchanged or add a zeroed third dimension to 2d vector.
+//! Return 3d point unchanged or add a zeroed third dimension to 2d point.
 /***************************************************************************//**
-  \param    v <vector-3d|vector-2d> A vector.
+  \param    p <point-3d|point-2d> A point.
 
-  \returns  <vector-3d> The 3d vector or the 2d vector converted to 3d
+  \returns  <point-3d> The 3d point or the 2d point converted to 3d
             with its third dimension assigned zero.
 
   \details
 
-    This function assumes any vector that is not 3d to be 2d.
+    This function assumes any point that is not 3d to be 2d.
 *******************************************************************************/
-function dimension_2to3_v
+function point_to_3d
 (
-  v
-) = (len(v) == 3) ? v : [v[0], v[1], 0];
+  p
+) = (len(p) == 3) ? p : [p[0], p[1], 0];
+
+//----------------------------------------------------------------------------//
+// set 3: vector
+//----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
 // set 4: line (or vector)
@@ -642,8 +642,8 @@ function plane_to_normal
   n,
   cw = true
 ) = !is_plane(n) ? undef
-  : is_vector(n) ? dimension_2to3_v(line_to_vector(n))      // n is normal.
-  : let (q = [for (i=n) dimension_2to3_v(i)])               // make 3d
+  : is_vector(n) ? point_to_3d(line_to_vector(n))           // n is normal.
+  : let (q = [for (i=n) point_to_3d(i)])                    // make 3d
     (len(n) == 2) ? cross(q[0], q[1])                       // vectors [v1, v2].
   : cross(q[0]-q[1], q[2]-q[1]) * ((cw == true) ? 1 : -1);  // 3 points.
 
@@ -739,7 +739,7 @@ BEGIN_SCOPE validate;
         1,                                                  // t08
         -3                                                  // t09
       ],
-      ["dimension_2to3_v",
+      ["point_to_3d",
         1,                                                  // fac
         4,                                                  // crp
         [undef,undef,0],                                    // t01
@@ -964,9 +964,9 @@ BEGIN_SCOPE validate;
     // set 2: point
     for (vid=run_ids) run("distance_pp",vid) test( "distance_pp", distance_pp(gv(vid,0),gv(vid,1)), vid, false );
     for (vid=run_ids) run("is_left_ppp",vid) test( "is_left_ppp", is_left_ppp(gv(vid,0),gv(vid,1),gv(vid,2)), vid, false );
+    for (vid=run_ids) run("point_to_3d",vid) test( "point_to_3d", point_to_3d(gv(vid,0)), vid, false );
 
     // set 3: vector
-    for (vid=run_ids) run("dimension_2to3_v",vid) test( "dimension_2to3_v", dimension_2to3_v(gv(vid,0)), vid, false );
 
     // set 4: line (or vector)
     log_notest( "line2d_new()" );

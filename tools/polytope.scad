@@ -263,8 +263,8 @@ module polytope_frame
   {
     for (i = get_index(el, ei))
     {
-      p1 = dimension_2to3_v(c[first(el[i])]);   // 3d points required for
-      p2 = dimension_2to3_v(c[second(el[i])]);  // polygons.
+      p1 = point_to_3d(c[first(el[i])]);        // 3d points required for
+      p2 = point_to_3d(c[second(el[i])]);       // polygons.
 
       translate((p1+p2)/2)
       orient_ll(rl=[p1, p2])
