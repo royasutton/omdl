@@ -14,7 +14,7 @@ local_library     :=  module \
                       vector_algebra \
                       \
                       bitwise \
-                      polygon_shapes \
+                      polygon_primitives \
                       polytope \
                       triangle \
                       utility

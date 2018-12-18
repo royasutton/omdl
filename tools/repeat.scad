@@ -35,7 +35,7 @@
 *******************************************************************************/
 
 include <../math/vector_algebra.scad>;
-include <../math/polygon_shapes.scad>;
+include <../math/polygon_primitives.scad>;
 
 //----------------------------------------------------------------------------//
 // dim macro, dim table, and group.

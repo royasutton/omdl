@@ -1,4 +1,4 @@
-//! Mathematical functions of polygon shapes.
+//! Mathematical functions of polygon primitive shapes.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Polygon Shapes)
-    \amu_define group_brief (Mathematical functions of polygon shapes.)
+    \amu_define group_name  (Polygon Primitives)
+    \amu_define group_brief (Mathematical functions of polygon primitive shapes.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/

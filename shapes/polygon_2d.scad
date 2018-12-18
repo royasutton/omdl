@@ -35,7 +35,7 @@
 *******************************************************************************/
 
 include <../math/triangle.scad>;
-include <../math/polygon_shapes.scad>;
+include <../math/polygon_primitives.scad>;
 include <../tools/repeat.scad>;
 
 //----------------------------------------------------------------------------//
