@@ -1259,8 +1259,13 @@ function polygon2d_linear_extrude_pf
 
   \details
 
-    Assumes polygon is defined in 2D space on the x-y plane. Each
-    vertex may be individually rounded using one of the following
+    Assumes polygon is defined in 2D space on the x-y plane. There
+    should be no repeating adjacent vertices along the polygon path
+    (ie: no adjacent vertex with identical coordinates). Any vertex
+    determined to be collinear with its adjacent previous and next
+    vertex is returned unmodified.
+
+    Each vertex may be individually rounded using one of the following
     modes:
 
      mode | name                |        description
