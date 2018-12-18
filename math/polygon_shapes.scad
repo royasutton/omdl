@@ -116,7 +116,7 @@ function polygon2d_regular_p
 
   \details
 
-    The arc coordinates will be at radius \p r centered about \p c
+    The arc coordinates will have radius \p r centered about \p c
     contained within the heads of vectors \p v1 and \p v2. When vectors
     \p v1 and \p v2 are parallel, the arc will be a complete circle.
     When \p fn is not specified, the arc facets are controlled by the
@@ -159,6 +159,81 @@ function polygon2d_arc_p
     for (a = aas)
       c + r * [cos(a), sin(a)]
   ];
+
+//! Compute the coordinates for an edge round with radius \p r between two vectors in 2D.
+/***************************************************************************//**
+  \param    m <integer> The round mode.
+  \param    r <decimal> The round radius.
+  \param    c <point-2d> The round center coordinate [x, y].
+  \param    v1 <line-2d|decimal> The round start angle.
+            A 2d line, vector, or decimal angle 1.
+  \param    v2 <line-2d|decimal> The round end angle.
+            A 2d line,  vector, or decimal angle 2.
+  \param    fn <integer> The number of fragments.
+  \param    cw <boolean> The coordinate point ordering.
+
+  \returns  <coords-2d> A list of arc coordinates points [[x, y], ...].
+
+  \details
+
+    Normally, angle 1 should be less than angle 2. The edge coordinates
+    will start at angle 1, end at angle 2, and will have radius \p r
+    along a rounded transition from edge 1 to 2. When \p cw = \b true
+    the corrdinates will start at edge 1 and increase toward edge 2.
+    When \p cw = \b false this ordering is reversed.
+
+    The round mode may be one of the following:
+
+     mode | name        | description
+     :---:|:-----------:|:--------------------------------
+       1  | fillet      | fillet from one edge to the next
+       2  | round       | round from one edge to the next
+       3  | chamfer     | bevel from one edge to the next
+
+    When \p fn is not specified, the arc facets are controlled by the
+    special variables \p $fa, \p $fs, and \p $fn.
+*******************************************************************************/
+function polygon2d_round_p
+(
+  m  = 1,
+  r  = 1,
+  c  = origin2d,
+  v1 = x_axis2d_uv,
+  v2 = y_axis2d_uv,
+  fn,
+  cw = true
+) =
+  let
+  (
+    // create vectors if numerical angles have been specified.
+    va1 = is_number(v1) ? [cos(v1), sin(v1)] : v1,
+    va2 = is_number(v2) ? [cos(v2), sin(v2)] : v2,
+
+    // triangle coordinates for edge corner in cw order
+    etc = [c + r*unit_l(va1), c, c + r*unit_l(va2)],
+
+    // tangent circle radius
+    tcr = (m == 1) ?triangle2d_exradius(etc, 2) : 0,
+
+    // tangent circle center coordinate
+    tcc = (m == 1) ?(c-r/(r-tcr) * triangle2d_excenter(etc, 2)) * (tcr-r)/tcr : c,
+
+    // distance from vertex to inflection points
+    vim = (m == 1) ? sqrt( pow(distance_pp(c, tcc),2) - pow(r,2) ) : r,
+
+    // inflection coordinates
+    tc1 = c + vim*unit_l(va1),
+    tc2 = c + vim*unit_l(va2),
+
+    // vertex rounding coordinate point list
+    vpl = (m == 1) ? polygon2d_arc_p(r=r, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=true)
+        : (m == 2) ? polygon2d_arc_p(r=r, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=false)
+        : empty_lst,
+
+    // cw ordering
+    pp = concat([tc1], vpl, [tc2])
+  )
+  (cw == true) ? pp : reverse(pp);
 
 //! Compute the coordinates for a rounded trapezoid in 2D space.
 /***************************************************************************//**
