@@ -55,6 +55,7 @@ include <../tools/repeat.scad>;
   \copydetails polygon2d_round_p()
 
   The coordinate points are rendered using polygon().
+  Parameter \p cw = \b true preset.
 
   \details
 
@@ -69,10 +70,11 @@ module polygon_round
   c  = origin2d,
   v1 = x_axis2d_uv,
   v2 = y_axis2d_uv,
-  fn,
-  cw = true
+  fn
 )
 {
+  cw = true;
+
   pp = concat
   ( [c],
     polygon2d_round_p(m=m, r=r, c=c, v1=v1, v2=v2, fn=fn, cw=cw)
@@ -87,6 +89,7 @@ module polygon_round
   \copydetails polygon2d_trapezoid_p()
 
   The coordinate points are rendered using polygon().
+  Parameter \p cw = \b true preset.
 
   \param    centroid <boolean> Center polygon centroid at origin.
 
@@ -104,10 +107,11 @@ module polygon_trapezoid
   vr = 0,
   vrm = 1,
   vfn,
-  cw = true,
   centroid = false
 )
 {
+  cw = true;
+
   c = polygon2d_trapezoid_p(b=b, h=h, l=l, a=a, vr=vr, vrm=vrm, vfn=vfn, cw=cw);
 
   translate ( (centroid==true) ? -polygon2d_centroid(c) : origin2d )
