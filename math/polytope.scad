@@ -1331,14 +1331,17 @@ function polygon2d_vertices_round3_p
         vc  = second(av),                 // vertex coordinate v[n]
         vn  = third(av),                  // vertex coordinate v[n+1]
 
+        il  = is_left_ppp(vp, vn, vc),    // identify position of vc
+
         rr  = edefined_or(vr, i, crr),    // vertex rounding radius
         rm  = (rr == 0) ? 0               // vertex rounding mode
+            : (il == 0) ? 0               // vp,vc,vn collinear, set rm=0
             : edefined_or(vrm, i, crm),
         fn  = edefined_or(vfn, i, cfn),   // vertex rounding arc fragments
 
         // reverse arc sweep on interior corners
-        // not relevant for rm == [0,5,9,10]
-        ras = (is_left_ppp(vp, vn, vc) < 0),
+        // not relevant for rm={0|5|9|10}
+        ras = (il < 0),
 
         // tangent circle radius
         tcr = (rm == 0) ? 0
