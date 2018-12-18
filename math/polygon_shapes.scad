@@ -126,8 +126,8 @@ function polygon2d_arc_p
 (
   r  = 1,
   c  = origin2d,
-  v1 = x_axis2d_ul,
-  v2 = x_axis2d_ul,
+  v1 = x_axis2d_uv,
+  v2 = x_axis2d_uv,
   fn,
   cw = true
 ) =
