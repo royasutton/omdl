@@ -46,7 +46,7 @@ include <polytope.scad>;
 
 //----------------------------------------------------------------------------//
 
-//! Compute the coordinates for an n-sided regular polygon in 2D.
+//! Compute coordinates for an n-sided regular polygon in 2D.
 /***************************************************************************//**
   \param    n <integer> The number of sides.
   \param    r <decimal> The circumradius of the circumcircle.
@@ -99,7 +99,7 @@ function polygon2d_regular_p
       not_defined(vr) ? v : v - vr/cos(180/n) * unit_l(v)
   ];
 
-//! Compute the coordinates of an arc with radius \p r between two vectors in 2D.
+//! Compute coordinates of an arc with constant radius between two vectors in 2D.
 /***************************************************************************//**
   \param    r <decimal> The arc radius.
   \param    c <point-2d> The arc center coordinate [x, y].
@@ -160,7 +160,7 @@ function polygon2d_arc_p
       c + r * [cos(a), sin(a)]
   ];
 
-//! Compute the coordinates for an edge round with radius \p r between two vectors in 2D.
+//! Compute coordinates for an edge round with constant radius between two vectors in 2D.
 /***************************************************************************//**
   \param    m <integer> The round mode.
   \param    r <decimal> The round radius.
