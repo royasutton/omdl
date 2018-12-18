@@ -50,6 +50,38 @@ include <../tools/repeat.scad>;
 
 //----------------------------------------------------------------------------//
 
+//! An edge round with constant radius between two vectors.
+/***************************************************************************//**
+  \copydetails polygon2d_round_p()
+
+  The coordinate points are rendered using polygon().
+
+  \details
+
+    \b Example
+    \amu_eval ( function=polygon_round ${example_dim} )
+*******************************************************************************/
+
+module polygon_round
+(
+  m  = 1,
+  r  = 1,
+  c  = origin2d,
+  v1 = x_axis2d_uv,
+  v2 = y_axis2d_uv,
+  fn,
+  cw = true
+)
+{
+  pp = concat
+  ( [c],
+    polygon2d_round_p(m=m, r=r, c=c, v1=v1, v2=v2, fn=fn, cw=cw)
+  );
+
+  polygon( pp );
+}
+
+
 //! A trapezoid with vertex rounding.
 /***************************************************************************//**
   \copydetails polygon2d_trapezoid_p()
@@ -94,10 +126,12 @@ BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
 
-    shape = "polygon_trapezoid";
+    shape = "polygon_round";
     $fn = 36;
 
-    if (shape == "polygon_trapezoid")
+    if (shape == "polygon_round")
+      polygon_round( r=20, v1=[1,1], v2=135 );
+    else if (shape == "polygon_trapezoid")
       polygon_trapezoid( b=[20,20], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
   END_OPENSCAD;
 
@@ -107,6 +141,7 @@ BEGIN_SCOPE dim;
     views     name "views" views "top";
     defines   name "shapes" define "shape"
               strings "
+                polygon_round
                 polygon_trapezoid
               ";
     variables add_opts_combine "views shapes";
@@ -124,6 +159,7 @@ BEGIN_SCOPE manifest;
 
     grid_repeat( g=5, i=60, center=true )
     {
+      polygon_round( r=20, v1=[1,1], v2=135 );
       polygon_trapezoid( b=[20,20], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
     }
   END_OPENSCAD;
