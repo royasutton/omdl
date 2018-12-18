@@ -1263,19 +1263,19 @@ function polygon2d_linear_extrude_pf
     vertex may be individually rounded using one of the following
     modes:
 
-     mode | name        | description
-     :---:|:-----------:|:------------------------------------------
-       0  | none        | no rounding
-       1  | i-round     | round from previos into next edge
-       2  | hollow      | inverse round from previos into next edge
-       3  | en-fillet   | exterior fillet next edge
-       4  | ep-fillet   | exterior fillet previous edge
-       5  | i-chamfer   | bevel from previos into next edge
-       6  | circle      | exterior round previos to next edge
-       7  | en-round    | exterior round next edge
-       8  | ep-round    | exterior round previous edge
-       9  | en-chamfer  | exterior bevel next edge
-      10  | ep-chamfer  | exterior bevel previous edge
+     mode | name                |        description
+     :---:|:-------------------:|:--------------------------------------
+       0  | none                | return vertex unchanged
+       1  | round               | previous to next edge round
+       2  | e-hollow / i-circle | previous to next edge inverse round
+       3  | n-fillet            | next edge pass return fillet
+       4  | p-fillet            | previous edge pass return fillet
+       5  | chamfer             | previous to next edge bevel
+       6  | e-circle / i-hollow | previous to next edge inverse round
+       7  | n-round             | next edge pass return round
+       8  | p-round             | previous edge pass return round
+       9  | n-chamfer           | next edge pass return bevel
+      10  | p-chamfer           | previous edge pass return bevel
 
     Vertex arc fragments can be specified using \p vfn. When any \p
     vnfn is \b undef, the special variables \p $fa, \p $fs, and \p $fn
@@ -1325,12 +1325,20 @@ function polygon2d_vertices_round3_p
       for ( i = [0 : len(avl)-1] )
       let
       (
-        av  = avl[i],                     // vertices [v[n-1], v[n], v[n+1]]
+        av  = avl[i],                     // vertices [vp, vc, vn]
+
+        vp  = first(av),                  // vertex coordinate v[n-1]
         vc  = second(av),                 // vertex coordinate v[n]
+        vn  = third(av),                  // vertex coordinate v[n+1]
+
         rr  = edefined_or(vr, i, crr),    // vertex rounding radius
         rm  = (rr == 0) ? 0               // vertex rounding mode
             : edefined_or(vrm, i, crm),
         fn  = edefined_or(vfn, i, cfn),   // vertex rounding arc fragments
+
+        // reverse arc sweep on interior corners
+        // not relevant for rm == [0,5,9,10]
+        ras = (is_left_ppp(vp, vn, vc) < 0),
 
         // tangent circle radius
         tcr = (rm == 0) ? 0
@@ -1361,22 +1369,22 @@ function polygon2d_vertices_round3_p
         // inflection coordinates
         tc1 = (rm == 0 || rm > 10) ? origin2d
             : (rm == 3 || rm == 7 || rm == 9) ?
-              vc + vim * unit_l([first(av), second(av)])
-            : vc + vim * unit_l([second(av), first(av)]),
+              vc + vim * unit_l([vp, vc])
+            : vc + vim * unit_l([vc, vp]),
 
         tc2 = (rm == 0 || rm > 10) ? origin2d
             : (rm == 4 || rm == 8 || rm == 10) ?
-              vc + vim * unit_l([third(av), second(av)])
-            : vc + vim * unit_l([second(av), third(av)]),
+              vc + vim * unit_l([vn, vc])
+            : vc + vim * unit_l([vc, vn]),
 
         // vertex rounding coordinate point list
         vpl = (rm == 0 || rm > 10) ? [vc]
             : (rm == 1) ?
-              concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=true), [tc2])
+              concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=ras?false:true), [tc2])
             : (rm == 2 || rm == 3 || rm == 4) ?
-              concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=false), [tc2])
+              concat([tc1], polygon2d_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=ras?true:false), [tc2])
             : (rm == 6 || rm == 7 || rm == 8) ?
-              concat([tc1], polygon2d_arc_p(r=rr, c=vc, v1=[vc, tc1], v2=[vc, tc2], fn=fn, cw=true), [tc2])
+              concat([tc1], polygon2d_arc_p(r=rr, c=vc, v1=[vc, tc1], v2=[vc, tc2], fn=fn, cw=ras?false:true), [tc2])
             : [tc1, tc2]
       )
       vpl
