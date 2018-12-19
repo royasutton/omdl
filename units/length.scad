@@ -43,7 +43,7 @@
   \details
 
     These functions allow for lengths to be specified with units.
-    Lengths specified with units are independent of (\ref base_unit_length).
+    Lengths specified with units are independent of (\ref length_unit_base).
     There are also unit conversion functions for converting from one unit
     to another.
 
@@ -71,10 +71,10 @@
       \skip include
       \until to="mm");
 
-    \b Result (base_unit_length = \b mm):  \include \amu_scope(index=1)_mm.log
-    \b Result (base_unit_length = \b cm):  \include \amu_scope(index=1)_cm.log
-    \b Result (base_unit_length = \b mil): \include \amu_scope(index=1)_mil.log
-    \b Result (base_unit_length = \b in):  \include \amu_scope(index=1)_in.log
+    \b Result (length_unit_base = \b mm):  \include \amu_scope(index=1)_mm.log
+    \b Result (length_unit_base = \b cm):  \include \amu_scope(index=1)_cm.log
+    \b Result (length_unit_base = \b mil): \include \amu_scope(index=1)_mil.log
+    \b Result (length_unit_base = \b in):  \include \amu_scope(index=1)_in.log
 
     \b Example (equivalent lengths)
 
@@ -85,7 +85,7 @@
 //----------------------------------------------------------------------------//
 
 //! <string> The base unit for length measurements.
-base_unit_length = "mm";
+length_unit_base = "mm";
 
 //! Return the long name for a length unit identifier.
 /***************************************************************************//**
@@ -96,9 +96,9 @@ base_unit_length = "mm";
 
   \private
 *******************************************************************************/
-function unit_length_name_id_lookup
+function length_unit_name_1d
 (
-  u = base_unit_length
+  u = length_unit_base
 ) = u == "pm"   ? "picometer"
   : u == "nm"   ? "nanometer"
   : u == "um"   ? "micrometer"
@@ -127,43 +127,43 @@ function unit_length_name_id_lookup
 
   \private
 *******************************************************************************/
-function unit_length_name_symbol
+function length_unit_name_symbol
 (
-  u = base_unit_length,
+  u = length_unit_base,
   d = 1
-) = d == 1 ?      unit_length_name_id_lookup( u )
-  : d == 2 ? str( unit_length_name_id_lookup( u ), "^2" )
-  : d == 3 ? str( unit_length_name_id_lookup( u ), "^3" )
+) = d == 1 ?      length_unit_name_1d( u )
+  : d == 2 ? str( length_unit_name_1d( u ), "^2" )
+  : d == 3 ? str( length_unit_name_1d( u ), "^3" )
   : undef;
 
 //! Return the long name for a length unit identifier with dimension.
 /***************************************************************************//**
-  \copydetails unit_length_name_symbol()
+  \copydetails length_unit_name_symbol()
 
   \private
 *******************************************************************************/
-function unit_length_name_word
+function length_unit_name_word
 (
-  u = base_unit_length,
+  u = length_unit_base,
   d = 1
-) = d == 1 ?                 unit_length_name_id_lookup( u )
-  : d == 2 ? str( "square ", unit_length_name_id_lookup( u ) )
-  : d == 3 ? str( "cubic ",  unit_length_name_id_lookup( u ) )
+) = d == 1 ?                 length_unit_name_1d( u )
+  : d == 2 ? str( "square ", length_unit_name_1d( u ) )
+  : d == 3 ? str( "cubic ",  length_unit_name_1d( u ) )
   : undef;
 
 //! Return the name for a length unit identifier with dimension.
 /***************************************************************************//**
   \param    w <boolean> \b true for word and \b false for symbol format.
 
-  \copydetails unit_length_name_symbol()
+  \copydetails length_unit_name_symbol()
 *******************************************************************************/
-function unit_length_name
+function length_unit_name
 (
-  u = base_unit_length,
+  u = length_unit_base,
   d = 1,
   w = false
-) = w == true ? unit_length_name_word( u, d )
-  :             unit_length_name_symbol( u, d );
+) = w == true ? length_unit_name_word( u, d )
+  :             length_unit_name_symbol( u, d );
 
 //! Convert a value from millimeters to other units.
 /***************************************************************************//**
@@ -175,7 +175,7 @@ function unit_length_name
 
   \private
 *******************************************************************************/
-function unit_length_mm_to
+function length_unit_mm2
 (
   v,
   to
@@ -205,11 +205,11 @@ function unit_length_mm_to
 
   \private
 *******************************************************************************/
-function unit_length_to_mm
+function length_unit_2mm
 (
   v,
   from
-) = v / unit_length_mm_to( 1, from );
+) = v / length_unit_mm2( 1, from );
 
 //! Convert a value from from one units to another.
 /***************************************************************************//**
@@ -222,12 +222,12 @@ function unit_length_to_mm
 
   \private
 *******************************************************************************/
-function unit_length_convert
+function length
 (
   v,
-  from = base_unit_length,
-  to   = base_unit_length
-) = unit_length_mm_to( unit_length_to_mm( v, from ), to );
+  from = length_unit_base,
+  to   = length_unit_base
+) = length_unit_mm2( length_unit_2mm( v, from ), to );
 
 //! Convert a value from from one units to another with dimensions.
 /***************************************************************************//**
@@ -240,15 +240,15 @@ function unit_length_convert
             Returns \b undef for identifiers or dimensions that are
             not defined.
 *******************************************************************************/
-function convert_length
+function length_d
 (
   v,
-  from = base_unit_length,
-  to   = base_unit_length,
+  from = length_unit_base,
+  to   = length_unit_base,
   d    = 1
-) = d == 1 ?    ( unit_length_convert(v, from, to)    )
-  : d == 2 ? pow( unit_length_convert(v, from, to), 2 )
-  : d == 3 ? pow( unit_length_convert(v, from, to), 3 )
+) = d == 1 ?    ( length(v, from, to)    )
+  : d == 2 ? pow( length(v, from, to), 2 )
+  : d == 3 ? pow( length(v, from, to), 3 )
   : undef;
 
 //! @}
@@ -263,20 +263,20 @@ BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <units/length.scad>;
 
-    base_unit_length = "mm";
+    length_unit_base = "mm";
 
     // get base unit name
-    un = unit_length_name();
+    un = length_unit_name();
 
     // absolute length measurements in base unit.
-    c1 = convert_length(1/8, "in");
-    c2 = convert_length(3.175, "mm");
-    c3 = convert_length(25, "mil");
-    c4 = convert_length(1, "ft", d=3);
+    c1 = length(1/8, "in");
+    c2 = length(3.175, "mm");
+    c3 = length(25, "mil");
+    c4 = length(1, "ft", d=3);
 
     // convert between units.
-    c5 = convert_length(10, from="mil", to="in");
-    c6 = convert_length(10, from="ft", to="mm");
+    c5 = length(10, from="mil", to="in");
+    c6 = length(10, from="ft", to="mm");
 
     echo( un=un );
     echo( c1=c1 );
@@ -290,7 +290,7 @@ BEGIN_SCOPE example;
   BEGIN_MFSCRIPT;
     include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
 
-    defines   name "units" define "base_unit_length" strings "mm cm mil in";
+    defines   name "units" define "length_unit_base" strings "mm cm mil in";
     variables add_opts_combine "units";
 
     include --path "${INCLUDE_PATH}" script_std.mfs;
@@ -315,8 +315,8 @@ BEGIN_SCOPE dim;
         translate([+mx/2,0,0]) square( [tx, ty], true );
       }
 
-      l1l = convert_length( uv, "in", un );
-      l1u = unit_length_name( un );
+      l1l = length( uv, "in", un );
+      l1u = length_unit_name( un );
       l1s = str( l1l, " ", l1u );
 
       translate( [0, ts, 0] )

@@ -45,7 +45,7 @@ include <../constants.scad>;
   \details
 
     These functions allow for angles to be specified with units.
-    Angles specified with units are independent of (\ref base_unit_angle).
+    Angles specified with units are independent of (\ref angle_unit_base).
     There are also unit conversion functions for converting from one unit
     to another.
 
@@ -63,15 +63,15 @@ include <../constants.scad>;
       \skip include
       \until to="dms");
 
-    \b Result (base_angle_length = \b r):   \include \amu_scope(index=1)_r.log
-    \b Result (base_angle_length = \b d):   \include \amu_scope(index=1)_d.log
-    \b Result (base_angle_length = \b dms): \include \amu_scope(index=1)_dms.log
+    \b Result (angle_unit_base = \b r):   \include \amu_scope(index=1)_r.log
+    \b Result (angle_unit_base = \b d):   \include \amu_scope(index=1)_d.log
+    \b Result (angle_unit_base = \b dms): \include \amu_scope(index=1)_dms.log
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
 
 //! <string> The base units for angle measurements.
-base_unit_angle = "d";
+angle_unit_base = "d";
 
 //! Return the name of an angle unit identifier.
 /***************************************************************************//**
@@ -80,9 +80,9 @@ base_unit_angle = "d";
   \returns  <string> The units name for the given angle unit identifier.
             Returns \b undef for identifiers that are not defined.
 *******************************************************************************/
-function unit_angle_name
+function angle_unit_name
 (
-  u = base_unit_angle
+  u = angle_unit_base
 ) = u == "r"   ? "radian"
   : u == "d"   ? "degree"
   : u == "dms" ? "degree, minute, second"
@@ -98,7 +98,7 @@ function unit_angle_name
 
   \private
 *******************************************************************************/
-function unit_angle_d_to
+function angle_unit_d2
 (
   a,
   to
@@ -120,7 +120,7 @@ function unit_angle_d_to
             Returns \b undef for identifiers that are not defined.
   \private
 *******************************************************************************/
-function unit_angle_to_d
+function angle_unit_2d
 (
   a,
   from
@@ -138,12 +138,12 @@ function unit_angle_to_d
   \returns  <decimal|decimal-list-3> The conversion result.
             Returns \b undef for identifiers that are not defined.
 *******************************************************************************/
-function convert_angle
+function angle
 (
   a,
-  from = base_unit_angle,
-  to   = base_unit_angle
-) = unit_angle_d_to( unit_angle_to_d( a, from ), to );
+  from = angle_unit_base,
+  to   = angle_unit_base
+) = angle_unit_d2( angle_unit_2d( a, from ), to );
 
 //! @}
 //! @}
@@ -157,20 +157,20 @@ BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <units/angle.scad>;
 
-    base_unit_angle = "d";
+    angle_unit_base = "d";
 
     // get base unit name
-    un = unit_angle_name();
+    un = angle_unit_name();
 
     // absolute angle measurements in base unit.
-    c1 = convert_angle(pi/6, "r");
-    c2 = convert_angle(pi/4, "r");
-    c3 = convert_angle(180, "d");
-    c4 = convert_angle([30, 15, 50], "dms");
+    c1 = angle(pi/6, "r");
+    c2 = angle(pi/4, "r");
+    c3 = angle(180, "d");
+    c4 = angle([30, 15, 50], "dms");
 
     // convert between units.
-    c5 = convert_angle([30, 15, 50], from="dms", to="r");
-    c6 = convert_angle(0.528205, from="r", to="dms");
+    c5 = angle([30, 15, 50], from="dms", to="r");
+    c6 = angle(0.528205, from="r", to="dms");
 
     echo( un=un );
     echo( c1=c1 );
@@ -184,7 +184,7 @@ BEGIN_SCOPE example;
   BEGIN_MFSCRIPT;
     include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
 
-    defines   name "units" define "base_unit_angle" strings "r d dms";
+    defines   name "units" define "angle_unit_base" strings "r d dms";
     variables add_opts_combine "units";
 
     include --path "${INCLUDE_PATH}" script_std.mfs;

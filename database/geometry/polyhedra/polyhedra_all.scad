@@ -105,7 +105,7 @@
     pv = get_table_v(tr, tc, id, "c");
     pf = get_table_v(tr, tc, id, "f");
 
-    sv = coordinates_csc(pv, 100);
+    sv = coordinate_scale3d_csc(pv, 100);
 
     polytope_number(sv, pf, to=[0,0,5]);
     polytope_frame(sv, pf) {circle(r=2); color("grey") sphere(r=4);}
@@ -21531,11 +21531,11 @@ BEGIN_SCOPE autotest;
       // convert stored spherical and compare with cartesian coordinates.
       for( i = [0 : len(c)-1] )
       {
-        cc = convert_coordinate(s[i], from="s");
+        cc = coordinate(s[i], from="s");
 
         if ( !n_almost_equal(c[i], cc) )
         {
-          cs = convert_coordinate(c[i], to="s");
+          cs = coordinate(c[i], to="s");
 
           n = get_table_v(tr, tc, id, "n");
           o = get_table_v(tr, tc, id, "o");

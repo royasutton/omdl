@@ -465,11 +465,11 @@ BEGIN_SCOPE example;
     ];
 
     table_rows =
-    [ //     id,  ht,     td,     tl,   hd,    hl,    nd,                  nl
-      ["m3r08r", "r",  3.000,   8.00, 5.50, 3.000,  5.50, convert_length(1.00, "in")],
-      ["m3r14r", "r",  3.000,  14.00, 5.50, 3.000,  5.50, convert_length(1.25, "in")],
-      ["m3r16r", "r",  3.000,  16.00, 5.50, 3.000,  5.50, convert_length(1.50, "in")],
-      ["m3r20r", "r",  3.000,  20.00, 5.50, 3.000,  5.50, convert_length(1.75, "in")]
+    [ //     id,  ht,     td,     tl,   hd,    hl,    nd,          nl
+      ["m3r08r", "r",  3.000,   8.00, 5.50, 3.000,  5.50, length(1.00, "in")],
+      ["m3r14r", "r",  3.000,  14.00, 5.50, 3.000,  5.50, length(1.25, "in")],
+      ["m3r16r", "r",  3.000,  16.00, 5.50, 3.000,  5.50, length(1.50, "in")],
+      ["m3r20r", "r",  3.000,  20.00, 5.50, 3.000,  5.50, length(1.75, "in")]
     ];
 
     table_check( table_rows, table_cols, true );

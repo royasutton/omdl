@@ -57,10 +57,10 @@ include <length.scad>;
       \skip include
       \until f));
 
-    \b Result (base_unit_length = \b mm):  \include \amu_scope(index=1)_mm.log
-    \b Result (base_unit_length = \b cm):  \include \amu_scope(index=1)_cm.log
-    \b Result (base_unit_length = \b mil): \include \amu_scope(index=1)_mil.log
-    \b Result (base_unit_length = \b in):  \include \amu_scope(index=1)_in.log
+    \b Result (length_unit_base = \b mm):  \include \amu_scope(index=1)_mm.log
+    \b Result (length_unit_base = \b cm):  \include \amu_scope(index=1)_cm.log
+    \b Result (length_unit_base = \b mil): \include \amu_scope(index=1)_mil.log
+    \b Result (length_unit_base = \b in):  \include \amu_scope(index=1)_in.log
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -129,7 +129,7 @@ function resolution_fn
   : $resolution_mode == "fpu"
     ? ceil(max(3, r*tau * $resolution_value))
   : $resolution_mode == "fpi"
-    ? ceil(max(3, unit_length_convert(r, to="in")*tau * $resolution_value))
+    ? ceil(max(3, length(r, to="in")*tau * $resolution_value))
 
   // common resolutions per unit (base_units)
   : $resolution_mode == "fast"
@@ -143,31 +143,31 @@ function resolution_fn
 
   // common resolutions in microns
   : $resolution_mode == "50um"
-    ? ceil(max(3, r*tau / unit_length_convert(  50, "um")))
+    ? ceil(max(3, r*tau / length(  50, "um")))
   : $resolution_mode == "100um"
-    ? ceil(max(3, r*tau / unit_length_convert( 100, "um")))
+    ? ceil(max(3, r*tau / length( 100, "um")))
   : $resolution_mode == "200um"
-    ? ceil(max(3, r*tau / unit_length_convert( 200, "um")))
+    ? ceil(max(3, r*tau / length( 200, "um")))
   : $resolution_mode == "300um"
-    ? ceil(max(3, r*tau / unit_length_convert( 300, "um")))
+    ? ceil(max(3, r*tau / length( 300, "um")))
   : $resolution_mode == "400um"
-    ? ceil(max(3, r*tau / unit_length_convert( 400, "um")))
+    ? ceil(max(3, r*tau / length( 400, "um")))
   : $resolution_mode == "500um"
-    ? ceil(max(3, r*tau / unit_length_convert( 500, "um")))
+    ? ceil(max(3, r*tau / length( 500, "um")))
 
   // common resolutions in thousands
   : $resolution_mode == "50mil"
-    ? ceil(max(3, r*tau / unit_length_convert(  50, "mil")))
+    ? ceil(max(3, r*tau / length(  50, "mil")))
   : $resolution_mode == "100mil"
-    ? ceil(max(3, r*tau / unit_length_convert( 100, "mil")))
+    ? ceil(max(3, r*tau / length( 100, "mil")))
   : $resolution_mode == "200mil"
-    ? ceil(max(3, r*tau / unit_length_convert( 200, "mil")))
+    ? ceil(max(3, r*tau / length( 200, "mil")))
   : $resolution_mode == "300mil"
-    ? ceil(max(3, r*tau / unit_length_convert( 300, "mil")))
+    ? ceil(max(3, r*tau / length( 300, "mil")))
   : $resolution_mode == "400mil"
-    ? ceil(max(3, r*tau / unit_length_convert( 400, "mil")))
+    ? ceil(max(3, r*tau / length( 400, "mil")))
   : $resolution_mode == "500mil"
-    ? ceil(max(3, r*tau / unit_length_convert( 500, "mil")))
+    ? ceil(max(3, r*tau / length( 500, "mil")))
 
   // otherwise
   : undef;
@@ -227,7 +227,7 @@ function resolution_fs ( )
   : $resolution_mode == "fpu"
     ? max(0.01, 1 / $resolution_value)
   : $resolution_mode == "fpi"
-    ? max(0.01, unit_length_convert(1, "in") / $resolution_value)
+    ? max(0.01, length(1, "in") / $resolution_value)
 
   // common resolutions per unit (base_units)
   : $resolution_mode == "fast"
@@ -241,31 +241,31 @@ function resolution_fs ( )
 
   // common resolutions in microns
   : $resolution_mode == "50um"
-    ? unit_length_convert(  50, "um")
+    ? length(  50, "um")
   : $resolution_mode == "100um"
-    ? unit_length_convert( 100, "um")
+    ? length( 100, "um")
   : $resolution_mode == "200um"
-    ? unit_length_convert( 200, "um")
+    ? length( 200, "um")
   : $resolution_mode == "300um"
-    ? unit_length_convert( 300, "um")
+    ? length( 300, "um")
   : $resolution_mode == "400um"
-    ? unit_length_convert( 400, "um")
+    ? length( 400, "um")
   : $resolution_mode == "500um"
-    ? unit_length_convert( 500, "um")
+    ? length( 500, "um")
 
   // common resolutions in thousands
   : $resolution_mode == "50mil"
-    ? unit_length_convert(  50, "mil")
+    ? length(  50, "mil")
   : $resolution_mode == "100mil"
-    ? unit_length_convert( 100, "mil")
+    ? length( 100, "mil")
   : $resolution_mode == "200mil"
-    ? unit_length_convert( 200, "mil")
+    ? length( 200, "mil")
   : $resolution_mode == "300mil"
-    ? unit_length_convert( 300, "mil")
+    ? length( 300, "mil")
   : $resolution_mode == "400mil"
-    ? unit_length_convert( 400, "mil")
+    ? length( 400, "mil")
   : $resolution_mode == "500mil"
-    ? unit_length_convert( 500, "mil")
+    ? length( 500, "mil")
 
   // otherwise
   : undef;
@@ -328,7 +328,7 @@ module resolution_info
     (
       "$resolution_mode = [", $resolution_mode,
       "], $resolution_value = ", $resolution_value,
-      ", base_unit_length = ", unit_length_name()
+      ", length_unit_base = ", length_unit_name()
     )
   );
 
@@ -348,7 +348,7 @@ module resolution_info
       str
       (
         "resolution reduction at radius > ",
-        resolution_reduced(), " ", unit_length_name()
+        resolution_reduced(), " ", length_unit_name()
       )
     );
 
@@ -357,7 +357,7 @@ module resolution_info
     (
       str
       (
-        "for radius = ", r, " ", unit_length_name()," facets limited to ",
+        "for radius = ", r, " ", length_unit_name()," facets limited to ",
         max(3, $fn), " by $fn=", $fn
       )
     );
@@ -366,7 +366,7 @@ module resolution_info
     (
       str
       (
-        "for radius = ", r, " ", unit_length_name()," facets limited to ",
+        "for radius = ", r, " ", length_unit_name()," facets limited to ",
         max(5, ceil(360.0/$fa)), " by $fa=", $fa
       )
     );
@@ -375,8 +375,8 @@ module resolution_info
     (
       str
       (
-        "for radius = ", r, " ", unit_length_name()," facets limited to ",
-        max(5, ceil(r*tau/$fs)), " by $fs=", $fs, " ", unit_length_name()
+        "for radius = ", r, " ", length_unit_name()," facets limited to ",
+        max(5, ceil(r*tau/$fs)), " by $fs=", $fs, " ", length_unit_name()
       )
     );
 }
@@ -429,14 +429,14 @@ BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <units/resolution.scad>;
 
-    base_unit_length = "in";
+    length_unit_base = "in";
 
     // set resolution to 25 fpi
     $resolution_mode  = "fpi";
     $resolution_value = 25;
 
     // use radius length of 1 inch
-    r = convert_length(1, "in");
+    r = length(1, "in");
 
     $fs=resolution_fs();
     $fa=resolution_fa( r );
@@ -444,13 +444,13 @@ BEGIN_SCOPE example;
     resolution_info( r );
 
     f = resolution_facets( r );
-    echo(str("for r = ", r, " ", unit_length_name(), ", facets = ", f));
+    echo(str("for r = ", r, " ", length_unit_name(), ", facets = ", f));
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
     include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
 
-    defines   name "units" define "base_unit_length" strings "mm cm mil in";
+    defines   name "units" define "length_unit_base" strings "mm cm mil in";
     variables add_opts_combine "units";
 
     include --path "${INCLUDE_PATH}" script_std.mfs;

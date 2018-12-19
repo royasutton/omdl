@@ -697,7 +697,7 @@ BEGIN_SCOPE dim;
     pf = get_table_v(tr, tc, id, "f");
     pe = get_table_v(tr, tc, id, "e");
 
-    sv = coordinates_csc(pv, sr);
+    sv = coordinate_scale3d_csc(pv, sr);
 
     if (config == 0)  // png preview
     {
