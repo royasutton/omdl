@@ -546,7 +546,7 @@ BEGIN_SCOPE autostat;
     tc = dtc_polyhedra_prisms;
     tr = dtr_polyhedra_prisms;
 
-    ids = get_table_ridl(tr);
+    ids = table_get_row_ids(tr);
 
     echo
     (
@@ -566,15 +566,15 @@ BEGIN_SCOPE autostat;
     {
       i = first(find(id, ids, c=1))+1;
 
-      n = get_table_v(tr, tc, id, "n");
-      o = get_table_v(tr, tc, id, "o");
-      g = get_table_v(tr, tc, id, "g");
-      d = get_table_v(tr, tc, id, "d");
+      n = table_get_value(tr, tc, id, "n");
+      o = table_get_value(tr, tc, id, "o");
+      g = table_get_value(tr, tc, id, "g");
+      d = table_get_value(tr, tc, id, "d");
 
-      c = get_table_v(tr, tc, id, "c");
-      s = get_table_v(tr, tc, id, "s");
-      f = get_table_v(tr, tc, id, "f");
-      e = get_table_v(tr, tc, id, "e");
+      c = table_get_value(tr, tc, id, "c");
+      s = table_get_value(tr, tc, id, "s");
+      f = table_get_value(tr, tc, id, "f");
+      e = table_get_value(tr, tc, id, "e");
 
       fo = is_empty(o) ? "-" : o;
 
@@ -621,9 +621,9 @@ BEGIN_SCOPE dim;
     id = "default";
     sr = 100;
 
-    pv = get_table_v(tr, tc, id, "c");
-    pf = get_table_v(tr, tc, id, "f");
-    pe = get_table_v(tr, tc, id, "e");
+    pv = table_get_value(tr, tc, id, "c");
+    pf = table_get_value(tr, tc, id, "f");
+    pe = table_get_value(tr, tc, id, "e");
 
     sv = coordinate_scale3d_csc(pv, sr);
 

@@ -84,11 +84,11 @@
     | f     | faces               |
     | e     | edges               |
 
-    Use the functions get_table_v() to retrieve feild data as show in
-    the following example. To see a list of table identifiers consider
-    the function get_table_ridl(), get_table_cidl(), or module
-    table_dump(). See datatypes/table.scad for other available table
-    functions.
+    Use the functions table_get_value() to retrieve feild data as show
+    in the following example. To see a list of table identifiers
+    consider the function table_get_row_ids(), table_get_column_ids(),
+    or module table_dump(). See datatypes/table.scad for other
+    available table functions.
 
     \b Example
     \code{.C}
@@ -102,8 +102,8 @@
 
     id = "dodecahedron";
 
-    pv = get_table_v(tr, tc, id, "c");
-    pf = get_table_v(tr, tc, id, "f");
+    pv = table_get_value(tr, tc, id, "c");
+    pf = table_get_value(tr, tc, id, "f");
 
     sv = coordinate_scale3d_csc(pv, 100);
 
@@ -21521,12 +21521,12 @@ BEGIN_SCOPE autotest;
     log_echo("  (1) spherical with converted cartesian coordinates:");
     log_echo("  (2) edge list from faces definition:");
 
-    for ( id = get_table_ridl( tr ) )
+    for ( id = table_get_row_ids( tr ) )
     {
-      c  = get_table_v(tr, tc, id, "c");
-      s  = get_table_v(tr, tc, id, "s");
-      f  = get_table_v(tr, tc, id, "f");
-      e  = get_table_v(tr, tc, id, "e");
+      c  = table_get_value(tr, tc, id, "c");
+      s  = table_get_value(tr, tc, id, "s");
+      f  = table_get_value(tr, tc, id, "f");
+      e  = table_get_value(tr, tc, id, "e");
 
       // convert stored spherical and compare with cartesian coordinates.
       for( i = [0 : len(c)-1] )
@@ -21537,10 +21537,10 @@ BEGIN_SCOPE autotest;
         {
           cs = coordinate(c[i], to="s");
 
-          n = get_table_v(tr, tc, id, "n");
-          o = get_table_v(tr, tc, id, "o");
-          g = get_table_v(tr, tc, id, "g");
-          d = get_table_v(tr, tc, id, "d");
+          n = table_get_value(tr, tc, id, "n");
+          o = table_get_value(tr, tc, id, "o");
+          g = table_get_value(tr, tc, id, "g");
+          d = table_get_value(tr, tc, id, "d");
 
           log_warn("coordinate mismatch");
           log_info(str("id=", id,", n=", n, ", o=", o, ", g=", g, ", d=", d));
@@ -21560,10 +21560,10 @@ BEGIN_SCOPE autotest;
         }
         else
         {
-          n = get_table_v(tr, tc, id, "n");
-          o = get_table_v(tr, tc, id, "o");
-          g = get_table_v(tr, tc, id, "g");
-          d = get_table_v(tr, tc, id, "d");
+          n = table_get_value(tr, tc, id, "n");
+          o = table_get_value(tr, tc, id, "o");
+          g = table_get_value(tr, tc, id, "g");
+          d = table_get_value(tr, tc, id, "d");
 
           log_warn("edge-list mismatch");
           log_info(str("id=", id,", n=", n, ", o=", o, ", g=", g, ", d=", d));
@@ -21575,7 +21575,7 @@ BEGIN_SCOPE autotest;
     }
 
     echo();
-    log_echo(str(get_table_size(tr)," polyhedra checked."));
+    log_echo(str(table_get_size(tr)," polyhedra checked."));
 
   END_OPENSCAD;
 

@@ -65,7 +65,7 @@ include <datatypes-base.scad>;
   \returns  <integer> The row index where the identifier exists.
             If the identifier does not exists, returns \b empty_lst.
 *******************************************************************************/
-function get_table_ri
+function table_get_row_index
 (
   r,
   ri
@@ -79,11 +79,11 @@ function get_table_ri
   \returns  <list-C> The table row where the row identifier exists.
             If the identifier does not exists, returns \b undef.
 *******************************************************************************/
-function get_table_r
+function table_get_row
 (
   r,
   ri
-) = r[ get_table_ri(r, ri) ];
+) = r[ table_get_row_index(r, ri) ];
 
 //! Get the table column index that matches a table column identifier.
 /***************************************************************************//**
@@ -93,7 +93,7 @@ function get_table_r
   \returns  <integer> The column index where the identifier exists.
             If the identifier does not exists, returns \b empty_lst.
 *******************************************************************************/
-function get_table_ci
+function table_get_column_index
 (
   c,
   ci
@@ -107,11 +107,11 @@ function get_table_ci
   \returns  <list-2> The table column where the column identifier exists.
             If the identifier does not exists, returns \b undef.
 *******************************************************************************/
-function get_table_c
+function table_get_column
 (
   c,
   ci
-) = c[ get_table_ci(c, ci) ];
+) = c[ table_get_column_index(c, ci) ];
 
 //! Get the table cell value for a specified row and column identifier.
 /***************************************************************************//**
@@ -123,13 +123,13 @@ function get_table_c
   \returns  \<value> The value of the matrix cell [ri, ci].
             If either identifier does not exists, returns \b undef.
 *******************************************************************************/
-function get_table_v
+function table_get_value
 (
   r,
   c,
   ri,
   ci
-) = r[get_table_ri(r,ri)][get_table_ci(c,ci)];
+) = r[table_get_row_index(r,ri)][table_get_column_index(c,ci)];
 
 //! Form a list of a select column across all table rows.
 /***************************************************************************//**
@@ -140,13 +140,13 @@ function get_table_v
   \returns  \<list> The list of a select column across all rows.
             If the identifier does not exists, returns \b undef.
 *******************************************************************************/
-function get_table_crl
+function table_get_columns
 (
   r,
   c,
   ci
 ) = table_exists(r,c,ci=ci) ?
-    eselect(get_table_copy(r,c,cl=[ci]),f=true)
+    eselect(table_get_copy(r,c,cl=[ci]),f=true)
   : undef;
 
 //! Form a list of all table row identifiers.
@@ -159,11 +159,11 @@ function get_table_crl
 
   \note     This functions assumes the first element of each table row
             to be the row identifier, as enforced by the table_check().
-            As an alternative, the function get_table_crl(), of
-            the form get_table_crl(r, c, "id"), may be used
+            As an alternative, the function table_get_columns(), of
+            the form table_get_columns(r, c, "id"), may be used
             without this assumption.
 *******************************************************************************/
-function get_table_ridl
+function table_get_row_ids
 (
   r
 ) = eselect(r,f=true);
@@ -179,7 +179,7 @@ function get_table_ridl
   \note     This functions assumes the first element of each table column
             to be the column identifier.
 *******************************************************************************/
-function get_table_cidl
+function table_get_column_ids
 (
   c
 ) = eselect(c,f=true);
@@ -201,11 +201,11 @@ function table_exists
   ri,
   ci
 ) = ( is_defined(ri) && is_defined(ci) ) ?
-      is_defined(get_table_v(trows, tcols, ri, ci))
+      is_defined(table_get_value(trows, tcols, ri, ci))
   : ( is_defined(ri) && not_defined(ci) ) ?
-      !is_empty(get_table_ri(r,ri))
+      !is_empty(table_get_row_index(r,ri))
   : ( not_defined(ri) && is_defined(ci) ) ?
-      !is_empty(get_table_ci(c,ci))
+      !is_empty(table_get_column_index(c,ci))
   : false;
 
 //! Get the size of a table.
@@ -222,7 +222,7 @@ function table_exists
     parameter is specified. (3) The (r * columns) when both parameters
     are specified.
 *******************************************************************************/
-function get_table_size
+function table_get_size
 (
   r,
   c
@@ -239,7 +239,7 @@ function get_table_size
 
   \returns  <matrix> A matrix of the selected rows and columns.
 *******************************************************************************/
-function get_table_copy
+function table_get_copy
 (
   r,
   c,
@@ -260,7 +260,7 @@ function get_table_copy
           not_defined( cl ) || is_empty( cl ) ||
           !is_empty( first( search( c_iter, cl, 1, 0 ) ) )
         )
-          get_table_v(r, c, r_iter, c_iter)
+          table_get_value(r, c, r_iter, c_iter)
     ]
 ];
 
@@ -273,13 +273,13 @@ function get_table_copy
 
   \returns  \<list> A list with the sum of each selected rows and columns.
 *******************************************************************************/
-function get_table_sum
+function table_get_sum
 (
   r,
   c,
   rl,
   cl
-) = sum( get_table_copy(r, c, rl, cl) );
+) = sum( table_get_copy(r, c, rl, cl) );
 
 //! Perform some basic validation/checks on a table.
 /***************************************************************************//**
@@ -316,7 +316,7 @@ module table_check
 
   // each row has correct column count
   if (verbose) log_info ("checking row column counts.");
-  col_cnt = get_table_size(c=c);
+  col_cnt = table_get_size(c=c);
   for ( r_iter = r )
   {
     if ( col_cnt !=  len ( r_iter ) )
@@ -325,7 +325,7 @@ module table_check
       (
         str
         (
-          "row ", get_table_ri(r, r_iter),
+          "row ", table_get_row_index(r, r_iter),
           ", id=[", first(r_iter), "]",
           ", has incorrect column count=[", len ( r_iter ),"]"
         )
@@ -351,8 +351,8 @@ module table_check
     (
       str (
         "table size: ",
-        get_table_size(r=r), " rows by ",
-        get_table_size(c=c), " columns."
+        table_get_size(r=r), " rows by ",
+        table_get_size(c=c), " columns."
       )
     );
 
@@ -399,7 +399,7 @@ module table_dump
       if ( number )
       {
         log_echo();
-        log_echo( str("row: ", get_table_ri(r, r_iter)) );
+        log_echo( str("row: ", table_get_row_index(r, r_iter)) );
       }
       for ( c_iter = c )
       {
@@ -416,7 +416,7 @@ module table_dump
               "[", first(r_iter), "]", chr(consts(maxr0-len(first(r_iter)), 32)),
               "[", first(c_iter), "]", chr(consts(maxc0-len(first(c_iter)), 32)),
               "(", c_iter[1], ")", chr(consts(maxc1-len(c_iter[1]), 32)),
-              "= [", get_table_v(r, c, r_iter, c_iter), "]"
+              "= [", table_get_value(r, c, r_iter, c_iter), "]"
             )
           );
         }
@@ -430,8 +430,8 @@ module table_dump
     (
       str (
         "table size: ",
-        get_table_size(r=r), " rows by ",
-        get_table_size(c=c), " columns."
+        table_get_size(r=r), " rows by ",
+        table_get_size(c=c), " columns."
       )
     );
   }
@@ -475,19 +475,19 @@ BEGIN_SCOPE example;
     table_check( table_rows, table_cols, true );
     table_dump( table_rows, table_cols );
 
-    m3r16r_tl = get_table_v( table_rows, table_cols, "m3r16r", "tl" );
+    m3r16r_tl = table_get_value( table_rows, table_cols, "m3r16r", "tl" );
 
     if ( table_exists( c=table_cols, ci="nl" ) )
       echo ( "metric 'nl' available" );
 
-    table_ids = get_table_ridl( table_rows );
-    table_cols_tl = get_table_crl( table_rows, table_cols, "tl" );
+    table_ids = table_get_row_ids( table_rows );
+    table_cols_tl = table_get_columns( table_rows, table_cols, "tl" );
 
     echo ( table_ids=table_ids );
     echo ( table_cols_tl=table_cols_tl );
 
-    tnew = get_table_copy( table_rows, table_cols, cl=["tl", "nl"] );
-    tsum = get_table_sum( table_rows, table_cols, cl=["tl", "nl"] );
+    tnew = table_get_copy( table_rows, table_cols, cl=["tl", "nl"] );
+    tsum = table_get_sum( table_rows, table_cols, cl=["tl", "nl"] );
 
     echo ( m3r16r_tl=m3r16r_tl );
     echo ( tnew=tnew );
