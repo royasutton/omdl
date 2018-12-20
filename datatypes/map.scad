@@ -324,7 +324,7 @@ module map_dump
   \param    ks <string-list> A list of selected keys.
   \param    sort <boolean> Sort the output by key.
   \param    number <boolean> Output index number.
-  \param    fs <string> A feild seperator.
+  \param    fs <string> A feild separator.
   \param    index_tags <string-list> List of html formatting tags.
   \param    key_tags <string-list> List of html formatting tags.
   \param    value_tags <string-list> List of html formatting tags.
@@ -334,6 +334,27 @@ module map_dump
     Output map keys and values the console. To output only select keys,
     assign the desired key identifiers to \p ks. For example to output
     only 'key1' and 'key2', assign <tt>ks = ["key1", "key2"]</tt>.
+
+    /+
+        read scope output log to define table
+     +/
+
+    \amu_scope scope  (index=2)
+    \amu_file log     (file="${scope}.log" ++rmecho ++read)
+    \amu_file th      (text="${log}" last=1 ++read)
+    \amu_file td      (text="${log}" first=2 ++read)
+    \amu_word th_cnt  (words="${th}" tokenizer="^" ++count)
+
+    \b Example
+
+      \dontinclude \amu_eval(${scope}).scad
+      \skip include
+      \until ["center","i"]);
+
+    \b Result \include \amu_eval(${scope}).log
+
+    \b Table
+      \amu_table (columns=${th_cnt} column_headings=${th} cell_texts=${td})
 *******************************************************************************/
 module map_write
 (
@@ -396,7 +417,7 @@ module map_write
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE example;
+BEGIN_SCOPE example1;
   BEGIN_OPENSCAD;
     include <datatypes/map.scad>;
 
@@ -430,6 +451,29 @@ BEGIN_SCOPE example;
       );
 
     map_dump(map);
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
+    include --path "${INCLUDE_PATH}" script_std.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE example2;
+  BEGIN_OPENSCAD;
+    include <datatypes/map.scad>;
+
+    map =
+    [
+      ["part1",       ["screw10", [10, 11, 13]]],
+      ["part2",       ["screw12", [20, 21, 30]]],
+      ["part3",       ["screw10", [10, 10, -12]]],
+      ["config",      ["top", "front", "rear"]],
+      ["version",     [21, 5, 0]],
+      ["runid",       10]
+    ];
+
+    map_write(map, index_tags=["center","i"]);
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
