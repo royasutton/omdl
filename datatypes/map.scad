@@ -381,7 +381,7 @@ module map_write
             str(lstr_html(idx, p=[index_tags]),fs)
           : empty_str,
           lstr_html(key, p=[key_tags]), fs,
-          lstr_html([map_get_value(m, key)], p=[value_tags])
+          lstr_html([map_get_value(m, key)], p=[value_tags]), fs
         )
       );
     }
