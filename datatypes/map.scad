@@ -161,6 +161,7 @@ function map_errors
           str
           (
             "map index ", i,
+            ", entry=", entry,
             ", has incorrect count=[", len(entry),"]"
           )
     ],
@@ -174,6 +175,7 @@ function map_errors
           str
           (
             "map index ", i,
+            ", entry=", entry,
             ", key=[", key,"] is not a string."
           )
     ],
