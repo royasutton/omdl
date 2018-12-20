@@ -321,6 +321,7 @@ module map_dump
 //! Write formatted map entries to the console.
 /***************************************************************************//**
   \param    m <matrix-2xN> A list of N key-value map pairs.
+  \param    ks <string-list> A list of selected keys.
   \param    sort <boolean> Sort the output by key.
   \param    number <boolean> Output index number.
   \param    fs <string> A feild seperator.
@@ -331,6 +332,7 @@ module map_dump
 module map_write
 (
   m,
+  ks,
   sort = false,
   number = true,
   fs = "^",
@@ -360,13 +362,18 @@ module map_write
     {
       idx = map_get_index(m, key);
 
+      if
+      (
+        not_defined( ks ) || is_empty( ks ) ||
+        !is_empty( first( search( [key], ks, 1, 0 ) ) )
+      )
       log_echo
       (
         str
         (
           number ? str(lstr_html(idx, p=index_tags),fs) : empty_str,
           lstr_html(key, p=key_tags), fs,
-          lstr_html(map_get_value(m, key), p=value_tags)
+          lstr_html([map_get_value(m, key)], p=value_tags)
         )
       );
     }
