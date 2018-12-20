@@ -222,7 +222,7 @@ module map_check
 module map_dump
 (
   m,
-  sort = true,
+  sort = false,
   number = true,
   p = 3
 )
