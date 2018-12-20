@@ -281,7 +281,70 @@ function table_get_sum
   cs
 ) = sum( table_get_copy(r, c, rs, cs) );
 
-//! Perform some basic validation/checks on a table.
+//! Perform basic validation/checks on a table and return errors.
+/***************************************************************************//**
+  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
+  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+
+  \returns  <list-N> A list of table format errors.
+
+  \details
+
+    Check that: (1) the first table column identifier is 'id'. (2) Make
+    sure that each row has the same number of columns as defined in the
+    columns vector. (3) Make sure that there are no repeating column
+    identifiers. (4) Make sure that there are no repeating row
+    identifiers. When there are no errors, the \b empty_lst is
+    returned.
+*******************************************************************************/
+function table_errors
+(
+  r,
+  c
+) =
+  let
+  (
+    // (1) first word of first column should be 'id'
+    ec1 =
+    [
+      if ( first( first(c) ) != "id")
+        str ("table column 0 should be 'id'")
+    ],
+
+    // (2) each row has correct column count
+    ec2 =
+    [
+      let (col_cnt = table_get_size(c=c))
+      for ( r_iter = r )
+        if ( col_cnt !=  len ( r_iter ) )
+          str
+          (
+            "row ", table_get_row_index(r, r_iter),
+            ", id=[", first(r_iter), "]",
+            ", has incorrect column count=[", len ( r_iter ),"]"
+          )
+    ],
+
+    // (3) no repeat column identifiers
+    ec3 =
+    [
+      for ( c_iter = c )
+        if ( len(first(search([first(c_iter)], c, 0, 0))) > 1 )
+          str("repeating column identifier [", first(c_iter), "]")
+    ],
+
+    // (4) no repeat row identifiers
+    ec4 =
+    [
+      for ( r_iter = r )
+        if ( len(first(search([first(r_iter)], r, 0, 0))) > 1 )
+          str("repeating row identifier [", first(r_iter), "]")
+    ]
+  )
+  concat(ec1, ec2, ec3, ec4);
+
+
+//! Perform basic validation/checks on a table and output errors to console.
 /***************************************************************************//**
   \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
   \param    c <matrix-2xC> The table column matrix (2 x C-columns).
@@ -304,7 +367,7 @@ module table_check
 {
   if (verbose) log_info("begin table check");
 
-  // first word of first column should be 'id'
+  // (1) first word of first column should be 'id'
   if ( first( first(c) ) != "id")
   {
     log_warn ("table column 0 should be 'id'");
@@ -314,7 +377,7 @@ module table_check
     if (verbose) log_info ("row identifier found at column zero.");
   }
 
-  // each row has correct column count
+  // (2) each row has correct column count
   if (verbose) log_info ("checking row column counts.");
   col_cnt = table_get_size(c=c);
   for ( r_iter = r )
@@ -333,15 +396,15 @@ module table_check
     }
   }
 
-  // no repeat column identifiers
+  // (3) no repeat column identifiers
   if (verbose) log_info ("checking for repeat column identifiers.");
-  for (c_iter = c)
+  for ( c_iter = c )
     if ( len(first(search([first(c_iter)], c, 0, 0))) > 1 )
       log_warn ( str("repeating column identifier [", first(c_iter), "]") );
 
-  // no repeat row identifiers
+  // (4) no repeat row identifiers
   if (verbose) log_info ("checking for repeat row identifiers.");
-  for (r_iter = r)
+  for ( r_iter = r )
     if ( len(first(search([first(r_iter)], r, 0, 0))) > 1 )
       log_warn ( str("repeating row identifier [", first(r_iter), "]") );
 
