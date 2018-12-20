@@ -134,7 +134,7 @@ function map_get_size
   m
 ) = len(m);
 
-//! Perform basic validation/checks on a map and return errors.
+//! Perform basic format checks on a map and return errors.
 /***************************************************************************//**
   \param    m <matrix-2xN> A list of N key-value map pairs.
 
@@ -195,7 +195,7 @@ function map_errors
   )
   concat(ec1, ec2, ec3);
 
-//! Perform basic validation/checks on a map and output errors to console.
+//! Perform basic format checks on a map and output errors to console.
 /***************************************************************************//**
   \param    m <matrix-2xN> A list of N key-value map pairs.
 

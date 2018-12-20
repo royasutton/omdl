@@ -281,7 +281,7 @@ function table_get_sum
   cs
 ) = sum( table_get_copy(r, c, rs, cs) );
 
-//! Perform basic validation/checks on a table and return errors.
+//! Perform basic format checks on a table and return errors.
 /***************************************************************************//**
   \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
   \param    c <matrix-2xC> The table column matrix (2 x C-columns).
@@ -344,7 +344,7 @@ function table_errors
   concat(ec1, ec2, ec3, ec4);
 
 
-//! Perform basic validation/checks on a table and output errors to console.
+//! Perform basic format checks on a table and output errors to console.
 /***************************************************************************//**
   \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
   \param    c <matrix-2xC> The table column matrix (2 x C-columns).
