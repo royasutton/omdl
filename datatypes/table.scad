@@ -201,7 +201,7 @@ function table_exists
   ri,
   ci
 ) = ( is_defined(ri) && is_defined(ci) ) ?
-      is_defined(table_get_value(trows, tcols, ri, ci))
+      is_defined(table_get_value(r, c, ri, ci))
   : ( is_defined(ri) && not_defined(ci) ) ?
       !is_empty(table_get_row_index(r,ri))
   : ( not_defined(ri) && is_defined(ci) ) ?
