@@ -429,7 +429,7 @@ module table_check
   \param    c <matrix-2xC> The table column matrix (2 x C-columns).
   \param    rs <string-list> A list of selected row identifiers.
   \param    cs <string-list> A list of selected column identifiers.
-  \param    number <boolean> Number the table rows.
+  \param    number <boolean> Number the rows.
 
   \details
 
@@ -447,6 +447,7 @@ module table_dump
   number = true
 )
 {
+  // determine maximum feild lengths
   maxr0 = max( [for (r_iter = r) len( first(r_iter) )] ) + 1;
   maxc0 = max( [for (c_iter = c) len( first(c_iter) )] ) + 1;
   maxc1 = max( [for (c_iter = c) len( c_iter[1] )] ) + 1;
@@ -487,7 +488,8 @@ module table_dump
     }
   }
 
-  if ( number ) {
+  if ( number )
+  {
     log_echo();
     log_echo
     (
@@ -497,6 +499,102 @@ module table_dump
         table_get_size(c=c), " columns."
       )
     );
+  }
+}
+
+//! Write formatted map entries to the console.
+/***************************************************************************//**
+  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
+  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    rs <string-list> A list of selected row identifiers.
+  \param    cs <string-list> A list of selected column identifiers.
+  \param    number <boolean> Number the rows.
+  \param    heading_id <boolean> Output table heading identifiers.
+  \param    heading_info <boolean> Output table heading descriptions.
+  \param    fs <string> A feild seperator.
+  \param    index_tags <string-list> List of html formatting tags.
+  \param    row_id_tags <string-list> List of html formatting tags.
+  \param    value_tags <string-list> List of html formatting tags.
+
+  \details
+
+    Output each table row to the console. To output only select rows and
+    columns, assign the desired identifiers to \p rs and \p cs.
+    For example to output only the column identifiers 'c1' and 'c2', assign
+    <tt>cs = ["c1", "c2"]</tt>.
+*******************************************************************************/
+module table_write
+(
+  r,
+  c,
+  rs,
+  cs,
+  number = true,
+  heading_id = true,
+  heading_info = true,
+  fs = "^",
+  index_tags = empty_lst,
+  row_id_tags = ["b"],
+  value_tags = empty_lst
+)
+{
+  // heading identifiers
+  th_id_text =
+  [
+    number ? str("-",fs) : empty_str,
+    for ( c_iter = c )
+      if
+      ( // when column selected
+        not_defined( cs ) || is_empty( cs ) ||
+        !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
+      )
+      str(first(c_iter),fs)
+  ];
+  if ( heading_id )
+    log_echo ( lstr(th_id_text) );
+
+  // heading descriptions
+  th_info_text =
+  [
+    number ? str("-",fs)  : empty_str,
+    for ( c_iter = c )
+      if
+      ( // when column selected
+        not_defined( cs ) || is_empty( cs ) ||
+        !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
+      )
+      str(second(c_iter),fs)
+  ];
+  if ( heading_info )
+    log_echo ( lstr(th_info_text) );
+
+  // row data
+  for ( r_iter = r )
+  {
+    if
+    ( // when row selected
+      not_defined( rs ) || is_empty( rs ) ||
+      !is_empty( first( search( r_iter, rs, 1, 0 ) ) )
+    )
+    {
+      tdr_text =
+      [
+        (number == true) ?
+          str(lstr_html(table_get_row_index(r, r_iter), p=[index_tags]),fs)
+        : empty_str,
+
+        lstr_html(first(r_iter), p=[row_id_tags]), fs,
+        for ( c_iter = ntail(c, n=1) )
+          if
+          ( // when column selected
+            not_defined( cs ) || is_empty( cs ) ||
+            !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
+          )
+            str(lstr_html(table_get_value(r, c, r_iter, c_iter), p=[value_tags]),fs)
+      ];
+
+      log_echo ( lstr(tdr_text) );
+    }
   }
 }
 
