@@ -303,7 +303,8 @@ module map_dump
 
       log_echo
       (
-        str (
+        str
+        (
           number ? chr(consts(p-len(str(idx)), 48)) : empty_str,
           number ? str(idx, ": ") : empty_str,
           chr(consts(maxl-len(key), 32)), "'", key, "' = ",
@@ -315,6 +316,61 @@ module map_dump
 
   if ( number )
     log_echo(str("map size: ", map_get_size(m), " entries."));
+}
+
+//! Write formatted map entries to the console.
+/***************************************************************************//**
+  \param    m <matrix-2xN> A list of N key-value map pairs.
+  \param    sort <boolean> Sort the output by key.
+  \param    number <boolean> Output index number.
+  \param    fs <string> A feild seperator.
+  \param    index_tags <string-list> List of html formatting tags.
+  \param    key_tags <string-list> List of html formatting tags.
+  \param    value_tags <string-list> List of html formatting tags.
+*******************************************************************************/
+module map_write
+(
+  m,
+  sort = false,
+  number = true,
+  fs = "^",
+  index_tags = [empty_lst],
+  key_tags = [["b"]],
+  value_tags = [empty_lst]
+)
+{
+  if ( map_get_size(m) > 0 )
+  {
+    // heading
+    log_echo
+    (
+      str
+      (
+        number ? str("index",fs) : empty_str,
+        "key", fs,
+        "value"
+      )
+    );
+
+    // data
+    keys = map_get_keys(m);
+    maxl = max( [for (i = keys) len(i)] ) + 1;
+
+    for (key = sort ? qsort(keys) : keys)
+    {
+      idx = map_get_index(m, key);
+
+      log_echo
+      (
+        str
+        (
+          number ? str(lstr_html(idx, p=index_tags),fs) : empty_str,
+          lstr_html(key, p=key_tags), fs,
+          lstr_html(map_get_value(m, key), p=value_tags)
+        )
+      );
+    }
+  }
 }
 
 //! @}
