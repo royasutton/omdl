@@ -328,6 +328,12 @@ module map_dump
   \param    index_tags <string-list> List of html formatting tags.
   \param    key_tags <string-list> List of html formatting tags.
   \param    value_tags <string-list> List of html formatting tags.
+
+  \details
+
+    Output map keys and values the console. To output only select keys,
+    assign the desired key identifiers to \p ks. For example to output
+    only 'key1' and 'key2', assign <tt>ks = ["key1", "key2"]</tt>.
 *******************************************************************************/
 module map_write
 (
@@ -336,9 +342,9 @@ module map_write
   sort = false,
   number = true,
   fs = "^",
-  index_tags = [empty_lst],
-  key_tags = [["b"]],
-  value_tags = [empty_lst]
+  index_tags = empty_lst,
+  key_tags = ["b"],
+  value_tags = empty_lst
 )
 {
   if ( map_get_size(m) > 0 )
@@ -371,9 +377,11 @@ module map_write
       (
         str
         (
-          number ? str(lstr_html(idx, p=index_tags),fs) : empty_str,
-          lstr_html(key, p=key_tags), fs,
-          lstr_html([map_get_value(m, key)], p=value_tags)
+          (number == true) ?
+            str(lstr_html(idx, p=[index_tags]),fs)
+          : empty_str,
+          lstr_html(key, p=[key_tags]), fs,
+          lstr_html([map_get_value(m, key)], p=[value_tags])
         )
       );
     }
