@@ -250,14 +250,14 @@ function table_get_copy
   for ( r_iter = r )
     if
     (
-      not_defined( rs ) || is_empty( rs ) ||
+      not_defined( rs ) ||
       !is_empty( first( search( r_iter, rs, 1, 0 ) ) )
     )
     [
       for ( c_iter = c )
         if
         (
-          not_defined( cs ) || is_empty( cs ) ||
+          not_defined( cs ) ||
           !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
         )
           table_get_value(r, c, r_iter, c_iter)
@@ -456,7 +456,7 @@ module table_dump
   {
     if
     (
-      not_defined( rs ) || is_empty( rs ) ||
+      not_defined( rs ) ||
       !is_empty( first( search( r_iter, rs, 1, 0 ) ) )
     )
     {
@@ -469,7 +469,7 @@ module table_dump
       {
         if
         (
-          not_defined( cs ) || is_empty( cs ) ||
+          not_defined( cs ) ||
           !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
         )
         {
@@ -545,7 +545,7 @@ module table_write
     for ( c_iter = c )
       if
       ( // when column selected
-        not_defined( cs ) || is_empty( cs ) ||
+        not_defined( cs ) ||
         !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
       )
       str(first(c_iter),fs)
@@ -560,7 +560,7 @@ module table_write
     for ( c_iter = c )
       if
       ( // when column selected
-        not_defined( cs ) || is_empty( cs ) ||
+        not_defined( cs ) ||
         !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
       )
       str(second(c_iter),fs)
@@ -573,7 +573,7 @@ module table_write
   {
     if
     ( // when row selected
-      not_defined( rs ) || is_empty( rs ) ||
+      not_defined( rs ) ||
       !is_empty( first( search( r_iter, rs, 1, 0 ) ) )
     )
     {
@@ -587,7 +587,7 @@ module table_write
         for ( c_iter = ntail(c, n=1) )
           if
           ( // when column selected
-            not_defined( cs ) || is_empty( cs ) ||
+            not_defined( cs ) ||
             !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
           )
             str(lstr_html(table_get_value(r, c, r_iter, c_iter), p=[value_tags]),fs)
