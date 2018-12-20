@@ -134,7 +134,66 @@ function map_get_size
   m
 ) = len(m);
 
-//! Perform some basic validation/checks on a map.
+//! Perform basic validation/checks on a map and return errors.
+/***************************************************************************//**
+  \param    m <matrix-2xN> A list of N key-value map pairs.
+
+  \returns  <list-N> A list of map format errors.
+
+  \details
+
+    Check that: (1) each entry has key-value 2-tuple, (2) each key is a
+    string, and (3) key identifiers are unique. When there are no
+    errors, the \b empty_lst is returned.
+*******************************************************************************/
+function map_errors
+(
+  m
+) =
+  let
+  (
+    // (1) each entry has key-value 2-tuple.
+    ec1 =
+    [
+      for ( i = [0:map_get_size(m)-1] )
+      let ( entry = m[i], key = first(entry) )
+        if ( 2 != len(entry) )
+          str
+          (
+            "map index ", i,
+            ", has incorrect count=[", len(entry),"]"
+          )
+    ],
+
+    // (2) each key must be a string.
+    ec2 =
+    [
+      for ( i = [0:map_get_size(m)-1] )
+      let ( entry = m[i], key = first(entry) )
+        if (  is_string(key) == false )
+          str
+          (
+            "map index ", i,
+            ", key=[", key,"] is not a string."
+          )
+    ],
+
+    // (3) no repeat key identifiers.
+    ec3 =
+    [
+      for ( i = [0:map_get_size(m)-1] )
+      let ( entry = m[i], key = first(entry) )
+        if ( len(first(search([key], m, 0, 0))) > 1 )
+          str
+          (
+            "map index ", i,
+            ", key=[", key,"] not unique."
+          )
+    ]
+  )
+  concat(ec1, ec2, ec3);
+
+//! Perform basic validation/checks on a map and output errors to console.
 /***************************************************************************//**
   \param    m <matrix-2xN> A list of N key-value map pairs.
 
@@ -161,12 +220,13 @@ module map_check
     entry = m[i];
     key = first(entry);
 
-    // each entry has key-value 2-tuple.
+    // (1) each entry has key-value 2-tuple.
     if ( 2 != len(entry) )
     {
       log_error
       (
-        str (
+        str
+        (
           "map index ", i,
           ", entry=", entry,
           ", has incorrect count=[", len(entry),"]"
@@ -174,12 +234,13 @@ module map_check
       );
     }
 
-    // each key must be a string.
+    // (2) each key must be a string.
     if ( is_string(key) == false )
     {
       log_error
       (
-        str (
+        str
+        (
           "map index ", i,
           ", entry=", entry,
           ", key=[", key,"] is not a string."
@@ -187,11 +248,12 @@ module map_check
       );
     }
 
-    // no repeat key identifiers
+    // (3) no repeat key identifiers.
     if ( len(first(search([key], m, 0, 0))) > 1 )
       log_warn
       (
-        str(
+        str
+        (
           "map index ", i,
           ", key=[", key,"] not unique."
         )
@@ -202,7 +264,8 @@ module map_check
   {
     log_info
     (
-      str (
+      str
+      (
         "map size: ",
         map_get_size(m), " entries."
       )
