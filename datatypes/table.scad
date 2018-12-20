@@ -146,7 +146,7 @@ function table_get_columns
   c,
   ci
 ) = table_exists(r,c,ci=ci) ?
-    eselect(table_get_copy(r,c,cl=[ci]),f=true)
+    eselect(table_get_copy(r,c,cs=[ci]),f=true)
   : undef;
 
 //! Form a list of all table row identifiers.
@@ -234,8 +234,8 @@ function table_get_size
 /***************************************************************************//**
   \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
   \param    c <matrix-2xC> The table column matrix (2 x C-columns).
-  \param    rl <string-list> A list of selected row identifiers.
-  \param    cl <string-list> A list of selected column identifiers.
+  \param    rs <string-list> A list of selected row identifiers.
+  \param    cs <string-list> A list of selected column identifiers.
 
   \returns  <matrix> A matrix of the selected rows and columns.
 *******************************************************************************/
@@ -243,22 +243,22 @@ function table_get_copy
 (
   r,
   c,
-  rl,
-  cl
+  rs,
+  cs
 ) =
 [
   for ( r_iter = r )
     if
     (
-      not_defined( rl ) || is_empty( rl ) ||
-      !is_empty( first( search( r_iter, rl, 1, 0 ) ) )
+      not_defined( rs ) || is_empty( rs ) ||
+      !is_empty( first( search( r_iter, rs, 1, 0 ) ) )
     )
     [
       for ( c_iter = c )
         if
         (
-          not_defined( cl ) || is_empty( cl ) ||
-          !is_empty( first( search( c_iter, cl, 1, 0 ) ) )
+          not_defined( cs ) || is_empty( cs ) ||
+          !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
         )
           table_get_value(r, c, r_iter, c_iter)
     ]
@@ -268,8 +268,8 @@ function table_get_copy
 /***************************************************************************//**
   \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
   \param    c <matrix-2xC> The table column matrix (2 x C-columns).
-  \param    rl <string-list> A list of selected row identifiers.
-  \param    cl <string-list> A list of selected column identifiers.
+  \param    rs <string-list> A list of selected row identifiers.
+  \param    cs <string-list> A list of selected column identifiers.
 
   \returns  \<list> A list with the sum of each selected rows and columns.
 *******************************************************************************/
@@ -277,9 +277,9 @@ function table_get_sum
 (
   r,
   c,
-  rl,
-  cl
-) = sum( table_get_copy(r, c, rl, cl) );
+  rs,
+  cs
+) = sum( table_get_copy(r, c, rs, cs) );
 
 //! Perform some basic validation/checks on a table.
 /***************************************************************************//**
@@ -364,23 +364,23 @@ module table_check
 /***************************************************************************//**
   \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
   \param    c <matrix-2xC> The table column matrix (2 x C-columns).
-  \param    rl <string-list> A list of selected row identifiers.
-  \param    cl <string-list> A list of selected column identifiers.
+  \param    rs <string-list> A list of selected row identifiers.
+  \param    cs <string-list> A list of selected column identifiers.
   \param    number <boolean> Number the table rows.
 
   \details
 
     Output each table row to the console. To output only select rows and
-    columns, assign the desired identifiers to \p rl and \p cl.
+    columns, assign the desired identifiers to \p rs and \p cs.
     For example to output only the column identifiers 'c1' and 'c2', assign
-    <tt>cl = ["c1", "c2"]</tt>.
+    <tt>cs = ["c1", "c2"]</tt>.
 *******************************************************************************/
 module table_dump
 (
   r,
   c,
-  rl,
-  cl,
+  rs,
+  cs,
   number = true
 )
 {
@@ -392,8 +392,8 @@ module table_dump
   {
     if
     (
-      not_defined( rl ) || is_empty( rl ) ||
-      !is_empty( first( search( r_iter, rl, 1, 0 ) ) )
+      not_defined( rs ) || is_empty( rs ) ||
+      !is_empty( first( search( r_iter, rs, 1, 0 ) ) )
     )
     {
       if ( number )
@@ -405,8 +405,8 @@ module table_dump
       {
         if
         (
-          not_defined( cl ) || is_empty( cl ) ||
-          !is_empty( first( search( c_iter, cl, 1, 0 ) ) )
+          not_defined( cs ) || is_empty( cs ) ||
+          !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
         )
         {
           log_echo
@@ -486,8 +486,8 @@ BEGIN_SCOPE example;
     echo ( table_ids=table_ids );
     echo ( table_cols_tl=table_cols_tl );
 
-    tnew = table_get_copy( table_rows, table_cols, cl=["tl", "nl"] );
-    tsum = table_get_sum( table_rows, table_cols, cl=["tl", "nl"] );
+    tnew = table_get_copy( table_rows, table_cols, cs=["tl", "nl"] );
+    tsum = table_get_sum( table_rows, table_cols, cs=["tl", "nl"] );
 
     echo ( m3r16r_tl=m3r16r_tl );
     echo ( tnew=tnew );
