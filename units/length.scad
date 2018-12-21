@@ -231,6 +231,23 @@ function length
 ) = (from == to) ? v
   : length_unit_mm2( length_unit_2mm( v, from ), to );
 
+//! Convert a value from from one units to another.
+/***************************************************************************//**
+  \param    v <decimal> A value to convert.
+  \param    from <string> The units of the value to be converted.
+  \param    to <string> A units to which the value should be converted.
+
+  \returns  <decimal> The conversion result.
+            Returns \b undef for identifiers that are not defined.
+*******************************************************************************/
+function length_inv
+(
+  v,
+  from = length_unit_base,
+  to   = length_unit_default
+) = (from == to) ? v
+  : length_unit_mm2( length_unit_2mm( v, from ), to );
+
 //! Convert a value from from one units to another with dimensions.
 /***************************************************************************//**
   \param    v <decimal> A value to convert.

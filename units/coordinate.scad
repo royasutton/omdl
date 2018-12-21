@@ -238,6 +238,25 @@ function coordinate
 ) = (from == to) ? c
   : coordinate_unit_c2( coordinate_unit_2c( c, from ), to );
 
+//! Convert point from one coordinate system to another.
+/***************************************************************************//**
+  \param    c <point> A point to convert.
+  \param    from <string> The coordinate system identifier of the point
+            to be converted.
+  \param    to <string> The coordinate system identifier to which the point
+            should be converted.
+
+  \returns  <point> The converted result.
+            Returns \b undef for identifiers that are not defined.
+*******************************************************************************/
+function coordinate_inv
+(
+  c,
+  from = coordinate_unit_base,
+  to   = coordinate_unit_default
+) = (from == to) ? c
+  : coordinate_unit_c2( coordinate_unit_2c( c, from ), to );
+
 //! Radially scale a list of 2d cartesian coordinates.
 /***************************************************************************//**
   \param    c <coords-2d> A list of cartesian coordinates [[x, y], ...].

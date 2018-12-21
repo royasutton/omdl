@@ -149,6 +149,23 @@ function angle
 ) = (from == to) ? a
   : angle_unit_d2( angle_unit_2d( a, from ), to );
 
+//! Convert an angle from some units to another.
+/***************************************************************************//**
+  \param    a <decimal|decimal-list-3> An angle to convert.
+  \param    from <string> The units of the angle to be converted.
+  \param    to <string> A units to which the angle should be converted.
+
+  \returns  <decimal|decimal-list-3> The conversion result.
+            Returns \b undef for identifiers that are not defined.
+*******************************************************************************/
+function angle_inv
+(
+  a,
+  from = angle_unit_base,
+  to   = angle_unit_default
+) = (from == to) ? a
+  : angle_unit_d2( angle_unit_2d( a, from ), to );
+
 //! @}
 //! @}
 
