@@ -361,7 +361,7 @@ module map_write
   m,
   ks,
   sort = false,
-  number = true,
+  number = false,
   fs = "^",
   index_tags = empty_lst,
   key_tags = ["b"],
