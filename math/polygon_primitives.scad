@@ -119,8 +119,6 @@ function polygon2d_regular_p
     The arc coordinates will have radius \p r centered about \p c
     contained within the heads of vectors \p v1 and \p v2. When vectors
     \p v1 and \p v2 are parallel, the arc will be a complete circle.
-    When \p fn is not specified, the arc facets are controlled by the
-    special variables \p $fa, \p $fs, and \p $fn.
 *******************************************************************************/
 function polygon2d_arc_p
 (
@@ -186,9 +184,6 @@ function polygon2d_arc_p
        1  | fillet      | fillet from one edge to the next
        2  | round       | round from one edge to the next
        3  | chamfer     | bevel from one edge to the next
-
-    When \p fn is not specified, the arc facets are controlled by the
-    special variables \p $fa, \p $fs, and \p $fn.
 *******************************************************************************/
 function polygon2d_round_p
 (
