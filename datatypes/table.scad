@@ -511,17 +511,44 @@ module table_dump
   \param    number <boolean> Number the rows.
   \param    heading_id <boolean> Output table heading identifiers.
   \param    heading_info <boolean> Output table heading descriptions.
-  \param    fs <string> A feild seperator.
+  \param    fs <string> A feild separator.
   \param    index_tags <string-list> List of html formatting tags.
   \param    row_id_tags <string-list> List of html formatting tags.
   \param    value_tags <string-list> List of html formatting tags.
 
   \details
 
-    Output each table row to the console. To output only select rows and
-    columns, assign the desired identifiers to \p rs and \p cs.
-    For example to output only the column identifiers 'c1' and 'c2', assign
-    <tt>cs = ["c1", "c2"]</tt>.
+    Output each table row to the console. To output only select rows
+    and columns, assign the desired identifiers to \p rs and \p cs. For
+    example to output only the column identifiers 'c1' and 'c2', assign
+    <tt>cs = ["c1", "c2"]</tt>. The output can then be processed to
+    produce documentation tables as shown in the example below.
+
+    /+
+        read scope output log to define example table
+     +/
+
+    \amu_scope scope  (index=2)
+    \amu_file log  (file="${scope}.log" ++rmecho ++read)
+    \amu_file th1  (text="${log}" first=1 last=1 ++read)
+    \amu_file td1  (text="${log}" first=2 last=9 ++read)
+    \amu_file th2  (text="${log}" first=10 last=10 ++read)
+    \amu_file td2  (text="${log}" first=11 ++read)
+    \amu_word th2c (words="${th2}" tokenizer="^" ++count)
+
+    \b Example
+
+      \dontinclude \amu_eval(${scope}).scad
+      \skip include
+      \until table_cols);
+
+    \b Result \include \amu_eval(${scope}).log
+
+    \b Key
+      \amu_table (columns=2 column_headings=${th1} cell_texts=${td1})
+
+    \b Table
+      \amu_table (columns=${th2c} column_headings=${th2} cell_texts=${td2})
 *******************************************************************************/
 module table_write
 (
@@ -541,32 +568,34 @@ module table_write
   // heading identifiers
   th_id_text =
   [
-    number ? str("-",fs) : empty_str,
+    number ? "-" : empty_str,
     for ( c_iter = c )
       if
       ( // when column selected
         not_defined( cs ) ||
         !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
       )
-      str(first(c_iter),fs)
+      first(c_iter)
   ];
   if ( heading_id )
-    log_echo ( lstr(th_id_text) );
+    // reformat so that 'fs' exists only between feilds
+    log_echo ( lstr([for ( i = nhead(th_id_text) ) str(i,fs), last(th_id_text)]) );
 
   // heading descriptions
   th_info_text =
   [
-    number ? str("-",fs)  : empty_str,
+    number ? "-" : empty_str,
     for ( c_iter = c )
       if
       ( // when column selected
         not_defined( cs ) ||
         !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
       )
-      str(second(c_iter),fs)
+      second(c_iter)
   ];
   if ( heading_info )
-    log_echo ( lstr(th_info_text) );
+    // reformat so that 'fs' exists only between feilds
+    log_echo ( lstr([for ( i = nhead(th_info_text) ) str(i,fs), last(th_info_text)]) );
 
   // row data
   for ( r_iter = r )
@@ -606,7 +635,7 @@ module table_write
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE example;
+BEGIN_SCOPE example1;
   BEGIN_OPENSCAD;
     include <units/length.scad>;
     include <datatypes/table.scad>;
@@ -653,6 +682,42 @@ BEGIN_SCOPE example;
     echo ( m3r16r_tl=m3r16r_tl );
     echo ( tnew=tnew );
     echo ( tsum=tsum );
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
+    include --path "${INCLUDE_PATH}" script_std.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE example2;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+
+    base_unit_length = "mm";
+
+    table_cols =
+    [ // id,  description
+      ["id",  "row identifier"],
+      ["ht",  "head type"],
+      ["td",  "thread diameter"],
+      ["tl",  "thread length"],
+      ["hd",  "head diameter"],
+      ["hl",  "head length"],
+      ["nd",  "nut width"],
+      ["nl",  "nut length"]
+    ];
+
+    table_rows =
+    [ //     id,  ht,     td,     tl,   hd,    hl,    nd,          nl
+      ["m3r08r", "r",  3.000,   8.00, 5.50, 3.000,  5.50, length(1.00, "in")],
+      ["m3r14r", "r",  3.000,  14.00, 5.50, 3.000,  5.50, length(1.25, "in")],
+      ["m4r16s", "s",  4.000,  16.00, 4.50, 4.000,  5.50, length(1.50, "in")],
+      ["m5r20h", "h",  5.000,  20.00, 6.00, 5.000,  5.50, length(1.75, "in")]
+    ];
+
+    map_write(table_cols, value_tags=["i"]);
+    table_write(table_rows, table_cols);
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
