@@ -233,8 +233,8 @@ function polygon2d_round_p
 
 //! Compute coordinates for an elliptical sector in 2D.
 /***************************************************************************//**
-  \param    r <decimal-list-2|decimal> A list [rx, ry] of decimals
-            or a single decimal for (rx=ry).
+  \param    r <decimal-list-2|decimal> The elliptical radius. A list
+            [rx, ry] of decimals or a single decimal for (rx=ry).
   \param    c <point-2d> The center coordinate [x, y].
   \param    v1 <line-2d|decimal> The sector angle 1.
             A 2d line, vector, or decimal.
@@ -251,7 +251,7 @@ function polygon2d_round_p
 
     The coordinates will be between angle 1 and angle 2 and will be
     ordered clockwise. The sector sweep direction can be controlled by
-    sign of the angles.
+    the sign of the angles.
 
   [facets]: \ref openscad_fn()
 *******************************************************************************/
