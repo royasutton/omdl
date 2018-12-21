@@ -70,8 +70,11 @@ include <../constants.scad>;
 
 //----------------------------------------------------------------------------//
 
-//! <string> The base units for angle measurements.
+//! <string> The base units for value storage.
 angle_unit_base = "d";
+
+//! <string> The default units when unspecified.
+angle_unit_default = "d";
 
 //! Return the name of an angle unit identifier.
 /***************************************************************************//**
@@ -82,7 +85,7 @@ angle_unit_base = "d";
 *******************************************************************************/
 function angle_unit_name
 (
-  u = angle_unit_base
+  u = angle_unit_default
 ) = u == "r"   ? "radian"
   : u == "d"   ? "degree"
   : u == "dms" ? "degree, minute, second"
@@ -141,9 +144,10 @@ function angle_unit_2d
 function angle
 (
   a,
-  from = angle_unit_base,
+  from = angle_unit_default,
   to   = angle_unit_base
-) = angle_unit_d2( angle_unit_2d( a, from ), to );
+) = (from == to) ? a
+  : angle_unit_d2( angle_unit_2d( a, from ), to );
 
 //! @}
 //! @}
@@ -158,21 +162,24 @@ BEGIN_SCOPE example;
     include <units/angle.scad>;
 
     angle_unit_base = "d";
+    angle_unit_default = "r";
 
-    // get base unit name
-    un = angle_unit_name();
+    // get unit names
+    bu = angle_unit_name(angle_unit_base);
+    du = angle_unit_name();
 
     // absolute angle measurements in base unit.
-    c1 = angle(pi/6, "r");
-    c2 = angle(pi/4, "r");
+    c1 = angle(pi/6);
+    c2 = angle(pi/4);
     c3 = angle(180, "d");
     c4 = angle([30, 15, 50], "dms");
 
     // convert between units.
     c5 = angle([30, 15, 50], from="dms", to="r");
-    c6 = angle(0.528205, from="r", to="dms");
+    c6 = angle(0.528205, to="dms");
 
-    echo( un=un );
+    echo( bu=bu );
+    echo( du=du );
     echo( c1=c1 );
     echo( c2=c2 );
     echo( c3=c3 );

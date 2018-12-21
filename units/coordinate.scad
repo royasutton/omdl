@@ -97,8 +97,11 @@ include <../constants.scad>;
 
 //----------------------------------------------------------------------------//
 
-//! <string> The base coordinate system.
+//! <string> The base units for value storage.
 coordinate_unit_base = "c";
+
+//! <string> The default units when unspecified.
+coordinate_unit_default = "c";
 
 //! <boolean> When converting to angular measures add 360 to negative angles.
 coordinate_positive_angle = true;
@@ -112,7 +115,7 @@ coordinate_positive_angle = true;
 *******************************************************************************/
 function coordinate_unit_name
 (
-  s = coordinate_unit_base
+  s = coordinate_unit_default
 ) = (s == "c") ? "cartesian"
   : (s == "p") ? "polar"
   : (s == "y") ? "cylindrical"
@@ -230,9 +233,10 @@ function coordinate_unit_2c
 function coordinate
 (
   c,
-  from = coordinate_unit_base,
+  from = coordinate_unit_default,
   to   = coordinate_unit_base
-) = coordinate_unit_c2( coordinate_unit_2c( c, from ), to );
+) = (from == to) ? c
+  : coordinate_unit_c2( coordinate_unit_2c( c, from ), to );
 
 //! Radially scale a list of 2d cartesian coordinates.
 /***************************************************************************//**
@@ -349,21 +353,24 @@ BEGIN_SCOPE example;
     include <units/coordinate.scad>;
 
     coordinate_unit_base = "c";
+    coordinate_unit_default = "p";
 
-    // get the base coordinate system name
-    cs = coordinate_unit_name();
+    // get unit names
+    bu = coordinate_unit_name(coordinate_unit_base);
+    du = coordinate_unit_name();
 
     // absolute coordinates in a specified coordinate system.
     c1 = coordinate([1, 1, 1], "c");
-    c2 = coordinate([1, 180], "p");
+    c2 = coordinate([1, 180]);
     c3 = coordinate([1, 90, -1], "y");
     c4 = coordinate([1, 5, 50], "s");
 
     // convert between system.
     c5 = coordinate([10*sqrt(2), 45, 45], from="s", to="y");
-    c6 = coordinate([sqrt(2), 45], from="p", to="c");
+    c6 = coordinate([sqrt(2), 45], to="c");
 
-    echo( cs=cs );
+    echo( bu=bu );
+    echo( du=du );
     echo( c1=c1 );
     echo( c2=c2 );
     echo( c3=c3 );

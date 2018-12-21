@@ -84,8 +84,11 @@
 
 //----------------------------------------------------------------------------//
 
-//! <string> The base unit for length measurements.
+//! <string> The base units for value storage.
 length_unit_base = "mm";
+
+//! <string> The default units when unspecified.
+length_unit_default = "mm";
 
 //! Return the long name for a length unit identifier.
 /***************************************************************************//**
@@ -98,7 +101,7 @@ length_unit_base = "mm";
 *******************************************************************************/
 function length_unit_name_1d
 (
-  u = length_unit_base
+  u = length_unit_default
 ) = u == "pm"   ? "picometer"
   : u == "nm"   ? "nanometer"
   : u == "um"   ? "micrometer"
@@ -129,7 +132,7 @@ function length_unit_name_1d
 *******************************************************************************/
 function length_unit_name_symbol
 (
-  u = length_unit_base,
+  u = length_unit_default,
   d = 1
 ) = d == 1 ?      length_unit_name_1d( u )
   : d == 2 ? str( length_unit_name_1d( u ), "^2" )
@@ -144,7 +147,7 @@ function length_unit_name_symbol
 *******************************************************************************/
 function length_unit_name_word
 (
-  u = length_unit_base,
+  u = length_unit_default,
   d = 1
 ) = d == 1 ?                 length_unit_name_1d( u )
   : d == 2 ? str( "square ", length_unit_name_1d( u ) )
@@ -159,7 +162,7 @@ function length_unit_name_word
 *******************************************************************************/
 function length_unit_name
 (
-  u = length_unit_base,
+  u = length_unit_default,
   d = 1,
   w = false
 ) = w == true ? length_unit_name_word( u, d )
@@ -219,15 +222,14 @@ function length_unit_2mm
 
   \returns  <decimal> The conversion result.
             Returns \b undef for identifiers that are not defined.
-
-  \private
 *******************************************************************************/
 function length
 (
   v,
-  from = length_unit_base,
+  from = length_unit_default,
   to   = length_unit_base
-) = length_unit_mm2( length_unit_2mm( v, from ), to );
+) = (from == to) ? v
+  : length_unit_mm2( length_unit_2mm( v, from ), to );
 
 //! Convert a value from from one units to another with dimensions.
 /***************************************************************************//**
@@ -243,7 +245,7 @@ function length
 function length_d
 (
   v,
-  from = length_unit_base,
+  from = length_unit_default,
   to   = length_unit_base,
   d    = 1
 ) = d == 1 ?    ( length(v, from, to)    )
@@ -264,12 +266,14 @@ BEGIN_SCOPE example;
     include <units/length.scad>;
 
     length_unit_base = "mm";
+    length_unit_default = "in";
 
-    // get base unit name
-    un = length_unit_name();
+    // get unit names
+    bu = length_unit_name(length_unit_base);
+    du = length_unit_name();
 
     // absolute length measurements in base unit.
-    c1 = length(1/8, "in");
+    c1 = length(1/8);
     c2 = length(3.175, "mm");
     c3 = length(25, "mil");
     c4 = length(1, "ft", d=3);
@@ -278,7 +282,8 @@ BEGIN_SCOPE example;
     c5 = length(10, from="mil", to="in");
     c6 = length(10, from="ft", to="mm");
 
-    echo( un=un );
+    echo( bu=bu );
+    echo( du=du );
     echo( c1=c1 );
     echo( c2=c2 );
     echo( c3=c3 );
