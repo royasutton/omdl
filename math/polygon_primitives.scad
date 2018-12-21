@@ -106,19 +106,21 @@ function polygon2d_regular_p
   \param    v1 <line-2d|decimal> The arc start angle.
             A 2d line, vector, or decimal angle 1.
   \param    v2 <line-2d|decimal> The arc end angle.
-            A 2d line,  vector, or decimal angle 2.
-  \param    fn <integer> The number of arc fragments.
+            A 2d line, vector, or decimal angle 2.
+  \param    fn <integer> The number of [facets].
   \param    cw <boolean> Sweep clockwise along arc from the head of
             vector \p v1 to the head of vector \p v2 when \p cw =
             \b true, and counter clockwise when \p cw = \b false.
 
-  \returns  <coords-2d> A list of arc coordinates points [[x, y], ...].
+  \returns  <coords-2d> A list of coordinates points [[x, y], ...].
 
   \details
 
     The arc coordinates will have radius \p r centered about \p c
     contained within the heads of vectors \p v1 and \p v2. When vectors
     \p v1 and \p v2 are parallel, the arc will be a complete circle.
+
+  [facets]: \ref openscad_fn()
 *******************************************************************************/
 function polygon2d_arc_p
 (
@@ -163,11 +165,11 @@ function polygon2d_arc_p
   \param    v1 <line-2d|decimal> The round start angle.
             A 2d line, vector, or decimal angle 1.
   \param    v2 <line-2d|decimal> The round end angle.
-            A 2d line,  vector, or decimal angle 2.
-  \param    fn <integer> The number of fragments.
+            A 2d line, vector, or decimal angle 2.
+  \param    fn <integer> The number of [facets].
   \param    cw <boolean> The coordinate point ordering.
 
-  \returns  <coords-2d> A list of arc coordinates points [[x, y], ...].
+  \returns  <coords-2d> A list of coordinates points [[x, y], ...].
 
   \details
 
@@ -184,6 +186,8 @@ function polygon2d_arc_p
        1  | fillet      | fillet from one edge to the next
        2  | round       | round from one edge to the next
        3  | chamfer     | bevel from one edge to the next
+
+  [facets]: \ref openscad_fn()
 *******************************************************************************/
 function polygon2d_round_p
 (
@@ -247,8 +251,7 @@ function polygon2d_round_p
             integer for (v1fn=v2fn=v3fn=v4fn).
   \param    cw <boolean> Polygon vertex ordering.
 
-  \returns  <coords-2d> A list of coordinates points [[x, y], ...]
-            that define the rounded trapezoid.
+  \returns  <coords-2d> A list of coordinates points [[x, y], ...].
 
   \details
 
