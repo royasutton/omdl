@@ -83,6 +83,34 @@ module polygon_round
   polygon( pp );
 }
 
+//! An elliptical sector.
+/***************************************************************************//**
+  \copydetails polygon2d_elliptical_sector_p()
+
+  The coordinate points are rendered using polygon().
+  Parameter \p cw = \b true preset.
+
+  \details
+
+    \b Example
+    \amu_eval ( function=polygon_elliptical_sector ${example_dim} )
+*******************************************************************************/
+module polygon_elliptical_sector
+(
+  r = 1,
+  c = origin2d,
+  v1 = x_axis2d_uv,
+  v2 = x_axis2d_uv,
+  s = true,
+  fn
+)
+{
+  cw = true;
+
+  c = polygon2d_elliptical_sector_p(r=r, c=c, v1=v1, v2=v2, s=s, fn=fn, cw=cw);
+
+  polygon( c );
+}
 
 //! A trapezoid with vertex rounding.
 /***************************************************************************//**
@@ -135,6 +163,8 @@ BEGIN_SCOPE dim;
 
     if (shape == "polygon_round")
       polygon_round( r=20, v1=[1,1], v2=135 );
+    else if (shape == "polygon_elliptical_sector")
+      polygon_elliptical_sector( r=[20, 15], v1=115, v2=-115 );
     else if (shape == "polygon_trapezoid")
       polygon_trapezoid( b=[20,20], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
   END_OPENSCAD;
@@ -146,6 +176,7 @@ BEGIN_SCOPE dim;
     defines   name "shapes" define "shape"
               strings "
                 polygon_round
+                polygon_elliptical_sector
                 polygon_trapezoid
               ";
     variables add_opts_combine "views shapes";
@@ -164,6 +195,7 @@ BEGIN_SCOPE manifest;
     grid_repeat( g=5, i=60, center=true )
     {
       polygon_round( r=20, v1=[1,1], v2=135 );
+      polygon_elliptical_sector( r=[20, 15], v1=115, v2=-115 );
       polygon_trapezoid( b=[20,20], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
     }
   END_OPENSCAD;
