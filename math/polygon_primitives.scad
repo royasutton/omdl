@@ -231,6 +231,68 @@ function polygon2d_round_p
   )
   (cw == true) ? pp : reverse(pp);
 
+//! Compute coordinates for an elliptical sector in 2D.
+/***************************************************************************//**
+  \param    r <decimal-list-2|decimal> A list [rx, ry] of decimals
+            or a single decimal for (rx=ry).
+  \param    c <point-2d> The center coordinate [x, y].
+  \param    v1 <line-2d|decimal> The sector angle 1.
+            A 2d line, vector, or decimal.
+  \param    v2 <line-2d|decimal> The sector angle 2.
+            A 2d line, vector, or decimal.
+  \param    s <boolean> Use signed vector angle conversions. When
+            \b false, positive angle conversion will be used.
+  \param    fn <integer> The number of [facets].
+  \param    cw <boolean> The coordinate point ordering.
+
+  \returns  <coords-2d> A list of coordinates points [[x, y], ...].
+
+  \details
+
+    The coordinates will be between angle 1 and angle 2 and will be
+    ordered clockwise. The sector sweep direction can be controlled by
+    sign of the angles.
+
+  [facets]: \ref openscad_fn()
+*******************************************************************************/
+function polygon2d_elliptical_sector_p
+(
+  r = 1,
+  c = origin2d,
+  v1 = x_axis2d_uv,
+  v2 = x_axis2d_uv,
+  s = true,
+  fn,
+  cw = true
+) =
+  let
+  (
+    rx  = edefined_or(r, 0, r),
+    ry  = edefined_or(r, 1, rx),
+
+    va1 = is_number(v1) ? v1 : angle_ll(x_axis2d_uv, v1, s),
+    va2 = is_number(v2) ? v2 : angle_ll(x_axis2d_uv, v2, s),
+
+    // full return when angles are equal
+    va3 = (va1 == va2) ? va2+360 : va2,
+
+    // number of arc facets
+    af  = defined_or(fn, openscad_fn((rx+ry)/2)),
+
+    // point generation ordering
+    as  = (va3 > va1) ? [af:-1:0] : [0:af],
+
+    // cw ordering
+    pp =
+    [
+      if (va1 != va2) c,
+      for (i = as)
+        let (pa = ((af-i)*va1 + i*va3) / af)
+        c + [rx*cos(pa), ry*sin(pa)]
+    ]
+  )
+  (cw == true) ? pp : reverse(pp);
+
 //! Compute the coordinates for a rounded trapezoid in 2D space.
 /***************************************************************************//**
   \param    b <decimal-list-2|decimal> The base lengths. A list [b1, b2]
