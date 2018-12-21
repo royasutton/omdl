@@ -134,10 +134,7 @@ function polygon2d_arc_p
   let
   (
     // number of arc facets
-    naf = is_defined(fn) ? fn
-        : (r < grid_fine) ? 3
-        : ($fn > 0.0) ? ($fn >= 3) ? $fn : 3
-        : ceil( max( min(360/$fa, r*tau/$fs), 5 ) ),
+    naf = defined_or(fn, openscad_fn(r)),
 
     // create vectors if numerical angles have been specified.
     va1 = is_number(v1) ? [cos(v1), sin(v1)] : v1,
