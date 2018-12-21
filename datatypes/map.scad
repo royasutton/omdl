@@ -333,10 +333,12 @@ module map_dump
 
     Output map keys and values the console. To output only select keys,
     assign the desired key identifiers to \p ks. For example to output
-    only 'key1' and 'key2', assign <tt>ks = ["key1", "key2"]</tt>.
+    only 'key1' and 'key2', assign <tt>ks = ["key1", "key2"]</tt>. The
+    output can then be processed to produce documentation tables as
+    shown in the example below.
 
     /+
-        read scope output log to define table
+        read scope output log to define example table
      +/
 
     \amu_scope scope  (index=2)
