@@ -277,9 +277,11 @@
 
     A \b vector has a direction and magnitude in space. A \b line, too,
     has direction and magnitude, but also has location, as it starts at
-    one point in space and ends at another. Operators in [omdl] make
-    use of a common convention for specifying Euclidean vectors and
-    straight lines as summarized in the following table:
+    one point in space and ends at another. Although a line can be
+    specified in one dimension, most library functions operate on two
+    and/or three dimensional lines. Operators in [omdl] make use of a
+    common convention for specifying Euclidean vectors and straight
+    lines as summarized in the following table:
 
     Given two points \c 'p1' and \c 'p2', in space:
 
