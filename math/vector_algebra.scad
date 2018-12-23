@@ -63,7 +63,7 @@
 
 //! Test if a value defines a point.
 /***************************************************************************//**
-  \param    p \<value> A value.
+  \param    p <value-2d|value-3d> A 2d or 3d value.
 
   \returns  <boolean> \b true when the value defines a point and
             \b false otherwise.
@@ -81,7 +81,7 @@ function is_point
 
 //! Test if a value defines a Euclidean vector.
 /***************************************************************************//**
-  \param    p \<value> A value.
+  \param    v <value-2d|value-3d> A 2d or 3d value.
 
   \returns  <boolean> \b true when the value defines a Euclidean vector
                       and \b false otherwise.
@@ -99,7 +99,7 @@ function is_vector
 
 //! Test if a value defines a line.
 /***************************************************************************//**
-  \param    p \<value> A value.
+  \param    l <value-2d|value-3d> A 2d or 3d value.
 
   \returns  <boolean> \b true when the value defines a line and
             \b false otherwise.
@@ -119,7 +119,7 @@ function is_line
 
 //! Test if a value defines a vector or a line.
 /***************************************************************************//**
-  \param    p \<value> A value.
+  \param    l <value-2d|value-3d> A 2d or 3d value.
 
   \returns  <boolean> \b true when the value defines a vector or a line
             and \b false otherwise.
@@ -137,7 +137,7 @@ function is_vector_or_line
 
 //! Test if a value defines a plane.
 /***************************************************************************//**
-  \param    p \<value> A value.
+  \param    n <value-2d|value-3d> A 2d or 3d value.
 
   \returns  <boolean> \b true when the value defines a plane and
             \b false otherwise.
