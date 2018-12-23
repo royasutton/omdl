@@ -362,15 +362,14 @@ function line_new
 
   \details
 
-    When \p l is a line, only the dimension of the initial point is
-    considered to determine the line dimension.
-
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
 function line_dim
 (
   l
-) = is_defined(len(l[0])) ? len(l[0]) : len(l);
+) = is_vector(l) ? len( line_tp(l) )
+  : is_line(l) ? len( line_tp(l) )
+  : undef;
 
 //! Return the terminal point of a line or vector.
 /***************************************************************************//**
@@ -385,9 +384,9 @@ function line_dim
 function line_tp
 (
   l
-) = is_iterable(l[0]) ?
-    (len(l)>1) ? l[1] : l[0]
-  : l;
+) = is_vector(l) ? line_to_vector(l)
+  : is_line(l) ? l[1]
+  : undef;
 
 //! Return the initial point of a line or vector.
 /***************************************************************************//**
@@ -402,11 +401,9 @@ function line_tp
 function line_ip
 (
   l
-) = is_iterable(l[0]) ?
-    (len(l)>1) ? l[0] : consts(len(l[0]), 0)
-  : is_iterable(l) ?
-    consts(len(l), 0)
-  : 0;
+) = is_vector(l) ? consts(len(line_to_vector(l)), 0)
+  : is_line(l) ? l[0]
+  : undef;
 
 //! Convert line to vector by shifting it to the origin.
 /***************************************************************************//**
@@ -778,39 +775,39 @@ BEGIN_SCOPE validate;
       ["line_dim",
         2,                                                  // fac
         4,                                                  // crp
-        2,                                                  // t01
-        0,                                                  // t02
+        undef,                                              // t01
+        undef,                                              // t02
         2,                                                  // t03
-        1,                                                  // t04
+        undef,                                              // t04
         2,                                                  // t05
         3,                                                  // t06
-        4,                                                  // t07
+        undef,                                              // t07
         3,                                                  // t08
         3                                                   // t09
       ],
       ["line_tp",
         2,                                                  // fac
         4,                                                  // crp
-        [undef,undef],                                      // t01
-        empty_lst,                                          // t02
+        undef,                                              // t01
+        undef,                                              // t02
         [60,50],                                            // t03
-        [58],                                               // t04
+        undef,                                              // t04
         [58,16],                                            // t05
         [158,116,75],                                       // t06
-        [178,16,25,20],                                     // t07
+        undef,                                              // t07
         y_axis3d_uv,                                        // t08
         y_axis3d_uv                                         // t09
       ],
       ["line_ip",
         2,                                                  // fac
         4,                                                  // crp
-        origin2d,                                           // t01
-        empty_lst,                                          // t02
+        undef,                                              // t01
+        undef,                                              // t02
         origin2d,                                           // t03
-        [99],                                               // t04
+        undef,                                              // t04
         [99,2],                                             // t05
         [199,20,55],                                        // t06
-        [169,27,35,10],                                     // t07
+        undef,                                              // t07
         x_axis3d_uv,                                        // t08
         x_axis3d_uv                                         // t09
       ],
