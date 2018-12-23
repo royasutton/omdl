@@ -75,8 +75,8 @@
 function is_point
 (
   p
-) = (len(p) == 2) ? not_defined(p[0] % p[1]) ? false : true
-  : (len(p) == 3) ? not_defined(p[0] % p[1] % p[2]) ? false : true
+) = (len(p) == 2) ? is_defined(p[0] % p[1]) ? true : false
+  : (len(p) == 3) ? is_defined(p[0] % p[1] % p[2]) ? true : false
   : false;
 
 //! Test if a value defines a Euclidean vector.
@@ -385,7 +385,9 @@ function line_dim
 function line_tp
 (
   l
-) = is_iterable(l[0]) ? (len(l)>1) ? l[1] : l[0] : l;
+) = is_iterable(l[0]) ?
+    (len(l)>1) ? l[1] : l[0]
+  : l;
 
 //! Return the initial point of a line or vector.
 /***************************************************************************//**
@@ -400,8 +402,11 @@ function line_tp
 function line_ip
 (
   l
-) = is_iterable(l[0]) ? (len(l)>1) ? l[0] : consts(len(l[0]), 0)
-  : is_iterable(l) ? consts(len(l), 0) : 0;
+) = is_iterable(l[0]) ?
+    (len(l)>1) ? l[0] : consts(len(l[0]), 0)
+  : is_iterable(l) ?
+    consts(len(l), 0)
+  : 0;
 
 //! Convert line to vector by shifting it to the origin.
 /***************************************************************************//**
