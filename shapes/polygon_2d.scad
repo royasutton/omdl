@@ -34,10 +34,6 @@
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
-include <../math/triangle.scad>;
-include <../math/polygon_primitives.scad>;
-include <../tools/repeat.scad>;
-
 //----------------------------------------------------------------------------//
 // dim macro, dim table, and group.
 //----------------------------------------------------------------------------//

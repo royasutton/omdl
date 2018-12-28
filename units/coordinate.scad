@@ -33,8 +33,6 @@
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
-include <../constants.scad>;
-
 //----------------------------------------------------------------------------//
 // group.
 //----------------------------------------------------------------------------//
@@ -369,7 +367,7 @@ function coordinate_scale3d_s2c
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <units/coordinate.scad>;
+    include <omdl-base.scad>;
 
     coordinate_unit_base = "c";
     coordinate_unit_default = "p";

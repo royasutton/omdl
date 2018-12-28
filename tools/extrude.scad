@@ -34,8 +34,6 @@
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
-include <../math/bitwise.scad>;
-
 //----------------------------------------------------------------------------//
 // dim macro, dim table, and group.
 //----------------------------------------------------------------------------//
@@ -263,7 +261,7 @@ module linear_extrude_uls
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <tools/extrude.scad>;
+    include <omdl-base.scad>;
 
     shape = "rotate_extrude_tr";
     $fn = 36;

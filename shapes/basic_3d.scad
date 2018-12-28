@@ -34,8 +34,6 @@
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
-include <basic_2d.scad>;
-
 //----------------------------------------------------------------------------//
 // dim macro, dim table, and group.
 //----------------------------------------------------------------------------//
@@ -438,7 +436,7 @@ module star3d
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <shapes/basic_3d.scad>;
+    include <omdl-base.scad>;
 
     shape = "cone";
     $fn = 36;
@@ -482,7 +480,7 @@ END_SCOPE;
 
 BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
-    include <shapes/basic_3d.scad>;
+    include <omdl-base.scad>;
 
     $fn = 36;
 

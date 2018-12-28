@@ -8,8 +8,6 @@ local_path        :=  datatypes
 
 local_library     :=  module \
                       \
-                      datatypes-base \
-                      \
                       identify_scalar \
                       identify_iterable \
                       identify_list \

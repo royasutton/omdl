@@ -677,9 +677,7 @@ function plane_to_normal
 /*
 BEGIN_SCOPE validate;
   BEGIN_OPENSCAD;
-    include <console.scad>;
-    include <datatypes/table.scad>;
-    include <math/vector_algebra.scad>;
+    include <omdl-base.scad>;
     include <validation.scad>;
 
     echo( str("openscad version ", version()) );

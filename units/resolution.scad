@@ -33,10 +33,6 @@
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
-include <../console.scad>;
-include <../constants.scad>;
-include <length.scad>;
-
 //----------------------------------------------------------------------------//
 // group.
 //----------------------------------------------------------------------------//
@@ -447,7 +443,7 @@ function resolution_facetsv
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <units/resolution.scad>;
+    include <omdl-base.scad>;
 
     length_unit_base = "in";
 

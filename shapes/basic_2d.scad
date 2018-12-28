@@ -34,9 +34,6 @@
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
-include <../math/triangle.scad>;
-include <../tools/repeat.scad>;
-
 //----------------------------------------------------------------------------//
 // dim macro, dim table, and group.
 //----------------------------------------------------------------------------//
@@ -1288,7 +1285,7 @@ module star2d
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <shapes/basic_2d.scad>;
+    include <omdl-base.scad>;
 
     shape = "ellipse_cs";
     $fn = 36;
@@ -1362,7 +1359,7 @@ END_SCOPE;
 
 BEGIN_SCOPE manifest;
   BEGIN_OPENSCAD;
-    include <shapes/basic_2d.scad>;
+    include <omdl-base.scad>;
 
     $fn = 36;
 

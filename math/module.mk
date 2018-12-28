@@ -8,8 +8,6 @@ local_path        :=  math
 
 local_library     :=  module \
                       \
-                      math-base \
-                      \
                       linear_algebra \
                       vector_algebra \
                       \

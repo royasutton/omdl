@@ -33,9 +33,6 @@
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
-include <../console.scad>;
-include <datatypes-base.scad>;
-
 //----------------------------------------------------------------------------//
 // group.
 //----------------------------------------------------------------------------//
@@ -421,7 +418,7 @@ module map_write
 /*
 BEGIN_SCOPE example1;
   BEGIN_OPENSCAD;
-    include <datatypes/map.scad>;
+    include <omdl-base.scad>;
 
     map =
     [
@@ -463,7 +460,7 @@ END_SCOPE;
 
 BEGIN_SCOPE example2;
   BEGIN_OPENSCAD;
-    include <datatypes/map.scad>;
+    include <omdl-base.scad>;
 
     map =
     [

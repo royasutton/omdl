@@ -243,9 +243,7 @@ function all_len
 /*
 BEGIN_SCOPE validate;
   BEGIN_OPENSCAD;
-    include <console.scad>;
-    include <datatypes/datatypes-base.scad>;
-    include <datatypes/table.scad>;
+    include <omdl-base.scad>;
     include <validation.scad>;
 
     echo( str("openscad version ", version()) );

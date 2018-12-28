@@ -935,9 +935,7 @@ dtr_polyhedra_cupolas =
 BEGIN_SCOPE db;
 BEGIN_SCOPE autostat;
   BEGIN_OPENSCAD;
-    include <math/polytope.scad>;
-    include <math/utility.scad>;
-    include <datatypes/table.scad>;
+    include <omdl-base.scad>;
     include <database/geometry/polyhedra/cupolas.scad>;
 
     fs  = "^";
@@ -951,7 +949,7 @@ BEGIN_SCOPE autostat;
     (
       str
       (
-        "no.", fs, "table id", fs, "other name", fs,
+        "no.", fs, "id", fs, "other name", fs,
         "vertices", fs, "faces", fs, "edges",
 
         fs, "face-verticies",
@@ -1007,9 +1005,7 @@ END_SCOPE;
 BEGIN_SCOPE db;
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <units/coordinate.scad>;
-    include <tools/polytope.scad>;
-    include <datatypes/table.scad>;
+    include <omdl-base.scad>;
     include <database/geometry/polyhedra/cupolas.scad>;
 
     config = 0;

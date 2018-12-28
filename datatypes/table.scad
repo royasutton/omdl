@@ -33,9 +33,6 @@
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
-include <../console.scad>;
-include <datatypes-base.scad>;
-
 //----------------------------------------------------------------------------//
 // group.
 //----------------------------------------------------------------------------//
@@ -637,8 +634,7 @@ module table_write
 /*
 BEGIN_SCOPE example1;
   BEGIN_OPENSCAD;
-    include <units/length.scad>;
-    include <datatypes/table.scad>;
+    include <omdl-base.scad>;
 
     base_unit_length = "mm";
 

@@ -33,8 +33,6 @@
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
-include <datatypes/datatypes-base.scad>;
-
 //----------------------------------------------------------------------------//
 // group.
 //----------------------------------------------------------------------------//
@@ -142,7 +140,7 @@ function validate
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <console.scad>;
+    include <omdl-base.scad>;
     include <validation.scad>;
 
     //

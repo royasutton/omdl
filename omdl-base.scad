@@ -33,21 +33,27 @@
 //----------------------------------------------------------------------------//
 // console + constants
 //----------------------------------------------------------------------------//
-//  include <console.scad>;
-//  include <constants.scad>;
+include <console.scad>;
+include <constants.scad>;
 
 //----------------------------------------------------------------------------//
 // units
 //----------------------------------------------------------------------------//
-//  include <units/length.scad>;
 include <units/angle.scad>;
 include <units/coordinate.scad>;
+include <units/length.scad>;
 include <units/resolution.scad>;
 
 //----------------------------------------------------------------------------//
 // data types
 //----------------------------------------------------------------------------//
-//  include <datatypes/datatypes-base.scad>;
+include <datatypes/identify_scalar.scad>;
+include <datatypes/identify_iterable.scad>;
+include <datatypes/identify_list.scad>;
+
+include <datatypes/operate_scalar.scad>;
+include <datatypes/operate_iterable.scad>;
+include <datatypes/operate_list.scad>;
 
 include <datatypes/map.scad>;
 include <datatypes/table.scad>;
@@ -55,30 +61,37 @@ include <datatypes/table.scad>;
 //----------------------------------------------------------------------------//
 // math
 //----------------------------------------------------------------------------//
-//  include <math/math-base.scad>;
+include <math/vector_algebra.scad>;
+include <math/linear_algebra.scad>;
 
-//  include <math/triangle.scad>;
-//  include <math/polygon_primitives.scad>;
-//  include <math/polytope.scad>;
-//  include <math/bitwise.scad>;
+include <math/triangle.scad>;
+
+include <math/polytope.scad>;
+include <math/polygon_primitives.scad>;
+
+include <math/bitwise.scad>;
 include <math/utility.scad>;
 
 //----------------------------------------------------------------------------//
 // shapes
 //----------------------------------------------------------------------------//
-//  include <shapes/basic_2d.scad>;
+include <shapes/basic_2d.scad>;
 include <shapes/basic_2de.scad>;
 include <shapes/basic_2dr.scad>;
+
 include <shapes/basic_3d.scad>;
-// include <shapes/polygon_2d.scad>;
+
+include <shapes/polygon_2d.scad>;
 
 //----------------------------------------------------------------------------//
 // tools
 //----------------------------------------------------------------------------//
-//  include <tools/align.scad>;
-//  include <tools/extrude.scad>;
+include <tools/align.scad>;
+
+include <tools/extrude.scad>;
+include <tools/repeat.scad>;
+
 include <tools/polytope.scad>;
-//  include <tools/repeat.scad>;
 
 //----------------------------------------------------------------------------//
 // end of file

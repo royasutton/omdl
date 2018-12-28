@@ -33,9 +33,6 @@
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
-include <../math/polytope.scad>;
-include <align.scad>;
-
 //----------------------------------------------------------------------------//
 // group.
 //----------------------------------------------------------------------------//
@@ -190,7 +187,7 @@ module polytope_number
     \b Example
 
     \code{.c}
-    include <tools/polytope.scad>;
+    include <omdl-base.scad>;
 
     s = second(xy_plane_os) * 25;
     p = polygon2d_linear_extrude_pf(s, h=50);

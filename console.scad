@@ -211,7 +211,7 @@ module log_error( m )
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <console.scad>;
+    include <omdl-base.scad>;
 
     $log_debug = true;
     message = "console log message";

@@ -33,8 +33,6 @@
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
-include <../datatypes/datatypes-base.scad>;
-
 //----------------------------------------------------------------------------//
 // validation.
 //----------------------------------------------------------------------------//
@@ -301,9 +299,7 @@ function bitwise_rsh
 /*
 BEGIN_SCOPE validate;
   BEGIN_OPENSCAD;
-    include <console.scad>;
-    include <datatypes/table.scad>;
-    include <math/bitwise.scad>;
+    include <omdl-base.scad>;
     include <validation.scad>;
 
     echo( str("openscad version ", version()) );

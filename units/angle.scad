@@ -33,8 +33,6 @@
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
-include <../constants.scad>;
-
 //----------------------------------------------------------------------------//
 // group.
 //----------------------------------------------------------------------------//
@@ -176,7 +174,7 @@ function angle_inv
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <units/angle.scad>;
+    include <omdl-base.scad>;
 
     angle_unit_base = "d";
     angle_unit_default = "r";
