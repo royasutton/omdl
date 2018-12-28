@@ -42,7 +42,6 @@ include <constants.scad>;
 include <units/angle.scad>;
 include <units/coordinate.scad>;
 include <units/length.scad>;
-include <units/resolution.scad>;
 
 //----------------------------------------------------------------------------//
 // data types
