@@ -299,8 +299,6 @@ module ellipsoid_s
 
     \b Example
     \amu_eval ( function=pyramid_t ${example_dim} )
-
-  \todo Support vertex rounding radius.
 *******************************************************************************/
 module pyramid_t
 (
@@ -342,8 +340,6 @@ module pyramid_t
 
     \b Example
     \amu_eval ( function=pyramid_q ${example_dim} )
-
-  \todo Support vertex rounding radius.
 *******************************************************************************/
 module pyramid_q
 (
