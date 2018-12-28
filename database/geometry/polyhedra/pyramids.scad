@@ -448,10 +448,10 @@ BEGIN_SCOPE autostat;
           i, fs, id, fs, fo, fs,
           len(c), fs, len(f), fs, len(e),
 
-          fs, hist(qsort(polytope_face_vertex_counts(f)), m=9),
-          fs, hist(qsort(dround(polytope_face_angles(c, f), d=1)), m=9),
-          fs, hist(qsort(sround(polytope_edge_lengths(c, e), d=3)), m=9),
-          fs, hist(qsort(dround(polytope_edge_angles(c, f), d=1)), m=9),
+          fs, histogram(qsort(polytope_face_vertex_counts(f)), m=9),
+          fs, histogram(qsort(dround(polytope_face_angles(c, f), d=1)), m=9),
+          fs, histogram(qsort(sround(polytope_edge_lengths(c, e), d=3)), m=9),
+          fs, histogram(qsort(dround(polytope_edge_angles(c, f), d=1)), m=9),
 
           fs
         )
