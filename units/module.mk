@@ -10,8 +10,7 @@ local_library     :=  module \
                       \
                       angle \
                       coordinate \
-                      length \
-                      resolution
+                      length
 
 local_release_add :=
 

@@ -43,9 +43,25 @@
 
 //----------------------------------------------------------------------------//
 
-//----------------------------------------------------------------------------//
-// statistical / informational
-//----------------------------------------------------------------------------//
+//! Return facets number for the given arc radius.
+/***************************************************************************//**
+  \param    r <decimal> The arc radius.
+
+  \returns  <integer> The number of facets.
+
+  \details
+
+    This function impliments the \c get_fragments_from_r() code that is
+    used by OpenSCAD to calculates the number of fragments in a circle
+    or arc. The arc facets are controlled by the special variables \p
+    $fa, \p $fs, and \p $fn.
+*******************************************************************************/
+function openscad_fn
+(
+  r
+) = (r < grid_fine) ? 3
+  : ($fn > 0.0) ? ($fn >= 3) ? $fn : 3
+  : ceil( max( min(360/$fa, r*tau/$fs), 5 ) );
 
 //! Generate a histogram for the elements of a list of values.
 /***************************************************************************//**
