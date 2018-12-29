@@ -1250,6 +1250,7 @@ function polygon2d_linear_extrude_pf
   \param    vfn <integer-list-n> The vertices arc fragment number.
             A list [v1fn, v2fn, v3fn, ... vnfn] of \em n integers or a
             single integer for (v1fn=v2fn=v3fn= ... =vnfn).
+  \param    w <boolean> Wrap-at-end during 3-point coordinate selection.
   \param    cw <boolean> Polygon vertex ordering.
 
   \returns  <coords-2d> A new list of coordinates points [[x, y], ...]
@@ -1307,6 +1308,7 @@ function polygon2d_vertices_round3_p
   vr = 0,
   vrm = 1,
   vfn,
+  w = true,
   cw = true
 ) =
   let
@@ -1320,7 +1322,7 @@ function polygon2d_vertices_round3_p
     cp  = (cw == true) ? c : reverse(c),
 
     // adjacent vertices sequence [ [v[n-1], v[n], v[n+1]] ... ]
-    avl = nssequence(cp, 3, w=true),
+    avl = nssequence(cp, 3, w=w),
 
     // polygon coordinate point list
     ppl =
