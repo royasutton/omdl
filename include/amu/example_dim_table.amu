@@ -7,7 +7,7 @@
 
  +/
 
-  \amu_include ( include/amu/example_dim_macro.amu )
+  \amu_include (include/amu/example_dim_macro.amu)
 
   \amu_make png_files (append=dim extension=png)
   \amu_make eps_files (append=dim extension=png2eps)

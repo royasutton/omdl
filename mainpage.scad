@@ -458,7 +458,7 @@ BEGIN_SCOPE quickstart;
     radial_repeat( n=5, angle=true )
       etriangle_ls_c( vs=frame, vc=core, vr=vrnd, h=10 );
 
-    translate([0, -50,0])
+    translate([0, -50, 0])
     linear_extrude(height=10)
     text( text="omdl", size=20, halign="center", valign="center" );
   END_OPENSCAD;
