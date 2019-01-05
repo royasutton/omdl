@@ -468,7 +468,7 @@ BEGIN_SCOPE quickstart;
 
     views     name "views" views "top bottom right diag";
     variables add_opts_combine "views";
-    variables add_opts "--viewall --autocenter";
+    variables add_opts "--viewall --autocenter --view=axes";
 
     include --path "${INCLUDE_PATH}" script_new.mfs;
 

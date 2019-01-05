@@ -13064,7 +13064,7 @@ BEGIN_SCOPE dim;
                 trigyrate_rhombicosidodecahedron
               ";
     variables add_opts_combine "views ids";
-    variables add_opts "-D config=0 --viewall --autocenter";
+    variables add_opts "-D config=0 --viewall --autocenter --view=axes";
 
     include --path "${INCLUDE_PATH}" script_new.mfs;
 

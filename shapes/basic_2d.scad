@@ -1351,7 +1351,7 @@ BEGIN_SCOPE dim;
                 star2d
               ";
     variables add_opts_combine "views shapes";
-    variables add_opts "--viewall --autocenter";
+    variables add_opts "--viewall --autocenter --view=axes";
 
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
