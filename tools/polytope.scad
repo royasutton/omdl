@@ -106,7 +106,7 @@ module polytope_number
     n = polytope_vertex_normal(c, fm, i);
 
     translate(p)
-    orient_ll(rl=is_nan(n) ? z_axis3d_uv : n)
+    orient_ll(r=is_nan(n) ? z_axis3d_uv : n)
     translate(fo) rotate(tr)
     if (pd == 3)
       linear_extrude(fh, center=true)
@@ -123,7 +123,7 @@ module polytope_number
     n = polytope_face_normal(c, l=fm[i]);
 
     translate(p)
-    orient_ll(rl=is_nan(n) ? z_axis3d_uv : n)
+    orient_ll(r=is_nan(n) ? z_axis3d_uv : n)
     translate(fo) rotate(tr)
     if (pd == 3)
       linear_extrude(fh, center=true)
@@ -140,7 +140,7 @@ module polytope_number
     n = polytope_edge_normal(c, fm, el, i);
 
     translate(p)
-    orient_ll(rl=is_nan(n) ? z_axis3d_uv : n)
+    orient_ll(r=is_nan(n) ? z_axis3d_uv : n)
     translate(fo) rotate(tr)
     if (pd == 3)
       linear_extrude(fh, center=true)
@@ -236,7 +236,7 @@ module polytope_frame
       n = polytope_vertex_normal(c, fm, i);
 
       translate(p)
-      orient_ll(rl=is_nan(n) ? z_axis3d_uv : n)
+      orient_ll(r=is_nan(n) ? z_axis3d_uv : n)
       children(vc);
     }
   }
@@ -250,7 +250,7 @@ module polytope_frame
       n = polytope_face_normal(c, l=fm[i]);
 
       translate(p)
-      orient_ll(rl=is_nan(n) ? z_axis3d_uv : n)
+      orient_ll(r=is_nan(n) ? z_axis3d_uv : n)
       children(fc);
     }
   }
@@ -264,7 +264,7 @@ module polytope_frame
       p2 = point_to_3d(c[second(el[i])]);       // polygons.
 
       translate((p1+p2)/2)
-      orient_ll(rl=[p1, p2])
+      orient_ll(r=[p1, p2])
       linear_extrude(distance_pp(p1, p2), center=true)
       children(ec);
     }
