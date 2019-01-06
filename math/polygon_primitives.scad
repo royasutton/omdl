@@ -96,6 +96,69 @@ function polygon2d_regular_p
       not_defined(vr) ? v : v - vr/cos(180/n) * unit_l(v)
   ];
 
+//! Compute coordinates along a line in 2D using linear interpolation.
+/***************************************************************************//**
+  \param    p1 <point-2d> The line initial coordinate [x, y].
+  \param    p2 <point-2d> The line terminal coordinate [x, y].
+  \param    l <line-2d> The line or vector.
+
+  \param    x <decimal-list|decimal> A list of coordinates
+            [\p x1, \p x2, ...] or a single coordinate \p x to
+            interpolate along the line.
+
+  \param    r <decimal-list|decimal> A list of ratios
+            [\p r1, \p r2, ...] or a single ratio \p r. The position
+            ratio along line \p p1 (\p r=\b 0) to \p p2 (\p r=\b 1).
+
+  \param    fs <decimal> A fixed segment size between each point along
+            the line.
+  \param    ft <decimal> A fixed segment size between each point,
+            centered, begining at \p p1 and terminating at \p p2.
+  \param    fn <integer> A fixed number of equally spaced points.
+
+  \returns  <coords-2d> A list of coordinates points [[x, y], ...].
+
+  \details
+
+    Linear interpolation is used to compute each point along the line.
+    The order of precedence for line specification is: \p l then \p p1
+    and \p p2. The order of precedence for x-interpolation is: \p x, \p
+    r, \p fs, \p ft, \p fn. See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Linear_interpolation
+*******************************************************************************/
+function polygon2d_line_p
+(
+  p1 = origin2d,
+  p2 = x_axis2d_uv,
+  l,
+
+  x,      // coordinate x [or vector of]
+  r,      // factor [0,1] [or vector of]
+
+  fs,     // fixed size
+  ft,     // fixed size centered and terminating
+  fn = 1  // number
+) =
+  let
+  (
+    ip  = is_defined(l) ? line_ip(l) : p1,
+    tp  = is_defined(l) ? line_tp(l) : p2,
+
+    xv  = is_defined(x) ? is_list(x) ? x : [x]
+        : is_defined(r) ? [for (i=is_list(r) ? r : [r]) (i*(tp[0]-ip[0])+ip[0])]
+
+        : is_defined(fs) ? [for (i=[ip[0] : fs : tp[0]]) i]
+        : is_defined(ft) ? let ( co=(tp[0]-ip[0]-ft*floor((tp[0]-ip[0])/ft))/2 )
+          [ip[0], for (i=[ip[0] + co : ft : tp[0]]) i, tp[0]]
+        : [for (i=[ip[0] : (tp[0]-ip[0])/fn : tp[0]]) i]
+  )
+  [
+    for (px = xv)
+      let( py = (ip[1]*(tp[0]-px) + tp[1]*(px-ip[0])) / (tp[0]-ip[0]) )
+      [px, py]
+  ];
+
 //! Compute coordinates of an arc with constant radius between two vectors in 2D.
 /***************************************************************************//**
   \param    r <decimal> The arc radius.
