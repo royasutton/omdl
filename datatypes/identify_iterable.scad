@@ -113,6 +113,19 @@ function any_equal
 *******************************************************************************/
 function all_defined(v) = !any_equal(v, undef);
 
+//! Test if any element of a list of values is defined.
+/***************************************************************************//**
+  \param    v \<list> A list of values.
+
+  \returns  <boolean> \b true when any element is defined
+            and \b false otherwise.
+
+  \details
+
+  \warning  Always returns \b false when the list is empty.
+*******************************************************************************/
+function any_defined(v) = !all_equal(v, undef);
+
 //! Test if any element of a list of values is undefined.
 /***************************************************************************//**
   \param    v \<list> A list of values.
@@ -304,6 +317,7 @@ BEGIN_SCOPE validate;
       ["any_equal_F",       f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f],
       ["any_equal_U",       t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
       ["all_defined",       f, t, t, t, t, t, t, t, t, t, f, t, t, t, t, t, t, f, f, t, t, t, t],
+      ["any_defined",       f, t, t, t, t, t, f, f, t, t, f, t, t, t, t, t, t, t, f, t, t, t, t],
       ["any_undefined",     t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
       ["all_scalars",       u, t, t, t, f, f, s, s, s, s, t, t, t, f, f, f, f, t, t, f, t, t, t],
       ["all_lists",         u, f, f, f, f, f, t, t, f, f, f, f, f, t, t, f, t, f, f, t, f, f, f],
@@ -349,6 +363,7 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "any_equal_F", any_equal(get_value(vid),f), vid );
     for (vid=test_ids) run_test( "any_equal_U", any_equal(get_value(vid),u), vid );
     for (vid=test_ids) run_test( "all_defined", all_defined(get_value(vid)), vid );
+    for (vid=test_ids) run_test( "any_defined", any_defined(get_value(vid)), vid );
     for (vid=test_ids) run_test( "any_undefined", any_undefined(get_value(vid)), vid );
     for (vid=test_ids) run_test( "all_scalars", all_scalars(get_value(vid)), vid );
     for (vid=test_ids) run_test( "all_lists", all_lists(get_value(vid)), vid );
