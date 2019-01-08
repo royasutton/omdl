@@ -10,6 +10,7 @@ local_library     :=  module \
                       \
                       align \
                       extrude \
+                      general \
                       polytope \
                       repeat
 
