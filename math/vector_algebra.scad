@@ -227,6 +227,37 @@ function point_to_3d
   p
 ) = (len(p) == 3) ? p : [p[0], p[1], 0];
 
+//! Linearly interpolate along a line established by two points in 2d.
+/***************************************************************************//**
+  \param    p1 <point-2d> The line initial coordinate [x, y].
+  \param    p2 <point-2d> The line terminal coordinate [x, y].
+
+  \param    y <decimal> The \p y coordinate at which to interpolate
+            along the line.
+  \param    x <decimal> The \p x coordinate at which to interpolate
+            along the line.
+
+  \returns  <point-2d> The interpolated coordinates point [x, y].
+
+  \details
+
+    The order of precedence for interpolation is: \p y, \p x. See
+    [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Linear_interpolation
+*******************************************************************************/
+function interpolate2d_linear_pp
+(
+  p1,
+  p2,
+  x,
+  y
+) = is_defined(y) ?
+    let( lx = (p1[0]*(p2[1]-y) + p2[0]*(y-p1[1])) / (p2[1]-p1[1]) )
+    [lx, y]
+  : let( ly = (p1[1]*(p2[0]-x) + p2[1]*(x-p1[0])) / (p2[0]-p1[0]) )
+    [x, ly];
+
 //----------------------------------------------------------------------------//
 // set 3: vector
 //----------------------------------------------------------------------------//
@@ -984,6 +1015,7 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("distance_pp",vid) test( "distance_pp", distance_pp(gv(vid,0),gv(vid,1)), vid, false );
     for (vid=run_ids) run("is_left_ppp",vid) test( "is_left_ppp", is_left_ppp(gv(vid,0),gv(vid,1),gv(vid,2)), vid, false );
     for (vid=run_ids) run("point_to_3d",vid) test( "point_to_3d", point_to_3d(gv(vid,0)), vid, false );
+    log_notest( "interpolate2d_linear_pp()" );
 
     // set 3: vector
 
