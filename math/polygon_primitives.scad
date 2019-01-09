@@ -180,7 +180,7 @@ function polygon2d_line_p
           [ip[a], for (i=[ip[a] + s*co : s*ft : tp[a]]) i, tp[a]]
 
         // fixed number
-        : [for (i=[ip[a] : (tp[a]-ip[a])/fn : tp[a]]) i]
+        : [for (i=[0:fn]) (i*(tp[a]-ip[a])/fn+ip[a])]
   )
     (a == 1) ?
     is_defined(x) ? undef                                     // (a == 1)
