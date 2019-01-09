@@ -616,7 +616,7 @@ module table_write
             not_defined( cs ) ||
             !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
           )
-            str(lstr_html(table_get_value(r, c, r_iter, c_iter), p=[value_tags]),fs)
+            str(lstr_html([table_get_value(r, c, r_iter, c_iter)], p=[value_tags]),fs)
       ];
 
       log_echo ( lstr(tdr_text) );
