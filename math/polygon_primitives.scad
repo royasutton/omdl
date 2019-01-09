@@ -48,6 +48,7 @@
   \param    n <integer> The number of sides.
   \param    r <decimal> The circumradius of the circumcircle.
   \param    a <decimal> The inradius of the incircle.
+  \param    o <decimal> The rotational angular offset.
   \param    vr <decimal> The vertex rounding radius.
   \param    cw <boolean> Use clockwise point ordering.
 
@@ -79,6 +80,7 @@ function polygon2d_regular_p
   n,
   r,
   a,
+  o = 0,
   vr,
   cw = true
 ) =
@@ -92,7 +94,7 @@ function polygon2d_regular_p
   )
   [
     for (a = b)
-      let( v = [s*cos(a), s*sin(a)] )
+      let( v = [s*cos(a+o), s*sin(a+o)] )
       not_defined(vr) ? v : v - vr/cos(180/n) * unit_l(v)
   ];
 
