@@ -210,7 +210,7 @@ function table_exists
   \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
   \param    c <matrix-2xC> The table column matrix (2 x C-columns).
 
-  \returns  <decimal> The table size.
+  \returns  <integer> The table size.
 
   \details
 
