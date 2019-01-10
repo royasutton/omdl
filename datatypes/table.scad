@@ -46,7 +46,7 @@
 
       \dontinclude \amu_scope(index=1).scad
       \skip include
-      \until ( tsum=tsum );
+      \until comment=2 );
 
     \b Result \include \amu_scope(index=1).log
 
@@ -499,6 +499,205 @@ module table_dump
   }
 }
 
+//! Dump table getter functions to the console.
+/***************************************************************************//**
+  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
+  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    tr <string> The table data matrix variable name.
+  \param    tc <string> The table column matrix variable name.
+  \param    ri <string|value> The row identifier variable name or value.
+  \param    ci <string|value> The column identifier variable name or value.
+  \param    vri <boolean> The row identifier \p ri is a value.
+  \param    vci <boolean> The column identifier \p ci is a value.
+  \param    name <string> The getter function name.
+  \param    append <boolean> Append id to names.
+  \param    comment <integer> Output comment mode {0, 1, 2}.
+  \param    verbose <boolean> Be verbose.
+
+  \details
+
+    Output getter functions for a table to the console. The resulting
+    functions can be used within scripts to access table data.
+
+    \b Example
+    \code
+    table_dump_getters
+    (
+      r=my_config_tr, c=my_config_tc, tr="my_config_tr", tc="my_config_tc",
+      ri="my_config", vri=true, name="my_get_function", comment=2
+    );
+    \endcode
+*******************************************************************************/
+module table_dump_getters
+(
+r,
+c,
+
+tr = "table_rows",
+tc = "table_cols",
+
+ri = "ri",
+ci = "ci",
+
+vri = false,
+vci = false,
+
+name = "get_helper",
+append = false,
+comment = 0,
+verbose = false
+)
+{
+  function qri(ri) = (ri == "ri") ? ri : (vri == true) ? ri : str("\"", ri, "\"");
+  function qci(ci) = (ci == "ci") ? ci : (vci == true) ? ci : str("\"", ci, "\"");
+  function gfn(fn) =
+    str
+    (
+      fn,
+      (ri == "ri")?"":(append?str("_", ri):""),
+      (ci == "ci")?"":(append?str("_", ci):"")
+    );
+
+  //
+  // check table
+  //
+  echo();
+  echo("Checking table...");
+  table_check(r=r, c=c, verbose=verbose);
+
+  if ( table_errors(r=r, c=c) == empty_lst )
+  {
+    //
+    // output helper function
+    //
+    echo();
+
+    // getter function comment
+    gct =
+      str
+      (
+        "// table value getter function",
+        (ri == "ri")?"":str(", constant row ri=", qri(ri)),
+        (ci == "ci")?"":str(", constant column ci=", qci(ci)),
+        "."
+      );
+    if (comment > 0) echo (str(gct));
+
+    // getter function
+    echo
+    (
+      str
+      (
+        "function ", gfn(name),
+        "(",
+        (ri == "ri")?"ri":"",
+        (ri == "ri") && (ci == "ci")?", ":"",
+        (ci == "ci")?"ci":"",
+        ") = table_get_value (r=", tr,
+        ", c=", tc,
+        ", ri=", qri(ri),
+        ", ci=", qci(ci),
+        ");"
+      )
+    );
+
+    //
+    // output value functions
+    //
+    echo();
+
+    // constant row (ri)
+    if ( (ri != "ri") && (ci == "ci") )
+    {
+      if ( vri || table_exists( r=r, c=c, ri=ri ) )
+      {
+        for ( i = table_get_column_ids (c=c) )
+        {
+          cic = table_get_column( c=c, ci=i );
+
+          gct = str("// get ci=", qci(i), " (", second(cic), ") & ri=", qri(ri), ".");
+          if (comment == 1) echo (str(gct));
+
+          echo
+          (
+            str
+            (
+              (append?str(ri, "_"):""), i, " = ",
+              gfn(name), "(ci=", qci(i), ");",
+              (comment == 2)?str("\t", gct):""
+            )
+          );
+        }
+      }
+      else
+      {
+        echo( str( "row ri=", qri(ri), " does not exist in table." ) );
+      }
+    }
+
+    // constant col (ci)
+    else if ( (ri == "ri") && (ci != "ci") )
+    {
+      if ( vci || table_exists( r=r, c=c, ci=ci ) )
+      {
+        for ( i = table_get_row_ids (r=r) )
+        {
+          gct = str("// get ri=", qri(i), " & ci=", qci(ci), ".");
+          if (comment == 1) echo (str(gct));
+
+          echo
+          (
+            str
+            (
+              i, (append?str("_", ci):""), " = ",
+              gfn(name), "(ri=", qri(i), ");",
+              (comment == 2)?str("\t", gct):""
+            )
+          );
+        }
+      }
+      else
+      {
+        echo( str( "column ci=", qci(ci), " does not exist in table." ) );
+      }
+    }
+
+    // constant row and col (ri & ci)
+    else if ( (ri != "ri") && (ci != "ci") )
+    {
+      if ( vri || vci || table_exists( r=r, c=c, ri=ri, ci=ci ) )
+      {        gct = str("// get ri=", qri(ri), " & ci=", qci(ci), ".");
+        if (comment == 1) echo (str(gct));
+
+        echo
+        (
+          str
+          (
+            ri, "_", ci, " = ",
+            gfn(name), "(ri=", qri(ri), ", ci=", qci(ci), ");",
+            (comment == 2)?str("\t", gct):""
+          )
+        );
+      }
+      else
+      {
+        echo
+        (
+          str
+          (
+            "row ri=", qri(ri), ", column ci=", qci(ci),
+            " does not exist in table."
+          )
+        );
+      }
+    }
+  }
+  else
+  {
+    echo ( "Table has errors." );
+  }
+}
+
 //! Write formatted map entries to the console.
 /***************************************************************************//**
   \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
@@ -678,6 +877,10 @@ BEGIN_SCOPE example1;
     echo ( m3r16r_tl=m3r16r_tl );
     echo ( tnew=tnew );
     echo ( tsum=tsum );
+
+    table_dump_getters( r=table_rows, c=table_cols,
+      tr="table_rows", tc="table_cols",
+      ri="my_config", vri=true, name="get_my_value", comment=2 );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
