@@ -120,6 +120,27 @@ function map_get_values
   m
 ) = eselect(m, l=true);
 
+//! Get the map value associated with a key.
+/***************************************************************************//**
+  \param    m1 <matrix-2xN> A list of N key-value map pairs.
+  \param    m2 <matrix-2xN> A list of N key-value map pairs.
+  \param    k <string> A map key.
+  \param    d \<value> A default return value.
+
+  \returns  \<value> The first value associated with \p key in maps \p
+            m1 the \p m2, otherwise return \p d when it does not exist
+            in either.
+*******************************************************************************/
+function map_get_firstof2_or
+(
+  m1,
+  m2,
+  k,
+  d
+) = map_exists(m1, k) ? map_get_value(m1, k)
+  : map_exists(m2, k) ? map_get_value(m2, k)
+  : d;
+
 //! Get the number of map entries.
 /***************************************************************************//**
   \param    m <matrix-2xN> A list of N key-value map pairs.
