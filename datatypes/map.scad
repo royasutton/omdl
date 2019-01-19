@@ -152,6 +152,29 @@ function map_get_size
   m
 ) = len(m);
 
+//! Merge the unique key-value pairs of a second map with those of a first.
+/***************************************************************************//**
+  \param    m1 <matrix-2xN> A list of N key-value map pairs.
+  \param    m2 <matrix-2xN> A list of N key-value map pairs.
+
+  \returns  \<value> The key value-pairs of \p m1 together with the
+            unique key value-pairs of \p m2 that are absent in \p m1.
+*******************************************************************************/
+function map_merge
+(
+  m1,
+  m2
+) = [
+      // output all key-value pairs of 'm1'
+      for (k = map_get_keys(m1) )
+          [k, map_get_value(m1, k)],
+
+      // output all key-value pairs of 'm2' not present in 'm1'
+      for (k = map_get_keys(m2) )
+        if ( !map_exists(m1, k) )
+          [k, map_get_value(m2, k)]
+    ];
+
 //! Perform basic format checks on a map and return errors.
 /***************************************************************************//**
   \param    m <matrix-2xN> A list of N key-value map pairs.
