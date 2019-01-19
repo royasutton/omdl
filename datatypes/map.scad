@@ -120,16 +120,16 @@ function map_get_values
   m
 ) = eselect(m, l=true);
 
-//! Get the map value associated with a key.
+//! Get the the first value associated with an existing key in one of two maps.
 /***************************************************************************//**
   \param    m1 <matrix-2xN> A list of N key-value map pairs.
   \param    m2 <matrix-2xN> A list of N key-value map pairs.
   \param    k <string> A map key.
   \param    d \<value> A default return value.
 
-  \returns  \<value> The first value associated with \p key in maps \p
-            m1 the \p m2, otherwise return \p d when it does not exist
-            in either.
+  \returns  \<value> The first value associated with \p key that exists
+            in maps \p m1 or \p m2, otherwise return \p d when it does
+            not exist in either.
 *******************************************************************************/
 function map_get_firstof2_or
 (
