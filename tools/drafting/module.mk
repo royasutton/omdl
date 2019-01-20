@@ -4,21 +4,20 @@
 $(eval $(call clear-local-module))
 #------------------------------------------------------------------------------#
 
-local_path        :=  tools
+local_path        :=  tools/drafting
 
 local_library     :=  module \
                       \
-                      align \
-                      extrude \
-                      general \
-                      polytope \
-                      repeat
+                      draft_config \
+                      draft_primitives \
+                      draft_tools \
+                      draft
 
-local_release_add :=  stl/edge_manifest.stl
+local_release_add :=
 
 local_backup_add  :=
 
-local_submodules  := drafting
+local_submodules  :=
 
 #------------------------------------------------------------------------------#
 # add local module
