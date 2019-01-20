@@ -636,14 +636,17 @@ module draft_note
     lnd = defined_or(line, [1,1]);
     lnc = is_list(lnd[0]) ? [lnd[0], lnd[1]] : [lnd, lnd];
 
+    // default heading text when size specified without text
+    htd = is_defined(size[2]) && not_defined(head) ? empty_str : head;
+
     // local table map
     map =
     [
       ["cmh",     cmh],
       ["cmv",     cmv],
 
-      not_defined(head) ? empty_lst :
-      ["heads",   [[head], edefined_or(size, 2, 1)]],
+      not_defined(htd) ? empty_lst :
+      ["heads",   [[htd], edefined_or(size, 2, 1)]],
 
       ["cols",    [edefined_or(size, 0, 10)]],
       ["rows",    [[[note], edefined_or(size, 1, 1)]]],
