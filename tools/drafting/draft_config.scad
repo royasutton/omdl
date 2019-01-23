@@ -61,9 +61,8 @@ function draft_get_default
   k
 ) = map_get_value(draft_defaults_map, k);
 
-draft_defaults_map =
+draft_defaults_s1_map =
 [
-
   ["font-szr",                  "Liberation Sans"],       // sheet zone reference
 
   ["font-tbh",                  "Liberation Sans"],       // title block headings
@@ -77,7 +76,7 @@ draft_defaults_map =
 
   ["line-width-min",            length(0.2, "mm")],       // lines
   ["line-segment-min",          length(1.25, "mm")],      // dashed-lines
-  ["line-use-hull",             false],                   // draft_line_pp() uses hull()
+  ["line-use-hull",             true],                    // draft_line_pp() uses hull()
 
   ["arrow-line-length-min",     length(4.0, "mm")],       // arrowhead
   ["arrow-angle-min",           angle(15, "d")],
@@ -89,6 +88,8 @@ draft_defaults_map =
   ["layers-titleblock",         ["all", "titleblock"]],
   ["layers-dim",                ["all", "dim"]]
 ];
+
+draft_defaults_map = draft_defaults_s1_map;
 
 //! .
 /***************************************************************************//**
