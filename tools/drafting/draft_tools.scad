@@ -62,7 +62,7 @@ module draft_layers
 //! .
 /***************************************************************************//**
     draft_sheet_get_zone()
-    v = [ [ zp:[px=0, py=0], [rx/ix, ry/iy], child_idx, layer="root" ] ... ]
+    v = [ [ zp:[px=0, py=0], [rx/ix, ry/iy], child_idx ] ... ]
 
   draft_move ( [ for (x=[0:7], y=[0:3] ) [[0,0], [x,y], 0] ] )
   square([10,10]);
@@ -78,34 +78,27 @@ module draft_move
   {
     e = list[i];
 
-    // default layer
-    l = defined_or(e[3], draft_get_default("layers"));
+    // default alignment
+    p = defined_or(e[0], [0, 0]);
 
-    // iff layer active
-    if (exists(is_list(l)?l:[l], draft_layers_show, true))
-    {
-      // default alignment
-      p = defined_or(e[0], [0, 0]);
+    // numerical or string references
+    n = all_numbers(e[1]) ? e[1] : [undef, undef];
+    s = all_strings(e[1]) ? e[1] : [undef, undef];;
 
-      // numerical or string references
-      n = all_numbers(e[1]) ? e[1] : [undef, undef];
-      s = all_strings(e[1]) ? e[1] : [undef, undef];;
+    // child index default
+    c = defined_or(e[2], i);
 
-      // child index default
-      c = defined_or(e[2], i);
-
-      translate
+    translate
+    (
+      draft_sheet_get_zone
       (
-        draft_sheet_get_zone
-        (
-          rx=s[0], ry=s[1],
-          ix=n[0], iy=n[1],
-          zp=p,
-          frame=false, window=false
-        )
+        rx=s[0], ry=s[1],
+        ix=n[0], iy=n[1],
+        zp=p,
+        frame=false, window=false
       )
-      children(c);
-    }
+    )
+    children(c);
   }
 }
 
