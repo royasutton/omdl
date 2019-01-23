@@ -568,13 +568,20 @@ module draft_line_pp
   $fn = $draft_line_fn;
   p = draft_get_default("line-width-min") * w * draft_scaler;
 
-  // hulled end-circles
-  hull() { translate(i) circle(d=p); translate(t) circle(d=p); }
+  if ( draft_get_default("line-use-hull")  )
+  {
+    // hulled end-circles
+    hull() { translate(i) circle(d=p); translate(t) circle(d=p); }
+  }
+  else
+  {
+    // rectangle line
+    align_ll(r=[i, t], rp=2, l=y_axis3d_ul)
+    square([p, distance_pp(i, t)], center=true);
 
-  // rectangle line with rounded ends
-  // align_ll(r=[i, t], rp=2, l=y_axis3d_ul)
-  // square([p, distance_pp(i, t)], center=true);
-  // translate(i) circle(d=p); translate(t) circle(d=p);
+    // add rounded ends
+    // translate(i) circle(d=p); translate(t) circle(d=p);
+  }
 }
 
 //! .

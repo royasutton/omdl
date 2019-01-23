@@ -77,6 +77,7 @@ draft_defaults_map =
 
   ["line-width-min",            length(0.2, "mm")],       // lines
   ["line-segment-min",          length(1.25, "mm")],      // dashed-lines
+  ["line-use-hull",             false],                   // draft_line_pp() uses hull()
 
   ["arrow-line-length-min",     length(4.0, "mm")],       // arrowhead
   ["arrow-angle-min",           angle(15, "d")],
