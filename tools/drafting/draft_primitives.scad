@@ -526,6 +526,23 @@ module draft_ztable_text
   );
 }
 
+//! .
+/***************************************************************************//**
+*******************************************************************************/
+module draft_make_3d_if_configured
+(
+)
+{
+  if ( draft_make_3d )
+    linear_extrude
+    (
+      height=draft_get_default("make-3d-height") * draft_scaler, center=true
+    )
+    children();
+  else
+    children();
+}
+
 //----------------------------------------------------------------------------//
 // basic shapes
 //----------------------------------------------------------------------------//
@@ -543,7 +560,13 @@ module draft_line_pp
   $fn = $draft_line_fn;
   p = draft_get_default("line-width-min") * w * draft_scaler;
 
+  // hulled end-circles
   hull() { translate(i) circle(d=p); translate(t) circle(d=p); }
+
+  // rectangle line with rounded ends
+  // align_ll(r=[i, t], rp=2, l=y_axis3d_ul)
+  // square([p, distance_pp(i, t)], center=true);
+  // translate(i) circle(d=p); translate(t) circle(d=p);
 }
 
 //! .
@@ -833,7 +856,7 @@ module draft_rectangle
 
 //! .
 /***************************************************************************//**
-  \param    c <coords-2d> A list of 3d or 2d coordinate points.
+  \param    c <coords-2d> A list of 2d coordinate points.
 
   \param    p <integer-list-list> A list of paths that enclose the
             shape where each face is a list of coordinate indexes.

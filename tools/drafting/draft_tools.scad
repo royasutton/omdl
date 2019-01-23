@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Draft)
+    \amu_define group_name  (Tools)
     \amu_define group_brief (Drafting tools and operations.)
 
   \amu_include (include/amu/pgid_path_pstem_g.amu)
@@ -126,6 +126,7 @@ module draft_sheet
   if ( !table_exists( r=draft_sheet_config_tr, ri=draft_sheet_config ) )
     log_error( str("unknown sheet configuration [", draft_sheet_config, "]") );
   else if (exists(is_list(layers)?layers:[layers], draft_layers_show, true))
+  draft_make_3d_if_configured()
   {
     // check tables
     if ( check )
@@ -310,6 +311,7 @@ module draft_ruler
 {
 
   if (exists(is_list(layers)?layers:[layers], draft_layers_show, true))
+  draft_make_3d_if_configured()
   {
     u  = length_unit_base;
     s  = length(linel, u) * (scaler?draft_scaler:1);
@@ -392,6 +394,7 @@ module draft_title_block
 )
 {
   if (exists(is_list(layers)?layers:[layers], draft_layers_show, true))
+  draft_make_3d_if_configured()
   {
     translate( -draft_ztable_get_zone(zp=zp, map=map) )
     if (window)
@@ -509,6 +512,7 @@ module draft_table
 )
 {
   if (exists(is_list(layers)?layers:[layers], draft_layers_show, true))
+  draft_make_3d_if_configured()
   {
     translate( -draft_table_get_cell(zp=zp, map=map, fmap=fmap) )
     if (window)
@@ -627,6 +631,7 @@ module draft_note
 )
 {
   if (exists(is_list(layers)?layers:[layers], draft_layers_show, true))
+  // draft_make_3d_if_configured() handled by draft_table()
   {
     // cell minimum horizontal and vertical
     cmh = edefined_or(cell, 0, defined_or(cell, length(1/4, "in") ));

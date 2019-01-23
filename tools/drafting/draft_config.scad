@@ -46,6 +46,7 @@
 $draft_line_fn = 4;
 $draft_arrow_fn = 8;
 
+draft_make_3d = false;
 draft_sheet_size = "A";
 draft_sheet_config = "L84TS";
 draft_layers_show = ["root"];
@@ -71,6 +72,8 @@ draft_defaults_map =
   ["font-tt",                   "Liberation Sans"],       // table titles
   ["font-th",                   "Liberation Sans"],       // table headings
   ["font-te",                   "Liberation Sans"],       // table entries
+
+  ["make-3d-height",            length(1, "mm")],         // make 3d extrude height
 
   ["line-width-min",            length(0.2, "mm")],       // lines
   ["line-segment-min",          length(1.25, "mm")],      // dashed-lines
