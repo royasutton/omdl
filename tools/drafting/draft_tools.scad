@@ -55,7 +55,7 @@ module draft_layers
   layers = draft_get_default("layers")
 )
 {
-  if (exists(is_list(layers)?layers:[layers], draft_layers_show, true))
+  if (draft_layers_any_active(layers))
     children();
 }
 
@@ -118,7 +118,7 @@ module draft_sheet
 {
   if ( !table_exists( r=draft_sheet_config_tr, ri=draft_sheet_config ) )
     log_error( str("unknown sheet configuration [", draft_sheet_config, "]") );
-  else if (exists(is_list(layers)?layers:[layers], draft_layers_show, true))
+  else if (draft_layers_any_active(layers))
   draft_make_3d_if_configured()
   {
     // check tables
@@ -303,7 +303,7 @@ module draft_ruler
 )
 {
 
-  if (exists(is_list(layers)?layers:[layers], draft_layers_show, true))
+  if (draft_layers_any_active(layers))
   draft_make_3d_if_configured()
   {
     u  = length_unit_base;
@@ -386,7 +386,7 @@ module draft_title_block
   layers = draft_get_default("layers")
 )
 {
-  if (exists(is_list(layers)?layers:[layers], draft_layers_show, true))
+  if (draft_layers_any_active(layers))
   draft_make_3d_if_configured()
   {
     translate( -draft_ztable_get_zone(zp=zp, map=map) )
@@ -504,7 +504,7 @@ module draft_table
   layers = draft_get_default("layers")
 )
 {
-  if (exists(is_list(layers)?layers:[layers], draft_layers_show, true))
+  if (draft_layers_any_active(layers))
   draft_make_3d_if_configured()
   {
     translate( -draft_table_get_cell(zp=zp, map=map, fmap=fmap) )
@@ -623,7 +623,7 @@ module draft_note
   layers = draft_get_default("layers")
 )
 {
-  if (exists(is_list(layers)?layers:[layers], draft_layers_show, true))
+  if (draft_layers_any_active(layers))
   // draft_make_3d_if_configured() handled by draft_table()
   {
     // cell minimum horizontal and vertical
