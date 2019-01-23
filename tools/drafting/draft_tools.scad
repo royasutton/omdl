@@ -349,34 +349,123 @@ module draft_ruler
 
 //! .
 /***************************************************************************//**
-
-  difference() {
-  draft_sheet();
-  translate( draft_sheet_get_zone(zp=[1,-1]) )
-  draft_title_block(window=true);
-  }
-
-  translate( draft_sheet_get_zone(zp=[1,-1]) )
-  union()
-  {
-    text =
-    [
-      ["data0.0", "data0.1"], "data1", "data2", "data3", "data4",
-      "data5", "data6", "data7", "data8", "data9", "data10", "data11",
-      ["data12.0", "data12.1", "data12.2", "data12.3"]
-    ];
-
-    draft_title_block
-    (
-      text = text,
-      zones = true,
-      hlines = true,
-      vlines = true
-    );
-  }
-
 *******************************************************************************/
-module draft_title_block
+module draft_table
+(
+  map,
+  fmap,
+  zp = 0,
+  window = false,
+  layers = draft_get_default("layers")
+)
+{
+  if (draft_layers_any_active(layers))
+  draft_make_3d_if_configured()
+  {
+    translate( -draft_table_get_cell(zp=zp, map=map, fmap=fmap) )
+    if (window)
+    { // solid retangular window
+      polygon(draft_table_get_cell(window=true, map=map, fmap=fmap));
+    }
+    else
+    {
+      // get table format
+      cmh = map_get_firstof2_or(map, fmap, "cmh", length(1/4,"in")) * draft_scaler;
+      cmv = map_get_firstof2_or(map, fmap, "cmv", length(1/4,"in")) * draft_scaler;
+
+      coh = map_get_firstof2_or(map, fmap, "coh", +1);
+      cov = map_get_firstof2_or(map, fmap, "cov", -1);
+
+      //
+      // default lines when not in map nor fmap:
+      //  no horizontal or vertical lines.
+      //
+      hlines  = map_get_firstof2_or(map, fmap, "hlines", consts(5,[0,0]));
+      vlines  = map_get_firstof2_or(map, fmap, "vlines", consts(3,[0,0]));
+
+      //
+      // cell default text format when not in map nor fmap:
+      //  'cll'=centered title,  left justified headings and entries
+      //
+      cll = [empty_str, [-1,-1], [2/5,-9/10], [0,-1-1/5], 0, 1, ["left", "center"]];
+
+      tdefs = map_get_firstof2_or(map, fmap, "tdefs", cll);
+      hdefs = map_get_firstof2_or(map, fmap, "hdefs", cll);
+      edefs = map_get_firstof2_or(map, fmap, "edefs", cll);
+
+      // get table data
+      title = map_get_value(map, "title");
+      heads = map_get_value(map, "heads");
+      cols  = map_get_value(map, "cols");
+      rows  = map_get_value(map, "rows");
+
+      // draw hlines
+      for( i=[0:len(rows)+2] )
+      {
+          ic = 0;                                 // from left
+          tc = len(cols);                         // to right
+
+          // get line configuration
+          lc = (i == 0) ? hlines[0]               // top
+             : (i == len(rows)+2) ? hlines[1]     // bottom
+             : (i == 1) ? hlines[2]               // title
+             : (i == 2) ? hlines[3]               // headings
+             : hlines[4];                         // rows
+
+          //
+          // don't draw title or headings lines when they are
+          // not defined. set line style to '0' no line.
+          //
+          lw = lc[0];
+          ls = (not_defined(title)  && (i==1)) ? 0
+             : (not_defined(heads)  && (i==2)) ? 0
+             : lc[1];
+
+          ip = draft_table_get_point( ix=ic, iy=i, map=map, fmap=fmap );
+          tp = draft_table_get_point( ix=tc, iy=i, map=map, fmap=fmap );
+
+          draft_line (l=[ip, tp], w=lw, s=ls );
+      }
+
+      // draw vlines
+      for( i=[0:len(cols)] )
+      {
+          ic = (i==0||i==len(cols)) ? 0 : 1;      // left & right start at top
+          tc = len(rows)+2;                       // to bottom of table
+
+          // get line configuration
+          lc = (i == 0) ? vlines[0]               // left
+             : (i == len(cols)) ? vlines[1]       // right
+             : vlines[2];                         // columns
+
+          lw = lc[0];                             // line weight
+          ls = lc[1];                             // line style
+
+          ip = draft_table_get_point( ix=i, iy=ic, map=map, fmap=fmap );
+          tp = draft_table_get_point( ix=i, iy=tc, map=map, fmap=fmap );
+
+          draft_line (l=[ip, tp], w=lw, s=ls );
+      }
+
+      // add title text
+      draft_table_text( 0, 0, title[0], cmh, tdefs, map, fmap );
+
+      // add heading entries text
+      for ( c = [0:len(cols)-1] )
+        draft_table_text( c, 1, heads[0][c], cmh/2, hdefs, map, fmap );
+
+      // add cell entries text
+      for ( r = [2:len(rows)+1], c = [0:len(cols)-1] )
+        draft_table_text( c, r, rows[r-2][0][c], cmh/2, edefs, map, fmap );
+
+    } // window
+  } // layers
+}
+
+//! .
+/***************************************************************************//**
+*******************************************************************************/
+module draft_ztable
 (
   text,
   map = draft_title_block_map,
@@ -495,121 +584,6 @@ module draft_title_block
 //! .
 /***************************************************************************//**
 *******************************************************************************/
-module draft_table
-(
-  map,
-  fmap,
-  zp = 0,
-  window = false,
-  layers = draft_get_default("layers")
-)
-{
-  if (draft_layers_any_active(layers))
-  draft_make_3d_if_configured()
-  {
-    translate( -draft_table_get_cell(zp=zp, map=map, fmap=fmap) )
-    if (window)
-    { // solid retangular window
-      polygon(draft_table_get_cell(window=true, map=map, fmap=fmap));
-    }
-    else
-    {
-      // get table format
-      cmh = map_get_firstof2_or(map, fmap, "cmh", length(1/4,"in")) * draft_scaler;
-      cmv = map_get_firstof2_or(map, fmap, "cmv", length(1/4,"in")) * draft_scaler;
-
-      coh = map_get_firstof2_or(map, fmap, "coh", +1);
-      cov = map_get_firstof2_or(map, fmap, "cov", -1);
-
-      //
-      // default lines when not in map nor fmap:
-      //  no horizontal or vertical lines.
-      //
-      hlines  = map_get_firstof2_or(map, fmap, "hlines", consts(5,[0,0]));
-      vlines  = map_get_firstof2_or(map, fmap, "vlines", consts(3,[0,0]));
-
-      //
-      // cell default text format when not in map nor fmap:
-      //  'cll'=centered title,  left justified headings and entries
-      //
-      cll = [empty_str, [-1,-1], [2/5,-9/10], [0,-1-1/5], 0, 1, ["left", "center"]];
-
-      tdefs = map_get_firstof2_or(map, fmap, "tdefs", cll);
-      hdefs = map_get_firstof2_or(map, fmap, "hdefs", cll);
-      edefs = map_get_firstof2_or(map, fmap, "edefs", cll);
-
-      // get table data
-      title = map_get_value(map, "title");
-      heads = map_get_value(map, "heads");
-      cols  = map_get_value(map, "cols");
-      rows  = map_get_value(map, "rows");
-
-      // draw hlines
-      for( i=[0:len(rows)+2] )
-      {
-          ic = 0;                                 // from left
-          tc = len(cols);                         // to right
-
-          // get line configuration
-          lc = (i == 0) ? hlines[0]               // top
-             : (i == len(rows)+2) ? hlines[1]     // bottom
-             : (i == 1) ? hlines[2]               // title
-             : (i == 2) ? hlines[3]               // headings
-             : hlines[4];                         // rows
-
-          //
-          // don't draw title or headings lines when they are
-          // not defined. set line style to '0' no line.
-          //
-          lw = lc[0];
-          ls = (not_defined(title)  && (i==1)) ? 0
-             : (not_defined(heads)  && (i==2)) ? 0
-             : lc[1];
-
-          ip = draft_table_get_point( ix=ic, iy=i, map=map, fmap=fmap );
-          tp = draft_table_get_point( ix=tc, iy=i, map=map, fmap=fmap );
-
-          draft_line (l=[ip, tp], w=lw, s=ls );
-      }
-
-      // draw vlines
-      for( i=[0:len(cols)] )
-      {
-          ic = (i==0||i==len(cols)) ? 0 : 1;      // left & right start at top
-          tc = len(rows)+2;                       // to bottom of table
-
-          // get line configuration
-          lc = (i == 0) ? vlines[0]               // left
-             : (i == len(cols)) ? vlines[1]       // right
-             : vlines[2];                         // columns
-
-          lw = lc[0];                             // line weight
-          ls = lc[1];                             // line style
-
-          ip = draft_table_get_point( ix=i, iy=ic, map=map, fmap=fmap );
-          tp = draft_table_get_point( ix=i, iy=tc, map=map, fmap=fmap );
-
-          draft_line (l=[ip, tp], w=lw, s=ls );
-      }
-
-      // add title text
-      draft_table_text( 0, 0, title[0], cmh, tdefs, map, fmap );
-
-      // add heading entries text
-      for ( c = [0:len(cols)-1] )
-        draft_table_text( c, 1, heads[0][c], cmh/2, hdefs, map, fmap );
-
-      // add cell entries text
-      for ( r = [2:len(rows)+1], c = [0:len(cols)-1] )
-        draft_table_text( c, r, rows[r-2][0][c], cmh/2, edefs, map, fmap );
-
-    } // window
-  } // layers
-}
-
-//! .
-/***************************************************************************//**
-*******************************************************************************/
 module draft_note
 (
   head,
@@ -662,6 +636,51 @@ module draft_note
     // layers handled locally, no need to pass
     draft_table(map=map, fmap=fmap, zp=zp, window=window);
   } // layers
+}
+
+//! .
+/***************************************************************************//**
+
+  difference() {
+  draft_sheet();
+  translate( draft_sheet_get_zone(zp=[1,-1]) )
+  draft_title_block(window=true);
+  }
+
+  translate( draft_sheet_get_zone(zp=[1,-1]) )
+  union()
+  {
+    text =
+    [
+      ["data0.0", "data0.1"], "data1", "data2", "data3", "data4",
+      "data5", "data6", "data7", "data8", "data9", "data10", "data11",
+      ["data12.0", "data12.1", "data12.2", "data12.3"]
+    ];
+
+    draft_title_block
+    (
+      text = text,
+      zones = true,
+      hlines = true,
+      vlines = true
+    );
+  }
+
+*******************************************************************************/
+module draft_title_block
+(
+  text,
+  map = draft_title_block_map,
+  zp = 0,
+  number = false,
+  window = false,
+  layers = draft_get_default("layers")
+)
+{
+  draft_ztable
+  (
+    text=text, map=map, zp=zp, number=number, window=window, layers=layers
+  );
 }
 
 //! @}
