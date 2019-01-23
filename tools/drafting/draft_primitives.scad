@@ -531,7 +531,7 @@ module draft_ztable_text
 *******************************************************************************/
 function draft_layers_any_active
 (
-  layers = draft_get_default("layers")
+  layers = draft_get_default("layers-default")
 ) = exists( is_list(layers) ? layers : [layers], draft_layers_show, true );
 
 //! .

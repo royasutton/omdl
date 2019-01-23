@@ -52,7 +52,7 @@
 *******************************************************************************/
 module draft_in_layers
 (
-  layers = draft_get_default("layers")
+  layers = draft_get_default("layers-default")
 )
 {
   if (draft_layers_any_active(layers))
@@ -113,7 +113,7 @@ module draft_sheet
   grid,
   zero,
   check = false,    // check configuration
-  layers = draft_get_default("layers")
+  layers = draft_get_default("layers-sheet")
 )
 {
   if ( !table_exists( r=draft_sheet_config_tr, ri=draft_sheet_config ) )
@@ -299,7 +299,7 @@ module draft_ruler
   scaler = true,    // scale ruler
   hide = false,     // hide label
   w = 1,            // mark line weight
-  layers = draft_get_default("layers")
+  layers = draft_get_default("layers-sheet")
 )
 {
 
@@ -356,7 +356,7 @@ module draft_table
   fmap,
   zp = 0,
   window = false,
-  layers = draft_get_default("layers")
+  layers = draft_get_default("layers-table")
 )
 {
   if (draft_layers_any_active(layers))
@@ -472,7 +472,7 @@ module draft_ztable
   zp = 0,
   number = false,
   window = false,
-  layers = draft_get_default("layers")
+  layers = draft_get_default("layers-table")
 )
 {
   if (draft_layers_any_active(layers))
@@ -594,7 +594,7 @@ module draft_note
   halign = "left",
   zp = 0,
   window = false,
-  layers = draft_get_default("layers")
+  layers = draft_get_default("layers-note")
 )
 {
   if (draft_layers_any_active(layers))
@@ -633,8 +633,10 @@ module draft_note
           : (halign == "right")  ? draft_table_format_crr_map
           : undef;
 
-    // layers handled locally, no need to pass
-    draft_table(map=map, fmap=fmap, zp=zp, window=window);
+    draft_table
+    (
+      map=map, fmap=fmap, zp=zp, window=window, layers=layers
+    );
   } // layers
 }
 
@@ -674,7 +676,7 @@ module draft_title_block
   zp = 0,
   number = false,
   window = false,
-  layers = draft_get_default("layers")
+  layers = draft_get_default("layers-titleblock")
 )
 {
   draft_ztable

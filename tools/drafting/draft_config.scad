@@ -49,7 +49,7 @@ $draft_arrow_fn = 8;
 draft_make_3d = false;
 draft_sheet_size = "A";
 draft_sheet_config = "L84TS";
-draft_layers_show = ["root"];
+draft_layers_show = ["all"];
 
 draft_scaler = 1;
 
@@ -81,7 +81,12 @@ draft_defaults_map =
   ["arrow-line-length-min",     length(4.0, "mm")],       // arrowhead
   ["arrow-angle-min",           angle(15, "d")],
 
-  ["layers",                    ["root"]]                 // default layer(s)
+  ["layers-default",            ["all", "default"]],      // default layers
+  ["layers-sheet",              ["all", "sheet"]],
+  ["layers-table",              ["all", "table"]],
+  ["layers-note",               ["all", "note"]],
+  ["layers-titleblock",         ["all", "titleblock"]],
+  ["layers-dim",                ["all", "dim"]]
 ];
 
 //! .
