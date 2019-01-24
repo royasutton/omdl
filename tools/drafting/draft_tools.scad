@@ -372,28 +372,25 @@ module draft_table
       //
       // get table format
       //
-      cmh = map_get_firstof2_or(map, fmap, "cmh", length(1/4,"in")) * draft_scaler;
-      cmv = map_get_firstof2_or(map, fmap, "cmv", length(1/4,"in")) * draft_scaler;
+      cmh = map_get_firstof2_or(map, fmap, "cmh", draft_get_default("table-cmh")) * draft_scaler;
+      cmv = map_get_firstof2_or(map, fmap, "cmv", draft_get_default("table-cmv")) * draft_scaler;
 
-      coh = map_get_firstof2_or(map, fmap, "coh", +1);
-      cov = map_get_firstof2_or(map, fmap, "cov", -1);
+      coh = map_get_firstof2_or(map, fmap, "coh", draft_get_default("table-coh"));
+      cov = map_get_firstof2_or(map, fmap, "cov", draft_get_default("table-cov"));
 
       //
       // default lines when not in map nor fmap:
       //  no horizontal or vertical lines.
       //
-      hlines  = map_get_firstof2_or(map, fmap, "hlines", consts(5,[0,0]));
-      vlines  = map_get_firstof2_or(map, fmap, "vlines", consts(3,[0,0]));
+      hlines  = map_get_firstof2_or(map, fmap, "hlines", draft_get_default("table-hlines"));
+      vlines  = map_get_firstof2_or(map, fmap, "vlines", draft_get_default("table-vlines"));
 
       //
       // cell default text format when not in map nor fmap:
-      //  'cll'=centered title,  left justified headings and entries
       //
-      cll = [empty_str, [-1,-1], [2/5,-9/10], [0,-1-1/5], 0, 1, ["left", "center"]];
-
-      tdefs = map_get_firstof2_or(map, fmap, "tdefs", cll);
-      hdefs = map_get_firstof2_or(map, fmap, "hdefs", cll);
-      edefs = map_get_firstof2_or(map, fmap, "edefs", cll);
+      tdefs = map_get_firstof2_or(map, fmap, "tdefs", draft_get_default("table-txt-fmt"));
+      hdefs = map_get_firstof2_or(map, fmap, "hdefs", draft_get_default("table-txt-fmt"));
+      edefs = map_get_firstof2_or(map, fmap, "edefs", draft_get_default("table-txt-fmt"));
 
       //
       // get table contents
@@ -594,9 +591,10 @@ module draft_note
   note,
   size,
   line,
-  cm,
-  zp = 0,
   halign = "left",
+  cmh = draft_get_default("note-cmh"),
+  cmv = draft_get_default("note-cmv"),
+  zp = 0,
   window = false,
   layers = draft_get_default("layers-note")
 )
@@ -604,12 +602,8 @@ module draft_note
   if (draft_layers_any_active(layers))
   // draft_make_3d_if_configured() handled by draft_table()
   {
-    // cell minimum horizontal and vertical
-    cmh = edefined_or(cm, 0, defined_or(cm, length(1/4, "in") ));
-    cmv = edefined_or(cm, 1, cmh);
-
     // default line configuration
-    lnd = defined_or(line, [1,1]);
+    lnd = defined_or(line, [1, 1]);
     lnc = is_list(lnd[0]) ? [lnd[0], lnd[1]] : [lnd, lnd];
 
     // default heading text when size specified without text

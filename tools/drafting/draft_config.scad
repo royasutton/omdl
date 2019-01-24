@@ -63,6 +63,10 @@ function draft_get_default
 
 draft_defaults_s1_map =
 [
+  //
+  // fonts
+  //
+
   ["font-szr",                  "Liberation Sans"],       // sheet zone reference
 
   ["font-tbh",                  "Liberation Sans"],       // title block headings
@@ -72,14 +76,51 @@ draft_defaults_s1_map =
   ["font-th",                   "Liberation Sans"],       // table headings
   ["font-te",                   "Liberation Sans"],       // table entries
 
+  //
+  // make 3d
+  //
+
   ["make-3d-height",            length(1, "mm")],         // make 3d extrude height
+
+  //
+  // lines
+  //
 
   ["line-width-min",            length(0.2, "mm")],       // lines
   ["line-segment-min",          length(1.25, "mm")],      // dashed-lines
   ["line-use-hull",             true],                    // draft_line_pp() uses hull()
 
+  //
+  // arrows
+  //
+
   ["arrow-line-length-min",     length(4.0, "mm")],       // arrowhead
   ["arrow-angle-min",           angle(15, "d")],
+
+  //
+  // table
+  //
+
+  ["table-cmh",                 length(1/4,"in")],        // horizontal width minimum
+  ["table-cmv",                 length(1/4,"in")],        // vertical height minimum
+  ["table-coh",                 +1],                      // horizontal line ordering
+  ["table-cov",                 -1],                      // vertical line ordering
+  ["table-hlines",              consts(5,[0,0])],         // horizontal lines
+  ["table-vlines",              consts(3,[0,0])],         // vertical line
+  ["table-txt-fmt",             [empty_str, [-1,-1],      // text format
+                                [2/5,-9/10], [0,-1-1/5],
+                                0, 1, ["left", "center"]]],
+
+  //
+  // note
+  //
+
+  ["note-cmh",                  length(1/4,"in")],        // horizontal width minimum
+  ["note-cmv",                  length(1/4,"in")],        // vertical height minimum
+
+  //
+  // layers
+  //
 
   ["layers-default",            ["all", "default"]],      // default layers
   ["layers-sheet",              ["all", "sheet"]],
