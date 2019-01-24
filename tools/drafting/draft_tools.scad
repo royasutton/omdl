@@ -683,6 +683,68 @@ module draft_title_block
   );
 }
 
+//! .
+/***************************************************************************//**
+*******************************************************************************/
+module draft_dim_leader
+(
+  p = origin2d,
+  b = 60,
+  l = 10,
+  d,
+
+  h,
+  t,
+  ts,
+  tv = x_axis2d_uv,
+  tl = 5,
+  tp = [-1,0],
+  ta = "center",
+
+  w = 1,
+  s = 1,
+  a = 1,
+
+  bw = 1,
+  bs = 1,
+
+  cmh = draft_get_default("dim-leader-cmh"),
+  cmv = draft_get_default("dim-leader-cmv"),
+
+  window = false,
+  layers = draft_get_default("layers-dim")
+)
+{
+  if (draft_layers_any_active(layers))
+  draft_make_3d_if_configured()
+  {
+    // leader line
+    lt = not_defined(d) ? p : line_tp(line2d_new(m=d, a=b, p1=p));
+    li = line_tp(line2d_new(m=l, a=b, p1=lt));
+    draft_line(l=[li, lt], w=w, s=s, a2=a);
+
+    // note line
+    nl = line2d_new(m=tl, p1=li, v=tv);
+    draft_line(l=nl, w=w, s=s);
+
+    // note
+    translate( line_tp(nl) )
+    draft_note
+    (
+      head=h,
+      note=t,
+      size=ts,
+      line=[bw, bs],
+      halign=ta,
+      cmh=cmh,
+      cmv=cmv,
+      zp=tp,
+      window=window,
+      layers=layers
+    );
+  }
+}
+
 //! @}
 //! @}
 
