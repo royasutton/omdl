@@ -111,7 +111,7 @@ module draft_sheet
   frame,
   zone,
   grid,
-  zero,
+  origin,
   check = false,    // check configuration
   layers = draft_get_default("layers-sheet")
 )
@@ -152,7 +152,7 @@ module draft_sheet
     zrf = draft_config_get_value(ci="zrf");
     zfs = draft_config_get_value(ci="zfs");
 
-    // sheet, frame, zone, grid, and zero/origin line configuration
+    // sheet, frame, zone, grid, and origin line configuration
     slc = draft_config_get_value(ci="slc");
     flc = draft_config_get_value(ci="flc");
     zlc = draft_config_get_value(ci="zlc");
@@ -258,14 +258,14 @@ module draft_sheet
     }
 
     //
-    // zero/origin tics
+    // origin tics
     //
-    origin_w = edefined_or(defined_or(zero, olc), 0, defined_or(zero, olc));
+    origin_w = edefined_or(defined_or(origin, olc), 0, defined_or(origin, olc));
     if ( origin_w )
     {
-      origin_s = edefined_or(defined_or(zero, olc), 1, 1);      // line style
-      origin_l = edefined_or(defined_or(zero, olc), 2, 1);      // length factor
-      origin_a = edefined_or(defined_or(zero, olc), 3, 1);      // arrow style
+      origin_s = edefined_or(defined_or(origin, olc), 1, 1);    // line style
+      origin_l = edefined_or(defined_or(origin, olc), 2, 1);    // length factor
+      origin_a = edefined_or(defined_or(origin, olc), 3, 1);    // arrow style
 
       // x-origin
       for ( ix = [1,-1] )
