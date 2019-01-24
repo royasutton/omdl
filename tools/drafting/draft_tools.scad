@@ -618,7 +618,7 @@ module draft_note
       not_defined(htd) ? empty_lst :
       ["heads",   [[htd], edefined_or(size, 2, 1)]],
 
-      ["cols",    [edefined_or(size, 0, 10)]],
+      ["cols",    [edefined_or(size, 0, defined_or(size,1))]],
       ["rows",    [[[note], edefined_or(size, 1, 1)]]],
 
       ["hlines",  concat(consts(3,lnc[0]), consts(2,lnc[1]))],
