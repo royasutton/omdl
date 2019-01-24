@@ -369,7 +369,9 @@ module draft_table
     }
     else
     {
+      //
       // get table format
+      //
       cmh = map_get_firstof2_or(map, fmap, "cmh", length(1/4,"in")) * draft_scaler;
       cmv = map_get_firstof2_or(map, fmap, "cmv", length(1/4,"in")) * draft_scaler;
 
@@ -393,7 +395,9 @@ module draft_table
       hdefs = map_get_firstof2_or(map, fmap, "hdefs", cll);
       edefs = map_get_firstof2_or(map, fmap, "edefs", cll);
 
-      // get table data
+      //
+      // get table contents
+      //
       title = map_get_value(map, "title");
       heads = map_get_value(map, "heads");
       cols  = map_get_value(map, "cols");
@@ -590,9 +594,9 @@ module draft_note
   note,
   size,
   line,
-  cell,
-  halign = "left",
+  cm,
   zp = 0,
+  halign = "left",
   window = false,
   layers = draft_get_default("layers-note")
 )
@@ -601,8 +605,8 @@ module draft_note
   // draft_make_3d_if_configured() handled by draft_table()
   {
     // cell minimum horizontal and vertical
-    cmh = edefined_or(cell, 0, defined_or(cell, length(1/4, "in") ));
-    cmv = edefined_or(cell, 1, cmh);
+    cmh = edefined_or(cm, 0, defined_or(cm, length(1/4, "in") ));
+    cmv = edefined_or(cm, 1, cmh);
 
     // default line configuration
     lnd = defined_or(line, [1,1]);
