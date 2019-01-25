@@ -705,8 +705,8 @@ module draft_dim_leader
   s = draft_get_default("dim-leader-style"),
   a = draft_get_default("dim-leader-arrow"),
 
-  bw = draft_get_default("dim-leader-box-weight"),,
-  bs = draft_get_default("dim-leader-box-style"),,
+  bw = draft_get_default("dim-leader-box-weight"),
+  bs = draft_get_default("dim-leader-box-style"),
 
   cmh = draft_get_default("dim-leader-cmh"),
   cmv = draft_get_default("dim-leader-cmv"),
