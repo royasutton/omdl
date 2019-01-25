@@ -119,11 +119,16 @@ draft_defaults_s1_map =
   ["note-cmv",                  length(1/4,"in")],        // vertical height minimum
 
   //
-  // dim_leader
+  // dim
   //
 
   ["dim-leader-cmh",            length(1/4,"in")],        // horizontal width minimum
   ["dim-leader-cmv",            length(1/4,"in")],        // vertical height minimum
+  ["dim-leader-weight",         1],
+  ["dim-leader-style",          1],
+  ["dim-leader-arrow",          1],
+  ["dim-leader-box-weight",     1],
+  ["dim-leader-box-style",      1],
 
   //
   // layers

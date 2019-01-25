@@ -701,12 +701,12 @@ module draft_dim_leader
   tp = [-1,0],
   ta = "center",
 
-  w = 1,
-  s = 1,
-  a = 1,
+  w = draft_get_default("dim-leader-weight"),
+  s = draft_get_default("dim-leader-style"),
+  a = draft_get_default("dim-leader-arrow"),
 
-  bw = 1,
-  bs = 1,
+  bw = draft_get_default("dim-leader-box-weight"),,
+  bs = draft_get_default("dim-leader-box-style"),,
 
   cmh = draft_get_default("dim-leader-cmh"),
   cmv = draft_get_default("dim-leader-cmv"),
