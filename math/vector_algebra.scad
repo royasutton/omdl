@@ -188,6 +188,46 @@ function distance_pp
     sqrt(sum([for (i=[0:d-1]) (p1[i]-p2[i])*(p1[i]-p2[i])]))
   : sqrt(sum([for (i=[0:d-1]) p1[i]*p1[i]]));
 
+//! Compute the shortest distance between a point and a line.
+/***************************************************************************//**
+  \param    p <point> A point coordinate.
+  \param    l <line> A line or vector.
+
+  \returns  <decimal> The shortest distance between the point and the
+            line.
+
+  \details
+
+  \sa point_closest_pl().
+*******************************************************************************/
+function distance_pl
+(
+  p,
+  l
+) = distance_pp(p, point_closest_pl(p, l));
+
+//! Compute the shortest distance between a point and a plane.
+/***************************************************************************//**
+  \param    p <point> A point coordinate.
+  \param    n <pnorm> A plane normal [specification].
+  \param    np <point> A point coordinate on the plane \p n.
+
+  \returns  <decimal> The shortest distance between the point and the
+            plane.
+
+  \details
+
+  \sa point_closest_pn().
+
+  [specification]: \ref dt_pnorm
+*******************************************************************************/
+function distance_pn
+(
+  p,
+  n,
+  np
+) = distance_pp(p, point_closest_pn(p, n, np));
+
 //! Test if a point is left, on, or right of an infinite line in a 2d-space.
 /***************************************************************************//**
   \param    p1 <point-2d> A 2d point coordinate 1.
@@ -210,6 +250,57 @@ function is_left_ppp
   p2,
   p3
 ) = ((p2[0]-p1[0]) * (p3[1]-p1[1]) - (p3[0]-p1[0]) * (p2[1]-p1[1]));
+
+//! Compute the coordinates of the closest point on a line to a given point.
+/***************************************************************************//**
+  \param    p <point> A point coordinate.
+  \param    l <line> A line or vector.
+
+  \returns  <point-3d> The coordinates of the point on the line
+            closest to the given point.
+*******************************************************************************/
+function point_closest_pl
+(
+  p,
+  l
+) = let
+    (
+      t = line_tp(l),
+      i = line_ip(l),
+
+      v = t - i,
+      w = p - i,
+
+      x = (w * v) / (v * v)
+    )
+    i + x * v;
+
+//! Compute the coordinates of the closest point on a plane to a given point.
+/***************************************************************************//**
+  \param    p <point> A point coordinate.
+  \param    n <pnorm> A plane normal [specification].
+  \param    np <point> A point coordinate on the plane \p n.
+
+  \returns  <point-3d> The coordinates of the point on the plane
+            closest to the given point.
+
+  [specification]: \ref dt_pnorm
+*******************************************************************************/
+function point_closest_pn
+(
+  p,
+  n,
+  np
+) = let
+    (
+      m = plane_to_normal(n),
+
+      q = m * (np - p),
+      r = m * m,
+
+      s = q / r
+    )
+    p + s * m;
 
 //! Return 3d point unchanged or add a zeroed third dimension to 2d point.
 /***************************************************************************//**
@@ -674,7 +765,7 @@ function are_coplanar_lll
 
 //! Convert a planes' normal specification into a normal vector.
 /***************************************************************************//**
-  \param    n <pnorm> A plane normal \ref dt_pnorm "specification".
+  \param    n <pnorm> A plane normal [specification].
 
   \param    cw <boolean> Point ordering. When the plane specified as
             non-collinear points, this indicates ordering.
@@ -687,6 +778,8 @@ function are_coplanar_lll
     normal vector is not normalized to its unit vector.
 
     See \ref dt_pnorm for argument specification and conventions.
+
+  [specification]: \ref dt_pnorm
 *******************************************************************************/
 function plane_to_normal
 (
@@ -1013,7 +1106,11 @@ BEGIN_SCOPE validate;
 
     // set 2: point
     for (vid=run_ids) run("distance_pp",vid) test( "distance_pp", distance_pp(gv(vid,0),gv(vid,1)), vid, false );
+    log_notest( "distance_pl()" );
+    log_notest( "distance_pn()" );
     for (vid=run_ids) run("is_left_ppp",vid) test( "is_left_ppp", is_left_ppp(gv(vid,0),gv(vid,1),gv(vid,2)), vid, false );
+    log_notest( "point_closest_pl()" );
+    log_notest( "point_closest_pn()" );
     for (vid=run_ids) run("point_to_3d",vid) test( "point_to_3d", point_to_3d(gv(vid,0)), vid, false );
     log_notest( "interpolate2d_linear_pp()" );
 
