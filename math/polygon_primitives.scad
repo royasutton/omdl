@@ -169,15 +169,23 @@ function polygon2d_line_p
 
         // fixed segment size
         : is_defined(fs) ?
-          [for (i=[ip[a] : s*fs : tp[a]]) i]
+          let
+          (
+            // scale by line x-projection iff using 'x' (ie: zdx != 0)
+            sx = fs * (zdx ? 1 : cos(angle_ll(x_axis2d_uv, s*[ip, tp])))
+          )
+          [for (i=[ip[a] : s*sx : tp[a]]) i]
 
         // fixed segment size centered
         : is_defined(ft) ?
           let
           (
-            co=( abs(tp[a]-ip[a]) - ft*floor(abs(tp[a]-ip[a])/ft) )/2
+            // scale by line x-projection iff using 'x' (ie: zdx != 0)
+            sx = ft * (zdx ? 1 : cos(angle_ll(x_axis2d_uv, s*[ip, tp]))),
+            // center offset
+            co = ( abs(tp[a]-ip[a]) - sx*floor(abs(tp[a]-ip[a])/sx) )/2
           )
-          [ip[a], for (i=[ip[a] + s*co : s*ft : tp[a]]) i, tp[a]]
+          [ip[a], for (i=[ip[a] + s*co : s*sx : tp[a]]) i, tp[a]]
 
         // fixed number
         : [for (i=[0:fn]) (i*(tp[a]-ip[a])/fn+ip[a])]
