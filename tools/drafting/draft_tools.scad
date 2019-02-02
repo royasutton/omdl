@@ -745,6 +745,152 @@ module draft_dim_leader
   }
 }
 
+//! .
+/***************************************************************************//**
+*******************************************************************************/
+module draft_dim_line
+(
+  p1,
+  p2,
+
+  v1,
+  v2,
+
+  t,
+  u,
+
+  d  = draft_get_default("dim-line-distance"),
+  o  = draft_get_default("dim-line-offset"),
+  l  = draft_get_default("dim-line-leader-length"),
+
+  ts = draft_get_default("dim-line-text-size"),
+  tp = draft_get_default("dim-line-text-place"),
+  rm = draft_get_default("dim-line-rnd-mode"),
+
+  ls = draft_get_default("dim-line-leader-style"),
+
+  w  = draft_get_default("dim-line-weight"),
+  s  = draft_get_default("dim-line-style"),
+  a  = draft_get_default("dim-line-arrow"),
+
+  a1,
+  a2,
+
+  cmh = draft_get_default("dim-line-cmh"),
+  cmv = draft_get_default("dim-line-cmv"),
+
+  layers = draft_get_default("layers-dim")
+)
+{
+  if (draft_layers_any_active(layers))
+  draft_make_3d_if_configured()
+  {
+    // identify measurement reference points
+    // only one of 'v1', 'v2' should normally be used at a time
+    mr1 = is_defined(v1) ? point_closest_pl(p2, v1) : p1;
+    mr2 = is_defined(v2) ? point_closest_pl(p1, v2) : p2;
+
+    // minimum distance from reference points to dimension line
+    dm1 = edefined_or(d, 0, d);
+    dm2 = edefined_or(d, 1, dm1);
+
+    // lead line lengths (back towards reference points)
+    dl1 = edefined_or(l, 0, l);
+    dl2 = edefined_or(l, 1, dl1);
+
+    // lead lines angle
+    // construct perpendicular to line form by reference points
+    apl = angle_ll(x_axis2d_uv, [mr1, mr2]) + 90;
+
+    // minimum distances to dimension line
+    dmt = max(dm1, dm2);
+
+    // lead line end points
+    pl1 = line_tp(line2d_new(m=dmt, a=apl, p1=mr1));
+    pl2 = line_tp(line2d_new(m=dmt, a=apl, p1=mr2));
+
+    // dimension line offset at lead line end-points
+    pd1 = line_tp(line2d_new(m=-o, a=apl, p1=pl1));
+    pd2 = line_tp(line2d_new(m=-o, a=apl, p1=pl2));
+
+    //
+    // draft
+    //
+
+    // lead lines
+    draft_line(l=line2d_new(m=-dl1, a=apl, p1=pl1), w=w/2, s=ls);
+    draft_line(l=line2d_new(m=-dl2, a=apl, p1=pl2), w=w/2, s=ls);
+
+    // dimension text
+    dt = is_defined(t) ? t
+       : let
+         (
+           // measure distance between reference points
+           md = distance_pp(mr1, mr2),
+
+           // use specified units 'u'
+           du = not_defined(u) ? md
+              : length(md, from=length_unit_base, to=u),
+
+           // rounding: [mode:0, digits]
+           rs = edefined_or(rm, 0, 0),
+
+           rd = rs == 1 ? dround(du, edefined_or(rm, 1, 2))
+              : rs == 2 ? sround(du, edefined_or(rm, 1, 3))
+              : du
+         )
+         // add units id when 'u' is specified
+         not_defined(u) ? str(rd) : str(rd, " ", u);
+
+    // individual or common arrowheads
+    da1 = defined_or(a1, a);
+    da2 = defined_or(a2, a);
+
+    // when text placed over line
+    if ( tp == [0, 0] && !is_empty(dt) )
+    difference()
+    {
+      // remove window from dimension line for text
+      draft_line(l=[pd1, pd2], w=w, s=s, a1=da1, a2=da2);
+
+      translate( (pd1+pd2)/2 )
+      rotate( [0, 0, apl-90] )
+      draft_note
+      (
+        note=dt,
+        size=ts,
+        line=[0,0],
+        halign="center",
+        cmh=cmh,
+        cmv=cmv,
+        zp=tp,
+        window=true,
+        layers=layers
+      );
+    }
+    else
+    {
+      draft_line(l=[pd1, pd2], w=w, s=s, a1=da1, a2=da2);
+    }
+
+    if ( !is_empty(dt)  )
+    translate( (pd1+pd2)/2 )
+    rotate( [0, 0, apl-90] )
+    draft_note
+    (
+      note=dt,
+      size=ts,
+      line=[0,0],
+      halign="center",
+      cmh=cmh,
+      cmv=cmv,
+      zp=tp,
+      window=false,
+      layers=layers
+    );
+  }
+}
+
 //! @}
 //! @}
 
