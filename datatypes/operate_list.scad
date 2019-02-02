@@ -299,7 +299,9 @@ function dround
 (
   v,
   d = 6
-) = is_number(v) ? round(v * pow(10, d)) / pow(10, d)
+) = is_number(v) ?
+    let(n = pow(10, d))
+    round(v * n) / n
   : is_list(v) ? [for (i=v) dround(i, d)]
   : v;
 
