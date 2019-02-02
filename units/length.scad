@@ -170,10 +170,10 @@ function length_unit_name
 
 //! Convert a value from millimeters to other units.
 /***************************************************************************//**
-  \param    v <decimal> A value to convert.
+  \param    v <decimal-list|decimal> The value(s) to convert.
   \param    to <string> The units to which the value should be converted.
 
-  \returns  <decimal> The conversion result.
+  \returns  <decimal-list|decimal> The conversion result.
             Returns \b undef for identifiers that are not defined.
 
   \private
@@ -200,10 +200,10 @@ function length_unit_mm2
 
 //! Convert a value from some units to millimeters.
 /***************************************************************************//**
-  \param    v <decimal> A value to convert.
+  \param    v <decimal-list|decimal> The value(s) to convert.
   \param    from <string> The units of the value to be converted.
 
-  \returns  <decimal> The conversion result.
+  \returns  <decimal-list|decimal> The conversion result.
             Returns \b undef for identifiers that are not defined.
 
   \private
@@ -216,11 +216,11 @@ function length_unit_2mm
 
 //! Convert a value from from one units to another.
 /***************************************************************************//**
-  \param    v <decimal> A value to convert.
+  \param    v <decimal-list|decimal> The value(s) to convert.
   \param    from <string> The units of the value to be converted.
   \param    to <string> A units to which the value should be converted.
 
-  \returns  <decimal> The conversion result.
+  \returns  <decimal-list|decimal> The conversion result.
             Returns \b undef for identifiers that are not defined.
 *******************************************************************************/
 function length
@@ -233,11 +233,11 @@ function length
 
 //! Convert a value from from one units to another.
 /***************************************************************************//**
-  \param    v <decimal> A value to convert.
+  \param    v <decimal-list|decimal> The value(s) to convert.
   \param    from <string> The units of the value to be converted.
   \param    to <string> A units to which the value should be converted.
 
-  \returns  <decimal> The conversion result.
+  \returns  <decimal-list|decimal> The conversion result.
             Returns \b undef for identifiers that are not defined.
 *******************************************************************************/
 function length_inv
@@ -250,7 +250,7 @@ function length_inv
 
 //! Convert a value from from one units to another with dimensions.
 /***************************************************************************//**
-  \param    v <decimal> A value to convert.
+  \param    v <decimal> The value to convert.
   \param    from <string> The units of the value to be converted.
   \param    to <string> A units to which the value should be converted.
   \param    d <integer> A dimension. One of [1|2|3].
