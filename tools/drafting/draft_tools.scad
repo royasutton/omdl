@@ -761,13 +761,13 @@ module draft_dim_line
 
   d  = draft_get_default("dim-line-distance"),
   o  = draft_get_default("dim-line-offset"),
-  l  = draft_get_default("dim-line-leader-length"),
+  e  = draft_get_default("dim-line-extension-length"),
 
   ts = draft_get_default("dim-line-text-size"),
   tp = draft_get_default("dim-line-text-place"),
   rm = draft_get_default("dim-line-rnd-mode"),
 
-  ls = draft_get_default("dim-line-leader-style"),
+  es = draft_get_default("dim-line-extension-style"),
 
   w  = draft_get_default("dim-line-weight"),
   s  = draft_get_default("dim-line-style"),
@@ -794,22 +794,22 @@ module draft_dim_line
     dm1 = edefined_or(d, 0, d);
     dm2 = edefined_or(d, 1, dm1);
 
-    // lead line lengths (back towards reference points)
-    dl1 = edefined_or(l, 0, l);
-    dl2 = edefined_or(l, 1, dl1);
+    // extension line lengths (back towards reference points)
+    dl1 = edefined_or(e, 0, e);
+    dl2 = edefined_or(e, 1, dl1);
 
-    // lead lines angle
+    // extension lines angle
     // construct perpendicular to line form by reference points
     apl = angle_ll(x_axis2d_uv, [mr1, mr2]) + 90;
 
     // minimum distances to dimension line
     dmt = max(dm1, dm2);
 
-    // lead line end points
+    // extension line end points
     pl1 = line_tp(line2d_new(m=dmt, a=apl, p1=mr1));
     pl2 = line_tp(line2d_new(m=dmt, a=apl, p1=mr2));
 
-    // dimension line offset at lead line end-points
+    // dimension line offset at extension line end-points
     pd1 = line_tp(line2d_new(m=-o, a=apl, p1=pl1));
     pd2 = line_tp(line2d_new(m=-o, a=apl, p1=pl2));
 
@@ -817,9 +817,9 @@ module draft_dim_line
     // draft
     //
 
-    // lead lines
-    draft_line(l=line2d_new(m=-dl1, a=apl, p1=pl1), w=w/2, s=ls);
-    draft_line(l=line2d_new(m=-dl2, a=apl, p1=pl2), w=w/2, s=ls);
+    // extension lines
+    draft_line(l=line2d_new(m=-dl1, a=apl, p1=pl1), w=w/2, s=es);
+    draft_line(l=line2d_new(m=-dl2, a=apl, p1=pl2), w=w/2, s=es);
 
     // dimension text
     dt = is_defined(t) ? t

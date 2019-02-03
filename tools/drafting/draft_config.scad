@@ -134,14 +134,14 @@ draft_defaults_s1_map =
   ["dim-line-cmv",              length(1/8,"in")],        // vertical height minimum
   ["dim-line-weight",           1],
   ["dim-line-style",            1],
-  ["dim-line-leader-style",     1],
+  ["dim-line-extension-style",  1],
   ["dim-line-arrow",            2],
   ["dim-line-text-place",       [0,1]],
   ["dim-line-text-size",        undef],
   ["dim-line-rnd-mode",         [1,2]],                   // [mode, figures]
   ["dim-line-distance",         length(3/8,"in")],
   ["dim-line-offset",           length(1/32,"in")],
-  ["dim-line-leader-length",    length(2/8,"in")],
+  ["dim-line-extension-length", length(2/8,"in")],
 
   //
   // layers
