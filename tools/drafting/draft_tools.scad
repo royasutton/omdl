@@ -795,31 +795,31 @@ module draft_dim_line
     dm2 = edefined_or(d, 1, dm1);
 
     // extension line lengths (back towards reference points)
-    dl1 = edefined_or(e, 0, e);
-    dl2 = edefined_or(e, 1, dl1);
+    de1 = edefined_or(e, 0, e);
+    de2 = edefined_or(e, 1, de1);
 
     // extension lines angle
     // construct perpendicular to line form by reference points
-    apl = angle_ll(x_axis2d_uv, [mr1, mr2]) + 90;
+    ape = angle_ll(x_axis2d_uv, [mr1, mr2]) + 90;
 
     // minimum distances to dimension line
     dmt = max(dm1, dm2);
 
     // extension line end points
-    pl1 = line_tp(line2d_new(m=dmt, a=apl, p1=mr1));
-    pl2 = line_tp(line2d_new(m=dmt, a=apl, p1=mr2));
+    pe1 = line_tp(line2d_new(m=dmt, a=ape, p1=mr1));
+    pe2 = line_tp(line2d_new(m=dmt, a=ape, p1=mr2));
 
     // dimension line offset at extension line end-points
-    pd1 = line_tp(line2d_new(m=-o, a=apl, p1=pl1));
-    pd2 = line_tp(line2d_new(m=-o, a=apl, p1=pl2));
+    pd1 = line_tp(line2d_new(m=-o, a=ape, p1=pe1));
+    pd2 = line_tp(line2d_new(m=-o, a=ape, p1=pe2));
 
     //
     // draft
     //
 
     // extension lines
-    draft_line(l=line2d_new(m=-dl1, a=apl, p1=pl1), w=w/2, s=es);
-    draft_line(l=line2d_new(m=-dl2, a=apl, p1=pl2), w=w/2, s=es);
+    draft_line(l=line2d_new(m=-de1, a=ape, p1=pe1), w=w/2, s=es);
+    draft_line(l=line2d_new(m=-de2, a=ape, p1=pe2), w=w/2, s=es);
 
     // dimension text
     dt = is_defined(t) ? t
@@ -854,7 +854,7 @@ module draft_dim_line
       draft_line(l=[pd1, pd2], w=w, s=s, a1=da1, a2=da2);
 
       translate( (pd1+pd2)/2 )
-      rotate( [0, 0, apl-90] )
+      rotate( [0, 0, ape-90] )
       draft_note
       (
         note=dt,
@@ -875,7 +875,7 @@ module draft_dim_line
 
     if ( !is_empty(dt)  )
     translate( (pd1+pd2)/2 )
-    rotate( [0, 0, apl-90] )
+    rotate( [0, 0, ape-90] )
     draft_note
     (
       note=dt,
