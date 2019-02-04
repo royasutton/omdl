@@ -787,8 +787,13 @@ module draft_dim_line
   {
     // identify measurement reference points
     // only one of 'v1', 'v2' should normally be used at a time
-    mr1 = is_defined(v1) ? point_closest_pl(p2, v1) : p1;
-    mr2 = is_defined(v2) ? point_closest_pl(p1, v2) : p2;
+    // create vector if numerical angle has been specified.
+    mr1 = not_defined(v1) ? p1
+        : let( va1 = is_number(v1) ? line2d_new(a=v1, p1=p1) : v1 )
+          point_closest_pl(p2, va1);
+    mr2 = not_defined(v2) ? p2
+        : let( va2 = is_number(v2) ? line2d_new(a=v2, p1=p2) : v2 )
+          point_closest_pl(p1, va2);
 
     // minimum distance from reference points to dimension line
     dm1 = edefined_or(d, 0, d);
