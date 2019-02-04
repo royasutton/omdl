@@ -896,6 +896,145 @@ module draft_dim_line
   }
 }
 
+//! .
+/***************************************************************************//**
+*******************************************************************************/
+module draft_dim_radius
+(
+  c,
+  p,
+
+  r,
+  v,
+
+  t,
+  u,
+
+  d  = false,
+
+  o  = draft_get_default("dim-radius-offset"),
+
+  ts = draft_get_default("dim-radius-text-size"),
+  tp = draft_get_default("dim-radius-text-place"),
+  rm = draft_get_default("dim-radius-rnd-mode"),
+
+  w  = draft_get_default("dim-radius-weight"),
+  s  = draft_get_default("dim-radius-style"),
+  a  = draft_get_default("dim-radius-arrow"),
+
+  a1,
+  a2,
+
+  cmh = draft_get_default("dim-radius-cmh"),
+  cmv = draft_get_default("dim-radius-cmv"),
+
+  layers = draft_get_default("layers-dim")
+)
+{
+  if (draft_layers_any_active(layers))
+  draft_make_3d_if_configured()
+  {
+    // identify radius reference points
+    // create vector if numerical angle has been specified.
+    rr1 = c;
+    rr2 = is_defined(p)  ? p
+        : not_defined(r) ? line_tp(line2d_new(p1=c))
+        : not_defined(v) ? line_tp(line2d_new(m=r, p1=c))
+        : is_number(v)   ? line_tp(line2d_new(m=r, a=v, p1=c))
+        :                  line_tp(line2d_new(m=r, v=v, p1=c));
+
+    // identify measurement reference points
+    mr1 = d ? line_tp(line2d_new(m=distance_pp(rr1, rr2), v=[rr2, rr1], p1=rr1))
+        : rr1;
+    mr2 = rr2;
+
+    // minimum distance from reference points to dimension line
+    do1 = edefined_or(o, 0, o);
+    do2 = edefined_or(o, 1, d ? do1 : 0);
+
+    // dimension lines angle
+    ape = angle_ll(x_axis2d_uv, [mr1, mr2]);
+
+    // dimension line offset at end-points
+    pd1 = (do1 == 0) ? mr1
+        : line_tp( line2d_new(m=distance_pp(mr1, mr2)-do1, v=[mr2, mr1], p1=mr2) );
+    pd2 = (do2 == 0) ? mr2
+        : line_tp( line2d_new(m=distance_pp(mr1, mr2)-do2, v=[mr1, mr2], p1=mr1) );
+
+    //
+    // draft
+    //
+
+    // dimension text
+    dt = is_defined(t) ? t
+       : let
+         (
+           // measure distance between reference points
+           md = distance_pp(mr1, mr2),
+
+           // use specified units 'u'
+           du = not_defined(u) ? md
+              : length(md, from=length_unit_base, to=u),
+
+           // rounding: [mode:0, digits]
+           rs = edefined_or(rm, 0, 0),
+
+           rd = rs == 1 ? dround(du, edefined_or(rm, 1, 2))
+              : rs == 2 ? sround(du, edefined_or(rm, 1, 3))
+              : du
+         )
+         // add units id when 'u' is specified
+         not_defined(u) ? str(rd) : str(rd, " ", u);
+
+    // individual or common arrowheads
+    da1 = defined_or(a1, d ? a : 0);
+    da2 = defined_or(a2, a);
+
+    // when text placed over line
+    if ( second(tp) == 0 && !is_empty(dt) )
+    difference()
+    {
+      // remove window from dimension line for text
+      draft_line(l=[pd1, pd2], w=w, s=s, a1=da1, a2=da2);
+
+      translate( (pd1+pd2)/2 )
+      rotate( [0, 0, ape] )
+      draft_note
+      (
+        note=dt,
+        size=ts,
+        line=[0,0],
+        halign="center",
+        cmh=cmh,
+        cmv=cmv,
+        zp=tp,
+        window=true,
+        layers=layers
+      );
+    }
+    else
+    {
+      draft_line(l=[pd1, pd2], w=w, s=s, a1=da1, a2=da2);
+    }
+
+    if ( !is_empty(dt)  )
+    translate( (pd1+pd2)/2 )
+    rotate( [0, 0, ape] )
+    draft_note
+    (
+      note=dt,
+      size=ts,
+      line=[0,0],
+      halign="center",
+      cmh=cmh,
+      cmv=cmv,
+      zp=tp,
+      window=false,
+      layers=layers
+    );
+  }
+}
+
 //! @}
 //! @}
 

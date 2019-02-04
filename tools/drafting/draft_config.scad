@@ -122,6 +122,7 @@ draft_defaults_s1_map =
   // dim
   //
 
+  // leader
   ["dim-leader-cmh",            length(1/4,"in")],        // horizontal width minimum
   ["dim-leader-cmv",            length(1/4,"in")],        // vertical height minimum
   ["dim-leader-weight",         1],
@@ -130,6 +131,7 @@ draft_defaults_s1_map =
   ["dim-leader-box-weight",     1],
   ["dim-leader-box-style",      1],
 
+  // line
   ["dim-line-cmh",              length(1/8,"in")],        // horizontal width minimum
   ["dim-line-cmv",              length(1/8,"in")],        // vertical height minimum
   ["dim-line-weight",           1],
@@ -142,6 +144,17 @@ draft_defaults_s1_map =
   ["dim-line-distance",         length(3/8,"in")],
   ["dim-line-offset",           length(1/32,"in")],
   ["dim-line-extension-length", length(2/8,"in")],
+
+  // radius
+  ["dim-radius-cmh",            length(1/8,"in")],        // horizontal width minimum
+  ["dim-radius-cmv",            length(1/8,"in")],        // vertical height minimum
+  ["dim-radius-weight",         1],
+  ["dim-radius-style",          1],
+  ["dim-radius-arrow",          2],
+  ["dim-radius-text-place",     [0,1]],
+  ["dim-radius-text-size",      undef],
+  ["dim-radius-rnd-mode",       [1,2]],                   // [mode, figures]
+  ["dim-radius-offset",         0],
 
   //
   // layers
