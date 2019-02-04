@@ -847,7 +847,7 @@ module draft_dim_line
     da2 = defined_or(a2, a);
 
     // when text placed over line
-    if ( tp == [0, 0] && !is_empty(dt) )
+    if ( second(tp) == 0 && !is_empty(dt) )
     difference()
     {
       // remove window from dimension line for text
