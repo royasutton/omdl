@@ -708,8 +708,8 @@ module draft_dim_leader
   bw = draft_get_default("dim-leader-box-weight"),
   bs = draft_get_default("dim-leader-box-style"),
 
-  cmh = draft_get_default("dim-leader-cmh"),
-  cmv = draft_get_default("dim-leader-cmv"),
+  cmh = draft_get_default("dim-cmh"),
+  cmv = draft_get_default("dim-cmv"),
 
   window = false,
   layers = draft_get_default("layers-dim")
@@ -760,12 +760,12 @@ module draft_dim_line
   u,
 
   d  = draft_get_default("dim-line-distance"),
-  o  = draft_get_default("dim-line-offset"),
+  o  = draft_get_default("dim-offset"),
   e  = draft_get_default("dim-line-extension-length"),
 
-  ts = draft_get_default("dim-line-text-size"),
-  tp = draft_get_default("dim-line-text-place"),
-  rm = draft_get_default("dim-line-rnd-mode"),
+  ts = draft_get_default("dim-text-size"),
+  tp = draft_get_default("dim-text-place"),
+  rm = draft_get_default("dim-rnd-mode"),
 
   es = draft_get_default("dim-line-extension-style"),
 
@@ -776,8 +776,8 @@ module draft_dim_line
   a1,
   a2,
 
-  cmh = draft_get_default("dim-line-cmh"),
-  cmv = draft_get_default("dim-line-cmv"),
+  cmh = draft_get_default("dim-cmh"),
+  cmv = draft_get_default("dim-cmv"),
 
   layers = draft_get_default("layers-dim")
 )
@@ -912,11 +912,11 @@ module draft_dim_radius
 
   d  = false,
 
-  o  = draft_get_default("dim-radius-offset"),
+  o  = draft_get_default("dim-offset"),
 
-  ts = draft_get_default("dim-radius-text-size"),
-  tp = draft_get_default("dim-radius-text-place"),
-  rm = draft_get_default("dim-radius-rnd-mode"),
+  ts = draft_get_default("dim-text-size"),
+  tp = draft_get_default("dim-text-place"),
+  rm = draft_get_default("dim-rnd-mode"),
 
   w  = draft_get_default("dim-radius-weight"),
   s  = draft_get_default("dim-radius-style"),
@@ -925,8 +925,8 @@ module draft_dim_radius
   a1,
   a2,
 
-  cmh = draft_get_default("dim-radius-cmh"),
-  cmv = draft_get_default("dim-radius-cmv"),
+  cmh = draft_get_default("dim-cmh"),
+  cmv = draft_get_default("dim-cmv"),
 
   layers = draft_get_default("layers-dim")
 )
@@ -1054,12 +1054,12 @@ module draft_dim_angle
   t,
   u,
 
-  o  = draft_get_default("dim-angle-offset"),
+  o  = draft_get_default("dim-offset"),
   e  = draft_get_default("dim-angle-extension-ratio"),
 
-  ts = draft_get_default("dim-angle-text-size"),
-  tp = draft_get_default("dim-angle-text-place"),
-  rm = draft_get_default("dim-angle-rnd-mode"),
+  ts = draft_get_default("dim-text-size"),
+  tp = draft_get_default("dim-text-place"),
+  rm = draft_get_default("dim-rnd-mode"),
 
   es = draft_get_default("dim-angle-extension-style"),
 
@@ -1070,8 +1070,8 @@ module draft_dim_angle
   a1,
   a2,
 
-  cmh = draft_get_default("dim-angle-cmh"),
-  cmv = draft_get_default("dim-angle-cmv"),
+  cmh = draft_get_default("dim-cmh"),
+  cmv = draft_get_default("dim-cmv"),
 
   layers = draft_get_default("layers-dim")
 )
