@@ -1037,6 +1037,149 @@ module draft_dim_radius
   }
 }
 
+//! .
+/***************************************************************************//**
+*******************************************************************************/
+module draft_dim_angle
+(
+  c,
+  r,
+
+  v1,
+  v2,
+
+  fn,
+  cw = false,
+
+  t,
+  u,
+
+  o  = draft_get_default("dim-angle-offset"),
+  e  = draft_get_default("dim-angle-extension-ratio"),
+
+  ts = draft_get_default("dim-angle-text-size"),
+  tp = draft_get_default("dim-angle-text-place"),
+  rm = draft_get_default("dim-angle-rnd-mode"),
+
+  es = draft_get_default("dim-angle-extension-style"),
+
+  w  = draft_get_default("dim-angle-weight"),
+  s  = draft_get_default("dim-angle-style"),
+  a  = draft_get_default("dim-angle-arrow"),
+
+  a1,
+  a2,
+
+  cmh = draft_get_default("dim-angle-cmh"),
+  cmv = draft_get_default("dim-angle-cmv"),
+
+  layers = draft_get_default("layers-dim")
+)
+{
+  if (draft_layers_any_active(layers))
+  draft_make_3d_if_configured()
+  {
+    // identify measurement reference points at center 'c'
+    // handle (1) point, (2) angle, or (3) vector.
+    mr1 = is_point(v1)  ? v1
+        : is_number(v1) ? line_tp(line2d_new(a=v1, p1=c))
+        :                 line_tp(line2d_new(v=v1, p1=c));
+    mr2 = is_point(v2)  ? v2
+        : is_number(v2) ? line_tp(line2d_new(a=v2, p1=c))
+        :                 line_tp(line2d_new(v=v2, p1=c));
+
+    // extension line to radius ratio
+    er1 = edefined_or(e, 0, e);
+    er2 = edefined_or(e, 1, er1);
+
+    // extension line end points
+    pe1 = line_tp(line2d_new(m=r, v=[c, mr1], p1=c));
+    pe2 = line_tp(line2d_new(m=r, v=[c, mr2], p1=c));
+
+    // dimension text angle and position
+    dta = angle_ll(x_axis2d_uv, cw ? [mr1, mr2] : [mr2, mr1], false);
+    dtp = line_tp(line2d_new(m=r-o, a=dta+90, p1=c));
+
+    //
+    // draft
+    //
+
+    // extension lines (back towards center point)
+    draft_line(l=line2d_new(m=r*er1, v=[mr1, c], p1=pe1), w=w/2, s=es);
+    draft_line(l=line2d_new(m=r*er2, v=[mr2, c], p1=pe2), w=w/2, s=es);
+
+    // dimension text
+    dt = is_defined(t) ? t
+       : let
+         (
+           // measure angle between reference points
+           ma = cw ?
+                angle_ll([c, mr2], [c, mr1], false)
+              : angle_ll([c, mr1], [c, mr2], false),
+
+           // use specified units 'u'
+           au = not_defined(u) ? ma
+              : angle(ma, from=angle_unit_base, to=u),
+
+           // rounding: [mode:0, digits]
+           rs = edefined_or(rm, 0, 0),
+
+           rd = rs == 1 ? dround(au, edefined_or(rm, 1, 2))
+              : rs == 2 ? sround(au, edefined_or(rm, 1, 3))
+              : au
+         )
+         // add units id when 'u' is specified
+         not_defined(u) ? str(rd) : str(rd, " ", u);
+
+    // individual or common arrowheads
+    da1 = defined_or(a1, a);
+    da2 = defined_or(a2, a);
+
+    // when text placed over line
+    if ( second(tp) == 0 && !is_empty(dt) )
+    difference()
+    {
+      // remove window from dimension line for text
+      draft_arc(r=r-o, c=c, v1=[c, pe1], v2=[c, pe2], fn=fn, cw=cw, w=w, s=s, a1=da1, a2=da2);
+
+      translate( dtp )
+      rotate( [0, 0, dta] )
+      draft_note
+      (
+        note=dt,
+        size=ts,
+        line=[0,0],
+        halign="center",
+        cmh=cmh,
+        cmv=cmv,
+        zp=tp,
+        window=true,
+        layers=layers
+      );
+    }
+    else
+    {
+      draft_arc(r=r-o, c=c, v1=[c, pe1], v2=[c, pe2], fn=fn, cw=cw, w=w, s=s, a1=da1, a2=da2);
+    }
+
+    if ( !is_empty(dt)  )
+    translate( dtp )
+    rotate( [0, 0, dta] )
+    draft_note
+    (
+      note=dt,
+      size=ts,
+      line=[0,0],
+      halign="center",
+      cmh=cmh,
+      cmv=cmv,
+      zp=tp,
+      window=false,
+      layers=layers
+    );
+  }
+}
+
 //! @}
 //! @}
 

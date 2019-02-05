@@ -156,6 +156,19 @@ draft_defaults_s1_map =
   ["dim-radius-rnd-mode",       [1,2]],                   // [mode, figures]
   ["dim-radius-offset",         0],
 
+  // angle
+  ["dim-angle-cmh",             length(1/8,"in")],        // horizontal width minimum
+  ["dim-angle-cmv",             length(1/8,"in")],        // vertical height minimum
+  ["dim-angle-weight",          1],
+  ["dim-angle-style",           1],
+  ["dim-angle-extension-style", 3],
+  ["dim-angle-arrow",           2],
+  ["dim-angle-text-place",      [0,1]],
+  ["dim-angle-text-size",       undef],
+  ["dim-angle-rnd-mode",        [1,2]],                   // [mode, figures]
+  ["dim-angle-offset",          length(1/32,"in")],
+  ["dim-angle-extension-ratio", 1],
+
   //
   // layers
   //
