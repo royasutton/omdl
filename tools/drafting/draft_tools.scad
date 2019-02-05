@@ -765,7 +765,7 @@ module draft_dim_line
 
   ts = draft_get_default("dim-text-size"),
   tp = draft_get_default("dim-text-place"),
-  rm = draft_get_default("dim-rnd-mode"),
+  rm = draft_get_default("dim-round-mode"),
 
   es = draft_get_default("dim-line-extension-style"),
 
@@ -916,7 +916,7 @@ module draft_dim_radius
 
   ts = draft_get_default("dim-text-size"),
   tp = draft_get_default("dim-text-place"),
-  rm = draft_get_default("dim-rnd-mode"),
+  rm = draft_get_default("dim-round-mode"),
 
   w  = draft_get_default("dim-radius-weight"),
   s  = draft_get_default("dim-radius-style"),
@@ -1059,7 +1059,7 @@ module draft_dim_angle
 
   ts = draft_get_default("dim-text-size"),
   tp = draft_get_default("dim-text-place"),
-  rm = draft_get_default("dim-rnd-mode"),
+  rm = draft_get_default("dim-round-mode"),
 
   es = draft_get_default("dim-angle-extension-style"),
 

@@ -127,7 +127,7 @@ draft_defaults_s1_map =
   ["dim-cmv",                   length(1/8,"in")],        // vertical height minimum
   ["dim-text-place",            [0,1]],
   ["dim-text-size",             undef],
-  ["dim-rnd-mode",              [1,2]],                   // [mode, figures]
+  ["dim-round-mode",            [1,2]],                   // [mode, figures]
   ["dim-offset",                length(1/32,"in")],
 
   // leader
