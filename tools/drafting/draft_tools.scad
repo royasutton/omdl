@@ -760,13 +760,7 @@ module draft_dim_line
   u,
 
   d  = draft_get_default("dim-line-distance"),
-  o  = draft_get_default("dim-offset"),
   e  = draft_get_default("dim-line-extension-length"),
-
-  ts = draft_get_default("dim-text-size"),
-  tp = draft_get_default("dim-text-place"),
-  rm = draft_get_default("dim-round-mode"),
-
   es = draft_get_default("dim-line-extension-style"),
 
   w  = draft_get_default("dim-line-weight"),
@@ -775,6 +769,12 @@ module draft_dim_line
 
   a1,
   a2,
+
+  o  = draft_get_default("dim-offset"),
+
+  ts = draft_get_default("dim-text-size"),
+  tp = draft_get_default("dim-text-place"),
+  rm = draft_get_default("dim-round-mode"),
 
   cmh = draft_get_default("dim-cmh"),
   cmv = draft_get_default("dim-cmv"),
@@ -912,18 +912,18 @@ module draft_dim_radius
 
   d  = false,
 
-  o  = draft_get_default("dim-offset"),
-
-  ts = draft_get_default("dim-text-size"),
-  tp = draft_get_default("dim-text-place"),
-  rm = draft_get_default("dim-round-mode"),
-
   w  = draft_get_default("dim-radius-weight"),
   s  = draft_get_default("dim-radius-style"),
   a  = draft_get_default("dim-radius-arrow"),
 
   a1,
   a2,
+
+  o  = draft_get_default("dim-offset"),
+
+  ts = draft_get_default("dim-text-size"),
+  tp = draft_get_default("dim-text-place"),
+  rm = draft_get_default("dim-round-mode"),
 
   cmh = draft_get_default("dim-cmh"),
   cmv = draft_get_default("dim-cmv"),
@@ -1054,13 +1054,7 @@ module draft_dim_angle
   t,
   u,
 
-  o  = draft_get_default("dim-offset"),
   e  = draft_get_default("dim-angle-extension-ratio"),
-
-  ts = draft_get_default("dim-text-size"),
-  tp = draft_get_default("dim-text-place"),
-  rm = draft_get_default("dim-round-mode"),
-
   es = draft_get_default("dim-angle-extension-style"),
 
   w  = draft_get_default("dim-angle-weight"),
@@ -1069,6 +1063,12 @@ module draft_dim_angle
 
   a1,
   a2,
+
+  o  = draft_get_default("dim-offset"),
+
+  ts = draft_get_default("dim-text-size"),
+  tp = draft_get_default("dim-text-place"),
+  rm = draft_get_default("dim-round-mode"),
 
   cmh = draft_get_default("dim-cmh"),
   cmv = draft_get_default("dim-cmv"),
