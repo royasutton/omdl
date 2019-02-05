@@ -120,7 +120,7 @@ function polygon2d_regular_p
   \param    fs <decimal> A fixed segment size between each point along
             the line.
   \param    ft <decimal> A fixed segment size between each point,
-            centered, begining at \p p1 and terminating at \p p2.
+            centered, beginning at \p p1 and terminating at \p p2.
   \param    fn <integer> A fixed number of equally spaced points.
 
   \returns  <coords-2d> A list of coordinates points [[x, y], ...].
@@ -273,7 +273,7 @@ function polygon2d_arc_p
     Normally, angle 1 should be less than angle 2. The edge coordinates
     will start at angle 1, end at angle 2, and will have radius \p r
     along a rounded transition from edge 1 to 2. When \p cw = \b true
-    the corrdinates will start at edge 1 and increase toward edge 2.
+    the coordinates will start at edge 1 and increase toward edge 2.
     When \p cw = \b false this ordering is reversed.
 
     The round mode may be one of the following:
