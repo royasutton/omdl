@@ -689,24 +689,27 @@ module draft_title_block
 module draft_dim_leader
 (
   p = origin2d,
-  b = 60,
-  l = 10,
-  d,
+
+  v1 = 60,
+  v2 = 0,
+  l1 = 10,
+  l2 = 5,
 
   h,
   t,
   ts,
-  tv = x_axis2d_uv,
-  tl = 5,
   tp = [-1,0],
   ta = "center",
+  tr = 0,
+
+  bw = draft_get_default("dim-leader-box-weight"),
+  bs = draft_get_default("dim-leader-box-style"),
 
   w = draft_get_default("dim-leader-weight"),
   s = draft_get_default("dim-leader-style"),
   a = draft_get_default("dim-leader-arrow"),
 
-  bw = draft_get_default("dim-leader-box-weight"),
-  bs = draft_get_default("dim-leader-box-style"),
+  o  = draft_get_default("dim-offset"),
 
   cmh = draft_get_default("dim-cmh"),
   cmv = draft_get_default("dim-cmv"),
@@ -719,16 +722,25 @@ module draft_dim_leader
   draft_make_3d_if_configured()
   {
     // leader line
-    lt = not_defined(d) ? p : line_tp(line2d_new(m=d, a=b, p1=p));
-    li = line_tp(line2d_new(m=l, a=b, p1=lt));
-    draft_line(l=[li, lt], w=w, s=s, a2=a);
+    plt = not_defined(o) ? p
+        : is_number(v1)  ? line_tp(line2d_new(m=o, a=v1, p1=p))
+        :                  line_tp(line2d_new(m=o, v=v1, p1=p));
+    pli = is_number(v1)  ? line_tp(line2d_new(m=l1, a=v1, p1=plt))
+        :                  line_tp(line2d_new(m=l1, v=v1, p1=plt));
 
-    // note line
-    nl = line2d_new(m=tl, p1=li, v=tv);
-    draft_line(l=nl, w=w, s=s);
+    draft_line(l=[pli, plt], w=w, s=s, a2=a);
 
-    // note
-    translate( line_tp(nl) )
+    // text line
+    lnl = is_number(v2) ? line2d_new(m=l2, a=v2, p1=pli)
+        :                 line2d_new(m=l2, v=v2, p1=pli);
+
+    draft_line(l=lnl, w=w, s=s);
+
+    // text
+    tra = is_number(tr) ? tr : angle_ll(x_axis2d_uv, tr);
+
+    translate( line_tp(lnl) )
+    rotate( [0, 0, tra] )
     draft_note
     (
       head=h,
