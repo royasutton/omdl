@@ -981,10 +981,12 @@ module draft_dim_radius
 
            rd = rs == 1 ? dround(du, edefined_or(rm, 1, 2))
               : rs == 2 ? sround(du, edefined_or(rm, 1, 3))
-              : du
+              : du,
+
+           rt = d ? "D" : "R"
          )
          // add units id when 'u' is specified
-         not_defined(u) ? str(rd) : str(rd, " ", u);
+         not_defined(u) ? str(rt, " ", rd) : str(rt, " ", rd, " ", u);
 
     // individual or common arrowheads
     da1 = defined_or(a1, d ? a : 0);
