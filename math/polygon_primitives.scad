@@ -238,20 +238,19 @@ function polygon2d_arc_p
     va2 = is_number(v2) ? [cos(v2), sin(v2)] : v2,
 
     // arc positive start angle
-    iap = angle_ll(x_axis2d_ul, va1, false),
+    iap = angle_ll(x_axis2d_uv, va1, false),
 
     // positive arc sweep angle
     vas = angle_ll(va2, va1, false),
     vap = (vas == 0) ? 360 : vas,
 
     // arc angle sweep sequence cw and ccw
-    aas = (cw == true)
-        ? [iap : -vap/naf : iap-vap]
-        : [iap : (360-vap)/naf : 360+iap-vap]
+    aas = (cw == true) ? [naf : -1 : 0] : [0 : naf]
   )
   [
-    for (a = aas)
-      c + r * [cos(a), sin(a)]
+    for (as = aas)
+      let (aa = iap + as * (((cw == true) ? 0 : 360) - vap)/naf)
+      c + r * [cos(aa), sin(aa)]
   ];
 
 //! Compute coordinates for an edge round with constant radius between two vectors in 2D.
