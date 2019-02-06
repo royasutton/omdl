@@ -1126,7 +1126,8 @@ module draft_dim_angle
     pe2 = line_tp(line2d_new(m=r, v=[c, mr2], p1=c));
 
     // dimension text angle and position
-    dta = angle_ll(x_axis2d_uv, cw ? [mr1, mr2] : [mr2, mr1], false);
+    dta = angle_ll(x_axis2d_uv, cw ? [mr1, mr2] : [mr2, mr1], false)
+        + defined_or(third(tp), 0);
     dtp = line_tp(line2d_new(m=r-o, a=dta+90, p1=c));
 
     //
@@ -1172,7 +1173,7 @@ module draft_dim_angle
       draft_arc(r=r-o, c=c, v1=[c, pe1], v2=[c, pe2], fn=fn, cw=cw, w=w, s=s, a1=da1, a2=da2);
 
       translate( dtp )
-      rotate( [0, 0, dta] )
+      rotate( [0, 0, dta + defined_or(tp[3], 0)] )
       draft_note
       (
         note=dt,
@@ -1193,7 +1194,7 @@ module draft_dim_angle
 
     if ( !is_empty(dt)  )
     translate( dtp )
-    rotate( [0, 0, dta] )
+    rotate( [0, 0, dta + defined_or(tp[3], 0)] )
     draft_note
     (
       note=dt,
