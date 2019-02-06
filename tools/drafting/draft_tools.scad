@@ -930,9 +930,9 @@ module draft_dim_line
 *******************************************************************************/
 module draft_dim_radius
 (
-  c,
-  p,
+  c = origin2d,
 
+  p,
   r,
   v,
 
@@ -1071,7 +1071,7 @@ module draft_dim_radius
 *******************************************************************************/
 module draft_dim_angle
 (
-  c,
+  c = origin2d,
   r,
 
   v1,
