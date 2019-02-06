@@ -690,17 +690,17 @@ module draft_dim_leader
 (
   p = origin2d,
 
-  v1 = 60,
-  v2 = 0,
+  v1 = 30,
   l1 = 10,
-  l2 = 5,
+  v2,
+  l2,
 
   h,
   t,
   ts,
-  tp = [-1,0],
+  tp,
   ta = "center",
-  tr = 0,
+  tr,
 
   bw = draft_get_default("dim-leader-box-weight"),
   bs = draft_get_default("dim-leader-box-style"),
@@ -721,25 +721,42 @@ module draft_dim_leader
   if (draft_layers_any_active(layers))
   draft_make_3d_if_configured()
   {
-    // leader line
-    plt = not_defined(o) ? p
+    // offset
+    plo = not_defined(o) ? p
         : is_number(v1)  ? line_tp(line2d_new(m=o, a=v1, p1=p))
         :                  line_tp(line2d_new(m=o, v=v1, p1=p));
-    pli = is_number(v1)  ? line_tp(line2d_new(m=l1, a=v1, p1=plt))
-        :                  line_tp(line2d_new(m=l1, v=v1, p1=plt));
 
-    draft_line(l=[pli, plt], w=w, s=s, a2=a);
+    // leader 1
+    ll1 = is_number(v1)  ? line2d_new(m=l1, a=v1, p1=plo)
+        :                  line2d_new(m=l1, v=v1, p1=plo);
 
-    // text line
-    lnl = is_number(v2) ? line2d_new(m=l2, a=v2, p1=pli)
-        :                 line2d_new(m=l2, v=v2, p1=pli);
+    draft_line(l=ll1, w=w, s=s, a1=a);
 
-    draft_line(l=lnl, w=w, s=s);
 
-    // text
-    tra = is_number(tr) ? tr : angle_ll(x_axis2d_uv, tr);
+    // leader 2
+    dv2 = defined_or(v2, ll1);
+    dl2 = defined_or(l2, l1);
 
-    translate( line_tp(lnl) )
+    ll2 = is_number(v2)  ? line2d_new(m=dl2, a=dv2, p1=line_tp(ll1))
+        :                  line2d_new(m=dl2, v=dv2, p1=line_tp(ll1));
+
+    draft_line(l=ll2, w=w, s=s);
+
+    // text rotation
+    tra = not_defined(tr) ? angle_ll(x_axis2d_uv, ll2, false)
+        : is_number(tr)   ? tr
+        :                   angle_ll(x_axis2d_uv, tr, false);
+
+    // text alignment point
+    dtp = not_defined(tr) ? [-1, 0]
+        : is_defined(tp)  ? tp
+        : let( al2 = (angle_ll(x_axis2d_uv, ll2, false)+360-tra)%360 )
+          (al2>  45 && al2< 135) ? [ 0, 1]
+        : (al2>=135 && al2<=225) ? [ 1, 0]
+        : (al2> 225 && al2< 315) ? [ 0,-1]
+        :                          [-1, 0];
+
+    translate( line_tp(ll2) )
     rotate( [0, 0, tra] )
     draft_note
     (
@@ -750,7 +767,7 @@ module draft_dim_leader
       halign=ta,
       cmh=cmh,
       cmv=cmv,
-      zp=tp,
+      zp=dtp,
       window=window,
       layers=layers
     );
