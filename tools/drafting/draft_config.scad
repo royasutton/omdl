@@ -157,6 +157,12 @@ draft_defaults_s1_map =
   ["dim-angle-extension-style", 3],
   ["dim-angle-extension-ratio", 1],
 
+  // center
+  ["dim-center-length",         length(1/16,"in")],
+  ["dim-center-weight",         1/2],
+  ["dim-center-style",          1],
+  ["dim-center-extension-style",3],
+
   //
   // layers
   //

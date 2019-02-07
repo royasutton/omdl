@@ -1210,6 +1210,75 @@ module draft_dim_angle
   }
 }
 
+//! .
+/***************************************************************************//**
+*******************************************************************************/
+module draft_dim_center
+(
+  c = origin2d,
+
+  r,
+  e,
+
+  v = 0,
+  l = draft_get_default("dim-center-length"),
+
+  w  = draft_get_default("dim-center-weight"),
+  s  = draft_get_default("dim-center-style"),
+  es = draft_get_default("dim-angle-extension-style"),
+
+  layers = draft_get_default("layers-dim")
+)
+{
+  if (draft_layers_any_active(layers))
+  draft_make_3d_if_configured()
+  {
+    // alignment angle
+    aa = is_number(v) ? v : angle_ll(x_axis2d_uv, v);
+
+    //
+    // draft
+    //
+
+    // center
+    for ( q = [0,1] )
+    {
+      la = aa + 90*q;
+      p1 = c - l * [cos(la), sin(la)];
+
+      draft_line(l=line2d_new(m=l*2, a=la, p1=p1), w=w, s=s);
+    }
+
+    // radius
+    if ( is_defined(r) )
+    for ( q = [0:3] )
+    {
+      la = aa + 90*q;
+      p1 = c + (r-l) * [cos(la), sin(la)];      // radius
+      p2 = c + (r-l/2)/2 * [cos(la), sin(la)];  // mid
+
+      draft_line(l=line2d_new(m=l*2, a=la, p1=p1), w=w, s=s);
+      draft_line(l=line2d_new(m=l/2, a=la, p1=p2), w=w, s=s);
+    }
+
+    // individual extensions
+    rs = is_defined(r) ? (r + 2*l) : (2*l);     // radial start distance
+    dl = edefined_or(e, 0, e);                  // default length
+
+    if ( is_defined(e) )
+    for ( q = [0:3] )
+    {
+      la = aa + 90*q;
+      p1 = c + rs * [cos(la), sin(la)];         // start point
+      el = edefined_or(e, q, dl) - rs;          // individual lengths
+
+      if (el > 0)
+      draft_line(l=line2d_new(m=el, a=la, p1=p1), w=w, s=es);
+    }
+
+  }
+}
+
 //! @}
 //! @}
 
