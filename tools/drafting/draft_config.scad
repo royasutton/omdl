@@ -46,12 +46,13 @@
 $draft_line_fn = 4;
 $draft_arrow_fn = 8;
 
+$draft_scale = 1;
+draft_sheet_scale = 1;
+
 draft_make_3d = false;
 draft_sheet_size = "A";
 draft_sheet_config = "L84TS";
 draft_layers_show = ["all"];
-
-draft_scaler = 1;
 
 //! .
 /***************************************************************************//**
@@ -402,7 +403,7 @@ draft_title_block_map =
         [ [ 1,  6], [ 6,  7], 0, ["NOTE1"] ],
         [ [ 1,  6], [ 4,  6], 0, ["NOTE2"] ],
         [ [ 6, 11], [ 4,  7], 0, ["NOTE3"] ],
-        [ [ 8,  9], [ 1,  4], 0, ["SCALE"],   [str("1:", draft_scaler), [0,0], [0,0]] ],
+        [ [ 8,  9], [ 1,  4], 0, ["SCALE"],   [str("1:", draft_sheet_scale), [0,0], [0,0]] ],
         [ [ 7,  8], [ 2,  4], 0, ["UNITS"],   [length_unit_base] ],
         [ [ 7,  8], [ 1,  2], 0, ["SIZE"],    [draft_sheet_size] ],
         [ [10, 11], [ 0,  1], 0, ["LOGO"],    ["omdl"] ]

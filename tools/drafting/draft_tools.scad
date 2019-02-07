@@ -133,16 +133,16 @@ module draft_sheet
     //
 
     // sheet size
-    sdx = draft_sheet_get_value(ci="sdx") * draft_scaler;
-    sdy = draft_sheet_get_value(ci="sdy") * draft_scaler;
+    sdx = draft_sheet_get_value(ci="sdx") * draft_sheet_scale;
+    sdy = draft_sheet_get_value(ci="sdy") * draft_sheet_scale;
 
     // sheet layout
     sll = draft_config_get_value(ci="sll");
 
     // sheet frame and zone margins
-    smx = draft_config_get_value(ci="smx") * draft_scaler;
-    smy = draft_config_get_value(ci="smy") * draft_scaler;
-    szm = draft_config_get_value(ci="szm") * draft_scaler;
+    smx = draft_config_get_value(ci="smx") * draft_sheet_scale;
+    smy = draft_config_get_value(ci="smy") * draft_sheet_scale;
+    szm = draft_config_get_value(ci="szm") * draft_sheet_scale;
 
     // reference zone labels
     zox = draft_config_get_value(ci="zox");
@@ -158,6 +158,9 @@ module draft_sheet
     zlc = draft_config_get_value(ci="zlc");
     glc = draft_config_get_value(ci="glc");
     olc = draft_config_get_value(ci="olc");
+
+    // set draft scale for sheet
+    $draft_scale = draft_sheet_scale;
 
     //
     // derived values
@@ -296,7 +299,6 @@ module draft_ruler
   linel = 5,        // grouped line unit-lengths
   label = 2/3,      // label scaler
   order = 1,        // marks direction
-  scaler = true,    // scale ruler
   hide = false,     // hide label
   w = 1,            // mark line weight
   layers = draft_get_default("layers-sheet")
@@ -307,7 +309,7 @@ module draft_ruler
   draft_make_3d_if_configured()
   {
     u  = length_unit_base;
-    s  = length(linel, u) * (scaler?draft_scaler:1);
+    s  = length(linel, u) * $draft_scale;
 
     ox = edefined_or(order, 0, order);
     oy = edefined_or(order, 1, ox);
@@ -315,7 +317,7 @@ module draft_ruler
 
     for ( i=[marks/2:groups*marks], j=[0, 1] )
     {
-      p = length(i, u) * (scaler?draft_scaler:1) * oo[j];
+      p = length(i, u) * $draft_scale * oo[j];
       l = line2d_new
           (
             m  = ((i%marks) ? s/2 : s) * oo[(j==0)?1:0],
@@ -329,7 +331,7 @@ module draft_ruler
       // label measurement
       if ((i == groups*marks) && !hide)
       {
-        offset = length(1, u) * (scaler?draft_scaler:1);
+        offset = length(1, u) * $draft_scale;
 
         translate
         (
@@ -339,7 +341,7 @@ module draft_ruler
         rotate( (j == 0) ? 0 : 90 )
         text
         (
-          str( groups * marks * (scaler?draft_scaler:1), " ", u),
+          str( groups * marks * $draft_scale, " ", u),
           valign="center", size=s*label
         );
       }
@@ -372,8 +374,8 @@ module draft_table
       //
       // get table format
       //
-      cmh = map_get_firstof2_or(map, fmap, "cmh", draft_get_default("table-cmh")) * draft_scaler;
-      cmv = map_get_firstof2_or(map, fmap, "cmv", draft_get_default("table-cmv")) * draft_scaler;
+      cmh = map_get_firstof2_or(map, fmap, "cmh", draft_get_default("table-cmh")) * $draft_scale;
+      cmv = map_get_firstof2_or(map, fmap, "cmv", draft_get_default("table-cmv")) * $draft_scale;
 
       coh = map_get_firstof2_or(map, fmap, "coh", draft_get_default("table-coh"));
       cov = map_get_firstof2_or(map, fmap, "cov", draft_get_default("table-cov"));
@@ -492,8 +494,8 @@ module draft_ztable
       num_vl = edefined_or(number, 2, num_hl);
 
       // get title block configuration
-      cmh    = map_get_value(map, "cmh") * draft_scaler;
-      cmv    = map_get_value(map, "cmv") * draft_scaler;
+      cmh    = map_get_value(map, "cmh") * $draft_scale;
+      cmv    = map_get_value(map, "cmv") * $draft_scale;
 
       // coh = map_get_value(map, "coh");
       cov    = map_get_value(map, "cov");

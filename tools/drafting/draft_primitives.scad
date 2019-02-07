@@ -66,16 +66,16 @@ function draft_sheet_get_window
     //
 
     // sheet size
-    sdx = draft_sheet_get_value(ci="sdx") * draft_scaler,
-    sdy = draft_sheet_get_value(ci="sdy") * draft_scaler,
+    sdx = draft_sheet_get_value(ci="sdx") * draft_sheet_scale,
+    sdy = draft_sheet_get_value(ci="sdy") * draft_sheet_scale,
 
     // sheet layout
     sll = draft_config_get_value(ci="sll"),
 
     // sheet frame and zone margins
-    smx = draft_config_get_value(ci="smx") * draft_scaler,
-    smy = draft_config_get_value(ci="smy") * draft_scaler,
-    szm = draft_config_get_value(ci="szm") * draft_scaler,
+    smx = draft_config_get_value(ci="smx") * draft_sheet_scale,
+    smy = draft_config_get_value(ci="smy") * draft_sheet_scale,
+    szm = draft_config_get_value(ci="szm") * draft_sheet_scale,
 
     // reference zone labels
     zox = draft_config_get_value(ci="zox"),
@@ -243,8 +243,8 @@ function draft_table_get_point
   let
   (
     // get table format
-    cmh = map_get_firstof2_or(map, fmap, "cmh", length(1/4,"in")) * draft_scaler,
-    cmv = map_get_firstof2_or(map, fmap, "cmv", length(1/4,"in")) * draft_scaler,
+    cmh = map_get_firstof2_or(map, fmap, "cmh", length(1/4,"in")) * $draft_scale,
+    cmv = map_get_firstof2_or(map, fmap, "cmv", length(1/4,"in")) * $draft_scale,
 
     coh = map_get_firstof2_or(map, fmap, "coh", +1),
     cov = map_get_firstof2_or(map, fmap, "cov", -1),
@@ -410,8 +410,8 @@ function draft_ztable_get_point
   let
   (
     // get table configuration
-    cmh    = map_get_value(map, "cmh") * draft_scaler,
-    cmv    = map_get_value(map, "cmv") * draft_scaler,
+    cmh    = map_get_value(map, "cmh") * $draft_scale,
+    cmv    = map_get_value(map, "cmv") * $draft_scale,
 
     coh    = map_get_value(map, "coh"),
     cov    = map_get_value(map, "cov"),
@@ -544,7 +544,7 @@ module draft_make_3d_if_configured
   if ( draft_make_3d )
     linear_extrude
     (
-      height=draft_get_default("make-3d-height") * draft_scaler, center=true
+      height=draft_get_default("make-3d-height") * $draft_scale, center=true
     )
     children();
   else
@@ -566,7 +566,7 @@ module draft_line_pp
 )
 {
   $fn = $draft_line_fn;
-  p = draft_get_default("line-width-min") * w * draft_scaler;
+  p = draft_get_default("line-width-min") * w * $draft_scale;
 
   if ( draft_get_default("line-use-hull")  )
   {
@@ -605,11 +605,11 @@ module draft_arrow
     s5  = edefined_or(s, 4, 1);               // angle multiplier
 
 
-    al  = draft_get_default("arrow-line-length-min")
-            * s4 * draft_scaler;              // length
+    al  = draft_get_default("arrow-line-length-min") * s4 * $draft_scale;
+                                              // length
 
-    ca  = draft_get_default("arrow-angle-min")
-            * s5;                             // cut angle
+    ca  = draft_get_default("arrow-angle-min") * s5;
+                                              // cut angle
 
     alx = angle_ll(x_axis2d_uv, l, true);     // line angle
     aa1 = alx+180-ca;                         // angle a1
@@ -706,7 +706,7 @@ module draft_line
 
   if ( !all_equal([s1, a1, a2], 0) )
   {
-    lsm = draft_get_default("line-segment-min") * draft_scaler;
+    lsm = draft_get_default("line-segment-min") * $draft_scale;
 
     i  = line_ip(l);
     t  = line_tp(l);
