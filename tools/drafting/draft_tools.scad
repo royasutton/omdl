@@ -693,7 +693,7 @@ module draft_dim_leader
   p = origin2d,
 
   v1 = 30,
-  l1 = 10,
+  l1 = draft_get_default("dim-leader-length"),
   v2,
   l2,
 

@@ -133,6 +133,7 @@ draft_defaults_s1_map =
   ["dim-offset",                length(1/32,"in")],
 
   // leader
+  ["dim-leader-length",         length(1/2,"in")],
   ["dim-leader-weight",         1],
   ["dim-leader-style",          1],
   ["dim-leader-arrow",          [2,1]],
