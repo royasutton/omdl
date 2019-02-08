@@ -49,7 +49,8 @@ $draft_arrow_fn = 8;
 $draft_scale = 1;
 draft_sheet_scale = 1;
 
-draft_make_3d = false;
+$draft_make_3d = false;
+
 draft_sheet_size = "A";
 draft_sheet_config = "L84TS";
 draft_layers_show = ["all"];

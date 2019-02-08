@@ -541,7 +541,7 @@ module draft_make_3d_if_configured
 (
 )
 {
-  if ( draft_make_3d )
+  if ( $draft_make_3d )
     linear_extrude
     (
       height=draft_get_default("make-3d-height") * $draft_scale, center=true

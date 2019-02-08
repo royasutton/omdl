@@ -771,7 +771,8 @@ module draft_dim_leader
       cmv=cmv,
       zp=dtp,
       window=window,
-      layers=layers
+      layers=layers,
+      $draft_make_3d=false
     );
   }
 }
@@ -901,7 +902,8 @@ module draft_dim_line
         cmv=cmv,
         zp=tp,
         window=true,
-        layers=layers
+        layers=layers,
+        $draft_make_3d=false
       );
     }
     else
@@ -922,7 +924,8 @@ module draft_dim_line
       cmv=cmv,
       zp=tp,
       window=false,
-      layers=layers
+      layers=layers,
+      $draft_make_3d=false
     );
   }
 }
@@ -1042,7 +1045,8 @@ module draft_dim_radius
         cmv=cmv,
         zp=tp,
         window=true,
-        layers=layers
+        layers=layers,
+        $draft_make_3d=false
       );
     }
     else
@@ -1063,7 +1067,8 @@ module draft_dim_radius
       cmv=cmv,
       zp=tp,
       window=false,
-      layers=layers
+      layers=layers,
+      $draft_make_3d=false
     );
   }
 }
@@ -1186,7 +1191,8 @@ module draft_dim_angle
         cmv=cmv,
         zp=tp,
         window=true,
-        layers=layers
+        layers=layers,
+        $draft_make_3d=false
       );
     }
     else
@@ -1207,7 +1213,8 @@ module draft_dim_angle
       cmv=cmv,
       zp=tp,
       window=false,
-      layers=layers
+      layers=layers,
+      $draft_make_3d=false
     );
   }
 }
