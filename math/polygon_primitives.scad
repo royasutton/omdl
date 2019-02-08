@@ -151,8 +151,12 @@ function polygon2d_line_p
     ip  = is_defined(l) ? line_ip(l) : p1,
     tp  = is_defined(l) ? line_tp(l) : p2,
 
-    zdx = (tp[0] == ip[0]),                                   // is delta-x zero
-    zdy = (tp[1] == ip[1]),                                   // is delta-y zero
+ //
+ // zdx = (tp[0] == ip[0]),                                   // is delta-x zero
+ // zdy = (tp[1] == ip[1]),                                   // is delta-y zero
+ //
+    zdx = n_almost_equal(tp[0], ip[0]),                       // is delta-x zero
+    zdy = n_almost_equal(tp[1], ip[1]),                       // is delta-y zero
 
     // axis: 'y' if zdx, else use 'x'
     a   = zdx ? 1 : 0,
