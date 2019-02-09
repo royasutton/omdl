@@ -294,9 +294,10 @@ module draft_sheet
 *******************************************************************************/
 module draft_ruler
 (
-  marks = 10,       // unit division marks
-  groups = 5,       // grouped marks
-  linel = 5,        // grouped line unit-lengths
+  units = "mm",     // units
+  marks = 10,       // number of unit marks per group
+  groups = 5,       // number of groups (of unit marks)
+  linel = 5,        // group-line unit-lengths
   label = 2/3,      // label scaler
   order = 1,        // marks direction
   hide = false,     // hide label
@@ -308,16 +309,22 @@ module draft_ruler
   if (draft_layers_any_active(layers))
   draft_make_3d_if_configured()
   {
-    u  = length_unit_base;
-    s  = length(linel, u) * $draft_scale;
+    // one mark unit length
+    ul = length(1, units);
 
+    // group-line mark size
+    s  = linel * ul * $draft_scale;
+
+    // order
     ox = edefined_or(order, 0, order);
     oy = edefined_or(order, 1, ox);
     oo = [ox, oy];
 
+    // draw marks and group ticks
+    // initial group begins mid-group to avoid 2D ruler crossing
     for ( i=[marks/2:groups*marks], j=[0, 1] )
     {
-      p = length(i, u) * $draft_scale * oo[j];
+      p = i * ul * oo[j] * $draft_scale;
       l = line2d_new
           (
             m  = ((i%marks) ? s/2 : s) * oo[(j==0)?1:0],
@@ -325,13 +332,14 @@ module draft_ruler
             v  = (j == 0) ? y_axis2d_uv : x_axis2d_uv
           );
 
-      // draw tick
+      // draft tick
       draft_line (l=l, w=(i%marks) ? w/2 : w, s=1 );
 
       // label measurement
       if ((i == groups*marks) && !hide)
       {
-        offset = length(1, u) * $draft_scale;
+        // text offset from group tick
+        offset = ul * $draft_scale;
 
         translate
         (
@@ -341,7 +349,11 @@ module draft_ruler
         rotate( (j == 0) ? 0 : 90 )
         text
         (
-          str( groups * marks * $draft_scale, " ", u),
+          str
+          (
+            groups * marks * $draft_scale,
+            " ", units
+          ),
           valign="center", size=s*label
         );
       }
