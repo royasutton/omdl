@@ -295,9 +295,10 @@ module draft_sheet
 module draft_ruler
 (
   units = "mm",     // units
+  marksize = 1,     // size of each mark
   marks = 10,       // number of unit marks per group
   groups = 5,       // number of groups (of unit marks)
-  linel = 5,        // group-line unit-lengths
+  linelength = 5,   // group-line length
   label = 2/3,      // label scaler
   order = 1,        // marks direction
   hide = false,     // hide label
@@ -310,10 +311,10 @@ module draft_ruler
   draft_make_3d_if_configured()
   {
     // one mark unit length
-    ul = length(1, units);
+    ul = length(marksize, units);
 
     // group-line mark size
-    s  = linel * ul * $draft_scale;
+    s  = ul * linelength * $draft_scale;
 
     // order
     ox = edefined_or(order, 0, order);
@@ -327,7 +328,11 @@ module draft_ruler
       p = i * ul * oo[j] * $draft_scale;
       l = line2d_new
           (
-            m  = ((i%marks) ? s/2 : s) * oo[(j==0)?1:0],
+            m  =  (
+                      (i%marks == marks/2) ? s*2/3
+                    : (i%marks) ? s/2
+                    : s
+                  ) * oo[(j==0)?1:0],
             p1 = (j == 0) ? [p, 0] : [0, p],
             v  = (j == 0) ? y_axis2d_uv : x_axis2d_uv
           );
@@ -351,7 +356,7 @@ module draft_ruler
         (
           str
           (
-            groups * marks * $draft_scale,
+            marksize * marks * groups * $draft_scale,
             " ", units
           ),
           valign="center", size=s*label
