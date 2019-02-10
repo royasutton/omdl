@@ -305,8 +305,8 @@ function draft_sheet_get_size
 
 //! <matrix-2x3> sheet sizes data table columns definition.
 /***************************************************************************//**
-  \private
   \hideinitializer
+  \private
 *******************************************************************************/
 draft_sheet_size_tc =
 [
@@ -315,8 +315,8 @@ draft_sheet_size_tc =
 
 //! <matrix-3xR> sheet sizes data table rows.
 /***************************************************************************//**
-  \private
   \hideinitializer
+  \private
 *******************************************************************************/
 draft_sheet_size_tr =
 [
@@ -364,8 +364,8 @@ function draft_sheet_get_config
 
 //! <matrix-2xC> Sheet configuration data table columns definition.
 /***************************************************************************//**
-  \private
   \hideinitializer
+  \private
 *******************************************************************************/
 draft_sheet_config_tc =
 [
@@ -395,8 +395,8 @@ draft_sheet_config_tc =
 
 //! <matrix-CxR> Sheet configuration data table rows.
 /***************************************************************************//**
-  \private
   \hideinitializer
+  \private
 *******************************************************************************/
 draft_sheet_config_tr =
 [
@@ -568,8 +568,8 @@ draft_title_block_map =
 
 //! <matrix-2xN> Table format map definitions; common.
 /***************************************************************************//**
-  \private
   \hideinitializer
+  \private
 *******************************************************************************/
 draft_table_format_common_map =
 [
