@@ -8,10 +8,12 @@ local_path        :=  tools/drafting
 
 local_library     :=  module \
                       \
-                      draft_config \
-                      draft_primitives \
-                      draft_tools \
-                      draft
+                      config \
+                      primitive \
+                      operation \
+                      dimension \
+                      \
+                      draft-base
 
 local_release_add :=
 

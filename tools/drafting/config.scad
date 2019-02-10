@@ -687,7 +687,7 @@ BEGIN_SCOPE config;
   BEGIN_SCOPE defaults;
     BEGIN_OPENSCAD;
       include <omdl-base.scad>;
-      include <tools/drafting/draft.scad>;
+      include <tools/drafting/draft-base.scad>;
       length_unit_base = "mm";
 
       map_write( draft_defaults_style1_map );
@@ -703,7 +703,7 @@ BEGIN_SCOPE config;
     BEGIN_SCOPE in;
       BEGIN_OPENSCAD;
         include <omdl-base.scad>;
-        include <tools/drafting/draft.scad>;
+        include <tools/drafting/draft-base.scad>;
         length_unit_base = "in";
 
         table_write( draft_sheet_size_tr, draft_sheet_size_tc );
@@ -718,7 +718,7 @@ BEGIN_SCOPE config;
     BEGIN_SCOPE mm;
       BEGIN_OPENSCAD;
         include <omdl-base.scad>;
-        include <tools/drafting/draft.scad>;
+        include <tools/drafting/draft-base.scad>;
         length_unit_base = "mm";
 
         table_write( draft_sheet_size_tr, draft_sheet_size_tc );

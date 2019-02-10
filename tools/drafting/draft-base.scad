@@ -31,12 +31,13 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// defaults, primitives, and operations
+// include components
 //----------------------------------------------------------------------------//
 
-include <draft_config.scad>;
-include <draft_primitives.scad>;
-include <draft_tools.scad>;
+include <config.scad>;
+include <primitive.scad>;
+include <operation.scad>;
+include <dimension.scad>;
 
 //----------------------------------------------------------------------------//
 // end of file
