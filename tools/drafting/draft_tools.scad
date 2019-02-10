@@ -125,7 +125,7 @@ module draft_sheet
     if ( check )
     {
       table_check( r=draft_sheet_config_tr, c=draft_sheet_config_tc );
-      table_check( r=draft_sheet_sizes_tr, c=draft_sheet_sizes_tc );
+      table_check( r=draft_sheet_size_tr, c=draft_sheet_size_tc );
     }
 
     //
@@ -133,31 +133,31 @@ module draft_sheet
     //
 
     // sheet size
-    sdx = draft_sheet_get_value(ci="sdx") * draft_sheet_scale;
-    sdy = draft_sheet_get_value(ci="sdy") * draft_sheet_scale;
+    sdx = draft_sheet_get_size(ci="sdx") * draft_sheet_scale;
+    sdy = draft_sheet_get_size(ci="sdy") * draft_sheet_scale;
 
     // sheet layout
-    sll = draft_config_get_value(ci="sll");
+    sll = draft_sheet_get_config(ci="sll");
 
     // sheet frame and zone margins
-    smx = draft_config_get_value(ci="smx") * draft_sheet_scale;
-    smy = draft_config_get_value(ci="smy") * draft_sheet_scale;
-    szm = draft_config_get_value(ci="szm") * draft_sheet_scale;
+    smx = draft_sheet_get_config(ci="smx") * draft_sheet_scale;
+    smy = draft_sheet_get_config(ci="smy") * draft_sheet_scale;
+    szm = draft_sheet_get_config(ci="szm") * draft_sheet_scale;
 
     // reference zone labels
-    zox = draft_config_get_value(ci="zox");
-    zoy = draft_config_get_value(ci="zoy");
-    zlx = draft_config_get_value(ci="zlx");
-    zly = draft_config_get_value(ci="zly");
-    zrf = draft_config_get_value(ci="zrf");
-    zfs = draft_config_get_value(ci="zfs");
+    zox = draft_sheet_get_config(ci="zox");
+    zoy = draft_sheet_get_config(ci="zoy");
+    zlx = draft_sheet_get_config(ci="zlx");
+    zly = draft_sheet_get_config(ci="zly");
+    zrf = draft_sheet_get_config(ci="zrf");
+    zfs = draft_sheet_get_config(ci="zfs");
 
     // sheet, frame, zone, grid, and origin line configuration
-    slc = draft_config_get_value(ci="slc");
-    flc = draft_config_get_value(ci="flc");
-    zlc = draft_config_get_value(ci="zlc");
-    glc = draft_config_get_value(ci="glc");
-    olc = draft_config_get_value(ci="olc");
+    slc = draft_sheet_get_config(ci="slc");
+    flc = draft_sheet_get_config(ci="flc");
+    zlc = draft_sheet_get_config(ci="zlc");
+    glc = draft_sheet_get_config(ci="glc");
+    olc = draft_sheet_get_config(ci="olc");
 
     // set draft scale for sheet
     $draft_scale = draft_sheet_scale;
@@ -407,9 +407,9 @@ module draft_table
       //
       // cell default text format when not in map nor fmap:
       //
-      tdefs = map_get_firstof2_or(map, fmap, "tdefs", draft_get_default("table-txt-fmt"));
-      hdefs = map_get_firstof2_or(map, fmap, "hdefs", draft_get_default("table-txt-fmt"));
-      edefs = map_get_firstof2_or(map, fmap, "edefs", draft_get_default("table-txt-fmt"));
+      tdefs = map_get_firstof2_or(map, fmap, "tdefs", draft_get_default("table-text-format"));
+      hdefs = map_get_firstof2_or(map, fmap, "hdefs", draft_get_default("table-text-format"));
+      edefs = map_get_firstof2_or(map, fmap, "edefs", draft_get_default("table-text-format"));
 
       //
       // get table contents

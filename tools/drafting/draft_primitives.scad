@@ -66,22 +66,22 @@ function draft_sheet_get_window
     //
 
     // sheet size
-    sdx = draft_sheet_get_value(ci="sdx") * draft_sheet_scale,
-    sdy = draft_sheet_get_value(ci="sdy") * draft_sheet_scale,
+    sdx = draft_sheet_get_size(ci="sdx") * draft_sheet_scale,
+    sdy = draft_sheet_get_size(ci="sdy") * draft_sheet_scale,
 
     // sheet layout
-    sll = draft_config_get_value(ci="sll"),
+    sll = draft_sheet_get_config(ci="sll"),
 
     // sheet frame and zone margins
-    smx = draft_config_get_value(ci="smx") * draft_sheet_scale,
-    smy = draft_config_get_value(ci="smy") * draft_sheet_scale,
-    szm = draft_config_get_value(ci="szm") * draft_sheet_scale,
+    smx = draft_sheet_get_config(ci="smx") * draft_sheet_scale,
+    smy = draft_sheet_get_config(ci="smy") * draft_sheet_scale,
+    szm = draft_sheet_get_config(ci="szm") * draft_sheet_scale,
 
     // reference zone labels
-    zox = draft_config_get_value(ci="zox"),
-    zoy = draft_config_get_value(ci="zoy"),
-    zlx = draft_config_get_value(ci="zlx"),
-    zly = draft_config_get_value(ci="zly"),
+    zox = draft_sheet_get_config(ci="zox"),
+    zoy = draft_sheet_get_config(ci="zoy"),
+    zlx = draft_sheet_get_config(ci="zlx"),
+    zly = draft_sheet_get_config(ci="zly"),
 
     // sheet layout dimensions
     ldx = sll ? sdy : sdx,
