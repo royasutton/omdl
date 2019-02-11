@@ -86,11 +86,11 @@ function polytope_faces2edges
             of dimensions, a list of dimensions, or a single dimension.
   \param    s <boolean> Return box size rather than coordinate limits.
 
-  \returns  <datastruct> A list with the bounding-box limits (see: table).
+  \returns  <datastruct> The bounding-box limits (see: table).
 
   \details
 
-  The returned list will be of the following form:
+  The returned datastruct will be one of the following forms:
 
   |     |  s    |     x     |     y     |     z     |  datastruct form      |
   |:---:|:-----:|:---------:|:---------:|:---------:|:---------------------:|
