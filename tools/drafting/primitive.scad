@@ -230,12 +230,22 @@ function draft_sheet_get_zone
     // point
     [cx, cy];
 
-//! .
+//! Get a coordinate point for a defined draft table column and row.
 /***************************************************************************//**
+  \param    ix <integer> A table column vertical line index.
+  \param    iy <integer> A table row horizontal line index.
+
+  \param    map <matrix-2xN> A table definition map.
+  \param    fmap <matrix-2xN> A table format map.
+
+  \returns  <point-2d> The table column and row intersection coordinate
+            point.
+
+  \private
 *******************************************************************************/
 function draft_table_get_point
 (
-  ix,   // verticle line index
+  ix,   // vertical line index
   iy,   // horizontal line index
   map,
   fmap
@@ -243,11 +253,11 @@ function draft_table_get_point
   let
   (
     // get table format
-    cmh = map_get_firstof2_or(map, fmap, "cmh", length(1/4,"in")) * $draft_scale,
-    cmv = map_get_firstof2_or(map, fmap, "cmv", length(1/4,"in")) * $draft_scale,
+    cmh = map_get_firstof2_or(map, fmap, "cmh", draft_get_default("table-cmh")) * $draft_scale,
+    cmv = map_get_firstof2_or(map, fmap, "cmv", draft_get_default("table-cmv")) * $draft_scale,
 
-    coh = map_get_firstof2_or(map, fmap, "coh", +1),
-    cov = map_get_firstof2_or(map, fmap, "cov", -1),
+    coh = map_get_firstof2_or(map, fmap, "coh", draft_get_default("table-coh")),
+    cov = map_get_firstof2_or(map, fmap, "cov", draft_get_default("table-cov")),
 
     // get table data
     title = map_get_value(map, "title"),
@@ -403,7 +413,7 @@ module draft_table_text
 *******************************************************************************/
 function draft_ztable_get_point
 (
-  ix,   // verticle line index
+  ix,   // vertical line index
   iy,   // horizontal line index
   map
 ) =
