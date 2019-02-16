@@ -19,7 +19,38 @@
   \amu_replace  fname (text="${fname}" search="${fprefix}")
   \amu_combine  fname ("${fname}" p="<center>" s="()</center>" j="" f="^")
 
+  /+
+
+    add to group parent
+
+   +/
+
   \addtogroup \amu_eval(${parent})
+  @{
+
+  \amu_image_table
+    (
+      type=html columns=4 image_width="200" cell_files="${png_files}"
+      table_caption="${group_name}" cell_captions="${cell_num}"
+      cell_end="${fname}"
+    )
+  \latexonly
+    \amu_image_table
+      (
+        type=latex columns=4 image_width="1.25in" cell_files="${eps_files}"
+        table_caption="${group_name}" cell_captions="${cell_num}"
+      )
+  \endlatexonly
+
+  @}
+
+  /+
+
+    add to group
+
+   +/
+
+  \addtogroup \amu_eval(${group})
   @{
 
   \amu_image_table
