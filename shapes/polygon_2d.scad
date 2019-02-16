@@ -50,8 +50,8 @@
 /***************************************************************************//**
   \copydetails polygon2d_round_p()
 
-  The coordinate points are rendered using polygon().
-  Parameter \p cw = \b true preset.
+    The coordinate points are rendered using polygon(). Parameter \p cw
+    = \b true preset.
 
   \details
 
@@ -83,8 +83,8 @@ module polygon_round
 /***************************************************************************//**
   \copydetails polygon2d_elliptical_sector_p()
 
-  The coordinate points are rendered using polygon().
-  Parameter \p cw = \b true preset.
+    The coordinate points are rendered using polygon(). Parameter \p cw
+    = \b true preset.
 
   \details
 
@@ -112,8 +112,8 @@ module polygon_elliptical_sector
 /***************************************************************************//**
   \copydetails polygon2d_trapezoid_p()
 
-  The coordinate points are rendered using polygon().
-  Parameter \p cw = \b true preset.
+    The coordinate points are rendered using polygon(). Parameter \p cw
+    = \b true preset.
 
   \param    centroid <boolean> Center polygon centroid at origin.
 
