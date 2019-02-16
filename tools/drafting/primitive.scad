@@ -636,7 +636,7 @@ module draft_arrow
     ptm = (ps1 + ps2)/2;                      // tail mid point
     pam = (ptm + pah)/2;                      // middle point
 
-    // update fn for arrow construction
+    // update fn for arrow line construction
     $draft_line_fn = $draft_arrow_fn;
 
     if ( s1 == 1 )
@@ -694,7 +694,7 @@ module draft_arrow
     else if ( s1 == 5 )
     { // circle
       hull_if( !s2 )
-      for ( ls = nssequence( polygon2d_arc_p( r=al/3, c=pah ), 2, 1 ) )
+      for ( ls = nssequence( polygon2d_arc_p( r=al/3, c=pah, fn=$draft_arrow_fn ), 2, 1 ) )
         draft_line_pp(ls[0], ls[1], w=w);
     }
   }
@@ -909,8 +909,6 @@ module draft_polygon
   s = 1
 )
 {
-  $fn = $draft_line_fn;
-
   el  = is_defined(e) ? e           // use supplied edge list 'e'
       : polytope_faces2edges        // construct from paths
         (
