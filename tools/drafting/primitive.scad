@@ -34,11 +34,15 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// group.
+// group and macros.
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+
+  \amu_define auto_file_debug (false)
+  \amu_define auto_file_extensions (svg)
+  \amu_include (include/amu/auto_file_html.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -47,8 +51,32 @@
 // base primitives
 //----------------------------------------------------------------------------//
 
-//! .
+//! Get sheet, sheet-frame, or sheet-zone reference window or limits.
 /***************************************************************************//**
+  \param    rx <string> A sheet x-axis zone reference identifier.
+  \param    ry <string> A sheet y-axis zone reference identifier.
+
+  \param    ix <integer> A sheet x-axis zone reference index.
+  \param    iy <integer> A sheet x-axis zone reference index.
+
+  \param    limits <boolean> Return window limits rather than coordinates.
+  \param    frame <boolean> Use frame when zone not specified.
+
+  \returns  <datastruct> The reference window.
+
+  \details
+
+    The returned datastruct will be one of the following forms:
+
+     limits | description                     | data type
+    :------:|:--------------------------------|:------------------------
+     true   | [[xmin, xmax], [ymin, ymax]]    | <decimal-list-2-list-2>
+     false  | [p0, p1, p2, p3], pn=[x,y]      | <point-2d-list-4>
+
+    The windows coordinate points [p0, p1, p2, p3] are clockwise
+    ordered with p0=[xmin, ymin].
+
+  \private
 *******************************************************************************/
 function draft_sheet_get_window
 (
@@ -143,8 +171,35 @@ function draft_sheet_get_window
     // window points in cw order from [xmin, ymin]
   : [[wx[0],wy[0]], [wx[0],wy[1]], [wx[1],wy[1]], [wx[1],wy[0]]];
 
-//! .
+//! Get sheet, sheet-frame, or sheet-zone reference coordinates.
 /***************************************************************************//**
+  \param    rx <string-list|string> Sheet x-axis zone reference identifier(s).
+  \param    ry <string-list|string> Sheet y-axis zone reference identifier(s).
+
+  \param    ix <integer-list|integer> Sheet x-axis zone reference index(es).
+  \param    iy <integer-list|integer> Sheet x-axis zone reference index(es).
+
+  \param    zp <integer-list-2|integer> The window coordinate scaler. A
+            list [zpx, zpy] of decimals or a single decimal for (zpx=zpy).
+
+  \param    window <boolean> Return window rather than point.
+  \param    frame <boolean> Use frame when zone not specified.
+
+  \returns  <datastruct> The reference coordinates.
+
+  \details
+
+    The returned datastruct will be one of the following forms:
+
+     window | description                     | data type
+    :------:|:--------------------------------|:------------------------
+     true   | [p0, p1, p2, p3], pn=[x,y]      | <point-2d-list-4>
+     false  | [x, y]                          | <point-2d>
+
+    The parameter \p zp is used to linearly scale the window
+    coordinate. For both axes, \b -1 = left/bottom, \b 0 =
+    center/middle, and \b +1 = right/top. The windows coordinate points
+    [p0, p1, p2, p3] are clockwise ordered with p0=[xmin, ymin].
 *******************************************************************************/
 function draft_sheet_get_zone
 (
@@ -245,8 +300,8 @@ function draft_sheet_get_zone
 *******************************************************************************/
 function draft_table_get_point
 (
-  ix,   // vertical line index
-  iy,   // horizontal line index
+  ix,
+  iy,
   map,
   fmap
 ) =
@@ -286,8 +341,36 @@ function draft_table_get_point
   )
   [xu*cmh*coh, yu*cmv*cov];                 // units * unit-size * order
 
-//! .
+//! Get table cell coordinates given a column and row.
 /***************************************************************************//**
+  \param    ix <integer> A table column vertical line index.
+  \param    iy <integer> A table row horizontal line index.
+
+  \param    zp <integer-list-2|integer> The cell coordinate scaler. A
+            list [zpx, zpy] of decimals or a single decimal for (zpx=zpy).
+
+  \param    limits <boolean> Return cell limits rather than coordinates.
+  \param    window <boolean> Return cell window rather than point.
+
+  \param    map <matrix-2xN> A table definition map.
+  \param    fmap <matrix-2xN> A table format map.
+
+  \returns  <datastruct> The table cell coordinates.
+
+  \details
+
+    The returned datastruct will be one of the following forms:
+
+     limits | window | description                     | data type
+    :------:|:------:|:--------------------------------|:------------------------
+     true   | -      | [[xmin, xmax], [ymin, ymax]]    | <decimal-list-2-list-2>
+     false  | true   | [p0, p1, p2, p3], pn=[x,y]      | <point-2d-list-4>
+     false  | false  | [x, y]                          | <point-2d>
+
+    The parameter \p zp is used to linearly scale the window
+    coordinate. For both axes, \b -1 = left/bottom, \b 0 =
+    center/middle, and \b +1 = right/top. The windows coordinate points
+    [p0, p1, p2, p3] are clockwise ordered with p0=[xmin, ymin].
 *******************************************************************************/
 function draft_table_get_cell
 (
@@ -345,8 +428,55 @@ function draft_table_get_cell
     // point
     [cx, cy];
 
-//! .
+//! Add text to table cell at a given a column and row.
 /***************************************************************************//**
+  \param    ix <integer> A table column vertical line index.
+  \param    iy <integer> A table row horizontal line index.
+
+  \param    text <string|string-list> The text to add. A single string
+            or a list of strings for multiple line text.
+  \param    size <decimal> The text size.
+
+  \param    dfmt <datastruct> The default text format.
+
+  \param    map <matrix-2xN> A table definition map.
+  \param    fmap <matrix-2xN> A table format map.
+
+  \details
+
+    The parameter \p dfmt of type <datastruct> is a list of eleven
+    values:
+
+    \verbatim
+    <datastruct> =
+    [
+      0:text, 1:<align-point>, 2:<align-offset>, 3:<multi-line-offset>,
+      4:rotate, 5:text-scale, 6:<text-align>, 7:font,
+      8:spacing, 9:direction, 10:language, 11:script
+    ]
+    \endverbatim
+
+     field  | description           | data type
+    :------:|-----------------------|:--------------------------
+      0     | text                  | <string>
+      1     | [h-align, v-align]    | <decimal-list-2>
+      2     | [h-offset, v-offset]  | <decimal-list-2>
+      3     | [h-offset, v-offset]  | <decimal-list-2>
+      4     | rotate                | <decimal>
+      5     | text-scale            | <decimal>
+      6     | [h-align, v-align]    | <string-list-2>
+      7     | font                  | <string>
+      8     | spacing               | <decimal>
+      9     | direction             | <string>
+      10    | language              | <string>
+      11    | script                | <string>
+
+    \b Example
+    \code{.C}
+    dfmt = [empty_str, [-1,-1], [2/5,-9/10], [0,-1-1/5], 0, 1, ["left", "center"]]];
+    \endcode
+
+    Unassigned fields are initialized with defaults.
 *******************************************************************************/
 module draft_table_text
 (
@@ -371,10 +501,12 @@ module draft_table_text
    (6) [ "t1", [0,0] ]          ["t1"]        [ "t1", [0,0] ]
   */
 
+  // text format
   sf = is_string(text)   ? [text]       // (1)
      : all_strings(text) ? [text]       // (2), (3)
      : text;                            // (4), (5), (6)
 
+  // text list
   tv = is_string(text)   ? [text]       // (1)
      : all_strings(text) ? text         // (2), (3)
      : is_list(text[0])  ? text[0]      // (4), (5)
@@ -386,7 +518,7 @@ module draft_table_text
   for ( l=[0:len(tv)-1] )
   translate
   (
-    // zone coordinates
+    // cell coordinates
     draft_table_get_cell( ix=ix, iy=iy, zp=df[1], map=map, fmap=fmap )
     // configured offset
     + [ df[2][0], df[2][1] ] * size * df[5]
@@ -408,13 +540,22 @@ module draft_table_text
   );
 }
 
-//! .
+//! Get a coordinate point for a defined draft zoned-table column and row.
 /***************************************************************************//**
+  \param    ix <integer> A ztable column vertical line index.
+  \param    iy <integer> A ztable row horizontal line index.
+
+  \param    map <matrix-2xN> A ztable definition map.
+
+  \returns  <point-2d> The ztable column and row intersection coordinate
+            point.
+
+  \private
 *******************************************************************************/
 function draft_ztable_get_point
 (
-  ix,   // vertical line index
-  iy,   // horizontal line index
+  ix,
+  iy,
   map
 ) =
   let
@@ -434,8 +575,34 @@ function draft_ztable_get_point
   )
   [x, y];
 
-//! .
+//! Get ztable zone coordinates given a zone index.
 /***************************************************************************//**
+  \param    i <integer> A ztable zone index.
+
+  \param    zp <integer-list-2|integer> The zone coordinate scaler. A
+            list [zpx, zpy] of decimals or a single decimal for (zpx=zpy).
+
+  \param    limits <boolean> Return zone limits rather than coordinates.
+  \param    window <boolean> Return zone window rather than point.
+
+  \param    map <matrix-2xN> A ztable definition map.
+
+  \returns  <datastruct> The ztable cell coordinates.
+
+  \details
+
+    The returned datastruct will be one of the following forms:
+
+     limits | window | description                     | data type
+    :------:|:------:|:--------------------------------|:------------------------
+     true   | -      | [[xmin, xmax], [ymin, ymax]]    | <decimal-list-2-list-2>
+     false  | true   | [p0, p1, p2, p3], pn=[x,y]      | <point-2d-list-4>
+     false  | false  | [x, y]                          | <point-2d>
+
+    The parameter \p zp is used to linearly scale the window
+    coordinate. For both axes, \b -1 = left/bottom, \b 0 =
+    center/middle, and \b +1 = right/top. The windows coordinate points
+    [p0, p1, p2, p3] are clockwise ordered with p0=[xmin, ymin].
 *******************************************************************************/
 function draft_ztable_get_zone
 (
@@ -490,8 +657,54 @@ function draft_ztable_get_zone
     // point
     [cx, cy];
 
-//! .
+//! Add text to ztable at a given a one.
 /***************************************************************************//**
+  \param    i <integer> A ztable zone index.
+
+  \param    text <string|string-list> The text to add. A single string
+            or a list of strings for multiple line text.
+  \param    size <decimal> The text size.
+
+  \param    fmt <datastruct> The text format.
+  \param    dfmt <datastruct> The default text format.
+
+  \param    map <matrix-2xN> A ztable definition map.
+
+  \details
+
+    The parameters \p fmt and \p dfmt of type <datastruct> is a list of
+    eleven values:
+
+    \verbatim
+    <datastruct> =
+    [
+      0:text, 1:<align-point>, 2:<align-offset>, 3:<multi-line-offset>,
+      4:rotate, 5:text-scale, 6:<text-align>, 7:font,
+      8:spacing, 9:direction, 10:language, 11:script
+    ]
+    \endverbatim
+
+     field  | description           | data type
+    :------:|-----------------------|:--------------------------
+      0     | text                  | <string>
+      1     | [h-align, v-align]    | <decimal-list-2>
+      2     | [h-offset, v-offset]  | <decimal-list-2>
+      3     | [h-offset, v-offset]  | <decimal-list-2>
+      4     | rotate                | <decimal>
+      5     | text-scale            | <decimal>
+      6     | [h-align, v-align]    | <string-list-2>
+      7     | font                  | <string>
+      8     | spacing               | <decimal>
+      9     | direction             | <string>
+      10    | language              | <string>
+      11    | script                | <string>
+
+    \b Example
+    \code{.C}
+    dfmt = [empty_str, [-1,-1], [2/5,-9/10], [0,-1-1/5], 0, 1, ["left", "center"]]];
+    \endcode
+
+    Unassigned fields are initialized with defaults.
 *******************************************************************************/
 module draft_ztable_text
 (
@@ -536,16 +749,28 @@ module draft_ztable_text
   );
 }
 
-//! .
+//! Check if any identified layers are active.
 /***************************************************************************//**
+  \param    layers <string-list> The list of layer names.
+
+  \returns  <boolean> \b true if any identified layer is active as
+            indicated by \ref draft_layers_show.
 *******************************************************************************/
 function draft_layers_any_active
 (
   layers = draft_get_default("layers-default")
 ) = exists( is_list(layers) ? layers : [layers], draft_layers_show, true );
 
-//! .
+//! Extrude 2D drafted constructions to 3D if configured.
 /***************************************************************************//**
+  \details
+
+    When \ref $draft_make_3d is \b true, all children objects are
+    extruded to 3D.
+
+    | see: \ref draft_defaults_map  |
+    |:-----------------------------:|
+    | make-3d-height                |
 *******************************************************************************/
 module draft_make_3d_if_configured
 (
@@ -565,8 +790,20 @@ module draft_make_3d_if_configured
 // basic shapes
 //----------------------------------------------------------------------------//
 
-//! .
+//! Draft a simple line from an initial to a terminal point.
 /***************************************************************************//**
+  \param    i <point-2d> The initial point coordinate [x, y].
+  \param    t <point-2d> The terminal point coordinate [x, y].
+  \param    w <decimal> The line weight.
+
+  \details
+
+    \ref $draft_line_fn sets arc fragment number for line construction.
+
+    | see: \ref draft_defaults_map  |
+    |:-----------------------------:|
+    | line-width-min                |
+    | line-use-hull                 |
 *******************************************************************************/
 module draft_line_pp
 (
@@ -594,14 +831,67 @@ module draft_line_pp
   }
 }
 
-//! .
+//! Draft an arrowhead at the terminal point of a line.
 /***************************************************************************//**
+  \param    l <line> A line or vector.
+  \param    w <decimal> The line segment weight.
+  \param    s <integer|integer-list-5> The arrowhead style.
+
+  \details
+
+    The style can be customize via the following optional parameter
+    list fields.
+
+     field  | description                     | data type           | default
+    :------:|:--------------------------------|:--------------------|:-------:
+      0     | style                           | <integer>           | 0
+      1     | fill: 0,1 or true,false         | <integer\|boolean>  | 0
+      2     | side: 0=both, 1=left, 2=right   | <integer>           | 0
+      3     | length multiplier               | <decimal>           | 1
+      4     | angle multiplier                | <decimal>           | 1
+
+    When parameter \p s is assigned a single integer it sets the style
+    and the other fields are assigned their default values.
+
+     style  | description
+    :------:|:--------------------------
+      0     | no arrowhead
+      1     | closed 3-point arrowhead
+      2     | closed 4-point arrowhead
+      3     | open 3-point arrowhead
+      4     | slash / cross arrowhead
+      5     | circle arrowhead
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      grid = [1, 3/4] * 10;
+
+      for ( s=[1:5], f=[0:1], p=[0:2] )
+        translate( [(p+1)*first(grid) + f*3*first(grid), s*second(grid)] )
+        draft_arrow( l=x_axis2d_ul, s=[s, f, p] );
+    }
+
+    \b Result
+
+    \amu_image (caption="Arrowhead Styles" file=${auto_file_name} width=320)
+
+    \ref $draft_arrow_fn sets arc fragment number for arrowhead
+    construction. The line segments are constructed by \ref draft_line_pp().
+
+    | see: \ref draft_defaults_map  |
+    |:-----------------------------:|
+    | arrow-line-length-min         |
+    | arrow-angle-min               |
 *******************************************************************************/
 module draft_arrow
 (
-  l,
+  l = x_axis2d_ul,
   w = 1,
-  s = 0
+  s = 1
 )
 {
   s1 = edefined_or(s, 0, s);                  // arrow selection
@@ -700,14 +990,92 @@ module draft_arrow
   }
 }
 
-//! .
+//! Draft a line with configurable style and optional arrowheads.
 /***************************************************************************//**
+  \param    l <line> A line or vector.
+  \param    w <decimal> The line weight.
+  \param    s <integer|integer-list> The line style.
+  \param    a1 <integer|integer-list-5> The arrowhead style at initial point.
+  \param    a2 <integer|integer-list-5> The arrowhead style at terminal point.
+
+  \details
+
+    When parameter \p s is assigned a single integer it sets the style
+    with its default optional values. The line style \p s can be one of
+    the following:
+
+     style  | description
+    :------:|:--------------------------
+      0     | no line
+      1     | solid line
+      2     | single dash pattern centered
+      3     | dual overlapped dash patterns
+      4     | both ends and center
+      5     | line section break
+
+    Each style can be customize via optional parameter list fields. The
+    options differ by style:
+
+    <b>style 2</b>
+
+     field  | description                     | data type           | default
+    :------:|:--------------------------------|:--------------------|:-------:
+      1     | length multiplier               | <decimal>           | 1
+      2     | stride                          | <decimal>           | 2
+
+    <b>style 3</b>
+
+     field  | description                     | data type           | default
+    :------:|:--------------------------------|:--------------------|:-------:
+      1     | length multiplier 1             | <decimal>           | 1
+      2     | stride 1                        | <decimal>           | 2
+      3     | length multiplier 2             | <decimal>           | 2
+      4     | stride 2                        | <decimal>           | 3
+
+    <b>style 4</b>
+
+     field  | description                     | data type           | default
+    :------:|:--------------------------------|:--------------------|:-------:
+      1     | number of centered segments     | <decimal>           | 1
+      2     | centered-length multiplier      | <decimal>           | 1
+      3     | end-length multiplier           | <decimal>           | 1
+
+    <b>style 5</b>
+
+     field  | description                     | data type           | default
+    :------:|:--------------------------------|:--------------------|:-------:
+      1     | number of breaks                | <decimal>           | 1
+      2     | break length multiplier         | <decimal>           | 2
+      3     | break width multiplier          | <decimal>           | 2
+      4     | break angle                     | <decimal>           | 67.5
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      line = [[0,0], [50,0]];
+      for ( s=[1:5] )
+        translate( [0, s*5] )
+        draft_line(l=line, s=s);
+    }
+
+    \b Result
+
+    \amu_image (caption="Line Styles" file=${auto_file_name} width=320)
+
+    The line segments are constructed by \ref draft_line_pp().
+
+    | see: \ref draft_defaults_map  |
+    |:-----------------------------:|
+    | line-segment-min              |
 *******************************************************************************/
 module draft_line
 (
-  l,
-  w = 1,
-  s = 1,
+  l  = x_axis2d_ul,
+  w  = 1,
+  s  = 1,
   a1 = 0,
   a2 = 0
 )
@@ -806,12 +1174,56 @@ module draft_line
   }
 }
 
-//! .
+//! Draft an arc with configurable style and optional arrowheads.
 /***************************************************************************//**
+  \copydetails polygon2d_arc_p()
+    These coordinates will be used to draft an arc according to the
+    following additional parameters.
+
+  \param    w <decimal> The line weight.
+  \param    s <integer|integer-list> The line style.
+  \param    a1 <integer|integer-list-5> The arrowhead style at initial point.
+  \param    a2 <integer|integer-list-5> The arrowhead style at terminal point.
+
+  \details
+
+    When parameter \p s is assigned a single integer it sets the style
+    with its default optional values. The line style \p s can be one of
+    the following:
+
+     style  | description
+    :------:|:--------------------------
+      0     | no line
+      1     | solid line
+      2     | single dash pattern
+
+    Style 2 can be customize via optional parameter as shown below:
+
+    <b>style 2</b>
+
+     field  | description                     | data type           | default
+    :------:|:--------------------------------|:--------------------|:-------:
+      1     | stride                          | <decimal>           | 2
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      for ( s=[1:2] )
+        draft_arc (r=50-5*s, v1=[-1,1], v2=45, cw=true, s=s);
+    }
+
+    \b Result
+
+    \amu_image (caption="Arc Styles" file=${auto_file_name} width=320)
+
+    The line segments are constructed by \ref draft_line_pp().
 *******************************************************************************/
 module draft_arc
 (
-  r,
+  r  = 1,
   c  = origin2d,
   v1 = x_axis2d_uv,
   v2 = x_axis2d_uv,
@@ -836,7 +1248,7 @@ module draft_arc
         draft_line_pp(ls[0], ls[1], w);
     }
     else if ( s1 == 2 )
-    { // single pattern centered
+    { // single pattern
       s2 = edefined_or(s, 1, 2);              // point stride
 
       for ( ls = nssequence( pp, 2, s2 ) )
@@ -849,12 +1261,34 @@ module draft_arc
   }
 }
 
-//! .
+//! Draft a rectangle with configurable style.
 /***************************************************************************//**
+  \param    d <decimal-list-2|decimal> A list [x, y] of decimals
+            or a single decimal for (x=y).
+  \param    c <point-2d> The center coordinate [x, y].
+  \param    w <decimal> The line weight.
+  \param    s <integer|integer-list> The line style.
+
+  \details
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      draft_rectangle ([50, 30], s=[4, 3, 2, 5]);
+    }
+
+    \b Result
+
+    \amu_image (caption="Example" file=${auto_file_name} width=320)
+
+    The line segments are constructed by \ref draft_line().
 *******************************************************************************/
 module draft_rectangle
 (
-  d,
+  d = 1,
   c = origin2d,
   w = 1,
   s = 1
@@ -889,13 +1323,41 @@ module draft_rectangle
             a list of two coordinate indexes.
   \param    i <index> An index sequence [specification].
 
+  \param    w <decimal> The line weight.
+  \param    s <integer|integer-list> The line style.
+
   \details
 
-  \note     Parameter \p p is optional. When it is not given, the
-            listed order of the coordinates \p c establishes the
-            polygon path.
-  \note     When \p e is not specified, it is computed from \p p using
-            polytope_faces2edges().
+    Parameter \p p is optional and when it is not given, the listed
+    order of the coordinates establishes the polygon path. When
+    parameter \p e is not specified, it is computed from \p p using
+    polytope_faces2edges(). Parameter \p i allows coordinate indexes to
+    be selected using several selection [schemes][specification].
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      pp = length
+      (
+        [ [+1.5 + 1/3, -1.25], [+1.5/4, 0], [+1.5 - 1/3, +1.25],
+          [-1.5 + 1/3, +1.25], [-1.5/4, 0], [-1.5 - 1/3, -1.25]
+        ], "in"
+      );
+
+      polytope_number(pp, ei=false, fi=false);
+
+      rp = polygon2d_vertices_round3_p(c=pp, vr=length(1/4, "in"), vrm=1, cw=false);
+      draft_polygon(rp, s=2);
+    }
+
+    \b Result
+
+    \amu_image (caption="Example" file=${auto_file_name} width=320)
+
+    The line segments are constructed by \ref draft_line().
 
   [specification]: \ref dt_index
 *******************************************************************************/
@@ -905,6 +1367,7 @@ module draft_polygon
   p,
   e,
   i = true,
+
   w = 1,
   s = 1
 )
