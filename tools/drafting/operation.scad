@@ -294,15 +294,15 @@ module draft_sheet
 *******************************************************************************/
 module draft_ruler
 (
-  units = "mm",     // units
-  marksize = 1,     // size of each mark
-  marks = 10,       // number of unit marks per group
-  groups = 5,       // number of groups (of unit marks)
-  linelength = 5,   // group-line length
-  label = 2/3,      // label scaler
-  order = 1,        // marks direction
-  hide = false,     // hide label
-  w = 1,            // mark line weight
+  units = "mm",
+  marks = 10,
+  groups = 5,
+  mark_size = 1,
+  group_height = 5,
+  label_scale = 2/3,
+  label_hide = false,
+  order = 1,
+  w = 1,
   layers = draft_get_default("layers-sheet")
 )
 {
@@ -311,10 +311,10 @@ module draft_ruler
   draft_make_3d_if_configured()
   {
     // one mark unit length
-    ul = length(marksize, units);
+    ul = length(mark_size, units);
 
     // group-line mark size
-    s  = ul * linelength * $draft_scale;
+    s  = ul * group_height * $draft_scale;
 
     // order
     ox = edefined_or(order, 0, order);
@@ -341,7 +341,7 @@ module draft_ruler
       draft_line (l=l, w=(i%marks) ? w/2 : w, s=1 );
 
       // label measurement
-      if ((i == groups*marks) && !hide)
+      if ((i == groups*marks) && !label_hide)
       {
         // text offset from group tick
         offset = ul * $draft_scale;
@@ -356,10 +356,10 @@ module draft_ruler
         (
           str
           (
-            marksize * marks * groups * $draft_scale,
+            mark_size * marks * groups * $draft_scale,
             " ", units
           ),
-          valign="center", size=s*label
+          valign="center", size=s*label_scale
         );
       }
     }
