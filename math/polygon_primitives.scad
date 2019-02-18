@@ -250,12 +250,12 @@ function polygon2d_arc_p
     vas = angle_ll(va2, va1, false),
     vap = (vas == 0) ? 360 : vas,
 
-    // arc angle sweep sequence cw and ccw
-    aas = (cw == true) ? [naf : -1 : 0] : [0 : naf]
+    // arc cw and ccw signed sweep step
+    sas = (((cw == true) ? 0 : 360) - vap)/naf
   )
   [
-    for (as = aas)
-      let (aa = iap + as * (((cw == true) ? 0 : 360) - vap)/naf)
+    for (as = [0 : naf])
+      let (aa = iap + as * sas)
       c + r * [cos(aa), sin(aa)]
   ];
 
