@@ -218,8 +218,10 @@ function polygon2d_line_p
   \details
 
     The arc coordinates will have radius \p r centered about \p c
-    contained within the heads of vectors \p v1 and \p v2. When vectors
-    \p v1 and \p v2 are parallel, the arc will be a complete circle.
+    contained within the heads of vectors \p v1 and \p v2. The arc will
+    start at the point coincident to \p v1 and will end at the point
+    coincident to \p v2. When vectors \p v1 and \p v2 are parallel, the
+    arc will be a complete circle.
 
   [facets]: \ref openscad_fn()
 *******************************************************************************/
