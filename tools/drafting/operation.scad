@@ -34,11 +34,15 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// group.
+// group and macros.
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+
+  \amu_define auto_file_debug (false)
+  \amu_define auto_file_extensions (svg)
+  \amu_include (include/amu/auto_file_html.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -47,8 +51,15 @@
 // general operations
 //----------------------------------------------------------------------------//
 
-//! .
+//! Assign one or more layers to child objects.
 /***************************************************************************//**
+  \param    layers <string-list> The List of drafting layer names.
+
+  \details
+
+    All children will be assigned the specified layer or layers and
+    will be subsequently shown only when one of these layers are active
+    as indicated by \ref draft_layers_show.
 *******************************************************************************/
 module draft_in_layers
 (
@@ -59,13 +70,45 @@ module draft_in_layers
     children();
 }
 
-//! .
+//! Move one or more child objects to sheet a reference zone.
 /***************************************************************************//**
-  draft_sheet_get_zone()
-  v = [ [ zp:[px=0, py=0], [rx/ix, ry/iy], child_idx ] ... ]
+  \param    list <datastruct-list> A List alignment references, zones,
+            and child object indexes.
 
-  draft_move ( [ for (x=[0:7], y=[0:3] ) [[0,0], [x,y], 0] ] )
-  square([10,10]);
+  \details
+
+    Each list element specified the placement of a child object and has
+    the form:
+
+    \verbatim
+    <datastruct> = [ 0:<alignment-point>, 1:<zone-reference>, 2:<child-index> ]
+    \endverbatim
+
+     field  | description           | data type
+    :------:|-----------------------|:--------------------------
+      0     | [px, py]              | <decimal-list-2>
+      1     | [rx, ry] or [ix, iy]  | <string-list-2\|decimal-list-2>
+      2     | index                 | <integer>
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      draft_sheet();
+      draft_move ( [for (x=[0:7], y=[0:3]) [[0,0], [x,y], is_even(x)?0:1]] )
+      {
+        square(10, center=true);
+        circle(d=10);
+      }
+    }
+
+    \b Result
+
+    \amu_image (caption="Example" file=${auto_file_name} width=320)
+
+  \sa draft_sheet_get_zone()
 *******************************************************************************/
 module draft_move
 (
@@ -102,8 +145,50 @@ module draft_move
   }
 }
 
-//! .
+//! Construct a drafting sheet with frame, zone, grid, and origin.
 /***************************************************************************//**
+  \param    sheet <value-list-2> A sheet line configuration that
+            overrides sheet line <width, style>.
+  \param    frame <value-list-2> A frame line configuration that
+            overrides frame line <width, style>.
+  \param    zone <value-list-2> A zone line configuration that
+            overrides zone line <width, style>.
+  \param    grid <value-list-2> A grid line configuration that
+            overrides grid line <width, style>.
+  \param    origin <value-list-4> An origin line configuration that
+            overrides origin line <width, style, length, arrow>.
+
+  \param    check <boolean> Check current sheet configuration.
+
+  \param    layers <string-list> The List of drafting layer names.
+
+  \details
+
+    When a parameter is not specified, the default value is use for the
+    current sheet configuration. The sheet configuration defaults are
+    set by \ref draft_sheet_config.
+
+    The parameters \p sheet, \p frame, \p zone, \p and grid accepts a
+    list of two values. The first value sets the construction line
+    width and the second sets the construction line style; <width,
+    style>. The style value may also be a list to configure the details
+    of the style as documented in draft_line(). The parameter \p origin
+    accepts a list of four values: <width, style, length, arrow>. The
+    style may be any of those available in draft_line() and the arrow
+    may be any available in draft_arrow().
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      draft_sheet( sheet=[5, [5, 4, 5, 5, 25]] );
+    }
+
+    \b Result
+
+    \amu_image (caption="Example" file=${auto_file_name} width=320)
 *******************************************************************************/
 module draft_sheet
 (
@@ -112,7 +197,7 @@ module draft_sheet
   zone,
   grid,
   origin,
-  check = false,    // check configuration
+  check = false,
   layers = draft_get_default("layers-sheet")
 )
 {
@@ -289,8 +374,44 @@ module draft_sheet
   }
 }
 
-//! .
+//! Construct a drafting sheet ruler.
 /***************************************************************************//**
+  \param    units <string> The ruler units.
+  \param    marks <integer> The number of unit marks per group.
+  \param    groups <integer> The number of groups.
+
+  \param    mark_size <decimal> The distance between unit marks
+            (in \p units).
+  \param    group_height <decimal> The group-line mark height.
+
+  \param    label_scale <decimal> The text label size scaler.
+  \param    label_hide <boolean> Hide ruler text label.
+
+  \param    order <integer-list-2|integer> The ruler marks horizontal
+            and vertical direction. A list [x, y] of decimals or a
+            single decimal for (x=y).
+
+  \param    w <decimal> The line segment weight.
+
+  \param    layers <string-list> The List of drafting layer names.
+
+  \details
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      draft_ruler();
+
+      translate([75,0])
+      draft_ruler(units="in", marks=16, groups=2, mark_size=length(1/16/25.4, "in"));
+    }
+
+    \b Result
+
+    \amu_image (caption="Example" file=${auto_file_name} height=240)
 *******************************************************************************/
 module draft_ruler
 (
@@ -366,8 +487,52 @@ module draft_ruler
   }
 }
 
-//! .
+//! Construct a text table that is populated by rows and columns.
 /***************************************************************************//**
+  \param    map <matrix-2xN> A table definition map.
+  \param    fmap <matrix-2xN> A table format map.
+
+  \param    zp <integer-list-2|integer> The center coordinate scaler. A
+            list [zpx, zpy] of decimals or a single decimal for (zpx=zpy).
+
+  \param    window <boolean> Return table window rectangle.
+
+  \param    layers <string-list> The List of drafting layer names.
+
+  \details
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      map=
+      [
+        [ "title",  [ "TABLE", 3/2 ] ],
+        [ "heads",  [ ["col1", "col2", "col3"], 3/4 ] ],
+        [ "cols",   [ 2, 2, 2 ] ],
+        [
+          "rows",
+                  [
+                    [ ["d00", "d01", "d02"], 1 ],
+                    [ ["d10", "d11", "d12"], 1 ],
+                    [ ["d20", "d21", "d22"], 1 ],
+                    [ ["d30", "d31", "d32"], 1 ]
+                  ]
+        ]
+      ];
+
+      draft_table( map=map, fmap=draft_table_format_ccc_map );
+    }
+
+    \b Result
+
+    \amu_image (caption="Example" file=${auto_file_name} height=240)
+
+    | see: \ref draft_defaults_map  |
+    |:-----------------------------:|
+    | table-text-format             |
 *******************************************************************************/
 module draft_table
 (
@@ -482,13 +647,49 @@ module draft_table
   } // layers
 }
 
-//! .
+//! Construct a text table that is populated by predefined zones.
 /***************************************************************************//**
+  \param    text <value-list> The list of zone values, where each value
+            is <string|string-list>, a single or multi-line string for
+            the corresponding zone.
+
+  \param    map <matrix-2xN> A zone table definition map.
+
+  \param    zp <integer-list-2|integer> The center coordinate scaler. A
+            list [zpx, zpy] of decimals or a single decimal for (zpx=zpy).
+
+  \param    number <boolean> Number the defined table zones.
+  \param    window <boolean> Return table window rectangle.
+
+  \param    layers <string-list> The List of drafting layer names.
+
+  \details
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      text=
+      [
+        ["data0.0", "data0.1"],
+        "data1", "data2", "data3", "data4", "data5", "data6",
+        "data7", "data8", "data9", "data10", "data11",
+        ["data12.0", "data12.1", "data12.2", "data12.3"]
+      ];
+
+      draft_ztable( text=text, map=draft_title_block_map );
+    }
+
+    \b Result
+
+    \amu_image (caption="Example" file=${auto_file_name} height=240)
 *******************************************************************************/
 module draft_ztable
 (
   text,
-  map = draft_title_block_map,
+  map,
   zp = 0,
   number = false,
   window = false,
@@ -601,8 +802,57 @@ module draft_ztable
   } // layers
 }
 
-//! .
+//! Construct a text note with optional heading and boarder.
 /***************************************************************************//**
+  \param    head <string> The optional note heading.
+  \param    note <string|string-list> A single or multi-line note
+            text string.
+
+  \param    size <decimal-list-3> A list of decimals that define the
+            <width, heading-height, line-height> of the note.
+  \param    line <value-list-2> The boarder line configuration override
+            that sets the line construction width and style;
+            <width, style>.
+
+  \param    halign <string> The text horizontal alignment. One of the
+            predefined strings: < \b "left" | \b "center" | \b "right" >.
+
+  \param    cmh <decimal> The horizontal width minimum unit cell size.
+  \param    cmv <decimal> The vertical height minimum unit cell size.
+
+  \param    zp <integer-list-2|integer> The center coordinate scaler. A
+            list [zpx, zpy] of decimals or a single decimal for (zpx=zpy).
+
+  \param    window <boolean> Return table window rectangle.
+
+  \param    layers <string-list> The List of drafting layer names.
+
+  \details
+
+    The boarder line style value may be configure as as documented in
+    draft_line().
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      for (i = [[-40, "left", [1,0]], [0, "center", [4,0]], [40, "right", 3]] )
+      translate([first(i), 0])
+      draft_note
+      (
+        head="Note",
+        note=["Line 1", "Line 2", "Line 3"],
+        size=[3, 2, 3/4],
+        halign = second(i),
+        line = [1, third(i)]
+      );
+    }
+
+    \b Result
+
+    \amu_image (caption="Example" file=${auto_file_name} height=120)
 *******************************************************************************/
 module draft_note
 (
@@ -657,35 +907,9 @@ module draft_note
   } // layers
 }
 
-//! .
+//! Construct a sheet title block.
 /***************************************************************************//**
-
-  difference()
-  {
-    draft_sheet();
-    translate( draft_sheet_get_zone(zp=[1,-1]) )
-    draft_title_block(window=true);
-  }
-
-  translate( draft_sheet_get_zone(zp=[1,-1]) )
-  union()
-  {
-    text =
-    [
-      ["data0.0", "data0.1"], "data1", "data2", "data3", "data4",
-      "data5", "data6", "data7", "data8", "data9", "data10", "data11",
-      ["data12.0", "data12.1", "data12.2", "data12.3"]
-    ];
-
-    draft_title_block
-    (
-      text = text,
-      zones = true,
-      hlines = true,
-      vlines = true
-    );
-  }
-
+  \copydetails draft_ztable()
 *******************************************************************************/
 module draft_title_block
 (
