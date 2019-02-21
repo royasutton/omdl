@@ -148,15 +148,15 @@ module draft_move
 //! Construct a drafting sheet with frame, zone, grid, and origin.
 /***************************************************************************//**
   \param    sheet <value-list-2> A sheet line configuration that
-            overrides sheet line <width, style>.
+            overrides sheet line <width, [style]>.
   \param    frame <value-list-2> A frame line configuration that
-            overrides frame line <width, style>.
+            overrides frame line <width, [style]>.
   \param    zone <value-list-2> A zone line configuration that
-            overrides zone line <width, style>.
+            overrides zone line <width, [style]>.
   \param    grid <value-list-2> A grid line configuration that
-            overrides grid line <width, style>.
+            overrides grid line <width, [style]>.
   \param    origin <value-list-4> An origin line configuration that
-            overrides origin line <width, style, length, arrow>.
+            overrides origin line <width, [style], length, [arrow]>.
 
   \param    check <boolean> Check current sheet configuration.
 
@@ -189,6 +189,9 @@ module draft_move
     \b Result
 
     \amu_image (caption="Example" file=${auto_file_name} width=320)
+
+  [style]: \ref draft_line()
+  [arrow]: \ref draft_arrow()
 *******************************************************************************/
 module draft_sheet
 (
@@ -812,7 +815,7 @@ module draft_ztable
             <width, heading-height, line-height> of the note.
   \param    line <value-list-2> The boarder line configuration override
             that sets the line construction width and style;
-            <width, style>.
+            <width, [style]>.
 
   \param    halign <string> The text horizontal alignment. One of the
             predefined strings: < \b "left" | \b "center" | \b "right" >.
@@ -853,6 +856,8 @@ module draft_ztable
     \b Result
 
     \amu_image (caption="Example" file=${auto_file_name} height=120)
+
+  [style]: \ref draft_line()
 *******************************************************************************/
 module draft_note
 (
