@@ -68,9 +68,9 @@
             <width, line-height, heading-height> of the text.
   \param    tp <integer-list-2> The text alignment point.
             A list [tpx, tpy] of decimals. Requires \p tr.
+  \param    tr <decimal> The text rotation angle.
   \param    ta <string> The text horizontal alignment. One of:
             < \b "left" | \b "center" | \b "right" >.
-  \param    tr <decimal> The text rotation angle.
 
   \param    bw <decimal> The boarder line weight.
   \param    bs <integer|integer-list> The boarder line [style].
@@ -118,8 +118,8 @@ module draft_dim_leader
   t,
   ts,
   tp,
-  ta = "center",
   tr,
+  ta = "center",
 
   bw = draft_get_default("dim-leader-box-weight"),
   bs = draft_get_default("dim-leader-box-style"),
