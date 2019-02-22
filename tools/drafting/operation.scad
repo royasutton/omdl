@@ -812,7 +812,7 @@ module draft_ztable
             text string.
 
   \param    size <decimal-list-3> A list of decimals that define the
-            <width, heading-height, line-height> of the note.
+            <width, line-height, heading-height> of the note.
   \param    line <value-list-2> The boarder line configuration override
             that sets the line construction width and style;
             <width, [style]>.
