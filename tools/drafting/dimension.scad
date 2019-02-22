@@ -144,8 +144,8 @@ module draft_dim_leader
 *******************************************************************************/
 module draft_dim_line
 (
-  p1,
-  p2,
+  p1 = origin2d,
+  p2 = origin2d,
 
   v1,
   v2,
@@ -300,7 +300,7 @@ module draft_dim_radius
   c = origin2d,
 
   p,
-  r,
+  r = 1,
   v,
 
   t,
@@ -334,7 +334,6 @@ module draft_dim_radius
     // create vector if numerical angle has been specified.
     rr1 = c;
     rr2 = is_defined(p)  ? p
-        : not_defined(r) ? line_tp(line2d_new(p1=c))
         : not_defined(v) ? line_tp(line2d_new(m=r, p1=c))
         : is_number(v)   ? line_tp(line2d_new(m=r, a=v, p1=c))
         :                  line_tp(line2d_new(m=r, v=v, p1=c));
@@ -441,7 +440,7 @@ module draft_dim_radius
 module draft_dim_angle
 (
   c = origin2d,
-  r,
+  r = 1,
 
   v1,
   v2,
@@ -589,14 +588,15 @@ module draft_dim_center
   c = origin2d,
 
   r,
-  e,
 
   v = 0,
   l = draft_get_default("dim-center-length"),
 
+  e,
+  es = draft_get_default("dim-angle-extension-style"),
+
   w  = draft_get_default("dim-center-weight"),
   s  = draft_get_default("dim-center-style"),
-  es = draft_get_default("dim-angle-extension-style"),
 
   layers = draft_get_default("layers-dim")
 )
