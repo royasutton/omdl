@@ -39,6 +39,10 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+
+  \amu_define auto_file_debug (false)
+  \amu_define auto_file_extensions (svg)
+  \amu_include (include/amu/auto_file_html.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -47,8 +51,59 @@
 // dimension operations
 //----------------------------------------------------------------------------//
 
-//! .
+//! Construct a dimension leader line at a point.
 /***************************************************************************//**
+  \param    p <point-2d> The leader line point.
+
+  \param    v1 <line-2d|decimal> The leader line 1 angle.
+            A 2d line, vector, or decimal angle.
+  \param    l1 <decimal> The leader line 1 length.
+  \param    v2 <line-2d|decimal> The leader line 2 angle.
+            A 2d line, vector, or decimal angle.
+  \param    l2 <decimal> The leader line 2 length.
+
+  \param    h <string> An optional text heading.
+  \param    t <string|string-list> A single or multi-line text string.
+  \param    ts <decimal-list-3> A list of decimals that define the
+            <width, line-height, heading-height> of the text.
+  \param    tp <integer-list-2> The text alignment point.
+            A list [tpx, tpy] of decimals. Requires \p tr.
+  \param    ta <string> The text horizontal alignment. One of:
+            < \b "left" | \b "center" | \b "right" >.
+  \param    tr <decimal> The text rotation angle.
+
+  \param    bw <decimal> The boarder line weight.
+  \param    bs <integer|integer-list> The boarder line [style].
+
+  \param    w <decimal> The line weight.
+  \param    s <integer|integer-list> The line [style].
+  \param    a <integer|integer-list-5> The arrowhead [style][arrow].
+
+  \param    o <decimal> The leader point offset.
+
+  \param    cmh <decimal> The horizontal width minimum unit cell size.
+  \param    cmv <decimal> The vertical height minimum unit cell size.
+
+  \param    window <boolean> Return text window rectangle.
+  \param    layers <string-list> The List of drafting layer names.
+
+  \details
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      draft_dim_leader (l1=25, v2=0, t="1");
+    }
+
+    \b Result
+
+    \amu_image (caption="Example" file=${auto_file_name} width=240)
+
+  [style]: \ref draft_line()
+  [arrow]: \ref draft_arrow()
 *******************************************************************************/
 module draft_dim_leader
 (
@@ -139,8 +194,75 @@ module draft_dim_leader
   }
 }
 
-//! .
+//! Construct a dimension line between two points.
 /***************************************************************************//**
+  \param    p1 <point-2d> The dimension point 1.
+  \param    p2 <point-2d> The dimension point 2.
+
+  \param    v1 <line-2d|decimal> The point 1 extension line vector.
+            A 2d line, vector, or decimal angle.
+  \param    v2 <line-2d|decimal> The point 2 extension line vector.
+            A 2d line, vector, or decimal angle.
+
+  \param    t <string|string-list> A single or multi-line text string
+            that overrides the measured distance.
+  \param    u <string> The units for the measured distance.
+            One of the predefined in \ref units_length.
+
+  \param    d <decimal|decimal-list-2> The minimum distance between the
+            reference point and the start of the extension line.
+            A list [d1, d2] of decimals or a single decimal for (d1=d2).
+  \param    e <decimal|decimal-list-2> The length of the extension line.
+            A list [e1, e2] of decimals or a single decimal for (e1=e2).
+  \param    es <integer|integer-list> The extension line [style].
+
+  \param    w <decimal> The line weight.
+  \param    s <integer|integer-list> The line [style].
+  \param    a <integer|integer-list-5> The arrowheads [style][arrow].
+
+  \param    a1 <integer|integer-list-5> The arrowhead 1 [style][arrow]
+            override.
+  \param    a2 <integer|integer-list-5> The arrowhead 2 [style][arrow]
+            override.
+
+  \param    o <decimal> The dimension line offset.
+
+  \param    ts <decimal-list-3> A list of decimals that define the
+            <width, line-height, heading-height> of the text.
+  \param    tp <integer-list-2> The text alignment point.
+            A list [tpx, tpy] of decimals.
+  \param    rm <integer> The measurement rounding mode.
+            One of: 0=none, 1=[dround], and 2=[sround].
+
+  \param    cmh <decimal> The horizontal width minimum unit cell size.
+  \param    cmv <decimal> The vertical height minimum unit cell size.
+
+  \param    layers <string-list> The List of drafting layer names.
+
+  \details
+
+    Only one of \p v1 or \p v2 should normally be used at a time. When
+    neither is specified, the extension line vector angle will be at a
+    right angle to the line formed by the dimension points \p p1 and \p
+    p2.
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      draft_dim_line (p1=[0,0], p2=[100,0], u="cm");
+    }
+
+    \b Result
+
+    \amu_image (caption="Example" file=${auto_file_name} width=480)
+
+  [style]: \ref draft_line()
+  [arrow]: \ref draft_arrow()
+  [dround]: \ref dround()
+  [sround]: \ref sround()
 *******************************************************************************/
 module draft_dim_line
 (
@@ -292,8 +414,66 @@ module draft_dim_line
   }
 }
 
-//! .
+//! Construct a radial dimension line.
 /***************************************************************************//**
+  \param    c <point-2d> The radius center point.
+
+  \param    p <point-2d> A point on the radius.
+  \param    r <decimal> The radius length.
+  \param    v <line-2d|decimal> The dimension line angle for radius \p r.
+            A 2d line, vector, or decimal angle.
+
+  \param    t <string|string-list> A single or multi-line text string
+            that overrides the measured length.
+  \param    u <string> The units for the measured length.
+            One of the predefined in \ref units_length.
+
+  \param    d <boolean> Construct a diameter dimension line.
+
+  \param    w <decimal> The line weight.
+  \param    s <integer|integer-list> The line [style].
+  \param    a <integer|integer-list-5> The arrowheads [style][arrow].
+
+  \param    a1 <integer|integer-list-5> The arrowhead 1 [style][arrow]
+            override.
+  \param    a2 <integer|integer-list-5> The arrowhead 2 [style][arrow]
+            override.
+
+  \param    o <decimal|decimal-list-2> The dimension line offset. A list
+            [o1, o2] of decimals or a single decimal for (o1=o2).
+
+  \param    ts <decimal-list-3> A list of decimals that define the
+            <width, line-height, heading-height> of the text.
+  \param    tp <integer-list-2> The text alignment point.
+            A list [tpx, tpy] of decimals.
+  \param    rm <integer> The measurement rounding mode.
+            One of: 0=none, 1=[dround], and 2=[sround].
+
+  \param    cmh <decimal> The horizontal width minimum unit cell size.
+  \param    cmv <decimal> The vertical height minimum unit cell size.
+
+  \param    layers <string-list> The List of drafting layer names.
+
+  \details
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      draft_arc (r=50, v1=90, s=2);
+      draft_dim_radius (r=50, v=45, u="cm", a1=[4,0,2]);
+    }
+
+    \b Result
+
+    \amu_image (caption="Example" file=${auto_file_name} width=240)
+
+  [style]: \ref draft_line()
+  [arrow]: \ref draft_arrow()
+  [dround]: \ref dround()
+  [sround]: \ref sround()
 *******************************************************************************/
 module draft_dim_radius
 (
@@ -434,8 +614,74 @@ module draft_dim_radius
   }
 }
 
-//! .
+//! Construct a angular dimension arc.
 /***************************************************************************//**
+  \param    c <point-2d> The arc center point.
+  \param    r <decimal> The arc radius length.
+
+  \param    v1 <line-2d|decimal> The arc initial angle.
+            A 2d line, vector, or decimal angle.
+  \param    v2 <line-2d|decimal> The arc terminal angle.
+            A 2d line, vector, or decimal angle.
+
+  \param    fn <integer> The number of [facets].
+  \param    cw <boolean> Sweep clockwise along arc from the head of
+            vector \p v1 to the head of vector \p v2 when \p cw =
+            \b true, and counter clockwise when \p cw = \b false.
+
+  \param    t <string|string-list> A single or multi-line text string
+            that overrides the measured angle.
+  \param    u <string> The units for the measured angle.
+            One of the predefined in \ref units_angle.
+
+  \param    e <decimal|decimal-list-2> The extension line to radius ratio.
+            A list [e1, e2] of decimals or a single decimal for (e1=e2).
+  \param    es <integer|integer-list> The extension line [style].
+
+  \param    w <decimal> The arc weight.
+  \param    s <integer|integer-list> The arc [style].
+  \param    a <integer|integer-list-5> The arrowheads [style][arrow].
+
+  \param    a1 <integer|integer-list-5> The arrowhead 1 [style][arrow]
+            override.
+  \param    a2 <integer|integer-list-5> The arrowhead 2 [style][arrow]
+            override.
+
+  \param    o <decimal> The dimension arc offset.
+
+  \param    ts <decimal-list-3> A list of decimals that define the
+            <width, line-height, heading-height> of the text.
+  \param    tp <integer-list-4> The text alignment point.
+            A list [tpx, tpy, tpa, tra] of decimals, where \p tpa is
+            the text pivot angle and \p tra is the text rotation angle.
+  \param    rm <integer> The measurement rounding mode.
+            One of: 0=none, 1=[dround], and 2=[sround].
+
+  \param    cmh <decimal> The horizontal width minimum unit cell size.
+  \param    cmv <decimal> The vertical height minimum unit cell size.
+
+  \param    layers <string-list> The List of drafting layer names.
+
+  \details
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      draft_dim_angle (r=50, v1=0, v2=angle(pi/4+pi/16,"r"), u="dms");
+    }
+
+    \b Result
+
+    \amu_image (caption="Example" file=${auto_file_name} width=240)
+
+  [facets]: \ref openscad_fn()
+  [style]: \ref draft_line()
+  [arrow]: \ref draft_arrow()
+  [dround]: \ref dround()
+  [sround]: \ref sround()
 *******************************************************************************/
 module draft_dim_angle
 (
@@ -580,8 +826,43 @@ module draft_dim_angle
   }
 }
 
-//! .
+//! Construct a center mark dimension cross.
 /***************************************************************************//**
+  \param    c <point-2d> The center point.
+
+  \param    r <decimal> A circular arc radius.
+
+  \param    v <line-2d|decimal> The cross rotation angle.
+            A 2d line, vector, or decimal angle.
+  \param    l <decimal> The cross line length.
+
+  \param    e <decimal|decimal-list-4> The length of the extension lines.
+            A list [e1, e2, e3, e4] of decimals or a single decimal for
+            (e1=e2=e3=e4).
+  \param    es <integer|integer-list> The extension line [style].
+
+  \param    w <decimal> The line weight.
+  \param    s <integer|integer-list> The line [style].
+
+  \param    layers <string-list> The List of drafting layer names.
+
+  \details
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      draft_arc (r=25, w=1/4);
+      draft_dim_center (r=25, l=5, v=[1,10], e=[0,100,0,100]);
+    }
+
+    \b Result
+
+    \amu_image (caption="Example" file=${auto_file_name} height=120)
+
+  [style]: \ref draft_line()
 *******************************************************************************/
 module draft_dim_center
 (
