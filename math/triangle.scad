@@ -48,6 +48,37 @@
 
 //----------------------------------------------------------------------------//
 
+//! Compute the side lengths of a triangle given its vertex coordinates.
+/***************************************************************************//**
+  \param    c <coords-3d|coords-2d>  A list of 3d or 2d vertex
+            coordinates [v1, v2, v3].
+  \param    s <integer> The initial side.
+
+  \returns  <decimal-list-3> A list of side lengths.
+
+  \details
+
+    Each side length is opposite its corresponding vertex.
+*******************************************************************************/
+function triangle_ppp2sss
+(
+  c,
+  s = 1
+) =
+  let
+  (
+    v1 = c[0],
+    v2 = c[1],
+    v3 = c[2],
+
+    s1 = distance_pp(v2, v3),
+    s2 = distance_pp(v1, v3),
+    s3 = distance_pp(v1, v2)
+  )
+    (s == 1) ? [s1, s2, s3]
+  : (s == 2) ? [s2, s3, s1]
+  :            [s3, s1, s2];
+
 //! Compute the vertex coordinates of a triangle given its side lengths in 2D.
 /***************************************************************************//**
   \param    l <decimal-list-3> The list of side lengths [s1, s2, s3].
@@ -62,7 +93,7 @@
     a valid triangle. Specifically, The legnth of the longest side must
     be greater than the sum of the lengths of the remaining two sides.
 *******************************************************************************/
-function triangle2d_s2p
+function triangle2d_sss2ppp
 (
   l,
   s = 2,
@@ -102,37 +133,6 @@ function triangle2d_s2p
        :            (cw) ? c1 : c2
   )
     [v1, v2, v3];
-
-//! Compute the side lengths of a triangle given its vertex coordinates.
-/***************************************************************************//**
-  \param    c <coords-3d|coords-2d>  A list of 3d or 2d vertex
-            coordinates [v1, v2, v3].
-  \param    s <integer> The initial side.
-
-  \returns  <decimal-list-3> A list of side lengths.
-
-  \details
-
-    Each side length is opposite its corresponding vertex.
-*******************************************************************************/
-function triangle_p2s
-(
-  c,
-  s = 1
-) =
-  let
-  (
-    v1 = c[0],
-    v2 = c[1],
-    v3 = c[2],
-
-    s1 = distance_pp(v2, v3),
-    s2 = distance_pp(v1, v3),
-    s3 = distance_pp(v1, v2)
-  )
-    (s == 1) ? [s1, s2, s3]
-  : (s == 2) ? [s2, s3, s1]
-  :            [s3, s1, s2];
 
 //! Compute the area of a triangle given its vertex coordinates in 2D.
 /***************************************************************************//**

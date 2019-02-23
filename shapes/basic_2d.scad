@@ -432,7 +432,7 @@ module triangle_ppp
 
     \b Example
     \code{.C}
-    t = triangle2d_s2p( [30, 40, 50] );
+    t = triangle2d_sss2ppp( [30, 40, 50] );
     r = [2, 4, 6];
     triangle_lp( v=t, vr=r  );
     \endcode
@@ -544,8 +544,8 @@ module triangle_sss
 
     \b Example
     \code{.C}
-    t = triangle2d_s2p( [3, 4, 5] );
-    s = triangle_p2s( t );
+    t = triangle2d_sss2ppp( [3, 4, 5] );
+    s = triangle_ppp2sss( t );
     triangle_ls( v=s, vr=2, centroid=true );
     \endcode
 *******************************************************************************/
@@ -633,14 +633,14 @@ module triangle_ls_c
     translate
     (
       ( centroid==false ) && ( incenter==true )
-        ? -triangle2d_incenter( triangle2d_s2p([ts1, ts2, ts3]) )
+        ? -triangle2d_incenter( triangle2d_sss2ppp([ts1, ts2, ts3]) )
         : origin2d
     )
     translate
     (
       ( centroid==true ) && ( incenter==false )
         ? origin2d
-        : triangle_centroid( triangle2d_s2p([ts1, ts2, ts3]) )
+        : triangle_centroid( triangle2d_sss2ppp([ts1, ts2, ts3]) )
     )
     difference()
     {
