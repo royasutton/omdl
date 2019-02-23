@@ -439,6 +439,39 @@ function reverse
   : is_empty(v) ? empty_lst
   : [for (i = [len(v)-1 : -1 : 0]) v[i]];
 
+//! Shift the elements of an iterable value.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+  \param    n <integer> The element shift count.
+  \param    r <boolean> Shift the elements to the right (or left).
+  \param    c <boolean> Perform circular shift (or drop).
+
+  \returns  \<list> A list containing the elements of \p v shifted by
+            \p n elements.
+            Returns \b undef when \p v is not defined or is not iterable.
+*******************************************************************************/
+function shift
+(
+  v,
+  n = 0,
+  r = true,
+  c = true
+) = not_defined(v) ? undef
+  : !is_iterable(v) ? undef
+  : let
+    (
+      l = len(v),
+      s = abs(n),           // absolute magnitude
+      m = s % l,            // circular magnitude
+      d = (n > 0) ? r : !r  // shift direction
+    )
+    // non-circular and shift greater than elements
+    (c == false && s > l-1) ? empty_lst
+    // shift direction
+  : (d == true) ?
+    [ if (m && c) for (i = [l-m : l-1]) v[i], for (i = [0 : l-1-m]) v[i] ]  // right
+  : [ for (i = [m : l-1]) v[i], if (m && c) for (i = [0 : m-1]) v[i] ];     // left
+
 //! Select a range of elements from an iterable value.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
@@ -990,6 +1023,32 @@ BEGIN_SCOPE validate;
         [["a","b","c"],[7,8,9],[4,5,6],[1,2,3]],            // t10
         [15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0]             // t11
       ],
+      ["shift_r1",
+        undef,                                              // t01
+        empty_lst,                                          // t02
+        undef,                                              // t03
+        ["g","A"," ","s","t","r","i","n"],                  // t04
+        ["banana","orange","apple","grape"],                // t05
+        ["s","b","a","n","a","n","a"],                      // t06
+        [undef],                                            // t07
+        [[2,3],[1,2]],                                      // t08
+        [[4,5],"ab",[1,2],[2,3]],                           // t09
+        [["a","b","c"],[1,2,3],[4,5,6],[7,8,9]],            // t10
+        [15,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]             // t11
+      ],
+      ["shift_l1",
+        undef,                                              // t01
+        empty_lst,                                          // t02
+        undef,                                              // t03
+        [" ","s","t","r","i","n","g","A"],                  // t04
+        ["apple","grape","banana","orange"],                // t05
+        ["a","n","a","n","a","s","b"],                      // t06
+        [undef],                                            // t07
+        [[2,3],[1,2]],                                      // t08
+        [[1,2],[2,3],[4,5],"ab"],                           // t09
+        [[4,5,6],[7,8,9],["a","b","c"],[1,2,3]],            // t10
+        [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0]             // t11
+      ],
       ["rselect_02",
         undef,                                              // t01
         empty_lst,                                          // t02
@@ -1172,6 +1231,8 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "nhead_1", nhead(get_value(vid),n=1), vid );
     for (vid=test_ids) run_test( "ntail_1", ntail(get_value(vid),n=1), vid );
     for (vid=test_ids) run_test( "reverse", reverse(get_value(vid)), vid );
+    for (vid=test_ids) run_test( "shift_r1", shift(get_value(vid),n=1,r=true), vid );
+    for (vid=test_ids) run_test( "shift_l1", shift(get_value(vid),n=1,r=false), vid );
     for (vid=test_ids) run_test( "rselect_02", rselect(get_value(vid),i=[0:2]), vid );
     for (vid=test_ids) run_test( "nssequence_31", nssequence(get_value(vid),n=3,s=1), vid );
     for (vid=test_ids) run_test( "eappend_T0", eappend(0,get_value(vid)), vid );
