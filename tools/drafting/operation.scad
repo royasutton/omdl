@@ -377,6 +377,136 @@ module draft_sheet
   }
 }
 
+//! Construct drafting sheet axes.
+/***************************************************************************//**
+  \param    size <decimal-list-2-list-2|decimal-list-2|decimal>
+            An optional list [[-x, +x], [-y, +y]] or [-x/y, +x/y] of
+            decimals or a single decimal for (-+x=-+y). The x and y
+            negative and positive axes lengths.
+
+  \param    w <decimal-list-2|decimal> A list [-w, +w] or a single
+            decimal for (-w=+w). The negative and positive axes segment
+            weights.
+  \param    s <integer-list-2-list|integer-list-2|integer> A list
+            [-[s], +[s]] or [-s, +s] of integers or a single integer
+            for (-s=+s). The negative and positive axes [styles].
+  \param    a <integer-list-2-list|integer-list-2|integer> A list
+            [-[a], +[a]] or [-a, +a] of integers or a single integer
+            for (-a=+a). The negative and positive axes [arrows].
+
+  \param    ts <decimal> The axes label text size.
+
+  \param    layers <string-list> The List of drafting layer names.
+
+  \details
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      draft_axes([[-10,100], [-10,60]], w=[1/2, 3], s=[2, 1], a=[0, [1,1,2,2]], ts=5);
+    }
+
+    \b Result
+
+    \amu_image (caption="Example" file=${auto_file_name} height=240)
+
+    When \p size is not specified, the axes will span the entire sheet
+    frame.
+
+  [styles]: \ref draft_line()
+  [arrows]: \ref draft_arrow()
+*******************************************************************************/
+module draft_axes
+(
+  size,
+
+  w  = 1,
+  s  = 2,
+  a  = 0,
+
+  ts = 0,
+
+  layers = draft_get_default("layers-sheet")
+)
+{
+  if (draft_layers_any_active(layers))
+  draft_make_3d_if_configured()
+  {
+    axy = is_defined(size) ? size
+        : let
+          (
+            //
+            // use sheet frame when size is not specified.
+            //
+
+            // sheet size
+            sdx = draft_sheet_get_size(ci="sdx") * draft_sheet_scale,
+            sdy = draft_sheet_get_size(ci="sdy") * draft_sheet_scale,
+
+            // sheet layout
+            sll = draft_sheet_get_config(ci="sll"),
+
+            // sheet frame and zone margins
+            smx = draft_sheet_get_config(ci="smx") * draft_sheet_scale,
+            smy = draft_sheet_get_config(ci="smy") * draft_sheet_scale,
+            szm = draft_sheet_get_config(ci="szm") * draft_sheet_scale,
+
+            //
+            // derived values
+            //
+
+            // sheet layout dimensions
+            ldx = sll ? sdy : sdx,
+            ldy = sll ? sdx : sdy,
+
+            // sheet frame dimensions
+            fdx = ldx - smx,
+            fdy = ldy - smy
+          )
+          // sheet frame less zone margins
+          [fdx/2-szm, fdy/2-szm];
+
+    for (i = [ [x_axis_ci, x_axis2d_uv, "x"], [y_axis_ci, y_axis2d_uv, "y"] ])
+    {
+      li = edefined_or(axy, first(i), axy);
+
+      // negative axes
+      ni = edefined_or(li, 0, li);
+      if ( ni < 0 )
+        draft_line
+        (
+          l  = second(i) * ni,
+          s  = edefined_or(s, 0, s),
+          w  = edefined_or(w, 0, w),
+          a2 = edefined_or(a, 0, a)
+        );
+
+      // positive axes
+      pi = edefined_or(li, 1, ni);
+      if ( pi > 0 )
+      {
+        draft_line
+        (
+          l  = +second(i) * pi,
+          s  = edefined_or(s, 1, s),
+          w  = edefined_or(w, 1, w),
+          a2 = edefined_or(a, 1, a)
+        );
+
+        // labels
+        if ( ts > 0 )
+        {
+          translate(second(i) * pi * (1 + ts/pi))
+          text(third(i), valign="center", halign="center", size=ts);
+        }
+      }
+    }
+  }
+}
+
 //! Construct a drafting sheet ruler.
 /***************************************************************************//**
   \param    units <string> The ruler units.
