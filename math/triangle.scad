@@ -34,11 +34,15 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// group.
+// group and macros.
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+
+  \amu_define auto_file_debug (false)
+  \amu_define auto_file_extensions (svg)
+  \amu_include (include/amu/auto_file_html.amu)
 
   \details
 
@@ -52,18 +56,41 @@
 /***************************************************************************//**
   \param    c <coords-3d|coords-2d>  A list of 3d or 2d vertex
             coordinates [v1, v2, v3].
-  \param    s <integer> The initial side.
 
-  \returns  <decimal-list-3> A list of side lengths.
+  \returns  <decimal-list-3> A list of side lengths [s1, s2, s3].
 
   \details
 
     Each side length is opposite its corresponding vertex.
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}")
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      s = 10;
+      c = translate_p(rotate_p(triangle2d_sss2ppp([6, 8, 7]), 15), [8, 0])*s;
+
+      polygon(c);
+
+      for (i = [0 : len(c)-1] )
+      {
+        cv = c[i];
+        os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
+
+        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), cmh=s, cmv=s);
+        draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
+      }
+    }
+
+    \b Result
+
+    \amu_image (file=${auto_file_name} height=240)
 *******************************************************************************/
 function triangle_ppp2sss
 (
-  c,
-  s = 1
+  c
 ) =
   let
   (
@@ -72,67 +99,83 @@ function triangle_ppp2sss
     v3 = c[2],
 
     s1 = distance_pp(v2, v3),
-    s2 = distance_pp(v1, v3),
+    s2 = distance_pp(v3, v1),
     s3 = distance_pp(v1, v2)
   )
-    (s == 1) ? [s1, s2, s3]
-  : (s == 2) ? [s2, s3, s1]
-  :            [s3, s1, s2];
+  [s1, s2, s3];
 
 //! Compute the vertex coordinates of a triangle given its side lengths in 2D.
 /***************************************************************************//**
-  \param    l <decimal-list-3> The list of side lengths [s1, s2, s3].
-  \param    s <integer> The side on the x-axis [1, 2, 3].
+  \param    s <decimal-list-3> The list of side lengths [s1, s2, s3].
+  \param    a <integer> The coordinate axis alignment index
+            <\b x_axis_ci | \b y_axis_ci>.
   \param    cw <boolean> Order vertices clockwise.
 
-  \returns  <coords-2d> A list of vertex coordinates [v1, v2, v3].
+  \returns  <coords-2d> A list of vertex coordinates [v1, v2, v3],
+            when \p cw = \b true, else [v1, v3, v2].
 
   \details
 
+    The triangle will be constructed with \em v1 at the origin and \em
+    s2 on the 'x' axis or \em s3 on the 'y' axis as determined by \p a.
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}")
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      s = 10;
+      c = translate_p(rotate_p(triangle2d_sss2ppp([6, 8, 7]), 0), [0, 0])*s;
+
+      polygon(c);
+      draft_axes([[0,12], [0,7]]*s, ts=s/2);
+
+      for (i = [0 : len(c)-1] )
+      {
+        cv = c[i];
+        os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
+
+        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), cmh=s, cmv=s);
+        draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
+      }
+    }
+
+    \b Result
+
+    \amu_image (file=${auto_file_name} height=240)
+
     No verification is performed to ensure that the given sides specify
-    a valid triangle. Specifically, The legnth of the longest side must
-    be greater than the sum of the lengths of the remaining two sides.
+    a valid triangle. Specifically, The length of the longest side must
+    be greater than the sum of the lengths of the other two sides.
 *******************************************************************************/
 function triangle2d_sss2ppp
 (
-  l,
-  s = 2,
+  s,
+  a  = x_axis_ci,
   cw = true
 ) =
   let
   (
-    s1 = (s == 1) ? (cw) ? l[2] : l[1]
-       : (s == 2) ? (cw) ? l[0] : l[2]
-       :            (cw) ? l[1] : l[0],
+    s1  = s[0],
+    s2  = s[1],
+    s3  = s[2],
 
-    s2 = (s == 1) ? l[0]
-       : (s == 2) ? l[1]
-       :            l[2],
+    v1  = origin2d,
 
-    s3 = (s == 1) ? (cw) ? l[1] : l[2]
-       : (s == 2) ? (cw) ? l[2] : l[0]
-       :            (cw) ? l[0] : l[1],
+    v2  = (a == x_axis_ci) ?
+          // law of cosines
+          let(x = (-s1*s1 + s2*s2 + s3*s3) / (2*s2))
+          [x, sqrt(s3*s3 - x*x)]
+        : [0, s3],
 
-    // solution
-    // v1 at origin, s2 on x-axis, cw
-    c1 = origin2d,
-    c2 = [(-s1*s1 + s2*s2 + s3*s3) / (2*s2),
-          sqrt(s3*s3 - pow((-s1*s1 + s2*s2 + s3*s3) / (2*s2), 2))],
-    c3 = [s2, 0],
-
-    v1 = (s == 1) ? (cw) ? c3 : c2
-       : (s == 2) ? (cw) ? c1 : c3
-       :            (cw) ? c2 : c1,
-
-    v2 = (s == 1) ? c1
-       : (s == 2) ? c2
-       :            c3,
-
-    v3 = (s == 1) ? (cw) ? c2 : c3
-       : (s == 2) ? (cw) ? c3 : c1
-       :            (cw) ? c1 : c2
+    v3  = (a == x_axis_ci) ?
+          [s2, 0]
+          // law of cosines
+        : let(y = (-s1*s1 + s2*s2 + s3*s3) / (2*s3))
+          [sqrt(s2*s2 - y*y), y]
   )
-    [v1, v2, v3];
+    (cw == true) ? [v1, v2, v3] : [v1, v3, v2];
 
 //! Compute the area of a triangle given its vertex coordinates in 2D.
 /***************************************************************************//**
