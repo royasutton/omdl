@@ -89,7 +89,7 @@ module cone
     translate([-cr, 0])
     difference()
     {
-      triangle_sss( s1=cr*2, s2=hl, s3=hl, v1r=br, v2r=br, v3r=pr );
+      triangle_ls_c( vs=[cr*2, hl, hl], vr=[br, br, pr] );
       square( size=[cr,h], center=false );
     }
   }

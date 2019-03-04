@@ -171,88 +171,6 @@ module etriangle_ppp
   );
 }
 
-//! An extruded general triangle specified by a list of its three vertices.
-/***************************************************************************//**
-  \copydoc linear_extrude_uls()
-
-  \copydoc triangle_lp()
-
-  \details
-*******************************************************************************/
-module etriangle_lp
-(
-  h,
-  center = false,
-
-  v,
-  vr,
-  centroid = false,
-  incenter = false
-)
-{
-  linear_extrude_uls(h=h, center=center)
-  triangle_lp(v=v, vr=vr, centroid=centroid, incenter=incenter);
-}
-
-//! An extruded general triangle specified by its three side lengths.
-/***************************************************************************//**
-  \copydoc linear_extrude_uls()
-
-  \copydoc triangle_sss()
-
-  \details
-
-    \b Example
-    \amu_eval ( function=etriangle_sss ${example_dim} )
-*******************************************************************************/
-module etriangle_sss
-(
-  h,
-  center = false,
-
-  s1,
-  s2,
-  s3,
-  vr,
-  v1r,
-  v2r,
-  v3r,
-  centroid = false,
-  incenter = false
-)
-{
-  linear_extrude_uls(h=h, center=center)
-  triangle_sss
-  (
-    s1=s1, s2=s2, s3=s3,
-    vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
-    centroid=centroid, incenter=incenter
-  );
-}
-
-//! An extruded general triangle specified by a list of its three side lengths.
-/***************************************************************************//**
-  \copydoc linear_extrude_uls()
-
-  \copydoc triangle_ls()
-
-  \details
-*******************************************************************************/
-module etriangle_ls
-(
-  h,
-  center = false,
-
-  v,
-  vr,
-  centroid = false,
-  incenter = false
-)
-{
-  linear_extrude_uls(h=h, center=center)
-  triangle_ls(v=v, vr=vr, centroid=centroid, incenter=incenter);
-}
-
 //! A general triangle specified by its sides with a removed triangular core.
 /***************************************************************************//**
   \copydoc linear_extrude_uls()
@@ -286,189 +204,6 @@ module etriangle_ls_c
     vs=vs, vc=vc,
     co=co, cr=cr,
     vr=vr, vr1=vr1, vr2=vr2,
-    centroid=centroid, incenter=incenter
-  );
-}
-
-//! An extruded general triangle specified by two sides and the included angle.
-/***************************************************************************//**
-  \copydoc linear_extrude_uls()
-
-  \copydoc triangle_sas()
-
-  \details
-
-    \b Example
-    \amu_eval ( function=etriangle_sas ${example_dim} )
-*******************************************************************************/
-module etriangle_sas
-(
-  h,
-  center = false,
-
-  s1,
-  a,
-  s2,
-  x = 1,
-  vr,
-  v1r,
-  v2r,
-  v3r,
-  centroid = false,
-  incenter = false
-)
-{
-  linear_extrude_uls(h=h, center=center)
-  triangle_sas
-  (
-    s1=s1, a=a, s2=s2, x=x,
-    vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
-    centroid=centroid, incenter=incenter
-  );
-}
-
-//! An extruded general triangle specified by a side and two adjacent angles.
-/***************************************************************************//**
-  \copydoc linear_extrude_uls()
-
-  \copydoc triangle_asa()
-
-  \details
-
-    \b Example
-    \amu_eval ( function=etriangle_asa ${example_dim} )
-*******************************************************************************/
-module etriangle_asa
-(
-  h,
-  center = false,
-
-  a1,
-  s,
-  a2,
-  x = 1,
-  vr,
-  v1r,
-  v2r,
-  v3r,
-  centroid = false,
-  incenter = false
-)
-{
-  linear_extrude_uls(h=h, center=center)
-  triangle_asa
-  (
-    a1=a1, s=s, a2=a2, x=x,
-    vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
-    centroid=centroid, incenter=incenter
-  );
-}
-
-//! An extruded general triangle specified by a side, one adjacent angle and the opposite angle.
-/***************************************************************************//**
-  \copydoc linear_extrude_uls()
-
-  \copydoc triangle_aas()
-
-  \details
-
-    \b Example
-    \amu_eval ( function=etriangle_aas ${example_dim} )
-*******************************************************************************/
-module etriangle_aas
-(
-  h,
-  center = false,
-
-  a1,
-  a2,
-  s,
-  x = 1,
-  vr,
-  v1r,
-  v2r,
-  v3r,
-  centroid = false,
-  incenter = false
-)
-{
-  linear_extrude_uls(h=h, center=center)
-  triangle_aas
-  (
-    a1=a1, a2=a2, s=s, x=x,
-    vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
-    centroid=centroid, incenter=incenter
-  );
-}
-
-//! An extruded right-angled triangle specified by its opposite and adjacent side lengths.
-/***************************************************************************//**
-  \copydoc linear_extrude_uls()
-
-  \copydoc triangle_ss()
-
-  \details
-
-    \b Example
-    \amu_eval ( function=etriangle_ss ${example_dim} )
-*******************************************************************************/
-module etriangle_ss
-(
-  h,
-  center = false,
-
-  x,
-  y,
-  vr,
-  v1r,
-  v2r,
-  v3r,
-  centroid = false,
-  incenter = false
-)
-{
-  linear_extrude_uls(h=h, center=center)
-  triangle_ss
-  (
-    x=x, y=y,
-    vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
-    centroid=centroid, incenter=incenter
-  );
-}
-
-//! An extruded right-angled triangle specified by a side length and an angle.
-/***************************************************************************//**
-  \copydoc linear_extrude_uls()
-
-  \copydoc triangle_sa()
-
-  \details
-
-    \b Example
-    \amu_eval ( function=etriangle_sa ${example_dim} )
-*******************************************************************************/
-module etriangle_sa
-(
-  h,
-  center = false,
-
-  x,
-  y,
-  aa,
-  oa,
-  vr,
-  v1r,
-  v2r,
-  v3r,
-  centroid = false,
-  incenter = false
-)
-{
-  linear_extrude_uls(h=h, center=center)
-  triangle_sa
-  (
-    x=x, y=y, aa=aa, oa=oa,
-    vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
     centroid=centroid, incenter=incenter
   );
 }
@@ -650,20 +385,8 @@ BEGIN_SCOPE dim;
       erhombus( size=[40,25], h=10, vr=[3,0,3,9], center=true );
     else if (shape == "etriangle_ppp")
       etriangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], h=20, vr=2, centroid=true, center=true );
-    else if (shape == "etriangle_sss")
-      etriangle_sss( s1=30, s2=40, s3=50, h=20, vr=2, centroid=true, center=true );
     else if (shape == "etriangle_ls_c")
       etriangle_ls_c(vs=50, vc=30, h=15, co=[0,-10], cr=180, vr=[2,2,8], centroid=true, center=true);
-    else if (shape == "etriangle_sas")
-      etriangle_sas( s1=50, a=60, s2=30, h=20, vr=2, centroid=true, center=true );
-    else if (shape == "etriangle_asa")
-      etriangle_asa( a1=30, s=50, a2=60, h=20, vr=2, centroid=true, center=true );
-    else if (shape == "etriangle_aas")
-      etriangle_aas( a1=60, a2=30, s=40, h=20, vr=2, centroid=true, center=true );
-    else if (shape == "etriangle_ss")
-      etriangle_ss( x=30, y=40, h=20, vr=2, centroid=true, center=true );
-    else if (shape == "etriangle_sa")
-      etriangle_sa( x=40, aa=30, h=20, vr=2, centroid=true, center=true );
     else if (shape == "engon")
       engon( n=6, r=25, h=20, vr=6, center=true );
     else if (shape == "eellipse")
@@ -688,13 +411,7 @@ BEGIN_SCOPE dim;
                 erectangle_c
                 erhombus
                 etriangle_ppp
-                etriangle_sss
                 etriangle_ls_c
-                etriangle_sas
-                etriangle_asa
-                etriangle_aas
-                etriangle_ss
-                etriangle_sa
                 engon
                 eellipse
                 eellipse_c
@@ -721,13 +438,7 @@ BEGIN_SCOPE manifest;
       erectangle_c( size=[40,20], t=[10,1], co=[0,-6], cr=10, vr=5, vrm1=12, h=30, center=true );
       erhombus( size=[40,25], h=10, vr=[3,0,3,9], center=true );
       etriangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], h=20, vr=2, centroid=true, center=true );
-      etriangle_sss( s1=30, s2=40, s3=50, h=20, vr=2, centroid=true, center=true );
       etriangle_ls_c( vs=50, vc=30, h=15, co=[0,-10], cr=180, vr=[2,2,8], centroid=true, center=true );
-      etriangle_sas( s1=50, a=60, s2=30, h=20, vr=2, centroid=true, center=true );
-      etriangle_asa( a1=30, s=50, a2=60, h=20, vr=2, centroid=true, center=true );
-      etriangle_aas( a1=60, a2=30, s=40, h=20, vr=2, centroid=true, center=true );
-      etriangle_ss( x=30, y=40, h=20, vr=2, centroid=true, center=true );
-      etriangle_sa( x=40, aa=30, h=20, vr=2, centroid=true, center=true );
       engon( n=6, r=25, h=20, vr=6, center=true );
       eellipse( size=[25, 40], h=20, center=true );
       eellipse_c( size=[25,40], core=[16,10], co=[0,10], cr=45, h=20, center=true );

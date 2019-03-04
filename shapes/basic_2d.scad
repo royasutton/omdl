@@ -417,166 +417,6 @@ module triangle_ppp
   }
 }
 
-//! A general triangle specified by a list of its three vertices.
-/***************************************************************************//**
-  \param    v <point-2d-list-3> A list [v1, v2, v3] of points [x, y].
-
-  \param    vr <decimal-list-3|decimal> The vertex rounding radius. A
-            list [v1r, v2r, v3r] of decimals or a single decimal for
-            (v1r=v2r=v3r).
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-
-  \details
-
-    \b Example
-    \code{.C}
-    t = triangle2d_sss2ppp( [30, 40, 50] );
-    r = [2, 4, 6];
-    triangle_lp( v=t, vr=r  );
-    \endcode
-*******************************************************************************/
-module triangle_lp
-(
-  v,
-  vr,
-  centroid = false,
-  incenter = false
-)
-{
-  if ( is_scalar(vr) )
-  {
-    triangle_ppp
-    (
-      v1=v[0], v2=v[1], v3=v[2],
-      vr=vr,
-      centroid=centroid, incenter=incenter
-    );
-  }
-  else
-  {
-    triangle_ppp
-    (
-      v1=v[0], v2=v[1], v3=v[2],
-      v1r=vr[0], v2r=vr[1], v3r=vr[2],
-      centroid=centroid, incenter=incenter
-    );
-  }
-}
-
-//! A general triangle specified by its three side lengths.
-/***************************************************************************//**
-  \param    s1 <decimal> The length of the side 1 (along the x-axis).
-  \param    s2 <decimal> The length of the side 2.
-  \param    s3 <decimal> The length of the side 3.
-
-  \param    vr <decimal> The default vertex rounding radius.
-  \param    v1r <decimal> Vertex 1 rounding radius.
-  \param    v2r <decimal> Vertex 2 rounding radius.
-  \param    v3r <decimal> Vertex 3 rounding radius.
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-
-  \details
-
-    \b Example
-    \amu_eval ( function=triangle_sss ${example_dim} )
-
-    See [Wikipedia] for more information.
-
-  [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
-*******************************************************************************/
-module triangle_sss
-(
-  s1,
-  s2,
-  s3,
-  vr,
-  v1r,
-  v2r,
-  v3r,
-  centroid = false,
-  incenter = false
-)
-{
-  a1 = acos( (s2*s2 + s3*s3 - s1*s1) / (2 * s2 * s3) );
-  a2 = acos( (s1*s1 + s3*s3 - s2*s2) / (2 * s1 * s3) );
-  a3 = 180 - a1 - a2;
-
-  p3 = [s2*cos(a3), s2*sin(a3)];
-
-  if ( is_nan( p3[0] ) || is_nan( p3[1] ) )
-  {
-    log_warn
-    (
-      str( "can not render triangle with sides (", s1, ", ", s2, ", ", s3, ")" )
-    );
-  }
-  else
-  {
-    v1 = origin2d;
-    v2 = [s1, 0];
-    v3 = [s1 - p3[0], p3[1]];
-
-    triangle_ppp
-    (
-      v1=v1, v2=v2, v3=v3,
-      vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
-      centroid=centroid, incenter=incenter
-    );
-  }
-}
-
-//! A general triangle specified by a list of its three side lengths.
-/***************************************************************************//**
-  \param    v <decimal-list-3> A list [s1, s2, s3] of decimals.
-
-  \param    vr <decimal-list-3|decimal> The vertex rounding radius. A
-            list [v1r, v2r, v3r] of decimals or a single decimal for
-            (v1r=v2r=v3r).
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-
-  \details
-
-    \b Example
-    \code{.C}
-    t = triangle2d_sss2ppp( [3, 4, 5] );
-    s = triangle_ppp2sss( t );
-    triangle_ls( v=s, vr=2, centroid=true );
-    \endcode
-*******************************************************************************/
-module triangle_ls
-(
-  v,
-  vr,
-  centroid = false,
-  incenter = false
-)
-{
-  if ( is_scalar(vr) )
-  {
-    triangle_sss
-    (
-      s1=v[0], s2=v[1], s3=v[2],
-      vr=vr,
-      centroid=centroid, incenter=incenter
-    );
-  }
-  else
-  {
-    triangle_sss
-    (
-      s1=v[0], s2=v[1], s3=v[2],
-      v1r=vr[0], v2r=vr[1], v3r=vr[2],
-      centroid=centroid, incenter=incenter
-    );
-  }
-}
-
 //! A general triangle specified by its sides with a removed triangular core.
 /***************************************************************************//**
   \param    vs <decimal-list-3|decimal> The size. A list [s1, s2, s3] of
@@ -617,6 +457,76 @@ module triangle_ls_c
   incenter = false
 )
 {
+  module triangle_sss
+  (
+    s1,
+    s2,
+    s3,
+    vr,
+    v1r,
+    v2r,
+    v3r,
+    centroid = false,
+    incenter = false
+  )
+  {
+    a1 = acos( (s2*s2 + s3*s3 - s1*s1) / (2 * s2 * s3) );
+    a2 = acos( (s1*s1 + s3*s3 - s2*s2) / (2 * s1 * s3) );
+    a3 = 180 - a1 - a2;
+
+    p3 = [s2*cos(a3), s2*sin(a3)];
+
+    if ( is_nan( p3[0] ) || is_nan( p3[1] ) )
+    {
+      log_warn
+      (
+        str( "can not render triangle with sides (", s1, ", ", s2, ", ", s3, ")" )
+      );
+    }
+    else
+    {
+      v1 = origin2d;
+      v2 = [s1, 0];
+      v3 = [s1 - p3[0], p3[1]];
+
+      triangle_ppp
+      (
+        v1=v1, v2=v2, v3=v3,
+        vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
+        centroid=centroid, incenter=incenter
+      );
+    }
+  }
+
+  module triangle_ls
+  (
+    v,
+    vr,
+    centroid = false,
+    incenter = false
+  )
+  {
+
+    if ( is_scalar(vr) )
+    {
+      triangle_sss
+      (
+        s1=v[0], s2=v[1], s3=v[2],
+        vr=vr,
+        centroid=centroid, incenter=incenter
+      );
+    }
+    else
+    {
+      triangle_sss
+      (
+        s1=v[0], s2=v[1], s3=v[2],
+        v1r=vr[0], v2r=vr[1], v3r=vr[2],
+        centroid=centroid, incenter=incenter
+      );
+    }
+  }
+
   ts1 = edefined_or(vs, 0, vs);
   ts2 = edefined_or(vs, 1, ts1);
   ts3 = edefined_or(vs, 2, ts2);
@@ -667,345 +577,6 @@ module triangle_ls_c
     (
       v=[ts1, ts2, ts3],
       vr=vrs,
-      centroid=centroid, incenter=incenter
-    );
-  }
-}
-
-//! A general triangle specified by two sides and the included angle.
-/***************************************************************************//**
-  \param    s1 <decimal> The length of the side 1.
-  \param    a <decimal> The included angle in degrees.
-  \param    s2 <decimal> The length of the side 2.
-
-  \param    x <integer> The side to draw on the positive x-axis
-            (\p x=1 for \p s1).
-
-  \param    vr <decimal> The default vertex rounding radius.
-  \param    v1r <decimal> Vertex 1 rounding radius.
-  \param    v2r <decimal> Vertex 2 rounding radius.
-  \param    v3r <decimal> Vertex 3 rounding radius.
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-
-  \details
-
-    \b Example
-    \amu_eval ( function=triangle_sas ${example_dim} )
-
-    See [Wikipedia] for more information.
-
-  [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
-*******************************************************************************/
-module triangle_sas
-(
-  s1,
-  a,
-  s2,
-  x = 1,
-  vr,
-  v1r,
-  v2r,
-  v3r,
-  centroid = false,
-  incenter = false
-)
-{
-  s3 = sqrt( s1*s1 + s2*s2 - 2*s1*s2*cos(a) );
-
-  if ( x%4 == 1 )
-  {
-    triangle_sss
-    (
-      s1=s1, s2=s2, s3=s3,
-      vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
-      centroid=centroid, incenter=incenter
-    );
-  }
-  else if ( x%4 == 2 )
-  {
-    triangle_sss
-    (
-      s1=s2, s2=s3, s3=s1,
-      vr=vr, v1r=v2r, v2r=v3r, v3r=v1r,
-      centroid=centroid, incenter=incenter
-    );
-  }
-  else if ( x%4 == 3 )
-  {
-    triangle_sss
-    (
-      s1=s3, s2=s1, s3=s2,
-      vr=vr, v1r=v3r, v2r=v1r, v3r=v2r,
-      centroid=centroid, incenter=incenter
-    );
-  }
-}
-
-//! A general triangle specified by a side and two adjacent angles.
-/***************************************************************************//**
-  \param    a1 <decimal> The adjacent angle 1 in degrees.
-  \param    s <decimal> The side length adjacent to the angles.
-  \param    a2 <decimal> The adjacent angle 2 in degrees.
-
-  \param    x <integer> The side to draw on the positive x-axis
-            (\p x=1 for \p s).
-
-  \param    vr <decimal> The default vertex rounding radius.
-  \param    v1r <decimal> Vertex 1 rounding radius.
-  \param    v2r <decimal> Vertex 2 rounding radius.
-  \param    v3r <decimal> Vertex 3 rounding radius.
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-
-  \details
-
-    \b Example
-    \amu_eval ( function=triangle_asa ${example_dim} )
-
-    See [Wikipedia] for more information.
-
-  [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
-*******************************************************************************/
-module triangle_asa
-(
-  a1,
-  s,
-  a2,
-  x = 1,
-  vr,
-  v1r,
-  v2r,
-  v3r,
-  centroid = false,
-  incenter = false
-)
-{
-  if ( (a1 + a2) >= 180 )
-  {
-    log_warn
-    (
-      str( "can not render triangle with angles (", a1, ", ", a2, ")" )
-    );
-  }
-  else
-  {
-    s3 = s;
-    a3 = 180 - a1 - a2;
-
-    s1 = s3 * sin( a1 ) / sin( a3 );
-    s2 = s3 * sin( a2 ) / sin( a3 );
-
-    if ( x%4 == 1 )
-    {
-      triangle_sss
-      (
-        s1=s3, s2=s1, s3=s2,
-        vr=vr, v1r=v3r, v2r=v1r, v3r=v2r,
-        centroid=centroid, incenter=incenter
-      );
-    }
-    else if ( x%4 == 2 )
-    {
-      triangle_sss
-      (
-        s1=s1, s2=s2, s3=s3,
-        vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
-        centroid=centroid, incenter=incenter
-      );
-    }
-    else if ( x%4 == 3 )
-    {
-      triangle_sss
-      (
-        s1=s2, s2=s3, s3=s1,
-        vr=vr, v1r=v2r, v2r=v3r, v3r=v1r,
-        centroid=centroid, incenter=incenter
-      );
-    }
-  }
-}
-
-//! A general triangle specified by a side, one adjacent angle and the opposite angle.
-/***************************************************************************//**
-  \param    a1 <decimal> The opposite angle 1 in degrees.
-  \param    a2 <decimal> The adjacent angle 2 in degrees.
-  \param    s <decimal> The side length.
-
-  \param    x <integer> The side to draw on the positive x-axis
-            (\p x=1 for \p s).
-
-  \param    vr <decimal> The default vertex rounding radius.
-  \param    v1r <decimal> Vertex 1 rounding radius.
-  \param    v2r <decimal> Vertex 2 rounding radius.
-  \param    v3r <decimal> Vertex 3 rounding radius.
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-
-  \details
-
-    \b Example
-    \amu_eval ( function=triangle_aas ${example_dim} )
-
-    See [Wikipedia] for more information.
-
-  [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
-*******************************************************************************/
-module triangle_aas
-(
-  a1,
-  a2,
-  s,
-  x = 1,
-  vr,
-  v1r,
-  v2r,
-  v3r,
-  centroid = false,
-  incenter = false
-)
-{
-  if ( (a1 + a2) >= 180 )
-  {
-    log_warn
-    (
-      str( "can not render triangle with angles (", a1, ", ", a2, ")" )
-    );
-  }
-  else
-  {
-    s1 = s;
-    a3 = 180 - a1 - a2;
-
-    s2 = s1 * sin( a2 ) / sin( a1 );
-    s3 = s1 * sin( a3 ) / sin( a1 );
-
-    if ( x%4 == 1 )
-    {
-      triangle_sss
-      (
-        s1=s1, s2=s2, s3=s3,
-        vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
-        centroid=centroid, incenter=incenter
-      );
-    }
-    else if ( x%4 == 2 )
-    {
-      triangle_sss
-      (
-        s1=s2, s2=s3, s3=s1,
-        vr=vr, v1r=v2r, v2r=v3r, v3r=v1r,
-        centroid=centroid, incenter=incenter
-      );
-    }
-    else if ( x%4 == 3 )
-    {
-      triangle_sss
-      (
-        s1=s3, s2=s1, s3=s2,
-        vr=vr, v1r=v3r, v2r=v1r, v3r=v2r,
-        centroid=centroid, incenter=incenter
-      );
-    }
-  }
-}
-
-//! A right-angled triangle specified by its opposite and adjacent side lengths.
-/***************************************************************************//**
-  \param    x <decimal> The length of the side along the x-axis.
-  \param    y <decimal> The length of the side along the y-axis.
-
-  \param    vr <decimal> The default vertex rounding radius.
-  \param    v1r <decimal> Vertex 1 rounding radius.
-  \param    v2r <decimal> Vertex 2 rounding radius.
-  \param    v3r <decimal> Vertex 3 rounding radius.
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-
-  \details
-
-    \b Example
-    \amu_eval ( function=triangle_ss ${example_dim} )
-*******************************************************************************/
-module triangle_ss
-(
-  x,
-  y,
-  vr,
-  v1r,
-  v2r,
-  v3r,
-  centroid = false,
-  incenter = false
-)
-{
-  triangle_ppp
-  (
-    v1=origin2d, v2=[x,0], v3=[0,y],
-    vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
-    centroid=centroid, incenter=incenter
-  );
-}
-
-//! A right-angled triangle specified by a side length and an angle.
-/***************************************************************************//**
-  \param    x <decimal> The length of the side along the x-axis.
-  \param    y <decimal> The length of the side along the y-axis.
-  \param    aa <decimal> The adjacent angle in degrees.
-  \param    oa <decimal> The opposite angle in degrees.
-
-  \param    vr <decimal> The default vertex rounding radius.
-  \param    v1r <decimal> Vertex 1 rounding radius.
-  \param    v2r <decimal> Vertex 2 rounding radius.
-  \param    v3r <decimal> Vertex 3 rounding radius.
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-
-  \details
-
-    \b Example
-    \amu_eval ( function=triangle_sa ${example_dim} )
-
-  \note     When both \p x and \p y are given, both triangles are rendered.
-  \note     When both \p aa and \p oa are given, \p aa is used.
-*******************************************************************************/
-module triangle_sa
-(
-  x,
-  y,
-  aa,
-  oa,
-  vr,
-  v1r,
-  v2r,
-  v3r,
-  centroid = false,
-  incenter = false
-)
-{
-  a = defined_or(aa, 90 - oa);
-
-  if ( is_defined(x) )
-  {
-    triangle_ppp
-    (
-      v1=origin2d, v2=[x,0], v3=[0,tan(a)*x],
-      vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
-      centroid=centroid, incenter=incenter
-    );
-  }
-
-  if ( is_defined(y) )
-  {
-    triangle_ppp
-    (
-      v1=origin2d, v2=[tan(a)*y,0], v3=[0,y],
-      vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
       centroid=centroid, incenter=incenter
     );
   }
@@ -1272,7 +843,7 @@ module star2d
   radial_repeat(n=n, angle=true, move=false)
   rotate([0, 0, -90])
   translate([-w/2, 0])
-  triangle_ls(v=[w, l, l], vr=vr);
+  triangle_ls_c(vs=[w, l, l], vr=vr);
 }
 
 //! @}
@@ -1298,20 +869,8 @@ BEGIN_SCOPE dim;
       rhombus( size=[40,25], vr=[2,4,2,4], center=true );
     else if (shape == "triangle_ppp")
       triangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], vr=2, centroid=true );
-    else if (shape == "triangle_sss")
-      triangle_sss( s1=30, s2=40, s3=50, vr=2, centroid=true );
     else if (shape == "triangle_ls_c")
       triangle_ls_c( vs=[30,50,50], vc=[20,40,40], co=[0,-4], vr1=[1,1,6], vr2=4, centroid=true );
-    else if (shape == "triangle_sas")
-      triangle_sas( s1=50, a=60, s2=30, vr=2, centroid=true );
-    else if (shape == "triangle_asa")
-      triangle_asa( a1=30, s=50, a2=60, vr=2, centroid=true );
-    else if (shape == "triangle_aas")
-      triangle_aas( a1=60, a2=30, s=40, vr=2, centroid=true );
-    else if (shape == "triangle_ss")
-      triangle_ss( x=30, y=40, vr=2, centroid=true );
-    else if (shape == "triangle_sa")
-      triangle_sa( x=40, aa=30, vr=2, centroid=true );
     else if (shape == "ngon")
       ngon( n=6, r=25, vr=6 );
     else if (shape == "ellipse")
@@ -1336,13 +895,7 @@ BEGIN_SCOPE dim;
                 rectangle_c
                 rhombus
                 triangle_ppp
-                triangle_sss
                 triangle_ls_c
-                triangle_sas
-                triangle_asa
-                triangle_aas
-                triangle_ss
-                triangle_sa
                 ngon
                 ellipse
                 ellipse_c
@@ -1369,13 +922,7 @@ BEGIN_SCOPE manifest;
       rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, vrm2=3, co=[0,5], center=true );
       rhombus( size=[40,25], vr=[2,4,2,4], center=true );
       triangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], vr=2, centroid=true );
-      triangle_sss( s1=30, s2=40, s3=50, vr=2, centroid=true );
       triangle_ls_c( vs=[30,50,50], vc=[20,40,40], co=[0,-4], vr1=[1,1,6], vr2=4, centroid=true );
-      triangle_sas( s1=50, a=60, s2=30, vr=2, centroid=true );
-      triangle_asa( a1=30, s=50, a2=60, vr=2, centroid=true );
-      triangle_aas( a1=60, a2=30, s=40, vr=2, centroid=true );
-      triangle_ss( x=30, y=40, vr=2, centroid=true );
-      triangle_sa( x=40, aa=30, vr=2, centroid=true );
       ngon( n=6, r=25, vr=6 );
       ellipse( size=[25, 40] );
       ellipse_c( size=[25,40], core=[16,10], co=[0,10], cr=45 );
