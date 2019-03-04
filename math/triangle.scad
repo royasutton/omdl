@@ -106,7 +106,7 @@ function triangle_ppp_s
 
 //! Compute the vertex coordinates of a triangle given its side lengths in 2D.
 /***************************************************************************//**
-  \param    s <decimal-list-3> The list of side lengths [s1, s2, s3].
+  \param    v <decimal-list-3> A list, [s1, s2, s3], of side lengths.
   \param    a <integer> The coordinate axis alignment index
             <\b x_axis_ci | \b y_axis_ci>.
   \param    cw <boolean> Order vertices clockwise.
@@ -151,15 +151,15 @@ function triangle_ppp_s
 *******************************************************************************/
 function triangle2d_sss_p
 (
-  s,
+  v,
   a  = x_axis_ci,
   cw = true
 ) =
   let
   (
-    s1  = s[0],
-    s2  = s[1],
-    s3  = s[2],
+    s1  = v[0],
+    s2  = v[1],
+    s3  = v[2],
 
     v1  = origin2d,
 
