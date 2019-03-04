@@ -70,7 +70,7 @@
       include <tools/drafting/draft-base.scad>;
 
       s = 10;
-      c = translate_p(rotate_p(triangle2d_sss2ppp([6, 8, 7]), 15), [8, 0])*s;
+      c = translate_p(rotate_p(triangle2d_sss_p([6, 8, 7]), 15), [8, 0])*s;
 
       polygon(c);
 
@@ -88,7 +88,7 @@
 
     \amu_image (file=${auto_file_name} height=240)
 *******************************************************************************/
-function triangle_ppp2sss
+function triangle_ppp_s
 (
   c
 ) =
@@ -126,7 +126,7 @@ function triangle_ppp2sss
       include <tools/drafting/draft-base.scad>;
 
       s = 10;
-      c = translate_p(rotate_p(triangle2d_sss2ppp([6, 8, 7]), 0), [0, 0])*s;
+      c = translate_p(rotate_p(triangle2d_sss_p([6, 8, 7]), 0), [0, 0])*s;
 
       polygon(c);
       draft_axes([[0,12], [0,7]]*s, ts=s/2);
@@ -149,7 +149,7 @@ function triangle_ppp2sss
     a valid triangle. Specifically, The length of the longest side must
     be greater than the sum of the lengths of the other two sides.
 *******************************************************************************/
-function triangle2d_sss2ppp
+function triangle2d_sss_p
 (
   s,
   a  = x_axis_ci,
