@@ -54,14 +54,14 @@
 
 //! Compute the side lengths of a triangle given its vertex coordinates.
 /***************************************************************************//**
-  \param    c <coords-3d|coords-2d>  A list of 3d or 2d vertex
-            coordinates [v1, v2, v3].
+  \param    c <coords-3d|coords-2d>  A list, [v1, v2, v3], the 3d or 2d
+            vertex coordinates.
 
   \returns  <decimal-list-3> A list of side lengths [s1, s2, s3].
 
   \details
 
-    Each side length is opposite its corresponding vertex.
+    Each side length is opposite the corresponding vertex.
 
     \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
     \amu_openscad (args="--render --o ${auto_file_name}")
@@ -70,25 +70,39 @@
       include <tools/drafting/draft-base.scad>;
 
       s = 10;
-      c = translate_p(rotate_p(triangle2d_sss_p([6, 8, 7]), 15), [8, 0])*s;
+      t = [6, 8, 7];
 
-      polygon(c);
+      r = min(t)/len(t)*s;
+      c = translate_p(rotate_p(triangle2d_sss2ppp(t), 15), [0, 0])*s;
 
-      for (i = [0 : len(c)-1] )
+      draft_polygon(c, w=s*2/3);
+
+      for (i = [0 : len(c)-1])
       {
         cv = c[i];
         os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
 
-        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), cmh=s, cmv=s);
+        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s, cmv=s);
+
+        if ( false )
+        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
+
+        if ( false )
         draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
+
       }
     }
 
     \b Result
 
     \amu_image (file=${auto_file_name} height=240)
+
+    No verification is performed to ensure that the given sides specify
+    a valid triangle. See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
 *******************************************************************************/
-function triangle_ppp_s
+function triangle_ppp2sss
 (
   c
 ) =
@@ -104,20 +118,16 @@ function triangle_ppp_s
   )
   [s1, s2, s3];
 
-//! Compute the vertex coordinates of a triangle given its side lengths in 2D.
+//! Compute the side lengths of a triangle given two sides and the included angle.
 /***************************************************************************//**
-  \param    v <decimal-list-3> A list, [s1, s2, s3], of side lengths.
-  \param    a <integer> The coordinate axis alignment index
-            <\b x_axis_ci | \b y_axis_ci>.
-  \param    cw <boolean> Order vertices clockwise.
+  \param    v <decimal-list-3> A list, [s1, a3, s2], the side lengths
+            and the included angle.
 
-  \returns  <coords-2d> A list of vertex coordinates [v1, v2, v3],
-            when \p cw = \b true, else [v1, v3, v2].
+  \returns  <decimal-list-3> A list of side lengths [s1, s2, s3].
 
   \details
 
-    The triangle will be constructed with \em v1 at the origin and \em
-    s2 on the 'x' axis or \em s3 on the 'y' axis as determined by \p a.
+    Each side length is opposite the corresponding vertex.
 
     \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
     \amu_openscad (args="--render --o ${auto_file_name}")
@@ -126,17 +136,24 @@ function triangle_ppp_s
       include <tools/drafting/draft-base.scad>;
 
       s = 10;
-      c = translate_p(rotate_p(triangle2d_sss_p([6, 8, 7]), 0), [0, 0])*s;
+      t = [6, 8, 7];
 
-      polygon(c);
-      draft_axes([[0,12], [0,7]]*s, ts=s/2);
+      r = min(t)/len(t)*s;
+      c = translate_p(rotate_p(triangle2d_sss2ppp(t), 15), [0, 0])*s;
 
-      for (i = [0 : len(c)-1] )
+      draft_polygon(c, w=s*2/3);
+
+      for (i = [0 : len(c)-1])
       {
         cv = c[i];
         os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
 
-        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), cmh=s, cmv=s);
+        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s, cmv=s);
+
+        if ( i == 2 )
+        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
+
+        if ( i < 2 )
         draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
       }
     }
@@ -146,10 +163,213 @@ function triangle_ppp_s
     \amu_image (file=${auto_file_name} height=240)
 
     No verification is performed to ensure that the given sides specify
-    a valid triangle. Specifically, The length of the longest side must
-    be greater than the sum of the lengths of the other two sides.
+    a valid triangle. See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
 *******************************************************************************/
-function triangle2d_sss_p
+function triangle_sas2sss
+(
+  v
+) =
+  let
+  (
+    s1 = v[0],
+    a3 = v[1],
+    s2 = v[2],
+
+    s3 = sqrt( s1*s1 + s2*s2 - 2*s1*s2*cos(a3) )
+  )
+  [s1, s2, s3];
+
+//! Compute the side lengths of a triangle given a side and two adjacent angles.
+/***************************************************************************//**
+  \param    v <decimal-list-3> A list, [a1, s3, a2], the side length
+            and two adjacent angles.
+
+  \returns  <decimal-list-3> A list of side lengths [s1, s2, s3].
+
+  \details
+
+    Each side length is opposite the corresponding vertex.
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}")
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      s = 10;
+      t = [6, 8, 7];
+
+      r = min(t)/len(t)*s;
+      c = translate_p(rotate_p(triangle2d_sss2ppp(t), 15), [0, 0])*s;
+
+      draft_polygon(c, w=s*2/3);
+
+      for (i = [0 : len(c)-1])
+      {
+        cv = c[i];
+        os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
+
+        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s, cmv=s);
+
+        if ( i < 2 )
+        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
+
+        if ( i == 2 )
+        draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
+      }
+    }
+
+    \b Result
+
+    \amu_image (file=${auto_file_name} height=240)
+
+    No verification is performed to ensure that the given sides specify
+    a valid triangle. See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
+*******************************************************************************/
+function triangle_asa2sss
+(
+  v
+) =
+  let
+  (
+    a1 = v[0],
+    s3 = v[1],
+    a2 = v[2],
+
+    a3 = 180 - a1 - a2,
+
+    s1 = s3 * sin( a1 ) / sin( a3 ),
+    s2 = s3 * sin( a2 ) / sin( a3 )
+  )
+  [s1, s2, s3];
+
+//! Compute the side lengths of a triangle given a side, one adjacent and the opposite angle.
+/***************************************************************************//**
+  \param    v <decimal-list-3> A list, [a1, a2, s1], a side length,
+            one adjacent and the opposite angle.
+
+  \returns  <decimal-list-3> A list of side lengths [s1, s2, s3].
+
+  \details
+
+    Each side length is opposite the corresponding vertex.
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}")
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      s = 10;
+      t = [6, 8, 7];
+
+      r = min(t)/len(t)*s;
+      c = translate_p(rotate_p(triangle2d_sss2ppp(t), 15), [0, 0])*s;
+
+      draft_polygon(c, w=s*2/3);
+
+      for (i = [0 : len(c)-1])
+      {
+        cv = c[i];
+        os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
+
+        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s, cmv=s);
+
+        if ( i < 2 )
+        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
+
+        if ( i == 0 )
+        draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
+      }
+    }
+
+    \b Result
+
+    \amu_image (file=${auto_file_name} height=240)
+
+    No verification is performed to ensure that the given sides specify
+    a valid triangle. See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
+*******************************************************************************/
+function triangle_aas2sss
+(
+  v
+) =
+  let
+  (
+    a1 = v[0],
+    a2 = v[1],
+    s1 = v[2],
+
+    a3 = 180 - a1 - a2,
+
+    s2 = s1 * sin( a2 ) / sin( a1 ),
+    s3 = s1 * sin( a3 ) / sin( a1 )
+  )
+  [s1, s2, s3];
+
+//! Compute a set of vertex coordinates for a triangle given its side lengths in 2D.
+/***************************************************************************//**
+  \param    v <decimal-list-3> A list, [s1, s2, s3], the side lengths.
+  \param    a <integer> The axis alignment index
+            < \b x_axis_ci | \b y_axis_ci >.
+  \param    cw <boolean> Order vertices clockwise.
+
+  \returns  <coords-2d> A list of vertex coordinates [v1, v2, v3],
+            when \p cw = \b true, else [v1, v3, v2].
+
+  \details
+
+    Each side length is opposite the corresponding vertex. The triangle
+    will be constructed with \em v1 at the origin. Side \em s2 will be
+    on the 'x' axis or side \em s3 will be on the 'y' axis as
+    determined by parameter \p a.
+
+    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
+    \amu_openscad (args="--render --o ${auto_file_name}")
+    {
+      include <omdl-base.scad>;
+      include <tools/drafting/draft-base.scad>;
+
+      s = 10;
+      t = [6, 8, 7];
+
+      r = min(t)/len(t)*s;
+      c = translate_p(rotate_p(triangle2d_sss2ppp(t), 0), [0, 0])*s;
+
+      draft_polygon(c, w=s*2/3);
+      draft_axes([[0,12], [0,7]]*s, ts=s/2);
+
+      for (i = [0 : len(c)-1])
+      {
+        cv = c[i];
+        os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
+
+        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s, cmv=s);
+
+        if ( false )
+        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
+
+        if ( true )
+        draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
+      }
+    }
+
+    \b Result
+
+    \amu_image (file=${auto_file_name} height=240)
+
+    No verification is performed to ensure that the given sides specify
+    a valid triangle. See [Wikipedia] for more information.
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
+*******************************************************************************/
+function triangle2d_sss2ppp
 (
   v,
   a  = x_axis_ci,

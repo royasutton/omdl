@@ -543,14 +543,14 @@ module triangle_ls_c
     translate
     (
       ( centroid==false ) && ( incenter==true )
-        ? -triangle2d_incenter( triangle2d_sss_p([ts1, ts2, ts3]) )
+        ? -triangle2d_incenter( triangle2d_sss2ppp([ts1, ts2, ts3]) )
         : origin2d
     )
     translate
     (
       ( centroid==true ) && ( incenter==false )
         ? origin2d
-        : triangle_centroid( triangle2d_sss_p([ts1, ts2, ts3]) )
+        : triangle_centroid( triangle2d_sss2ppp([ts1, ts2, ts3]) )
     )
     difference()
     {
