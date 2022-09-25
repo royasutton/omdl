@@ -205,8 +205,8 @@ module linear_extrude_uls
   {
     z = h[0];                                   // total height
 
-    n1 = (len(h) >= 3) ? max(h[1], 0)  : undef; // number of scaled-slices
-    z1 = (len(h) >= 3) ? abs(h[2])/100 : undef; // z scale fraction
+    n1 = (len(h) >= 3) ? max(h[1], 0)  : 0; // number of scaled-slices
+    z1 = (len(h) >= 3) ? abs(h[2])/100 : 0; // z scale fraction
     x1 = (len(h) >= 4) ?     h[3] /100 : -z1;   // x scale fraction
     y1 = (len(h) >= 5) ?     h[4] /100 : x1;    // y scale fraction
 
