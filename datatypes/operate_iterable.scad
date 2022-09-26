@@ -66,12 +66,9 @@
 
   \returns  \<value> <tt>v[i]</tt> when it is defined or \p d otherwise.
 *******************************************************************************/
-function edefined_or
-(
-  v,
-  i,
-  d
-) = (len(v) > i) ? v[i] : d;
+function edefined_or(v, i, d) =
+     is_iterable(v)? ((len(v) > i) ? v[i] : d): d;
+
 
 //! Find the occurrences of a match value in an iterable value.
 /***************************************************************************//**
