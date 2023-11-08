@@ -65,7 +65,7 @@
   \returns  <boolean> \b true when the value is defined
             and \b false otherwise.
 *******************************************************************************/
-function is_defined(v) = if_undef(v)? false : true;
+function is_defined(v) = is_undef(v)? false : true;
 
 //! Test if a value is not defined.
 /***************************************************************************//**
