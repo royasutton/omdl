@@ -14,6 +14,7 @@ AMU_LIB_PATH                  := /usr/local/share/openscad-amu/$(AMU_TOOL_VERSIO
 AMU_PM_PREFIX                 := $(AMU_LIB_PATH)/include/pmf/
 AMU_PM_INIT                   := $(AMU_PM_PREFIX)amu_pm_init
 AMU_PM_RULES                  := $(AMU_PM_PREFIX)amu_pm_rules
+AMU_PM_DESIGN_FLOW            := df1/
 
 AMU_PM_COMPONENTS_LOCAL_PATH  := include/mf
 AMU_PM_COMPONENTS_LOCAL       := modules
@@ -25,31 +26,41 @@ AMU_PM_COMPONENTS_LOCAL       := modules
 #------------------------------------------------------------------------------#
 # Project Announcements
 #------------------------------------------------------------------------------#
-define AMU_SETUP_ANNOUNCE
+define ANNOUNCE_AMU_INIT
 
- $1 not found...
- Tried [$2].
+  [$1] file not found...
+  Tried [$2].
 
- Please update AMU_TOOL_PREFIX and AMU_LIB_PATH in $(lastword $(MAKEFILE_LIST))
- as needed for your installation or setup openscad-amu ($(AMU_TOOL_VERSION))
- using the following:
-
- $$ wget http://git.io/setup-amu.bash && chmod +x setup-amu.bash
- $$ sudo ./setup-amu.bash --branch $(AMU_TOOL_VERSION) --yes --install
+  Please review the definitions at the top of $(firstword $(MAKEFILE_LIST)) and
+  update as needed for your installation.
 
 endef
 
-define OPENSCAD_SETUP_ANNOUNCE
+define ANNOUNCE_AMU_VERSION
 
-  This library uses language features only available in recent versions
-  of OpenSCAD. Please install a development snapshots released after
-  $1.
+  This library has been designed and tested to work with openscad-amu $1
+  or later. To install:
 
-  See: http://www.openscad.org/downloads.html#snapshots
+  $$ wget http://git.io/setup-amu.bash && chmod +x setup-amu.bash
+  $$ sudo ./setup-amu.bash --branch $(AMU_TOOL_VERSION) --yes --install
 
 endef
 
-define IMAGEMAGICK_CODER_ANNOUNCE
+define ANNOUNCE_OPENSCAD_VERSION
+
+  This library has been designed and tested to work with OpenSCAD $1.
+
+  Please make sure this version is available in the search path. This
+  or all version checks can be disabled in this project makefile using
+  the control variable [version_checks] or individually in the tools
+  assertions section.
+
+  see: $(firstword $(MAKEFILE_LIST))
+  See: http://www.openscad.org/downloads.html
+
+endef
+
+define ANNOUNCE_IMAGEMAGICK_POLICY
 
   The current ImageMagick security policy denies access rights ($2)
   to a coder ($1) required to compile this library. Please grant
@@ -71,10 +82,10 @@ define IMAGEMAGICK_CODER_ANNOUNCE
 endef
 
 #------------------------------------------------------------------------------#
-# Design Flow Init (DO NO EDIT THIS SECTION)
+# Include Design Flow Init (DO NO EDIT THIS SECTION)
 #------------------------------------------------------------------------------#
 ifeq ($(wildcard $(AMU_PM_INIT)),)
-  $(info $(call AMU_SETUP_ANNOUNCE,Init file,$(AMU_PM_INIT)))
+  $(info $(call ANNOUNCE_AMU_INIT,AMU_PM_INIT,$(AMU_PM_INIT)))
   $(error unable to continue.)
 else
   include $(AMU_PM_INIT)
@@ -119,13 +130,13 @@ backup_root                             := backups
 ifeq ($(version_checks),$(true))
 
 # require recent OpenSCAD version.
-$(call check_version,openscad,gt,2018.01,$(true), \
-  $(call OPENSCAD_SETUP_ANNOUNCE,2018.01) \
+$(call check_version,openscad,eq,2021.01,$(true), \
+  $(call ANNOUNCE_OPENSCAD_VERSION,2021.01) \
 )
 
 # require openscad-amu version stated by $(AMU_TOOL_VERSION).
 $(call check_version,amuseam,ge,$(subst v,,$(AMU_TOOL_VERSION)),$(true), \
-  requires openscad-amu $(AMU_TOOL_VERSION) or later. \
+  $(call ANNOUNCE_AMU_VERSION,$(AMU_TOOL_VERSION)) \
 )
 
 # warn of known build issue when latax output configured.
@@ -142,7 +153,7 @@ ifneq ($(shell identify -list policy | $(grep) EPS),)
           | $(sed) -n '/pattern: EPS/{x;p;d;}; x' \
           | $(sed) -n 's/^.*rights:[[:space:]]*//p' \
        )),Read Write)
-    $(error $(call IMAGEMAGICK_CODER_ANNOUNCE,EPS,Read Write,read|write))
+    $(error $(call ANNOUNCE_IMAGEMAGICK_POLICY,EPS,Read Write,read|write))
   endif
 endif
 
@@ -207,10 +218,10 @@ backup_files_add              := $(library_info) \
                                  $(modules_backup_add)
 
 #------------------------------------------------------------------------------#
-# Design Flow Rules (DO NO EDIT THIS SECTION)
+# Include Design Flow Rules (DO NO EDIT THIS SECTION)
 #------------------------------------------------------------------------------#
 ifeq ($(wildcard $(AMU_PM_RULES)),)
-  $(info $(call AMU_SETUP_ANNOUNCE,Rules file,$(AMU_PM_RULES)))
+  $(info $(call ANNOUNCE_AMU_INIT,AMU_PM_RULES,$(AMU_PM_RULES)))
   $(error unable to continue.)
 else
   include $(AMU_PM_RULES)
