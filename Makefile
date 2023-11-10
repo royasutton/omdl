@@ -16,6 +16,7 @@ AMU_PM_INIT                   := $(AMU_PM_PREFIX)amu_pm_init
 AMU_PM_RULES                  := $(AMU_PM_PREFIX)amu_pm_rules
 AMU_PM_DESIGN_FLOW            := df1/
 
+# 'Modules' extensions to openscad-amu for omdl
 AMU_PM_COMPONENTS_LOCAL_PATH  := include/pmf
 AMU_PM_COMPONENTS_LOCAL       := modules
 
@@ -96,7 +97,9 @@ endif
 #------------------------------------------------------------------------------#
 # target_headings                       := $(false)
 # verbose_seam                          := $(false)
+# debug_seam_scanner                    := $(trueq)
 # debug_dif_filter                      := $(true)
+# debug_dif_scanner                     := $(true)
 
 output_root                             := build
 output_path_add_project_version         := $(false)
@@ -186,7 +189,7 @@ library_info        := README.md \
 #------------------------------------------------------------------------------#
 
 # root module
-include rootmodule.mk
+include module.mk
 
 #------------------------------------------------------------------------------#
 # Excluded Design Flow Scopes

@@ -7,7 +7,7 @@ $(eval $(call clear-local-module))
 local_path        :=
 
 local_library     :=  mainpage \
-                      rootmodule \
+                      module \
                       \
                       omdl-base \
                       \
@@ -32,13 +32,13 @@ local_submodules  :=  datatypes \
 local_submodules  +=  $(wildcard database_src)
 
 #------------------------------------------------------------------------------#
-# add local module
+# initialize omdl modules
 #------------------------------------------------------------------------------#
 
 # add (this) root module
 modules +=  $(lastword $(MAKEFILE_LIST))
 
-# root module
+# add local module
 $(eval $(call add-local-module))
 
 # cleanup after last module
