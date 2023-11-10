@@ -16,7 +16,7 @@ AMU_PM_INIT                   := $(AMU_PM_PREFIX)amu_pm_init
 AMU_PM_RULES                  := $(AMU_PM_PREFIX)amu_pm_rules
 AMU_PM_DESIGN_FLOW            := df1/
 
-AMU_PM_COMPONENTS_LOCAL_PATH  := include/mf
+AMU_PM_COMPONENTS_LOCAL_PATH  := include/pmf
 AMU_PM_COMPONENTS_LOCAL       := modules
 
 # Uncomment following for increased verbosity and/or debugging.
