@@ -1,4 +1,4 @@
-//! Function validation methods.
+//! Methods for validating the results of functions.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -155,6 +155,8 @@ BEGIN_SCOPE example;
     //
     // pass test example
     //
+    log_type( "EXAMPLE 1", "pass test example" );
+
     pass_result = validate("test-a f1(farg)", f1(farg), "equals", erv1);
 
     if ( !validate(cv=f1(farg), t="equals", ev=erv1, pf=true) )
@@ -165,6 +167,8 @@ BEGIN_SCOPE example;
     //
     // fail test example
     //
+    log_type( "EXAMPLE 2", "fail test example" );
+
     fail_result = validate("test-b f1(farg)", f1(farg), "equals", erv2);
 
     if ( !validate(cv=f1(farg), t="equals", ev=erv2, pf=true) )
@@ -175,11 +179,16 @@ BEGIN_SCOPE example;
     //
     // almost equal test example
     //
+    log_type( "EXAMPLE 3", "almost equal test example" );
+
     tvae1 = [[90.001], [[45.009], true]];
     tvae2 = [[90.002], [[45.010], true]];
 
+    log_type( "EXAMPLE 3", "almost equal to 3 digits" );
     log_info( validate("test-c", tvae1, "almost", tvae2, 3) );
-    log_warn( validate("test-d", tvae1, "almost", tvae2, 4) );
+
+    log_type( "EXAMPLE 3", "almost equal to 4 digits" );
+    log_info( validate("test-d", tvae1, "almost", tvae2, 4) );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
