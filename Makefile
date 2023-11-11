@@ -173,9 +173,10 @@ docs_group_id       := omdl
 project_logo        := mainpage_logo_top_55x55
 seam_defines        := INCLUDE_PATH=include/mfs
 
-doxygen_config      := Doxyfile
-doxygen_html_footer := Doxyfooter.html
-doxygen_html_css    := Doxystyle.css
+doxygen_config      := share/doxygen/Doxyfile
+doxygen_html_footer := share/doxygen/html_footer.html
+doxygen_html_css    := share/doxygen/html_style.css
+doxygen_layout      := share/doxygen/html_layout.xml
 
 project_files_add   := $(wildcard include/mf/*) \
                        $(wildcard include/mfs/*.mfs) \
