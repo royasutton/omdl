@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2019
+  \date   2015-2023
 
   \copyright
 
@@ -884,7 +884,7 @@ BEGIN_SCOPE example1;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;
@@ -920,7 +920,7 @@ BEGIN_SCOPE example2;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;

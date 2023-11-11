@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2017-2019
+  \date   2017-2023
 
   \copyright
 
@@ -667,7 +667,7 @@ BEGIN_SCOPE autostat;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;

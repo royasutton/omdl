@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2017-2018
+  \date   2017-2023
 
   \copyright
 
@@ -397,7 +397,7 @@ BEGIN_SCOPE example;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
 
     defines   name "system" define "coordinate_unit_base" strings "c p y s";
     variables add_opts_combine "system";

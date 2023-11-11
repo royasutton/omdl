@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2018
+  \date   2015-2023
 
   \copyright
 
@@ -204,7 +204,7 @@ BEGIN_SCOPE example;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
 
     defines   name "units" define "angle_unit_base" strings "r d dms";
     variables add_opts_combine "units";
