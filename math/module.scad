@@ -1,8 +1,8 @@
-//! Module documentation.
+//! Math Module documentation.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2018
+  \date   2018-2023
 
   \copyright
 

@@ -336,6 +336,11 @@
   [openscad-amu]: https://royasutton.github.io/openscad-amu
   [OpenSCAD]: http://www.openscad.org
 
+  /+
+      Start page for tree- and list-view validation results.
+      modules can attached results to this page using its reference.
+  +/
+
   \page tv_tree Validation Tests and Results
 
   \page tv_list Validation Summary
