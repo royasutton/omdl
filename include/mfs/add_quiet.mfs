@@ -1,21 +1,11 @@
 ###############################################################################
 #
-# script: Append makefile + menu(ext, src, all)
+# configuration: Add option (quiet)
 #
 ###############################################################################
 
-script \
-  begin_makefile_append \
-    \
-    summary \
-    tables \
-    targets \
-    \
-    menu_ext \
-    menu_src \
-    menu_all \
-    \
-  end_makefile
+variables \
+  add_opts "--quiet"
 
 ###############################################################################
 # eof

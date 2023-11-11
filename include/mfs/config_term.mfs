@@ -1,21 +1,16 @@
 ###############################################################################
 #
-# script: Append makefile + menu(ext, src, all)
+# configuration: Console output redirection to .log file (term)
 #
 ###############################################################################
 
-script \
-  begin_makefile_append \
-    \
-    summary \
-    tables \
-    targets \
-    \
-    menu_ext \
-    menu_src \
-    menu_all \
-    \
-  end_makefile
+variables \
+  set_ext "term" \
+  \
+  clear_convert \
+  \
+  set_opts "--export-format term" \
+  clear_opts_combine
 
 ###############################################################################
 # eof
