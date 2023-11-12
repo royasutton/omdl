@@ -6,8 +6,8 @@ $(eval $(call clear-local-module))
 
 local_path        :=
 
-local_library     :=  mainpage \
-                      module \
+local_library     :=  docs_start \
+                      docs_topics \
                       \
                       omdl-base \
                       \

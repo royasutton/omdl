@@ -1,4 +1,4 @@
-//! Include wrapper of base omdl includes files.
+//! Include wrapper of base library components.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

@@ -1,4 +1,4 @@
-//! Library Documentation: main page.
+//! Library documentation start page.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -32,7 +32,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \mainpage omdl
+  \mainpage Overview
   \tableofcontents
 
   \section introduction Introduction

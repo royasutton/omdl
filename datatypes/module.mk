@@ -6,7 +6,7 @@ $(eval $(call clear-local-module))
 
 local_path        :=  datatypes
 
-local_library     :=  module \
+local_library     :=  docs_module \
                       \
                       identify_scalar \
                       identify_iterable \

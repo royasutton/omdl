@@ -1,4 +1,4 @@
-//! Root Module documentation.
+//! Library documentation topics page.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
