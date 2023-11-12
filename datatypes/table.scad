@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Tables)
-    \amu_define group_brief (Table data type and operations.)
+    \amu_define group_brief (Table structure and operations.)
     \amu_define parent_id   (structure)
 
   \amu_include (include/amu/pgid_path_pid_pstem_pg.amu)

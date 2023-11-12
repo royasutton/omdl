@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Math)
-    \amu_define group_brief (Mathematical functions.)
+    \amu_define group_brief (Mathematical functions and operations.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

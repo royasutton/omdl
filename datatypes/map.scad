@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Maps)
-    \amu_define group_brief (Map data type and operations.)
+    \amu_define group_brief (Map structure and operations.)
     \amu_define parent_id   (structure)
 
   \amu_include (include/amu/pgid_path_pid_pstem_pg.amu)

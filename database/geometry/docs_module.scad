@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Geometry)
-    \amu_define group_brief (Geometric data.)
+    \amu_define group_brief (Geometric specifications.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

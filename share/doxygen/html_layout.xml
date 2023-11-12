@@ -11,7 +11,7 @@
 
     <tab type="modules" visible="yes"
       title="Index"
-      intro="Library component Tree:"
+      intro="Library component tree:"
     />
 
     <tab type="files" visible="yes" title="Files">

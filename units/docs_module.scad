@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Units)
-    \amu_define group_brief (Units and unit conversions.)
+    \amu_define group_brief (Unit definitions and conversions.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

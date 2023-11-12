@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Shapes)
-    \amu_define group_brief (Basic geometric shapes.)
+    \amu_define group_brief (Basic geometric shapes and constructs.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
