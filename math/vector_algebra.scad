@@ -802,7 +802,7 @@ function plane_to_normal
 BEGIN_SCOPE validate;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <validation.scad>;
+    include <common/validation.scad>;
 
     echo( str("openscad version ", version()) );
 
