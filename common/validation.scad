@@ -142,7 +142,7 @@ function validate
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <validation.scad>;
+    include <common/validation.scad>;
 
     //
     // function to validate
