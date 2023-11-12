@@ -170,7 +170,7 @@ project_version     := $(shell git describe --tags --dirty --always)
 project_brief       := OpenSCAD Mechanical Design Library
 
 docs_group_id       := omdl
-project_logo        := mainpage_logo_top_55x55
+project_logo        := docs_start_logo_top_55x55
 seam_defines        := INCLUDE_PATH=include/mfs
 
 doxygen_config      := share/doxygen/Doxyfile
