@@ -69,13 +69,13 @@
 
   \details
 
-     validation types     | pass if (else fail)
-    :--------------------:|:----------------------------:
-     "almost"             | \p cv almost equals \p ev
-     "equals"             | \p cv equals \p ev
-     "not"                | \p cv not equal to \p ev
-     "true" \| \b true    | \p cv is \b true
-     "false" \| \b false  | \p cv is \b false
+     validation types             | pass if (else fail)
+    :----------------------------:|:----------------------------:
+     "ae" \| "almost"             | \p cv almost equals \p ev
+     "eq" \| "equals"             | \p cv equals \p ev
+     "ne" \|    "not"             | \p cv not equal to \p ev
+      "t" \|   "true" \| \b true  | \p cv is \b true
+      "f" \|  "false" \| \b false | \p cv is \b false
 
   \note     When performing an \b "almost" equal validation, the
             comparison precision is controlled by \p p. This specifies
@@ -93,7 +93,7 @@ function validate
   p = 4,
   pf = false
 )
-  = (t == "equals") ?
+  = ( (t == "eq") || (t == "equals") ) ?
     (
       (cv == ev)
       ? (pf?true  : str("passed: '", d, "'"))
@@ -104,7 +104,7 @@ function validate
                     )
         )
     )
-  : (t == "not") ?
+  : ( (t == "ne") || (t == "not") ) ?
     (
       (cv != ev)
       ? (pf?true  : str("passed: '", d, "'"))
@@ -115,9 +115,9 @@ function validate
                     )
         )
     )
-  : ( (t == true)  || (t == "true")  ) ? validate(d, cv, "equals", true, p, pf)
-  : ( (t == false) || (t == "false") ) ? validate(d, cv, "equals", false, p, pf)
-  :  (t == "almost") ?
+  : ( (t == true) || (t == "true") || (t == "t") ) ? validate(d, cv, "equals", true, p, pf)
+  : ( (t == false) || (t == "false") || (t == "f") ) ? validate(d, cv, "equals", false, p, pf)
+  : ( (t == "ae") || (t == "almost") ) ?
     (
       almost_equal(cv, ev, p)
       ? (pf?true  : str("passed: '", d, "'"))
