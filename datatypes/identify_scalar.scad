@@ -53,6 +53,11 @@
 
   \details
 
+  \amu_define group_references
+  (
+    [ottf]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Type_Test_Functions "OpenSCAD Type Test Functions"
+  )
+
   \amu_include (include/amu/validate_summary.amu)
 *******************************************************************************/
 
@@ -64,8 +69,19 @@
 
   \returns  <boolean> \b true when the value is defined
             and \b false otherwise.
+
+  \details
+
+  \note     Starting with version 2019.05, this function is now
+            provided directly by OpenSCAD via a built-in [type test
+            function][ottf] \c is_undef().
+
+  \amu_eval (${group_references})
 *******************************************************************************/
-function is_defined(v) = is_undef(v)? false : true;
+function is_defined
+(
+  v
+) = is_undef(v) ? false : true;
 
 //! Test if a value is not defined.
 /***************************************************************************//**
@@ -73,27 +89,44 @@ function is_defined(v) = is_undef(v)? false : true;
 
   \returns  <boolean> \b true when the value is not defined
             and \b false otherwise.
-*******************************************************************************/
-function not_defined(v) = is_undef(v)? true : false;
 
-//! Test if a numerical value is invalid.
+  \details
+
+  \note     Starting with version 2019.05, this function is now
+            provided directly by OpenSCAD via a built-in [type test
+            function][ottf] \c is_undef().
+
+  \amu_eval (${group_references})
+*******************************************************************************/
+function not_defined
+(
+  v
+) = is_undef(v);
+
+//! Test if a numerical value is 'nan' (not a number).
 /***************************************************************************//**
   \param    v \<value> A numerical value.
 
   \returns  <boolean> \b true when the value is determined to be
             \b nan (Not A Number) and \b false otherwise.
 *******************************************************************************/
-function is_nan(v) = ( v != v );
+function is_nan
+(
+  v
+) = (v != v);
 
 //! Test if a numerical value is infinite.
 /***************************************************************************//**
   \param    v \<value> A numerical value.
 
   \returns  <boolean> \b true when the value is determined to be
-            \b inf (greater than the largest representable number)
-            and \b false otherwise.
+            \b inf (greater than the largest OpenSCAD representable
+            number) and \b false otherwise.
 *******************************************************************************/
-function is_inf(v) = ( v == (number_max * number_max) );
+function is_inf
+(
+  v
+) = ( v == (number_max * number_max) );
 
 //! Test if a value is a single non-iterable value.
 /***************************************************************************//**
@@ -104,18 +137,22 @@ function is_inf(v) = ( v == (number_max * number_max) );
 
   \details
 
-     data type     | defined
-    :-------------:|:-----------------:
-     number(s)     | \b true
-     boolean       | \b true
-     string        | \b false
-     list          | \b false
-     range         | not defined
-     \b undef      | \b true
-     \b inf        | \b true
-     \b nan        | \b true
+     input value | function return
+    :-----------:|:-----------------:
+     \em number  | \b  true
+     \em boolean | \b  true
+     \em string  | \b  false
+     \em list    | \b  false
+     \em range   | \b  true
+     \b  undef   | \b  true
+     \b  inf     | \b  true
+     \b  nan     | \b  true
+
 *******************************************************************************/
-function is_scalar( v ) = !(is_string(v) || is_list(v));
+function is_scalar
+(
+  v
+) = !is_string(v) && !is_list(v);
 
 //! Test if a value has multiple parts and is iterable.
 /***************************************************************************//**
@@ -126,27 +163,36 @@ function is_scalar( v ) = !(is_string(v) || is_list(v));
 
   \details
 
-     data type     | defined
-    :-------------:|:-----------------:
-     number(s)     | \b false
-     boolean       | \b false
-     string        | \b true
-     list          | \b true
-     range         | not defined
-     \b undef      | \b false
-     \b inf        | \b false
-     \b nan        | \b false
+     input value | function return
+    :-----------:|:-----------------:
+     \em number  | \b  false
+     \em boolean | \b  false
+     \em string  | \b  true
+     \em list    | \b  true
+     \em range   | \b  false
+     \b  undef   | \b  false
+     \b  inf     | \b  false
+     \b  nan     | \b  false
+
 *******************************************************************************/
-function is_iterable(v) = is_string(v) || is_list(v);
+function is_iterable
+(
+  v
+) = is_string(v) || is_list(v);
 
 //! Test if an iterable value is empty.
 /***************************************************************************//**
   \param    v \<value> An iterable value.
 
   \returns  <boolean> \b true when the iterable value has zero elements
-            and \b false otherwise.
+            and \b false otherwise. Returns \b true when \b v is not
+            an iterable value.
 *******************************************************************************/
-function is_empty(v) = (len(v) == 0);
+function is_empty
+(
+  v
+) = !is_iterable(v) ? true
+  : (len(v) == 0);
 
 //! Test if a value is a number.
 /***************************************************************************//**
@@ -155,36 +201,44 @@ function is_empty(v) = (len(v) == 0);
   \returns  <boolean> \b true when the value is a number
             and \b false otherwise.
 
-  \note     Returns \b true for \b inf and \b nan values.
+  \details
+
+  \note     Starting with version 2019.05, this function is now
+            provided directly by OpenSCAD via a built-in [type test
+            function][ottf] \c is_num().
+
+  \amu_eval (${group_references})
 *******************************************************************************/
-function is_number(v) = is_num(v);
+function is_number
+(
+  v
+) = is_num(v);
 
 //! Test if a value is an integer.
 /***************************************************************************//**
   \param    v \<value> A value.
 
-  \returns  <boolean> \b true when the value is an integer
-            and \b false otherwise.
+  \returns  <boolean> \b true when the value is an integer and \b false
+            otherwise.
 *******************************************************************************/
-function is_integer(v) = is_undef(v) ? false : ((v % 1) == 0);
+function is_integer
+(
+  v
+) = !is_num(v) ? false
+  : ((v % 1) == 0);
 
 //! Test if a value is a decimal.
 /***************************************************************************//**
   \param    v \<value> A value.
 
-  \returns  <boolean> \b true when the value is a decimal
-            and \b false otherwise.
+  \returns  <boolean> \b true when the value is a decimal and \b false
+            otherwise.
 *******************************************************************************/
-function is_decimal(v) = ((v % 1) > 0);
-
-//! Test if a value is a predefined boolean constant.
-/***************************************************************************//**
-  \param    v \<value> A value.
-
-  \returns  <boolean> \b true when the value is one of the predefined
-            boolean constants <tt>[true|false]</tt> and \b false otherwise.
-*******************************************************************************/
-function is_boolean(v) = is_bool(v);
+function is_decimal
+(
+  v
+) = !is_num(v) ? false
+  : ((v % 1) > 0);
 
 //! Test if a value is a range definition.
 /***************************************************************************//**
@@ -195,39 +249,53 @@ function is_boolean(v) = is_bool(v);
 
   \details
 
+  \note     A range is determined to be a value which does not fit in
+            any other category. Specifically, It is a value that is not
+            {\b undef, \b nan or \b inf}, and is neither of {\em list,
+            \em number, \em bool, or \em string}.
+
   \internal
-    Currently a range is determined to be that which does not fit in any
-    other value category. This is likely to fail as OpenSCAD matures.
     This exclusion test should be replaced by a suitable inclusion test
     when possible.
   \endinternal
 *******************************************************************************/
-function is_range(v) = is_defined(v) &&
-    !is_iterable(v) &&
-    !is_boolean(v) &&
-    !is_integer(v) &&
-    !is_decimal(v) &&
+function is_range
+(
+  v
+) = !is_undef(v) &&
     !is_nan(v) &&
-    !is_inf(v);
+    !is_inf(v) &&
+    !is_list(v) &&
+    !is_num(v) &&
+    !is_bool(v) &&
+    !is_string(v);
 
 //! Test if a numerical value is even.
 /***************************************************************************//**
   \param    v \<value> A numerical value.
 
-  \returns  <boolean> \b true when the value is determined to be \e even
-            and \b false otherwise (The value may be positive or negative).
+  \returns  <boolean> \b true when the value is determined to be an \e even
+            integer and \b false otherwise (The value may be positive or
+            negative).
 *******************************************************************************/
-function is_even(v) = !is_integer(v) ? false
+function is_even
+(
+  v
+) = !is_integer(v) ? false
   : ((v % 2) == 0);
 
 //! Test if a numerical value is odd.
 /***************************************************************************//**
   \param    v \<value> A numerical value.
 
-  \returns  <boolean> \b true when the value is determined to be \e odd
-            and \b false otherwise (The value may be positive or negative).
+  \returns  <boolean> \b true when the value is determined to be an \e odd
+            integer and \b false otherwise (The value may be positive or
+            negative).
 *******************************************************************************/
-function is_odd(v) = !is_integer(v) ? false
+function is_odd
+(
+  v
+) = !is_integer(v) ? false
   : ((v % 2) != 0);
 
 //! Test if a numerical value is between an upper and lower bounds.
@@ -236,10 +304,17 @@ function is_odd(v) = !is_integer(v) ? false
   \param    l <number> The minimum value.
   \param    u <number> The maximum value.
 
-  \returns  <boolean> \b true when the value is between the upper and
-            lower bounds and \b false otherwise.
+  \returns  <boolean> \b true when the value is equal to or between the
+            upper and lower bounds and \b false otherwise. Returns \b false
+            when either of \b v, \b l, or \b u is not a number.
 *******************************************************************************/
-function is_between(v, l, u) = ((v >= l) && (v <=u));
+function is_between
+(
+  v,
+  l,
+  u
+) = !(is_num(v) && is_num(l) && is_num(u)) ? false
+  : ((v >= l) && (v <=u));
 
 //! @}
 //! @}
@@ -254,7 +329,31 @@ BEGIN_SCOPE validate;
     include <omdl-base.scad>;
     include <common/validation.scad>;
 
-    echo( str("openscad version ", version()) );
+    t = true; f = false; u = undef; s = -1;
+
+    function get_value( id ) = table_get_value(test_r, test_c, id, "tv");
+    module log_test( m ) { log_type ( "OMDL_TEST", m ); }
+    module log_skip( fn ) { log_test ( str("not tested: '", fn, "'") ); }
+    module run_test( fn, fr, id )
+    {
+      td = table_get_value(test_r, test_c, id, "td");
+      ev = table_get_value(good_r, good_c, fn, id);
+
+      if ( ev != s )
+      {
+        d=str(fn, "(", get_value(id), ")=", ev);
+        m = validate( d=d, cv=fr, t="eq", ev=ev );
+
+        if ( !validate( cv=fr, t="eq", ev=ev, pf=true ) )
+          log_test( str(id, " ", m, " ---> \"", td, "\"") );
+        else
+          log_test( str(id, " ", m) );
+      }
+      else
+        log_test( str(id, " -skip-: '", fn, "(", td, ")'") );
+    }
+
+    log_test( str("openscad version ", version()) );
 
     // test-values columns
     test_c =
@@ -289,6 +388,7 @@ BEGIN_SCOPE validate;
       ["t20", "A shorthand range",          [0:9]],
       ["t21", "A range",                    [0:0.5:9]]
     ];
+    table_check( test_r, test_c, false );   // sanity-test
 
     test_ids = table_get_row_ids( test_r );
 
@@ -296,58 +396,28 @@ BEGIN_SCOPE validate;
     good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
 
     // expected rows: ("golden" test results), use 's' to skip test
-    t = true;   // shortcuts
-    f = false;
-    u = undef;
-    s = -1;     // skip test
-
     good_r =
     [ // function       01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21
       ["is_defined",    f, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t],
       ["not_defined",   t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["is_nan",        f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f],
       ["is_inf",        f, f, f, f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f],
-      ["is_scalar",     t, t, t, t, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, s, s],
-      ["is_iterable",   f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, t, t, t, s, s],
-      ["is_empty",      f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f],
-      ["is_number",     f, t, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f],
+      ["is_scalar",     t, t, t, t, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, t, t],
+      ["is_iterable",   f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, t, t, t, f, f],
+      ["is_empty",      t, t, t, t, t, t, t, t, t, t, t, f, f, t, t, f, f, f, f, t, t],
+      ["is_number",     f, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["is_integer",    f, t, t, t, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["is_decimal",    f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
-      ["is_boolean",    f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
-      ["is_string",     f, f, f, f, f, f, f, f, f, f, f, t, t, t, f, f, f, f, f, f, f],
-      ["is_list",       f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, s, s],
       ["is_range",      f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t],
-      ["is_even",       s, f, t, t, f, t, t, s, s, s, s, s, s, s, s, s, s, s, s, s, s],
-      ["is_odd",        s, t, f, f, f, f, f, s, s, s, s, s, s, s, s, s, s, s, s, s, s],
-      ["is_between_MM", f, t, t, t, t, t, t, f, f, t, t, f, f, f, f, f, f, f, f, f, f]
+      ["is_even",       f, f, t, t, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+      ["is_odd",        f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+      ["is_between_MM", f, t, t, t, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+
+      ["is_bool",       f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
+      ["is_string",     f, f, f, f, f, f, f, f, f, f, f, t, t, t, f, f, f, f, f, f, f],
+      ["is_list",       f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, f, f]
     ];
-
-    // sanity-test tables
-    table_check( test_r, test_c, false );
-    table_check( good_r, good_c, false );
-
-    // validate helper function and module
-    function get_value( vid ) = table_get_value(test_r, test_c, vid, "tv");
-    module log_test( m ) { log_type ( "test", m ); }
-    module log_notest( f ) { log_test ( str("not tested: '", f, "'") ); }
-    module run_test( fname, fresult, vid )
-    {
-      value_text = table_get_value(test_r, test_c, vid, "td");
-      pass_value = table_get_value(good_r, good_c, fname, vid);
-
-      test_pass = validate( cv=fresult, t=pass_value, pf=true );
-      test_text = validate( str(fname, "(", get_value(vid), ")=", pass_value), fresult, pass_value );
-
-      if ( pass_value != s )
-      {
-        if ( !test_pass )
-          log_test( str(vid, " ", test_text, " (", value_text, ")") );
-        else
-          log_test( str(vid, " ", test_text) );
-      }
-      else
-        log_test( str(vid, " -skip-: '", fname, "(", value_text, ")'") );
-    }
+    table_check( good_r, good_c, false );   // sanity-test
 
     // Indirect function calls would be very useful here!!!
     for (vid=test_ids) run_test( "is_defined", is_defined(get_value(vid)), vid );
@@ -360,13 +430,15 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "is_number", is_number(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_integer", is_integer(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_decimal", is_decimal(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "is_boolean", is_boolean(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "is_string", is_string(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "is_list", is_list(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_range", is_range(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_even", is_even(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_odd", is_odd(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_between_MM", is_between(get_value(vid),number_min,number_max), vid );
+
+    // OpenSCAD built-in functions: is_undef() and is_num() are tested above
+    for (vid=test_ids) run_test( "is_bool", is_bool(get_value(vid)), vid );
+    for (vid=test_ids) run_test( "is_string", is_string(get_value(vid)), vid );
+    for (vid=test_ids) run_test( "is_list", is_list(get_value(vid)), vid );
 
     // end-of-tests
   END_OPENSCAD;
