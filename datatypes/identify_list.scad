@@ -177,8 +177,8 @@ function compare
     : 1 // others are greater
     )
   // v1 a boolean
-  : let( v2_ib = is_boolean(v2) )
-    is_boolean(v1) ?
+  : let( v2_ib = is_bool(v2) )
+    is_bool(v1) ?
     (
       (v2_nd || v2_in) ? -1
     : v2_ib ?
