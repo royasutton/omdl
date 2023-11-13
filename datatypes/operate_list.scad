@@ -1062,7 +1062,7 @@ BEGIN_SCOPE validate;
     // validate helper function and module
     function get_value( vid ) = table_get_value(test_r, test_c, vid, "tv");
     module log_test( m ) { log_type ( "test", m ); }
-    module log_notest( f ) { log_test ( str("not tested: '", f, "'") ); }
+    module log_skip( f ) { log_test ( str("not tested: '", f, "'") ); }
     module run_test( fname, fresult, vid )
     {
       value_text = table_get_value(test_r, test_c, vid, "td");
@@ -1088,13 +1088,13 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "consts", consts(get_value(vid)), vid );
     for (vid=test_ids) run_test( "get_index", get_index(get_value(vid)), vid );
     for (vid=test_ids) run_test( "pad_9", pad(get_value(vid), w=9), vid );
-    log_notest( "dround()" );
-    log_notest( "sround()" );
+    log_skip( "dround()" );
+    log_skip( "sround()" );
     for (vid=test_ids) run_test( "limit_12", limit(get_value(vid),1,2), vid );
     for (vid=test_ids) run_test( "sum", sum(get_value(vid)), vid );
     for (vid=test_ids) run_test( "mean", mean(get_value(vid)), vid );
-    log_notest( "ciselect()" );
-    log_notest( "cmvselect()" );
+    log_skip( "ciselect()" );
+    log_skip( "cmvselect()" );
     for (vid=test_ids) run_test( "eselect_F", eselect(get_value(vid),f=true), vid );
     for (vid=test_ids) run_test( "eselect_L", eselect(get_value(vid),l=true), vid );
     for (vid=test_ids) run_test( "eselect_1", eselect(get_value(vid),i=1), vid );

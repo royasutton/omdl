@@ -1188,7 +1188,7 @@ BEGIN_SCOPE validate;
     // validate helper function and module
     function get_value( vid ) = table_get_value(test_r, test_c, vid, "tv");
     module log_test( m ) { log_type ( "test", m ); }
-    module log_notest( f ) { log_test ( str("not tested: '", f, "'") ); }
+    module log_skip( f ) { log_test ( str("not tested: '", f, "'") ); }
     module run_test( fname, fresult, vid )
     {
       value_text = table_get_value(test_r, test_c, vid, "td");
@@ -1218,11 +1218,11 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "second", second(get_value(vid)), vid );
     for (vid=test_ids) run_test( "third", third(get_value(vid)), vid );
     for (vid=test_ids) run_test( "last", last(get_value(vid)), vid );
-    log_notest( "middle()" );
-    log_notest( "first2()" );
-    log_notest( "first3()" );
-    log_notest( "last2()" );
-    log_notest( "last3()" );
+    log_skip( "middle()" );
+    log_skip( "first2()" );
+    log_skip( "first3()" );
+    log_skip( "last2()" );
+    log_skip( "last3()" );
     for (vid=test_ids) run_test( "nfirst_1", nfirst(get_value(vid),n=1), vid );
     for (vid=test_ids) run_test( "nlast_1", nlast(get_value(vid),n=1), vid );
     for (vid=test_ids) run_test( "nhead_1", nhead(get_value(vid),n=1), vid );

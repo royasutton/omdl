@@ -1060,7 +1060,7 @@ BEGIN_SCOPE validate;
     function get_value( vid ) = table_get_value(test_r, test_c, vid, "tv");
     function gv( vid, e ) = get_value( vid )[e];
     module log_test( m ) { log_type ( "test", m ); }
-    module log_notest( f ) { log_test ( str("not tested: '", f, "'") ); }
+    module log_skip( f ) { log_test ( str("not tested: '", f, "'") ); }
     module run( fname, vid )
     {
       value_text = table_get_value(test_r, test_c, vid, "td");
@@ -1098,33 +1098,33 @@ BEGIN_SCOPE validate;
     run_ids = delete( test_ids, mv=["fac", "crp"] );
 
     // set 1: identify
-    log_notest( "is_point()" );
-    log_notest( "is_vector()" );
-    log_notest( "is_line()" );
-    log_notest( "is_vector_or_line()" );
-    log_notest( "is_plane()" );
+    log_skip( "is_point()" );
+    log_skip( "is_vector()" );
+    log_skip( "is_line()" );
+    log_skip( "is_vector_or_line()" );
+    log_skip( "is_plane()" );
 
     // set 2: point
     for (vid=run_ids) run("distance_pp",vid) test( "distance_pp", distance_pp(gv(vid,0),gv(vid,1)), vid, false );
-    log_notest( "distance_pl()" );
-    log_notest( "distance_pn()" );
+    log_skip( "distance_pl()" );
+    log_skip( "distance_pn()" );
     for (vid=run_ids) run("is_left_ppp",vid) test( "is_left_ppp", is_left_ppp(gv(vid,0),gv(vid,1),gv(vid,2)), vid, false );
-    log_notest( "point_closest_pl()" );
-    log_notest( "point_closest_pn()" );
+    log_skip( "point_closest_pl()" );
+    log_skip( "point_closest_pn()" );
     for (vid=run_ids) run("point_to_3d",vid) test( "point_to_3d", point_to_3d(gv(vid,0)), vid, false );
-    log_notest( "interpolate2d_linear_pp()" );
+    log_skip( "interpolate2d_linear_pp()" );
 
     // set 3: vector
 
     // set 4: line (or vector)
-    log_notest( "line2d_new()" );
-    log_notest( "line3d_new()" );
-    log_notest( "line_new()" );
+    log_skip( "line2d_new()" );
+    log_skip( "line3d_new()" );
+    log_skip( "line_new()" );
     for (vid=run_ids) run("line_dim",vid) test( "line_dim", line_dim([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("line_tp",vid) test( "line_tp", line_tp([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("line_ip",vid) test( "line_ip", line_ip([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("line_to_vector",vid) test( "line_to_vector", line_to_vector([gv(vid,0),gv(vid,1)]), vid, true );
-    log_notest( "vector_to_line()" );
+    log_skip( "vector_to_line()" );
     for (vid=run_ids) run("dot_ll",vid) test( "dot_ll", dot_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("cross_ll",vid) test( "cross_ll", cross_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("striple_lll",vid) test( "striple_lll", striple_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );

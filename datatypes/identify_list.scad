@@ -338,7 +338,7 @@ BEGIN_SCOPE validate;
     // validate helper function and module
     function get_value( vid ) = table_get_value(test_r, test_c, vid, "tv");
     module log_test( m ) { log_type ( "test", m ); }
-    module log_notest( f ) { log_test ( str("not tested: '", f, "'") ); }
+    module log_skip( f ) { log_test ( str("not tested: '", f, "'") ); }
     module run_test( fname, fresult, vid )
     {
       value_text = table_get_value(test_r, test_c, vid, "td");

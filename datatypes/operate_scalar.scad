@@ -158,7 +158,7 @@ BEGIN_SCOPE validate;
     // validate helper function and module
     function get_value( vid ) = table_get_value(test_r, test_c, vid, "tv");
     module log_test( m ) { log_type ( "test", m ); }
-    module log_notest( f ) { log_test ( str("not tested: '", f, "'") ); }
+    module log_skip( f ) { log_test ( str("not tested: '", f, "'") ); }
     module run_test( fname, fresult, vid )
     {
       value_text = table_get_value(test_r, test_c, vid, "td");
@@ -180,7 +180,7 @@ BEGIN_SCOPE validate;
 
     // Indirect function calls would be very useful here!!!
     for (vid=test_ids) run_test( "defined_or_D", defined_or(get_value(vid),"default"), vid );
-    log_notest( "circular_index()" );
+    log_skip( "circular_index()" );
 
     // end-of-tests
   END_OPENSCAD;
