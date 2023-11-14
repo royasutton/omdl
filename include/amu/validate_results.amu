@@ -36,7 +36,14 @@
   \page tv_list
     \amu_table (columns=${tv_tc} cell_texts=${tv_td})
 
-  \page validation
+  \page tv_fail
     \amu_if ( -n ${tv_fail} ) {\ref ${group} failed ${tv_fail_c}} endif
+
+  \page tv_warn
+    \amu_if ( -n ${tv_warn} ) {\ref ${group} warnings ${tv_warn_c}} endif
+
+  \page validation
+    \amu_if ( -n ${tv_fail} ) {\li \ref ${group} failed ${tv_fail_c}} endif
+    \amu_if ( -n ${tv_warn} ) {\li \ref ${group} warnings ${tv_warn_c}} endif
 
 /+ end of file  +/

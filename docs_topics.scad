@@ -325,27 +325,34 @@
     behavior. These validations are performed to identify library
     routines that require updating to conform to any such changes.
 
-    | category                | description
-    |:-----------------------:|:----------------------------------------
-    | \subpage tv_tree "Tree" | Tree of test scripts and test results.
-    | \subpage tv_list "List" | A summary list of test results.
+    | format                  | description
+    |:-----------------------:|:------------------------------------------
+    | \subpage tv_tree "Tree" | Tree of all test scripts and test results.
+    | \subpage tv_list "List" | A flat list of all test results.
+    | \subpage tv_fail "Fail" | A flat list of current test failures.
+    | \subpage tv_warn "Warn" | A flat list of current test warnings.
 
-  ### Current Failures ###
+  #### Current Test Failures and Warnings ####
 
   [omdl]: https://royasutton.github.io/omdl
   [openscad-amu]: https://royasutton.github.io/openscad-amu
   [OpenSCAD]: http://www.openscad.org
+*******************************************************************************/
 
+/***************************************************************************//**
   /+
-      Start page for tree- and list-view validation results.
-      modules can attached results to this page using its reference.
+      Define seperate pages for validation results. Modules can
+      attached results to the related page reference.
   +/
 
   \page tv_tree Validation Tests and Results
 
-  \page tv_list Validation Summary
+  \page tv_list Validation Tests Summary
     \amu_include (include/amu/validate_log_th.amu)
     \amu_table(columns=${tv_tc} column_headings=${tv_th})
+
+  \page tv_fail Current Tests Failures
+  \page tv_warn Current Tests Warnings
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
