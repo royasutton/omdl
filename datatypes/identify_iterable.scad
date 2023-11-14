@@ -58,6 +58,32 @@
 
 //----------------------------------------------------------------------------//
 
+//! Test if a value has multiple parts and is iterable.
+/***************************************************************************//**
+  \param    v \<value> A value.
+
+  \returns  <boolean> \b true when the value is an iterable multi-part value
+            and \b false otherwise.
+
+  \details
+
+     input value | function return
+    :-----------:|:-----------------:
+     \em number  | \b  false
+     \em boolean | \b  false
+     \em string  | \b  true
+     \em list    | \b  true
+     \em range   | \b  false
+     \b  undef   | \b  false
+     \b  inf     | \b  false
+     \b  nan     | \b  false
+
+*******************************************************************************/
+function is_iterable
+(
+  v
+) = is_string(v) || is_list(v);
+
 //! Test if a list of values equal a comparison value.
 /***************************************************************************//**
   \param    v \<list> A list of values.
@@ -310,6 +336,7 @@ BEGIN_SCOPE validate;
 
     good_r =
     [ // function           01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+      ["is_iterable",       f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, t, t, t, f, f, s, s],
       ["all_equal_T",       f, f, t, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t],
       ["all_equal_F",       f, f, f, t, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["all_equal_U",       t, f, f, f, f, f, t, t, f, f, t, f, f, f, f, f, f, f, t, f, f, f, f],
@@ -356,6 +383,7 @@ BEGIN_SCOPE validate;
     }
 
     // Indirect function calls would be very useful here!!!
+    for (vid=test_ids) run_test( "is_iterable", is_iterable(get_value(vid)), vid );
     for (vid=test_ids) run_test( "all_equal_T", all_equal(get_value(vid),t), vid );
     for (vid=test_ids) run_test( "all_equal_F", all_equal(get_value(vid),f), vid );
     for (vid=test_ids) run_test( "all_equal_U", all_equal(get_value(vid),u), vid );

@@ -63,6 +63,32 @@
 
 //----------------------------------------------------------------------------//
 
+//! Test if a value is a single non-iterable value.
+/***************************************************************************//**
+  \param    v \<value> A value.
+
+  \returns  <boolean> \b true when the value is a single non-iterable value
+            and \b false otherwise.
+
+  \details
+
+     input value | function return
+    :-----------:|:-----------------:
+     \em number  | \b  true
+     \em boolean | \b  true
+     \em string  | \b  false
+     \em list    | \b  false
+     \em range   | \b  true
+     \b  undef   | \b  true
+     \b  inf     | \b  true
+     \b  nan     | \b  true
+
+*******************************************************************************/
+function is_scalar
+(
+  v
+) = !is_string(v) && !is_list(v);
+
 //! Test if a value is defined.
 /***************************************************************************//**
   \param    v \<value> A value.
@@ -127,58 +153,6 @@ function is_inf
 (
   v
 ) = ( v == (number_max * number_max) );
-
-//! Test if a value is a single non-iterable value.
-/***************************************************************************//**
-  \param    v \<value> A value.
-
-  \returns  <boolean> \b true when the value is a single non-iterable value
-            and \b false otherwise.
-
-  \details
-
-     input value | function return
-    :-----------:|:-----------------:
-     \em number  | \b  true
-     \em boolean | \b  true
-     \em string  | \b  false
-     \em list    | \b  false
-     \em range   | \b  true
-     \b  undef   | \b  true
-     \b  inf     | \b  true
-     \b  nan     | \b  true
-
-*******************************************************************************/
-function is_scalar
-(
-  v
-) = !is_string(v) && !is_list(v);
-
-//! Test if a value has multiple parts and is iterable.
-/***************************************************************************//**
-  \param    v \<value> A value.
-
-  \returns  <boolean> \b true when the value is an iterable multi-part value
-            and \b false otherwise.
-
-  \details
-
-     input value | function return
-    :-----------:|:-----------------:
-     \em number  | \b  false
-     \em boolean | \b  false
-     \em string  | \b  true
-     \em list    | \b  true
-     \em range   | \b  false
-     \b  undef   | \b  false
-     \b  inf     | \b  false
-     \b  nan     | \b  false
-
-*******************************************************************************/
-function is_iterable
-(
-  v
-) = is_string(v) || is_list(v);
 
 //! Test if an iterable value is empty.
 /***************************************************************************//**
@@ -398,12 +372,11 @@ BEGIN_SCOPE validate;
     // expected rows: ("golden" test results), use 's' to skip test
     good_r =
     [ // function       01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21
+      ["is_scalar",     t, t, t, t, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, t, t],
       ["is_defined",    f, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t],
       ["not_defined",   t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["is_nan",        f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f],
       ["is_inf",        f, f, f, f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f],
-      ["is_scalar",     t, t, t, t, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, t, t],
-      ["is_iterable",   f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, t, t, t, f, f],
       ["is_empty",      t, t, t, t, t, t, t, t, t, t, t, f, f, t, t, f, f, f, f, t, t],
       ["is_number",     f, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["is_integer",    f, t, t, t, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
@@ -420,12 +393,11 @@ BEGIN_SCOPE validate;
     table_check( good_r, good_c, false );   // sanity-test
 
     // Indirect function calls would be very useful here!!!
+    for (vid=test_ids) run_test( "is_scalar", is_scalar(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_defined", is_defined(get_value(vid)), vid );
     for (vid=test_ids) run_test( "not_defined", not_defined(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_nan", is_nan(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_inf", is_inf(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "is_scalar", is_scalar(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "is_iterable", is_iterable(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_empty", is_empty(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_number", is_number(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_integer", is_integer(get_value(vid)), vid );
