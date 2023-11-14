@@ -330,12 +330,7 @@ BEGIN_SCOPE validate;
     log_test( str("openscad version ", version()) );
 
     // test-values columns
-    test_c =
-    [
-      ["id", "identifier"],
-      ["td", "description"],
-      ["tv", "test value"]
-    ];
+    test_c = [ ["id", "identifier"], ["td", "description"], ["tv", "test value"] ];
 
     // test-values rows
     test_r =
