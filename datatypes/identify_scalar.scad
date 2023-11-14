@@ -67,8 +67,8 @@
 /***************************************************************************//**
   \param    v \<value> A value.
 
-  \returns  <boolean> \b true when the value is a single non-iterable value
-            and \b false otherwise.
+  \returns  <boolean> \b true when the value is a single non-iterable
+            value and \b false otherwise.
 
   \details
 
@@ -159,7 +159,7 @@ function is_inf
   \param    v \<value> An iterable value.
 
   \returns  <boolean> \b true when the iterable value has zero elements
-            and \b false otherwise. Returns \b true when \b v is not
+            and \b false otherwise. Returns \b true when \p v is not
             an iterable value.
 *******************************************************************************/
 function is_empty
@@ -248,7 +248,7 @@ function is_range
 /***************************************************************************//**
   \param    v \<value> A numerical value.
 
-  \returns  <boolean> \b true when the value is determined to be an \e even
+  \returns  <boolean> \b true when the value is determined to be an \em even
             integer and \b false otherwise (The value may be positive or
             negative).
 *******************************************************************************/
@@ -262,7 +262,7 @@ function is_even
 /***************************************************************************//**
   \param    v \<value> A numerical value.
 
-  \returns  <boolean> \b true when the value is determined to be an \e odd
+  \returns  <boolean> \b true when the value is determined to be an \em odd
             integer and \b false otherwise (The value may be positive or
             negative).
 *******************************************************************************/
@@ -280,7 +280,7 @@ function is_odd
 
   \returns  <boolean> \b true when the value is equal to or between the
             upper and lower bounds and \b false otherwise. Returns \b false
-            when either of \b v, \b l, or \b u is not a number.
+            when either of \p v, \p l, or \p u is not a number.
 *******************************************************************************/
 function is_between
 (
