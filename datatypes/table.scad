@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Tables)
+    \amu_define group_name  (Tables Structure)
     \amu_define group_brief (Table structure and operations.)
     \amu_define parent_id   (structure)
 

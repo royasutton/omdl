@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Coordinates)
+    \amu_define group_name  (Coordinates Systems)
     \amu_define group_brief (Coordinate systems and conversions.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)

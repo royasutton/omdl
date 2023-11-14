@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Lengths)
+    \amu_define group_name  (Length Units)
     \amu_define group_brief (Length units and conversions.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)

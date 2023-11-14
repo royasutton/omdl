@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Parts)
-    \amu_define group_brief (Parts and small assemblies.)
+    \amu_define group_brief (Small parts and assemblies.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

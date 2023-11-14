@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Scalars)
+    \amu_define group_name  (Scalar Identification)
     \amu_define group_brief (Scalar data type tests.)
     \amu_define parent_id   (identify)
 

@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Utilities)
+    \amu_define group_name  (Math Utilities)
     \amu_define group_brief (Miscellaneous mathematical utilities.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)

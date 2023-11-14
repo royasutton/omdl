@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Maps)
+    \amu_define group_name  (Map Structure)
     \amu_define group_brief (Map structure and operations.)
     \amu_define parent_id   (structure)
 

@@ -29,7 +29,7 @@
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 
-    \amu_define group_name  (Constants)
+    \amu_define group_name  (Constant Definitions)
     \amu_define group_brief (Common mechanical design constants.)
 
       \amu_define group1        (${group}_general)

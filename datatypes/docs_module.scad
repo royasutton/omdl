@@ -30,7 +30,7 @@
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 
     \amu_define group_name  (Data Types)
-    \amu_define group_brief (Data type identification, operators, and structures.)
+    \amu_define group_brief (Type identification, operators, and structures.)
 
       \amu_define group1        (${group}_identify)
       \amu_define group1_name   (Type Identification)
@@ -41,7 +41,7 @@
       \amu_define group2_brief  (Base data type operators.)
 
       \amu_define group3        (${group}_structure)
-      \amu_define group3_name   (Structures)
+      \amu_define group3_name   (Data Structures)
       \amu_define group3_brief  (Data structures and operators.)
 
 *******************************************************************************/

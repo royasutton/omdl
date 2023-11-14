@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Angles)
+    \amu_define group_name  (Angle Units)
     \amu_define group_brief (Angle units and conversions.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)

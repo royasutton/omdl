@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Iterables)
+    \amu_define group_name  (Iterable Identification)
     \amu_define group_brief (Iterable data type tests.)
     \amu_define parent_id   (identify)
 

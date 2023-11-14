@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Console)
+    \amu_define group_name  (Console Output)
     \amu_define group_brief (Console message logging.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)

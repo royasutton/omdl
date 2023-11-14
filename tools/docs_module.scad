@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Tools)
-    \amu_define group_brief (Design tools and modules.)
+    \amu_define group_brief (Tools and design components.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

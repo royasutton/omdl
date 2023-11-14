@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Database)
-    \amu_define group_brief (Design specification data.)
+    \amu_define group_brief (Design data and specifications.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

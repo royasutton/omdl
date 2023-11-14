@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Scalars)
+    \amu_define group_name  (Scalar Operations)
     \amu_define group_brief (Scalar data type operations.)
     \amu_define parent_id   (operate)
 

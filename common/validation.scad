@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Validation)
+    \amu_define group_name  (Validation Functions)
     \amu_define group_brief (Run-time test and validation functions.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)

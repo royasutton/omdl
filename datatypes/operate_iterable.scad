@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Iterables)
+    \amu_define group_name  (Iterable Operations)
     \amu_define group_brief (Iterable data type operations.)
     \amu_define parent_id   (operate)
 

@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Triangles)
+    \amu_define group_name  (Triangle Math)
     \amu_define group_brief (Triangle related mathematical functions.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)

@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Bitwise)
+    \amu_define group_name  (Bitwise Math)
     \amu_define group_brief (Base-two bitwise binary operations.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)

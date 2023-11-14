@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Lists)
+    \amu_define group_name  (List Identification)
     \amu_define group_brief (List data type tests.)
     \amu_define parent_id   (identify)
 
