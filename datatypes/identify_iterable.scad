@@ -78,23 +78,21 @@
      \b  inf     | \b  false
      \b  nan     | \b  false
 
+  \note     The empty list and empty string return \b true.
 *******************************************************************************/
 function is_iterable
 (
   v
 ) = is_string(v) || is_list(v);
 
-//! Test if a list of values equal a comparison value.
+//! Test if all elements of an iterable value equal a comparison value.
 /***************************************************************************//**
-  \param    v \<list> A list of values.
+  \param    v \<list> An iterable data type value.
   \param    cv \<value> A comparison value.
 
-  \returns  <boolean> \b true when all elements equal the value \p cv
-            and \b false otherwise.
-
-  \details
-
-  \warning  Always returns \b true when the list is empty.
+  \returns  <boolean> \b true when all elements of \p v equal the value
+            \p cv and \b false otherwise. Returns \b true when \p v is
+            empty.
 *******************************************************************************/
 function all_equal
 (
@@ -105,17 +103,14 @@ function all_equal
   : (first(v) != cv) ? false
   : all_equal(ntail(v), cv);
 
-//! Test if any element of a list of values equal a comparison value.
+//! Test if any element of an iterable value equal a comparison value.
 /***************************************************************************//**
-  \param    v \<list> A list of values.
+  \param    v \<list> An iterable data type value.
   \param    cv \<value> A comparison value.
 
-  \returns  <boolean> \b true when any element equals the value \p cv
-            and \b false otherwise.
-
-  \details
-
-  \warning  Always returns \b false when the list is empty.
+  \returns  <boolean> \b true when any element of \p v equals the value
+            \p cv and \b false otherwise. Returns \b false when \p v is
+            empty.
 *******************************************************************************/
 function any_equal
 (
@@ -126,151 +121,164 @@ function any_equal
   : (first(v) == cv) ? true
   : any_equal(ntail(v), cv);
 
-//! Test if no element of a list of values is undefined.
+//! Test if no element of an iterable value has an undefined value.
 /***************************************************************************//**
-  \param    v \<list> A list of values.
+  \param    v \<list> An iterable data type value.
 
-  \returns  <boolean> \b true when no element is undefined
-            and \b false otherwise.
-
-  \details
-
-  \warning  Always returns \b true when the list is empty.
+  \returns  <boolean> \b true when no element of \p v has its value
+            equal to \b undef and \b false otherwise. Returns \b true
+            when the list \p v is empty.
 *******************************************************************************/
 function all_defined(v) = !any_equal(v, undef);
 
-//! Test if any element of a list of values is defined.
+//! Test if at least one element of an iterable value has a defined value.
 /***************************************************************************//**
-  \param    v \<list> A list of values.
+  \param    v \<list> An iterable data type value.
 
-  \returns  <boolean> \b true when any element is defined
-            and \b false otherwise.
-
-  \details
-
-  \warning  Always returns \b false when the list is empty.
+  \returns  <boolean> \b true when any element of \p v has a defined
+            value and \b false otherwise. Returns \b false when \p v is
+            empty.
 *******************************************************************************/
 function any_defined(v) = !all_equal(v, undef);
 
-//! Test if any element of a list of values is undefined.
+//! Test if at least one element of an iterable value has an undefined value.
 /***************************************************************************//**
-  \param    v \<list> A list of values.
+  \param    v \<list> An iterable data type value.
 
-  \returns  <boolean> \b true when any element is undefined
-            and \b false otherwise.
-
-  \details
-
-  \warning  Always returns \b false when the list is empty.
+  \returns  <boolean> \b true when any element of \p v has an undefined
+            value and \b false otherwise. Returns \b false when \p v is
+            empty.
 *******************************************************************************/
 function any_undefined(v) = any_equal(v, undef);
 
-//! Test if all elements of a list of values are scalars.
+//! Test if all elements of an iterable value are scalar values.
 /***************************************************************************//**
-  \param    v \<list> A list of values.
+  \param    v \<list> An iterable data type value.
 
-  \returns  <boolean> \b true when all elements are scalar values
-            and \b false otherwise.
-            Returns \b true when the list is a single scalar value.
-
-  \details
-
-  \warning  Always returns \b true when the list is empty.
+  \returns  <boolean> \b true when all elements of \p v are scalar
+            values and \b false otherwise. Returns \b true when \p v is
+            a single scalar value and \b true when the \p v is an empty
+            list, empty string, or undefined.
 *******************************************************************************/
 function all_scalars
 (
   v
-) = not_defined(v) ? undef
-  : is_scalar(v) ? true
+) = !is_iterable(v) ? true
   : is_empty(v) ? true
   : !is_scalar(first(v)) ? false
   : all_scalars(ntail(v));
 
-//! Test if all elements of a list of values are lists.
+//! Test if all elements of an iterable value are iterable.
 /***************************************************************************//**
-  \param    v \<list> A list of values.
+  \param    v \<list> An iterable data type value.
 
-  \returns  <boolean> \b true when all elements are lists
-            and \b false otherwise.
-            Returns \b true when the list is a single list value.
+  \returns  <boolean> \b true when all elements of \p v are iterable
+            and \b false otherwise. Returns \b true when \p v is a
+            single iterable value and returns \b true when \p v is an
+            empty list or empty string. Returns \b false when \p v is
+            undefined.
+*******************************************************************************/
+function all_iterables
+(
+  v
+) = !is_iterable(v) ? false
+  : is_empty(v) ? true
+  : !is_iterable(first(v)) ? false
+  : all_iterables(ntail(v));
+
+//! Test if all elements of an iterable value are lists.
+/***************************************************************************//**
+  \param    v \<list> An iterable data type value.
+  \param    c \<integer> (\em internal) Count of passing comparasions.
+
+  \returns  <boolean> \b true when all elements of \p v are lists
+            and \b false otherwise. Returns \b true when \p v is a
+            single iterable list.
 
   \details
 
-  \warning  Always returns \b true when the list is empty.
+  \note     The parameter \p c is an internal variable used to count
+            the number of successful comparasion performed while
+            traversing \p v. This parameter should not be initialized
+            under normal circumstances.
 *******************************************************************************/
 function all_lists
 (
-  v
-) = not_defined(v) ? undef
-  : is_scalar(v) ? false
-  : is_empty(v) ? true
+  v,
+  c = 0
+) = !is_iterable(v) ? false
+  : is_empty(v) ? ((c>0) || is_list(v))
   : !is_list(first(v)) ? false
-  : all_lists(ntail(v));
+  : all_lists(ntail(v), c+1);
 
-//! Test if all elements of a list of values are strings.
+//! Test if all elements of an iterable value are strings.
 /***************************************************************************//**
-  \param    v \<list> A list of values.
+  \param    v \<list> An iterable data type value.
+  \param    c \<integer> (\em internal) Count of passing comparasions.
 
-  \returns  <boolean> \b true when all elements are string values
-            and \b false otherwise.
-            Returns \b true when the list is a single string value.
+  \returns  <boolean> \b true when all elements of \p v are strings
+            and \b false otherwise. Returns \b true when \p v is a
+            single string.
 
   \details
 
-  \warning  Always returns \b true when the list is empty.
+  \note     The parameter \p c is an internal variable used to count
+            the number of successful comparasion performed while
+            traversing \p v. This parameter should not be initialized
+            under normal circumstances.
 *******************************************************************************/
 function all_strings
 (
-  v
-) = not_defined(v) ? undef
-  : is_scalar(v) ? false
-  : is_empty(v) ? true
+  v,
+  c = 0
+) = !is_iterable(v) ? false
+  : is_empty(v) ? ((c>0) || is_string(v))
   : !is_string(first(v)) ? false
-  : all_strings(ntail(v));
+  : all_strings(ntail(v), c+1);
 
-//! Test if all elements of a list of values are numbers.
+//! Test if all elements of an iterable value are numbers.
 /***************************************************************************//**
-  \param    v \<list> A list of values.
+  \param    v \<list> An iterable data type value.
+  \param    c \<integer> (\em internal) Count of passing comparasions.
 
-  \returns  <boolean> \b true when all elements are numerical values
-            and \b false otherwise.
-            Returns \b true when the list is a single numerical value.
+  \returns  <boolean> \b true when all elements of \p v are numerical
+            values and \b false otherwise. Returns \b true when \p v is
+            a single numerical value.
 
   \details
 
-  \warning  Always returns \b true when the list is empty.
+  \note     The parameter \p c is an internal variable used to count
+            the number of successful comparasion performed while
+            traversing \p v. This parameter should not be initialized
+            under normal circumstances.
 *******************************************************************************/
 function all_numbers
 (
-  v
-) = not_defined(v) ? undef
-  : is_scalar(v) ? is_number(v)
-  : is_empty(v) ? true
+  v,
+  c = 0
+) = !is_iterable(v) ? is_number(v)
+  : is_empty(v) ? (c>0)
   : !is_number(first(v)) ? false
-  : all_numbers(ntail(v));
+  : all_numbers(ntail(v), c+1);
 
-//! Test if all elements of a list of values are lists of a specified length.
+//! Test if all elements of an iterable value are iterable with a fixed length.
 /***************************************************************************//**
-  \param    v \<list> A list of values.
-  \param    l <integer> The test length.
+  \param    v \<list> An iterable data type value.
+  \param    l <integer> The required length of each value.
 
-  \returns  <boolean> \b true when all elements are lists of the specified
-            length and \b false otherwise.
-            Returns \b true when the list is a single list of length \p l.
-
-  \details
-
-  \warning  Always returns \b true when \p v is empty.
+  \returns  <boolean> \b true when all elements of \p v are iterable
+            values with lengths equal to \p l and \b false otherwise.
 *******************************************************************************/
 function all_len
 (
   v,
-  l
-) = not_defined(v) ? undef
-  : is_scalar(v) ? false
-  : is_empty(v) ? true
+  l,
+  c = 0
+) = !is_iterable(v) ? false
+  : is_empty(v) ? (c>0)
+  : !is_iterable(first(v)) ? false
   : (len(first(v)) != l) ? false
-  : all_len(ntail(v),l);
+  : all_len(ntail(v),l, c+1);
 
 //! @}
 //! @}
@@ -327,19 +335,19 @@ BEGIN_SCOPE validate;
       ["t08", "The empty list",             empty_lst],
       ["t09", "A shorthand range",          [0:9]],
       ["t10", "A range",                    [0:0.5:9]],
-      ["t11", "Test list 01",               [undef]],
-      ["t12", "Test list 02",               [1]],
-      ["t13", "Test list 03",               [1, 2, 3]],
-      ["t14", "Test list 04",               [[1], [2], [3], [4], [5]]],
-      ["t15", "Test list 05",               [[1,2], [2,3]]],
-      ["t16", "Test list 06",               [[1,2], [2,3], [4,5], "ab"]],
-      ["t17", "Test list 07",               [[1,2,3], [4,5,6], [7,8,9], ["a", "b", "c"]]],
-      ["t18", "Test list 08",               [1, 2, 3, undef]],
-      ["t19", "Test list 09",               [undef, undef, undef, undef]],
-      ["t20", "Test list 10",               [[undef], [undef], [undef]]],
-      ["t21", "Test list 11",               [true, true, true, true, false]],
-      ["t22", "Test list 12",               [true, false, false, false, false]],
-      ["t23", "Test list 13",               [true, true, true, true]]
+      ["t11", "Single item list: 1 undef",  [undef]],
+      ["t12", "Single item list: 1 number", [1]],
+      ["t13", "List of 3 numbers",          [1, 2, 3]],
+      ["t14", "List of single num lists",   [[1], [2], [3], [4], [5]]],
+      ["t15", "List of number pairs",       [[1,2], [2,3]]],
+      ["t16", "List of num pairs and str",  [[1,2], [2,3], [4,5], "ab"]],
+      ["t17", "List of mixed tuples",       [[1,2,3], [4,5,6], [7,8,9], ["a", "b", "c"]]],
+      ["t18", "List of number with undef",  [1, 2, 3, undef]],
+      ["t19", "List of items, all = undef", [undef, undef, undef, undef]],
+      ["t20", "List of lists, all = undef", [[undef], [undef], [undef]]],
+      ["t21", "List of mixed booleans mt",  [true, true, true, true, false]],
+      ["t22", "List of mixed booleans mf",  [true, false, false, false, false]],
+      ["t23", "List of booleans = true",    [true, true, true, true]]
     ];
     table_check( test_r, test_c, false );   // sanity-test
 
@@ -351,7 +359,7 @@ BEGIN_SCOPE validate;
     // expected rows: ("golden" test results), use 's' to skip test
     good_r =
     [ // function           01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23
-      ["is_iterable",       f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, t, t, t, f, f, s, s],
+      ["is_iterable",       f, f, f, f, t, t, t, t, f, f, t, t, t, t, t, t, t, t, t, t, t, t, t],
       ["all_equal_T",       f, f, t, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t],
       ["all_equal_F",       f, f, f, t, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["all_equal_U",       t, f, f, f, f, f, t, t, f, f, t, f, f, f, f, f, f, f, t, f, f, f, f],
@@ -361,13 +369,14 @@ BEGIN_SCOPE validate;
       ["all_defined",       f, t, t, t, t, t, t, t, t, t, f, t, t, t, t, t, t, f, f, t, t, t, t],
       ["any_defined",       f, t, t, t, t, t, f, f, t, t, f, t, t, t, t, t, t, t, f, t, t, t, t],
       ["any_undefined",     t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
-      ["all_scalars",       u, t, t, t, f, f, s, s, s, s, t, t, t, f, f, f, f, t, t, f, t, t, t],
-      ["all_lists",         u, f, f, f, f, f, t, t, f, f, f, f, f, t, t, f, t, f, f, t, f, f, f],
-      ["all_strings",       u, f, f, f, t, t, t, s, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
-      ["all_numbers",       u, t, f, f, f, f, s, s, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
-      ["all_len_1",         u, f, f, f, t, t, s, s, f, f, f, f, f, t, f, f, f, f, f, t, f, f, f],
-      ["all_len_2",         u, f, f, f, f, f, s, s, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f],
-      ["all_len_3",         u, f, f, f, f, f, s, s, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f]
+      ["all_scalars",       t, t, t, t, f, f, t, t, t, t, t, t, t, f, f, f, f, t, t, f, t, t, t],
+      ["all_iterables",     f, f, f, f, t, t, t, t, f, f, f, f, f, t, t, t, t, f, f, t, f, f, f],
+      ["all_lists",         f, f, f, f, f, f, f, t, f, f, f, f, f, t, t, f, t, f, f, t, f, f, f],
+      ["all_strings",       f, f, f, f, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+      ["all_numbers",       f, t, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
+      ["all_len_1",         f, f, f, f, t, t, f, f, f, f, f, f, f, t, f, f, f, f, f, t, f, f, f],
+      ["all_len_2",         f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f],
+      ["all_len_3",         f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f]
     ];
     table_check( good_r, good_c, false );   // sanity-test
 
@@ -383,6 +392,7 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "any_defined", any_defined(get_value(vid)), vid );
     for (vid=test_ids) run_test( "any_undefined", any_undefined(get_value(vid)), vid );
     for (vid=test_ids) run_test( "all_scalars", all_scalars(get_value(vid)), vid );
+    for (vid=test_ids) run_test( "all_iterables", all_iterables(get_value(vid)), vid );
     for (vid=test_ids) run_test( "all_lists", all_lists(get_value(vid)), vid );
     for (vid=test_ids) run_test( "all_strings", all_strings(get_value(vid)), vid );
     for (vid=test_ids) run_test( "all_numbers", all_numbers(get_value(vid)), vid );

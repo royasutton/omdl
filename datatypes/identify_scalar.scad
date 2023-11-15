@@ -83,6 +83,7 @@
      \b  inf     | \b  true
      \b  nan     | \b  true
 
+  \note     The empty list and empty string return \b true.
 *******************************************************************************/
 function is_scalar
 (
