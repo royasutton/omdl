@@ -272,15 +272,34 @@ BEGIN_SCOPE validate;
     include <omdl-base.scad>;
     include <common/validation.scad>;
 
-    echo( str("openscad version ", version()) );
+    t = true; f = false; u = undef; s = -1;
+
+    function get_value( id ) = table_get_value(test_r, test_c, id, "tv");
+    module log_test( m ) { log_type ( "OMDL_TEST", m ); }
+    module log_skip( fn ) { log_test ( str("not tested: '", fn, "'") ); }
+    module run_test( fn, fr, id )
+    {
+      td = table_get_value(test_r, test_c, id, "td");
+      ev = table_get_value(good_r, good_c, fn, id);
+
+      if ( ev != s )
+      {
+        d=str(fn, "(", get_value(id), ")=", ev);
+        m = validate( d=d, cv=fr, t="eq", ev=ev );
+
+        if ( !validate( cv=fr, t="eq", ev=ev, pf=true ) )
+          log_test( str(id, " ", m, " ---> \"", td, "\"") );
+        else
+          log_test( str(id, " ", m) );
+      }
+      else
+        log_test( str(id, " -skip-: '", fn, "(", td, ")'") );
+    }
+
+    log_test( str("openscad version ", version()) );
 
     // test-values columns
-    test_c =
-    [
-      ["id", "identifier"],
-      ["td", "description"],
-      ["tv", "test value"]
-    ];
+    test_c = [ ["id", "identifier"], ["td", "description"], ["tv", "test value"] ];
 
     // test-values rows
     test_r =
@@ -309,17 +328,12 @@ BEGIN_SCOPE validate;
       ["t22", "Test list 12",               [true, false, false, false, false]],
       ["t23", "Test list 13",               [true, true, true, true]]
     ];
+    table_check( test_r, test_c, false );   // sanity-test
 
     test_ids = table_get_row_ids( test_r );
 
     // expected columns: ("id" + one column for each test)
     good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
-
-    // expected rows: ("golden" test results), use 's' to skip test
-    t = true;   // shortcuts
-    f = false;
-    u = undef;
-    s = -1;     // skip test
 
     good_r =
     [ // function           01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23
@@ -330,33 +344,7 @@ BEGIN_SCOPE validate;
       ["almost_equal_U",    t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["compare_AA",        t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t]
     ];
-
-    // sanity-test tables
-    table_check( test_r, test_c, false );
-    table_check( good_r, good_c, false );
-
-    // validate helper function and module
-    function get_value( vid ) = table_get_value(test_r, test_c, vid, "tv");
-    module log_test( m ) { log_type ( "test", m ); }
-    module log_skip( f ) { log_test ( str("not tested: '", f, "'") ); }
-    module run_test( fname, fresult, vid )
-    {
-      value_text = table_get_value(test_r, test_c, vid, "td");
-      pass_value = table_get_value(good_r, good_c, fname, vid);
-
-      test_pass = validate( cv=fresult, t="equals", ev=pass_value, pf=true );
-      test_text = validate( str(fname, "(", get_value(vid), ")=", pass_value), fresult, "equals", pass_value );
-
-      if ( pass_value != s )
-      {
-        if ( !test_pass )
-          log_test( str(vid, " ", test_text, " (", value_text, ")") );
-        else
-          log_test( str(vid, " ", test_text) );
-      }
-      else
-        log_test( str(vid, " -skip-: '", fname, "(", value_text, ")'") );
-    }
+    table_check( good_r, good_c, false );   // sanity-test
 
     // Indirect function calls would be very useful here!!!
     for (vid=test_ids) run_test( "n_almost_equal_AA", n_almost_equal(get_value(vid),get_value(vid)), vid );
