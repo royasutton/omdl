@@ -85,6 +85,20 @@ function is_iterable
   v
 ) = is_string(v) || is_list(v);
 
+//! Test if an iterable value is empty.
+/***************************************************************************//**
+  \param    v \<value> An iterable value.
+
+  \returns  <boolean> \b true when the iterable value has zero elements
+            and \b false otherwise. Returns \b true when \p v is not
+            an iterable value.
+*******************************************************************************/
+function is_empty
+(
+  v
+) = !is_iterable(v) ? true
+  : (len(v) == 0);
+
 //! Test if all elements of an iterable value equal a comparison value.
 /***************************************************************************//**
   \param    v \<list> An iterable data type value.
@@ -358,30 +372,32 @@ BEGIN_SCOPE validate;
 
     // expected rows: ("golden" test results), use 's' to skip test
     good_r =
-    [ // function           01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23
-      ["is_iterable",       f, f, f, f, t, t, t, t, f, f, t, t, t, t, t, t, t, t, t, t, t, t, t],
-      ["all_equal_T",       f, f, t, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t],
-      ["all_equal_F",       f, f, f, t, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
-      ["all_equal_U",       t, f, f, f, f, f, t, t, f, f, t, f, f, f, f, f, f, f, t, f, f, f, f],
-      ["any_equal_T",       f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t],
-      ["any_equal_F",       f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f],
-      ["any_equal_U",       t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
-      ["all_defined",       f, t, t, t, t, t, t, t, t, t, f, t, t, t, t, t, t, f, f, t, t, t, t],
-      ["any_defined",       f, t, t, t, t, t, f, f, t, t, f, t, t, t, t, t, t, t, f, t, t, t, t],
-      ["any_undefined",     t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
-      ["all_scalars",       t, t, t, t, f, f, t, t, t, t, t, t, t, f, f, f, f, t, t, f, t, t, t],
-      ["all_iterables",     f, f, f, f, t, t, t, t, f, f, f, f, f, t, t, t, t, f, f, t, f, f, f],
-      ["all_lists",         f, f, f, f, f, f, f, t, f, f, f, f, f, t, t, f, t, f, f, t, f, f, f],
-      ["all_strings",       f, f, f, f, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
-      ["all_numbers",       f, t, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
-      ["all_len_1",         f, f, f, f, t, t, f, f, f, f, f, f, f, t, f, f, f, f, f, t, f, f, f],
-      ["all_len_2",         f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f],
-      ["all_len_3",         f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f]
+    [ // function       01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+      ["is_iterable",   f, f, f, f, t, t, t, t, f, f, t, t, t, t, t, t, t, t, t, t, t, t, t],
+      ["is_empty",      t, t, t, t, f, f, t, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f],
+      ["all_equal_T",   f, f, t, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t],
+      ["all_equal_F",   f, f, f, t, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+      ["all_equal_U",   t, f, f, f, f, f, t, t, f, f, t, f, f, f, f, f, f, f, t, f, f, f, f],
+      ["any_equal_T",   f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t],
+      ["any_equal_F",   f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f],
+      ["any_equal_U",   t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
+      ["all_defined",   f, t, t, t, t, t, t, t, t, t, f, t, t, t, t, t, t, f, f, t, t, t, t],
+      ["any_defined",   f, t, t, t, t, t, f, f, t, t, f, t, t, t, t, t, t, t, f, t, t, t, t],
+      ["any_undefined", t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
+      ["all_scalars",   t, t, t, t, f, f, t, t, t, t, t, t, t, f, f, f, f, t, t, f, t, t, t],
+      ["all_iterables", f, f, f, f, t, t, t, t, f, f, f, f, f, t, t, t, t, f, f, t, f, f, f],
+      ["all_lists",     f, f, f, f, f, f, f, t, f, f, f, f, f, t, t, f, t, f, f, t, f, f, f],
+      ["all_strings",   f, f, f, f, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+      ["all_numbers",   f, t, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
+      ["all_len_1",     f, f, f, f, t, t, f, f, f, f, f, f, f, t, f, f, f, f, f, t, f, f, f],
+      ["all_len_2",     f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f],
+      ["all_len_3",     f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f]
     ];
     table_check( good_r, good_c, false );   // sanity-test
 
     // Indirect function calls would be very useful here!!!
     for (vid=test_ids) run_test( "is_iterable", is_iterable(get_value(vid)), vid );
+    for (vid=test_ids) run_test( "is_empty", is_empty(get_value(vid)), vid );
     for (vid=test_ids) run_test( "all_equal_T", all_equal(get_value(vid),t), vid );
     for (vid=test_ids) run_test( "all_equal_F", all_equal(get_value(vid),f), vid );
     for (vid=test_ids) run_test( "all_equal_U", all_equal(get_value(vid),u), vid );

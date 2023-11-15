@@ -155,20 +155,6 @@ function is_inf
   v
 ) = ( v == (number_max * number_max) );
 
-//! Test if an iterable value is empty.
-/***************************************************************************//**
-  \param    v \<value> An iterable value.
-
-  \returns  <boolean> \b true when the iterable value has zero elements
-            and \b false otherwise. Returns \b true when \p v is not
-            an iterable value.
-*******************************************************************************/
-function is_empty
-(
-  v
-) = !is_iterable(v) ? true
-  : (len(v) == 0);
-
 //! Test if a value is a number.
 /***************************************************************************//**
   \param    v \<value> A value.
@@ -373,7 +359,6 @@ BEGIN_SCOPE validate;
       ["not_defined",   t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["is_nan",        f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f],
       ["is_inf",        f, f, f, f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f],
-      ["is_empty",      t, t, t, t, t, t, t, t, t, t, t, f, f, t, t, f, f, f, f, t, t],
       ["is_number",     f, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["is_integer",    f, t, t, t, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["is_decimal",    f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
@@ -394,7 +379,6 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "not_defined", not_defined(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_nan", is_nan(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_inf", is_inf(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "is_empty", is_empty(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_number", is_number(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_integer", is_integer(get_value(vid)), vid );
     for (vid=test_ids) run_test( "is_decimal", is_decimal(get_value(vid)), vid );
