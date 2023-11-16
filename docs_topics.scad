@@ -53,13 +53,12 @@
 
     | type      | description                                         |
     |:---------:|:----------------------------------------------------|
-    | [value]   | any valid OpenSCAD storable datum                   |
-    | number    | a numerical value                                   |
     | boolean   | a binary logic value (\b true or \b false)          |
+    | number    | a numerical value                                   |
     | string    | an iterable sequence of of character values         |
     | list      | an iterable sequential of arbitrary values          |
-    | iterable  | any iterable sequential value                       |
     | range     | an arithmetic sequence                              |
+    | function  | a function literal or variable containing functions |
 
   \subsection dt_special_sv Special values
 
@@ -78,19 +77,21 @@
 
   \section dt_additions Additional conventions
 
-    When a list has an expected number of elements 'n', the \em count
-    is appended following a '-'. When there is a range of expected
-    elements, the lower and upper bounds are separated by a ':' and
-    appended (order of bounds may be reversed). When the elements
-    values are of an expected type, that \em type is prepended.
-    Combinations are used as needed as in the following table:
-
     | name        | description                                       |
     |:-----------:|:--------------------------------------------------|
+    | [value]     | any valid OpenSCAD storable datum                 |
+    | iterable    | any iterable value                                |
     | list-n      | a list of of n elements                           |
     | list-l:u    | a list of l to u elements                         |
     | type-list   | a list of elements with an expected type          |
     | type-list-n | a list of n elements with an expected type        |
+
+    When a list has an expected number of elements 'n', the expected
+    number is appended following a '-'. When there is a range of
+    expected elements, the lower and upper bounds are separated by a
+    ':' and appended (order of bounds may be reversed). When the
+    elements values are of an expected data type, that \em type is
+    prepended.
 
   \subsection dt_distinctions Distinctions
 
