@@ -1380,7 +1380,7 @@ module draft_polygon
         );
 
   // draft each selected edge
-  for (i = get_index(el, i))        // allow edge selection index
+  for (i = get_index_seq(el, i))        // allow edge selection index
     draft_line(l=[c[first(el[i])], c[second(el[i])]], w=w, s=s);
 }
 

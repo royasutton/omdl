@@ -232,7 +232,7 @@ function consts
 
     See \ref dt_index for argument specification and conventions.
 *******************************************************************************/
-function get_index
+function get_index_seq
 (
   l,
   s = true,
@@ -825,7 +825,7 @@ BEGIN_SCOPE validate;
         empty_lst,                                          // t10
         empty_lst                                           // t11
       ],
-      ["get_index",
+      ["get_index_seq",
         empty_lst,                                          // t01
         empty_lst,                                          // t02
         empty_lst,                                          // t03
@@ -1086,7 +1086,7 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "lstr", lstr(get_value(vid)), vid );
     for (vid=test_ids) run_test( "lstr_html_B", lstr_html(get_value(vid),p="b"), vid );
     for (vid=test_ids) run_test( "consts", consts(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "get_index", get_index(get_value(vid)), vid );
+    for (vid=test_ids) run_test( "get_index_seq", get_index_seq(get_value(vid)), vid );
     for (vid=test_ids) run_test( "pad_9", pad(get_value(vid), w=9), vid );
     log_skip( "dround()" );
     log_skip( "sround()" );
