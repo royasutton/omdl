@@ -308,9 +308,9 @@ BEGIN_SCOPE validate;
 
     t = true; f = false; u = undef; s = -1;
 
-    function get_value( id ) = table_get_value(test_r, test_c, id, "tv");
+    function get_v1( id ) = table_get_value(test_r, test_c, id, "v1");
     module log_test( m ) { log_type ( "OMDL_TEST", m ); }
-    module log_skip( fn ) { log_test ( str("not tested: '", fn, "'") ); }
+    module log_skip( fn ) { log_test ( str("ignore: '", fn, "'") ); }
     module run_test( fn, fr, id )
     {
       td = table_get_value(test_r, test_c, id, "td");
@@ -318,7 +318,7 @@ BEGIN_SCOPE validate;
 
       if ( ev != s )
       {
-        d=str(fn, "(", get_value(id), ")=", ev);
+        d=str(fn, "(", get_v1(id), ")=", ev);
         m = validate( d=d, cv=fr, t="eq", ev=ev );
 
         if ( !validate( cv=fr, t="eq", ev=ev, pf=true ) )
@@ -333,7 +333,7 @@ BEGIN_SCOPE validate;
     log_test( str("openscad version ", version()) );
 
     // test-values columns
-    test_c = [ ["id", "identifier"], ["td", "description"], ["tv", "test value"] ];
+    test_c = [ ["id", "identifier"], ["td", "description"], ["v1", "value 1"] ];
 
     // test-values rows
     test_r =
@@ -395,25 +395,25 @@ BEGIN_SCOPE validate;
     table_check( good_r, good_c, false );   // sanity-test
 
     // Indirect function calls would be very useful here!!!
-    for (vid=test_ids) run_test( "is_iterable", is_iterable(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "is_empty", is_empty(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "all_equal_T", all_equal(get_value(vid),t), vid );
-    for (vid=test_ids) run_test( "all_equal_F", all_equal(get_value(vid),f), vid );
-    for (vid=test_ids) run_test( "all_equal_U", all_equal(get_value(vid),u), vid );
-    for (vid=test_ids) run_test( "any_equal_T", any_equal(get_value(vid),t), vid );
-    for (vid=test_ids) run_test( "any_equal_F", any_equal(get_value(vid),f), vid );
-    for (vid=test_ids) run_test( "any_equal_U", any_equal(get_value(vid),u), vid );
-    for (vid=test_ids) run_test( "all_defined", all_defined(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "any_defined", any_defined(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "any_undefined", any_undefined(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "all_scalars", all_scalars(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "all_iterables", all_iterables(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "all_lists", all_lists(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "all_strings", all_strings(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "all_numbers", all_numbers(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "all_len_1", all_len(get_value(vid),1), vid );
-    for (vid=test_ids) run_test( "all_len_2", all_len(get_value(vid),2), vid );
-    for (vid=test_ids) run_test( "all_len_3", all_len(get_value(vid),3), vid );
+    for (vid=test_ids) run_test( "is_iterable", is_iterable(get_v1(vid)), vid );
+    for (vid=test_ids) run_test( "is_empty", is_empty(get_v1(vid)), vid );
+    for (vid=test_ids) run_test( "all_equal_T", all_equal(get_v1(vid),t), vid );
+    for (vid=test_ids) run_test( "all_equal_F", all_equal(get_v1(vid),f), vid );
+    for (vid=test_ids) run_test( "all_equal_U", all_equal(get_v1(vid),u), vid );
+    for (vid=test_ids) run_test( "any_equal_T", any_equal(get_v1(vid),t), vid );
+    for (vid=test_ids) run_test( "any_equal_F", any_equal(get_v1(vid),f), vid );
+    for (vid=test_ids) run_test( "any_equal_U", any_equal(get_v1(vid),u), vid );
+    for (vid=test_ids) run_test( "all_defined", all_defined(get_v1(vid)), vid );
+    for (vid=test_ids) run_test( "any_defined", any_defined(get_v1(vid)), vid );
+    for (vid=test_ids) run_test( "any_undefined", any_undefined(get_v1(vid)), vid );
+    for (vid=test_ids) run_test( "all_scalars", all_scalars(get_v1(vid)), vid );
+    for (vid=test_ids) run_test( "all_iterables", all_iterables(get_v1(vid)), vid );
+    for (vid=test_ids) run_test( "all_lists", all_lists(get_v1(vid)), vid );
+    for (vid=test_ids) run_test( "all_strings", all_strings(get_v1(vid)), vid );
+    for (vid=test_ids) run_test( "all_numbers", all_numbers(get_v1(vid)), vid );
+    for (vid=test_ids) run_test( "all_len_1", all_len(get_v1(vid),1), vid );
+    for (vid=test_ids) run_test( "all_len_2", all_len(get_v1(vid),2), vid );
+    for (vid=test_ids) run_test( "all_len_3", all_len(get_v1(vid),3), vid );
 
     // end-of-tests
   END_OPENSCAD;

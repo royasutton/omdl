@@ -96,10 +96,10 @@ function validate
   = ( (t == "eq") || (t == "equals") ) ?
     (
       (cv == ev)
-      ? (pf?true  : str("passed: '", d, "'"))
+      ? (pf?true  : str("PASSED: '", d, "'"))
       : (pf?false : str
                     (
-                      "failed: '", d, "'; got '", cv,
+                      "FAILED: '", d, "'; got '", cv,
                       "', expected to equal '", ev, "'."
                     )
         )
@@ -107,10 +107,10 @@ function validate
   : ( (t == "ne") || (t == "not") ) ?
     (
       (cv != ev)
-      ? (pf?true  : str("passed: '", d, "'"))
+      ? (pf?true  : str("PASSED: '", d, "'"))
       : (pf?false : str
                     (
-                      "failed: '", d, "'; got '", cv,
+                      "FAILED: '", d, "'; got '", cv,
                       "', expected to not equal '", ev, "'."
                     )
         )
@@ -120,16 +120,16 @@ function validate
   : ( (t == "ae") || (t == "almost") ) ?
     (
       almost_equal(cv, ev, p)
-      ? (pf?true  : str("passed: '", d, "'"))
+      ? (pf?true  : str("PASSED: '", d, "'"))
       : (pf?false : str
                     (
-                      "failed: '", d, "'; got '", cv,
+                      "FAILED: '", d, "'; got '", cv,
                       "', expected to almost equal '", ev, "'.",
                       " to ", p, " digits"
                     )
         )
     )
-  : (pf?false : str("failed: '", d, "';  unknown test '", t, "'."));
+  : (pf?false : str("FAILED: '", d, "';  unknown test '", t, "'."));
 
 //! @}
 //! @}

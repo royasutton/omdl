@@ -532,7 +532,7 @@ BEGIN_SCOPE validate;
     function get_value( vid ) = table_get_value(test_r, test_c, vid, "tv");
     function gv( vid, e ) = get_value( vid )[e];
     module log_test( m ) { log_type ( "test", m ); }
-    module log_skip( f ) { log_test ( str("not tested: '", f, "'") ); }
+    module log_skip( f ) { log_test ( str("ignore: '", f, "'") ); }
     module run( fname, vid )
     {
       value_text = table_get_value(test_r, test_c, vid, "td");
