@@ -44,7 +44,7 @@
   \amu_word    tv_fail_c (words=${tv_fail} ++count)
   \amu_replace tv_fail_td
   (
-    text=${tv_log} search="^.*failed:.*$" replace="&^"
+    text=${tv_log} search="^.*FAILED:.*$" replace="&^"
     ++not_dot_newline
     ++format_sed
     ++format_no_copy

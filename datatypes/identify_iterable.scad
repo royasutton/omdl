@@ -306,10 +306,10 @@ BEGIN_SCOPE validate;
     include <omdl-base.scad>;
     include <common/validation.scad>;
 
-    t = true; f = false; u = undef; s = -1;
+    t = true; f = false; u = undef; s = number_max;
 
     function get_v1( id ) = table_get_value(test_r, test_c, id, "v1");
-    module log_test( m ) { log_type ( "OMDL_TEST", m ); }
+    module log_test( m ) { log_type ( "omdl_test", m ); }
     module log_skip( fn ) { log_test ( str("ignore: '", fn, "'") ); }
     module test_1v( fn, fr, id )
     {
@@ -318,7 +318,7 @@ BEGIN_SCOPE validate;
 
       if ( ev != s )
       {
-        d=str(fn, "(", get_v1(id), ")=", ev);
+        d = str(fn, "(", get_v1(id), ")=", ev);
         m = validate( d=d, cv=fr, t="eq", ev=ev );
 
         if ( !validate( cv=fr, t="eq", ev=ev, pf=true ) )
