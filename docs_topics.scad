@@ -54,14 +54,22 @@
     | type      | description                                         |
     |:---------:|:----------------------------------------------------|
     | [value]   | any valid OpenSCAD storable datum                   |
-    | number    | an arithmetic value                                 |
-    | boolean   | a binary logic value (true or false)                |
-    | string    | a sequential list of of character values            |
-    | list      | a sequential list of arbitrary values               |
+    | number    | a numerical value                                   |
+    | boolean   | a binary logic value (\b true or \b false)          |
+    | string    | an iterable sequence of of character values         |
+    | list      | an iterable sequential of arbitrary values          |
+    | iterable  | any iterable sequential value                       |
     | range     | an arithmetic sequence                              |
-    | undef     | the undefined value                                 |
 
-  \subsection dt_special Special numerical values
+  \subsection dt_special_sv Special values
+
+    | value     | description                                         |
+    |:---------:|:----------------------------------------------------|
+    | undef     | a value with no definition                          |
+    | ""        | the empty string                                    |
+    | []        | the empty list                                      |
+
+  \subsection dt_special_snv Special numerical values
 
     | value     | description                                         |
     |:---------:|:----------------------------------------------------|
