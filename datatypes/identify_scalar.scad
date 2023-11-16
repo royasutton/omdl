@@ -295,7 +295,7 @@ BEGIN_SCOPE validate;
     function get_v1( id ) = table_get_value(test_r, test_c, id, "v1");
     module log_test( m ) { log_type ( "OMDL_TEST", m ); }
     module log_skip( fn ) { log_test ( str("ignore: '", fn, "'") ); }
-    module run_test( fn, fr, id )
+    module test_1v( fn, fr, id )
     {
       td = table_get_value(test_r, test_c, id, "td");
       ev = table_get_value(good_r, good_c, fn, id);
@@ -374,23 +374,23 @@ BEGIN_SCOPE validate;
     table_check( good_r, good_c, false );   // sanity-test
 
     // Indirect function calls would be very useful here!!!
-    for (vid=test_ids) run_test( "is_scalar", is_scalar(get_v1(vid)), vid );
-    for (vid=test_ids) run_test( "is_defined", is_defined(get_v1(vid)), vid );
-    for (vid=test_ids) run_test( "not_defined", not_defined(get_v1(vid)), vid );
-    for (vid=test_ids) run_test( "is_nan", is_nan(get_v1(vid)), vid );
-    for (vid=test_ids) run_test( "is_inf", is_inf(get_v1(vid)), vid );
-    for (vid=test_ids) run_test( "is_number", is_number(get_v1(vid)), vid );
-    for (vid=test_ids) run_test( "is_integer", is_integer(get_v1(vid)), vid );
-    for (vid=test_ids) run_test( "is_decimal", is_decimal(get_v1(vid)), vid );
-    for (vid=test_ids) run_test( "is_range", is_range(get_v1(vid)), vid );
-    for (vid=test_ids) run_test( "is_even", is_even(get_v1(vid)), vid );
-    for (vid=test_ids) run_test( "is_odd", is_odd(get_v1(vid)), vid );
-    for (vid=test_ids) run_test( "is_between_MM", is_between(get_v1(vid),number_min,number_max), vid );
+    for (vid=test_ids) test_1v( "is_scalar", is_scalar(get_v1(vid)), vid );
+    for (vid=test_ids) test_1v( "is_defined", is_defined(get_v1(vid)), vid );
+    for (vid=test_ids) test_1v( "not_defined", not_defined(get_v1(vid)), vid );
+    for (vid=test_ids) test_1v( "is_nan", is_nan(get_v1(vid)), vid );
+    for (vid=test_ids) test_1v( "is_inf", is_inf(get_v1(vid)), vid );
+    for (vid=test_ids) test_1v( "is_number", is_number(get_v1(vid)), vid );
+    for (vid=test_ids) test_1v( "is_integer", is_integer(get_v1(vid)), vid );
+    for (vid=test_ids) test_1v( "is_decimal", is_decimal(get_v1(vid)), vid );
+    for (vid=test_ids) test_1v( "is_range", is_range(get_v1(vid)), vid );
+    for (vid=test_ids) test_1v( "is_even", is_even(get_v1(vid)), vid );
+    for (vid=test_ids) test_1v( "is_odd", is_odd(get_v1(vid)), vid );
+    for (vid=test_ids) test_1v( "is_between_MM", is_between(get_v1(vid),number_min,number_max), vid );
 
     // OpenSCAD built-in functions: is_undef() and is_num() are tested above
-    for (vid=test_ids) run_test( "is_bool", is_bool(get_v1(vid)), vid );
-    for (vid=test_ids) run_test( "is_string", is_string(get_v1(vid)), vid );
-    for (vid=test_ids) run_test( "is_list", is_list(get_v1(vid)), vid );
+    for (vid=test_ids) test_1v( "is_bool", is_bool(get_v1(vid)), vid );
+    for (vid=test_ids) test_1v( "is_string", is_string(get_v1(vid)), vid );
+    for (vid=test_ids) test_1v( "is_list", is_list(get_v1(vid)), vid );
 
     // end-of-tests
   END_OPENSCAD;
