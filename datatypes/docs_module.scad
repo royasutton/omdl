@@ -27,23 +27,10 @@
 
   \details
 
-  \amu_include (include/amu/pgid_pparent_path_n.amu)
-
     \amu_define group_name  (Data Types)
-    \amu_define group_brief (Type identification, operators, and structures.)
+    \amu_define group_brief (Type identification and operations.)
 
-      \amu_define group1        (${group}_identify)
-      \amu_define group1_name   (Type Identification)
-      \amu_define group1_brief  (Base data type identification.)
-
-      \amu_define group2        (${group}_operate)
-      \amu_define group2_name   (Type Operators)
-      \amu_define group2_brief  (Base data type operators.)
-
-      \amu_define group3        (${group}_structure)
-      \amu_define group3_name   (Data Structures)
-      \amu_define group3_brief  (Data structures and operators.)
-
+  \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -55,13 +42,6 @@
     \li \subpage tv_\amu_eval(${group})
 
   \page tv_\amu_eval(${group} ${group_name})
-    \li \subpage tv_\amu_eval(${group1})
-
-    \li \subpage tv_\amu_eval(${group2})
-
-  \page tv_\amu_eval(${group1} ${group1_name})
-
-  \page tv_\amu_eval(${group2} ${group2_name})
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -73,15 +53,6 @@
 
     See \ref dt for nomenclature, assumptions, and conventions used to
     specify values and data types throughout the library.
-
-  \defgroup \amu_eval(${group1} ${group1_name})
-  \brief    \amu_eval(${group1_brief})
-
-  \defgroup \amu_eval(${group2} ${group2_name})
-  \brief    \amu_eval(${group2_brief})
-
-  \defgroup \amu_eval(${group3} ${group3_name})
-  \brief    \amu_eval(${group3_brief})
 
   @}
 *******************************************************************************/

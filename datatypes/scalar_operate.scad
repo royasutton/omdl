@@ -28,10 +28,9 @@
   \details
 
     \amu_define group_name  (Scalar Operations)
-    \amu_define group_brief (Scalar data type operations.)
-    \amu_define parent_id   (operate)
+    \amu_define group_brief (Operations for scalar data types.)
 
-  \amu_include (include/amu/pgid_path_pid_pstem_pg.amu)
+  \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

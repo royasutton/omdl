@@ -1,4 +1,4 @@
-//! Table data type operations.
+//! Table data structure and operations.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,11 +27,10 @@
 
   \details
 
-    \amu_define group_name  (Tables Structure)
-    \amu_define group_brief (Table structure and operations.)
-    \amu_define parent_id   (structure)
+    \amu_define group_name  (Tables Operations)
+    \amu_define group_brief (Table data type and operations.)
 
-  \amu_include (include/amu/pgid_path_pid_pstem_pg.amu)
+  \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

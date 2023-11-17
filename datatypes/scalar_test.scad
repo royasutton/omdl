@@ -27,11 +27,10 @@
 
   \details
 
-    \amu_define group_name  (Scalar Identification)
-    \amu_define group_brief (Scalar data type tests.)
-    \amu_define parent_id   (identify)
+    \amu_define group_name  (Scalar Tests)
+    \amu_define group_brief (Tests to differentiate scalar data types.)
 
-  \amu_include (include/amu/pgid_path_pid_pstem_pg.amu)
+  \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

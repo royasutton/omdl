@@ -28,10 +28,9 @@
   \details
 
     \amu_define group_name  (Iterable Operations)
-    \amu_define group_brief (Iterable data type operations.)
-    \amu_define parent_id   (operate)
+    \amu_define group_brief (Operations for iterable data types.)
 
-  \amu_include (include/amu/pgid_path_pid_pstem_pg.amu)
+  \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

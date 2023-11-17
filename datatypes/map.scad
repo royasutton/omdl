@@ -1,4 +1,4 @@
-//! Map data type operations.
+//! Map data structure and operations.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,11 +27,10 @@
 
   \details
 
-    \amu_define group_name  (Map Structure)
-    \amu_define group_brief (Map structure and operations.)
-    \amu_define parent_id   (structure)
+    \amu_define group_name  (Map Operations)
+    \amu_define group_brief (Map data type and operations.)
 
-  \amu_include (include/amu/pgid_path_pid_pstem_pg.amu)
+  \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

@@ -1,4 +1,4 @@
-//! List data type tests.
+//! List data type comparision.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,11 +27,10 @@
 
   \details
 
-    \amu_define group_name  (List Identification)
-    \amu_define group_brief (List data type tests.)
-    \amu_define parent_id   (identify)
+    \amu_define group_name  (List Comparision)
+    \amu_define group_brief (List comparision operations.)
 
-  \amu_include (include/amu/pgid_path_pid_pstem_pg.amu)
+  \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

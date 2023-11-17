@@ -8,13 +8,14 @@ local_path        :=  datatypes
 
 local_library     :=  docs_module \
                       \
-                      identify_scalar \
-                      identify_iterable \
-                      identify_list \
+                      scalar_test \
+                      scalar_operate \
                       \
-                      operate_scalar \
-                      operate_iterable \
-                      operate_list \
+                      iterable_test \
+                      iterable_operate \
+                      \
+                      list_operate \
+                      list_compare \
                       \
                       map \
                       table

@@ -37,25 +37,26 @@ include <common/console.scad>;
 include <common/constants.scad>;
 
 //----------------------------------------------------------------------------//
+// data types
+//----------------------------------------------------------------------------//
+include <datatypes/scalar_test.scad>;
+include <datatypes/scalar_operate.scad>;
+
+include <datatypes/iterable_test.scad>;
+include <datatypes/iterable_operate.scad>;
+
+include <datatypes/list_operate.scad>;
+include <datatypes/list_compare.scad>;
+
+include <datatypes/map.scad>;
+include <datatypes/table.scad>;
+
+//----------------------------------------------------------------------------//
 // units
 //----------------------------------------------------------------------------//
 include <units/angle.scad>;
 include <units/coordinate.scad>;
 include <units/length.scad>;
-
-//----------------------------------------------------------------------------//
-// data types
-//----------------------------------------------------------------------------//
-include <datatypes/identify_scalar.scad>;
-include <datatypes/identify_iterable.scad>;
-include <datatypes/identify_list.scad>;
-
-include <datatypes/operate_scalar.scad>;
-include <datatypes/operate_iterable.scad>;
-include <datatypes/operate_list.scad>;
-
-include <datatypes/map.scad>;
-include <datatypes/table.scad>;
 
 //----------------------------------------------------------------------------//
 // math
