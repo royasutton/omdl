@@ -131,6 +131,49 @@ function validate
     )
   : (pf?false : str("FAILED: '", d, "';  unknown test '", t, "'."));
 
+// tables
+
+// maps
+    // test map structure
+    // [ "proto", ["function-name", argc]],
+    // [ "id",    ["description", passing-value, argv1, argv2, argv3] ]
+function map_validate_get_name( m ) = first(map_get_value(m, "proto"));
+function map_validate_get_argc( m ) = second(map_get_value(m, "proto"));
+
+function map_validate_get_td( m, id ) = first(map_get_value(m, id));
+function map_validate_get_ev( m, id ) = second(map_get_value(m, id));
+function map_validate_get_v1( m, id ) = third(map_get_value(m, id));
+function map_validate_get_v2( m, id ) = (map_get_value(m, id))[3];
+function map_validate_get_v3( m, id ) = (map_get_value(m, id))[4];
+
+module validate_log( t ) { log_type ( "omdl_test", t ); }
+
+module map_validate( m, id, fr )
+{
+  if ( id != "proto" )
+  {
+    fn = map_validate_get_name(m);
+    argc = map_validate_get_argc(m);
+
+    td = map_validate_get_td(m, id);
+    ev = map_validate_get_ev(m, id);
+    v1 = map_validate_get_v1(m, id);
+    v2 = map_validate_get_v2(m, id);
+
+    vd = (argc == 3) ? str(fn, "(", map_validate_get_v1(m, id), ",",  map_validate_get_v2(m, id),  ",",  map_validate_get_v3(m, id), ")=", ev)
+       : (argc == 2) ? str(fn, "(", map_validate_get_v1(m, id), ",",  map_validate_get_v2(m, id), ")=", ev)
+       : (argc == 1) ? str(fn, "(", map_validate_get_v1(m, id), ")=", ev)
+       :             str(fn, "(*)=", ev);
+
+    t = validate( d=vd, cv=fr, t="eq", ev=ev );
+
+    if ( !validate( cv=fr, t="eq", ev=ev, pf=true ) )
+      validate_log( str(id, " ", t, " ---> \"", td, "\"") );
+    else
+      validate_log( str(id, " ", t) );
+  }
+}
+
 //! @}
 //! @}
 
