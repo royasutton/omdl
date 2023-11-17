@@ -100,6 +100,12 @@ number_max = 1e308;
 //! <decimal> The smallest representable number in OpenSCAD scripts.
 number_min = -1e308;
 
+//! <value> The OpenSCAD \c inf value (infinity).
+number_inf = 1/0;
+
+//! <value> The OpenSCAD \c nan value (not a number).
+number_nan = 0/0;
+
 //! <string> A string with no characters (the empty string).
 empty_str = "";
 
