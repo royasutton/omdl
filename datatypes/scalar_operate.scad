@@ -101,9 +101,7 @@ BEGIN_SCOPE validate;
     include <omdl-base.scad>;
     include <common/validation.scad>;
 
-    validate_log( str("openscad version ", version()) );
-
-    map_defined_or =
+    m_defined_or =
     [
       ["proto", ["defined_or", 2]],
       ["t01", ["Undefined", 1, undef, 1]],
@@ -115,13 +113,14 @@ BEGIN_SCOPE validate;
       ["t07", ["Empty string", empty_str, empty_str, 7]],
       ["t08", ["Empty list", empty_lst, empty_lst, 8]]
     ];
-    map_check( map_defined_or, false );
 
-    for ( id = map_get_keys( map_defined_or ) )
+    map_validate_init( m_defined_or );
+
+    for ( id = map_get_keys( m_defined_or ) )
       map_validate
-      ( map_defined_or, id,
-        defined_or (  map_validate_get_v1(map_defined_or, id),
-                      map_validate_get_v2(map_defined_or, id) )
+      ( m_defined_or, id,
+        defined_or (  map_validate_get_v1(m_defined_or, id),
+                      map_validate_get_v2(m_defined_or, id) )
       );
 
     // end-of-tests
