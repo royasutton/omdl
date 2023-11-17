@@ -686,7 +686,7 @@ function qsort
 
   \details
 
-    Elements are ordered using compare(). See its documentation for a
+    Elements are ordered using compare_av(). See its documentation for a
     description of the parameter \p s. To recursively sort all
     elements, set \p d greater than, or equal to, the maximum level of
     hierarchy in \p v.
@@ -714,21 +714,21 @@ function qsort2
       [
         for (j = v)
         let(k = not_defined(i) ? j : j[i])
-          if (compare(me, k, s) == -1)
+          if (compare_av(me, k, s) == -1)
             ((d > 0) && is_list(k)) ? qsort2(k, i, d-1, r, s) : j
       ],
       eq =
       [
         for (j = v)
         let(k = not_defined(i) ? j : j[i])
-          if (compare(me, k, s) ==  0)
+          if (compare_av(me, k, s) ==  0)
             ((d > 0) && is_list(k)) ? qsort2(k, i, d-1, r, s) : j
       ],
       gt =
       [
         for (j = v)
         let(k = not_defined(i) ? j : j[i])
-          if (compare(me, k, s) == +1)
+          if (compare_av(me, k, s) == +1)
             ((d > 0) && is_list(k)) ? qsort2(k, i, d-1, r, s) : j
       ],
       sp = (r == true) ?

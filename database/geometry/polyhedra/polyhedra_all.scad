@@ -21529,7 +21529,7 @@ BEGIN_SCOPE autotest;
       {
         cc = coordinate(s[i], from="s");
 
-        if ( !n_almost_equal(c[i], cc) )
+        if ( !almost_equal_nv(c[i], cc) )
         {
           cs = coordinate(c[i], to="s");
 

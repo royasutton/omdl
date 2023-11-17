@@ -155,8 +155,8 @@ function polygon2d_line_p
  // zdx = (tp[0] == ip[0]),                                   // is delta-x zero
  // zdy = (tp[1] == ip[1]),                                   // is delta-y zero
  //
-    zdx = n_almost_equal(tp[0], ip[0]),                       // is delta-x zero
-    zdy = n_almost_equal(tp[1], ip[1]),                       // is delta-y zero
+    zdx = almost_equal_nv(tp[0], ip[0]),                      // is delta-x zero
+    zdy = almost_equal_nv(tp[1], ip[1]),                      // is delta-y zero
 
     // axis: 'y' if zdx, else use 'x'
     a   = zdx ? 1 : 0,

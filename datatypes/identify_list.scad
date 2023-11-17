@@ -72,9 +72,9 @@
   \details
 
     Can compare two scalar numbers as well. To compare general lists of
-    non-numerical values see almost_equal().
+    non-numerical values see almost_equal_av().
 *******************************************************************************/
-function n_almost_equal
+function almost_equal_nv
 (
   v1,
   v2,
@@ -100,20 +100,20 @@ function n_almost_equal
     The iterable values can be of mixed data types. All numerical
     comparisons are performed using the specified precision. All
     non-numeric comparisons test for equality. When both \p v1 and \p
-    v2 are both numerical vectors, the function n_almost_equal()
+    v2 are both numerical vectors, the function almost_equal_nv()
     provides a more efficient test.
 *******************************************************************************/
-function almost_equal
+function almost_equal_av
 (
   v1,
   v2,
   p = 6
-) = all_numbers(concat(v1, v2)) ? n_almost_equal(v1, v2, p) // all numerical
-  : all_scalars(concat([v1], [v2])) ? (v1 == v2)            // all single values
-  : (is_string(v1) || is_string(v2)) ? (v1 == v2)           // either is a string
-  : !all_iterables(concat([v1], [v2])) ? false              // false if either not iterable
-  : !almost_equal(first(v1), first(v2), p) ? false          // compare first elements
-  : almost_equal(ntail(v1), ntail(v2), p);                  // compare remaining elements
+) = all_numbers(concat(v1, v2)) ? almost_equal_nv(v1, v2, p)  // all numerical
+  : all_scalars(concat([v1], [v2])) ? (v1 == v2)              // all single values
+  : (is_string(v1) || is_string(v2)) ? (v1 == v2)             // either is a string
+  : !all_iterables(concat([v1], [v2])) ? false                // false if either not iterable
+  : !almost_equal_av(first(v1), first(v2), p) ? false         // compare first elements
+  : almost_equal_av(ntail(v1), ntail(v2), p);                 // compare remaining elements
 
 //! Compare the sort order any two arbitrary data type values.
 /***************************************************************************//**
@@ -149,7 +149,7 @@ function almost_equal
             exceeded the intermediate variable storage capacity for
             long ranges.
 *******************************************************************************/
-function compare
+function compare_av
 (
   v1,
   v2,
@@ -180,7 +180,7 @@ function compare
       (v2_nd || v2_in) ? -1
     : v2_ib ?
       (
-        ((v1 == true)  && (v2 == false)) ? -1   // defined: true > false
+        ((v1 == true)  && (v2 == false)) ? -1       // defined: true > false
       : ((v1 == false) && (v2 == true))  ? +1
       : 0
       )
@@ -208,49 +208,49 @@ function compare
       (
         let
         (
-          l1 = len(smerge(v1, true)),           // get total element count
+          l1 = len(smerge(v1, true)),               // get total element count
           l2 = len(smerge(v2, true))
         )
-        (l1 > l2) ? -1                          // longest list is greater
+        (l1 > l2) ? -1                              // longest list is greater
       : (l2 > l1) ? +1
-      : ((l1 == 0) && (l2 == 0)) ? 0            // reached end, are equal
+      : ((l1 == 0) && (l2 == 0)) ? 0                // reached end, are equal
       : let
         (
-          cf = compare(first(v1), first(v2), s) // compare first elements
+          cf = compare_av(first(v1), first(v2), s)  // compare first elements
         )
-        (cf != 0) ? cf                          // not equal, ordering determined
-      : compare(ntail(v1), ntail(v2), s)        // equal, check remaining
+        (cf != 0) ? cf                              // not equal, ordering determined
+      : compare_av(ntail(v1), ntail(v2), s)         // equal, check remaining
       )
     : 1 // others are greater
     )
   // v1 a range.
   : is_range(v2) ?
     (
-      (v1 == v2) ? 0                            // equal range definitions
+      (v1 == v2) ? 0                                // equal range definitions
       // compare range sums
     : (s == true) ?
       (
         let
         (
-          rs1 = sum(v1),                        // compute range sums
+          rs1 = sum(v1),                            // compute range sums
           rs2 = sum(v2)
         )
-        (rs1 > rs2) ? -1                        // greatest sum is greater
+        (rs1 > rs2) ? -1                            // greatest sum is greater
       : (rs2 > rs1) ? +1
-      : 0                                       // sums equal
+      : 0                                           // sums equal
       )
       // compare range lists
     : (
         let
         (
-          rv1 = [for (i=v1) i],                 // convert to lists
+          rv1 = [for (i=v1) i],                     // convert to lists
           rv2 = [for (i=v2) i],
-          rl1 = len(rv1),                       // get lengths
+          rl1 = len(rv1),                           // get lengths
           rl2 = len(rv2)
         )
-        (rl1 > rl2) ? -1                        // longest range is greater
+        (rl1 > rl2) ? -1                            // longest range is greater
       : (rl2 > rl1) ? +1
-      : compare(rv1, rv2, s)                    // equal so compare as lists
+      : compare_av(rv1, rv2, s)                     // equal so compare as lists
       )
     )
   // v2 not a range so v1 > v2
@@ -372,18 +372,18 @@ BEGIN_SCOPE validate;
 
     good_r =
     [ // function            01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20
-      ["n_almost_equal_p4",   f, f, f, f, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f],
-      ["n_almost_equal_p2",   f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f],
-      ["almost_equal_p2",     t, f, t, f, f, t, t, f, t, f, f, f, f, t, t, t, t, t, t, t],
-      ["compare",             0,-1, 0,+1,+1, 0, 0,-1, 0,+1,-1,-1,+1, 0,+1, 0, 0, 0, 0,+1],
+      ["almost_equal_nv_p4",  f, f, f, f, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f],
+      ["almost_equal_nv_p2",  f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f],
+      ["almost_equal_av_p2",  t, f, t, f, f, t, t, f, t, f, f, f, f, t, t, t, t, t, t, t],
+      ["compare_av",          0,-1, 0,+1,+1, 0, 0,-1, 0,+1,-1,-1,+1, 0,+1, 0, 0, 0, 0,+1],
     ];
     table_check( good_r, good_c, false );   // sanity-test
 
     // Indirect function calls would be very useful here!!!
-    for (vid=test_ids) test_2v( "n_almost_equal_p4", n_almost_equal(get_v1(vid),get_v2(vid),4), vid );
-    for (vid=test_ids) test_2v( "n_almost_equal_p2", n_almost_equal(get_v1(vid),get_v2(vid),2), vid );
-    for (vid=test_ids) test_2v( "almost_equal_p2", almost_equal(get_v1(vid),get_v2(vid),2), vid );
-    for (vid=test_ids) test_2v( "compare", compare(get_v1(vid),get_v2(vid)), vid );
+    for (vid=test_ids) test_2v( "almost_equal_nv_p4", almost_equal_nv(get_v1(vid),get_v2(vid),4), vid );
+    for (vid=test_ids) test_2v( "almost_equal_nv_p2", almost_equal_nv(get_v1(vid),get_v2(vid),2), vid );
+    for (vid=test_ids) test_2v( "almost_equal_av_p2", almost_equal_av(get_v1(vid),get_v2(vid),2), vid );
+    for (vid=test_ids) test_2v( "compare_av", compare_av(get_v1(vid),get_v2(vid)), vid );
 
     // end-of-tests
   END_OPENSCAD;
