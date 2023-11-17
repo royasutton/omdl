@@ -53,6 +53,9 @@
 
 //----------------------------------------------------------------------------//
 
+//! <value> Value assignment for expected results table to skip a test.
+validation_skip_value = number_inf;
+
 //! Compare a computed test value with an known good result.
 /***************************************************************************//**
   \param    d <string> A description.
@@ -131,12 +134,62 @@ function validate
     )
   : (pf?false : str("FAILED: '", d, "';  unknown test '", t, "'."));
 
-// tables
+// log
+module validate_log( t ) { log_type ( "omdl_test", t ); }
+module validate_skip( fn ) { validate_log ( str("ignore: '", fn, "'") ); }
 
+//
+// tables
+//
+
+function table_validate_get_td( r, c, id ) = table_get_value(r, c, id, "td");
+function table_validate_get_ev( r, c, fn, id ) = table_get_value(r, c, fn, id);
+function table_validate_get_v1( r, c, id ) = first(table_get_value(r, c, id, "vl"));
+function table_validate_get_v2( r, c, id ) = second(table_get_value(r, c, id, "vl"));
+function table_validate_get_v3( r, c, id ) = third(table_get_value(r, c, id, "vl"));
+
+module table_validate_init( tr, tc, gr, gc, verbose=false )
+{
+  validate_log( str("openscad version ", version()) );
+
+  table_check( tt_r, tt_c, verbose );
+  table_check( tg_r, tg_c, verbose );
+}
+
+module table_validate( tr, tc, gr, gc, id, fn, argc, fr, t="equals", p=6 )
+{
+  td = table_validate_get_td(tr, tc, id);
+  ev = table_validate_get_ev(gr, gc, fn, id);
+
+  if ( ev != validation_skip_value )
+  {
+    vd = (argc == 3) ? str(fn, "(", table_validate_get_v1(tr, tc, id),
+                               ",", table_validate_get_v2(tr, tc, id),
+                               ",", table_validate_get_v3(tr, tc, id), ")=", ev)
+       : (argc == 2) ? str(fn, "(", table_validate_get_v1(tr, tc, id),
+                               ",", table_validate_get_v2(tr, tc, id), ")=", ev)
+       : (argc == 1) ? str(fn, "(", table_validate_get_v1(tr, tc, id), ")=", ev)
+       :               str(fn, "(*)=", ev);
+
+    lm = validate( d=vd, cv=fr, t=t, p=p, ev=ev );
+
+    if ( !validate( cv=fr, t=t, p=p, ev=ev, pf=true ) )
+      validate_log( str(id, " ", lm, " ---> \"", td, "\"") );
+    else
+      validate_log( str(id, " ", lm) );
+  }
+  else
+    validate_log( str(id, " -skip-: '", fn, "(", td, ")'") );
+}
+
+
+//
 // maps
-    // test map structure
-    // [ "proto", ["function-name", argc]],
-    // [ "id",    ["description", passing-value, argv1, argv2, argv3] ]
+//
+
+// test map structure
+// [ "proto", ["function-name", argc]],
+// [ "id",    ["description", passing-value, argv1, argv2, argv3] ]
 function map_validate_get_name( m ) = first(map_get_value(m, "proto"));
 function map_validate_get_argc( m ) = second(map_get_value(m, "proto"));
 
@@ -146,9 +199,16 @@ function map_validate_get_v1( m, id ) = third(map_get_value(m, id));
 function map_validate_get_v2( m, id ) = (map_get_value(m, id))[3];
 function map_validate_get_v3( m, id ) = (map_get_value(m, id))[4];
 
-module validate_log( t ) { log_type ( "omdl_test", t ); }
+module map_validate_init( m, verbose=false )
+{
+  validate_log( str("openscad version ", version()) );
 
-module map_validate( m, id, fr )
+  map_check( m, verbose );
+
+  validate_log( str(map_validate_get_name(m), "(argc = ", map_validate_get_argc(m), ")") );
+}
+
+module map_validate( m, id, fr, t="equals", p=6 )
 {
   if ( id != "proto" )
   {
@@ -160,17 +220,20 @@ module map_validate( m, id, fr )
     v1 = map_validate_get_v1(m, id);
     v2 = map_validate_get_v2(m, id);
 
-    vd = (argc == 3) ? str(fn, "(", map_validate_get_v1(m, id), ",",  map_validate_get_v2(m, id),  ",",  map_validate_get_v3(m, id), ")=", ev)
-       : (argc == 2) ? str(fn, "(", map_validate_get_v1(m, id), ",",  map_validate_get_v2(m, id), ")=", ev)
+    vd = (argc == 3) ? str(fn, "(", map_validate_get_v1(m, id),
+                               ",", map_validate_get_v2(m, id),
+                               ",", map_validate_get_v3(m, id), ")=", ev)
+       : (argc == 2) ? str(fn, "(", map_validate_get_v1(m, id),
+                               ",", map_validate_get_v2(m, id), ")=", ev)
        : (argc == 1) ? str(fn, "(", map_validate_get_v1(m, id), ")=", ev)
-       :             str(fn, "(*)=", ev);
+       :               str(fn, "(*)=", ev);
 
-    t = validate( d=vd, cv=fr, t="eq", ev=ev );
+    lm = validate( d=vd, cv=fr, t=t, p=p, ev=ev );
 
-    if ( !validate( cv=fr, t="eq", ev=ev, pf=true ) )
-      validate_log( str(id, " ", t, " ---> \"", td, "\"") );
+    if ( !validate( cv=fr, t=t, p=p, ev=ev, pf=true ) )
+      validate_log( str(id, " ", lm, " ---> \"", td, "\"") );
     else
-      validate_log( str(id, " ", t) );
+      validate_log( str(id, " ", lm) );
   }
 }
 
