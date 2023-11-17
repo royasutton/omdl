@@ -57,27 +57,29 @@
 
 //----------------------------------------------------------------------------//
 
-//! Return a value when it is defined or a default value when it is not.
+//! Return given value, if defined, or a secondary value, if primary is not defined.
 /***************************************************************************//**
-  \param    v \<value> A value.
-  \param    d \<value> A default value.
+  \param    v \<value> A primary value.
+  \param    d \<value> A secondary value.
 
   \returns  \<value> \p v when it is defined and \p d otherwise.
+
+  The value \p d is returned only when \p v is equal to \b undef.
 *******************************************************************************/
 function defined_or
 (
   v,
   d
-) = is_defined(v) ? v : d;
+) = is_undef(v) ? d : v;
 
-//! Map an index position into a circularly indexed list.
+//! Return a circular index position.
 /***************************************************************************//**
-  \param    i <integer> Any index, in or out of bounds.
-  \param    l <integer> The circular list length.
-  \param    f <integer> The starting index number.
+  \param    i <integer> A integer position.
+  \param    l <integer> The range length.
+  \param    f <integer> The starting index position.
 
-  \returns  <integer> A index position in the circular list within the
-            range <tt>[f : l+f-1]</tt>.
+  \returns  <integer> The index position mapped into a circular list
+            within the range <tt>[f : l+f-1]</tt>.
 *******************************************************************************/
 function circular_index
 (
@@ -99,87 +101,28 @@ BEGIN_SCOPE validate;
     include <omdl-base.scad>;
     include <common/validation.scad>;
 
-    echo( str("openscad version ", version()) );
+    validate_log( str("openscad version ", version()) );
 
-    // test-values columns
-    test_c =
+    map_defined_or =
     [
-      ["id", "identifier"],
-      ["td", "description"],
-      ["tv", "test value"]
+      ["proto", ["defined_or", 2]],
+      ["t01", ["Undefined", 1, undef, 1]],
+      ["t02", ["A small value", aeps, aeps, 2]],
+      ["t03", ["Infinity", number_inf, number_inf, 3]],
+      ["t04", ["Max number", number_max, number_max, 4]],
+      ["t05", ["Undefined list", [undef], [undef], 5]],
+      ["t06", ["Short range", [0:9], [0:9], 6]],
+      ["t07", ["Empty string", empty_str, empty_str, 7]],
+      ["t08", ["Empty list", empty_lst, empty_lst, 8]]
     ];
+    map_check( map_defined_or, false );
 
-    // test-values rows
-    test_r =
-    [
-      ["t01", "The undefined value",        undef],
-      ["t02", "The empty list",             empty_lst],
-      ["t03", "A range",                    [0:0.5:9]],
-      ["t04", "A string",                   "A string"],
-      ["t05", "Test list 01",               ["orange","apple","grape","banana"]],
-      ["t06", "Test list 02",               ["b","a","n","a","n","a","s"]],
-      ["t07", "Test list 03",               [undef]],
-      ["t08", "Test list 04",               [[1,2],[2,3]]],
-      ["t09", "Test list 05",               ["ab",[1,2],[2,3],[4,5]]],
-      ["t10", "Test list 06",               [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]]],
-      ["t11", "Vector of integers 0 to 15", [for (i=[0:15]) i]]
-    ];
-
-    test_ids = table_get_row_ids( test_r );
-
-    // expected columns: ("id" + one column for each test)
-    good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
-
-    // expected rows: ("golden" test results), use 's' to skip test
-    skip = -1;  // skip test
-
-    good_r =
-    [ // function
-      ["defined_or_D",
-        "default",                                          // t01
-        empty_lst,                                          // t02
-        [0:0.5:9],                                          // t03
-        "A string",                                         // t04
-        ["orange","apple","grape","banana"],                // t05
-        ["b","a","n","a","n","a","s"],                      // t06
-        [undef],                                            // t07
-        [[1,2],[2,3]],                                      // t08
-        ["ab",[1,2],[2,3],[4,5]],                           // t09
-        [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]],            // t10
-        [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
-      ]
-    ];
-
-    // sanity-test tables
-    table_check( test_r, test_c, false );
-    table_check( good_r, good_c, false );
-
-    // validate helper function and module
-    function get_value( vid ) = table_get_value(test_r, test_c, vid, "tv");
-    module log_test( m ) { log_type ( "test", m ); }
-    module log_skip( f ) { log_test ( str("ignore: '", f, "'") ); }
-    module run_test( fname, fresult, vid )
-    {
-      value_text = table_get_value(test_r, test_c, vid, "td");
-      pass_value = table_get_value(good_r, good_c, fname, vid);
-
-      test_pass = validate( cv=fresult, t="equals", ev=pass_value, pf=true );
-      test_text = validate( str(fname, "(", get_value(vid), ")=", pass_value), fresult, "equals", pass_value );
-
-      if ( pass_value != skip )
-      {
-        if ( !test_pass )
-          log_test( str(vid, " ", test_text, " (", value_text, ")") );
-        else
-          log_test( str(vid, " ", test_text) );
-      }
-      else
-        log_test( str(vid, " -skip-: '", fname, "(", value_text, ")'") );
-    }
-
-    // Indirect function calls would be very useful here!!!
-    for (vid=test_ids) run_test( "defined_or_D", defined_or(get_value(vid),"default"), vid );
-    log_skip( "circular_index()" );
+    for ( id = map_get_keys( map_defined_or ) )
+      map_validate
+      ( map_defined_or, id,
+        defined_or (  map_validate_get_v1(map_defined_or, id),
+                      map_validate_get_v2(map_defined_or, id) )
+      );
 
     // end-of-tests
   END_OPENSCAD;
