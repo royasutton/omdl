@@ -104,7 +104,7 @@ BEGIN_SCOPE validate;
     function v1( m, id ) = map_validate_get_v1(m, id);
     function v2( m, id ) = map_validate_get_v2(m, id);
 
-    map_defined_or =
+    map_test_defined_or =
     [
       ["proto", ["defined_or", 2]],
       ["t01", ["Undefined", 1, undef, 1]],
@@ -117,7 +117,7 @@ BEGIN_SCOPE validate;
       ["t08", ["Empty list", empty_lst, empty_lst, 8]]
     ];
 
-    m = map_defined_or;
+    m = map_test_defined_or;
     map_validate_start( m );
 
     for ( id = map_get_keys( m ) )
