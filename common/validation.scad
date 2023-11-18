@@ -581,7 +581,7 @@ BEGIN_SCOPE example_table;
     include <common/validation.scad>;
 
     function fmt( id, td, v1, v2, v3 ) = table_validate_fmt(id, td, v1, v2, v3);
-    function v1(id) = table_validate_get_v1(db, id);
+    function v1(db, id) = table_validate_get_v1(db, id);
     t = true; f = false; u = undef; s = validation_skip;
 
     // table: test values
@@ -612,9 +612,9 @@ BEGIN_SCOPE example_table;
     table_validate_start( db );
     test_ids = table_validate_get_ids( db );
 
-    for (id=test_ids) table_validate( db, id,   "is_bool", 1,   is_bool( v1(id) ) );
-    for (id=test_ids) table_validate( db, id, "is_string", 1, is_string( v1(id) ) );
-    for (id=test_ids) table_validate( db, id,   "is_list", 1,   is_list( v1(id) ) );
+    for (id=test_ids) table_validate( db, id,   "is_bool", 1,   is_bool( v1(db, id) ) );
+    for (id=test_ids) table_validate( db, id, "is_string", 1, is_string( v1(db, id) ) );
+    for (id=test_ids) table_validate( db, id,   "is_list", 1,   is_list( v1(db, id) ) );
 
     // end-of-example
   END_OPENSCAD;
