@@ -213,7 +213,7 @@ function polytope_vertex_adjacent_vertices
         for (j = [0:fn-1])
           if (i == fi[j])
             for (k = [-1, 1])
-              fi[circular_index(j + k, fn)]
+              fi[cindex(j + k, fn)]
     ]
   )
   unique(vn);

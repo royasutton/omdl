@@ -231,7 +231,7 @@ function consts
 
     See \ref dt_index for argument specification and conventions.
 *******************************************************************************/
-function get_index_seq
+function seq_generate
 (
   l,
   s = true,
@@ -685,7 +685,7 @@ function qsort
 
   \details
 
-    Elements are ordered using compare_av(). See its documentation for a
+    Elements are ordered using compare(). See its documentation for a
     description of the parameter \p s. To recursively sort all
     elements, set \p d greater than, or equal to, the maximum level of
     hierarchy in \p v.
@@ -713,21 +713,21 @@ function qsort2
       [
         for (j = v)
         let(k = not_defined(i) ? j : j[i])
-          if (compare_av(me, k, s) == -1)
+          if (compare(me, k, s) == -1)
             ((d > 0) && is_list(k)) ? qsort2(k, i, d-1, r, s) : j
       ],
       eq =
       [
         for (j = v)
         let(k = not_defined(i) ? j : j[i])
-          if (compare_av(me, k, s) ==  0)
+          if (compare(me, k, s) ==  0)
             ((d > 0) && is_list(k)) ? qsort2(k, i, d-1, r, s) : j
       ],
       gt =
       [
         for (j = v)
         let(k = not_defined(i) ? j : j[i])
-          if (compare_av(me, k, s) == +1)
+          if (compare(me, k, s) == +1)
             ((d > 0) && is_list(k)) ? qsort2(k, i, d-1, r, s) : j
       ],
       sp = (r == true) ?
@@ -824,7 +824,7 @@ BEGIN_SCOPE validate;
         empty_lst,                                          // t10
         empty_lst                                           // t11
       ],
-      ["get_index_seq",
+      ["seq_generate",
         empty_lst,                                          // t01
         empty_lst,                                          // t02
         empty_lst,                                          // t03
@@ -1085,7 +1085,7 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "lstr", lstr(get_value(vid)), vid );
     for (vid=test_ids) run_test( "lstr_html_B", lstr_html(get_value(vid),p="b"), vid );
     for (vid=test_ids) run_test( "consts", consts(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "get_index_seq", get_index_seq(get_value(vid)), vid );
+    for (vid=test_ids) run_test( "seq_generate", seq_generate(get_value(vid)), vid );
     for (vid=test_ids) run_test( "pad_9", pad(get_value(vid), w=9), vid );
     log_skip( "dround()" );
     log_skip( "sround()" );

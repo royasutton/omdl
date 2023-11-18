@@ -138,7 +138,7 @@
     | <range>         | The range of positions given by a <range>     |
     | <integer-list>  | The list of positions give in <integer-list>  |
 
-    The function get_index_seq() can be used to convert a value of this
+    The function seq_generate() can be used to convert a value of this
     data type into a sequence of list element indexes.
 
     \b Example
@@ -148,8 +148,8 @@
     l1 = [a,b,c,d,e,f]
 
     // index sequence
-    get_index_seq(l1)          = [0,1,2,3,4,5]
-    get_index_seq(l1, "rands") = [0,2,5]
+    seq_generate(l1)          = [0,1,2,3,4,5]
+    seq_generate(l1, "rands") = [0,2,5]
     \endcode
 
   \subsection dt_geometric Geometric
