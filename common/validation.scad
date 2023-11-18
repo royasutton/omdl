@@ -52,9 +52,11 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+// common
+//----------------------------------------------------------------------------//
 
-//! <value> Value assignment for expected results table to skip a test.
-validation_skip = number_inf;
+//! Value signature assignment for log-value results table to skip a test.
+validation_skip = [number_min, number_max, number_inf];
 
 //! Compare a computed test value with an known good result.
 /***************************************************************************//**
@@ -95,8 +97,7 @@ function validate
   ev,
   p = 4,
   pf = false
-)
-  = ( (t == "eq") || (t == "equals") ) ?
+) = ( (t == "eq") || (t == "equals") ) ?
     (
       (cv == ev)
       ? (pf?true  : str("PASSED: '", d, "'"))
@@ -134,41 +135,149 @@ function validate
     )
   : (pf?false : str("FAILED: '", d, "';  unknown test '", t, "'."));
 
-// log
+//! Output text \p t to test log.
+/***************************************************************************//**
+  \param    t <string> A message to output to log.
+*******************************************************************************/
 module validate_log( t ) { log_type ( "omdl_test", t ); }
+
+//! Record that function named \p fn has been skipped in the test log.
+/***************************************************************************//**
+  \param    fn <string> The name of the skipped function.
+*******************************************************************************/
 module validate_skip( fn ) { validate_log ( str("ignore: '", fn, "'") ); }
 
-//
-// tables
-//
+//----------------------------------------------------------------------------//
+// validation tables
+//----------------------------------------------------------------------------//
 
-function table_validate_init ( tr, gr ) =
-  let(ids = table_get_row_ids( tr ))
-  [
-    tr,                                                               // test row
-    [["id","identifier"],["td","description"],["vl","value-list"] ],  // test data columns
-    gr,                                                               // good result row
-    pmerge([concat("id",ids),concat("identifier",ids)])               // good result columns
-  ];
+//! Create data structure for related table validation functions.
+/***************************************************************************//**
+  \param    tr <matrix-CxR> The test data table rows.
+  \param    gr <matrix-CxR> The expected result data table rows.
 
+  \returns  <datastruct> A structure used with the related table
+            validation functions.
+*******************************************************************************/
+function table_validate_init
+(
+  tr,
+  gr
+) = let
+    (
+      ids = table_get_row_ids( tr )
+    )
+    [
+      tr,                                                             // db[0] test row
+      [["id","identifier"],["td","description"],["vl","value-list"]], // db[1] test data columns
+      gr,                                                             // db[2] good result row
+      pmerge([concat("id",ids),concat("identifier",ids)])             // db[3] good result columns
+    ];
+
+function table_validate_fmt
+(
+  id,
+  td,
+  v1,
+  v2,
+  v3
+) = !is_undef(v2) && !is_undef(v3) ?  [id, td, [v1, v2, v3]]
+  : !is_undef(v2) ?                   [id, td, [v1, v2]]
+  :                                   [id, td, [v1]];
+
+//! Return a list of test identifiers.
+/***************************************************************************//**
+  \param    db <datastruct> An initialized table validation data structure.
+
+  \returns  <list> A list of test identifiers.
+*******************************************************************************/
 function table_validate_get_ids( db ) = table_get_row_ids( db[0] );
 
+//! Return the expected value for a given test.
+/***************************************************************************//**
+  \param    db <datastruct> An initialized table validation data structure.
+  \param    fn <string> The function name.
+  \param    id <string> The test identifier.
+
+  \returns  <value> The expect value.
+*******************************************************************************/
 function table_validate_get_ev( db, fn, id ) = table_get_value(db[2], db[3], fn, id);
 
+//! Return the test description.
+/***************************************************************************//**
+  \param    db <datastruct> An initialized table validation data structure.
+  \param    id <string> The test identifier.
+
+  \returns  <value> The test description.
+*******************************************************************************/
 function table_validate_get_td( db, id ) = table_get_value(db[0], db[1], id, "td");
+
+//! Return the test argument value 1.
+/***************************************************************************//**
+  \param    db <datastruct> An initialized table validation data structure.
+  \param    id <string> The test identifier.
+
+  \returns  <value> The test argument value 1.
+*******************************************************************************/
 function table_validate_get_v1( db, id ) = first(table_get_value(db[0], db[1], id, "vl"));
+
+//! Return the test argument value 2.
+/***************************************************************************//**
+  \param    db <datastruct> An initialized table validation data structure.
+  \param    id <string> The test identifier.
+
+  \returns  <value> The test argument value 2.
+*******************************************************************************/
 function table_validate_get_v2( db, id ) = second(table_get_value(db[0], db[1], id, "vl"));
+
+//! Return the test argument value 3.
+/***************************************************************************//**
+  \param    db <datastruct> An initialized table validation data structure.
+  \param    id <string> The test identifier.
+
+  \returns  <value> The test argument value 3.
+*******************************************************************************/
 function table_validate_get_v3( db, id ) = third(table_get_value(db[0], db[1], id, "vl"));
 
+//! Test data structure \p db and output the start of test to log.
+/***************************************************************************//**
+  \param    db <datastruct> An initialized table validation data structure.
+  \param    verbose <boolean> Be more verbose in output log.
+*******************************************************************************/
 module table_validate_start( db, verbose=false )
 {
-  validate_log( str("openscad version ", version()) );
+  if ( verbose )
+    validate_log( "checking data structure" );
 
-  table_check( db[0], db[1], verbose );   // check test table
-  table_check( db[2], db[3], verbose );   // check expected result table
+  // check test table
+  table_check( db[0], db[1], verbose );
+
+  // check expected result table
+  table_check( db[2], db[3], verbose );
+
+  validate_log( str("openscad version ", version()) );
 }
 
-module table_validate( db, id, fn, argc, fr, t="equals", p=6 )
+//! Validate and log the test function return value against its expected value.
+/***************************************************************************//**
+  \param    db <datastruct> An initialized table validation data structure.
+  \param    id <string> The test identifier.
+  \param    fn <string> The function name.
+  \param    argc <integer> The number of arguments to retrieve from \p db.
+  \param    fr <value> The tested function return value.
+  \param    t <string|boolean> The validation type.
+  \param    p <number> A numerical precision for approximate comparisons.
+*******************************************************************************/
+module table_validate
+(
+  db,
+  id,
+  fn,
+  argc,
+  fr,
+  t="equals",
+  p=6
+)
 {
   td = table_validate_get_td(db, id);
   ev = table_validate_get_ev(db, fn, id);
@@ -194,49 +303,68 @@ module table_validate( db, id, fn, argc, fr, t="equals", p=6 )
     validate_log( str(id, " -skip-: '", fn, "(", td, ")'") );
 }
 
-//
-// maps
-//
+//----------------------------------------------------------------------------//
+// validation maps
+//----------------------------------------------------------------------------//
 
-// test map structure
-// [ "proto", ["function-name", argc]],
-// [ "id",    ["description", passing-value, argv1, argv2, argv3] ]
-function map_validate_get_name( m ) = first(map_get_value(m, "proto"));
-function map_validate_get_argc( m ) = second(map_get_value(m, "proto"));
+function map_validate_init
+(
+  m,
+  fn
+) =
+  [
+    m,    // db[0] test map
+    fn    // db[1] function name
+  ];
 
-function map_validate_get_td( m, id ) = (map_get_value(m, id))[0];
-function map_validate_get_ev( m, id ) = (map_get_value(m, id))[1];
-function map_validate_get_v1( m, id ) = (map_get_value(m, id))[2];
-function map_validate_get_v2( m, id ) = (map_get_value(m, id))[3];
-function map_validate_get_v3( m, id ) = (map_get_value(m, id))[4];
+function map_validate_fmt
+(
+  id,
+  td,
+  ev,
+  v1,
+  v2,
+  v3
+) = !is_undef(v2) && !is_undef(v3) ?  [id, [td, ev, [v1, v2, v3]]]
+  : !is_undef(v2) ?                   [id, [td, ev, [v1, v2]]]
+  :                                   [id, [td, ev, [v1]]];
 
-module map_validate_start( m, verbose=false )
+function map_validate_get_ids( db ) = map_get_keys(db[0]);
+
+function map_validate_get_fn( db ) = db[1];
+function map_validate_get_td( db, id ) = map_get_value(db[0], id)[0];
+function map_validate_get_ev( db, id ) = map_get_value(db[0], id)[1];
+function map_validate_get_v1( db, id ) = first(map_get_value(db[0], id)[2]);
+function map_validate_get_v2( db, id ) = second(map_get_value(db[0], id)[2]);
+function map_validate_get_v3( db, id ) = third(map_get_value(db[0], id)[2]);
+
+module map_validate_start( db, verbose=false )
 {
+  if ( verbose )
+    validate_log( "checking data structure" );
+
+  // check map
+  map_check( db[0], verbose );
+
   validate_log( str("openscad version ", version()) );
-
-  map_check( m, verbose );
-
-  validate_log( str(map_validate_get_name(m), "(argc = ", map_validate_get_argc(m), ")") );
+  validate_log( str(map_validate_get_fn(db), "()") );
 }
 
-module map_validate( m, id, fr, t="equals", p=6 )
+module map_validate( db, id, argc, fr, t="equals", p=6 )
 {
-  if ( id != "proto" )
+  fn = map_validate_get_fn(db);
+
+  td = map_validate_get_td(db, id);
+  ev = map_validate_get_ev(db, id);
+
+  if ( ev != validation_skip )
   {
-    fn = map_validate_get_name(m);
-    argc = map_validate_get_argc(m);
-
-    td = map_validate_get_td(m, id);
-    ev = map_validate_get_ev(m, id);
-    v1 = map_validate_get_v1(m, id);
-    v2 = map_validate_get_v2(m, id);
-
-    vd = (argc == 3) ? str(fn, "(", map_validate_get_v1(m, id),
-                               ",", map_validate_get_v2(m, id),
-                               ",", map_validate_get_v3(m, id), ")=", ev)
-       : (argc == 2) ? str(fn, "(", map_validate_get_v1(m, id),
-                               ",", map_validate_get_v2(m, id), ")=", ev)
-       : (argc == 1) ? str(fn, "(", map_validate_get_v1(m, id), ")=", ev)
+    vd = (argc == 3) ? str(fn, "(", map_validate_get_v1(db, id),
+                               ",", map_validate_get_v2(db, id),
+                               ",", map_validate_get_v3(db, id), ")=", ev)
+       : (argc == 2) ? str(fn, "(", map_validate_get_v1(db, id),
+                               ",", map_validate_get_v2(db, id), ")=", ev)
+       : (argc == 1) ? str(fn, "(", map_validate_get_v1(db, id), ")=", ev)
        :               str(fn, "(*)=", ev);
 
     lm = validate( d=vd, cv=fr, t=t, p=p, ev=ev );
@@ -246,6 +374,8 @@ module map_validate( m, id, fr, t="equals", p=6 )
     else
       validate_log( str(id, " ", lm) );
   }
+  else
+    validate_log( str(id, " -skip-: '", fn, "(", td, ")'") );
 }
 
 //! @}

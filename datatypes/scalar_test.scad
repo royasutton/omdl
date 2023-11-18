@@ -289,33 +289,34 @@ BEGIN_SCOPE validate;
     include <omdl-base.scad>;
     include <common/validation.scad>;
 
+    function fmt( id, td, v1, v2, v3 ) = table_validate_fmt(id, td, v1, v2, v3);
     function v1(id) = table_validate_get_v1(db, id);
     t = true; f = false; u = undef; s = validation_skip;
 
     // table: test values
     tbl_test_values =
     [
-      ["t01", "The undefined value",        [undef]],
-      ["t02", "An odd integer",             [1]],
-      ["t03", "An small even integer",      [10]],
-      ["t04", "A large integer",            [100000000]],
-      ["t05", "A small decimal (epsilon)",  [aeps]],
-      ["t06", "The max number",             [number_max]],
-      ["t07", "The min number",             [number_min]],
-      ["t08", "The max number^2",           [number_max * number_max]],
-      ["t09", "The invalid number nan",     [0 / 0]],
-      ["t10", "The boolean true",           [true]],
-      ["t11", "The boolean false",          [false]],
-      ["t12", "A character string",         ["a"]],
-      ["t13", "A string",                   ["This is a longer string"]],
-      ["t14", "The empty string",           [empty_str]],
-      ["t15", "The empty list",             [empty_lst]],
-      ["t16", "A 1-tuple list of undef",    [[undef]]],
-      ["t17", "A 1-tuple list",             [[10]]],
-      ["t18", "A 3-tuple list",             [[1, 2, 3]]],
-      ["t19", "A list of lists",            [[[1,2,3], [4,5,6], [7,8,9]]]],
-      ["t20", "A shorthand range",          [[0:9]]],
-      ["t21", "A range",                    [[0:0.5:9]]]
+      fmt("t01", "The undefined value",        undef),
+      fmt("t02", "An odd integer",             1),
+      fmt("t03", "An small even integer",      10),
+      fmt("t04", "A large integer",            100000000),
+      fmt("t05", "A small decimal (epsilon)",  aeps),
+      fmt("t06", "The max number",             number_max),
+      fmt("t07", "The min number",             number_min),
+      fmt("t08", "The max number^2",           number_max * number_max),
+      fmt("t09", "The invalid number nan",     0 / 0),
+      fmt("t10", "The boolean true",           true),
+      fmt("t11", "The boolean false",          false),
+      fmt("t12", "A character string",         "a"),
+      fmt("t13", "A string",                   "This is a longer string"),
+      fmt("t14", "The empty string",           empty_str),
+      fmt("t15", "The empty list",             empty_lst),
+      fmt("t16", "A 1-tuple list of undef",    [undef]),
+      fmt("t17", "A 1-tuple list",             [10]),
+      fmt("t18", "A 3-tuple list",             [1, 2, 3]),
+      fmt("t19", "A list of lists",            [[1,2,3], [4,5,6], [7,8,9]]),
+      fmt("t20", "A shorthand range",          [0:9]),
+      fmt("t21", "A range",                    [0:0.5:9])
     ];
 
     // table: expected results: use 's' to skip

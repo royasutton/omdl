@@ -101,27 +101,27 @@ BEGIN_SCOPE validate;
     include <omdl-base.scad>;
     include <common/validation.scad>;
 
-    function v1( m, id ) = map_validate_get_v1(m, id);
-    function v2( m, id ) = map_validate_get_v2(m, id);
+    function fmt( id, td, ev, v1, v2, v3 ) = map_validate_fmt(id, td, ev, v1, v2, v3);
+    function v1( db, id ) = map_validate_get_v1(db, id);
+    function v2( db, id ) = map_validate_get_v2(db, id);
 
     map_test_defined_or =
     [
-      ["proto", ["defined_or", 2]],
-      ["t01", ["Undefined", 1, undef, 1]],
-      ["t02", ["A small value", aeps, aeps, 2]],
-      ["t03", ["Infinity", number_inf, number_inf, 3]],
-      ["t04", ["Max number", number_max, number_max, 4]],
-      ["t05", ["Undefined list", [undef], [undef], 5]],
-      ["t06", ["Short range", [0:9], [0:9], 6]],
-      ["t07", ["Empty string", empty_str, empty_str, 7]],
-      ["t08", ["Empty list", empty_lst, empty_lst, 8]]
+      fmt("t01", "Undefined", 1, undef, 1),
+      fmt("t02", "A small value", aeps, aeps, 2),
+      fmt("t03", "Infinity", number_inf, number_inf, 3),
+      fmt("t04", "Max number", number_max, number_max, 4),
+      fmt("t05", "Undefined list", [undef], [undef], 5),
+      fmt("t06", "Short range", [0:9], [0:9], 6),
+      fmt("t07", "Empty string", empty_str, empty_str, 7),
+      fmt("t08", "Empty list", empty_lst, empty_lst, 8)
     ];
 
-    m = map_test_defined_or;
-    map_validate_start( m );
+    db = map_validate_init( map_test_defined_or, "defined_or" );
+    map_validate_start( db );
 
-    for ( id = map_get_keys( m ) )
-      map_validate( m, id, defined_or (  v1(m, id), v2(m, id) ) );
+    for ( id = map_validate_get_ids( db ) )
+      map_validate( db, id, 2, defined_or ( v1(db, id), v2(db, id) ) );
 
     // end-of-tests
   END_OPENSCAD;
