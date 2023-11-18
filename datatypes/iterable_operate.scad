@@ -57,9 +57,9 @@
 
 //----------------------------------------------------------------------------//
 
-//! Return an iterable element when it exists or a default value when it does not.
+//! Return an element of an iterable when it exists or a default value otherwise.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
   \param    i <integer> An element index.
   \param    d \<value> A default value.
 
@@ -72,7 +72,7 @@ function edefined_or(v, i, d) =
 //! Find the occurrences of a match value in an iterable value.
 /***************************************************************************//**
   \param    mv \<value> A match value.
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
   \param    c <integer> A match count.
             For <tt>(c>=1)</tt>, return the first \p c matches.
             For <tt>(c<=0)</tt>, return all matches.
@@ -158,12 +158,17 @@ function find
 //! Count all occurrences of a match value in an iterable value.
 /***************************************************************************//**
   \param    mv \<value> A match value.
-  \param    v \<value> An iterable value.
-  \param    s <boolean> Use [search] for element matching
-            (assign \b false to use find()).
-  \param    i <integer> The element index to consider for iterable elements.
+  \param    v <iterable> An iterable value.
+  \param    s <boolean> Element matching search method.
+  \param    i <integer> The element index to consider for two
+              dimensional iterable elements.
 
   \returns  <integer> The number of times \p mv occurs in the list.
+
+  \details
+
+    When \p s == \b true, [search] is used to match elements. When
+    \p s == false, find() is used.
 
   [search]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Other_Language_Features#Search
 *******************************************************************************/
@@ -180,11 +185,11 @@ function count
 //! Test if an element exists at a specified index of an iterable value.
 /***************************************************************************//**
   \param    i <integer> An element index.
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
 
-  \returns  <boolean> \b true when the element \p i of \p v, \p v[i],
-            exists and \b false otherwise.
-            Returns \b undef when \p i is not an integer.
+  \returns  <boolean> \b true when the element \p v[i], exists and
+            \b false otherwise. Returns \b undef when \p i is not an
+            integer.
 *******************************************************************************/
 function eexists
 (
@@ -197,13 +202,17 @@ function eexists
 //! Check for the existence of a match value in an iterable value.
 /***************************************************************************//**
   \param    mv \<value> A match value.
-  \param    v \<value> An iterable value.
-  \param    s <boolean> Use [search] for element matching
-            (assign \b false to use find()).
+  \param    v <iterable> An iterable value.
+  \param    s <boolean> Element matching search method.
   \param    i <integer> The element index to consider for iterable elements.
 
   \returns  <boolean> \b true when \p mv exists in the list and
             \b false otherwise.
+
+  \details
+
+    When \p s == \b true, [search] is used to match elements. When
+    \p s == false, find() is used.
 
   [search]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Other_Language_Features#Search
 *******************************************************************************/
@@ -219,7 +228,7 @@ function exists
 
 //! Return the first element of an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
 
   \returns  \<value> The first element of \p v.
             Returns \b undef when \p v is not defined, is not iterable,
@@ -233,7 +242,7 @@ function first( v ) = v[0];
 
 //! Return the second element of an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
 
   \returns  \<value> The second element of \p v.
             Returns \b undef when \p v is not defined, is not iterable,
@@ -247,7 +256,7 @@ function second( v ) = v[1];
 
 //! Return the third element of an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
 
   \returns  \<value> The second element of \p v.
             Returns \b undef when \p v is not defined, is not iterable,
@@ -261,7 +270,7 @@ function third( v ) = v[2];
 
 //! Return the last element of an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
 
   \returns  \<value> The last element of \p v.
             Returns \b undef when \p v is not defined, is not iterable,
@@ -271,7 +280,7 @@ function last( v ) = v[len(v)-1];
 
 //! Return the middle element of an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
 
   \returns  \<value> The middle element of \p v.
             Returns \b undef when \p v is not defined, is not iterable,
@@ -281,7 +290,7 @@ function middle( v ) = v[len(v)/2];
 
 //! Return a list containing the first two elements of an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
 
   \returns  \<list> A list containing the first two elements of \p v.
             Returns \b undef when \p v is not defined, is not iterable,
@@ -295,7 +304,7 @@ function first2( v ) = [v[0], v[1]];
 
 //! Return a list containing the first three elements of an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
 
   \returns  \<list> A list containing the first three elements of \p v.
             Returns \b undef when \p v is not defined, is not iterable,
@@ -309,7 +318,7 @@ function first3( v ) = [v[0], v[1], v[2]];
 
 //! Return a list containing the last two elements of an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
 
   \returns  \<list> A list containing the last two elements of \p v.
             Returns \b undef when \p v is not defined, is not iterable,
@@ -326,7 +335,7 @@ function last2
 
 //! Return a list containing the last three elements of an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
 
   \returns  \<list> A list containing the last three elements of \p v.
             Returns \b undef when \p v is not defined, is not iterable,
@@ -343,7 +352,7 @@ function last3
 
 //! Return a list containing the first n elements of an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
   \param    n <integer> The element count.
 
   \returns  \<list> A list containing the first \p n elements of \p v.
@@ -362,7 +371,7 @@ function nfirst
 
 //! Return a list containing the last n elements of an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
   \param    n <integer> The element count.
 
   \returns  \<list> A list containing the last \p n elements of \p v.
@@ -381,7 +390,7 @@ function nlast
 
 //! Return a list containing all but the last n elements of an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
   \param    n <integer> The element count.
 
   \returns  \<list> A list containing all but the last \p n elements of \p v.
@@ -401,7 +410,7 @@ function nhead
 
 //! Return a list containing all but the first n elements of an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
   \param    n <integer> The element count.
 
   \returns  \<list> A list containing all but the first n elements of \p v.
@@ -421,7 +430,7 @@ function ntail
 
 //! Reverse the elements of an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
 
   \returns  \<list> A list containing the elements of \p v in reversed order.
             Returns \b empty_lst when \p v is empty.
@@ -437,7 +446,7 @@ function reverse
 
 //! Shift the elements of an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
   \param    n <integer> The element shift count.
   \param    r <boolean> Shift the elements to the right (or left).
   \param    c <boolean> Perform circular shift (or drop).
@@ -470,7 +479,7 @@ function shift
 
 //! Select a range of elements from an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
   \param    i <range|list|integer> The index selection.
 
   \returns  \<list> A list containing the identified element(s).
@@ -496,7 +505,7 @@ function rselect
 
 //! Return a list of all n-element sequential-subsets of an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
   \param    n <integer> The number of elements for each subset.
   \param    s <integer> The iteration step size.
   \param    w <boolean> Use wrap-at-end circular subset selection.
@@ -534,7 +543,7 @@ function nssequence
 //! Append a value to each element of an iterable value.
 /***************************************************************************//**
   \param    nv \<value> A new value to append.
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
 
   \param    r <boolean> Reduce list element value before appending.
   \param    j <boolean> Join each appendage as a separate list.
@@ -592,15 +601,14 @@ function eappend
 //! Insert a new value into an iterable value.
 /***************************************************************************//**
   \param    nv \<value> A new value to insert.
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
 
   \param    i <integer> An insert position index.
 
   \param    mv <list|string|value> Match value candidates.
   \param    mi <integer> A match index.
 
-  \param    s <boolean> Use [search] for element matching
-            (assign \b false to use find()).
+  \param    s <boolean> Element matching search method.
   \param    si <integer> The element column index when matching.
 
   \returns  \<list> A list with \p nv inserted into \p v at the
@@ -612,6 +620,9 @@ function eappend
             Returns \b undef when \p v is not defined or is not iterable.
 
   \details
+
+    When \p s == \b true, [search] is used to match elements. When
+    \p s == false, find() is used.
 
     The insert position can be specified by an index, an element match
     value, or list of potential match values (when using [search]). When
@@ -655,7 +666,7 @@ function insert
 
 //! Delete elements from an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
 
   \param    i <range|list|integer> Deletion Indexes.
 
@@ -664,8 +675,7 @@ function insert
             For <tt>(mc>=1)</tt>, remove the first \p mc matches.
             For <tt>(mc<=0)</tt>, remove all matches.
 
-  \param    s <boolean> Use [search] for element matching
-            (assign \b false to use find()).
+  \param    s <boolean> Element matching search method.
   \param    si <integer> The element column index when matching.
 
   \returns  \<list> A list with all specified elements removed.
@@ -673,6 +683,9 @@ function insert
             Returns \b undef when \p v is not defined or is not iterable.
 
   \details
+
+    When \p s == \b true, [search] is used to match elements. When
+    \p s == false, find() is used.
 
     The elements to delete can be specified by an index position, a
     list of index positions, an index range, an element match value, or
@@ -718,7 +731,7 @@ function delete
 
 //! Strip all matching values from an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
   \param    mv \<value> The match value.
 
   \returns  \<list> A list with all elements equal to \p mv removed.
@@ -736,7 +749,7 @@ function strip
 
 //! Apply a mask to an interable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
   \param    m \<value> An element mask.
   \param    r <boolean> Right align the mask and value.
   \param    o <integer> A positive or negative mask offset.
@@ -772,7 +785,7 @@ function mask
 
 //! Return the unique elements of an iterable value.
 /***************************************************************************//**
-  \param    v \<value> An iterable value.
+  \param    v <iterable> An iterable value.
 
   \returns  \<list> A list of unique elements with order preserved.
             Returns \b undef when \p v is not defined or is not iterable.
