@@ -39,16 +39,6 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
-
-  \details
-
-    \b Example
-
-      \dontinclude \amu_scope(index=1).scad
-      \skip include
-      \until tvae2, 4) );
-
-    \b Result \include \amu_scope(index=1).log
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -88,6 +78,14 @@ validation_skip = [number_min, number_max, number_inf];
             comparison. A passing result indicates that \p cv equals
             \p ev to the number of decimal digits specified by \p p. The
             comparison is performed by the function almost_equal().
+
+    \b Example \b 1
+
+      \dontinclude \amu_scope(index=1).scad
+      \skip include
+      \until end-of-example
+
+    \b Result \b 1 \include \amu_scope(index=1).log
 *******************************************************************************/
 function validate
 (
@@ -282,6 +280,14 @@ module table_validate_start( db, verbose=false )
 
     See function validate() for more information on possible values for
     parameters \p t and \p p.
+
+    \b Example \b 2
+
+      \dontinclude \amu_scope(index=2).scad
+      \skip include
+      \until end-of-example
+
+    \b Result \b 2 \include \amu_scope(index=2).log
 *******************************************************************************/
 module table_validate
 (
@@ -455,6 +461,14 @@ module map_validate_start( db, verbose=false )
 
     See function validate() for more information on possible values for
     parameters \p t and \p p.
+
+    \b Example \b 3
+
+      \dontinclude \amu_scope(index=3).scad
+      \skip include
+      \until end-of-example
+
+    \b Result \b 3 \include \amu_scope(index=3).log
 *******************************************************************************/
 module map_validate
 (
@@ -500,7 +514,7 @@ module map_validate
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE example;
+BEGIN_SCOPE example1;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <common/validation.scad>;
@@ -551,6 +565,94 @@ BEGIN_SCOPE example;
 
     log_type( "EXAMPLE 3", "almost equal to 4 digits" );
     log_info( validate("test-d", tvae1, "almost", tvae2, 4) );
+
+    // end-of-example
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
+    include --path "${INCLUDE_PATH}" script_std.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE example_table;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <common/validation.scad>;
+
+    function fmt( id, td, v1, v2, v3 ) = table_validate_fmt(id, td, v1, v2, v3);
+    function v1(id) = table_validate_get_v1(db, id);
+    t = true; f = false; u = undef; s = validation_skip;
+
+    // table: test values
+    tbl_test_values =
+    [
+      fmt("t01", "The undefined value",        undef),
+      fmt("t02", "A small decimal (epsilon)",  aeps),
+      fmt("t03", "The max number",             number_max),
+      fmt("t04", "The invalid number nan",     0 / 0),
+      fmt("t05", "The boolean true",           true),
+      fmt("t06", "A string",                   "This is a longer string"),
+      fmt("t07", "The empty string",           empty_str),
+      fmt("t08", "The empty list",             empty_lst),
+      fmt("t09", "A list of lists",            [[1,2,3], [4,5,6], [7,8,9]]),
+      fmt("t10", "A range",                    [0:0.5:9])
+    ];
+
+    // table: expected results: use 's' to skip
+    tbl_test_answers =
+    [ // function       01 02 03 04 05 06 07 08 09 101
+      ["is_bool",       f, f, f, f, f, f, f, f, f, t],
+      ["is_string",     f, f, f, f, f, f, f, f, f, f],
+      ["is_list",       f, f, f, f, f, f, f, f, f, f]
+    ];
+
+    db = table_validate_init( tbl_test_values, tbl_test_answers );
+
+    table_validate_start( db );
+    test_ids = table_validate_get_ids( db );
+
+    for (id=test_ids) table_validate( db, id,   "is_bool", 1,   is_bool( v1(id) ) );
+    for (id=test_ids) table_validate( db, id, "is_string", 1, is_string( v1(id) ) );
+    for (id=test_ids) table_validate( db, id,   "is_list", 1,   is_list( v1(id) ) );
+
+    // end-of-example
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
+    include --path "${INCLUDE_PATH}" script_std.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE example_map;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <common/validation.scad>;
+
+    function fmt( id, td, ev, v1, v2, v3 ) = map_validate_fmt(id, td, ev, v1, v2, v3);
+    function v1( db, id ) = map_validate_get_v1(db, id);
+    function v2( db, id ) = map_validate_get_v2(db, id);
+
+    map_test_defined_or =
+    [
+      fmt("t01", "Undefined", 1, undef, 1),
+      fmt("t02", "A small value", aeps, aeps, 2),
+      fmt("t03", "Infinity", number_inf, number_inf, 3),
+      fmt("t04", "Max number", number_max, number_max, 4),
+      fmt("t05", "Undefined list", [undef], [undef], 5),
+      fmt("t06", "Short range", [0:9], [0:9], 6),
+      fmt("t07", "Empty string", empty_str, empty_str, 7),
+      fmt("t08", "Empty list", empty_lst, empty_lst, 8)
+    ];
+
+    db = map_validate_init( map_test_defined_or, "defined_or" );
+    map_validate_start( db );
+
+    for ( id = map_validate_get_ids( db ) )
+      map_validate( db, id, 2, defined_or ( v1(db, id), v2(db, id) ) );
+
+    // end-of-example
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
