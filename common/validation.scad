@@ -135,13 +135,13 @@ function validate
     )
   : (pf?false : str("FAILED: '", d, "';  unknown test '", t, "'."));
 
-//! Output text \p t to test log.
+//! Output text \p t to the test log.
 /***************************************************************************//**
   \param    t <string> A message to output to log.
 *******************************************************************************/
 module validate_log( t ) { log_type ( "omdl_test", t ); }
 
-//! Record that function named \p fn has been skipped in the test log.
+//! Output that function named \p fn has been skipped to the test log.
 /***************************************************************************//**
   \param    fn <string> The name of the skipped function.
 *******************************************************************************/
@@ -174,6 +174,16 @@ function table_validate_init
       pmerge([concat("id",ids),concat("identifier",ids)])             // db[3] good result columns
     ];
 
+//! Encode an entry for test table.
+/***************************************************************************//**
+  \param    id <string> The test identifier.
+  \param    td <string> The test description.
+  \param    v1 <value> The test argument value 1.
+  \param    v2 <value> The test argument value 1.
+  \param    v3 <value> The test argument value 1.
+
+  \returns  <datastruct> An test table entry.
+*******************************************************************************/
 function table_validate_fmt
 (
   id,
@@ -185,17 +195,17 @@ function table_validate_fmt
   : !is_undef(v2) ?                   [id, td, [v1, v2]]
   :                                   [id, td, [v1]];
 
-//! Return a list of test identifiers.
+//! Return a list of test identifiers in \p db.
 /***************************************************************************//**
-  \param    db <datastruct> An initialized table validation data structure.
+  \param    db <datastruct> An initialized validation table data structure.
 
   \returns  <list> A list of test identifiers.
 *******************************************************************************/
 function table_validate_get_ids( db ) = table_get_row_ids( db[0] );
 
-//! Return the expected value for a given test.
+//! Return the expected value.
 /***************************************************************************//**
-  \param    db <datastruct> An initialized table validation data structure.
+  \param    db <datastruct> An initialized validation table data structure.
   \param    fn <string> The function name.
   \param    id <string> The test identifier.
 
@@ -205,7 +215,7 @@ function table_validate_get_ev( db, fn, id ) = table_get_value(db[2], db[3], fn,
 
 //! Return the test description.
 /***************************************************************************//**
-  \param    db <datastruct> An initialized table validation data structure.
+  \param    db <datastruct> An initialized validation table data structure.
   \param    id <string> The test identifier.
 
   \returns  <value> The test description.
@@ -214,7 +224,7 @@ function table_validate_get_td( db, id ) = table_get_value(db[0], db[1], id, "td
 
 //! Return the test argument value 1.
 /***************************************************************************//**
-  \param    db <datastruct> An initialized table validation data structure.
+  \param    db <datastruct> An initialized validation table data structure.
   \param    id <string> The test identifier.
 
   \returns  <value> The test argument value 1.
@@ -223,7 +233,7 @@ function table_validate_get_v1( db, id ) = first(table_get_value(db[0], db[1], i
 
 //! Return the test argument value 2.
 /***************************************************************************//**
-  \param    db <datastruct> An initialized table validation data structure.
+  \param    db <datastruct> An initialized validation table data structure.
   \param    id <string> The test identifier.
 
   \returns  <value> The test argument value 2.
@@ -232,17 +242,17 @@ function table_validate_get_v2( db, id ) = second(table_get_value(db[0], db[1], 
 
 //! Return the test argument value 3.
 /***************************************************************************//**
-  \param    db <datastruct> An initialized table validation data structure.
+  \param    db <datastruct> An initialized validation table data structure.
   \param    id <string> The test identifier.
 
   \returns  <value> The test argument value 3.
 *******************************************************************************/
 function table_validate_get_v3( db, id ) = third(table_get_value(db[0], db[1], id, "vl"));
 
-//! Test data structure \p db and output the start of test to log.
+//! Test data structure \p db and output the start of test to the test log.
 /***************************************************************************//**
-  \param    db <datastruct> An initialized table validation data structure.
-  \param    verbose <boolean> Be more verbose in output log.
+  \param    db <datastruct> An initialized validation table data structure.
+  \param    verbose <boolean> Be more verbose.
 *******************************************************************************/
 module table_validate_start( db, verbose=false )
 {
@@ -258,15 +268,20 @@ module table_validate_start( db, verbose=false )
   validate_log( str("openscad version ", version()) );
 }
 
-//! Validate and log the test function return value against its expected value.
+//! Validate and log a test function return value against its expected value.
 /***************************************************************************//**
-  \param    db <datastruct> An initialized table validation data structure.
+  \param    db <datastruct> An initialized validation table data structure.
   \param    id <string> The test identifier.
   \param    fn <string> The function name.
   \param    argc <integer> The number of arguments to retrieve from \p db.
-  \param    fr <value> The tested function return value.
+  \param    fr <value> The value returned from the tested function.
   \param    t <string|boolean> The validation type.
   \param    p <number> A numerical precision for approximate comparisons.
+
+  \details
+
+    See function validate() for more information on possible values for
+    parameters \p t and \p p.
 *******************************************************************************/
 module table_validate
 (
@@ -307,6 +322,14 @@ module table_validate
 // validation maps
 //----------------------------------------------------------------------------//
 
+//! Create data structure for related map validation functions.
+/***************************************************************************//**
+  \param    m <matrix-2xN> The test data map.
+  \param    fn <string> The function name.
+
+  \returns  <datastruct> A structure used with the related map
+            validation functions.
+*******************************************************************************/
 function map_validate_init
 (
   m,
@@ -317,6 +340,17 @@ function map_validate_init
     fn    // db[1] function name
   ];
 
+//! Encode an entry for test map.
+/***************************************************************************//**
+  \param    id <string> The test identifier.
+  \param    td <string> The test description.
+  \param    ev <value> The test expect value.
+  \param    v1 <value> The test argument value 1.
+  \param    v2 <value> The test argument value 1.
+  \param    v3 <value> The test argument value 1.
+
+  \returns  <datastruct> An test map entry.
+*******************************************************************************/
 function map_validate_fmt
 (
   id,
@@ -329,15 +363,73 @@ function map_validate_fmt
   : !is_undef(v2) ?                   [id, [td, ev, [v1, v2]]]
   :                                   [id, [td, ev, [v1]]];
 
+//! Return a list of test identifiers in \p db.
+/***************************************************************************//**
+  \param    db <datastruct> An initialized validation map data structure.
+
+  \returns  <list> A list of test identifiers.
+*******************************************************************************/
 function map_validate_get_ids( db ) = map_get_keys(db[0]);
 
+
+//! Return the test function name.
+/***************************************************************************//**
+  \param    db <datastruct> An initialized validation map data structure.
+
+  \returns  <string> The test function name.
+*******************************************************************************/
 function map_validate_get_fn( db ) = db[1];
+
+//! Return the test description.
+/***************************************************************************//**
+  \param    db <datastruct> An initialized validation map data structure.
+  \param    id <string> The test identifier.
+
+  \returns  <string> The test description for a given test \p id.
+*******************************************************************************/
 function map_validate_get_td( db, id ) = map_get_value(db[0], id)[0];
+
+//! Return the expected value.
+/***************************************************************************//**
+  \param    db <datastruct> An initialized validation map data structure.
+  \param    id <string> The test identifier.
+
+  \returns  <value> The expect value.
+*******************************************************************************/
 function map_validate_get_ev( db, id ) = map_get_value(db[0], id)[1];
+
+//! Return the test argument value 1.
+/***************************************************************************//**
+  \param    db <datastruct> An initialized validation map data structure.
+  \param    id <string> The test identifier.
+
+  \returns  <value> The argument value 1.
+*******************************************************************************/
 function map_validate_get_v1( db, id ) = first(map_get_value(db[0], id)[2]);
+
+//! Return the test argument value 2.
+/***************************************************************************//**
+  \param    db <datastruct> An initialized validation map data structure.
+  \param    id <string> The test identifier.
+
+  \returns  <value> The argument value 2.
+*******************************************************************************/
 function map_validate_get_v2( db, id ) = second(map_get_value(db[0], id)[2]);
+
+//! Return the test argument value 3.
+/***************************************************************************//**
+  \param    db <datastruct> An initialized validation map data structure.
+  \param    id <string> The test identifier.
+
+  \returns  <value> The argument value 3.
+*******************************************************************************/
 function map_validate_get_v3( db, id ) = third(map_get_value(db[0], id)[2]);
 
+//! Test data structure \p db and output the start of test to the test log.
+/***************************************************************************//**
+  \param    db <datastruct> An initialized validation map data structure.
+  \param    verbose <boolean> Be more verbose.
+*******************************************************************************/
 module map_validate_start( db, verbose=false )
 {
   if ( verbose )
@@ -350,7 +442,29 @@ module map_validate_start( db, verbose=false )
   validate_log( str(map_validate_get_fn(db), "()") );
 }
 
-module map_validate( db, id, argc, fr, t="equals", p=6 )
+//! Validate and log a test function return value against its expected value.
+/***************************************************************************//**
+  \param    db <datastruct> An initialized validation map data structure.
+  \param    id <string> The test identifier.
+  \param    argc <integer> The number of arguments to retrieve from \p db.
+  \param    fr <value> The value returned from the tested function.
+  \param    t <string|boolean> The validation type.
+  \param    p <number> A numerical precision for approximate comparisons.
+
+  \details
+
+    See function validate() for more information on possible values for
+    parameters \p t and \p p.
+*******************************************************************************/
+module map_validate
+(
+  db,
+  id,
+  argc,
+  fr,
+  t="equals",
+  p=6
+)
 {
   fn = map_validate_get_fn(db);
 
