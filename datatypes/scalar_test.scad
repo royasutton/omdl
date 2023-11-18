@@ -289,69 +289,37 @@ BEGIN_SCOPE validate;
     include <omdl-base.scad>;
     include <common/validation.scad>;
 
-    t = true; f = false; u = undef; s = number_max;
+    function v1(id) = table_validate_get_v1(db, id);
+    t = true; f = false; u = undef; s = validation_skip;
 
-    function get_v1( id ) = table_get_value(test_r, test_c, id, "v1");
-    module log_test( m ) { log_type ( "omdl_test", m ); }
-    module log_skip( fn ) { log_test ( str("ignore: '", fn, "'") ); }
-    module test_1v( fn, fr, id )
-    {
-      td = table_get_value(test_r, test_c, id, "td");
-      ev = table_get_value(good_r, good_c, fn, id);
-
-      if ( ev != s )
-      {
-        d = str(fn, "(", get_v1(id), ")=", ev);
-        m = validate( d=d, cv=fr, t="eq", ev=ev );
-
-        if ( !validate( cv=fr, t="eq", ev=ev, pf=true ) )
-          log_test( str(id, " ", m, " ---> \"", td, "\"") );
-        else
-          log_test( str(id, " ", m) );
-      }
-      else
-        log_test( str(id, " -skip-: '", fn, "(", td, ")'") );
-    }
-
-    log_test( str("openscad version ", version()) );
-
-    // test-values columns
-    test_c = [ ["id", "identifier"], ["td", "description"], ["v1", "value 1"] ];
-
-    // test-values rows
-    test_r =
+    // table: test values
+    tbl_test_values =
     [
-      ["t01", "The undefined value",        undef],
-      ["t02", "An odd integer",             1],
-      ["t03", "An small even integer",      10],
-      ["t04", "A large integer",            100000000],
-      ["t05", "A small decimal (epsilon)",  aeps],
-      ["t06", "The max number",             number_max],
-      ["t07", "The min number",             number_min],
-      ["t08", "The max number^2",           number_max * number_max],
-      ["t09", "The invalid number nan",     0 / 0],
-      ["t10", "The boolean true",           true],
-      ["t11", "The boolean false",          false],
-      ["t12", "A character string",         "a"],
-      ["t13", "A string",                   "This is a longer string"],
-      ["t14", "The empty string",           empty_str],
-      ["t15", "The empty list",             empty_lst],
-      ["t16", "A 1-tuple list of undef",    [undef]],
-      ["t17", "A 1-tuple list",             [10]],
-      ["t18", "A 3-tuple list",             [1, 2, 3]],
-      ["t19", "A list of lists",            [[1,2,3], [4,5,6], [7,8,9]]],
-      ["t20", "A shorthand range",          [0:9]],
-      ["t21", "A range",                    [0:0.5:9]]
+      ["t01", "The undefined value",        [undef]],
+      ["t02", "An odd integer",             [1]],
+      ["t03", "An small even integer",      [10]],
+      ["t04", "A large integer",            [100000000]],
+      ["t05", "A small decimal (epsilon)",  [aeps]],
+      ["t06", "The max number",             [number_max]],
+      ["t07", "The min number",             [number_min]],
+      ["t08", "The max number^2",           [number_max * number_max]],
+      ["t09", "The invalid number nan",     [0 / 0]],
+      ["t10", "The boolean true",           [true]],
+      ["t11", "The boolean false",          [false]],
+      ["t12", "A character string",         ["a"]],
+      ["t13", "A string",                   ["This is a longer string"]],
+      ["t14", "The empty string",           [empty_str]],
+      ["t15", "The empty list",             [empty_lst]],
+      ["t16", "A 1-tuple list of undef",    [[undef]]],
+      ["t17", "A 1-tuple list",             [[10]]],
+      ["t18", "A 3-tuple list",             [[1, 2, 3]]],
+      ["t19", "A list of lists",            [[[1,2,3], [4,5,6], [7,8,9]]]],
+      ["t20", "A shorthand range",          [[0:9]]],
+      ["t21", "A range",                    [[0:0.5:9]]]
     ];
-    table_check( test_r, test_c, false );   // sanity-test
 
-    test_ids = table_get_row_ids( test_r );
-
-    // expected columns: ("id" + one column for each test)
-    good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
-
-    // expected rows: ("golden" test results), use 's' to skip test
-    good_r =
+    // table: expected results: use 's' to skip
+    tbl_test_answers =
     [ // function       01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21
       ["is_scalar",     t, t, t, t, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, t, t],
       ["is_defined",    f, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t],
@@ -370,26 +338,29 @@ BEGIN_SCOPE validate;
       ["is_string",     f, f, f, f, f, f, f, f, f, f, f, t, t, t, f, f, f, f, f, f, f],
       ["is_list",       f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, f, f]
     ];
-    table_check( good_r, good_c, false );   // sanity-test
 
-    // Indirect function calls would be very useful here!!!
-    for (vid=test_ids) test_1v( "is_scalar", is_scalar(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "is_defined", is_defined(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "not_defined", not_defined(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "is_nan", is_nan(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "is_inf", is_inf(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "is_number", is_number(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "is_integer", is_integer(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "is_decimal", is_decimal(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "is_range", is_range(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "is_even", is_even(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "is_odd", is_odd(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "is_between_MM", is_between(get_v1(vid),number_min,number_max), vid );
+    db = table_validate_init( tbl_test_values, tbl_test_answers );
+
+    table_validate_start( db );
+    test_ids = table_validate_get_ids( db );
+
+    for (id=test_ids) table_validate( db, id, "is_scalar", 1, is_scalar( v1(id)) );
+    for (id=test_ids) table_validate( db, id, "is_defined", 1, is_defined( v1(id)) );
+    for (id=test_ids) table_validate( db, id, "not_defined", 1, not_defined( v1(id)) );
+    for (id=test_ids) table_validate( db, id, "is_nan", 1, is_nan( v1(id)) );
+    for (id=test_ids) table_validate( db, id, "is_inf", 1, is_inf( v1(id)) );
+    for (id=test_ids) table_validate( db, id, "is_number", 1, is_number( v1(id)) );
+    for (id=test_ids) table_validate( db, id, "is_integer", 1, is_integer( v1(id)) );
+    for (id=test_ids) table_validate( db, id, "is_decimal", 1, is_decimal( v1(id)) );
+    for (id=test_ids) table_validate( db, id, "is_range", 1, is_range( v1(id)) );
+    for (id=test_ids) table_validate( db, id, "is_even", 1, is_even( v1(id)) );
+    for (id=test_ids) table_validate( db, id, "is_odd", 1, is_odd( v1(id)) );
+    for (id=test_ids) table_validate( db, id, "is_between_MM", 1, is_between( v1(id), number_min, number_max ) );
 
     // OpenSCAD built-in functions: is_undef() and is_num() are tested above
-    for (vid=test_ids) test_1v( "is_bool", is_bool(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "is_string", is_string(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "is_list", is_list(get_v1(vid)), vid );
+    for (id=test_ids) table_validate( db, id, "is_bool", 1, is_bool( v1(id)) );
+    for (id=test_ids) table_validate( db, id, "is_string", 1, is_string( v1(id)) );
+    for (id=test_ids) table_validate( db, id, "is_list", 1, is_list( v1(id)) );
 
     // end-of-tests
   END_OPENSCAD;
