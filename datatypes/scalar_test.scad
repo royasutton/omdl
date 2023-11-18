@@ -290,10 +290,9 @@ BEGIN_SCOPE validate;
     include <common/validation.scad>;
 
     function fmt( id, td, v1, v2, v3 ) = table_validate_fmt(id, td, v1, v2, v3);
-    function v1(id) = table_validate_get_v1(db, id);
+    function v1(db, id) = table_validate_get_v1(db, id);
     t = true; f = false; u = undef; s = validation_skip;
 
-    // table: test values
     tbl_test_values =
     [
       fmt("t01", "The undefined value",        undef),
@@ -319,7 +318,6 @@ BEGIN_SCOPE validate;
       fmt("t21", "A range",                    [0:0.5:9])
     ];
 
-    // table: expected results: use 's' to skip
     tbl_test_answers =
     [ // function       01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21
       ["is_scalar",     t, t, t, t, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, t, t],
@@ -345,23 +343,23 @@ BEGIN_SCOPE validate;
     table_validate_start( db );
     test_ids = table_validate_get_ids( db );
 
-    for (id=test_ids) table_validate( db, id, "is_scalar", 1, is_scalar( v1(id)) );
-    for (id=test_ids) table_validate( db, id, "is_defined", 1, is_defined( v1(id)) );
-    for (id=test_ids) table_validate( db, id, "not_defined", 1, not_defined( v1(id)) );
-    for (id=test_ids) table_validate( db, id, "is_nan", 1, is_nan( v1(id)) );
-    for (id=test_ids) table_validate( db, id, "is_inf", 1, is_inf( v1(id)) );
-    for (id=test_ids) table_validate( db, id, "is_number", 1, is_number( v1(id)) );
-    for (id=test_ids) table_validate( db, id, "is_integer", 1, is_integer( v1(id)) );
-    for (id=test_ids) table_validate( db, id, "is_decimal", 1, is_decimal( v1(id)) );
-    for (id=test_ids) table_validate( db, id, "is_range", 1, is_range( v1(id)) );
-    for (id=test_ids) table_validate( db, id, "is_even", 1, is_even( v1(id)) );
-    for (id=test_ids) table_validate( db, id, "is_odd", 1, is_odd( v1(id)) );
-    for (id=test_ids) table_validate( db, id, "is_between_MM", 1, is_between( v1(id), number_min, number_max ) );
+    for (id=test_ids) table_validate( db, id, "is_scalar", 1, is_scalar( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "is_defined", 1, is_defined( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "not_defined", 1, not_defined( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "is_nan", 1, is_nan( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "is_inf", 1, is_inf( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "is_number", 1, is_number( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "is_integer", 1, is_integer( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "is_decimal", 1, is_decimal( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "is_range", 1, is_range( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "is_even", 1, is_even( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "is_odd", 1, is_odd( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "is_between_MM", 1, is_between( v1(db,id), number_min, number_max ) );
 
     // OpenSCAD built-in functions: is_undef() and is_num() are tested above
-    for (id=test_ids) table_validate( db, id, "is_bool", 1, is_bool( v1(id)) );
-    for (id=test_ids) table_validate( db, id, "is_string", 1, is_string( v1(id)) );
-    for (id=test_ids) table_validate( db, id, "is_list", 1, is_list( v1(id)) );
+    for (id=test_ids) table_validate( db, id, "is_bool", 1, is_bool( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "is_string", 1, is_string( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "is_list", 1, is_list( v1(db,id)) );
 
     // end-of-tests
   END_OPENSCAD;
