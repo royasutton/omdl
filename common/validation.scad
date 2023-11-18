@@ -54,7 +54,7 @@
 //----------------------------------------------------------------------------//
 
 //! <value> Value assignment for expected results table to skip a test.
-validation_skip_value = number_inf;
+validation_skip = number_inf;
 
 //! Compare a computed test value with an known good result.
 /***************************************************************************//**
@@ -142,33 +142,45 @@ module validate_skip( fn ) { validate_log ( str("ignore: '", fn, "'") ); }
 // tables
 //
 
-function table_validate_get_td( r, c, id ) = table_get_value(r, c, id, "td");
-function table_validate_get_ev( r, c, fn, id ) = table_get_value(r, c, fn, id);
-function table_validate_get_v1( r, c, id ) = first(table_get_value(r, c, id, "vl"));
-function table_validate_get_v2( r, c, id ) = second(table_get_value(r, c, id, "vl"));
-function table_validate_get_v3( r, c, id ) = third(table_get_value(r, c, id, "vl"));
+function table_validate_init ( tr, gr ) =
+  let(ids = table_get_row_ids( tr ))
+  [
+    tr,                                                               // test row
+    [["id","identifier"],["td","description"],["vl","value-list"] ],  // test data columns
+    gr,                                                               // good result row
+    pmerge([concat("id",ids),concat("identifier",ids)])               // good result columns
+  ];
 
-module table_validate_init( tr, tc, gr, gc, verbose=false )
+function table_validate_get_ids( db ) = table_get_row_ids( db[0] );
+
+function table_validate_get_ev( db, fn, id ) = table_get_value(db[2], db[3], fn, id);
+
+function table_validate_get_td( db, id ) = table_get_value(db[0], db[1], id, "td");
+function table_validate_get_v1( db, id ) = first(table_get_value(db[0], db[1], id, "vl"));
+function table_validate_get_v2( db, id ) = second(table_get_value(db[0], db[1], id, "vl"));
+function table_validate_get_v3( db, id ) = third(table_get_value(db[0], db[1], id, "vl"));
+
+module table_validate_start( db, verbose=false )
 {
   validate_log( str("openscad version ", version()) );
 
-  table_check( tt_r, tt_c, verbose );
-  table_check( tg_r, tg_c, verbose );
+  table_check( db[0], db[1], verbose );   // check test table
+  table_check( db[2], db[3], verbose );   // check expected result table
 }
 
-module table_validate( tr, tc, gr, gc, id, fn, argc, fr, t="equals", p=6 )
+module table_validate( db, id, fn, argc, fr, t="equals", p=6 )
 {
-  td = table_validate_get_td(tr, tc, id);
-  ev = table_validate_get_ev(gr, gc, fn, id);
+  td = table_validate_get_td(db, id);
+  ev = table_validate_get_ev(db, fn, id);
 
-  if ( ev != validation_skip_value )
+  if ( ev != validation_skip )
   {
-    vd = (argc == 3) ? str(fn, "(", table_validate_get_v1(tr, tc, id),
-                               ",", table_validate_get_v2(tr, tc, id),
-                               ",", table_validate_get_v3(tr, tc, id), ")=", ev)
-       : (argc == 2) ? str(fn, "(", table_validate_get_v1(tr, tc, id),
-                               ",", table_validate_get_v2(tr, tc, id), ")=", ev)
-       : (argc == 1) ? str(fn, "(", table_validate_get_v1(tr, tc, id), ")=", ev)
+    vd = (argc == 3) ? str(fn, "(", table_validate_get_v1(db, id),
+                               ",", table_validate_get_v2(db, id),
+                               ",", table_validate_get_v3(db, id), ")=", ev)
+       : (argc == 2) ? str(fn, "(", table_validate_get_v1(db, id),
+                               ",", table_validate_get_v2(db, id), ")=", ev)
+       : (argc == 1) ? str(fn, "(", table_validate_get_v1(db, id), ")=", ev)
        :               str(fn, "(*)=", ev);
 
     lm = validate( d=vd, cv=fr, t=t, p=p, ev=ev );
@@ -182,7 +194,6 @@ module table_validate( tr, tc, gr, gc, id, fn, argc, fr, t="equals", p=6 )
     validate_log( str(id, " -skip-: '", fn, "(", td, ")'") );
 }
 
-
 //
 // maps
 //
@@ -193,13 +204,13 @@ module table_validate( tr, tc, gr, gc, id, fn, argc, fr, t="equals", p=6 )
 function map_validate_get_name( m ) = first(map_get_value(m, "proto"));
 function map_validate_get_argc( m ) = second(map_get_value(m, "proto"));
 
-function map_validate_get_td( m, id ) = first(map_get_value(m, id));
-function map_validate_get_ev( m, id ) = second(map_get_value(m, id));
-function map_validate_get_v1( m, id ) = third(map_get_value(m, id));
+function map_validate_get_td( m, id ) = (map_get_value(m, id))[0];
+function map_validate_get_ev( m, id ) = (map_get_value(m, id))[1];
+function map_validate_get_v1( m, id ) = (map_get_value(m, id))[2];
 function map_validate_get_v2( m, id ) = (map_get_value(m, id))[3];
 function map_validate_get_v3( m, id ) = (map_get_value(m, id))[4];
 
-module map_validate_init( m, verbose=false )
+module map_validate_start( m, verbose=false )
 {
   validate_log( str("openscad version ", version()) );
 
