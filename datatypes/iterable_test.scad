@@ -305,71 +305,38 @@ BEGIN_SCOPE validate;
     include <omdl-base.scad>;
     include <common/validation.scad>;
 
-    t = true; f = false; u = undef; s = number_max;
+    function fmt( id, td, v1, v2, v3 ) = table_validate_fmt(id, td, v1, v2, v3);
+    function v1(db, id) = table_validate_get_v1(db, id);
+    t = true; f = false; u = undef; s = validation_skip;
 
-    function get_v1( id ) = table_get_value(test_r, test_c, id, "v1");
-    module log_test( m ) { log_type ( "omdl_test", m ); }
-    module log_skip( fn ) { log_test ( str("ignore: '", fn, "'") ); }
-    module test_1v( fn, fr, id )
-    {
-      td = table_get_value(test_r, test_c, id, "td");
-      ev = table_get_value(good_r, good_c, fn, id);
-
-      if ( ev != s )
-      {
-        d = str(fn, "(", get_v1(id), ")=", ev);
-        m = validate( d=d, cv=fr, t="eq", ev=ev );
-
-        if ( !validate( cv=fr, t="eq", ev=ev, pf=true ) )
-          log_test( str(id, " ", m, " ---> \"", td, "\"") );
-        else
-          log_test( str(id, " ", m) );
-      }
-      else
-        log_test( str(id, " -skip-: '", fn, "(", td, ")'") );
-    }
-
-    log_test( str("openscad version ", version()) );
-
-    // test-values columns
-    test_c = [ ["id", "identifier"], ["td", "description"], ["v1", "value 1"] ];
-
-    // test-values rows
-    test_r =
+    tbl_test_values =
     [
-      ["t01", "The undefined value",        undef],
-      ["t02", "An odd integer",             1],
-      ["t03", "The boolean true",           true],
-      ["t04", "The boolean false",          false],
-      ["t05", "A character string",         "a"],
-      ["t06", "A string",                   "This is a longer string"],
-      ["t07", "The empty string",           empty_str],
-      ["t08", "The empty list",             empty_lst],
-      ["t09", "A shorthand range",          [0:9]],
-      ["t10", "A range",                    [0:0.5:9]],
-      ["t11", "Single item list: 1 undef",  [undef]],
-      ["t12", "Single item list: 1 number", [1]],
-      ["t13", "List of 3 numbers",          [1, 2, 3]],
-      ["t14", "List of single num lists",   [[1], [2], [3], [4], [5]]],
-      ["t15", "List of number pairs",       [[1,2], [2,3]]],
-      ["t16", "List of num pairs and str",  [[1,2], [2,3], [4,5], "ab"]],
-      ["t17", "List of mixed tuples",       [[1,2,3], [4,5,6], [7,8,9], ["a", "b", "c"]]],
-      ["t18", "List of number with undef",  [1, 2, 3, undef]],
-      ["t19", "List of items, all = undef", [undef, undef, undef, undef]],
-      ["t20", "List of lists, all = undef", [[undef], [undef], [undef]]],
-      ["t21", "List of mixed booleans mt",  [true, true, true, true, false]],
-      ["t22", "List of mixed booleans mf",  [true, false, false, false, false]],
-      ["t23", "List of booleans = true",    [true, true, true, true]]
+      fmt("t01", "The undefined value",         undef),
+      fmt("t02", "An odd integer",              1),
+      fmt("t03", "The boolean true",            true),
+      fmt("t04", "The boolean false",           false),
+      fmt("t05", "A character string",          "a"),
+      fmt("t06", "A string",                    "This is a longer string"),
+      fmt("t07", "The empty string",            empty_str),
+      fmt("t08", "The empty list",              empty_lst),
+      fmt("t09", "A shorthand range",           [0:9]),
+      fmt("t10", "A range",                     [0:0.5:9]),
+      fmt("t11", "Single item list: 1 undef",   [undef]),
+      fmt("t12", "Single item list: 1 number",  [1]),
+      fmt("t13", "List of 3 numbers",           [1, 2, 3]),
+      fmt("t14", "List of single num lists",    [[1], [2], [3], [4], [5]]),
+      fmt("t15", "List of number pairs",        [[1,2], [2,3]]),
+      fmt("t16", "List of num pairs and str",   [[1,2], [2,3], [4,5], "ab"]),
+      fmt("t17", "List of mixed tuples",        [[1,2,3], [4,5,6], [7,8,9], ["a", "b", "c"]]),
+      fmt("t18", "List of number with undef",   [1, 2, 3, undef]),
+      fmt("t19", "List of items, all = undef",  [undef, undef, undef, undef]),
+      fmt("t20", "List of lists, all = undef",  [[undef], [undef], [undef]]),
+      fmt("t21", "List of mixed booleans mt",   [true, true, true, true, false]),
+      fmt("t22", "List of mixed booleans mf",   [true, false, false, false, false]),
+      fmt("t23", "List of booleans = true",     [true, true, true, true])
     ];
-    table_check( test_r, test_c, false );   // sanity-test
 
-    test_ids = table_get_row_ids( test_r );
-
-    // expected columns: ("id" + one column for each test)
-    good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
-
-    // expected rows: ("golden" test results), use 's' to skip test
-    good_r =
+    tbl_test_answers =
     [ // function       01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23
       ["is_iterable",   f, f, f, f, t, t, t, t, f, f, t, t, t, t, t, t, t, t, t, t, t, t, t],
       ["is_empty",      t, t, t, t, f, f, t, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f],
@@ -391,28 +358,32 @@ BEGIN_SCOPE validate;
       ["all_len_2",     f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f],
       ["all_len_3",     f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f]
     ];
-    table_check( good_r, good_c, false );   // sanity-test
 
-    // Indirect function calls would be very useful here!!!
-    for (vid=test_ids) test_1v( "is_iterable", is_iterable(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "is_empty", is_empty(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "all_equal_T", all_equal(get_v1(vid),t), vid );
-    for (vid=test_ids) test_1v( "all_equal_F", all_equal(get_v1(vid),f), vid );
-    for (vid=test_ids) test_1v( "all_equal_U", all_equal(get_v1(vid),u), vid );
-    for (vid=test_ids) test_1v( "any_equal_T", any_equal(get_v1(vid),t), vid );
-    for (vid=test_ids) test_1v( "any_equal_F", any_equal(get_v1(vid),f), vid );
-    for (vid=test_ids) test_1v( "any_equal_U", any_equal(get_v1(vid),u), vid );
-    for (vid=test_ids) test_1v( "all_defined", all_defined(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "any_defined", any_defined(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "any_undefined", any_undefined(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "all_scalars", all_scalars(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "all_iterables", all_iterables(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "all_lists", all_lists(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "all_strings", all_strings(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "all_numbers", all_numbers(get_v1(vid)), vid );
-    for (vid=test_ids) test_1v( "all_len_1", all_len(get_v1(vid),1), vid );
-    for (vid=test_ids) test_1v( "all_len_2", all_len(get_v1(vid),2), vid );
-    for (vid=test_ids) test_1v( "all_len_3", all_len(get_v1(vid),3), vid );
+    db = table_validate_init( tbl_test_values, tbl_test_answers );
+
+    table_validate_start( db );
+    test_ids = table_validate_get_ids( db );
+
+    for (id=test_ids) table_validate( db, id, "is_iterable", 1, is_iterable( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "is_empty", 1, is_empty( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "all_equal_T", 1, all_equal( v1(db,id), t ) );
+    for (id=test_ids) table_validate( db, id, "all_equal_F", 1, all_equal( v1(db,id), f ) );
+    for (id=test_ids) table_validate( db, id, "all_equal_U", 1, all_equal( v1(db,id), u ) );
+    for (id=test_ids) table_validate( db, id, "any_equal_T", 1, any_equal( v1(db,id), t ) );
+    for (id=test_ids) table_validate( db, id, "any_equal_F", 1, any_equal( v1(db,id), f ) );
+    for (id=test_ids) table_validate( db, id, "any_equal_U", 1, any_equal( v1(db,id), u ) );
+    for (id=test_ids) table_validate( db, id, "all_defined", 1, all_defined( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "any_defined", 1, any_defined( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "any_undefined", 1, any_undefined( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "all_scalars", 1, all_scalars( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "all_iterables", 1, all_iterables( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "all_lists", 1, all_lists( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "all_strings", 1, all_strings( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "all_numbers", 1, all_numbers( v1(db,id) ) );
+
+    for (id=test_ids) table_validate( db, id, "all_len_1", 1, all_len( v1(db,id), 1 ) );
+    for (id=test_ids) table_validate( db, id, "all_len_2", 1, all_len( v1(db,id), 2 ) );
+    for (id=test_ids) table_validate( db, id, "all_len_3", 1, all_len( v1(db,id), 3 ) );
 
     // end-of-tests
   END_OPENSCAD;
