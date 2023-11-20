@@ -229,7 +229,7 @@ function exists
 
   \returns  (1) <boolean> \b true when the element \p v[i], exists and
                 \b false otherwise.
-            (2) Returns \b undef when \p i is not an integer.
+            (2) Returns \b undef when \p i is not an number.
 
   \note     This functions does not consider the value of the element
             at the index position, but rather if an element exists at
@@ -239,7 +239,7 @@ function eexists
 (
   i,
   v
-) = !is_integer( i ) ? undef
+) = !is_number( i ) ? undef
   : (i < 0) ? false
   : !is_iterable( v ) ? false
   : (len(v) > i);
