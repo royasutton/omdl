@@ -893,42 +893,27 @@ BEGIN_SCOPE validate;
     include <omdl-base.scad>;
     include <common/validation.scad>;
 
-    echo( str("openscad version ", version()) );
+    function fmt( id, td, v1, v2, v3 ) = table_validate_fmt(id, td, v1, v2, v3);
+    function v1(db, id) = table_validate_get_v1(db, id);
+    t = true; f = false; u = undef; s = validation_skip;
 
-    // test-values columns
-    test_c =
+    tbl_test_values =
     [
-      ["id", "identifier"],
-      ["td", "description"],
-      ["tv", "test value"]
+      fmt("t01", "The undefined value",       undef),
+      fmt("t02", "The empty list",            empty_lst),
+      fmt("t03", "A long range",              [0:0.5:9]),
+      fmt("t04", "string = (A string)",       "A string"),
+      fmt("t05", "List-4 fruit",              ["orange","apple","grape","banana"]),
+      fmt("t06", "List-7 characters",         ["b","a","n","a","n","a","s"]),
+      fmt("t07", "List-1 undefined",          [undef]),
+      fmt("t08", "List-2 integers-2",         [[1,2],[2,3]]),
+      fmt("t09", "List-4 iterable-2",         ["ab",[1,2],[2,3],[4,5]]),
+      fmt("t10", "List-4  iterable-3",        [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]]),
+      fmt("t11", "List-15 of integers",       [for (i=[0:15]) i])
     ];
 
-    // test-values rows
-    test_r =
+    tbl_test_answers =
     [
-      ["t01", "The undefined value",        undef],
-      ["t02", "The empty list",             empty_lst],
-      ["t03", "A range",                    [0:0.5:9]],
-      ["t04", "A string",                   "A string"],
-      ["t05", "Test list 01",               ["orange","apple","grape","banana"]],
-      ["t06", "Test list 02",               ["b","a","n","a","n","a","s"]],
-      ["t07", "Test list 03",               [undef]],
-      ["t08", "Test list 04",               [[1,2],[2,3]]],
-      ["t09", "Test list 05",               ["ab",[1,2],[2,3],[4,5]]],
-      ["t10", "Test list 06",               [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]]],
-      ["t11", "Vector of integers 0 to 15", [for (i=[0:15]) i]]
-    ];
-
-    test_ids = table_get_row_ids( test_r );
-
-    // expected columns: ("id" + one column for each test)
-    good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
-
-    // expected rows: ("golden" test results), use 's' to skip test
-    skip = -1;  // skip test
-
-    good_r =
-    [ // function
       ["edefined_or_DE3",
         "default",                                          // t01
         "default",                                          // t02
@@ -956,43 +941,13 @@ BEGIN_SCOPE validate;
         empty_lst                                           // t11
       ],
       ["count_S1",
-        0,                                                  // t01
-        0,                                                  // t02
-        0,                                                  // t03
-        0,                                                  // t04
-        0,                                                  // t05
-        0,                                                  // t06
-        0,                                                  // t07
-        1,                                                  // t08
-        1,                                                  // t09
-        1,                                                  // t10
-        1                                                   // t11
+        0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1
       ],
       ["exists_S1",
-        false,                                              // t01
-        false,                                              // t02
-        false,                                              // t03
-        false,                                              // t04
-        false,                                              // t05
-        false,                                              // t06
-        false,                                              // t07
-        true,                                               // t08
-        true,                                               // t09
-        true,                                               // t10
-        true                                                // t11
+        f, f, f, f, f, f, f, t, t, t, t
       ],
       ["eexists_5",
-        false,                                              // t01
-        false,                                              // t02
-        false,                                              // t03
-        true,                                               // t04
-        false,                                              // t05
-        true,                                               // t06
-        false,                                              // t07
-        false,                                              // t08
-        false,                                              // t09
-        false,                                              // t10
-        true                                                // t11
+        f, f, f, t, f, t, f, f, f, f, t
       ],
       ["first",
         undef,                                              // t01
@@ -1045,6 +1000,71 @@ BEGIN_SCOPE validate;
         [4,5],                                              // t09
         ["a","b","c"],                                      // t10
         15                                                  // t11
+      ],
+      ["middle",
+        undef,                                              // t01
+        undef,                                              // t02
+        undef,                                              // t03
+        "r",                                                // t04
+        "grape",                                            // t05
+        "a",                                                // t06
+        undef,                                              // t07
+        [2,3],                                              // t08
+        [2,3],                                              // t09
+        [7,8,9],                                            // t10
+        8                                                   // t11
+      ],
+      ["first2",
+        undef,                                              // t01
+        undef,                                              // t02
+        undef,                                              // t03
+        ["A"," "],                                          // t04
+        ["orange","apple"],                                 // t05
+        ["b","a"],                                          // t06
+        undef,                                              // t07
+        [[1,2],[2,3]],                                      // t08
+        ["ab", [1,2]],                                      // t09
+        [[1,2,3],[4,5,6]],                                  // t10
+        [0,1]                                               // t11
+      ],
+      ["first3",
+        undef,                                              // t01
+        undef,                                              // t02
+        undef,                                              // t03
+        ["A"," ","s"],                                      // t04
+        ["orange","apple","grape"],                         // t05
+        ["b","a","n"],                                      // t06
+        undef,                                              // t07
+        undef,                                              // t08
+        ["ab", [1,2],[2,3]],                                // t09
+        [[1,2,3],[4,5,6],[7,8,9]],                          // t10
+        [0,1,2]                                             // t11
+      ],
+      ["last2",
+        undef,                                              // t01
+        undef,                                              // t02
+        undef,                                              // t03
+        ["n","g"],                                          // t04
+        ["grape","banana"],                                 // t05
+        ["a","s"],                                          // t06
+        undef,                                              // t07
+        [[1,2],[2,3]],                                      // t08
+        [[2,3], [4,5]],                                     // t09
+        [[7,8,9],["a","b","c"]],                            // t10
+        [14,15]                                             // t11
+      ],
+      ["last3",
+        undef,                                              // t01
+        undef,                                              // t02
+        undef,                                              // t03
+        ["i","n","g"],                                      // t04
+        ["apple","grape","banana"],                         // t05
+        ["n","a","s"],                                      // t06
+        undef,                                              // t07
+        undef,                                              // t08
+        [[1,2],[2,3],[4,5]],                                // t09
+        [[4,5,6],[7,8,9],["a","b","c"]],                    // t10
+        [13,14,15]                                          // t11
       ],
       ["nfirst_1",
         undef,                                              // t01
@@ -1272,63 +1292,40 @@ BEGIN_SCOPE validate;
       ]
     ];
 
-    // sanity-test tables
-    table_check( test_r, test_c, false );
-    table_check( good_r, good_c, false );
+    db = table_validate_init( tbl_test_values, tbl_test_answers );
 
-    // validate helper function and module
-    function get_value( vid ) = table_get_value(test_r, test_c, vid, "tv");
-    module log_test( m ) { log_type ( "test", m ); }
-    module log_skip( f ) { log_test ( str("ignore: '", f, "'") ); }
-    module run_test( fname, fresult, vid )
-    {
-      value_text = table_get_value(test_r, test_c, vid, "td");
-      pass_value = table_get_value(good_r, good_c, fname, vid);
+    table_validate_start( db );
+    test_ids = table_validate_get_ids( db );
 
-      test_pass = validate( cv=fresult, t="equals", ev=pass_value, pf=true );
-      test_text = validate( str(fname, "(", get_value(vid), ")=", pass_value), fresult, "equals", pass_value );
-
-      if ( pass_value != skip )
-      {
-        if ( !test_pass )
-          log_test( str(vid, " ", test_text, " (", value_text, ")") );
-        else
-          log_test( str(vid, " ", test_text) );
-      }
-      else
-        log_test( str(vid, " -skip-: '", fname, "(", value_text, ")'") );
-    }
-
-    // Indirect function calls would be very useful here!!!
-    for (vid=test_ids) run_test( "edefined_or_DE3", edefined_or(get_value(vid),3,"default"), vid );
-    for (vid=test_ids) run_test( "find_12", find([1,2],get_value(vid)), vid );
-    for (vid=test_ids) run_test( "count_S1", count(1,get_value(vid),true), vid );
-    for (vid=test_ids) run_test( "exists_S1", exists(1,get_value(vid),true), vid );
-    for (vid=test_ids) run_test( "eexists_5", eexists(5,get_value(vid)), vid );
-    for (vid=test_ids) run_test( "first", first(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "second", second(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "third", third(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "last", last(get_value(vid)), vid );
-    log_skip( "middle()" );
-    log_skip( "first2()" );
-    log_skip( "first3()" );
-    log_skip( "last2()" );
-    log_skip( "last3()" );
-    for (vid=test_ids) run_test( "nfirst_1", nfirst(get_value(vid),n=1), vid );
-    for (vid=test_ids) run_test( "nlast_1", nlast(get_value(vid),n=1), vid );
-    for (vid=test_ids) run_test( "nhead_1", nhead(get_value(vid),n=1), vid );
-    for (vid=test_ids) run_test( "ntail_1", ntail(get_value(vid),n=1), vid );
-    for (vid=test_ids) run_test( "reverse", reverse(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "shift_r1", shift(get_value(vid),n=1,r=true), vid );
-    for (vid=test_ids) run_test( "shift_l1", shift(get_value(vid),n=1,r=false), vid );
-    for (vid=test_ids) run_test( "rselect_02", rselect(get_value(vid),i=[0:2]), vid );
-    for (vid=test_ids) run_test( "nssequence_31", nssequence(get_value(vid),n=3,s=1), vid );
-    for (vid=test_ids) run_test( "eappend_T0", eappend(0,get_value(vid)), vid );
-    for (vid=test_ids) run_test( "insert_T0", insert(0,get_value(vid),mv=["x","r","apple","s",[2,3],5]), vid );
-    for (vid=test_ids) run_test( "delete_T0", delete(get_value(vid),mv=["x","r","apple","s",[2,3],5]), vid );
-    for (vid=test_ids) run_test( "strip", strip(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "mask_01R", mask(get_value(vid),[0,1],r=true), vid );
-    for (vid=test_ids) run_test( "unique", unique(get_value(vid)), vid );
+    for (id=test_ids) table_validate( db, id, "edefined_or_DE3", 1, edefined_or( v1(db,id), 3, "default" ) );
+    for (id=test_ids) table_validate( db, id, "find_12", 1, find( [1,2], v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "count_S1", 1, count( 1, v1(db,id), true ) );
+    for (id=test_ids) table_validate( db, id, "exists_S1", 1, exists( 1, v1(db,id), true ) );
+    for (id=test_ids) table_validate( db, id, "eexists_5", 1, eexists( 5, v1(db,id )) );
+    for (id=test_ids) table_validate( db, id, "first", 1, first( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "second", 1, second( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "third", 1, third( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "last", 1, last( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "middle", 1, middle( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "first2", 1, first2( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "first3", 1, first3( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "last2", 1, last2( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "last3", 1, last3( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "nfirst_1", 1, nfirst( v1(db,id), n=1 ) );
+    for (id=test_ids) table_validate( db, id, "nlast_1", 1, nlast( v1(db,id), n=1 ) );
+    for (id=test_ids) table_validate( db, id, "nhead_1", 1, nhead( v1(db,id), n=1 ) );
+    for (id=test_ids) table_validate( db, id, "ntail_1", 1, ntail( v1(db,id), n=1 ) );
+    for (id=test_ids) table_validate( db, id, "reverse", 1, reverse( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "shift_r1", 1, shift( v1(db,id), n=1, r=true ) );
+    for (id=test_ids) table_validate( db, id, "shift_l1", 1, shift( v1(db,id), n=1, r=false ) );
+    for (id=test_ids) table_validate( db, id, "rselect_02", 1, rselect( v1(db,id), i=[0:2] ) );
+    for (id=test_ids) table_validate( db, id, "nssequence_31", 1, nssequence( v1(db,id), n=3, s=1 ) );
+    for (id=test_ids) table_validate( db, id, "eappend_T0", 1, eappend( 0, v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "insert_T0", 1, insert( 0, v1(db,id), mv=["x","r","apple","s",[2,3],5] ) );
+    for (id=test_ids) table_validate( db, id, "delete_T0", 1, delete( v1(db,id), mv=["x","r","apple","s",[2,3],5] ) );
+    for (id=test_ids) table_validate( db, id, "strip", 1, strip( v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "mask_01R", 1, mask( v1(db,id), [0,1], r=true ) );
+    for (id=test_ids) table_validate( db, id, "unique", 1, unique( v1(db,id) ) );
 
     // end-of-tests
   END_OPENSCAD;
