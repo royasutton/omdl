@@ -52,6 +52,11 @@
 
   \details
 
+  \amu_define group_references
+  (
+    [search]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Other_Language_Features#search
+  )
+
   \amu_include (include/amu/validate_summary.amu)
 *******************************************************************************/
 
@@ -63,10 +68,17 @@
   \param    i <integer> An element index.
   \param    d \<value> A default value.
 
-  \returns  \<value> <tt>v[i]</tt> when it is defined or \p d otherwise.
+  \returns  (1) \<value> <tt>v[i]</tt> when it is defined or \p d
+                otherwise.
 *******************************************************************************/
-function edefined_or(v, i, d) =
-     is_iterable(v)? ((len(v) > i) ? v[i] : d): d;
+function edefined_or
+(
+  v,
+  i,
+  d
+) = !is_iterable(v) ? d
+  : !is_undef( v[i] ) ? v[i]
+  : d;
 
 
 //! Find the occurrences of a match value in an iterable value.
@@ -74,19 +86,21 @@ function edefined_or(v, i, d) =
   \param    mv \<value> A match value.
   \param    v <iterable> An iterable value.
   \param    c <integer> A match count.
-            For <tt>(c>=1)</tt>, return the first \p c matches.
-            For <tt>(c<=0)</tt>, return all matches.
-  \param    i <integer> The element index to consider for iterable elements.
-  \param    i1 <integer> The element index where find begins (default: first).
-  \param    i2 <integer> The element index where find ends (default: last).
+              For <tt>(c>=1)</tt>, return the first \p c matches.
+              For <tt>(c<=0)</tt>, return all matches.
+  \param    i <integer> The secondary element index to match for when
+              the elements of \p v are themselves iterable elements.
 
-  \returns  \<list> A list of indexes where elements match \p mv.
-            Returns \b empty_lst when no element of \p v matches \p mv
-            or when \p v is not iterable.
+  \param    i1 <integer> The element index of \p v where the search begins.
+  \param    i2 <integer> The element index of \p v where the search ends.
+
+  \returns  (1) \<list> A list of indexes where elements match \p mv.
+            (2) Returns \b empty_lst when no element of \p v matches
+                \p mv or when \p v is not iterable.
 
   \details
 
-    The use-cases for find() and [search()] are summarized in the
+    The use-cases for find() and [search]\() are summarized in the
     following tables.
 
     \b Find:
@@ -129,13 +143,13 @@ function edefined_or(v, i, d) =
 
   \note     \b 1: When \p i is specified, that element column is compared.
             Otherwise, the entire element is compared. Functions find()
-            and [search()] behave differently in this regard.
+            and [search]\() behave differently in this regard.
   \note     \b 2: Invalid use combination when any element of \p v is a
             string. However, an element that is a list of one or more
             strings is valid. In which case, only the first character of
             each string element is considered.
 
-  [search()]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Other_Language_Features#Search
+  \amu_eval (${group_references})
 *******************************************************************************/
 function find
 (
@@ -145,32 +159,32 @@ function find
   i,
   i1 = 0,
   i2
-) = !is_iterable(v) ? empty_lst
-  : (i1 > i2) ? empty_lst
-  : (i1 > len(v)-1) ? empty_lst
-  : ((not_defined(i) && (v[i1] == mv)) || (v[i1][i] == mv)) ?
+) = !is_iterable(v) ? empty_lst                                   // not iterable
+  : (!is_undef(i2) && (i1 > i2)) ? empty_lst                      // at upper index
+  : (i1 > len(v)-1) ? empty_lst                                   // at end of list
+  : ((is_undef(i) && (v[i1] == mv)) || (v[i1][i] == mv)) ?        // match method
     (
-      (c == 1) ? [i1]
-    : concat(i1, find(mv, v, c-1, i, i1+1, i2))
+      (c == 1) ? [i1]                                             // one or all
+    : concat(i1, find(mv, v, c-1, i, i1+1, i2))                   // add to list
     )
-  : find(mv, v, c, i, i1+1, i2);
+  : find(mv, v, c, i, i1+1, i2);                                  // no match, cont.
 
 //! Count all occurrences of a match value in an iterable value.
 /***************************************************************************//**
   \param    mv \<value> A match value.
   \param    v <iterable> An iterable value.
   \param    s <boolean> Element matching search method.
-  \param    i <integer> The element index to consider for two
-              dimensional iterable elements.
+  \param    i <integer> The secondary element index to match for when
+              the elements of \p v are themselves iterable elements.
 
-  \returns  <integer> The number of times \p mv occurs in the list.
+  \returns  (1) <integer> The number of times \p mv occurs in the list.
 
   \details
 
-    When \p s == \b true, [search] is used to match elements. When
+    When \p s == \b true, [search]\() is used to match elements. When
     \p s == false, find() is used.
 
-  [search]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Other_Language_Features#Search
+  \amu_eval (${group_references})
 *******************************************************************************/
 function count
 (
@@ -178,43 +192,26 @@ function count
   v,
   s = true,
   i
-) = (s == false) ?
-    len(find(mv, v, 0, i))
+) = (s == false) ? len(find(mv, v, 0, i))
   : len(smerge(search(mv, v, 0, i)));
-
-//! Test if an element exists at a specified index of an iterable value.
-/***************************************************************************//**
-  \param    i <integer> An element index.
-  \param    v <iterable> An iterable value.
-
-  \returns  <boolean> \b true when the element \p v[i], exists and
-            \b false otherwise. Returns \b undef when \p i is not an
-            integer.
-*******************************************************************************/
-function eexists
-(
-  i,
-  v
-) = !is_integer( i ) ? undef
-  : (i < 0) ? false
-  : (len(v) > i);
 
 //! Check for the existence of a match value in an iterable value.
 /***************************************************************************//**
   \param    mv \<value> A match value.
   \param    v <iterable> An iterable value.
   \param    s <boolean> Element matching search method.
-  \param    i <integer> The element index to consider for iterable elements.
+  \param    i <integer> The secondary element index to match for when
+              the elements of \p v are themselves iterable elements.
 
-  \returns  <boolean> \b true when \p mv exists in the list and
-            \b false otherwise.
+  \returns  (1) <boolean> \b true when \p mv exists in the list and
+                \b false otherwise.
 
   \details
 
-    When \p s == \b true, [search] is used to match elements. When
+    When \p s == \b true, [search]\() is used to match elements. When
     \p s == false, find() is used.
 
-  [search]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Other_Language_Features#Search
+  \amu_eval (${group_references})
 *******************************************************************************/
 function exists
 (
@@ -222,21 +219,42 @@ function exists
   v,
   s = true,
   i
-) = (s == false) ?
-    (find(mv, v, 1, i) != empty_lst)
+) = (s == false) ? (find(mv, v, 1, i) != empty_lst)
   : (strip(search(mv, v, 1, i)) != empty_lst);
+
+//! Test if an element exists at a specified index of an iterable value.
+/***************************************************************************//**
+  \param    i <integer> An element index.
+  \param    v <iterable> An iterable value.
+
+  \returns  (1) <boolean> \b true when the element \p v[i], exists and
+                \b false otherwise.
+            (2) Returns \b undef when \p i is not an integer.
+
+  \note     This functions does not consider the value of the element
+            at the index position, but rather if an element exists at
+            the index position \p i.
+*******************************************************************************/
+function eexists
+(
+  i,
+  v
+) = !is_integer( i ) ? undef
+  : (i < 0) ? false
+  : !is_iterable( v ) ? false
+  : (len(v) > i);
 
 //! Return the first element of an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
 
-  \returns  \<value> The first element of \p v.
-            Returns \b undef when \p v is not defined, is not iterable,
-            or is empty.
+  \returns  (1) \<value> The first element of \p v.
+            (2) Returns \b undef when \p v is not defined, is not
+                iterable, or is empty.
 
   \details
 
-  \note     Value may also be a range.
+  \note     Value may also be a range to obtain its \em start value.
 *******************************************************************************/
 function first( v ) = v[0];
 
@@ -244,13 +262,13 @@ function first( v ) = v[0];
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
 
-  \returns  \<value> The second element of \p v.
-            Returns \b undef when \p v is not defined, is not iterable,
-            or is empty.
+  \returns  (1) \<value> The second element of \p v.
+            (2) Returns \b undef when \p v is not defined, is not
+                iterable, or is empty.
 
   \details
 
-  \note     Value may also be a range.
+  \note     Value may also be a range to obtain its \em step value.
 *******************************************************************************/
 function second( v ) = v[1];
 
@@ -258,13 +276,13 @@ function second( v ) = v[1];
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
 
-  \returns  \<value> The second element of \p v.
-            Returns \b undef when \p v is not defined, is not iterable,
-            or is empty.
+  \returns  (1) \<value> The second element of \p v.
+            (2) Returns \b undef when \p v is not defined, is not
+                iterable, or is empty.
 
   \details
 
-  \note     Value may also be a range.
+  \note     Value may also be a range to obtain its \em end value.
 *******************************************************************************/
 function third( v ) = v[2];
 
@@ -272,158 +290,187 @@ function third( v ) = v[2];
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
 
-  \returns  \<value> The last element of \p v.
-            Returns \b undef when \p v is not defined, is not iterable,
-            or is empty.
+  \returns  (1) \<value> The last element of \p v.
+            (2) Returns \b undef when \p v is not defined, is not
+                iterable, or is empty.
 *******************************************************************************/
-function last( v ) = v[len(v)-1];
+function last
+(
+  v
+) = !is_iterable(v) ? undef
+  : v[len(v)-1];
 
 //! Return the middle element of an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
 
-  \returns  \<value> The middle element of \p v.
-            Returns \b undef when \p v is not defined, is not iterable,
-            or is empty.
+  \returns  (1) \<value> The middle element of \p v.
+            (2) Returns \b undef when \p v is not defined, is not
+                iterable, or is empty.
 *******************************************************************************/
-function middle( v ) = v[len(v)/2];
+function middle
+(
+  v
+) = !is_iterable(v) ? undef
+  : v[len(v)/2];
 
 //! Return a list containing the first two elements of an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
 
-  \returns  \<list> A list containing the first two elements of \p v.
-            Returns \b undef when \p v is not defined, is not iterable,
-            or is empty.
+  \returns  (1) \<list> A list containing the first two elements of \p v.
+            (2) Returns \b undef when \p v is not defined, is not
+                iterable, is empty or has less than two elements
 
   \details
 
   \note     Value may also be a range.
 *******************************************************************************/
-function first2( v ) = [v[0], v[1]];
+function first2
+(
+  v
+) = !is_iterable(v) ? undef
+  : (len(v) < 2) ? undef
+  : [v[0], v[1]];
 
 //! Return a list containing the first three elements of an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
 
-  \returns  \<list> A list containing the first three elements of \p v.
-            Returns \b undef when \p v is not defined, is not iterable,
-            or is empty.
+  \returns  (1) \<list> A list containing the first three elements of \p v.
+            (2) Returns \b undef when \p v is not defined, is not
+                iterable, is empty, or has less than three elements.
 
   \details
 
   \note     Value may also be a range.
 *******************************************************************************/
-function first3( v ) = [v[0], v[1], v[2]];
+function first3
+(
+  v
+) = !is_iterable(v) ? undef
+  : (len(v) < 3) ? undef
+  : [v[0], v[1], v[2]];
 
 //! Return a list containing the last two elements of an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
 
-  \returns  \<list> A list containing the last two elements of \p v.
-            Returns \b undef when \p v is not defined, is not iterable,
-            or is empty.
+  \returns  (1) \<list> A list containing the last two elements of \p v.
+            (2) Returns \b undef when \p v is not defined, is not
+                iterable, is empty, or has less than two elements.
 *******************************************************************************/
 function last2
 (
   v
-) = let
-    (
-      l = len(v)
-    )
-    [v[l-2], v[l-1]];
+) = !is_iterable(v) ? undef
+  : let( l = len(v) )
+    (l < 2) ? undef
+  : [v[l-2], v[l-1]];
 
 //! Return a list containing the last three elements of an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
 
-  \returns  \<list> A list containing the last three elements of \p v.
-            Returns \b undef when \p v is not defined, is not iterable,
-            or is empty.
+  \returns  (1) \<list> A list containing the last three elements of \p v.
+            (2) Returns \b undef when \p v is not defined, is not
+                iterable, is empty, or has less than three elements.
 *******************************************************************************/
 function last3
 (
   v
-) = let
-    (
-      l = len(v)
-    )
-    [v[l-3], v[l-2], v[l-1]];
+) = !is_iterable(v) ? undef
+  : let( l = len(v) )
+    (l < 3) ? undef
+  : [v[l-3], v[l-2], v[l-1]];
 
-//! Return a list containing the first n elements of an iterable value.
+//! Return a list containing the first \p n elements of an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
   \param    n <integer> The element count.
 
-  \returns  \<list> A list containing the first \p n elements of \p v.
-            Returns \b undef when \p v is not defined, is not iterable,
-            or is empty.
+  \returns  (1) \<list> A list containing the first \p n elements of \p v.
+            (2) Returns \b undef when \p v is not defined, is not
+              iterable, or is empty.
+
+  \details
+
+    When \p n is greater than the length of the iterable \p v, the list
+    will stop at the last element of \p v.
 *******************************************************************************/
 function nfirst
 (
   v,
   n = 1
-) = not_defined(v) ? undef
-  : !is_iterable(v) ? undef
+) = !is_iterable(v) ? undef
   : is_empty(v) ? undef
   : n < 1 ? empty_lst
-  : [for (i = [0 : min(n-1, len(v)-1)]) v[i]];
+  : let ( s = min(n-1, len(v)-1) )
+    [for (i = [0 : s]) v[i]];
 
-//! Return a list containing the last n elements of an iterable value.
+//! Return a list containing the last \p n elements of an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
   \param    n <integer> The element count.
 
-  \returns  \<list> A list containing the last \p n elements of \p v.
-            Returns \b undef when \p v is not defined, is not iterable,
-            or is empty.
+  \returns  (1) \<list> A list containing the last \p n elements of \p v.
+            (2) Returns \b undef when \p v is not defined, is not
+                iterable, or is empty.
+
+  \details
+
+    When \p n is greater than the length of the iterable \p v, the list
+    will start at the first element of \p v.
 *******************************************************************************/
 function nlast
 (
   v,
   n = 1
-) = not_defined(v) ? undef
-  : !is_iterable(v) ? undef
+) = !is_iterable(v) ? undef
   : is_empty(v) ? undef
   : n < 1 ? empty_lst
-  : [for (i = [max(0, len(v)-n) : len(v)-1]) v[i]];
+  : let ( s = max(0, len(v)-n) )
+    [for (i = [s : len(v)-1]) v[i]];
 
-//! Return a list containing all but the last n elements of an iterable value.
+//! Return a list containing all but the last \p n elements of an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
   \param    n <integer> The element count.
 
-  \returns  \<list> A list containing all but the last \p n elements of \p v.
-            Returns \b empty_lst when \p v contains fewer than \p n elements.
-            Returns \b undef when \p v is not defined, is not iterable,
-            or is empty.
+  \returns  (1) \<list> A list containing all but the last \p n
+                elements of \p v.
+            (2) Returns \b empty_lst when \p v contains fewer than \p n
+                elements.
+            (3) Returns \b undef when \p v is not defined, is not
+                iterable, or is empty.
 *******************************************************************************/
 function nhead
 (
   v,
   n = 1
-) = not_defined(v) ? undef
-  : !is_iterable(v) ? undef
+) = !is_iterable(v) ? undef
   : is_empty(v) ? undef
   : (n >= len(v)) ? empty_lst
-  : [for (i = [0 : min(len(v)-1, len(v)-1-n)]) v[i]];
+  : let ( s = min(len(v)-1, len(v)-1-n) )
+    [for (i = [0 : s]) v[i]];
 
-//! Return a list containing all but the first n elements of an iterable value.
+//! Return a list containing all but the first \p n elements of an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
   \param    n <integer> The element count.
 
-  \returns  \<list> A list containing all but the first n elements of \p v.
-            Returns \b empty_lst when \p v contains fewer than \p n elements.
-            Returns \b undef when \p v is not defined, is not iterable,
-            or is empty.
+  \returns  (1) \<list> A list containing all but the first \p n
+                elements of \p v.
+            (2) Returns \b empty_lst when \p v contains fewer than \p n
+                elements.
+            (3) Returns \b undef when \p v is not defined, is not
+                iterable, or is empty.
 *******************************************************************************/
 function ntail
 (
   v,
   n = 1
-) = not_defined(v) ? undef
-  : !is_iterable(v) ? undef
+) = !is_iterable(v) ? undef
   : is_empty(v) ? undef
   : (n >= len(v)) ? empty_lst
   : [for (i = [max(0, n) : len(v)-1]) v[i]];
@@ -432,15 +479,15 @@ function ntail
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
 
-  \returns  \<list> A list containing the elements of \p v in reversed order.
-            Returns \b empty_lst when \p v is empty.
-            Returns \b undef when \p v is not defined or is not iterable.
+  \returns  (1) \<list> A list containing the elements of \p v in
+                reversed order.
+            (2) Returns \b empty_lst when \p v is empty.
+            (3) Returns \b undef when \p v is not defined or is not iterable.
 *******************************************************************************/
 function reverse
 (
   v
-) = not_defined(v) ? undef
-  : !is_iterable(v) ? undef
+) = !is_iterable(v) ? undef
   : is_empty(v) ? empty_lst
   : [for (i = [len(v)-1 : -1 : 0]) v[i]];
 
@@ -451,9 +498,13 @@ function reverse
   \param    r <boolean> Shift the elements to the right (or left).
   \param    c <boolean> Perform circular shift (or drop).
 
-  \returns  \<list> A list containing the elements of \p v shifted by
-            \p n elements.
-            Returns \b undef when \p v is not defined or is not iterable.
+  \returns  (1) \<list> A list containing the elements of \p v shifted
+                by \p n elements.
+            (2) Returns \b undef when \p v is not defined or is not iterable.
+
+  \details
+
+    The shift count \p n may be positive or negative.
 *******************************************************************************/
 function shift
 (
@@ -461,8 +512,7 @@ function shift
   n = 0,
   r = true,
   c = true
-) = not_defined(v) ? undef
-  : !is_iterable(v) ? undef
+) = !is_iterable(v) ? undef
   : let
     (
       l = len(v),
@@ -474,33 +524,32 @@ function shift
     (c == false && s > l-1) ? empty_lst
     // shift direction
   : (d == true) ?
-    [ if (m && c) for (i = [l-m : l-1]) v[i], for (i = [0 : l-1-m]) v[i] ]  // right
-  : [ for (i = [m : l-1]) v[i], if (m && c) for (i = [0 : m-1]) v[i] ];     // left
+    // shift right
+    [ if (m && c) for (i = [l-m : l-1]) v[i], for (i = [0 : l-1-m]) v[i] ]
+    // shift left
+  : [ for (i = [m : l-1]) v[i], if (m && c) for (i = [0 : m-1]) v[i] ];
 
 //! Select a range of elements from an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
   \param    i <range|list|integer> The index selection.
 
-  \returns  \<list> A list containing the identified element(s).
-            Returns \b undef when \p i does not map to an element of \p v.
-            Returns \b empty_lst when \p v is empty.
-            Returns \b undef when \p v is not defined or is not iterable.
+  \returns  (1) \<list> A list containing the selected elements.
+            (2) Returns \b undef when \p v is not defined, is not
+                iterable, or when \p i does not map to an element of \p v.
+            (3) Returns \b empty_lst when \p v is empty.
 *******************************************************************************/
 function rselect
 (
   v,
   i
-) = !all_defined([v, i]) ? undef
-  : !is_iterable(v) ? undef
+) = (!is_iterable(v) || !all_defined(i)) ? undef
   : is_empty(v) ? empty_lst
-  : is_number(i) && ((i<0) || (i>(len(v)-1))) ? undef
-  : is_list(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
+  : ( !is_number(i) && !is_list(i) && !is_range(i) ) ? undef
+  : is_number(i) && !is_between(i, 0, len(v)-1) ? undef
+  : is_list(i)  && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
   : is_range(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
-  : let
-    (
-      s = is_number(i) ? [i] : i
-    )
+  : let ( s = is_number(i) ? [i] : i )
     [for (j = [for (k=s) k]) v[j]];
 
 //! Return a list of all n-element sequential-subsets of an iterable value.
@@ -510,10 +559,11 @@ function rselect
   \param    s <integer> The iteration step size.
   \param    w <boolean> Use wrap-at-end circular subset selection.
 
-  \returns  <list-list> A list of all n-element sequential-subsets of
-            \p v skipping \p s elements between each subset selection.
-            Returns \b empty_lst when \p v is empty, is not defined or is
-            not iterable.
+  \returns  (1) <list-list> A list of all n-element sequential subsets
+                of \p v skipping \p s elements of \p v between each
+                subset selection.
+            (2) Returns \b empty_lst when \p v is empty, is not defined
+                or is not iterable.
 
   \details
 
@@ -531,29 +581,35 @@ function nssequence
   n = 1,
   s = 1,
   w = false
-) =
-[
-  for (i=[0 : s : (len(v)-((w == true) ? 1 : n)) ])
-  [
-    for (j=[i : (i+n-1)])
-      v[j % len(v)]
-  ]
-];
+) = is_empty(v) ? empty_lst
+  : [
+      for (i=[0 : s : (len(v)-((w == true) ? 1 : n)) ])
+      [
+        for (j=[i : (i+n-1)])
+          v[j % len(v)]
+      ]
+    ];
 
 //! Append a value to each element of an iterable value.
 /***************************************************************************//**
   \param    nv \<value> A new value to append.
   \param    v <iterable> An iterable value.
 
-  \param    r <boolean> Reduce list element value before appending.
+  \param    r <boolean> Reduce list element before appending.
   \param    j <boolean> Join each appendage as a separate list.
 
   \param    l <boolean> Append new value to last element.
 
-  \returns  \<list> A list with \p nv appended to each element of \p v.
-            Returns \b undef when \p v is not defined or is not iterable.
+  \returns  (1) \<list> A list with \p nv appended to each element of \p v.
+            (2) Returns \b undef when \p v is not defined or is not iterable.
 
   \details
+
+    Appending with \p r == \b true causes each element of \p nv to be
+    appended to the elements of each iterable value. When \p r == \b
+    false, each element of \p nv is appended to the iterable value
+    itself. To append a list of elements together as a list to \p v,
+    enclose the elements of \p nv with a second set of brackets.
 
     \b Example
     \code{.C}
@@ -572,9 +628,6 @@ function nssequence
     ECHO: ["a", 1, 2, 3, "b", 1, 2, 3, "c", 1, 2, 3, "d"]
     \endcode
 
-  \note     Appending with reduction causes \p nv to be appended to the
-            \e elements of each iterable value. Otherwise, \p nv is
-            appended to the iterable value itself.
 *******************************************************************************/
 function eappend
 (
@@ -583,54 +636,59 @@ function eappend
   r = true,
   j = true,
   l = true
-) = not_defined(v) ? undef
-  : !is_iterable(v) ? undef
+) = !is_iterable(v) ? undef
+    // when 'v' is empty
   : is_empty(v) ? ((j == true) ? [concat(nv)] : concat(nv))
+    // 'v' not empty
   : let
-    (
-      ce = (r == true) ? first(v) : nfirst(v)
+    ( // current element 'ce'
+      ce = (r == true) ? first(v) : [first(v)]
     )
+    // last element of 'v'
     (len(v) == 1) ?
-    (
-      (j == true) ? (l == true) ? [concat(ce, nv)] : [ce]
-      : (l == true) ? concat(ce, nv) : ce
-    )
-  : (j == true) ? concat([concat(ce, nv)], eappend(nv, ntail(v), r, j, l))
-  : concat(concat(ce, nv), eappend(nv, ntail(v), r, j, l));
+      (
+           (j == true  && l == true ) ? [concat(ce, nv)]
+         : (j == true  && l == false) ? [ce]
+         : (j == false && l == true ) ?  concat(ce, nv)
+         :                               ce
+      )
+  : (j == true) ? concat( [concat(ce, nv)], eappend(nv, ntail(v), r, j, l) )
+  :               concat(  concat(ce, nv) , eappend(nv, ntail(v), r, j, l) );
 
 //! Insert a new value into an iterable value.
 /***************************************************************************//**
   \param    nv \<value> A new value to insert.
   \param    v <iterable> An iterable value.
 
-  \param    i <integer> An insert position index.
+  \param    i <integer> The index insert position.
 
-  \param    mv <list|string|value> Match value candidates.
-  \param    mi <integer> A match index.
+  \param    mv <list|string|value> Matched value candidates.
+  \param    mi <integer> The matched selection index.
 
   \param    s <boolean> Element matching search method.
-  \param    si <integer> The element column index when matching.
+  \param    si <integer> The search element index when matching.
 
-  \returns  \<list> A list with \p nv inserted into \p v at the
-            specified position.
-            Returns \b undef when no value of \p mv exists in \p v.
-            Returns \b undef when <tt>(mi + 1)</tt> exceeds the matched
-            element count.
-            Returns \b undef when \p i does not map to an element of \p v.
-            Returns \b undef when \p v is not defined or is not iterable.
+  \returns  (1) \<list> A list with \p nv inserted into \p v at the
+                specified position.
+            (2) Returns \b undef when no value of \p mv exists in
+                \p v, when <tt>(mi + 1)</tt> exceeds the matched
+                element count, when \p i does not map to an element of
+                \p v, or when \p v is not defined or is not iterable.
 
   \details
 
-    When \p s == \b true, [search] is used to match elements. When
+    When \p s == \b true, [search]\() is used to match elements. When
     \p s == false, find() is used.
 
     The insert position can be specified by an index, an element match
-    value, or list of potential match values (when using [search]). When
-    multiple matches exists, \p mi indicates the insert position. When
-    more than one insert position criteria is specified, the order of
-    precedence is: \p mv, \p i.
+    value, or list of potential match values. When multiple matches
+    exists, \p mi indicates the insert position. When more than one
+    insert position criteria is specified, the order of precedence is:
+    (1) \p mv then (2) \p i. To insert a list of elements together as a
+    list to \p v, enclose the elements of \p nv with a second set of
+    brackets.
 
-  [search]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Other_Language_Features#Search
+  \amu_eval (${group_references})
 *******************************************************************************/
 function insert
 (
@@ -641,28 +699,27 @@ function insert
   mi = 0,
   s = true,
   si
-) = not_defined(v) ? undef
-  : !is_iterable(v) ? undef
-  : is_empty(v) ?
-    (
-      ( is_defined(mv) && any_equal(mv, empty_lst)) ||
-      (not_defined(mv) && (i == 0))
-    ) ? concat(nv) : undef
-  : ((i<0) || (i>len(v))) ? undef
+) = !is_iterable(v) ? undef
+    // when 'v' is empty and 'i' or 'mv' specified
+  : (is_empty(v) && ( (i != 0) || !is_undef(mv)) ) ? undef
+    //  when 'v' is empty, simply return 'nv'
+  : is_empty(v) ? concat(nv)
   : let
-    (
+    ( // identify specified insert position 'p' or return undef
       p = is_defined(mv) ?
-        (
-          (s == false) ?
-            find(mv, v, 0, si)[mi]
-          : smerge(search(mv, v, 0, si), false)[mi]
-        )
-        : is_number(i) ? i
-        : undef,
-      h = (p>0) ? [for (j = [0 : p-1]) v[j]] : empty_lst,
-      t = (p>len(v)-1) ? empty_lst : [for (j = [p : len(v)-1]) v[j]]
+        // search for 'mv' in 'v' selecting 'mi'
+        ( s == false )  ? find(mv, v, 0, si)[mi]
+                        : smerge(search(mv, v, 0, si), false)[mi]
+        // using 'i'; element position 'i' must exists in 'v' or is undef
+        : !is_between(i, 0, len(v)) ? undef
+        : i,
+      // generate result list head 'h'
+      h = ( !is_undef(p) && (p>0) ) ? [for (j = [0 : p-1]) v[j]] : empty_lst,
+      // generate result list tail 't'
+      t = ( is_undef(p) || (p>len(v)-1) ) ? empty_lst : [for (j = [p : len(v)-1]) v[j]]
     )
-    all_equal([h, t], empty_lst) ? undef : concat(h, nv, t);
+    // result valid iff a valid insert position was specified
+    is_undef(p) ? undef : concat(h, nv, t);
 
 //! Delete elements from an iterable value.
 /***************************************************************************//**
@@ -670,7 +727,7 @@ function insert
 
   \param    i <range|list|integer> Deletion Indexes.
 
-  \param    mv <list|string|value> Match value candidates.
+  \param    mv <list|string|value> Matched value candidates.
   \param    mc <integer> A match count.
             For <tt>(mc>=1)</tt>, remove the first \p mc matches.
             For <tt>(mc<=0)</tt>, remove all matches.
@@ -678,24 +735,26 @@ function insert
   \param    s <boolean> Element matching search method.
   \param    si <integer> The element column index when matching.
 
-  \returns  \<list> A list with all specified elements removed.
-            Returns \b undef when \p i does not map to an element of \p v.
-            Returns \b undef when \p v is not defined or is not iterable.
+  \returns  (1) \<list> A list with all specified elements removed.
+            (2) Returns \b undef when \p i does not map to an element
+                of \p v, when \p v is not defined, or is not iterable.
+
 
   \details
 
-    When \p s == \b true, [search] is used to match elements. When
+    When \p s == \b true, [search]\() is used to match elements. When
     \p s == false, find() is used.
 
     The elements to delete can be specified by an index position, a
     list of index positions, an index range, an element match value, or
-    a list of element match values (when using [search]). When \p mv is
-    a list of match values, all values of \p mv that exists in \p v are
-    candidates for deletion. For each matching candidate, \p mc
+    a list of element match values (when using [search]\()). When \p mv
+    is a list of match values, all values of \p mv that exists in \p v
+    are candidates for deletion. For each matching candidate, \p mc
     indicates the quantity to remove. When more than one deletion
-    criteria is specified, the order of precedence is: \p mv, \p i.
+    criteria is specified, the order of precedence is: (1) \p mv then
+    (2) \p i.
 
-  [search]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Other_Language_Features#Search
+  \amu_eval (${group_references})
 *******************************************************************************/
 function delete
 (
@@ -705,26 +764,28 @@ function delete
   mc = 1,
   s = true,
   si
-) = not_defined(v) ? undef
-  : !is_iterable(v) ? undef
+) = !is_iterable(v) ? undef
+    // nothing to delete
   : is_empty(v) ? empty_lst
-  : is_number(i) && ((i<0) || (i>(len(v)-1))) ? undef
-  : is_list(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
+    // for 'i' a number, list or range; each indexed position must exists in 'v'
+  : is_number(i) && !is_between(i, 0, len(v)-1) ? undef
+  : is_list(i)  && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
   : is_range(i) && ((min([for (y=i) y])<0) || (max([for (y=i) y])>(len(v)-1))) ? undef
   : let
-    (
+    ( // identify specified deletion position(s) 'p' or return undef
       p = is_defined(mv) ?
-        (
-          (s == false) ?
-            find(mv, v, mc, si)
-          : smerge(search(mv, v, mc, si), false)
-        )
+        // search for 'mv' in 'v' selecting 'mi'
+        ( s == false ) ? find(mv, v, mc, si)
+                       : smerge(search(mv, v, mc, si), false)
+        // using 'i'; for single number, format as list
         : is_number(i) ? [i]
+        // using 'i';  pass list as specified
         : is_list(i) ? i
+        // using 'i';  enumerate range to list
         : is_range(i) ? [for (y=i) y]
         : undef
     )
-    [
+    [ // output only elements of 'v' that do not exists in 'p'
       for (j = [0 : len(v)-1])
         if (is_empty(find(j, p))) v[j]
     ];
@@ -732,34 +793,41 @@ function delete
 //! Strip all matching values from an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
-  \param    mv \<value> The match value.
+  \param    mv \<value> A match value.
 
-  \returns  \<list> A list with all elements equal to \p mv removed.
-            Returns \b undef when \p v is not defined or is not iterable.
+  \returns  (1) \<list> The list 'v' with all elements equal \p mv removed.
+            (2) Returns \b undef when \p v is not defined or is not iterable.
 *******************************************************************************/
 function strip
 (
   v,
   mv = empty_lst
-) = not_defined(v) ? undef
-  : !is_iterable(v) ? undef
+) = !is_iterable(v) ? undef
   : is_empty(v) ? empty_lst
   : (first(v) == mv) ? concat(strip(ntail(v), mv))
   : concat(nfirst(v), strip(ntail(v), mv));
 
-//! Apply a mask to an interable value.
+//! Apply a binary mask to an interable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
-  \param    m \<value> An element mask.
-  \param    r <boolean> Right align the mask and value.
+  \param    m <iterable> A binary mask.
+  \param    r <boolean> Right align the mask to \p v value.
   \param    o <integer> A positive or negative mask offset.
-  \param    u \<value> The value assigned to undefined and non-existing
-            elements.
-  \param    z \<value> The value assigned to zeroed elements.
+  \param    u \<value> The value assigned to elements of the mask that
+              does not exists or are undefined in \p v.
+  \param    z \<value> The value assigned to masked elements.
 
-  \returns  \<value> The resulting masked value.
-            Returns \b undef when \p m is not defined or is not iterable.
-            Returns \b empty_lst when \p m is empty.
+  \returns  (1) \<value> A list containing the masked values of \p v.
+            (2) Returns \b v as a list when \p m is not defined.
+            (3) Returns \p undef when \p m is not iterable or contains
+                values other than zero or one.
+
+  \details
+
+    This mask may be specified as a list or string and is composed of
+    ones and zeros. One indicates that an element value of \p v is
+    passed and a zero indicates that a value of \p v is to be replaced
+    with \p z.
 *******************************************************************************/
 function mask
 (
@@ -769,37 +837,48 @@ function mask
   o = 0,
   u = undef,
   z = 0
-) = not_defined(m) ? undef
+) = is_undef(m) ? nhead(v, 0)
+    // if defined, 'm' must be iterable
   : !is_iterable(m) ? undef
-  : is_empty(m) ? empty_lst
+    // string mask may only include "01"
+  : is_string(m) && !is_empty(delete(m, mv="01", mc=0)) ? undef
+    // list mask may only include [0, 1]
+  : is_list(m) && !is_empty(delete(m, mv=[0,1], mc=0)) ? undef
   : let
-    (
-      j = ((r == true) ? len(v) - len(m) : 0) + o
+    ( // calculate the mask base offset
+      l = is_iterable(v) ? len(v) : 0,
+      j = ((r == true) ? l - len(m) : 0) + o
     )
     [
       for (i = [0 : len(m)-1])
-        (m[i] == 1) ?
-          edefined_or(v, i+j, u)
-        : eexists(i+j, v) ? z : u
+        (m[i] == 1 || m[i] == "1") ? edefined_or(v, i+j, u)
+                                   : eexists(i+j, v) ? z : u
     ];
 
-//! Return the unique elements of an iterable value.
+//! Return a list of the unique elements of an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
 
-  \returns  \<list> A list of unique elements with order preserved.
-            Returns \b undef when \p v is not defined or is not iterable.
+  \returns  (1) \<list> A list of unique elements with order preserved.
+            (2) Returns \b undef when \p v is not defined or is not
+                iterable.
+
+  \warning  Any and all list elements of \p v that have the value of \b
+            undef are ignored and is not considered to be a unique.
 *******************************************************************************/
 function unique
 (
   v
-) = not_defined(v) ? undef
-  : !is_iterable(v) ? undef
-  : is_empty(v) ? empty_lst
-  : (len(v) < 1) ? v
-    // use exact element matching via s=false for find().
+) = is_undef(v) ? empty_lst
+  : !is_iterable(v) ? [v]
+    // handled empty list or empty string
+  : (len(v) == 0) ? empty_lst
+  // last element. filter case where first element of list is [undef]
+  : (len(v) == 1) ? (v == [undef]) ? empty_lst : nhead(v, 0)
+    // set s=false to use find() for single element matching
   : exists(last(v), nhead(v), s=false) ? unique(nhead(v))
   : concat(unique(nhead(v)), nlast(v));
+
 
 //! @}
 //! @}
@@ -889,19 +968,6 @@ BEGIN_SCOPE validate;
         1,                                                  // t10
         1                                                   // t11
       ],
-      ["eexists_5",
-        false,                                              // t01
-        false,                                              // t02
-        false,                                              // t03
-        true,                                               // t04
-        false,                                              // t05
-        true,                                               // t06
-        false,                                              // t07
-        false,                                              // t08
-        false,                                              // t09
-        false,                                              // t10
-        true                                                // t11
-      ],
       ["exists_S1",
         false,                                              // t01
         false,                                              // t02
@@ -913,6 +979,19 @@ BEGIN_SCOPE validate;
         true,                                               // t08
         true,                                               // t09
         true,                                               // t10
+        true                                                // t11
+      ],
+      ["eexists_5",
+        false,                                              // t01
+        false,                                              // t02
+        false,                                              // t03
+        true,                                               // t04
+        false,                                              // t05
+        true,                                               // t06
+        false,                                              // t07
+        false,                                              // t08
+        false,                                              // t09
+        false,                                              // t10
         true                                                // t11
       ],
       ["first",
@@ -1179,13 +1258,13 @@ BEGIN_SCOPE validate;
         [0,15]                                              // t11
       ],
       ["unique",
-        undef,                                              // t01
+        empty_lst,                                          // t01
         empty_lst,                                          // t02
-        undef,                                              // t03
+        [[0:0.5:9]],                                        // t03
         ["A"," ","s","t","r","i","n","g"],                  // t04
         ["orange","apple","grape","banana"],                // t05
         ["b","a","n","s"],                                  // t06
-        [undef],                                            // t07
+        empty_lst,                                          // t07
         [[1,2],[2,3]],                                      // t08
         ["ab",[1,2],[2,3],[4,5]],                           // t09
         [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]],            // t10
@@ -1224,8 +1303,8 @@ BEGIN_SCOPE validate;
     for (vid=test_ids) run_test( "edefined_or_DE3", edefined_or(get_value(vid),3,"default"), vid );
     for (vid=test_ids) run_test( "find_12", find([1,2],get_value(vid)), vid );
     for (vid=test_ids) run_test( "count_S1", count(1,get_value(vid),true), vid );
-    for (vid=test_ids) run_test( "eexists_5", eexists(5,get_value(vid)), vid );
     for (vid=test_ids) run_test( "exists_S1", exists(1,get_value(vid),true), vid );
+    for (vid=test_ids) run_test( "eexists_5", eexists(5,get_value(vid)), vid );
     for (vid=test_ids) run_test( "first", first(get_value(vid)), vid );
     for (vid=test_ids) run_test( "second", second(get_value(vid)), vid );
     for (vid=test_ids) run_test( "third", third(get_value(vid)), vid );
