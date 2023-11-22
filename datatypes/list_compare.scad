@@ -63,14 +63,14 @@
   \param    v2 <vector-Nd> A vector 2 in an 'N' dimensional space.
   \param    p <number> The numerical precision.
 
-  \returns  <boolean> \b true when the distance between \p v1 and \p v2
-            is less than \p d and \b false otherwise. Returns \b false
-            when either \p v1 or \p v2 are not numerical vectors of the
-            same length.
+  \returns  (1) <boolean> \b true when the distance between \p v1 and
+                \p v2 is less than \p d and \b false otherwise.
+            (2) Returns \b false when either \p v1 or \p v2 are not
+                numerical vectors of the same length.
 
   \details
 
-    Can compare two scalar numbers as well. To compare general lists of
+    Can also compare two scalar numbers. To compare general lists of
     non-numerical values see almost_equal().
 *******************************************************************************/
 function almost_equal_nv
@@ -91,8 +91,9 @@ function almost_equal_nv
   \param    v2 \<iterable> An iterable data type value 2.
   \param    p <number> The precision for numerical comparisons.
 
-  \returns  <boolean> \b true when all elements of each iterable value
-            are \em sufficiently equal and \b false otherwise.
+  \returns  (1) <boolean> \b true when all elements of each iterable
+                value are \em sufficiently equal and \b false
+                otherwise.
 
   \details
 
@@ -114,19 +115,25 @@ function almost_equal
   : !almost_equal(first(v1), first(v2), p) ? false            // compare first elements
   : almost_equal(ntail(v1), ntail(v2), p);                    // compare remaining elements
 
-//! Compare the sort order any two arbitrary data type values.
+//! Compare the sort order of any two values.
 /***************************************************************************//**
-  \param    v1 \<value> Any valid values 1.
-  \param    v2 \<value> Any valid values 2.
-  \param    s <boolean> Order ranges by their numerical sum.
+  \param    v1 \<value> The values 1.
+  \param    v2 \<value> The values 2.
+  \param    s <boolean> Order ranges by their enumerated sum.
 
-  \returns  <integer> \b -1 when <tt>(v2 < v1)</tt>,
-                      \b +1 when <tt>(v2 > v1)</tt>, and
-                      \b  0 when <tt>(v2 == v1)</tt>.
+  \returns  <integer> An integer value.
 
   \details
 
-    The following table summarizes how values are ordered.
+    Return values (rv) table.
+
+     rv      | order of values
+    :-------:|:-------------------
+      \b -1  | <tt>(v2 < v1)</tt>
+      \b  0  | <tt>(v2 == v1)</tt>
+      \b +1  | <tt>(v2 > v1)</tt>
+
+    The following table summarizes how data type values are ordered.
 
      order | type     | \p s      | intra-type ordering
     :-----:|:--------:|:---------:|:--------------------------------------
@@ -374,7 +381,7 @@ BEGIN_SCOPE validate;
       ["almost_equal_nv_p4",  f, f, f, f, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f],
       ["almost_equal_nv_p2",  f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f],
       ["almost_equal_p2",     t, f, t, f, f, t, t, f, t, f, f, f, f, t, t, t, t, t, t, t],
-      ["compare",          0,-1, 0,+1,+1, 0, 0,-1, 0,+1,-1,-1,+1, 0,+1, 0, 0, 0, 0,+1],
+      ["compare",             0,-1, 0,+1,+1, 0, 0,-1, 0,-1,-1,-1,+1, 0,+1, 0, 0, 0, 0,+1],
     ];
     table_check( good_r, good_c, false );   // sanity-test
 

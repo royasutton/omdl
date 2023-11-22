@@ -715,7 +715,7 @@ function qsort
   \param    i <integer> The sort element index for iterable values of \p v.
   \param    d <integer> The recursive sort depth.
   \param    r <boolean> Reverse the sort order.
-  \param    s <boolean> Order ranges by their numerical sum.
+  \param    s <boolean> Order ranges by their enumerated sum.
 
   \returns  (1) \<list> A list with elements sorted in ascending order.
             (2) Returns \b undef when \p v is not iterable.
