@@ -606,7 +606,7 @@ function smerge
   r = false
 ) = !is_iterable(v) ? undef
   : is_empty(v) ? empty_lst
-  : ( (r == true) && is_iterable(first(v)) ) ?
+  : ( (r == true) && is_list(first(v)) ) ?
       concat(smerge(first(v), r), smerge(ntail(v), r))
   : concat(first(v), smerge(ntail(v), r));
 
@@ -786,41 +786,26 @@ BEGIN_SCOPE validate;
     include <omdl-base.scad>;
     include <common/validation.scad>;
 
-    echo( str("openscad version ", version()) );
+    function fmt( id, td, v1, v2, v3 ) = table_validate_fmt(id, td, v1, v2, v3);
+    function v1(db, id) = table_validate_get_v1(db, id);
+    t = true; f = false; u = undef; skip = validation_skip;
 
-    // test-values columns
-    test_c =
+    tbl_test_values =
     [
-      ["id", "identifier"],
-      ["td", "description"],
-      ["tv", "test value"]
+      fmt("t01", "The undefined value",       undef),
+      fmt("t02", "The empty list",            empty_lst),
+      fmt("t03", "A long range",              [0:0.5:9]),
+      fmt("t04", "string = (A string)",       "A string"),
+      fmt("t05", "List-4 fruit",              ["orange","apple","grape","banana"]),
+      fmt("t06", "List-7 characters",         ["b","a","n","a","n","a","s"]),
+      fmt("t07", "List-1 undefined",          [undef]),
+      fmt("t08", "List-2 integers-2",         [[1,2],[2,3]]),
+      fmt("t09", "List-4 iterable-2",         ["ab",[1,2],[2,3],[4,5]]),
+      fmt("t10", "List-4  iterable-3",        [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]]),
+      fmt("t11", "List-15 of integers",       [for (i=[0:15]) i])
     ];
 
-    // test-values rows
-    test_r =
-    [
-      ["t01", "The undefined value",        undef],
-      ["t02", "The empty list",             empty_lst],
-      ["t03", "A range",                    [0:0.5:9]],
-      ["t04", "A string",                   "A string"],
-      ["t05", "Test list 01",               ["orange","apple","grape","banana"]],
-      ["t06", "Test list 02",               ["b","a","n","a","n","a","s"]],
-      ["t07", "Test list 03",               [undef]],
-      ["t08", "Test list 04",               [[1,2],[2,3]]],
-      ["t09", "Test list 05",               ["ab",[1,2],[2,3],[4,5]]],
-      ["t10", "Test list 06",               [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]]],
-      ["t11", "Vector of integers 0 to 15", [for (i=[0:15]) i]]
-    ];
-
-    test_ids = table_get_row_ids( test_r );
-
-    // expected columns: ("id" + one column for each test)
-    good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
-
-    // expected rows: ("golden" test results), use 's' to skip test
-    skip = -1;  // skip test
-
-    good_r =
+    tbl_test_answers =
     [ // function
       ["lstr",
         undef,                                              // t01
@@ -1078,55 +1063,33 @@ BEGIN_SCOPE validate;
       ]
     ];
 
-    // sanity-test tables
-    table_check( test_r, test_c, false );
-    table_check( good_r, good_c, false );
 
-    // validate helper function and module
-    function get_value( vid ) = table_get_value(test_r, test_c, vid, "tv");
-    module log_test( m ) { log_type ( "test", m ); }
-    module log_skip( f ) { log_test ( str("ignore: '", f, "'") ); }
-    module run_test( fname, fresult, vid )
-    {
-      value_text = table_get_value(test_r, test_c, vid, "td");
-      pass_value = table_get_value(good_r, good_c, fname, vid);
+    db = table_validate_init( tbl_test_values, tbl_test_answers );
 
-      test_pass = validate( cv=fresult, t="equals", ev=pass_value, pf=true );
-      test_text = validate( str(fname, "(", get_value(vid), ")=", pass_value), fresult, "equals", pass_value );
+    table_validate_start( db );
+    test_ids = table_validate_get_ids( db );
 
-      if ( pass_value != skip )
-      {
-        if ( !test_pass )
-          log_test( str(vid, " ", test_text, " (", value_text, ")") );
-        else
-          log_test( str(vid, " ", test_text) );
-      }
-      else
-        log_test( str(vid, " -skip-: '", fname, "(", value_text, ")'") );
-    }
-
-    // Indirect function calls would be very useful here!!!
-    for (vid=test_ids) run_test( "lstr", lstr(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "lstr_html_B", lstr_html(get_value(vid),p="b"), vid );
-    for (vid=test_ids) run_test( "consts", consts(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "seq_generate", seq_generate(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "epad_9", epad(get_value(vid), w=9), vid );
-    log_skip( "dround()" );
-    log_skip( "sround()" );
-    log_skip( "limit()" );
-    log_skip( "sum()" );
-    log_skip( "mean()" );
-    log_skip( "ciselect()" );
-    log_skip( "cmselect()" );
-    for (vid=test_ids) run_test( "eselect_F", eselect(get_value(vid),f=true), vid );
-    for (vid=test_ids) run_test( "eselect_L", eselect(get_value(vid),l=true), vid );
-    for (vid=test_ids) run_test( "eselect_1", eselect(get_value(vid),i=1), vid );
-    for (vid=test_ids) run_test( "enselect_F2", enselect(get_value(vid),f=true,n=2), vid );
-    log_skip( "enselect()" );
-    for (vid=test_ids) run_test( "smerge", smerge(get_value(vid)), vid );
-    for (vid=test_ids) run_test( "pmerge", pmerge(get_value(vid)), vid );
-    log_skip( "qsort()" );
-    log_skip( "qsor2()" );
+    for (id=test_ids) table_validate( db, id, "lstr", 1, lstr( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "lstr_html_B", 1, lstr_html( v1(db,id),p="b") );
+    for (id=test_ids) table_validate( db, id, "consts", 1, consts( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "seq_generate", 1, seq_generate( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "epad_9", 1, epad( v1(db,id), w=9) );
+    validate_skip( "dround()" );
+    validate_skip( "sround()" );
+    validate_skip( "limit()" );
+    validate_skip( "sum()" );
+    validate_skip( "mean()" );
+    validate_skip( "ciselect()" );
+    validate_skip( "cmselect()" );
+    for (id=test_ids) table_validate( db, id, "eselect_F", 1, eselect( v1(db,id),f=true) );
+    for (id=test_ids) table_validate( db, id, "eselect_L", 1, eselect( v1(db,id),l=true) );
+    for (id=test_ids) table_validate( db, id, "eselect_1", 1, eselect( v1(db,id),i=1) );
+    for (id=test_ids) table_validate( db, id, "enselect_F2", 1, enselect( v1(db,id),f=true,n=2) );
+    validate_skip( "enselect()" );
+    for (id=test_ids) table_validate( db, id, "smerge", 1, smerge( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "pmerge", 1, pmerge( v1(db,id)) );
+    validate_skip( "qsort()" );
+    validate_skip( "qsor2()" );
 
     // end-of-tests
   END_OPENSCAD;
