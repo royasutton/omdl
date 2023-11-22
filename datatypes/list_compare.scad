@@ -121,7 +121,7 @@ function almost_equal
   \param    v2 \<value> The values 2.
   \param    s <boolean> Order ranges by their enumerated sum.
 
-  \returns  <integer> An integer value.
+  \returns  (1) <integer> An integer value.
 
   \details
 
@@ -160,11 +160,11 @@ function compare
   v1,
   v2,
   s = true
-) = let( v2_nd = not_defined(v2) )
-    not_defined(v1) ?
+) = let( v2_nd = is_undef(v2) )
+    is_undef(v1) ?
     (
       v2_nd ? 0
-    : 1 // others are greater
+            : 1 // others are greater
     )
   // v1 a number
   : let( v2_in = is_number(v2) )
@@ -173,7 +173,7 @@ function compare
       v2_nd ? -1
     : v2_in ?
       (
-        (v1 > v2) ? -1
+        (v1 > v2) ? -1                              // compare numbers
       : (v2 > v1) ? +1
       : 0
       )
@@ -199,7 +199,7 @@ function compare
       (v2_nd || v2_in || v2_ib) ? -1
     : v2_is ?
       (
-        (v1 > v2) ? -1
+        (v1 > v2) ? -1                              // compare strings
       : (v2 > v1) ? +1
       : 0
       )
@@ -275,121 +275,112 @@ BEGIN_SCOPE validate;
     include <omdl-base.scad>;
     include <common/validation.scad>;
 
-    t = true; f = false; u = undef; s = number_max;
+    function fmt( id, td, v1, v2, v3 ) = table_validate_fmt(id, td, v1, v2, v3);
+    function v1(db, id) = table_validate_get_v1(db, id);
+    function v2(db, id) = table_validate_get_v2(db, id);
+    t = true; f = false; u = undef; s = validation_skip;
 
-    function get_v1( id ) = table_get_value(test_r, test_c, id, "v1");
-    function get_v2( id ) = table_get_value(test_r, test_c, id, "v2");
-    module log_test( m ) { log_type ( "omdl_test", m ); }
-    module log_skip( fn ) { log_test ( str("ignore: '", fn, "'") ); }
-    module test_2v( fn, fr, id )
-    {
-      td = table_get_value(test_r, test_c, id, "td");
-      ev = table_get_value(good_r, good_c, fn, id);
-
-      if ( ev != s )
-      {
-        d = str(fn, "(", get_v1(id), ",", get_v2(id), ")=", ev);
-        m = validate( d=d, cv=fr, t="eq", ev=ev );
-
-        if ( !validate( cv=fr, t="eq", ev=ev, pf=true ) )
-          log_test( str(id, " ", m, " ---> \"", td, "\"") );
-        else
-          log_test( str(id, " ", m) );
-      }
-      else
-        log_test( str(id, " -skip-: '", fn, "(", td, ")'") );
-    }
-
-    log_test( str("openscad version ", version()) );
-
-    // test-values columns
-    test_c = [ ["id", "identifier"], ["td", "description"], ["v1", "value 1"], ["v2", "value 2"] ];
-
-    // test-values rows
-    test_r =
+    tbl_test_values =
     [
-      ["t01", "The undefined value",          undef,
-                                              undef
-      ],
-      ["t02", "Integers",                     2121,
-                                              2100
-      ],
-      ["t03", "Equal srings",                 "This is a test",
-                                              "This is a test"
-      ],
-      ["t04", "Non-equal srings",             "This is test v1",
-                                              "This is test v2"
-      ],
-      ["t05", "Non-equal srings 2",           "v1 this is test v1",
-                                              "v2 this is test v2"
-      ],
-      ["t06", "Empty strings",                empty_str,
-                                              empty_str
-      ],
-      ["t07", "Empty lists",                  empty_lst,
-                                              empty_lst
-      ],
-      ["t08", "Non-equal short ranges",       [0:9],
-                                              [-1:9]
-      ],
-      ["t09", "Equal ranges",                 [0:9],
-                                              [0:9]
-      ],
-      ["t10", "Long and short ranges",        [0:0.5:9],
-                                              [0:9]
-      ],
-      ["t11", "Lists with num-3 + undef",     [1, 2, 3, undef],
-                                              [undef, 1, 2, 3]
-      ],
-      ["t12", "4D vector and scalar",         [21, 32, 35],
-                                              19
-      ],
-      ["t13", "Unequal 3D vectors",           [1, 2, 3],
-                                              [3, 2, 1]
-      ],
-      ["t14", "equal 5D vectors",             [10, 12, 33, 98, 100],
-                                              [10, 12, 33, 98, 100]
-      ],
-      ["t15", "close 5D vectors",             [09.999, 11.999, 32.999, 97.999,  99.999],
-                                              [10.001, 12.001, 33.001, 98.001, 100.001]
-      ],
-      ["t16", "Equal tuples list-3",          [[1,2,3], [4,5,6], [7,8,9]],
-                                              [[1,2,3], [4,5,6], [7,8,9]]
-      ],
-      ["t17", "Equal mixed-tuples list",      [[1,2,3], [4,5,6], [7,8,9], ["a", "b", "c"]],
-                                              [[1,2,3], [4,5,6], [7,8,9], ["a", "b", "c"]]
-      ],
-      ["t18", "List-4 all = undef",           [undef, undef, undef, undef],
-                                              [undef, undef, undef, undef]
-      ],
-      ["t19", "List of equal num lists-1",    [[1], [2], [3], [4], [5]],
-                                              [[1], [2], [3], [4], [5]]
-      ],
-      ["t20", "List-4 of close number pairs", [[1,2], [3,4], [5,6], [7,8]],
-                                              [[1.001,2.001], [3.001,4.001], [5.001,6.001], [7.001,8.001]]
-      ]
+      fmt("t01", "The undefined value",
+          undef,
+          undef
+      ),
+      fmt("t02", "Integers",
+          2121,
+          2100
+      ),
+      fmt("t03", "Equal srings",
+          "This is a test",
+          "This is a test"
+      ),
+      fmt("t04", "Non-equal srings",
+          "This is test v1",
+          "This is test v2"
+      ),
+      fmt("t05", "Non-equal srings 2",
+          "v1 this is test v1",
+          "v2 this is test v2"
+      ),
+      fmt("t06", "Empty strings",
+          empty_str,
+          empty_str
+      ),
+      fmt("t07", "Empty lists",
+          empty_lst,
+          empty_lst
+      ),
+      fmt("t08", "Non-equal short ranges",
+          [0:9],
+          [-1:9]
+      ),
+      fmt("t09", "Equal ranges",
+          [0:9],
+          [0:9]
+      ),
+      fmt("t10", "Long and short ranges",
+          [0:0.5:9],
+          [0:9]
+      ),
+      fmt("t11", "Lists with num-3 + undef",
+          [1, 2, 3, undef],
+          [undef, 1, 2, 3]
+      ),
+      fmt("t12", "3D vector and scalar",
+          [21, 32, 35],
+          19
+      ),
+      fmt("t13", "Unequal 3D vectors",
+          [1, 2, 3],
+          [3, 2, 1]
+      ),
+      fmt("t14", "equal 5D vectors",
+          [10, 12, 33, 98, 100],
+          [10, 12, 33, 98, 100]
+      ),
+      fmt("t15", "close 5D vectors",
+          [09.999, 11.999, 32.999, 97.999,  99.999],
+          [10.001, 12.001, 33.001, 98.001, 100.001]
+      ),
+      fmt("t16", "Equal tuples list-3",
+          [[1,2,3], [4,5,6], [7,8,9]],
+          [[1,2,3], [4,5,6], [7,8,9]]
+      ),
+      fmt("t17", "Equal mixed-tuples list",
+          [[1,2,3], [4,5,6], [7,8,9], ["a", "b", "c"]],
+          [[1,2,3], [4,5,6], [7,8,9], ["a", "b", "c"]]
+      ),
+      fmt("t18", "List-4, all undef",
+          [undef, undef, undef, undef],
+          [undef, undef, undef, undef]
+      ),
+      fmt("t19", "List of equal num lists-1",
+          [[1], [2], [3], [4], [5]],
+          [[1], [2], [3], [4], [5]]
+      ),
+      fmt("t20", "List-4 of close number pairs",
+          [[1,2], [3,4], [5,6], [7,8]],
+          [[1.001,2.001], [3.001,4.001], [5.001,6.001], [7.001,8.001]]
+      )
     ];
-    table_check( test_r, test_c, false );   // sanity-test
 
-    test_ids = table_get_row_ids( test_r );
-
-    // expected columns: ("id" + one column for each test)
-    good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
-
-    good_r =
+    tbl_test_answers =
     [ // function            01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20
       ["almost_equal_nv_p4",  f, f, f, f, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f],
       ["almost_equal_nv_p2",  f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f],
       ["almost_equal_p2",     t, f, t, f, f, t, t, f, t, f, f, f, f, t, t, t, t, t, t, t],
       ["compare",             0,-1, 0,+1,+1, 0, 0,-1, 0,-1,-1,-1,+1, 0,+1, 0, 0, 0, 0,+1],
     ];
-    table_check( good_r, good_c, false );   // sanity-test
 
-    // Indirect function calls would be very useful here!!!
-    for (vid=test_ids) test_2v( "almost_equal_nv_p4", almost_equal_nv(get_v1(vid),get_v2(vid),4), vid );
-    for (vid=test_ids) test_2v( "almost_equal_nv_p2", almost_equal_nv(get_v1(vid),get_v2(vid),2), vid );
-    for (vid=test_ids) test_2v( "almost_equal_p2", almost_equal(get_v1(vid),get_v2(vid),2), vid );
-    for (vid=test_ids) test_2v( "compare", compare(get_v1(vid),get_v2(vid)), vid );
+    db = table_validate_init( tbl_test_values, tbl_test_answers );
+
+    table_validate_start( db );
+    test_ids = table_validate_get_ids( db );
+
+    for (id=test_ids) table_validate( db, id, "almost_equal_nv_p4", 2, almost_equal_nv( v1(db,id), v2(db,id), 4) );
+    for (id=test_ids) table_validate( db, id, "almost_equal_nv_p2", 2, almost_equal_nv( v1(db,id), v2(db,id), 2) );
+    for (id=test_ids) table_validate( db, id, "almost_equal_p2", 2, almost_equal( v1(db,id), v2(db,id), 2) );
+    for (id=test_ids) table_validate( db, id, "compare", 2, compare( v1(db,id), v2(db,id) ) );
 
     // end-of-tests
   END_OPENSCAD;
