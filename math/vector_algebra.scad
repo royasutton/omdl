@@ -63,10 +63,10 @@
 
 //! Test if a value defines a point.
 /***************************************************************************//**
-  \param    p <value-2d|value-3d> A 2d or 3d value.
+  \param    v <list-2d|list-3d> A 2d or 3d list of numbers.
 
-  \returns  <boolean> \b true when the value defines a point and
-            \b false otherwise.
+  \returns  (1) <boolean> \b true when the \p v can be interpreted as a
+                point and \b false otherwise.
 
   \details
 
@@ -74,17 +74,18 @@
 *******************************************************************************/
 function is_point
 (
-  p
-) = (len(p) == 2) ? is_defined(p[0] % p[1]) ? true : false
-  : (len(p) == 3) ? is_defined(p[0] % p[1] % p[2]) ? true : false
-  : false;
+  v
+) = !is_list(v) ? false
+  : !all_numbers(v) ? false
+  : !is_between(len(v), 2, 3) ? false
+  : true;
 
 //! Test if a value defines a Euclidean vector.
 /***************************************************************************//**
-  \param    v <value-2d|value-3d> A 2d or 3d value.
+  \param    v <list-2d|list-3d> A 2d or 3d list of numbers.
 
-  \returns  <boolean> \b true when the value defines a Euclidean vector
-                      and \b false otherwise.
+  \returns  (1) <boolean> \b true when the \p v can be interpreted as a
+                Euclidean vector and \b false otherwise.
 
   \details
 
@@ -93,16 +94,17 @@ function is_point
 function is_vector
 (
   v
-) = ((len(v) == 1) && is_point(v[0])) ? true
-  : is_point(v) ? true
-  : false;
+) = !is_list(v) ? false
+  : (len(v) == 1) && !is_point(v[0]) ? false
+  : !is_point(v) ? false
+  : true;
 
 //! Test if a value defines a line.
 /***************************************************************************//**
-  \param    l <value-2d|value-3d> A 2d or 3d value.
+  \param    v <list-2d|list-3d> A 2d or 3d list of numbers.
 
-  \returns  <boolean> \b true when the value defines a line and
-            \b false otherwise.
+  \returns  (1) <boolean> \b true when the \p v can be interpreted as a
+                line and \b false otherwise.
 
   \details
 
@@ -110,37 +112,38 @@ function is_vector
 *******************************************************************************/
 function is_line
 (
-  l
-) = (len(l) != 2) ? false
-  : (len(l[0]) != len(l[1])) ? false
-  : !is_point(l[0]) ? false
-  : !is_point(l[1]) ? false
+  v
+) = !is_list(v) ? false
+  : (len(v) != 2) ? false
+  : !is_point(v[0]) ? false
+  : !is_point(v[1]) ? false
+  : (len(v[0]) != len(v[1])) ? false
   : true;
 
 //! Test if a value defines a vector or a line.
 /***************************************************************************//**
-  \param    l <value-2d|value-3d> A 2d or 3d value.
+  \param    v <list-2d|list-3d> A 2d or 3d list of numbers.
 
-  \returns  <boolean> \b true when the value defines a vector or a line
-            and \b false otherwise.
+  \returns  (1) <boolean> \b true when the \p v can be interpreted as a
+                vector or a line and \b false otherwise.
 
   \details
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function is_vector_or_line
+function is_line_or_vector
 (
-  l
-) = is_vector(l) ? true
-  : is_line(l) ? true
+  v
+) = is_vector(v) ? true
+  : is_line(v) ? true
   : false;
 
 //! Test if a value defines a plane.
 /***************************************************************************//**
-  \param    n <value-2d|value-3d> A 2d or 3d value.
+  \param    v <list-2d|list-3d> A 2d or 3d list of numbers.
 
-  \returns  <boolean> \b true when the value defines a plane and
-            \b false otherwise.
+  \returns  (1) <boolean> \b true when the \p v can be interpreted as a
+                plane and \b false otherwise.
 
   \details
 
@@ -148,15 +151,21 @@ function is_vector_or_line
 *******************************************************************************/
 function is_plane
 (
-  n
-) = is_vector(n) ? true               // predetermined normal vector
-  : is_line(n) ? true                 // intersecting vectors [v1, v2] like line.
-  : (len(n) != 3) ? false             // otherwise, 3 points of same dimension.
-  : !is_point(n[0]) ? false
-  : !is_point(n[1]) ? false
-  : !is_point(n[2]) ? false
-  : (len(n[0]) != len(n[1])) ? false
-  : (len(n[0]) != len(n[2])) ? false
+  v
+    // predetermined normal vector
+) = is_vector(v) ? true
+
+    // intersecting vectors [v1, v2] like line.
+  : is_line(v) ? true
+
+    // otherwise, 3 points of same dimension.
+  : !is_list(v) ? false
+  : (len(v) != 3) ? false
+  : !is_point(v[0]) ? false
+  : !is_point(v[1]) ? false
+  : !is_point(v[2]) ? false
+  : (len(v[0]) != len(v[1])) ? false
+  : (len(v[1]) != len(v[2])) ? false
   : true;
 
 //----------------------------------------------------------------------------//
@@ -168,8 +177,9 @@ function is_plane
   \param    p1 <point> A point coordinate 1.
   \param    p2 <point> A point coordinate 2.
 
-  \returns  <decimal> The distance between the two points.
-            Returns \b undef when points do not have equal dimensions.
+  \returns  (1) <decimal> The distance between the two points.
+            (2) Returns \b undef when \p p1 or \p p2 are not points or
+                do not have equal dimensions.
 
   \details
 
@@ -182,19 +192,21 @@ function distance_pp
 (
   p1,
   p2
-) = let(d = len(p1))
-    !(d > 0) ? abs(p1 - defined_or(p2, 0))
-  : is_defined(p2) ?
-    sqrt(sum([for (i=[0:d-1]) (p1[i]-p2[i])*(p1[i]-p2[i])]))
-  : sqrt(sum([for (i=[0:d-1]) p1[i]*p1[i]]));
+) = !is_point(p1) ? undef
+  : !is_undef(p2) && !is_point(p2) ? undef
+  :  is_undef(p2) ?
+        sqrt(sum([for (i=[0:len(p1)-1]) p1[i]*p1[i]]))
+      : sqrt(sum([for (i=[0:len(p1)-1]) (p1[i]-p2[i])*(p1[i]-p2[i])]));
 
 //! Compute the shortest distance between a point and a line.
 /***************************************************************************//**
   \param    p <point> A point coordinate.
   \param    l <line> A line or vector.
 
-  \returns  <decimal> The shortest distance between the point and the
-            line.
+  \returns  (1) <decimal> The shortest distance between the point and
+                the line.
+            (2) Returns \b undef when \p p is not a point or \p l is
+                not a line.
 
   \details
 
@@ -212,8 +224,10 @@ function distance_pl
   \param    n <pnorm> A plane normal [specification].
   \param    np <point> A point coordinate on the plane \p n.
 
-  \returns  <decimal> The shortest distance between the point and the
-            plane.
+  \returns  (1) <decimal> The shortest distance between the point and
+                the plane.
+            (2) Returns \b undef when \p p is not a point or \p l is
+                not a line.
 
   \details
 
@@ -234,9 +248,11 @@ function distance_pn
   \param    p2 <point-2d> A 2d point coordinate 2.
   \param    p3 <point-2d> A 2d point coordinate 3.
 
-  \returns  <decimal> (\b > 0) for \p p3 \em left of the line through
-            \p p1 and \p p2, (\b = 0) for p3  \em on the line, and
-            (\b < 0) for p3  right of the line.
+  \returns  (1) <decimal> (\b > 0) for \p p3 \em left of the line
+                through \p p1 and \p p2, (\b = 0) for p3  \em on the
+                line, and (\b < 0) for p3  right of the line.
+            (2) Returns \b undef when \p p1, \p p2, or \p p3 is not a
+                point.
 
   \details
 
@@ -249,21 +265,28 @@ function is_left_ppp
   p1,
   p2,
   p3
-) = ((p2[0]-p1[0]) * (p3[1]-p1[1]) - (p3[0]-p1[0]) * (p2[1]-p1[1]));
+) = !is_point(p1) ? undef
+  : !is_point(p2) ? undef
+  : !is_point(p3) ? undef
+  : ((p2[0]-p1[0]) * (p3[1]-p1[1]) - (p3[0]-p1[0]) * (p2[1]-p1[1]));
 
 //! Compute the coordinates of the closest point on a line to a given point.
 /***************************************************************************//**
   \param    p <point> A point coordinate.
   \param    l <line> A line or vector.
 
-  \returns  <point-3d> The coordinates of the point on the line
-            closest to the given point.
+  \returns  (1) <point-3d> The coordinates of the point on the line
+                closest to the given point.
+            (2) Returns \b undef when \p p is not a point or \p l is
+                not a line.
 *******************************************************************************/
 function point_closest_pl
 (
   p,
   l
-) = let
+) = !is_point(p) ? undef
+  : !is_line(l) ? undef
+  : let
     (
       t = line_tp(l),
       i = line_ip(l),
@@ -281,8 +304,10 @@ function point_closest_pl
   \param    n <pnorm> A plane normal [specification].
   \param    np <point> A point coordinate on the plane \p n.
 
-  \returns  <point-3d> The coordinates of the point on the plane
-            closest to the given point.
+  \returns  (1) <point-3d> The coordinates of the point on the plane
+                closest to the given point.
+            (2) Returns \b undef when \p p or \p np is not a point or
+                when \p n is not a plane.
 
   [specification]: \ref dt_pnorm
 *******************************************************************************/
@@ -291,7 +316,10 @@ function point_closest_pn
   p,
   n,
   np
-) = let
+) = !is_point(p) ? undef
+  : !is_plane(n) ? undef
+  : !is_point(np) ? undef
+  : let
     (
       m = plane_to_normal(n),
 
@@ -306,8 +334,9 @@ function point_closest_pn
 /***************************************************************************//**
   \param    p <point-3d|point-2d> A point.
 
-  \returns  <point-3d> The 3d point or the 2d point converted to 3d
-            with its third dimension assigned zero.
+  \returns  (1) <point-3d> The 3d point or the 2d point converted to 3d
+                with its third dimension assigned zero.
+            (2) Returns \b undef when \p p is not a point.
 
   \details
 
@@ -316,7 +345,8 @@ function point_closest_pn
 function point_to_3d
 (
   p
-) = (len(p) == 3) ? p : [p[0], p[1], 0];
+) = !is_point(p) ? undef
+  : (len(p) == 3) ? p : [p[0], p[1], 0];
 
 //! Linearly interpolate along a line established by two points in 2d.
 /***************************************************************************//**
@@ -324,11 +354,13 @@ function point_to_3d
   \param    p2 <point-2d> The line terminal coordinate [x, y].
 
   \param    y <decimal> The \p y coordinate at which to interpolate
-            along the line.
+              along the line.
   \param    x <decimal> The \p x coordinate at which to interpolate
-            along the line.
+              along the line.
 
-  \returns  <point-2d> The interpolated coordinates point [x, y].
+  \returns  (1) <point-2d> The interpolated coordinates point [x, y].
+            (2) Returns \b undef when \p p1 or \p p2 is not a point or
+                when \p x or \p y are not numbers.
 
   \details
 
@@ -343,9 +375,17 @@ function interpolate2d_linear_pp
   p2,
   x,
   y
-) = is_defined(y) ?
+) = !is_point(p1) ? undef
+  : !is_point(p1) ? undef
+
+    // 'y' is given, get 'lx' for given 'y'
+  : !is_undef(y) && !is_number(y) ? undef
+  : !is_undef(y) ?
     let( lx = (p1[0]*(p2[1]-y) + p2[0]*(y-p1[1])) / (p2[1]-p1[1]) )
     [lx, y]
+
+    // 'y' not given, get 'ly' for given 'x'
+  : !is_number(x) ? undef
   : let( ly = (p1[1]*(p2[0]-x) + p2[1]*(x-p1[0])) / (p2[0]-p1[0]) )
     [x, ly];
 
@@ -365,7 +405,9 @@ function interpolate2d_linear_pp
   \param    p2 <point-2d> The terminal point.
   \param    v <vector-2d> An orientation line or vector.
 
-  \returns  <line-2d> The 2d directed line.
+  \returns  (1) <line-2d> The 2d directed line.
+            (2) Returns \b undef when required parameters are not
+                defined.
 
   \details
 
@@ -382,9 +424,20 @@ function line2d_new
   p1 = origin2d,
   p2,
   v
-) = is_defined(p2) ? [p1, p2]
-  : is_defined(v) ? [p1, p1 + m*unit_l(v)]
-  : [p1, p1 + m*[cos(a), sin(a)]];
+) = !is_point(p1) ? undef
+
+    // using 'p2' ('p1')
+  : !is_undef(p2) ? !is_point(p2) ? undef
+      : [p1, p2]
+
+    // using 'v' ('p1' and 'm')
+  : !is_number(m) ? undef
+  : !is_undef(v) ? !is_vector(v) ? undef
+      : [p1, p1 + m*unit_l(v)]
+
+    // using 'a' ('p1' and 'm')
+  : !is_number(a) ? undef
+      : [p1, p1 + m*[cos(a), sin(a)]];
 
 //! Construct a 3 dimensional directed line.
 /***************************************************************************//**
@@ -395,7 +448,9 @@ function line2d_new
   \param    p2 <point-3d> The terminal point.
   \param    v <vector-3d> An orientation line or vector.
 
-  \returns  <line-3d> The 3d directed line.
+  \returns  (1) <line-3d> The 3d directed line.
+            (2) Returns \b undef when required parameters are not
+                defined.
 
   \details
 
@@ -413,9 +468,20 @@ function line3d_new
   p1 = origin3d,
   p2,
   v
-) = is_defined(p2) ? [p1, p2]
-  : is_defined(v) ? [p1, p1 + m*unit_l(v)]
-  : [p1, p1 + m*[sin(t)*cos(a), sin(t)*sin(a), cos(t)]];
+) = !is_point(p1) ? undef
+
+    // using 'p2' ('p1')
+  : !is_undef(p2) ? !is_point(p2) ? undef
+      : [p1, p2]
+
+    // using 'v' ('p1' and 'm')
+  : !is_number(m) ? undef
+  : !is_undef(v) ? !is_vector(v) ? undef
+      : [p1, p1 + m*unit_l(v)]
+
+    // using 'a' and 't' ('p1' and 'm')
+  : (!is_number(a) || !is_number(t)) ? undef
+      : [p1, p1 + m*[sin(t)*cos(a), sin(t)*sin(a), cos(t)]];
 
 //! Construct a directed line.
 /***************************************************************************//**
@@ -426,7 +492,9 @@ function line3d_new
   \param    p2 <point> The terminal point.
   \param    v <vector> An orientation line or vector.
 
-  \returns  <line> The directed line.
+  \returns  (1) <line> The directed line.
+            (2) Returns \b undef when required parameters are not
+                defined.
 
   \details
 
@@ -450,37 +518,47 @@ function line_new
   p1,
   p2,
   v
-) = is_defined(p2) ?
-    let
-    (
-      pd = is_defined(p1) ? p1
-         : (len(p2) == 2) ? origin2d : origin3d
-    )
-    [pd, p2]
-  : is_defined(v) ?
-    let
-    (
-      pd = is_defined(p1) ? p1
-         : (len(v) == 2) ? origin2d : origin3d
-    )
-    [pd, pd + m*unit_l(v)]
-  : not_defined(t) ?
-    let
-    (
-      pd = is_defined(p1) ? p1 : origin2d
-    )
-    [pd, pd + m*[cos(a), sin(a)]]
-  : let
-    (
-      pd = is_defined(p1) ? p1 : origin3d
-    )
-    [pd, pd + m*[sin(t)*cos(a), sin(t)*sin(a), cos(t)]];
+    // using 'p2'
+) = !is_undef(p2) ? !is_point(p2) ? undef
+      : let
+        (
+          pd = !is_undef(p1) ? p1
+             : (len(p2) == 2) ? origin2d : origin3d
+        )
+        [pd, p2]
+
+    // using 'v' ('m')
+  : !is_number(m) ? undef
+  : !is_undef(v) ? !is_vector(v) ? undef
+      : let
+        (
+          pd = !is_undef(p1) ? p1
+             : (len(v) == 2) ? origin2d : origin3d
+        )
+        [pd, pd + m*unit_l(v)]
+
+    // using 'a' ('m')
+  : is_undef(t) ? !is_number(a) ? undef
+      : let
+        (
+          pd = !is_undef(p1) ? p1 : origin2d
+        )
+        [pd, pd + m*[cos(a), sin(a)]]
+
+    // using 'a' and 't' ('m')
+  : (!is_number(a) || !is_number(t)) ? undef
+      : let
+        (
+          pd = !is_undef(p1) ? p1 : origin3d
+        )
+        [pd, pd + m*[sin(t)*cos(a), sin(t)*sin(a), cos(t)]];
 
 //! Return the number of dimensions of a line or vector.
 /***************************************************************************//**
   \param    l <line> A line or vector.
 
-  \returns  <integer> The number of dimensions for the line or vector.
+  \returns  (1) <integer> The line or vector dimensions.
+            (2) Returns \b undef when \p l is not a line or vector.
 
   \details
 
@@ -489,15 +567,16 @@ function line_new
 function line_dim
 (
   l
-) = is_vector(l) ? len( line_tp(l) )
-  : is_line(l) ? len( line_tp(l) )
+) = is_vector(l) ? (len(l) == 1) ? len( l[0] ) : len( l )
+  : is_line(l) ? len( l[0] )
   : undef;
 
 //! Return the terminal point of a line or vector.
 /***************************************************************************//**
   \param    l <line> A line or vector.
 
-  \returns  <point> The terminal point of the line or vector.
+  \returns  (1) <point> The terminal point of the line or vector.
+            (2) Returns \b undef when \p l is not a line or vector.
 
   \details
 
@@ -506,7 +585,7 @@ function line_dim
 function line_tp
 (
   l
-) = is_vector(l) ? line_to_vector(l)
+) = is_vector(l) ? (len(l) == 1) ? l[0] : l
   : is_line(l) ? l[1]
   : undef;
 
@@ -514,7 +593,8 @@ function line_tp
 /***************************************************************************//**
   \param    l <line> A line or vector.
 
-  \returns  <point> The initial point of the line or vector.
+  \returns  (1) <point> The initial point of the line or vector.
+            (2) Returns \b undef when \p l is not a line or vector.
 
   \details
 
@@ -523,7 +603,12 @@ function line_tp
 function line_ip
 (
   l
-) = is_vector(l) ? consts(len(line_to_vector(l)), 0)
+) = is_vector(l) ?
+        let
+        (
+          d = (len(l) == 1) ? len(l[0]) : len(l)
+        )
+        consts(d, 0)
   : is_line(l) ? l[0]
   : undef;
 
@@ -531,18 +616,18 @@ function line_ip
 /***************************************************************************//**
   \param    l <line> A line or vector.
 
-  \returns  <vector> The line shifted to the origin.
+  \returns  (1) <vector> The line shifted to the origin.
+            (2) Returns \b undef when \p l is not a line or vector.
 
   \details
-
-    This functions does not test if \p l is a valid line or vector.
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
 function line_to_vector
 (
   l
-) = not_defined(len(l[0])) ? l
+) = is_vector(l) ? (len(l) == 1) ? l[0] : l
+  : !is_line(l) ? undef
   : (len(l) == 1) ? l[0]
   : (len(l) == 2) ? (l[1]-l[0])
   : undef;
@@ -552,13 +637,14 @@ function line_to_vector
   \param    l <line> A line or vector.
   \param    p <point> The new initial point.
 
-  \returns  <line> The line or vector moved to \p p.
+  \returns  (1) <line> The line or vector moved to \p p.
+            (2) Returns \b undef when \p l is not a line or vector or
+                when \p p is not a point.
 
   \details
 
-    This functions does not test if \p l is a valid line or vector or
-    if \p p is a valid point. When \p p is not specified, the line or
-    vector is moved to the origin.
+    When \p p is not specified, the line or vector is moved to the
+    origin.
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
@@ -566,24 +652,30 @@ function vector_to_line
 (
   l,
   p
-) =
-  let (pd = is_defined(p) ? p : (line_dim(l) == 2) ? origin2d : origin3d)
-  [pd, pd + line_to_vector(l)];
+) = !is_line(l) ? undef
+  : !is_undef(p) && !is_point(p) ? undef
+  : let
+    (
+      d = !is_undef(p) ? p
+                       : (line_dim(l) == 2) ? origin2d
+                                            : origin3d
+    )
+    [d, d + line_to_vector(l)];
 
-//! Compute the dot product of two lines or vectors.
+//! Compute the dot product of two lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
-  \param    l1 <line> A n-dimensional line or vector 1.
-  \param    l2 <line> A n-dimensional line or vector 2.
+  \param    l1 <line-3d|line-2d> A 3d or 2d line or vector 1.
+  \param    l2 <line-3d|line-2d> A 3d or 2d line or vector 2.
 
-  \returns  <decimal> The dot product of \p l1 with \p l2.
-            Returns \b undef when lines or vectors have different
-            dimensions.
+  \returns  (1) <decimal> The dot product of \p l1 with \p l2.
+            (2) Returns \b undef when \p l1 or \p l2 is not a line or
+                vector or have different dimensions.
 
   \details
 
     This function supports the abstraction outlined in \ref dt_line.
     The built-in operation will be more efficient in situations that do
-    not make use of the aforementioned abstraction.
+    not make use of this abstraction.
 
     See \ref dt_line for argument specification and conventions. See
     [Wikipedia] for more information.
@@ -594,16 +686,20 @@ function dot_ll
 (
   l1,
   l2
-) = (line_to_vector(l1) * line_to_vector(l2));
+) = !is_line_or_vector(l1) ? undef
+  : !is_line_or_vector(l2) ? undef
+  : (len(l1) != len(l2)) ? undef
+  : (line_to_vector(l1) * line_to_vector(l2));
 
 //! Compute the cross product of two lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
   \param    l1 <line-3d|line-2d> A 3d or 2d line or vector 1.
   \param    l2 <line-3d|line-2d> A 3d or 2d line or vector 2.
 
-  \returns  <decimal|vector-2d> The cross product of \p l1 with \p l2.
-            Returns \b undef when lines or vectors have different
-            dimensions.
+  \returns  (1) <decimal|vector-2d> The cross product of \p l1 with
+                \p l2.
+            (2) Returns \b undef when \p l1 or \p l2 is not a line or
+                vector or have different dimensions.
 
   \details
 
@@ -623,7 +719,10 @@ function cross_ll
 (
   l1,
   l2
-) = cross(line_to_vector(l1), line_to_vector(l2));
+) = !is_line_or_vector(l1) ? undef
+  : !is_line_or_vector(l2) ? undef
+  : (len(l1) != len(l2)) ? undef
+  : cross(line_to_vector(l1), line_to_vector(l2));
 
 //! Compute the scalar triple product of three lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
@@ -631,9 +730,9 @@ function cross_ll
   \param    l2 <line-3d|line-2d> A 3d or 2d line or vector 2.
   \param    l3 <line-3d|line-2d> A 3d or 2d line or vector 3.
 
-  \returns  <decimal|vector-2d> The scalar triple product.
-            Returns \b undef when lines or vectors have different
-            dimensions.
+  \returns  (1) <decimal|vector-2d> The scalar triple product.
+            (2) Returns \b undef when \p l1, \p l2, or \p l3 is not a
+                line or vector or have different dimensions,
 
   \details
 
@@ -655,7 +754,12 @@ function striple_lll
   l1,
   l2,
   l3
-) = (line_to_vector(l1) * cross_ll(l2, l3));
+) = !is_line_or_vector(l1) ? undef
+  : !is_line_or_vector(l2) ? undef
+  : !is_line_or_vector(l3) ? undef
+  : (len(l1) != len(l2)) ? undef
+  : (len(l2) != len(l3)) ? undef
+  : (line_to_vector(l1) * cross_ll(l2, l3));
 
 //! Compute the angle between two lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
@@ -663,9 +767,11 @@ function striple_lll
   \param    l2 <line-3d|line-2d> A 3d or 2d line or vector 2.
   \param    s <boolean> Return the 2d signed angle.
 
-  \returns  <decimal> The angle between the two lines or vectors in
-            degrees. Returns \b undef when lines or vectors have
-            different dimensions or when they do not intersect.
+  \returns  (1) <decimal> The angle between the two lines or vectors in
+                degrees.
+            (2) Returns \b undef when \p l1 or \p l2 is not a line or
+                vector or have different dimensions or when they do not
+                intersect.
 
   \details
 
@@ -686,10 +792,23 @@ function angle_ll
   l1,
   l2,
   s = true
-) = let(d = line_dim(l1) + line_dim(l2))
-    (d == 4) ? let (sa = atan2(cross_ll(l1, l2), dot_ll(l1, l2)))
-    ((sa < 0) && (s == false)) ? sa+360 : sa
-  : (d == 6) ? atan2(distance_pp(cross_ll(l1, l2)), dot_ll(l1, l2))
+) = !is_line_or_vector(l1) ? undef
+  : !is_line_or_vector(l2) ? undef
+  : let
+    (
+      d = line_dim(l1) + line_dim(l2)
+    )
+    // two 2d
+    (d == 4) ?
+        let
+        (
+          sa = atan2(cross_ll(l1, l2), dot_ll(l1, l2))
+        )
+        ((sa < 0) && (s == false)) ? sa+360
+                                   : sa
+    // two 3d
+  : (d == 6) ?
+        atan2(distance_pp(cross_ll(l1, l2)), dot_ll(l1, l2))
   : undef;
 
 //! Compute the angle between two lines or vectors in a 3d-space.
@@ -698,9 +817,11 @@ function angle_ll
   \param    l2 <line-3d> A 3d line or vector 2.
   \param    n <line-3d> A 3d normal line or vector.
 
-  \returns  <decimal> The angle between the two lines or vectors in
-            degrees. Returns \b undef when lines or vectors have
-            different dimensions or when they do not intersect.
+  \returns  (1) <decimal> The angle between the two lines or vectors in
+                degrees.
+            (2) Returns \b undef when \p l1, \p l2, or \p n is not a
+                line or vector or have different dimensions or when
+                they do not intersect.
 
   \details
 
@@ -713,13 +834,19 @@ function angle_lll
   l1,
   l2,
   n
-) = atan2(striple_lll(n, l1, l2), dot_ll(l1, l2));
+) = !is_line_or_vector(l1) ? undef
+  : !is_line_or_vector(l2) ? undef
+  : !is_line_or_vector(n) ? undef
+  : (len(l1) != len(l2)) ? undef
+  : (len(l2) != len(n)) ? undef
+  : atan2(striple_lll(n, l1, l2), dot_ll(l1, l2));
 
 //! Compute the normalized unit vector of a line or vector.
 /***************************************************************************//**
   \param    l <line> A line or vector.
 
-  \returns  <vector> The normalized unit vector.
+  \returns  (1) <vector> The normalized unit vector.
+            (2) Returns \b undef when \p l is not a line or vector.
 
   \details
 
@@ -728,7 +855,8 @@ function angle_lll
 function unit_l
 (
   l
-) = line_to_vector(l) / distance_pp(line_to_vector(l));
+) = !is_line_or_vector(l) ? undef
+  : line_to_vector(l) / distance_pp(line_to_vector(l));
 
 //! Test if three lines or vectors are coplanar in 3d-space.
 /***************************************************************************//**
@@ -737,8 +865,10 @@ function unit_l
   \param    l3 <line-3d> A 3d line or vector 3.
   \param    d <integer> The number of decimal places to consider.
 
-  \returns  <boolean> \b true when all three lines or vectors are
-            coplanar, and \b false otherwise.
+  \returns  (1) <boolean> \b true when all three lines or vectors are
+                coplanar, and \b false otherwise.
+            (2) Returns \b undef when \p l1, \p l2, or \p l3 is not a
+                line or vector or have different dimensions,
 
   \details
 
@@ -757,7 +887,12 @@ function are_coplanar_lll
   l2,
   l3,
   d = 6
-) = (dround(striple_lll(l1, l2, l3), d) ==  0);
+) = !is_line_or_vector(l1) ? undef
+  : !is_line_or_vector(l2) ? undef
+  : !is_line_or_vector(l3) ? undef
+  : (len(l1) != len(l2)) ? undef
+  : (len(l2) != len(l3)) ? undef
+  : (dround(striple_lll(l1, l2, l3), d) ==  0);
 
 //----------------------------------------------------------------------------//
 // set 5: plane and pnorm
@@ -770,7 +905,8 @@ function are_coplanar_lll
   \param    cw <boolean> Point ordering. When the plane specified as
             non-collinear points, this indicates ordering.
 
-  \returns  <normal> A vector-3d normal to the plane.
+  \returns  (1) <normal> A vector-3d normal to the plane.
+            (2) Returns \b undef when \p n is not a plane.
 
   \details
 
@@ -786,10 +922,21 @@ function plane_to_normal
   n,
   cw = true
 ) = !is_plane(n) ? undef
-  : is_vector(n) ? point_to_3d(line_to_vector(n))           // n is normal.
-  : let (q = [for (i=n) point_to_3d(i)])                    // make 3d
-    (len(n) == 2) ? cross(q[0], q[1])                       // vectors [v1, v2].
-  : cross(q[0]-q[1], q[2]-q[1]) * ((cw == true) ? 1 : -1);  // 3 points.
+
+    // n is normal
+  : is_vector(n) ? point_to_3d(line_to_vector(n))
+
+    // make 3d
+  : let
+    (
+      q = [for (i=n) point_to_3d(i)]
+    )
+    (len(n) == 2) ?
+        // vectors [v1, v2].
+        cross(q[0], q[1])
+
+        // 3 points.
+      : cross(q[0]-q[1], q[2]-q[1]) * ((cw == true) ? 1 : -1);
 
 //! @}
 //! @}
@@ -817,32 +964,43 @@ BEGIN_SCOPE validate;
     // test-values rows
     test_r =
     [
-      ["fac", "Function argument count",    undef],
-      ["crp", "Result precision",           undef],
-      ["t01", "All undefined",              [undef,undef,undef,undef,undef,undef]],
-      ["t02", "All empty lists",            [empty_lst,empty_lst,empty_lst,empty_lst,empty_lst,empty_lst]],
-      ["t03", "All scalars",                [60, 50, 40, 30, 20, 10]],
-      ["t04", "All 1d vectors",             [[99], [58], [12], [42], [15], [1]]],
+      ["fac", "Function argument count",    undef
+      ],
+      ["crp", "Result precision",           undef
+      ],
+      ["t01", "All undefined",              [undef,undef,undef,undef,undef,undef]
+      ],
+      ["t02", "All empty lists",            [empty_lst,empty_lst,empty_lst,empty_lst,empty_lst,empty_lst]
+      ],
+      ["t03", "All scalars",                [60, 50, 40, 30, 20, 10]
+      ],
+      ["t04", "All 1d vectors",             [[99], [58], [12], [42], [15], [1]]
+      ],
       ["t05", "All 2d vectors",             [
                                               [99,2], [58,16], [12,43],
                                               [42,13], [15,59], [1,85]
-                                            ]],
+                                            ]
+      ],
       ["t06", "All 3d vectors",             [
                                               [199,20,55], [158,116,75], [12,43,90],
                                               [42,13,34], [15,59,45], [62,33,69]
-                                            ]],
+                                            ]
+      ],
       ["t07", "All 4d vectors",             [
                                               [169,27,35,10], [178,016,25,20], [12,43,90,30],
                                               [42,13,34,60], [15,059,45,50], [62,33,69,40]
-                                            ]],
+                                            ]
+      ],
       ["t08", "Orthogonal vectors",         [
                                               +x_axis3d_uv, +y_axis3d_uv, +z_axis3d_uv,
                                               -x_axis3d_uv, -y_axis3d_uv, -z_axis3d_uv,
-                                            ]],
+                                            ]
+      ],
       ["t09", "Coplanar vectors",           [
                                               +x_axis3d_uv, +y_axis3d_uv, [2,2,0],
                                               origin3d, origin3d, origin3d,
-                                            ]]
+                                            ]
+      ]
     ];
 
     test_ids = table_get_row_ids( test_r );
@@ -860,11 +1018,11 @@ BEGIN_SCOPE validate;
         4,                                                  // crp
         undef,                                              // t01
         undef,                                              // t02
-        10,                                                 // t03
-        41,                                                 // t04
+        undef,                                              // t03
+        undef,                                              // t04
         43.3244,                                            // t05
         106.2873,                                           // t06
-        20.0499,                                            // t07
+        undef,                                              // t07
         1.4142,                                             // t08
         1.4142                                              // t09
       ],
@@ -877,20 +1035,20 @@ BEGIN_SCOPE validate;
         undef,                                              // t04
         -463,                                               // t05
         17009,                                              // t06
-        -1583,                                              // t07
+        undef,                                              // t07
         1,                                                  // t08
         -3                                                  // t09
       ],
       ["point_to_3d",
         1,                                                  // fac
         4,                                                  // crp
-        [undef,undef,0],                                    // t01
-        [undef,undef,0],                                    // t02
-        [undef,undef,0],                                    // t03
-        [99,undef,0],                                       // t04
+        undef,                                              // t01
+        undef,                                              // t02
+        undef,                                              // t03
+        undef,                                              // t04
         [99,2,0],                                           // t05
         [199,20,55],                                        // t06
-        [169,27,0],                                         // t07
+        undef,                                              // t07
         x_axis3d_uv,                                        // t08
         x_axis3d_uv                                         // t09
       ],
@@ -936,13 +1094,13 @@ BEGIN_SCOPE validate;
       ["line_to_vector",
         2,                                                  // fac
         4,                                                  // crp
-        [undef, undef],                                     // t01
-        empty_lst,                                          // t02
+        undef,                                              // t01
+        undef,                                              // t02
         [60,50],                                            // t03
-        [-41],                                              // t04
+        undef,                                              // t04
         [-41,14],                                           // t05
         [-41,96,20],                                        // t06
-        [9,-11,-10,10],                                     // t07
+        undef,                                              // t07
         [-1,1,0],                                           // t08
         [-1,1,0]                                            // t09
       ],
@@ -952,10 +1110,10 @@ BEGIN_SCOPE validate;
         undef,                                              // t01
         undef,                                              // t02
         3900,                                               // t03
-        -1230,                                              // t04
+        undef,                                              // t04
         -1650,                                              // t05
         -5230,                                              // t06
-        1460,                                               // t07
+        undef,                                              // t07
         1,                                                  // t08
         0                                                   // t09
       ],
@@ -1017,10 +1175,10 @@ BEGIN_SCOPE validate;
         undef,                                              // t01
         undef,                                              // t02
         [.7682,0.6402],                                     // t03
-        [-1],                                               // t04
+        undef,                                              // t04
         [-0.9464,0.3231],                                   // t05
         [-0.3857,0.9032,0.1882],                            // t06
-        [0.44888,-0.5486,-0.4988,0.4988],                   // t07
+        undef,                                              // t07
         [-0.7071,0.7071,0],                                 // t08
         [-0.7071,0.7071,0]                                  // t09
       ],
@@ -1101,7 +1259,7 @@ BEGIN_SCOPE validate;
     log_skip( "is_point()" );
     log_skip( "is_vector()" );
     log_skip( "is_line()" );
-    log_skip( "is_vector_or_line()" );
+    log_skip( "is_line_or_vector()" );
     log_skip( "is_plane()" );
 
     // set 2: point
