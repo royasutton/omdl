@@ -143,14 +143,15 @@ BEGIN_SCOPE logo;
 
     $fn = 36;
 
-    frame = triangle_ppp2sss( [ [30,0], [0,40], [30,40] ] );
+    frame = triangle_ppp2sss( [[30,40], [30,0], [0,40]] );
     core  = 2 * frame / 3;
     vrnd  = [1, 2, 4];
 
     cone( h=20, r=10, vr=2 );
     rotate([0, 0, 360/20])
     radial_repeat( n=5, angle=true )
-      etriangle_ls_c( vs=frame, vc=core, vr=vrnd, h=10 );
+      translate([15,-5,0])
+        etriangle_ls_c( vs=frame, vc=core, vr=vrnd, h=10 );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
