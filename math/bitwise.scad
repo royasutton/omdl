@@ -1,4 +1,4 @@
-//! Mathematical base-two bitwise binary functions.
+//! Mathematical base-2 bitwise binary functions.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -63,65 +63,77 @@
 
 //----------------------------------------------------------------------------//
 
-//! Test if a base-two bit position of an integer value equals a test bit.
+//! Test if a base-2 bit position of an integer value equals a test bit.
 /***************************************************************************//**
   \param    v <integer> An integer value.
-  \param    b <integer> A base-two bit position.
+  \param    b <integer> A base-2 bit position.
   \param    t <bit> The bit test value [0|1].
 
-  \returns  <boolean> \b true when the base-two bit position of the integer
-            value equals \p t, otherwise returns \b false.
+  \returns  (1) <boolean> \b true when the base-2 bit position in \p v
+                specified by \p b equals \p t, otherwise returns
+                \b false.
+            (2) Returns \b undef if \p v or \p b is not an integer.
 *******************************************************************************/
 function bitwise_is_equal
 (
   v,
   b,
   t = 1
-) = ((floor(v / pow(2, b)) % 2) == t);
+) = !is_integer(v) ? undef
+  : !is_integer(b) ? undef
+  : ((floor(v / pow(2, b)) % 2) == t);
 
-//! Encode an integer value as a base-two list of bits.
+//! Encode an integer value as a base-2 list of bits.
 /***************************************************************************//**
   \param    v <integer> An integer value.
   \param    w <integer> The minimum bit width.
   \param    bv (an internal recursion loop variable).
 
-  \returns  <bit-list> of bits base-two encoding of the integer value.
-            Returns \b undef when \p v or \p w is not an integer.
+  \returns  (1) <bit-list> of bits base-2 encoding of the integer value.
+            (2) Returns \b undef when \p v or \p w is not an integer.
+
+  \details
+
+    The bit-list will be the minimum required to represent the value. If
+    \p w is greater than the minimum required bits, then the value will
+    be padded with '0'.
 *******************************************************************************/
 function bitwise_i2v
 (
   v,
   w = 1,
-  bv = 1    // iteration bit value
+  // iteration bit value
+  bv = 1
 ) = !is_integer(v) ? undef
   : !is_integer(w) ? undef
   : ((v == 0) && (bv >= pow(2, w))) ? empty_lst
-  : ((v % 2) > 0) ?
-    concat(bitwise_i2v(floor(v/2), w, bv*2), 1)
-  : concat(bitwise_i2v(floor(v/2), w, bv*2), 0);
+  : ((v % 2) > 0) ? concat(bitwise_i2v(floor(v/2), w, bv*2), 1)
+                  : concat(bitwise_i2v(floor(v/2), w, bv*2), 0);
 
-//! Decode a base-two list of bits to an integer value.
+//! Decode a base-2 list of bits to an integer value.
 /***************************************************************************//**
-  \param    v <bit-list> A value encoded as a base-two list of bits.
+  \param    v <bit-list> A value encoded as a base-2 list of bits.
 
-  \returns  <integer> value encoding of the base-two list of bits.
-            Returns \b undef when \p v is not a list of bit values.
+  \returns  (1) <integer> value encoding of the base-2 list of bits.
+            (2) Returns \b undef when \p v is not a list of bit values.
 *******************************************************************************/
 function bitwise_v2i
 (
   v
 ) = is_empty(v) ? 0
+    // all must be '0' or '1'
+  : (sum(unique(v)) > 1) ? undef
   : (first(v) == 1) ? bitwise_v2i(ntail(v)) + pow(2, len(v)-1)
   : (first(v) == 0) ? bitwise_v2i(ntail(v))
   : undef;
 
-//! Encode an integer value as a base-two string of bits.
+//! Encode an integer value as a base-2 string of bits.
 /***************************************************************************//**
   \param    v <integer> An integer value.
   \param    w <integer> The minimum bit width.
 
-  \returns  <bit-string> of bits base-two encoding of the integer value.
-            Returns \b undef when \p v or \p w is not an integer.
+  \returns  (1) <bit-string> of bits base-2 encoding of the integer value.
+            (2) Returns \b undef when \p v or \p w is not an integer.
 *******************************************************************************/
 function bitwise_i2s
 (
@@ -131,36 +143,47 @@ function bitwise_i2s
   : !is_integer(w) ? undef
   : lstr(bitwise_i2v(v, w));
 
-//! Decode a base-two string of bits to an integer value.
+//! Decode a base-2 string of bits to an integer value.
 /***************************************************************************//**
-  \param    v <bit-string> A value encoded as a base-two string of bits.
+  \param    v <bit-string> A value encoded as a base-2 string of bits.
 
-  \returns  <integer> value encoding of the base-two string of bits.
-            Returns \b undef when \p v is not a string of bit values.
+  \returns  (1) <integer> value encoding of the base-2 string of bits.
+            (2) Returns \b undef when \p v is not a string of bit values.
 *******************************************************************************/
 function bitwise_s2i
 (
   v
 ) = is_empty(v) ? 0
+    // all must be '0' or '1'
+//  : let
+//    (
+//      d = search("01", v, 0)
+//    )
+//    ( ( len(d[0]) + len(d[1]) ) != len(v)) ? undef
   : (first(v) == "1") ? bitwise_s2i(ntail(v)) + pow(2, len(v)-1)
   : (first(v) == "0") ? bitwise_s2i(ntail(v))
   : undef;
 
-//! Decode the integer in a value at a shifted base-two bit mask of width-w.
+//! Decode the integer in a value at a shifted base-2 bit mask of width-w.
 /***************************************************************************//**
   \param    v <integer> An integer value.
   \param    w <integer> The bit mask width.
   \param    s <integer> The bit mask shift offset.
 
-  \returns  <integer> value of the \p w bits of \p v starting at bit
-            position \p s up to bit <tt>(w+s-1)</tt>.
+  \returns  (1) <integer> value of the \p w bits of \p v starting at bit
+                position \p s up to bit <tt>(w+s-1)</tt>.
+            (2) Returns \b undef when \p v, \p w, or \p s is not an
+                integer.
 *******************************************************************************/
 function bitwise_imi
 (
   v,
   w,
   s
-) = bitwise_rsh(bitwise_and(v, bitwise_lsh(pow(2,w)-1, s)), s);
+) = !is_integer(v) ? undef
+  : !is_integer(w) ? undef
+  : !is_integer(s) ? undef
+  : bitwise_rsh(bitwise_and(v, bitwise_lsh(pow(2,w)-1, s)), s);
 
 //! Base-two bitwise AND operation for integers.
 /***************************************************************************//**
@@ -168,8 +191,8 @@ function bitwise_imi
   \param    v2 <integer> An integer value.
   \param    bv (an internal recursion loop variable).
 
-  \returns  <integer> result of the base-two bitwise AND of \p v1 and \p v2.
-            Returns \b undef when \p v1 or \p v2 is not an integer.
+  \returns  (1) <integer> the base-2 bitwise AND of \p v1 and \p v2.
+            (2) Returns \b undef when \p v1 or \p v2 is not an integer.
 *******************************************************************************/
 function bitwise_and
 (
@@ -189,8 +212,8 @@ function bitwise_and
   \param    v2 <integer> An integer value.
   \param    bv (an internal recursion loop variable).
 
-  \returns  <integer> result of the base-two bitwise OR of \p v1 and \p v2.
-            Returns \b undef when \p v1 or \p v2 is not an integer.
+  \returns  (1) <integer> the base-2 bitwise OR of \p v1 and \p v2.
+            (2) Returns \b undef when \p v1 or \p v2 is not an integer.
 *******************************************************************************/
 function bitwise_or
 (
@@ -210,8 +233,8 @@ function bitwise_or
   \param    v2 <integer> An integer value.
   \param    bv (an internal recursion loop variable).
 
-  \returns  <integer> result of the base-two bitwise XOR of \p v1 and \p v2.
-            Returns \b undef when \p v1 or \p v2 is not an integer.
+  \returns  (1) <integer> the base-2 bitwise XOR of \p v1 and \p v2.
+            (2) Returns \b undef when \p v1 or \p v2 is not an integer.
 *******************************************************************************/
 function bitwise_xor
 (
@@ -231,8 +254,8 @@ function bitwise_xor
   \param    w <integer> The minimum bit width.
   \param    bv (an internal recursion loop variable).
 
-  \returns  <integer> result of the base-two bitwise NOT of \p v.
-            Returns \b undef when \p v is not an integer.
+  \returns  (1) <integer> the base-2 bitwise NOT of \p v.
+            (2) Returns \b undef when \p v or \p w is not an integer.
 *******************************************************************************/
 function bitwise_not
 (
@@ -240,6 +263,7 @@ function bitwise_not
   w = 1,
   bv = 1
 ) = !is_integer(v) ? undef
+  : !is_integer(w) ? undef
   : ((v == 0) && (bv >= pow(2, w))) ? 0
   : ((v % 2) > 0) ?
     bitwise_not(floor(v/2), w, bv*2)
@@ -252,9 +276,9 @@ function bitwise_not
   \param    bm (an internal recursion loop variable).
   \param    bv (an internal recursion loop variable).
 
-  \returns  <integer> result of the base-two bitwise left-shift of \p v
-            by \p s bits.
-            Returns \b undef when \p v or \p s is not an integer.
+  \returns  (1) <integer> the base-2 bitwise left-shift of \p v
+                by \p s bits.
+            (2) Returns \b undef when \p v or \p s is not an integer.
 *******************************************************************************/
 function bitwise_lsh
 (
@@ -264,21 +288,23 @@ function bitwise_lsh
   bv = 1
 ) = !is_integer(v) ? undef
   : !is_integer(s) ? undef
-  : (bm < v) ? bitwise_lsh(v, s, bm*2, bv)    // max bit position
-  : (s  > 0) ? bitwise_lsh(v*2, s-1, bm, bv)  // shift value
+    // max bit position
+  : (bm < v) ? bitwise_lsh(v, s, bm*2, bv)
+    // shift value
+  : (s  > 0) ? bitwise_lsh(v*2, s-1, bm, bv)
   : (bv > bm) ? 0
-  : ((v % 2) > 0) ?                           // encoded result
-    bitwise_lsh(floor(v/2), s, bm, bv*2) + bv
-  : bitwise_lsh(floor(v/2), s, bm, bv*2);
+    // encoded result
+  : ((v % 2) > 0) ? bitwise_lsh(floor(v/2), s, bm, bv*2) + bv
+                  : bitwise_lsh(floor(v/2), s, bm, bv*2);
 
 //! Base-two bitwise right-shift operation for an integer.
 /***************************************************************************//**
   \param    v <integer> An integer value.
   \param    s <integer> The number of bits to shift.
 
-  \returns  <integer> result of the base-two bitwise right-shift of \p v
-            by \p s bits.
-            Returns \b undef when \p v or \p s is not an integer.
+  \returns  (1) <integer> the base-2 bitwise right-shift of \p v
+                by \p s bits.
+            (2) Returns \b undef when \p v or \p s is not an integer.
 *******************************************************************************/
 function bitwise_rsh
 (
@@ -341,8 +367,8 @@ BEGIN_SCOPE validate;
     good_r =
     [ // function
       ["bitwise_is_equal_0", 2,
-        false,                          // t01
-        false,                          // t02
+        undef,                          // t01
+        undef,                          // t02
         true,                           // t03
         false,                          // t04
         false,                          // t05
@@ -355,8 +381,8 @@ BEGIN_SCOPE validate;
         true                            // t12
       ],
       ["bitwise_is_equal_1", 2,
-        false,                          // t01
-        false,                          // t02
+        undef,                          // t01
+        undef,                          // t02
         false,                          // t03
         true,                           // t04
         true,                           // t05
@@ -383,8 +409,8 @@ BEGIN_SCOPE validate;
         [1,1,0,1,0,1,1,0,0,0]           // t12
       ],
       ["bitwise_i2v_v2i", 1,
-        undef,                          // t01
-        undef,                          // t02
+        0,                              // t01
+        0,                              // t02
         254,                            // t03
         254,                            // t04
         255,                            // t05
@@ -411,8 +437,8 @@ BEGIN_SCOPE validate;
         "1101011000"                    // t12
       ],
       ["bitwise_i2s_s2i", 1,
-        undef,                          // t01
-        undef,                          // t02
+        0,                              // t01
+        0,                              // t02
         254,                            // t03
         254,                            // t04
         255,                            // t05
