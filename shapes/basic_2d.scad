@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2019
+  \date   2015-2023
 
   \copyright
 
@@ -86,7 +86,7 @@ module rectangle
 
   translate(center==true ? [-rx/2, -ry/2] : origin2d)
   {
-    if ( not_defined(vr) )              // no rounding
+    if ( is_undef(vr) )              // no rounding
     {
       square([rx, ry]);
     }
@@ -271,7 +271,7 @@ module rhombus
 
   translate(center==true ? origin2d : [rx, ry])
   {
-    if ( not_defined(vr) )              // no rounding
+    if ( is_undef(vr) )              // no rounding
     {
       polygon
       (
@@ -605,7 +605,7 @@ module ngon
   vr
 )
 {
-  if ( not_defined(vr) )
+  if ( is_undef(vr) )
   {
     circle(r=r, $fn=n);
   }

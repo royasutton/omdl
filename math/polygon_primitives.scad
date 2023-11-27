@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2019
+  \date   2015-2023
 
   \copyright
 
@@ -97,7 +97,7 @@ function polygon2d_regular_p
   [
     for (a = b)
       let( v = [s*cos(a+o), s*sin(a+o)] + c )
-      not_defined(vr) ? v : v - vr/cos(180/n) * unit_l(v)
+      is_undef(vr) ? v : v - vr/cos(180/n) * unit_l(v)
   ];
 
 //! Compute coordinates along a line in 2D.

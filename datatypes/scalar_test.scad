@@ -109,26 +109,6 @@ function is_defined
   v
 ) = is_undef(v) ? false : true;
 
-//! Test if a value is not defined.
-/***************************************************************************//**
-  \param    v \<value> A value.
-
-  \returns  <boolean> \b true when the value is not defined
-            and \b false otherwise.
-
-  \details
-
-  \note     Starting with version 2019.05, this function is now
-            provided directly by OpenSCAD via a built-in [type test
-            function][ottf] \c is_undef().
-
-  \amu_eval (${group_references})
-*******************************************************************************/
-function not_defined
-(
-  v
-) = is_undef(v);
-
 //! Test if a numerical value is 'nan' (not a number).
 /***************************************************************************//**
   \param    v \<value> A numerical value.
@@ -322,7 +302,6 @@ BEGIN_SCOPE validate;
     [ // function       01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21
       ["is_scalar",     t, t, t, t, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, t, t],
       ["is_defined",    f, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t, t],
-      ["not_defined",   t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["is_nan",        f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f],
       ["is_inf",        f, f, f, f, f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["is_number",     f, t, t, t, t, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f],
@@ -333,6 +312,7 @@ BEGIN_SCOPE validate;
       ["is_odd",        f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["is_between_MM", f, t, t, t, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
 
+      ["is_undef",      t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["is_bool",       f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
       ["is_string",     f, f, f, f, f, f, f, f, f, f, f, t, t, t, f, f, f, f, f, f, f],
       ["is_list",       f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t, t, t, f, f]
@@ -345,7 +325,6 @@ BEGIN_SCOPE validate;
 
     for (id=test_ids) table_validate( db, id, "is_scalar", 1, is_scalar( v1(db,id)) );
     for (id=test_ids) table_validate( db, id, "is_defined", 1, is_defined( v1(db,id)) );
-    for (id=test_ids) table_validate( db, id, "not_defined", 1, not_defined( v1(db,id)) );
     for (id=test_ids) table_validate( db, id, "is_nan", 1, is_nan( v1(db,id)) );
     for (id=test_ids) table_validate( db, id, "is_inf", 1, is_inf( v1(db,id)) );
     for (id=test_ids) table_validate( db, id, "is_number", 1, is_number( v1(db,id)) );
@@ -357,6 +336,7 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "is_between_MM", 1, is_between( v1(db,id), number_min, number_max ) );
 
     // OpenSCAD built-in functions: is_undef() and is_num() are tested above
+    for (id=test_ids) table_validate( db, id, "is_undef", 1, is_undef( v1(db,id)) );
     for (id=test_ids) table_validate( db, id, "is_bool", 1, is_bool( v1(db,id)) );
     for (id=test_ids) table_validate( db, id, "is_string", 1, is_string( v1(db,id)) );
     for (id=test_ids) table_validate( db, id, "is_list", 1, is_list( v1(db,id)) );

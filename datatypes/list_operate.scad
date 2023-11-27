@@ -691,16 +691,16 @@ function qsort
   : let
     (
       mp = v[floor(len(v)/2)],            // mid-point index
-      me = not_defined(i) ? mp : mp[i],   // mid-point element
+      me = is_undef(i) ? mp : mp[i],      // mid-point element
 
       // place each element of 'v' into bin
-      lt = [for (j = v) let(k = not_defined(i) ? j : j[i]) if (k  < me) j],
-      eq = [for (j = v) let(k = not_defined(i) ? j : j[i]) if (k == me) j],
-      gt = [for (j = v) let(k = not_defined(i) ? j : j[i]) if (k  > me) j],
+      lt = [for (j = v) let(k = is_undef(i) ? j : j[i]) if (k  < me) j],
+      eq = [for (j = v) let(k = is_undef(i) ? j : j[i]) if (k == me) j],
+      gt = [for (j = v) let(k = is_undef(i) ? j : j[i]) if (k  > me) j],
 
       // un-orderable elements of 'v'
       uo = [
-             for (j = v) let(k = not_defined(i) ? j : j[i])
+             for (j = v) let(k = is_undef(i) ? j : j[i])
                if ( !( (k < me) || (k == me) || (k > me) ) ) j
            ],
 
@@ -744,26 +744,26 @@ function qsort2
   : let
     (
       mp = v[floor(len(v)/2)],
-      me = not_defined(i) ? mp : mp[i],
+      me = is_undef(i) ? mp : mp[i],
 
       lt =
       [
         for (j = v)
-        let(k = not_defined(i) ? j : j[i])
+        let(k = is_undef(i) ? j : j[i])
           if (compare(me, k, s) == -1)
             ((d > 0) && is_list(k)) ? qsort2(k, i, d-1, r, s) : j
       ],
       eq =
       [
         for (j = v)
-        let(k = not_defined(i) ? j : j[i])
+        let(k = is_undef(i) ? j : j[i])
           if (compare(me, k, s) ==  0)
             ((d > 0) && is_list(k)) ? qsort2(k, i, d-1, r, s) : j
       ],
       gt =
       [
         for (j = v)
-        let(k = not_defined(i) ? j : j[i])
+        let(k = is_undef(i) ? j : j[i])
           if (compare(me, k, s) == +1)
             ((d > 0) && is_list(k)) ? qsort2(k, i, d-1, r, s) : j
       ],

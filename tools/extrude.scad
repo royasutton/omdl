@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2019
+  \date   2015-2023
 
   \copyright
 
@@ -103,7 +103,7 @@ module rotate_extrude_tre
   m = 255
 )
 {
-  if ( not_defined(l) || (profile==true) )
+  if ( is_undef(l) || (profile==true) )
   {
     rotate_extrude_tr(r=r, pa=pa, ra=ra, profile=profile)
     children();
@@ -191,7 +191,7 @@ module linear_extrude_uls
   center = false
 )
 {
-  if ( not_defined(h) )
+  if ( is_undef(h) )
   {
     children();
   }

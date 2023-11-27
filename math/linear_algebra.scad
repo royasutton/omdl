@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2018
+  \date   2015-2023
 
   \copyright
 
@@ -95,7 +95,7 @@ function translate_p
 (
   c,
   v
-) = not_defined(v) ? c
+) = is_undef(v) ? c
   : let
     (
       d = len(first(c)),
@@ -133,7 +133,7 @@ function rotate_p
   a,
   v,
   o = origin3d
-) = not_defined(a) ? c
+) = is_undef(a) ? c
   : let
     (
       d  = len(first(c)),
@@ -143,7 +143,7 @@ function rotate_p
 
       rc = (d == 2) ? [for (ci=c) [cg*ci[0]-sg*ci[1], sg*ci[0]+cg*ci[1]]]
          : (d != 3) ? c
-         : (not_defined(v) || is_list(a)) ?
+         : (is_undef(v) || is_list(a)) ?
             let
             (
               ax = edefined_or(a, 0, 0),
@@ -208,7 +208,7 @@ function scale_p
 (
   c,
   v
-) = not_defined(v) ? c
+) = is_undef(v) ? c
   : let
     (
       d = len(first(c)),
@@ -229,7 +229,7 @@ function resize_p
 (
   c,
   v
-) = not_defined(v) ? c
+) = is_undef(v) ? c
   : let
     (
       d = len(first(c)),

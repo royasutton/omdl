@@ -434,7 +434,7 @@ module map_write
 
       if
       (
-        not_defined( ks ) ||
+        is_undef( ks ) ||
         !is_empty( first( search( [key], ks, 1, 0 ) ) )
       )
       log_echo

@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2019
+  \date   2019-2023
 
   \copyright
 
@@ -141,7 +141,7 @@ module draft_dim_leader
   draft_make_3d_if_configured()
   {
     // offset
-    plo = not_defined(o) ? p
+    plo = is_undef(o) ? p
         : is_number(v1)  ? line_tp(line2d_new(m=o, a=v1, p1=p))
         :                  line_tp(line2d_new(m=o, v=v1, p1=p));
 
@@ -162,12 +162,12 @@ module draft_dim_leader
     draft_line(l=ll2, w=w, s=s);
 
     // text rotation
-    tra = not_defined(tr) ? angle_ll(x_axis2d_uv, ll2, false)
+    tra = is_undef(tr) ? angle_ll(x_axis2d_uv, ll2, false)
         : is_number(tr)   ? tr
         :                   angle_ll(x_axis2d_uv, tr, false);
 
     // text alignment point
-    dtp = not_defined(tr) ? [-1, 0]
+    dtp = is_undef(tr) ? [-1, 0]
         : is_defined(tp)  ? tp
         : let( al2 = (angle_ll(x_axis2d_uv, ll2, false)+360-tra)%360 )
           (al2>  45 && al2< 135) ? [ 0, 1]
@@ -304,10 +304,10 @@ module draft_dim_line
     // identify measurement reference points
     // only one of 'v1', 'v2' should normally be used at a time
     // create vector if numerical angle has been specified.
-    mr1 = not_defined(v1) ? p1
+    mr1 = is_undef(v1) ? p1
         : let( va1 = is_number(v1) ? line2d_new(a=v1, p1=p1) : v1 )
           point_closest_pl(p2, va1);
-    mr2 = not_defined(v2) ? p2
+    mr2 = is_undef(v2) ? p2
         : let( va2 = is_number(v2) ? line2d_new(a=v2, p1=p2) : v2 )
           point_closest_pl(p1, va2);
 
@@ -350,7 +350,7 @@ module draft_dim_line
            md = distance_pp(mr1, mr2),
 
            // use specified units 'u'
-           du = not_defined(u) ? md
+           du = is_undef(u) ? md
               : length(md, from=length_unit_base, to=u),
 
            // rounding: [mode:0, digits]
@@ -361,7 +361,7 @@ module draft_dim_line
               : du
          )
          // add units id when 'u' is specified
-         not_defined(u) ? str(rd) : str(rd, " ", u);
+         is_undef(u) ? str(rd) : str(rd, " ", u);
 
     // individual or common arrowheads
     da1 = defined_or(a1, a);
@@ -514,7 +514,7 @@ module draft_dim_radius
     // create vector if numerical angle has been specified.
     rr1 = c;
     rr2 = is_defined(p)  ? p
-        : not_defined(v) ? line_tp(line2d_new(m=r, p1=c))
+        : is_undef(v) ? line_tp(line2d_new(m=r, p1=c))
         : is_number(v)   ? line_tp(line2d_new(m=r, a=v, p1=c))
         :                  line_tp(line2d_new(m=r, v=v, p1=c));
 
@@ -548,7 +548,7 @@ module draft_dim_radius
            md = distance_pp(mr1, mr2),
 
            // use specified units 'u'
-           du = not_defined(u) ? md
+           du = is_undef(u) ? md
               : length(md, from=length_unit_base, to=u),
 
            // rounding: [mode:0, digits]
@@ -561,7 +561,7 @@ module draft_dim_radius
            rt = d ? "D" : "R"
          )
          // add units id when 'u' is specified
-         not_defined(u) ? str(rt, " ", rd) : str(rt, " ", rd, " ", u);
+         is_undef(u) ? str(rt, " ", rd) : str(rt, " ", rd, " ", u);
 
     // individual or common arrowheads
     da1 = defined_or(a1, d ? a : 0);
@@ -762,7 +762,7 @@ module draft_dim_angle
               : angle_ll([c, mr1], [c, mr2], false),
 
            // use specified units 'u'
-           au = not_defined(u) ? ma
+           au = is_undef(u) ? ma
               : angle(ma, from=angle_unit_base, to=u),
 
            // rounding: [mode:0, digits]
@@ -773,7 +773,7 @@ module draft_dim_angle
               : au
          )
          // add units id when 'u' is specified
-         not_defined(u) ? str(rd) : str(rd, " ", u);
+         is_undef(u) ? str(rd) : str(rd, " ", u);
 
     // individual or common arrowheads
     da1 = defined_or(a1, a);

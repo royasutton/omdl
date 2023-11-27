@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2019
+  \date   2019-2023
 
   \copyright
 
@@ -735,8 +735,8 @@ module draft_table
           // not defined. set line style to '0' no line.
           //
           lw = lc[0];
-          ls = (not_defined(title)  && (i==1)) ? 0
-             : (not_defined(heads)  && (i==2)) ? 0
+          ls = (is_undef(title)  && (i==1)) ? 0
+             : (is_undef(heads)  && (i==2)) ? 0
              : lc[1];
 
           ip = draft_table_get_point( ix=ic, iy=i, map=map, fmap=fmap );
@@ -924,7 +924,7 @@ module draft_ztable
           draft_ztable_text( i, zddata[i][3][0], tts, htdefs, zddata[i][3], map );
 
           // zone entry-text
-          et  = (is_empty(text[i]) || not_defined(text[i])) ?
+          et  = (is_empty(text[i]) || is_undef(text[i])) ?
                 zddata[i][4][0]
               : text[i];
 
@@ -1011,7 +1011,7 @@ module draft_note
     lnc = is_list(lnd[0]) ? [lnd[0], lnd[1]] : [lnd, lnd];
 
     // default heading text when size specified without text
-    htd = is_defined(size[2]) && not_defined(head) ? empty_str : head;
+    htd = is_defined(size[2]) && is_undef(head) ? empty_str : head;
 
     // local table map
     map =
@@ -1019,7 +1019,7 @@ module draft_note
       ["cmh",     cmh],
       ["cmv",     cmv],
 
-      not_defined(htd) ? empty_lst :
+      is_undef(htd) ? empty_lst :
       ["heads",   [[htd], edefined_or(size, 2, 1)]],
 
       ["cols",    [edefined_or(size, 0, defined_or(size,1))]],

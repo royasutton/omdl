@@ -199,9 +199,9 @@ function table_exists
   ci
 ) = ( is_defined(ri) && is_defined(ci) ) ?
       is_defined(table_get_value(r, c, ri, ci))
-  : ( is_defined(ri) && not_defined(ci) ) ?
+  : ( is_defined(ri) && is_undef(ci) ) ?
       !is_empty(table_get_row_index(r,ri))
-  : ( not_defined(ri) && is_defined(ci) ) ?
+  : ( is_undef(ri) && is_defined(ci) ) ?
       !is_empty(table_get_column_index(c,ci))
   : false;
 
@@ -223,8 +223,8 @@ function table_get_size
 (
   r,
   c
-) = ( is_defined(r) && not_defined(c) ) ? len( r )
-  : ( not_defined(r) && is_defined(c) ) ? len( c )
+) = ( is_defined(r) && is_undef(c) ) ? len( r )
+  : ( is_undef(r) && is_defined(c) ) ? len( c )
   : len( r ) * len( c );
 
 //! Create a new matrix from select rows and columns of a table.
@@ -247,14 +247,14 @@ function table_get_copy
   for ( r_iter = r )
     if
     (
-      not_defined( rs ) ||
+      is_undef( rs ) ||
       !is_empty( first( search( r_iter, rs, 1, 0 ) ) )
     )
     [
       for ( c_iter = c )
         if
         (
-          not_defined( cs ) ||
+          is_undef( cs ) ||
           !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
         )
           table_get_value(r, c, r_iter, c_iter)
@@ -453,7 +453,7 @@ module table_dump
   {
     if
     (
-      not_defined( rs ) ||
+      is_undef( rs ) ||
       !is_empty( first( search( r_iter, rs, 1, 0 ) ) )
     )
     {
@@ -466,7 +466,7 @@ module table_dump
       {
         if
         (
-          not_defined( cs ) ||
+          is_undef( cs ) ||
           !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
         )
         {
@@ -768,7 +768,7 @@ module table_write
     for ( c_iter = c )
       if
       ( // when column selected
-        not_defined( cs ) ||
+        is_undef( cs ) ||
         !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
       )
       first(c_iter)
@@ -784,7 +784,7 @@ module table_write
     for ( c_iter = c )
       if
       ( // when column selected
-        not_defined( cs ) ||
+        is_undef( cs ) ||
         !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
       )
       second(c_iter)
@@ -798,7 +798,7 @@ module table_write
   {
     if
     ( // when row selected
-      not_defined( rs ) ||
+      is_undef( rs ) ||
       !is_empty( first( search( r_iter, rs, 1, 0 ) ) )
     )
     {
@@ -812,7 +812,7 @@ module table_write
         for ( c_iter = ntail(c, n=1) )
           if
           ( // when column selected
-            not_defined( cs ) ||
+            is_undef( cs ) ||
             !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
           )
             str(lstr_html([table_get_value(r, c, r_iter, c_iter)], p=[value_tags]),fs)

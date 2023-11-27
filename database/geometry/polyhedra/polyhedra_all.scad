@@ -21545,7 +21545,7 @@ BEGIN_SCOPE autotest;
       }
 
       // re-create sorted edge list and compare with stored.
-      ce = qsort2(polytope_faces2edges(f, d=1), d=1);
+      ce = qsort2(polytope_faces2edges(f), d=1);
 
       if ( e != ce )
       {

@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2019
+  \date   2015-2023
 
   \copyright
 
@@ -143,7 +143,7 @@ module cuboid
   vf = bitwise_is_equal(vrm, 1, 0);
 
   translate(center==true ? origin3d : [bx/2, by/2, bz/2])
-  if ( not_defined(vr) )
+  if ( is_undef(vr) )
   {
     cube([bx, by, bz], center=true);
   }

@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2017-2019
+  \date   2017-2023
 
   \copyright
 
@@ -170,7 +170,7 @@ function polytope_line
   l,
   r = false
 ) = is_defined(l) ? [c[first(l)], c[second(l)]]
-  : not_defined(i) ? undef
+  : is_undef(i) ? undef
   : let
     (
       fm = defined_or(f, [consts(len(c))]),
@@ -862,7 +862,7 @@ function polygon2d_is_convex
 (
   c,
   p
-) = not_defined(c) ? undef
+) = is_undef(c) ? undef
   : len(c) < 3 ? undef
   : !all_len(c, 2) ? undef
   : let
