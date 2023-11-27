@@ -116,6 +116,32 @@ function all_equal
   : (first(v) != cv) ? false
   : all_equal(ntail(v), cv);
 
+//! Test if all elements of an iterable value equal one of the comparison values.
+/***************************************************************************//**
+  \param    v <iterable> An iterable data type value.
+  \param    cv \<value> An iterable of one more more comparison values.
+
+  \returns  <boolean> \b true when all elements of \p v equal one of the
+            values in \p cv and \b false otherwise. Returns \b undef
+            when either \p v or \p cv is undefined.
+
+
+  \details
+
+    The iterable type for \p v and \p cv must be the same. When \p v is
+    a list, \p cv must also be a list. When \p v is a string, \p cv
+    must also be a string.
+*******************************************************************************/
+function all_equal_oneof
+(
+  v,
+  cv
+) = !is_iterable(v) ? undef
+    // 'v' and 'cv' must be same iterable type
+  : (is_list(v) && !is_list(cv)) ? undef
+  : (is_string(v) && !is_string(cv)) ? undef
+  : !any_equal(search( v, cv, 0, 0), empty_lst);
+
 //! Test if any element of an iterable value equal a comparison value.
 /***************************************************************************//**
   \param    v \<iterable> An iterable data type value.
@@ -337,26 +363,27 @@ BEGIN_SCOPE validate;
     ];
 
     tbl_test_answers =
-    [ // function       01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23
-      ["is_iterable",   f, f, f, f, t, t, t, t, f, f, t, t, t, t, t, t, t, t, t, t, t, t, t],
-      ["is_empty",      t, t, t, t, f, f, t, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f],
-      ["all_equal_T",   f, f, t, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t],
-      ["all_equal_F",   f, f, f, t, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
-      ["all_equal_U",   t, f, f, f, f, f, t, t, f, f, t, f, f, f, f, f, f, f, t, f, f, f, f],
-      ["any_equal_T",   f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t],
-      ["any_equal_F",   f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f],
-      ["any_equal_U",   t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
-      ["all_defined",   f, t, t, t, t, t, t, t, t, t, f, t, t, t, t, t, t, f, f, t, t, t, t],
-      ["any_defined",   f, t, t, t, t, t, f, f, t, t, f, t, t, t, t, t, t, t, f, t, t, t, t],
-      ["any_undefined", t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
-      ["all_scalars",   t, t, t, t, f, f, t, t, t, t, t, t, t, f, f, f, f, t, t, f, t, t, t],
-      ["all_iterables", f, f, f, f, t, t, t, t, f, f, f, f, f, t, t, t, t, f, f, t, f, f, f],
-      ["all_lists",     f, f, f, f, f, f, f, t, f, f, f, f, f, t, t, f, t, f, f, t, f, f, f],
-      ["all_strings",   f, f, f, f, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
-      ["all_numbers",   f, t, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
-      ["all_len_1",     f, f, f, f, t, t, f, f, f, f, f, f, f, t, f, f, f, f, f, t, f, f, f],
-      ["all_len_2",     f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f],
-      ["all_len_3",     f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f]
+    [ // function            01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+      ["is_iterable",         f, f, f, f, t, t, t, t, f, f, t, t, t, t, t, t, t, t, t, t, t, t, t],
+      ["is_empty",            t, t, t, t, f, f, t, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f],
+      ["all_equal_T",         f, f, t, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t],
+      ["all_equal_F",         f, f, f, t, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+      ["all_equal_U",         t, f, f, f, f, f, t, t, f, f, t, f, f, f, f, f, f, f, t, f, f, f, f],
+      ["all_equal_oneof_S1",  u, u, u, u, u, u, u, t, u, u, t, t, t, f, f, f, f, t, t, f, t, t, t],
+      ["any_equal_T",         f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t],
+      ["any_equal_F",         f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f],
+      ["any_equal_U",         t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
+      ["all_defined",         f, t, t, t, t, t, t, t, t, t, f, t, t, t, t, t, t, f, f, t, t, t, t],
+      ["any_defined",         f, t, t, t, t, t, f, f, t, t, f, t, t, t, t, t, t, t, f, t, t, t, t],
+      ["any_undefined",       t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
+      ["all_scalars",         t, t, t, t, f, f, t, t, t, t, t, t, t, f, f, f, f, t, t, f, t, t, t],
+      ["all_iterables",       f, f, f, f, t, t, t, t, f, f, f, f, f, t, t, t, t, f, f, t, f, f, f],
+      ["all_lists",           f, f, f, f, f, f, f, t, f, f, f, f, f, t, t, f, t, f, f, t, f, f, f],
+      ["all_strings",         f, f, f, f, t, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
+      ["all_numbers",         f, t, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f],
+      ["all_len_1",           f, f, f, f, t, t, f, f, f, f, f, f, f, t, f, f, f, f, f, t, f, f, f],
+      ["all_len_2",           f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f, f, f],
+      ["all_len_3",           f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f]
     ];
 
     db = table_validate_init( tbl_test_values, tbl_test_answers );
@@ -369,6 +396,7 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "all_equal_T", 1, all_equal( v1(db,id), t ) );
     for (id=test_ids) table_validate( db, id, "all_equal_F", 1, all_equal( v1(db,id), f ) );
     for (id=test_ids) table_validate( db, id, "all_equal_U", 1, all_equal( v1(db,id), u ) );
+    for (id=test_ids) table_validate( db, id, "all_equal_oneof_S1", 1, all_equal_oneof( v1(db,id), [undef, 1, 2, 3, true, false] ) );
     for (id=test_ids) table_validate( db, id, "any_equal_T", 1, any_equal( v1(db,id), t ) );
     for (id=test_ids) table_validate( db, id, "any_equal_F", 1, any_equal( v1(db,id), f ) );
     for (id=test_ids) table_validate( db, id, "any_equal_U", 1, any_equal( v1(db,id), u ) );
