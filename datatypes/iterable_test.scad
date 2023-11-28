@@ -132,7 +132,7 @@ function all_equal
     a list, \p cv must also be a list. When \p v is a string, \p cv
     must also be a string.
 *******************************************************************************/
-function all_equal_oneof
+function all_oneof
 (
   v,
   cv
@@ -369,7 +369,7 @@ BEGIN_SCOPE validate;
       ["all_equal_T",         f, f, t, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t],
       ["all_equal_F",         f, f, f, t, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["all_equal_U",         t, f, f, f, f, f, t, t, f, f, t, f, f, f, f, f, f, f, t, f, f, f, f],
-      ["all_equal_oneof_S1",  u, u, u, u, u, u, u, t, u, u, t, t, t, f, f, f, f, t, t, f, t, t, t],
+      ["all_oneof_S1",        u, u, u, u, u, u, u, t, u, u, t, t, t, f, f, f, f, t, t, f, t, t, t],
       ["any_equal_T",         f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t],
       ["any_equal_F",         f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f],
       ["any_equal_U",         t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
@@ -396,7 +396,7 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "all_equal_T", 1, all_equal( v1(db,id), t ) );
     for (id=test_ids) table_validate( db, id, "all_equal_F", 1, all_equal( v1(db,id), f ) );
     for (id=test_ids) table_validate( db, id, "all_equal_U", 1, all_equal( v1(db,id), u ) );
-    for (id=test_ids) table_validate( db, id, "all_equal_oneof_S1", 1, all_equal_oneof( v1(db,id), [undef, 1, 2, 3, true, false] ) );
+    for (id=test_ids) table_validate( db, id, "all_oneof_S1", 1, all_oneof( v1(db,id), [undef, 1, 2, 3, true, false] ) );
     for (id=test_ids) table_validate( db, id, "any_equal_T", 1, any_equal( v1(db,id), t ) );
     for (id=test_ids) table_validate( db, id, "any_equal_F", 1, any_equal( v1(db,id), f ) );
     for (id=test_ids) table_validate( db, id, "any_equal_U", 1, any_equal( v1(db,id), u ) );
