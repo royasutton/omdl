@@ -174,8 +174,8 @@ module cuboid
           (
             points =
             [
-              [-aeps,-aeps,+zo], [(vr+aeps)*x,-aeps,+zo], [-aeps,(vr+aeps)*y,+zo],
-              [-aeps,-aeps,-zo], [(vr+aeps)*x,-aeps,-zo], [-aeps,(vr+aeps)*y,-zo],
+              [-eps,-eps,+zo], [(vr+eps)*x,-eps,+zo], [-eps,(vr+eps)*y,+zo],
+              [-eps,-eps,-zo], [(vr+eps)*x,-eps,-zo], [-eps,(vr+eps)*y,-zo],
             ],
             faces = [[0,2,1], [0,1,4,3], [1,2,5,4], [2,0,3,5], [3,4,5]]
           );

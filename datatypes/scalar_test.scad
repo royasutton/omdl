@@ -279,7 +279,7 @@ BEGIN_SCOPE validate;
       fmt("t02", "An odd integer",             1),
       fmt("t03", "An small even integer",      10),
       fmt("t04", "A large integer",            100000000),
-      fmt("t05", "A small decimal (epsilon)",  aeps),
+      fmt("t05", "A small decimal (epsilon)",  eps),
       fmt("t06", "The max number",             number_max),
       fmt("t07", "The min number",             number_min),
       fmt("t08", "The max number^2",           number_max * number_max),

@@ -108,7 +108,7 @@ BEGIN_SCOPE validate;
     map_test_defined_or =
     [
       fmt("t01", "Undefined", 1, undef, 1),
-      fmt("t02", "A small value", aeps, aeps, 2),
+      fmt("t02", "A small value", eps, eps, 2),
       fmt("t03", "Infinity", number_inf, number_inf, 3),
       fmt("t04", "Max number", number_max, number_max, 4),
       fmt("t05", "Undefined list", [undef], [undef], 5),
