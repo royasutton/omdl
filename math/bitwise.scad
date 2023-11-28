@@ -122,7 +122,7 @@ function bitwise_v2i
   v
 ) = is_empty(v) ? 0
     // all must be '0' or '1'
-  : (sum(unique(v)) > 1) ? undef
+  : !all_oneof(v, [0, 1]) ? undef
   : (first(v) == 1) ? bitwise_v2i(ntail(v)) + pow(2, len(v)-1)
   : (first(v) == 0) ? bitwise_v2i(ntail(v))
   : undef;
@@ -155,13 +155,9 @@ function bitwise_s2i
   v
 ) = is_empty(v) ? 0
     // all must be '0' or '1'
-//  : let
-//    (
-//      d = search("01", v, 0)
-//    )
-//    ( ( len(d[0]) + len(d[1]) ) != len(v)) ? undef
-  : (first(v) == "1") ? bitwise_s2i(ntail(v)) + pow(2, len(v)-1)
-  : (first(v) == "0") ? bitwise_s2i(ntail(v))
+  : !all_oneof(v, "01") ? undef
+  : (first(v) == "1") ? bitwise_s2i(lstr(ntail(v))) + pow(2, len(v)-1)
+  : (first(v) == "0") ? bitwise_s2i(lstr(ntail(v)))
   : undef;
 
 //! Decode the integer in a value at a shifted base-2 bit mask of width-w.
