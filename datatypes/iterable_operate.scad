@@ -193,7 +193,7 @@ function count
   s = true,
   i
 ) = (s == false) ? len(find(mv, v, 0, i))
-  : len(smerge(search(mv, v, 0, i)));
+  : len(merge_s(search(mv, v, 0, i)));
 
 //! Check for the existence of a match value in an iterable value.
 /***************************************************************************//**
@@ -709,7 +709,7 @@ function insert
       p = is_defined(mv) ?
         // search for 'mv' in 'v' selecting 'mi'
         ( s == false )  ? find(mv, v, 0, si)[mi]
-                        : smerge(search(mv, v, 0, si), false)[mi]
+                        : merge_s(search(mv, v, 0, si), false)[mi]
         // using 'i'; element position 'i' must exists in 'v' or is undef
         : !is_between(i, 0, len(v)) ? undef
         : i,
@@ -776,7 +776,7 @@ function delete
       p = is_defined(mv) ?
         // search for 'mv' in 'v' selecting 'mi'
         ( s == false ) ? find(mv, v, mc, si)
-                       : smerge(search(mv, v, mc, si), false)
+                       : merge_s(search(mv, v, mc, si), false)
         // using 'i'; for single number, format as list
         : is_number(i) ? [i]
         // using 'i';  pass list as specified

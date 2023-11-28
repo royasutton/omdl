@@ -143,7 +143,7 @@ function table_get_columns
   c,
   ci
 ) = table_exists(r,c,ci=ci) ?
-    eselect(table_get_copy(r,c,cs=[ci]),f=true)
+    select_e(table_get_copy(r,c,cs=[ci]),f=true)
   : undef;
 
 //! Form a list of all table row identifiers.
@@ -163,7 +163,7 @@ function table_get_columns
 function table_get_row_ids
 (
   r
-) = eselect(r,f=true);
+) = select_e(r,f=true);
 
 //! Form a list of all table column identifiers.
 /***************************************************************************//**
@@ -179,7 +179,7 @@ function table_get_row_ids
 function table_get_column_ids
 (
   c
-) = eselect(c,f=true);
+) = select_e(c,f=true);
 
 //! Test the existence of a table row and column identifier.
 /***************************************************************************//**
@@ -775,7 +775,7 @@ module table_write
   ];
   if ( heading_id )
     // reformat so that 'fs' exists only between feilds
-    log_echo ( lstr([for ( i = headn(th_id_text) ) str(i,fs), last(th_id_text)]) );
+    log_echo ( strl([for ( i = headn(th_id_text) ) str(i,fs), last(th_id_text)]) );
 
   // heading descriptions
   th_info_text =
@@ -791,7 +791,7 @@ module table_write
   ];
   if ( heading_info )
     // reformat so that 'fs' exists only between feilds
-    log_echo ( lstr([for ( i = headn(th_info_text) ) str(i,fs), last(th_info_text)]) );
+    log_echo ( strl([for ( i = headn(th_info_text) ) str(i,fs), last(th_info_text)]) );
 
   // row data
   for ( r_iter = r )
@@ -805,20 +805,20 @@ module table_write
       tdr_text =
       [
         (number == true) ?
-          str(lstr_html(table_get_row_index(r, r_iter), p=[index_tags]),fs)
+          str(strl_html(table_get_row_index(r, r_iter), p=[index_tags]),fs)
         : empty_str,
 
-        lstr_html(first(r_iter), p=[row_id_tags]), fs,
+        strl_html(first(r_iter), p=[row_id_tags]), fs,
         for ( c_iter = tailn(c, n=1) )
           if
           ( // when column selected
             is_undef( cs ) ||
             !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
           )
-            str(lstr_html([table_get_value(r, c, r_iter, c_iter)], p=[value_tags]),fs)
+            str(strl_html([table_get_value(r, c, r_iter, c_iter)], p=[value_tags]),fs)
       ];
 
-      log_echo ( lstr(tdr_text) );
+      log_echo ( strl(tdr_text) );
     }
   }
 }

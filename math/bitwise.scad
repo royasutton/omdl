@@ -141,7 +141,7 @@ function bitwise_i2s
   w = 1
 ) = !is_integer(v) ? undef
   : !is_integer(w) ? undef
-  : lstr(bitwise_i2v(v, w));
+  : strl(bitwise_i2v(v, w));
 
 //! Decode a base-2 string of bits to an integer value.
 /***************************************************************************//**
@@ -156,8 +156,8 @@ function bitwise_s2i
 ) = is_empty(v) ? 0
     // all must be '0' or '1'
   : !all_oneof(v, "01") ? undef
-  : (first(v) == "1") ? bitwise_s2i(lstr(tailn(v))) + pow(2, len(v)-1)
-  : (first(v) == "0") ? bitwise_s2i(lstr(tailn(v)))
+  : (first(v) == "1") ? bitwise_s2i(strl(tailn(v))) + pow(2, len(v)-1)
+  : (first(v) == "0") ? bitwise_s2i(strl(tailn(v)))
   : undef;
 
 //! Decode the integer in a value at a shifted base-2 bit mask of width-w.
@@ -355,7 +355,7 @@ BEGIN_SCOPE validate;
     test_ids = table_get_row_ids( test_r );
 
     // expected columns: ("id" + one column for each test)
-    good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
+    good_c = merge_p([concat("id", test_ids), concat("identifier", test_ids)]);
 
     // expected rows: ("golden" test results), use 'skip' to skip test
     skip = -1;  // skip test
@@ -571,7 +571,7 @@ BEGIN_SCOPE validate;
       pass_value = table_get_value(good_r, good_c, fname, vid);
 
       test_pass = validate(cv=fresult, t="equals", ev=pass_value, pf=true);
-      farg_text = lstr(append_e(", ", select_r(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
+      farg_text = strl(append_e(", ", select_r(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
       test_text = validate(str(fname, "(", farg_text, ")=", pass_value), fresult, "equals", pass_value);
 
       if ( pass_value != skip )

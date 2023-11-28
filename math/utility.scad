@@ -83,7 +83,7 @@ function openscad_fn
     s1, value, s2, value-frequency, s3, fs
     \endverbatim
 
-    See lstr_html() for description of the html formatting parameters
+    See strl_html() for description of the html formatting parameters
     \p cb, \p cp, \p ca, \p cf, and \p d.
 
     Output mode selection:
@@ -152,10 +152,10 @@ function histogram
          : (sm==4) ? undef
          :           cf
     )
-    lstr
+    strl
     ([
       for (i=[0:len(hv)-1])
-        lstr_html
+        strl_html
         (
           [s1, first(hv[i]), s2, second(hv[i]), s3, if ((i<(len(hv)-1)) || fm) fs],
           b=fb, p=fp, a=fa, f=ff, d=d

@@ -169,7 +169,7 @@ function table_validate_init
       tr,                                                             // db[0] test row
       [["id","identifier"],["td","description"],["vl","value-list"]], // db[1] test data columns
       gr,                                                             // db[2] good result row
-      pmerge([concat("id",ids),concat("identifier",ids)])             // db[3] good result columns
+      merge_p([concat("id",ids),concat("identifier",ids)])            // db[3] good result columns
     ];
 
 //! Encode an entry for test table.

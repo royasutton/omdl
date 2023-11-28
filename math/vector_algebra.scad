@@ -892,7 +892,7 @@ function are_coplanar_lll
   : !is_line_or_vector(l3) ? undef
   : (len(l1) != len(l2)) ? undef
   : (len(l2) != len(l3)) ? undef
-  : (dround(striple_lll(l1, l2, l3), d) ==  0);
+  : (round_d(striple_lll(l1, l2, l3), d) ==  0);
 
 //----------------------------------------------------------------------------//
 // set 5: plane and pnorm
@@ -1006,7 +1006,7 @@ BEGIN_SCOPE validate;
     test_ids = table_get_row_ids( test_r );
 
     // expected columns: ("id" + one column for each test)
-    good_c = pmerge([concat("id", test_ids), concat("identifier", test_ids)]);
+    good_c = merge_p([concat("id", test_ids), concat("identifier", test_ids)]);
 
     // expected rows: ("golden" test results), use 'skip' to skip test
     skip = -1;  // skip test
@@ -1237,8 +1237,8 @@ BEGIN_SCOPE validate;
 
       test_pass = validate(cv=fresult, t="almost", ev=pass_value, p=comp_prcsn, pf=true);
       farg_text = (pair == true)
-                ? lstr(append_e(", ", sequence_ns(select_r(get_value(vid), [0:fname_argc-1]), n=2, s=2), r=false, j=false, l=false))
-                : lstr(append_e(", ", select_r(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
+                ? strl(append_e(", ", sequence_ns(select_r(get_value(vid), [0:fname_argc-1]), n=2, s=2), r=false, j=false, l=false))
+                : strl(append_e(", ", select_r(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
       test_text = validate(str(fname, "(", farg_text, ")=", pass_value), fresult, "almost", pass_value, comp_prcsn);
 
       if ( pass_value != skip )

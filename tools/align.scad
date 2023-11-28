@@ -122,7 +122,7 @@ module align_ll
   rm = mean(lr);
 
   // translate reference
-  translate(ciselect([origin3d, ri, rm, rt, ri+rt, rm], rp))
+  translate(select_ci([origin3d, ri, rm, rt, ri+rt, rm], rp))
 
   // orient and roll line about reference
   rotate(ar, line_to_vector(lr))
@@ -133,7 +133,7 @@ module align_ll
   rotate(ro)
 
   // translate alignment point
-  translate(-ciselect([origin3d, li, lm, lt, li+lt, lm], lp))
+  translate(-select_ci([origin3d, li, lm, lt, li+lt, lm], lp))
   children();
 }
 
@@ -176,7 +176,7 @@ module align_al
   ro = zero3d
 )
 {
-  ra = ciselect([x_axis3d_ul, y_axis3d_ul, z_axis3d_ul], a);
+  ra = select_ci([x_axis3d_ul, y_axis3d_ul, z_axis3d_ul], a);
 
   align_ll(ra, r, 0, rp, ar, to, ro)
   children();

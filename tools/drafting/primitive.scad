@@ -1164,7 +1164,7 @@ module draft_line
         [ lp[1], xp[0], xp[1], lp[0] ]
       ];
 
-      for ( ls = sequence_ns(concat([i],smerge(xp),[t]), 2, 1 ) )
+      for ( ls = sequence_ns(concat([i],merge_s(xp),[t]), 2, 1 ) )
         draft_line_pp(ls[0], ls[1], w);
     }
 
@@ -1380,7 +1380,7 @@ module draft_polygon
         );
 
   // draft each selected edge
-  for (i = seq_generate(el, i))     // allow edge selection index
+  for (i = index_gen(el, i))        // allow edge selection index
     draft_line(l=[c[first(el[i])], c[second(el[i])]], w=w, s=s);
 }
 

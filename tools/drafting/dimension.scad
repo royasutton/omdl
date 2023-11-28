@@ -232,7 +232,7 @@ module draft_dim_leader
   \param    tp <integer-list-2> The text alignment point.
             A list [tpx, tpy] of decimals.
   \param    rm <integer> The measurement rounding mode.
-            One of: 0=none, 1=[dround], and 2=[sround].
+            One of: 0=none, 1=[round_d], and 2=[round_s].
 
   \param    cmh <decimal> The horizontal width minimum unit cell size.
   \param    cmv <decimal> The vertical height minimum unit cell size.
@@ -261,8 +261,8 @@ module draft_dim_leader
 
   [style]: \ref draft_line()
   [arrow]: \ref draft_arrow()
-  [dround]: \ref dround()
-  [sround]: \ref sround()
+  [round_d]: \ref round_d()
+  [round_s]: \ref round_s()
 *******************************************************************************/
 module draft_dim_line
 (
@@ -356,8 +356,8 @@ module draft_dim_line
            // rounding: [mode:0, digits]
            rs = defined_e_or(rm, 0, 0),
 
-           rd = rs == 1 ? dround(du, defined_e_or(rm, 1, 2))
-              : rs == 2 ? sround(du, defined_e_or(rm, 1, 3))
+           rd = rs == 1 ? round_d(du, defined_e_or(rm, 1, 2))
+              : rs == 2 ? round_s(du, defined_e_or(rm, 1, 3))
               : du
          )
          // add units id when 'u' is specified
@@ -447,7 +447,7 @@ module draft_dim_line
   \param    tp <integer-list-2> The text alignment point.
             A list [tpx, tpy] of decimals.
   \param    rm <integer> The measurement rounding mode.
-            One of: 0=none, 1=[dround], and 2=[sround].
+            One of: 0=none, 1=[round_d], and 2=[round_s].
 
   \param    cmh <decimal> The horizontal width minimum unit cell size.
   \param    cmv <decimal> The vertical height minimum unit cell size.
@@ -472,8 +472,8 @@ module draft_dim_line
 
   [style]: \ref draft_line()
   [arrow]: \ref draft_arrow()
-  [dround]: \ref dround()
-  [sround]: \ref sround()
+  [round_d]: \ref round_d()
+  [round_s]: \ref round_s()
 *******************************************************************************/
 module draft_dim_radius
 (
@@ -554,8 +554,8 @@ module draft_dim_radius
            // rounding: [mode:0, digits]
            rs = defined_e_or(rm, 0, 0),
 
-           rd = rs == 1 ? dround(du, defined_e_or(rm, 1, 2))
-              : rs == 2 ? sround(du, defined_e_or(rm, 1, 3))
+           rd = rs == 1 ? round_d(du, defined_e_or(rm, 1, 2))
+              : rs == 2 ? round_s(du, defined_e_or(rm, 1, 3))
               : du,
 
            rt = d ? "D" : "R"
@@ -655,7 +655,7 @@ module draft_dim_radius
             A list [tpx, tpy, tpa, tra] of decimals, where \p tpa is
             the text pivot angle and \p tra is the text rotation angle.
   \param    rm <integer> The measurement rounding mode.
-            One of: 0=none, 1=[dround], and 2=[sround].
+            One of: 0=none, 1=[round_d], and 2=[round_s].
 
   \param    cmh <decimal> The horizontal width minimum unit cell size.
   \param    cmv <decimal> The vertical height minimum unit cell size.
@@ -680,8 +680,8 @@ module draft_dim_radius
   [facets]: \ref openscad_fn()
   [style]: \ref draft_line()
   [arrow]: \ref draft_arrow()
-  [dround]: \ref dround()
-  [sround]: \ref sround()
+  [round_d]: \ref round_d()
+  [round_s]: \ref round_s()
 *******************************************************************************/
 module draft_dim_angle
 (
@@ -768,8 +768,8 @@ module draft_dim_angle
            // rounding: [mode:0, digits]
            rs = defined_e_or(rm, 0, 0),
 
-           rd = rs == 1 ? dround(au, defined_e_or(rm, 1, 2))
-              : rs == 2 ? sround(au, defined_e_or(rm, 1, 3))
+           rd = rs == 1 ? round_d(au, defined_e_or(rm, 1, 2))
+              : rs == 2 ? round_s(au, defined_e_or(rm, 1, 3))
               : au
          )
          // add units id when 'u' is specified

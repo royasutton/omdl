@@ -107,7 +107,7 @@ function map_get_value
 function map_get_keys
 (
   m
-) = eselect(m, f=true);
+) = select_e(m, f=true);
 
 //! Get a list of all map values.
 /***************************************************************************//**
@@ -118,7 +118,7 @@ function map_get_keys
 function map_get_values
 (
   m
-) = eselect(m, l=true);
+) = select_e(m, l=true);
 
 //! Get the the first value associated with an existing key in one of two maps.
 /***************************************************************************//**
@@ -338,7 +338,7 @@ module map_dump
     keys = map_get_keys(m);
     maxl = max( [for (i = keys) len(i)] ) + 1;
 
-    for (key = sort ? qsort(keys) : keys)
+    for (key = sort ? sort_q(keys) : keys)
     {
       idx = map_get_index(m, key);
 
@@ -428,7 +428,7 @@ module map_write
     keys = map_get_keys(m);
     maxl = max( [for (i = keys) len(i)] ) + 1;
 
-    for (key = sort ? qsort(keys) : keys)
+    for (key = sort ? sort_q(keys) : keys)
     {
       idx = map_get_index(m, key);
 
@@ -442,10 +442,10 @@ module map_write
         str
         (
           (number == true) ?
-            str(lstr_html(idx, p=[index_tags]),fs)
+            str(strl_html(idx, p=[index_tags]),fs)
           : empty_str,
-          lstr_html(key, p=[key_tags]), fs,
-          lstr_html([map_get_value(m, key)], p=[value_tags]), fs
+          strl_html(key, p=[key_tags]), fs,
+          strl_html([map_get_value(m, key)], p=[value_tags]), fs
         )
       );
     }

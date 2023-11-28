@@ -552,8 +552,8 @@ function polytope_faces_are_regular
   (
     ce = is_defined(e) ? e : polytope_faces2edges(f),
 
-    ul = unique(sround(polytope_edge_lengths(c, ce), d)),
-    ua = unique(sround(polytope_edge_angles(c, f), d))
+    ul = unique(round_s(polytope_edge_lengths(c, ce), d)),
+    ua = unique(round_s(polytope_edge_angles(c, f), d))
   )
   ((len(ul) == 1) && (len(ua) == 1));
 
@@ -1399,7 +1399,7 @@ function polygon2d_vertices_round3_p
     ],
 
     // polygon points
-    pp = smerge( ppl )
+    pp = merge_s( ppl )
   )
   (cw == true) ? pp : reverse(pp);
 

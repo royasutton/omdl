@@ -72,7 +72,7 @@
     v1=["a", "b", "c", "d"];
     v2=[1, 2, 3];
 
-    echo( lstr(concat(v1, v2)) );
+    echo( strl(concat(v1, v2)) );
     \endcode
 
     \b Result
@@ -80,14 +80,14 @@
     ECHO: "abcd123"
     \endcode
 *******************************************************************************/
-function lstr
+function strl
 (
   v
 ) = is_undef(v) ? undef
   : !is_iterable(v) ? str(v)
   : is_empty(v) ? empty_str
   : (len(v) == 1) ? str(first(v))
-  : str(first(v), lstr(tailn(v)));
+  : str(first(v), strl(tailn(v)));
 
 //! Convert a list of values to a concatenated HTML-formatted string.
 /***************************************************************************//**
@@ -125,8 +125,8 @@ function lstr
 
     \b Example
     \code{.C}
-    echo( lstr_html(v="bold text", p="b", d=true) );
-    echo( lstr_html(v=[1,"x",3], f=[["red",6,"helvetica"],undef,["blue",10,"courier"]], d=true) );
+    echo( strl_html(v="bold text", p="b", d=true) );
+    echo( strl_html(v=[1,"x",3], f=[["red",6,"helvetica"],undef,["blue",10,"courier"]], d=true) );
 
     v = ["result", "=", "mc", "2"];
     b = ["hr", undef];
@@ -134,7 +134,7 @@ function lstr
     a = concat(consts(3, u=true), "hr");
     f = [undef, ["red"], undef, ["blue",4]];
 
-    echo( lstr_html(v=v, b=b, p=p, a=a, f=f, d=true) );
+    echo( strl_html(v=v, b=b, p=p, a=a, f=f, d=true) );
     \endcode
 
     \b Result
@@ -147,7 +147,7 @@ function lstr
     [tag(s)]: http://doc.qt.io/qt-5/richtext-html-subset.html
     [HTML subset]: http://doc.qt.io/qt-5/richtext-html-subset.html
 *******************************************************************************/
-function lstr_html
+function strl_html
 (
   v,          // value
   b,          // before
@@ -199,7 +199,7 @@ function lstr_html
       na = is_list(a) ? exists_e(1,a) ? tailn(a) : lastn(a) : a,
       nf = is_list(f) ? exists_e(1,f) ? tailn(f) : lastn(f) : f
     )
-    lstr(concat(cs, lstr_html(nv, nb, np, na, nf, d)));
+    strl(concat(cs, strl_html(nv, nb, np, na, nf, d)));
 
 //! Create a list of constant or incrementing elements.
 /***************************************************************************//**
@@ -242,7 +242,7 @@ function consts
 
     See \ref dt_index for argument specification and conventions.
 *******************************************************************************/
-function seq_generate
+function index_gen
 (
   l,
   s = true,
@@ -282,18 +282,18 @@ function seq_generate
 
     When the list has greater than \p w elements, the list is returned
     unchanged. When \p l is a string, characters are counted as
-    individual elements. The function lstr() can be used to join padded
+    individual elements. The function strl() can be used to join padded
     values back into a single string. When the value is a multi-dimensional
     list, the list element count is considered the value widdth.
 
     \b Example
     \code{.C}
-    echo (lstr(epad([1,2,3,4], 8)));
-    echo (lstr(epad(192, 8)));
-    echo (lstr(epad("010111", 8)));
+    echo (strl(pad_e([1,2,3,4], 8)));
+    echo (strl(pad_e(192, 8)));
+    echo (strl(pad_e("010111", 8)));
     \endcode
 *******************************************************************************/
-function epad
+function pad_e
 (
   v,
   w,
@@ -329,14 +329,14 @@ function epad
                 digit is 5 or greater.
             (2) Returns \b undef when \p v is a non-numeric value.
 *******************************************************************************/
-function dround
+function round_d
 (
   v,
   d = 6
 ) = is_number(v) ?
     let(n = pow(10, d))
       round(v * n) / n
-  : is_list(v) ? [for (i=v) dround(i, d)]
+  : is_list(v) ? [for (i=v) round_d(i, d)]
   : undef;
 
 //! Round a list of numbers to a fixed number of significant figures.
@@ -354,7 +354,7 @@ function dround
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Significant_figures
 *******************************************************************************/
-function sround
+function round_s
 (
   v,
   d = 6
@@ -362,7 +362,7 @@ function sround
   : is_number(v) ?
     let(n = floor(log(abs(v))) + 1 - d)
       round(v * pow(10, -n)) * pow(10, n)
-  : is_list(v) ? [for (i=v) sround(i, d)]
+  : is_list(v) ? [for (i=v) round_s(i, d)]
   : undef;
 
 //! Limit a list of numbers between an upper and lower bounds.
@@ -459,12 +459,12 @@ function mean
     \code{.C}
     ov = [ "value1", "value2", "default" ];
 
-    ciselect( ov )      // "default"
-    ciselect( ov, 4 )   // "default"
-    ciselect( ov, 0 )   // "value1"
+    select_ci( ov )      // "default"
+    select_ci( ov, 4 )   // "default"
+    select_ci( ov, 0 )   // "value1"
     \endcode
 *******************************************************************************/
-function ciselect
+function select_ci
 (
   v,
   i,
@@ -489,13 +489,13 @@ function ciselect
     \code{.C}
     ov = [ [0,"value0"], ["a","value1"], ["b","value2"], ["c","default"] ];
 
-    cmselect( ov )      // "default"
-    cmselect( ov, "x" ) // "default"
-    cmselect( ov, 0 )   // "value0"
-    cmselect( ov, "b" ) // "value2"
+    select_cm( ov )      // "default"
+    select_cm( ov, "x" ) // "default"
+    select_cm( ov, 0 )   // "value0"
+    select_cm( ov, "b" ) // "value2"
     \endcode
 *******************************************************************************/
-function cmselect
+function select_cm
 (
   v,
   mv,
@@ -524,7 +524,7 @@ function cmselect
     When more than one selection criteria is specified, the order of
     precedence is: \p i, \p f, \p l.
 *******************************************************************************/
-function eselect
+function select_e
 (
   v,
   i,
@@ -532,9 +532,9 @@ function eselect
   l
 ) = !is_iterable(v) ? undef
   : is_empty(v) ? empty_lst
-  : is_defined(i) ? concat( [first(v)[i]], eselect(tailn(v), i, f, l) )
-  : (f == true) ? concat( [first(first(v))], eselect(tailn(v), i, f, l) )
-  : (l == true) ? concat( [last(first(v))], eselect(tailn(v), i, f, l) )
+  : is_defined(i) ? concat( [first(v)[i]], select_e(tailn(v), i, f, l) )
+  : (f == true) ? concat( [first(first(v))], select_e(tailn(v), i, f, l) )
+  : (l == true) ? concat( [last(first(v))], select_e(tailn(v), i, f, l) )
   : undef;
 
 //! Select n elements from each iterable value of a list.
@@ -558,7 +558,7 @@ function eselect
     available. When more than one selection criteria is specified, the
     order of precedence is: \p i, \p f, \p l.
 *******************************************************************************/
-function enselect
+function select_en
 (
   v,
   i,
@@ -571,10 +571,10 @@ function enselect
       concat
       (
         [firstn(select_r(v[0], [i:len(v[0])-1]), n)],
-        enselect(tailn(v), i, f, l, n)
+        select_en(tailn(v), i, f, l, n)
       )
-  : (f == true) ? concat( [firstn(first(v), n)], enselect(tailn(v), i, f, l, n) )
-  : (l == true) ? concat( [lastn(first(v), n)], enselect(tailn(v), i, f, l, n) )
+  : (f == true) ? concat( [firstn(first(v), n)], select_en(tailn(v), i, f, l, n) )
+  : (l == true) ? concat( [lastn(first(v), n)], select_en(tailn(v), i, f, l, n) )
   : undef;
 
 //! Serially merge the elements of a list.
@@ -592,7 +592,7 @@ function enselect
     \code{.C}
     l = [[1,2,3],[[[[0]]]], [4,5,6],[[[7,8,[9]]]]];
 
-    echo( smerge( l, true ) );
+    echo( merge_s( l, true ) );
     \endcode
 
     \b Result
@@ -600,15 +600,15 @@ function enselect
     ECHO: [1, 2, 3, 4, 5, 6, 7, 8, 9]
     \endcode
 *******************************************************************************/
-function smerge
+function merge_s
 (
   v,
   r = false
 ) = !is_iterable(v) ? undef
   : is_empty(v) ? empty_lst
   : ( (r == true) && is_list(first(v)) ) ?
-      concat(smerge(first(v), r), smerge(tailn(v), r))
-  : concat(first(v), smerge(tailn(v), r));
+      concat(merge_s(first(v), r), merge_s(tailn(v), r))
+  : concat(first(v), merge_s(tailn(v), r));
 
 //! Parallel-merge the iterable elements of a list.
 /***************************************************************************//**
@@ -631,8 +631,8 @@ function smerge
     v1=["a", "b", "c", "d"];
     v2=[1, 2, 3];
 
-    echo( pmerge( [v1, v2], true ) );
-    echo( pmerge( [v1, v2], false ) );
+    echo( merge_p( [v1, v2], true ) );
+    echo( merge_p( [v1, v2], false ) );
     \endcode
 
     \b Result
@@ -641,7 +641,7 @@ function smerge
     ECHO: ["a", 1, "b", 2, "c", 3]
     \endcode
 *******************************************************************************/
-function pmerge
+function merge_p
 (
   v,
   j = true
@@ -656,8 +656,8 @@ function pmerge
       h = [for (i = v) first(i)],
       t = [for (i = v) tailn(i)]
     )
-    (j == true) ? concat([h], pmerge(t, j))
-  : concat(h, pmerge(t, j));
+    (j == true) ? concat([h], merge_p(t, j))
+  : concat(h, merge_p(t, j));
 
 //! Sort the elements of an iterable value using quick sort.
 /***************************************************************************//**
@@ -681,7 +681,7 @@ function pmerge
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Quicksort
 *******************************************************************************/
-function qsort
+function sort_q
 (
   v,
   i,
@@ -704,8 +704,8 @@ function qsort
                if ( !( (k < me) || (k == me) || (k > me) ) ) j
            ],
 
-      sp = (r == true) ? concat(qsort(gt, i, r), eq, qsort(lt, i, r), uo)
-                       : concat(qsort(lt, i, r), eq, qsort(gt, i, r), uo)
+      sp = (r == true) ? concat(sort_q(gt, i, r), eq, sort_q(lt, i, r), uo)
+                       : concat(sort_q(lt, i, r), eq, sort_q(gt, i, r), uo)
     )
     sp;
 
@@ -732,7 +732,7 @@ function qsort
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Quicksort
 *******************************************************************************/
-function qsort2
+function sort_q2
 (
   v,
   i,
@@ -751,27 +751,27 @@ function qsort2
         for (j = v)
         let(k = is_undef(i) ? j : j[i])
           if (compare(me, k, s) == -1)
-            ((d > 0) && is_list(k)) ? qsort2(k, i, d-1, r, s) : j
+            ((d > 0) && is_list(k)) ? sort_q2(k, i, d-1, r, s) : j
       ],
       eq =
       [
         for (j = v)
         let(k = is_undef(i) ? j : j[i])
           if (compare(me, k, s) ==  0)
-            ((d > 0) && is_list(k)) ? qsort2(k, i, d-1, r, s) : j
+            ((d > 0) && is_list(k)) ? sort_q2(k, i, d-1, r, s) : j
       ],
       gt =
       [
         for (j = v)
         let(k = is_undef(i) ? j : j[i])
           if (compare(me, k, s) == +1)
-            ((d > 0) && is_list(k)) ? qsort2(k, i, d-1, r, s) : j
+            ((d > 0) && is_list(k)) ? sort_q2(k, i, d-1, r, s) : j
       ],
       sp = (r == true) ?
-           concat(qsort2(gt, i, d, r, s), eq, qsort2(lt, i, d, r, s))
-         : concat(qsort2(lt, i, d, r, s), eq, qsort2(gt, i, d, r, s))
+           concat(sort_q2(gt, i, d, r, s), eq, sort_q2(lt, i, d, r, s))
+         : concat(sort_q2(lt, i, d, r, s), eq, sort_q2(gt, i, d, r, s))
     )
-    (d > 0) ? qsort2(sp, i, d-1, r, s) : sp;
+    (d > 0) ? sort_q2(sp, i, d-1, r, s) : sp;
 
 //! @}
 //! @}
@@ -807,7 +807,7 @@ BEGIN_SCOPE validate;
 
     tbl_test_answers =
     [ // function
-      ["lstr",
+      ["strl",
         undef,                                              // t01
         empty_str,                                          // t02
         "[0 : 0.5 : 9]",                                    // t03
@@ -820,7 +820,7 @@ BEGIN_SCOPE validate;
         "[1, 2, 3][4, 5, 6][7, 8, 9][\"a\", \"b\", \"c\"]", // t10
         "0123456789101112131415"                            // t11
       ],
-      ["lstr_html_B",
+      ["strl_html_B",
         empty_str,                                          // t01
         empty_str,                                          // t02
         empty_str,                                          // t03
@@ -846,7 +846,7 @@ BEGIN_SCOPE validate;
         empty_lst,                                          // t10
         empty_lst                                           // t11
       ],
-      ["seq_generate",
+      ["index_gen",
         empty_lst,                                          // t01
         empty_lst,                                          // t02
         empty_lst,                                          // t03
@@ -859,7 +859,7 @@ BEGIN_SCOPE validate;
         [0,1,2,3],                                          // t10
         [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
       ],
-      ["epad_9",
+      ["pad_e_9",
         undef,                                              // t01
         ["0","0","0","0","0","0","0","0","0"],              // t02
         ["[0 : 0.5 : 9]"],                                  // t03
@@ -898,7 +898,7 @@ BEGIN_SCOPE validate;
         [undef,undef,undef],                                // t10
         7.5                                                 // t11
       ],
-      ["eselect_F",
+      ["select_e_F",
         undef,                                              // t01
         empty_lst,                                          // t02
         undef,                                              // t03
@@ -911,7 +911,7 @@ BEGIN_SCOPE validate;
         [1,4,7,"a"],                                        // t10
         skip                                                // t11
       ],
-      ["eselect_L",
+      ["select_e_L",
         undef,                                              // t01
         empty_lst,                                          // t02
         undef,                                              // t03
@@ -924,7 +924,7 @@ BEGIN_SCOPE validate;
         [3,6,9,"c"],                                        // t10
         skip                                                // t11
       ],
-      ["eselect_1",
+      ["select_e_1",
         undef,                                              // t01
         empty_lst,                                          // t02
         undef,                                              // t03
@@ -937,7 +937,7 @@ BEGIN_SCOPE validate;
         [2,5,8,"b"],                                        // t10
         skip                                                // t11
       ],
-      ["enselect_F2",
+      ["select_en_F2",
         undef,                                              // t01
         empty_lst,                                          // t02
         undef,                                              // t03
@@ -950,7 +950,7 @@ BEGIN_SCOPE validate;
         [[1,2],[4,5],[7,8],["a","b"]],                      // t10
         skip                                                // t11
       ],
-      ["enselect_L3",
+      ["select_en_L3",
         undef,                                              // t01
         empty_lst,                                          // t02
         undef,                                              // t03
@@ -966,7 +966,7 @@ BEGIN_SCOPE validate;
         [[1,2,3],[4,5,6],[7,8,9],["a","b","c"]],            // t10
         skip                                                // t11
       ],
-      ["enselect_12",
+      ["select_en_12",
         undef,                                              // t01
         empty_lst,                                          // t02
         undef,                                              // t03
@@ -979,7 +979,7 @@ BEGIN_SCOPE validate;
         [[2,3],[5,6],[8,9],["b","c"]],                      // t10
         skip                                                // t11
       ],
-      ["smerge",
+      ["merge_s",
         undef,                                              // t01
         empty_lst,                                          // t02
         undef,                                              // t03
@@ -992,7 +992,7 @@ BEGIN_SCOPE validate;
         [1,2,3,4,5,6,7,8,9,"a","b","c"],                    // t10
         [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
       ],
-      ["pmerge",
+      ["merge_p",
         undef,                                              // t01
         empty_lst,                                          // t02
         undef,                                              // t03
@@ -1009,7 +1009,7 @@ BEGIN_SCOPE validate;
         [[1,4,7,"a"],[2,5,8,"b"],[3,6,9,"c"]],              // t10
         undef                                               // t11
       ],
-      ["qsort",
+      ["sort_q",
         undef,                                              // t01
         empty_lst,                                          // t02
         undef,                                              // t03
@@ -1022,7 +1022,7 @@ BEGIN_SCOPE validate;
         skip,                                               // t10
         [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
       ],
-      ["qsort_1R",
+      ["sort_q_1R",
         undef,                                              // t01
         empty_lst,                                          // t02
         undef,                                              // t03
@@ -1035,7 +1035,7 @@ BEGIN_SCOPE validate;
         [[7,8,9],[4,5,6],[1,2,3],["a","b","c"]],            // t10
         skip                                                // t11
       ],
-      ["qsort2_1R",
+      ["sort_q2_1R",
         undef,                                              // t01
         empty_lst,                                          // t02
         undef,                                              // t03
@@ -1048,7 +1048,7 @@ BEGIN_SCOPE validate;
         [["a","b","c"],[7,8,9],[4,5,6],[1,2,3]],            // t10
         skip                                                // t11
       ],
-      ["qsort2_HR",
+      ["sort_q2_HR",
         undef,                                              // t01
         empty_lst,                                          // t02
         undef,                                              // t03
@@ -1069,27 +1069,27 @@ BEGIN_SCOPE validate;
     table_validate_start( db );
     test_ids = table_validate_get_ids( db );
 
-    for (id=test_ids) table_validate( db, id, "lstr", 1, lstr( v1(db,id)) );
-    for (id=test_ids) table_validate( db, id, "lstr_html_B", 1, lstr_html( v1(db,id),p="b") );
+    for (id=test_ids) table_validate( db, id, "strl", 1, strl( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "strl_html_B", 1, strl_html( v1(db,id),p="b") );
     for (id=test_ids) table_validate( db, id, "consts", 1, consts( v1(db,id)) );
-    for (id=test_ids) table_validate( db, id, "seq_generate", 1, seq_generate( v1(db,id)) );
-    for (id=test_ids) table_validate( db, id, "epad_9", 1, epad( v1(db,id), w=9) );
-    validate_skip( "dround()" );
-    validate_skip( "sround()" );
+    for (id=test_ids) table_validate( db, id, "index_gen", 1, index_gen( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "pad_e_9", 1, pad_e( v1(db,id), w=9) );
+    validate_skip( "round_d()" );
+    validate_skip( "round_s()" );
     validate_skip( "limit()" );
     validate_skip( "sum()" );
     validate_skip( "mean()" );
-    validate_skip( "ciselect()" );
-    validate_skip( "cmselect()" );
-    for (id=test_ids) table_validate( db, id, "eselect_F", 1, eselect( v1(db,id),f=true) );
-    for (id=test_ids) table_validate( db, id, "eselect_L", 1, eselect( v1(db,id),l=true) );
-    for (id=test_ids) table_validate( db, id, "eselect_1", 1, eselect( v1(db,id),i=1) );
-    for (id=test_ids) table_validate( db, id, "enselect_F2", 1, enselect( v1(db,id),f=true,n=2) );
-    validate_skip( "enselect()" );
-    for (id=test_ids) table_validate( db, id, "smerge", 1, smerge( v1(db,id)) );
-    for (id=test_ids) table_validate( db, id, "pmerge", 1, pmerge( v1(db,id)) );
-    validate_skip( "qsort()" );
-    validate_skip( "qsor2()" );
+    validate_skip( "select_ci()" );
+    validate_skip( "select_cm()" );
+    for (id=test_ids) table_validate( db, id, "select_e_F", 1, select_e( v1(db,id),f=true) );
+    for (id=test_ids) table_validate( db, id, "select_e_L", 1, select_e( v1(db,id),l=true) );
+    for (id=test_ids) table_validate( db, id, "select_e_1", 1, select_e( v1(db,id),i=1) );
+    for (id=test_ids) table_validate( db, id, "select_en_F2", 1, select_en( v1(db,id),f=true,n=2) );
+    validate_skip( "select_en()" );
+    for (id=test_ids) table_validate( db, id, "merge_s", 1, merge_s( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "merge_p", 1, merge_p( v1(db,id)) );
+    validate_skip( "sort_q()" );
+    validate_skip( "sort_q2()" );
 
     // end-of-tests
   END_OPENSCAD;

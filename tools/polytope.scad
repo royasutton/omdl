@@ -100,7 +100,7 @@ module polytope_number
 
   // vertex
   color("green")
-  for (i = seq_generate(c, vi))
+  for (i = index_gen(c, vi))
   {
     p = c[i];
     n = polytope_vertex_normal(c, fm, i);
@@ -117,7 +117,7 @@ module polytope_number
 
   // face
   color("red")
-  for (i = seq_generate(fm, fi))
+  for (i = index_gen(fm, fi))
   {
     p = polytope_face_mean(c, l=fm[i]);
     n = polytope_face_normal(c, l=fm[i]);
@@ -134,7 +134,7 @@ module polytope_number
 
   // edge
   color("blue")
-  for (i = seq_generate(el, ei))
+  for (i = index_gen(el, ei))
   {
     p = mean([c[first(el[i])], c[second(el[i])]]);
     n = polytope_edge_normal(c, fm, el, i);
@@ -230,7 +230,7 @@ module polytope_frame
   // vertex
   if (is_between(vc, 0, $children-1) && ($children > 0))
   {
-    for (i = seq_generate(c, vi))
+    for (i = index_gen(c, vi))
     {
       p = c[i];
       n = polytope_vertex_normal(c, fm, i);
@@ -244,7 +244,7 @@ module polytope_frame
   // face
   if (is_between(fc, 0, $children-1) && ($children > 0))
   {
-    for (i = seq_generate(fm, fi))
+    for (i = index_gen(fm, fi))
     {
       p = polytope_face_mean(c, l=fm[i]);
       n = polytope_face_normal(c, l=fm[i]);
@@ -258,7 +258,7 @@ module polytope_frame
   // edge
   if (is_between(ec, 0, $children-1) && ($children > 0))
   {
-    for (i = seq_generate(el, ei))
+    for (i = index_gen(el, ei))
     {
       p1 = point_to_3d(c[first(el[i])]);        // 3d points required for
       p2 = point_to_3d(c[second(el[i])]);       // polygons.
