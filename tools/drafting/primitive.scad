@@ -276,8 +276,8 @@ function draft_sheet_get_zone
     (
       // linearly scale window by px, py
       // [-1]=left/bottom, [0]=center/middle, [+1]=right/top]
-      px = edefined_or(zp, 0, zp),
-      py = edefined_or(zp, 1, px),
+      px = defined_e_or(zp, 0, zp),
+      py = defined_e_or(zp, 1, px),
 
       cx = ( px * (wl[0][1]-wl[0][0]) + (wl[0][0]+wl[0][1]) )/2,
       cy = ( py * (wl[1][1]-wl[1][0]) + (wl[1][0]+wl[1][1]) )/2
@@ -324,8 +324,8 @@ function draft_table_get_point
     xu  = (ix <= 0) ? 0                     // left
         : sum([for( i=[1:ix] ) cols[i-1]]), // sum column units widths
 
-    yt  = edefined_or(title, 1, 0),         // title: '0' unit default height
-    yh  = edefined_or(heads, 1, 0),         // heads: '0' unit default height
+    yt  = defined_e_or(title, 1, 0),        // title: '0' unit default height
+    yh  = defined_e_or(heads, 1, 0),        // heads: '0' unit default height
 
     // horizontal line index
     yu  = (iy <= 0) ? 0                     // top
@@ -335,7 +335,7 @@ function draft_table_get_point
           (
             [
               yt, yh,                       // rows: '1' unit default height
-              for( i=[3:iy] ) edefined_or(rows[i-3], 1, 1)
+              for( i=[3:iy] ) defined_e_or(rows[i-3], 1, 1)
             ]
           )
   )
@@ -419,8 +419,8 @@ function draft_table_get_cell
     (
       // linearly scale window by px, py
       // [-1]=left/bottom, [0]=center/middle, [+1]=right/top]
-      px = edefined_or(zp, 0, zp),
-      py = edefined_or(zp, 1, px),
+      px = defined_e_or(zp, 0, zp),
+      py = defined_e_or(zp, 1, px),
 
       cx = ( px * (wl[0][1]-wl[0][0]) + (wl[0][0]+wl[0][1]) )/2,
       cy = ( py * (wl[1][1]-wl[1][0]) + (wl[1][0]+wl[1][1]) )/2
@@ -648,8 +648,8 @@ function draft_ztable_get_zone
     (
       // linearly scale window by px, py
       // [-1]=left/bottom, [0]=center/middle, [+1]=right/top]
-      px = edefined_or(zp, 0, zp),
-      py = edefined_or(zp, 1, px),
+      px = defined_e_or(zp, 0, zp),
+      py = defined_e_or(zp, 1, px),
 
       cx = ( px * (wl[0][1]-wl[0][0]) + (wl[0][0]+wl[0][1]) )/2,
       cy = ( py * (wl[1][1]-wl[1][0]) + (wl[1][0]+wl[1][1]) )/2
@@ -894,15 +894,15 @@ module draft_arrow
   s = 1
 )
 {
-  s1 = edefined_or(s, 0, s);                  // arrow selection
+  s1 = defined_e_or(s, 0, s);                 // arrow selection
 
   if ( s1 )
   {
-    s2  = edefined_or(s, 1, 0);               // fill [0:1, t:f]
-    s3  = edefined_or(s, 2, 0);               // sections [0:all,1:left,2:right]
+    s2  = defined_e_or(s, 1, 0);              // fill [0:1, t:f]
+    s3  = defined_e_or(s, 2, 0);              // sections [0:all,1:left,2:right]
 
-    s4  = edefined_or(s, 3, 1);               // length multiplier
-    s5  = edefined_or(s, 4, 1);               // angle multiplier
+    s4  = defined_e_or(s, 3, 1);              // length multiplier
+    s5  = defined_e_or(s, 4, 1);              // angle multiplier
 
 
     al  = draft_get_default("arrow-line-length-min") * s4 * $draft_scale;
@@ -984,7 +984,7 @@ module draft_arrow
     else if ( s1 == 5 )
     { // circle
       hull_if( !s2 )
-      for ( ls = nssequence( polygon2d_arc_p( r=al/3, c=pah, fn=$draft_arrow_fn ), 2, 1 ) )
+      for ( ls = sequence_ns( polygon2d_arc_p( r=al/3, c=pah, fn=$draft_arrow_fn ), 2, 1 ) )
         draft_line_pp(ls[0], ls[1], w=w);
     }
   }
@@ -1080,7 +1080,7 @@ module draft_line
   a2 = 0
 )
 {
-  s1 = edefined_or(s, 0, s);                  // line selection
+  s1 = defined_e_or(s, 0, s);                 // line selection
 
   if ( !all_equal([s1, a1, a2], 0) )
   {
@@ -1095,30 +1095,30 @@ module draft_line
     }
     else if ( s1 == 2 )
     { // single pattern centered
-      s2 = edefined_or(s, 1, 1)*lsm;          // length multiplier
-      s3 = edefined_or(s, 2, 2);              // stride
+      s2 = defined_e_or(s, 1, 1)*lsm;         // length multiplier
+      s3 = defined_e_or(s, 2, 2);             // stride
 
-      for ( ls = nssequence( polygon2d_line_p(l=l, ft=s2), 2, s3 ) )
+      for ( ls = sequence_ns( polygon2d_line_p(l=l, ft=s2), 2, s3 ) )
         draft_line_pp(ls[0], ls[1], w);
     }
     else if ( s1 == 3 )
     { // dual overlapped patterns
-      s2 = edefined_or(s, 1, 1)*lsm;          // length multiplier 1
-      s3 = edefined_or(s, 2, 2);              // stride 1
-      s4 = edefined_or(s, 3, 2)*lsm;          // length multiplier 2
-      s5 = edefined_or(s, 4, 3);              // stride 2
+      s2 = defined_e_or(s, 1, 1)*lsm;         // length multiplier 1
+      s3 = defined_e_or(s, 2, 2);             // stride 1
+      s4 = defined_e_or(s, 3, 2)*lsm;         // length multiplier 2
+      s5 = defined_e_or(s, 4, 3);             // stride 2
 
-      for ( ls = nssequence( polygon2d_line_p(l=l, fs=s2), 2, s3 ) )
+      for ( ls = sequence_ns( polygon2d_line_p(l=l, fs=s2), 2, s3 ) )
         draft_line_pp(ls[0], ls[1], w);
 
-      for ( ls = nssequence( polygon2d_line_p(l=l, fs=s4), 2, s5 ) )
+      for ( ls = sequence_ns( polygon2d_line_p(l=l, fs=s4), 2, s5 ) )
         draft_line_pp(ls[0], ls[1], w);
     }
     else if ( s1 == 4 )
     { // at both ends and 'n' centered
-      s2 = edefined_or(s, 1, 1);              // number 'n'
-      s3 = edefined_or(s, 2, 1)*lsm;          // centered-length multiplier
-      s4 = edefined_or(s, 3, 1)*lsm;          // end-length multiplier
+      s2 = defined_e_or(s, 1, 1);             // number 'n'
+      s3 = defined_e_or(s, 2, 1)*lsm;         // centered-length multiplier
+      s4 = defined_e_or(s, 3, 1)*lsm;         // end-length multiplier
 
       // at both ends
       el1 = line2d_new(s4, p1=i, v=[i, t]);
@@ -1142,10 +1142,10 @@ module draft_line
     }
     else if ( s1 == 5 )
     { // line break(s)
-      s2 = edefined_or(s, 1, 1);              // number of breaks
-      s3 = edefined_or(s, 2, 2)*lsm;          // length multiplier
-      s4 = edefined_or(s, 3, 2)*lsm;          // width multiplier
-      s5 = edefined_or(s, 4, 67.5);           // angle*
+      s2 = defined_e_or(s, 1, 1);             // number of breaks
+      s3 = defined_e_or(s, 2, 2)*lsm;         // length multiplier
+      s4 = defined_e_or(s, 3, 2)*lsm;         // width multiplier
+      s5 = defined_e_or(s, 4, 67.5);          // angle*
 
       // *s5=90 invokes bug: https://github.com/CGAL/cgal/issues/2631
 
@@ -1164,7 +1164,7 @@ module draft_line
         [ lp[1], xp[0], xp[1], lp[0] ]
       ];
 
-      for ( ls = nssequence(concat([i],smerge(xp),[t]), 2, 1 ) )
+      for ( ls = sequence_ns(concat([i],smerge(xp),[t]), 2, 1 ) )
         draft_line_pp(ls[0], ls[1], w);
     }
 
@@ -1236,7 +1236,7 @@ module draft_arc
   a2 = 0
 )
 {
-  s1 = edefined_or(s, 0, s);                  // line selection
+  s1 = defined_e_or(s, 0, s);                 // line selection
 
   if ( !all_equal([s1, a1, a2], 0) )
   {
@@ -1244,20 +1244,20 @@ module draft_arc
 
     if ( s1 == 1 )
     { // solid line
-      for ( ls = nssequence( pp, 2, 1 ) )
+      for ( ls = sequence_ns( pp, 2, 1 ) )
         draft_line_pp(ls[0], ls[1], w);
     }
     else if ( s1 == 2 )
     { // single pattern
-      s2 = edefined_or(s, 1, 2);              // point stride
+      s2 = defined_e_or(s, 1, 2);             // point stride
 
-      for ( ls = nssequence( pp, 2, s2 ) )
+      for ( ls = sequence_ns( pp, 2, s2 ) )
         draft_line_pp(ls[0], ls[1], w);
     }
 
     // arrows
-    draft_arrow(l=reverse(nfirst(pp, 2)), w=w, s=a1);
-    draft_arrow(l=nlast(pp, 2), w=w, s=a2);
+    draft_arrow(l=reverse(firstn(pp, 2)), w=w, s=a1);
+    draft_arrow(l=lastn(pp, 2), w=w, s=a2);
   }
 }
 
@@ -1294,8 +1294,8 @@ module draft_rectangle
   s = 1
 )
 {
-  dx = edefined_or(d, 0, d);
-  dy = edefined_or(d, 1, dx);
+  dx = defined_e_or(d, 0, d);
+  dy = defined_e_or(d, 1, dx);
 
   mx = dx/2;
   my = dy/2;
@@ -1309,7 +1309,7 @@ module draft_rectangle
   ];
 
   // draft each edge
-  for ( cp = nssequence(pl, n=2, s=1, w=true) )
+  for ( cp = sequence_ns(pl, n=2, s=1, w=true) )
     draft_line(l=[cp[0], cp[1]], w=w, s=s);
 }
 

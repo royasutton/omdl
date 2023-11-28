@@ -1237,8 +1237,8 @@ BEGIN_SCOPE validate;
 
       test_pass = validate(cv=fresult, t="almost", ev=pass_value, p=comp_prcsn, pf=true);
       farg_text = (pair == true)
-                ? lstr(eappend(", ", nssequence(rselect(get_value(vid), [0:fname_argc-1]), n=2, s=2), r=false, j=false, l=false))
-                : lstr(eappend(", ", rselect(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
+                ? lstr(append_e(", ", sequence_ns(select_r(get_value(vid), [0:fname_argc-1]), n=2, s=2), r=false, j=false, l=false))
+                : lstr(append_e(", ", select_r(get_value(vid), [0:fname_argc-1]), r=false, j=false, l=false));
       test_text = validate(str(fname, "(", farg_text, ")=", pass_value), fresult, "almost", pass_value, comp_prcsn);
 
       if ( pass_value != skip )

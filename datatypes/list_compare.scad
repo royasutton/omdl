@@ -71,9 +71,9 @@
   \details
 
     Can also compare two scalar numbers. To compare general lists of
-    non-numerical values see almost_equal().
+    non-numerical values see almost_eq().
 *******************************************************************************/
-function almost_equal_nv
+function almost_eq_nv
 (
   v1,
   v2,
@@ -100,20 +100,20 @@ function almost_equal_nv
     The iterable values can be of mixed data types. All numerical
     comparisons are performed using the specified precision. All
     non-numeric comparisons test for equality. When both \p v1 and \p
-    v2 are both numerical vectors, the function almost_equal_nv()
+    v2 are both numerical vectors, the function almost_eq_nv()
     provides a more efficient test.
 *******************************************************************************/
-function almost_equal
+function almost_eq
 (
   v1,
   v2,
   p = 6
-) = all_numbers(concat(v1, v2)) ? almost_equal_nv(v1, v2, p)  // all numerical
+) = all_numbers(concat(v1, v2)) ? almost_eq_nv(v1, v2, p)     // all numerical
   : all_scalars(concat([v1], [v2])) ? (v1 == v2)              // all single values
   : (is_string(v1) || is_string(v2)) ? (v1 == v2)             // either is a string
   : !all_iterables(concat([v1], [v2])) ? false                // false if either not iterable
-  : !almost_equal(first(v1), first(v2), p) ? false            // compare first elements
-  : almost_equal(ntail(v1), ntail(v2), p);                    // compare remaining elements
+  : !almost_eq(first(v1), first(v2), p) ? false               // compare first elements
+  : almost_eq(tailn(v1), tailn(v2), p);                       // compare remaining elements
 
 //! Compare the sort order of any two values.
 /***************************************************************************//**
@@ -225,7 +225,7 @@ function compare
           cf = compare(first(v1), first(v2), s)     // compare first elements
         )
         (cf != 0) ? cf                              // not equal, ordering determined
-      : compare(ntail(v1), ntail(v2), s)            // equal, check remaining
+      : compare(tailn(v1), tailn(v2), s)            // equal, check remaining
       )
     : 1 // others are greater
     )
@@ -366,9 +366,9 @@ BEGIN_SCOPE validate;
 
     tbl_test_answers =
     [ // function            01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20
-      ["almost_equal_nv_p4",  f, f, f, f, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f],
-      ["almost_equal_nv_p2",  f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f],
-      ["almost_equal_p2",     t, f, t, f, f, t, t, f, t, f, f, f, f, t, t, t, t, t, t, t],
+      ["almost_eq_nv_p4",     f, f, f, f, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f],
+      ["almost_eq_nv_p2",     f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f, f, f, f, f],
+      ["almost_eq_p2",        t, f, t, f, f, t, t, f, t, f, f, f, f, t, t, t, t, t, t, t],
       ["compare",             0,-1, 0,+1,+1, 0, 0,-1, 0,-1,-1,-1,+1, 0,+1, 0, 0, 0, 0,+1],
     ];
 
@@ -377,9 +377,9 @@ BEGIN_SCOPE validate;
     table_validate_start( db );
     test_ids = table_validate_get_ids( db );
 
-    for (id=test_ids) table_validate( db, id, "almost_equal_nv_p4", 2, almost_equal_nv( v1(db,id), v2(db,id), 4) );
-    for (id=test_ids) table_validate( db, id, "almost_equal_nv_p2", 2, almost_equal_nv( v1(db,id), v2(db,id), 2) );
-    for (id=test_ids) table_validate( db, id, "almost_equal_p2", 2, almost_equal( v1(db,id), v2(db,id), 2) );
+    for (id=test_ids) table_validate( db, id, "almost_eq_nv_p4", 2, almost_eq_nv( v1(db,id), v2(db,id), 4) );
+    for (id=test_ids) table_validate( db, id, "almost_eq_nv_p2", 2, almost_eq_nv( v1(db,id), v2(db,id), 2) );
+    for (id=test_ids) table_validate( db, id, "almost_eq_p2", 2, almost_eq( v1(db,id), v2(db,id), 2) );
     for (id=test_ids) table_validate( db, id, "compare", 2, compare( v1(db,id), v2(db,id) ) );
 
     // end-of-tests

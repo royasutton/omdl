@@ -265,10 +265,10 @@ module draft_sheet
     //
     // sheet layout
     //
-    sheet_w = edefined_or(defined_or(sheet, slc), 0, defined_or(sheet, slc));
+    sheet_w = defined_e_or(defined_or(sheet, slc), 0, defined_or(sheet, slc));
     if ( sheet_w )
     {
-      sheet_s = edefined_or(defined_or(sheet, slc), 1, 4);
+      sheet_s = defined_e_or(defined_or(sheet, slc), 1, 4);
 
       // layout
       draft_rectangle( d=[ldx, ldy], w=sheet_w, s=sheet_s );
@@ -277,10 +277,10 @@ module draft_sheet
     //
     // sheet frame
     //
-    frame_w = edefined_or(defined_or(frame, flc), 0, defined_or(frame, flc));
+    frame_w = defined_e_or(defined_or(frame, flc), 0, defined_or(frame, flc));
     if ( frame_w )
     {
-      frame_s = edefined_or(defined_or(frame, flc), 1, 1);
+      frame_s = defined_e_or(defined_or(frame, flc), 1, 1);
 
       // frame
       draft_rectangle( d=[fdx, fdy], w=frame_w, s=frame_s );
@@ -289,10 +289,10 @@ module draft_sheet
     //
     // zone reference
     //
-    zone_w = edefined_or(defined_or(zone, zlc), 0, defined_or(zone, zlc));
+    zone_w = defined_e_or(defined_or(zone, zlc), 0, defined_or(zone, zlc));
     if ( zone_w )
     {
-      zone_s = edefined_or(defined_or(zone, zlc), 1, 1);
+      zone_s = defined_e_or(defined_or(zone, zlc), 1, 1);
 
       // zone frame
       draft_rectangle( d=[fdx, fdy]-2*[szm, szm], w=zone_w, s=zone_s );
@@ -329,10 +329,10 @@ module draft_sheet
     //
     // feild grid
     //
-    grid_w = edefined_or(defined_or(grid, glc), 0, defined_or(grid, glc));
+    grid_w = defined_e_or(defined_or(grid, glc), 0, defined_or(grid, glc));
     if ( grid_w )
     {
-      grid_s = edefined_or(defined_or(grid, glc), 1, 2);
+      grid_s = defined_e_or(defined_or(grid, glc), 1, 2);
 
       // x-grid
       for ( ix = [1:len(zlx)-1], iyo = [1,-1] )
@@ -351,12 +351,12 @@ module draft_sheet
     //
     // origin tics
     //
-    origin_w = edefined_or(defined_or(origin, olc), 0, defined_or(origin, olc));
+    origin_w = defined_e_or(defined_or(origin, olc), 0, defined_or(origin, olc));
     if ( origin_w )
     {
-      origin_s = edefined_or(defined_or(origin, olc), 1, 1);    // line style
-      origin_l = edefined_or(defined_or(origin, olc), 2, 1);    // length factor
-      origin_a = edefined_or(defined_or(origin, olc), 3, 1);    // arrow style
+      origin_s = defined_e_or(defined_or(origin, olc), 1, 1);    // line style
+      origin_l = defined_e_or(defined_or(origin, olc), 2, 1);    // length factor
+      origin_a = defined_e_or(defined_or(origin, olc), 3, 1);    // arrow style
 
       // x-origin
       for ( ix = [1,-1] )
@@ -471,29 +471,29 @@ module draft_axes
 
     for (i = [ [x_axis_ci, x_axis2d_uv, "x"], [y_axis_ci, y_axis2d_uv, "y"] ])
     {
-      li = edefined_or(axy, first(i), axy);
+      li = defined_e_or(axy, first(i), axy);
 
       // negative axes
-      ni = edefined_or(li, 0, li);
+      ni = defined_e_or(li, 0, li);
       if ( ni < 0 )
         draft_line
         (
           l  = second(i) * ni,
-          s  = edefined_or(s, 0, s),
-          w  = edefined_or(w, 0, w),
-          a2 = edefined_or(a, 0, a)
+          s  = defined_e_or(s, 0, s),
+          w  = defined_e_or(w, 0, w),
+          a2 = defined_e_or(a, 0, a)
         );
 
       // positive axes
-      pi = edefined_or(li, 1, ni);
+      pi = defined_e_or(li, 1, ni);
       if ( pi > 0 )
       {
         draft_line
         (
           l  = +second(i) * pi,
-          s  = edefined_or(s, 1, s),
-          w  = edefined_or(w, 1, w),
-          a2 = edefined_or(a, 1, a)
+          s  = defined_e_or(s, 1, s),
+          w  = defined_e_or(w, 1, w),
+          a2 = defined_e_or(a, 1, a)
         );
 
         // labels
@@ -571,8 +571,8 @@ module draft_ruler
     s  = ul * group_height * $draft_scale;
 
     // order
-    ox = edefined_or(order, 0, order);
-    oy = edefined_or(order, 1, ox);
+    ox = defined_e_or(order, 0, order);
+    oy = defined_e_or(order, 1, ox);
     oo = [ox, oy];
 
     // draw marks and group ticks
@@ -840,9 +840,9 @@ module draft_ztable
     else
     {
       // number: zones, hlines, and vlines
-      num_zn = edefined_or(number, 0, number);
-      num_hl = edefined_or(number, 1, num_zn);
-      num_vl = edefined_or(number, 2, num_hl);
+      num_zn = defined_e_or(number, 0, number);
+      num_hl = defined_e_or(number, 1, num_zn);
+      num_vl = defined_e_or(number, 2, num_hl);
 
       // get title block configuration
       cmh    = map_get_value(map, "cmh") * $draft_scale;
@@ -1020,10 +1020,10 @@ module draft_note
       ["cmv",     cmv],
 
       is_undef(htd) ? empty_lst :
-      ["heads",   [[htd], edefined_or(size, 2, 1)]],
+      ["heads",   [[htd], defined_e_or(size, 2, 1)]],
 
-      ["cols",    [edefined_or(size, 0, defined_or(size,1))]],
-      ["rows",    [[[note], edefined_or(size, 1, 1)]]],
+      ["cols",    [defined_e_or(size, 0, defined_or(size,1))]],
+      ["rows",    [[[note], defined_e_or(size, 1, 1)]]],
 
       ["hlines",  concat(consts(3,lnc[0]), consts(2,lnc[1]))],
       ["vlines",  consts(3,lnc[0])]

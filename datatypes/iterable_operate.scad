@@ -71,7 +71,7 @@
   \returns  (1) \<value> <tt>v[i]</tt> when it is defined or \p d
                 otherwise.
 *******************************************************************************/
-function edefined_or
+function defined_e_or
 (
   v,
   i,
@@ -235,7 +235,7 @@ function exists
             at the index position, but rather if an element exists at
             the index position \p i.
 *******************************************************************************/
-function eexists
+function exists_e
 (
   i,
   v
@@ -398,7 +398,7 @@ function last3
     When \p n is greater than the length of the iterable \p v, the list
     will stop at the last element of \p v.
 *******************************************************************************/
-function nfirst
+function firstn
 (
   v,
   n = 1
@@ -422,7 +422,7 @@ function nfirst
     When \p n is greater than the length of the iterable \p v, the list
     will start at the first element of \p v.
 *******************************************************************************/
-function nlast
+function lastn
 (
   v,
   n = 1
@@ -444,7 +444,7 @@ function nlast
             (3) Returns \b undef when \p v is not defined, is not
                 iterable, or is empty.
 *******************************************************************************/
-function nhead
+function headn
 (
   v,
   n = 1
@@ -466,7 +466,7 @@ function nhead
             (3) Returns \b undef when \p v is not defined, is not
                 iterable, or is empty.
 *******************************************************************************/
-function ntail
+function tailn
 (
   v,
   n = 1
@@ -539,7 +539,7 @@ function shift
                 iterable, or when \p i does not map to an element of \p v.
             (3) Returns \b empty_lst when \p v is empty.
 *******************************************************************************/
-function rselect
+function select_r
 (
   v,
   i
@@ -571,11 +571,11 @@ function rselect
     \code{.C}
     v = [1, 2, 3, 4];
 
-    nssequence( v, 3, 1, false ); // [ [1,2,3], [2,3,4] ]
-    nssequence( v, 3, 1, true );  // [ [1,2,3], [2,3,4], [3,4,1], [4,1,2] ]
+    sequence_ns( v, 3, 1, false ); // [ [1,2,3], [2,3,4] ]
+    sequence_ns( v, 3, 1, true );  // [ [1,2,3], [2,3,4], [3,4,1], [4,1,2] ]
     \endcode
 *******************************************************************************/
-function nssequence
+function sequence_ns
 (
   v,
   n = 1,
@@ -616,9 +616,9 @@ function nssequence
     v1=[["a"], ["b"], ["c"], ["d"]];
     v2=[1, 2, 3];
 
-    echo( eappend( v2, v1 ) );
-    echo( eappend( v2, v1, r=false ) );
-    echo( eappend( v2, v1, j=false, l=false ) );
+    echo( append_e( v2, v1 ) );
+    echo( append_e( v2, v1, r=false ) );
+    echo( append_e( v2, v1, j=false, l=false ) );
     \endcode
 
     \b Result
@@ -629,7 +629,7 @@ function nssequence
     \endcode
 
 *******************************************************************************/
-function eappend
+function append_e
 (
   nv,
   v,
@@ -652,8 +652,8 @@ function eappend
          : (j == false && l == true ) ?  concat(ce, nv)
          :                               ce
       )
-  : (j == true) ? concat( [concat(ce, nv)], eappend(nv, ntail(v), r, j, l) )
-  :               concat(  concat(ce, nv) , eappend(nv, ntail(v), r, j, l) );
+  : (j == true) ? concat( [concat(ce, nv)], append_e(nv, tailn(v), r, j, l) )
+  :               concat(  concat(ce, nv) , append_e(nv, tailn(v), r, j, l) );
 
 //! Insert a new value into an iterable value.
 /***************************************************************************//**
@@ -804,8 +804,8 @@ function strip
   mv = empty_lst
 ) = !is_iterable(v) ? undef
   : is_empty(v) ? empty_lst
-  : (first(v) == mv) ? concat(strip(ntail(v), mv))
-  : concat(nfirst(v), strip(ntail(v), mv));
+  : (first(v) == mv) ? concat(strip(tailn(v), mv))
+  : concat(firstn(v), strip(tailn(v), mv));
 
 //! Apply a binary mask to an interable value.
 /***************************************************************************//**
@@ -837,7 +837,7 @@ function mask
   o = 0,
   u = undef,
   z = 0
-) = is_undef(m) ? nhead(v, 0)
+) = is_undef(m) ? headn(v, 0)
     // if defined, 'm' must be iterable
   : !is_iterable(m) ? undef
     // string mask may only include "01"
@@ -851,8 +851,8 @@ function mask
     )
     [
       for (i = [0 : len(m)-1])
-        (m[i] == 1 || m[i] == "1") ? edefined_or(v, i+j, u)
-                                   : eexists(i+j, v) ? z : u
+        (m[i] == 1 || m[i] == "1") ? defined_e_or(v, i+j, u)
+                                   : exists_e(i+j, v) ? z : u
     ];
 
 //! Return a list of the unique elements of an iterable value.
@@ -874,10 +874,10 @@ function unique
     // handled empty list or empty string
   : (len(v) == 0) ? empty_lst
   // last element. filter case where first element of list is [undef]
-  : (len(v) == 1) ? (v == [undef]) ? empty_lst : nhead(v, 0)
+  : (len(v) == 1) ? (v == [undef]) ? empty_lst : headn(v, 0)
     // set s=false to use find() for single element matching
-  : exists(last(v), nhead(v), s=false) ? unique(nhead(v))
-  : concat(unique(nhead(v)), nlast(v));
+  : exists(last(v), headn(v), s=false) ? unique(headn(v))
+  : concat(unique(headn(v)), lastn(v));
 
 
 //! @}
@@ -914,7 +914,7 @@ BEGIN_SCOPE validate;
 
     tbl_test_answers =
     [
-      ["edefined_or_DE3",
+      ["defined_e_or_DE3",
         "default",                                          // t01
         "default",                                          // t02
         "default",                                          // t03
@@ -946,7 +946,7 @@ BEGIN_SCOPE validate;
       ["exists_S1",
         f, f, f, f, f, f, f, t, t, t, t
       ],
-      ["eexists_5",
+      ["exists_e_5",
         f, f, f, t, f, t, f, f, f, f, t
       ],
       ["first",
@@ -1066,7 +1066,7 @@ BEGIN_SCOPE validate;
         [[4,5,6],[7,8,9],["a","b","c"]],                    // t10
         [13,14,15]                                          // t11
       ],
-      ["nfirst_1",
+      ["firstn_1",
         undef,                                              // t01
         undef,                                              // t02
         undef,                                              // t03
@@ -1079,7 +1079,7 @@ BEGIN_SCOPE validate;
         [[1,2,3]],                                          // t10
         [0]                                                 // t11
       ],
-      ["nlast_1",
+      ["lastn_1",
         undef,                                              // t01
         undef,                                              // t02
         undef,                                              // t03
@@ -1092,7 +1092,7 @@ BEGIN_SCOPE validate;
         [["a","b","c"]],                                    // t10
         [15]                                                // t11
       ],
-      ["nhead_1",
+      ["headn_1",
         undef,                                              // t01
         undef,                                              // t02
         undef,                                              // t03
@@ -1105,7 +1105,7 @@ BEGIN_SCOPE validate;
         [[1,2,3],[4,5,6],[7,8,9]],                          // t10
         [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]                // t11
       ],
-      ["ntail_1",
+      ["tailn_1",
         undef,                                              // t01
         undef,                                              // t02
         undef,                                              // t03
@@ -1157,7 +1157,7 @@ BEGIN_SCOPE validate;
         [[4,5,6],[7,8,9],["a","b","c"],[1,2,3]],            // t10
         [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0]             // t11
       ],
-      ["rselect_02",
+      ["select_r_02",
         undef,                                              // t01
         empty_lst,                                          // t02
         undef,                                              // t03
@@ -1170,7 +1170,7 @@ BEGIN_SCOPE validate;
         [[1,2,3],[4,5,6],[7,8,9]],                          // t10
         [0,1,2]                                             // t11
       ],
-      ["nssequence_31",
+      ["sequence_ns_31",
         empty_lst,                                          // t01
         empty_lst,                                          // t02
         empty_lst,                                          // t03
@@ -1199,7 +1199,7 @@ BEGIN_SCOPE validate;
           [11,12,13],[12,13,14],[13,14,15]
         ]                                                   // t11
       ],
-      ["eappend_T0",
+      ["append_e_T0",
         undef,                                              // t01
         [[0]],                                              // t02
         undef,                                              // t03
@@ -1297,11 +1297,11 @@ BEGIN_SCOPE validate;
     table_validate_start( db );
     test_ids = table_validate_get_ids( db );
 
-    for (id=test_ids) table_validate( db, id, "edefined_or_DE3", 1, edefined_or( v1(db,id), 3, "default" ) );
+    for (id=test_ids) table_validate( db, id, "defined_e_or_DE3", 1, defined_e_or( v1(db,id), 3, "default" ) );
     for (id=test_ids) table_validate( db, id, "find_12", 1, find( [1,2], v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "count_S1", 1, count( 1, v1(db,id), true ) );
     for (id=test_ids) table_validate( db, id, "exists_S1", 1, exists( 1, v1(db,id), true ) );
-    for (id=test_ids) table_validate( db, id, "eexists_5", 1, eexists( 5, v1(db,id )) );
+    for (id=test_ids) table_validate( db, id, "exists_e_5", 1, exists_e( 5, v1(db,id )) );
     for (id=test_ids) table_validate( db, id, "first", 1, first( v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "second", 1, second( v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "third", 1, third( v1(db,id) ) );
@@ -1311,16 +1311,16 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "first3", 1, first3( v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "last2", 1, last2( v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "last3", 1, last3( v1(db,id) ) );
-    for (id=test_ids) table_validate( db, id, "nfirst_1", 1, nfirst( v1(db,id), n=1 ) );
-    for (id=test_ids) table_validate( db, id, "nlast_1", 1, nlast( v1(db,id), n=1 ) );
-    for (id=test_ids) table_validate( db, id, "nhead_1", 1, nhead( v1(db,id), n=1 ) );
-    for (id=test_ids) table_validate( db, id, "ntail_1", 1, ntail( v1(db,id), n=1 ) );
+    for (id=test_ids) table_validate( db, id, "firstn_1", 1, firstn( v1(db,id), n=1 ) );
+    for (id=test_ids) table_validate( db, id, "lastn_1", 1, lastn( v1(db,id), n=1 ) );
+    for (id=test_ids) table_validate( db, id, "headn_1", 1, headn( v1(db,id), n=1 ) );
+    for (id=test_ids) table_validate( db, id, "tailn_1", 1, tailn( v1(db,id), n=1 ) );
     for (id=test_ids) table_validate( db, id, "reverse", 1, reverse( v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "shift_r1", 1, shift( v1(db,id), n=1, r=true ) );
     for (id=test_ids) table_validate( db, id, "shift_l1", 1, shift( v1(db,id), n=1, r=false ) );
-    for (id=test_ids) table_validate( db, id, "rselect_02", 1, rselect( v1(db,id), i=[0:2] ) );
-    for (id=test_ids) table_validate( db, id, "nssequence_31", 1, nssequence( v1(db,id), n=3, s=1 ) );
-    for (id=test_ids) table_validate( db, id, "eappend_T0", 1, eappend( 0, v1(db,id) ) );
+    for (id=test_ids) table_validate( db, id, "select_r_02", 1, select_r( v1(db,id), i=[0:2] ) );
+    for (id=test_ids) table_validate( db, id, "sequence_ns_31", 1, sequence_ns( v1(db,id), n=3, s=1 ) );
+    for (id=test_ids) table_validate( db, id, "append_e_T0", 1, append_e( 0, v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "insert_T0", 1, insert( 0, v1(db,id), mv=["x","r","apple","s",[2,3],5] ) );
     for (id=test_ids) table_validate( db, id, "delete_T0", 1, delete( v1(db,id), mv=["x","r","apple","s",[2,3],5] ) );
     for (id=test_ids) table_validate( db, id, "strip", 1, strip( v1(db,id) ) );

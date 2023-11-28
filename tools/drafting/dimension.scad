@@ -312,12 +312,12 @@ module draft_dim_line
           point_closest_pl(p1, va2);
 
     // minimum distance from reference points to dimension line
-    dm1 = edefined_or(d, 0, d);
-    dm2 = edefined_or(d, 1, dm1);
+    dm1 = defined_e_or(d, 0, d);
+    dm2 = defined_e_or(d, 1, dm1);
 
     // extension line lengths (back towards reference points)
-    de1 = edefined_or(e, 0, e);
-    de2 = edefined_or(e, 1, de1);
+    de1 = defined_e_or(e, 0, e);
+    de2 = defined_e_or(e, 1, de1);
 
     // extension lines angle
     // construct perpendicular to line form by reference points
@@ -354,10 +354,10 @@ module draft_dim_line
               : length(md, from=length_unit_base, to=u),
 
            // rounding: [mode:0, digits]
-           rs = edefined_or(rm, 0, 0),
+           rs = defined_e_or(rm, 0, 0),
 
-           rd = rs == 1 ? dround(du, edefined_or(rm, 1, 2))
-              : rs == 2 ? sround(du, edefined_or(rm, 1, 3))
+           rd = rs == 1 ? dround(du, defined_e_or(rm, 1, 2))
+              : rs == 2 ? sround(du, defined_e_or(rm, 1, 3))
               : du
          )
          // add units id when 'u' is specified
@@ -524,8 +524,8 @@ module draft_dim_radius
     mr2 = rr2;
 
     // minimum distance from reference points to dimension line
-    do1 = edefined_or(o, 0, o);
-    do2 = edefined_or(o, 1, d ? do1 : 0);
+    do1 = defined_e_or(o, 0, o);
+    do2 = defined_e_or(o, 1, d ? do1 : 0);
 
     // dimension lines angle
     ape = angle_ll(x_axis2d_uv, [mr1, mr2]);
@@ -552,10 +552,10 @@ module draft_dim_radius
               : length(md, from=length_unit_base, to=u),
 
            // rounding: [mode:0, digits]
-           rs = edefined_or(rm, 0, 0),
+           rs = defined_e_or(rm, 0, 0),
 
-           rd = rs == 1 ? dround(du, edefined_or(rm, 1, 2))
-              : rs == 2 ? sround(du, edefined_or(rm, 1, 3))
+           rd = rs == 1 ? dround(du, defined_e_or(rm, 1, 2))
+              : rs == 2 ? sround(du, defined_e_or(rm, 1, 3))
               : du,
 
            rt = d ? "D" : "R"
@@ -732,8 +732,8 @@ module draft_dim_angle
         :                 line_tp(line2d_new(v=v2, p1=c));
 
     // extension line to radius ratio
-    er1 = edefined_or(e, 0, e);
-    er2 = edefined_or(e, 1, er1);
+    er1 = defined_e_or(e, 0, e);
+    er2 = defined_e_or(e, 1, er1);
 
     // extension line end points
     pe1 = line_tp(line2d_new(m=r, v=[c, mr1], p1=c));
@@ -766,10 +766,10 @@ module draft_dim_angle
               : angle(ma, from=angle_unit_base, to=u),
 
            // rounding: [mode:0, digits]
-           rs = edefined_or(rm, 0, 0),
+           rs = defined_e_or(rm, 0, 0),
 
-           rd = rs == 1 ? dround(au, edefined_or(rm, 1, 2))
-              : rs == 2 ? sround(au, edefined_or(rm, 1, 3))
+           rd = rs == 1 ? dround(au, defined_e_or(rm, 1, 2))
+              : rs == 2 ? sround(au, defined_e_or(rm, 1, 3))
               : au
          )
          // add units id when 'u' is specified
@@ -915,14 +915,14 @@ module draft_dim_center
 
     // individual extensions
     rs = is_defined(r) ? (r + 2*l) : (2*l);     // radial start distance
-    dl = edefined_or(e, 0, e);                  // default length
+    dl = defined_e_or(e, 0, e);                 // default length
 
     if ( is_defined(e) )
     for ( q = [0:3] )
     {
       la = aa + 90*q;
       p1 = c + rs * [cos(la), sin(la)];         // start point
-      el = edefined_or(e, q, dl) - rs;          // individual lengths
+      el = defined_e_or(e, q, dl) - rs;         // individual lengths
 
       if (el > 0)
       draft_line(l=line2d_new(m=el, a=la, p1=p1), w=w, s=es);

@@ -77,7 +77,7 @@ validation_skip = [number_min, number_max, number_inf];
             the number of digits of precision for each numerical
             comparison. A passing result indicates that \p cv equals
             \p ev to the number of decimal digits specified by \p p. The
-            comparison is performed by the function almost_equal().
+            comparison is performed by the function almost_eq().
 
     \b Example \b 1
 
@@ -121,7 +121,7 @@ function validate
   : ( (t == false) || (t == "false") || (t == "f") ) ? validate(d, cv, "equals", false, p, pf)
   : ( (t == "ae") || (t == "almost") ) ?
     (
-      almost_equal(cv, ev, p)
+      almost_eq(cv, ev, p)
       ? (pf?true  : str("PASSED: '", d, "'"))
       : (pf?false : str
                     (

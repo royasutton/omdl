@@ -114,7 +114,7 @@ function all_equal
 ) = !is_iterable(v) ? (v == cv)
   : is_empty(v) ? true
   : (first(v) != cv) ? false
-  : all_equal(ntail(v), cv);
+  : all_equal(tailn(v), cv);
 
 //! Test if all elements of an iterable value equal one of the comparison values.
 /***************************************************************************//**
@@ -158,7 +158,7 @@ function any_equal
 ) = !is_iterable(v) ? (v == cv)
   : is_empty(v) ? false
   : (first(v) == cv) ? true
-  : any_equal(ntail(v), cv);
+  : any_equal(tailn(v), cv);
 
 //! Test if no element of an iterable value has an undefined value.
 /***************************************************************************//**
@@ -205,7 +205,7 @@ function all_scalars
 ) = !is_iterable(v) ? true
   : is_empty(v) ? true
   : !is_scalar(first(v)) ? false
-  : all_scalars(ntail(v));
+  : all_scalars(tailn(v));
 
 //! Test if all elements of an iterable value are iterable.
 /***************************************************************************//**
@@ -222,7 +222,7 @@ function all_iterables
 ) = !is_iterable(v) ? false
   : is_empty(v) ? true
   : !is_iterable(first(v)) ? false
-  : all_iterables(ntail(v));
+  : all_iterables(tailn(v));
 
 //! Test if all elements of an iterable value are lists.
 /***************************************************************************//**
@@ -247,7 +247,7 @@ function all_lists
 ) = !is_iterable(v) ? false
   : is_empty(v) ? ((c>0) || is_list(v))
   : !is_list(first(v)) ? false
-  : all_lists(ntail(v), c+1);
+  : all_lists(tailn(v), c+1);
 
 //! Test if all elements of an iterable value are strings.
 /***************************************************************************//**
@@ -272,7 +272,7 @@ function all_strings
 ) = !is_iterable(v) ? false
   : is_empty(v) ? ((c>0) || is_string(v))
   : !is_string(first(v)) ? false
-  : all_strings(ntail(v), c+1);
+  : all_strings(tailn(v), c+1);
 
 //! Test if all elements of an iterable value are numbers.
 /***************************************************************************//**
@@ -297,7 +297,7 @@ function all_numbers
 ) = !is_iterable(v) ? is_number(v)
   : is_empty(v) ? (c>0)
   : !is_number(first(v)) ? false
-  : all_numbers(ntail(v), c+1);
+  : all_numbers(tailn(v), c+1);
 
 //! Test if all elements of an iterable value are iterable with a fixed length.
 /***************************************************************************//**
@@ -316,7 +316,7 @@ function all_len
   : is_empty(v) ? (c>0)
   : !is_iterable(first(v)) ? false
   : (len(first(v)) != l) ? false
-  : all_len(ntail(v),l, c+1);
+  : all_len(tailn(v),l, c+1);
 
 //! @}
 //! @}

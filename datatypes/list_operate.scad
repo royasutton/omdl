@@ -87,7 +87,7 @@ function lstr
   : !is_iterable(v) ? str(v)
   : is_empty(v) ? empty_str
   : (len(v) == 1) ? str(first(v))
-  : str(first(v), lstr(ntail(v)));
+  : str(first(v), lstr(tailn(v)));
 
 //! Convert a list of values to a concatenated HTML-formatted string.
 /***************************************************************************//**
@@ -163,7 +163,7 @@ function lstr_html
       ba = (d == true) ? "}" : ">",
 
       // current element is first
-      cv = is_list(v) ? nfirst(v) : v,
+      cv = is_list(v) ? firstn(v) : v,
       cb = is_list(b) ?  first(b) : b,
       cp = is_list(p) ?  first(p) : p,
       ca = is_list(a) ?  first(a) : a,
@@ -173,9 +173,9 @@ function lstr_html
       rp = is_list(cp) ? reverse(cp) : cp,
 
       // font attributes
-      f0 = eexists(0,cf) ? str(" color=\"", cf[0], "\"") : empty_str,
-      f1 = eexists(1,cf) ? str(" size=\"",  cf[1], "\"") : empty_str,
-      f2 = eexists(2,cf) ? str(" face=\"",  cf[2], "\"") : empty_str,
+      f0 = exists_e(0,cf) ? str(" color=\"", cf[0], "\"") : empty_str,
+      f1 = exists_e(1,cf) ? str(" size=\"",  cf[1], "\"") : empty_str,
+      f2 = exists_e(2,cf) ? str(" face=\"",  cf[2], "\"") : empty_str,
 
       // before and after
       fb = is_undef(cf) ? empty_str : str(bb, "font", f0, f1, f2, ba),
@@ -193,11 +193,11 @@ function lstr_html
       ),
 
       // next elements
-      nv = is_list(v) ? ntail(v) : empty_str,
-      nb = is_list(b) ? eexists(1,b) ? ntail(b) : nlast(b) : b,
-      np = is_list(p) ? eexists(1,p) ? ntail(p) : nlast(p) : p,
-      na = is_list(a) ? eexists(1,a) ? ntail(a) : nlast(a) : a,
-      nf = is_list(f) ? eexists(1,f) ? ntail(f) : nlast(f) : f
+      nv = is_list(v) ? tailn(v) : empty_str,
+      nb = is_list(b) ? exists_e(1,b) ? tailn(b) : lastn(b) : b,
+      np = is_list(p) ? exists_e(1,p) ? tailn(p) : lastn(p) : p,
+      na = is_list(a) ? exists_e(1,a) ? tailn(a) : lastn(a) : a,
+      nf = is_list(f) ? exists_e(1,f) ? tailn(f) : lastn(f) : f
     )
     lstr(concat(cs, lstr_html(nv, nb, np, na, nf, d)));
 
@@ -469,7 +469,7 @@ function ciselect
   v,
   i,
   l = true
-) = edefined_or(v, i, (l == true) ? last(v) : first(v));
+) = defined_e_or(v, i, (l == true) ? last(v) : first(v));
 
 //! Select a specified mapped value from list of key-value pairs or return a default.
 /***************************************************************************//**
@@ -532,9 +532,9 @@ function eselect
   l
 ) = !is_iterable(v) ? undef
   : is_empty(v) ? empty_lst
-  : is_defined(i) ? concat( [first(v)[i]], eselect(ntail(v), i, f, l) )
-  : (f == true) ? concat( [first(first(v))], eselect(ntail(v), i, f, l) )
-  : (l == true) ? concat( [last(first(v))], eselect(ntail(v), i, f, l) )
+  : is_defined(i) ? concat( [first(v)[i]], eselect(tailn(v), i, f, l) )
+  : (f == true) ? concat( [first(first(v))], eselect(tailn(v), i, f, l) )
+  : (l == true) ? concat( [last(first(v))], eselect(tailn(v), i, f, l) )
   : undef;
 
 //! Select n elements from each iterable value of a list.
@@ -570,11 +570,11 @@ function enselect
   : is_defined(i) ?
       concat
       (
-        [nfirst(rselect(v[0], [i:len(v[0])-1]), n)],
-        enselect(ntail(v), i, f, l, n)
+        [firstn(select_r(v[0], [i:len(v[0])-1]), n)],
+        enselect(tailn(v), i, f, l, n)
       )
-  : (f == true) ? concat( [nfirst(first(v), n)], enselect(ntail(v), i, f, l, n) )
-  : (l == true) ? concat( [nlast(first(v), n)], enselect(ntail(v), i, f, l, n) )
+  : (f == true) ? concat( [firstn(first(v), n)], enselect(tailn(v), i, f, l, n) )
+  : (l == true) ? concat( [lastn(first(v), n)], enselect(tailn(v), i, f, l, n) )
   : undef;
 
 //! Serially merge the elements of a list.
@@ -607,8 +607,8 @@ function smerge
 ) = !is_iterable(v) ? undef
   : is_empty(v) ? empty_lst
   : ( (r == true) && is_list(first(v)) ) ?
-      concat(smerge(first(v), r), smerge(ntail(v), r))
-  : concat(first(v), smerge(ntail(v), r));
+      concat(smerge(first(v), r), smerge(tailn(v), r))
+  : concat(first(v), smerge(tailn(v), r));
 
 //! Parallel-merge the iterable elements of a list.
 /***************************************************************************//**
@@ -654,7 +654,7 @@ function pmerge
   : let
     (
       h = [for (i = v) first(i)],
-      t = [for (i = v) ntail(i)]
+      t = [for (i = v) tailn(i)]
     )
     (j == true) ? concat([h], pmerge(t, j))
   : concat(h, pmerge(t, j));

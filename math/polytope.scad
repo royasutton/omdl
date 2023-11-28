@@ -68,7 +68,7 @@ function polytope_faces2edges
   (
     el =
     [
-      for (ip = [for (fi = f) for (ai = nssequence(fi, n=2, s=1, w=true)) ai])
+      for (ip = [for (fi = f) for (ai = sequence_ns(fi, n=2, s=1, w=true)) ai])
         [min(ip), max(ip)]
     ]
   )
@@ -123,7 +123,7 @@ function polytope_limits
          : undef,
 
       ad = (is_defined(a) && is_scalar(a)) ? a : 0,
-      ap = [for (j = ax) edefined_or(a, j, ad)],
+      ap = [for (j = ax) defined_e_or(a, j, ad)],
 
       pm = is_defined(f)
         ? [for (j = ax) [for (m = f) for (i=[0 : len(m)-1]) c[m[i]][j]]]
@@ -213,7 +213,7 @@ function polytope_vertex_adjacent_vertices
         for (j = [0:fn-1])
           if (i == fi[j])
             for (k = [-1, 1])
-              fi[cindex(j + k, fn)]
+              fi[index_c(j + k, fn)]
     ]
   )
   unique(vn);
@@ -518,7 +518,7 @@ function polytope_edge_angles
   f
 ) =
   [
-    for (k=[for (j=f) for (i=nssequence(j, n=3, s=1, w=true)) i])
+    for (k=[for (j=f) for (i=sequence_ns(j, n=3, s=1, w=true)) i])
       angle_ll([c[k[0]], c[k[1]]], [c[k[1]], c[k[2]]])
   ];
 
@@ -1322,7 +1322,7 @@ function polygon2d_vertices_round3_p
     cp  = (cw == true) ? c : reverse(c),
 
     // adjacent vertices sequence [ [v[n-1], v[n], v[n+1]] ... ]
-    avl = nssequence(cp, 3, w=w),
+    avl = sequence_ns(cp, 3, w=w),
 
     // polygon coordinate point list
     ppl =
@@ -1338,11 +1338,11 @@ function polygon2d_vertices_round3_p
 
         il  = is_left_ppp(vp, vn, vc),    // identify position of vc
 
-        rr  = edefined_or(vr, i, crr),    // vertex rounding radius
+        rr  = defined_e_or(vr, i, crr),   // vertex rounding radius
         rm  = (rr == 0) ? 0               // vertex rounding mode
             : (il == 0) ? 0               // vp,vc,vn collinear, set rm=0
-            : edefined_or(vrm, i, crm),
-        fn  = edefined_or(vfn, i, cfn),   // vertex rounding arc fragments
+            : defined_e_or(vrm, i, crm),
+        fn  = defined_e_or(vfn, i, cfn),  // vertex rounding arc fragments
 
         // reverse arc sweep on interior corners
         // not relevant for rm={0|5|9|10}

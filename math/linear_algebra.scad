@@ -100,7 +100,7 @@ function translate_p
     (
       d = len(first(c)),
       u = is_scalar(v) ? v : 0,
-      w = [for (i=[0 : d-1]) edefined_or(v, i, u)]
+      w = [for (i=[0 : d-1]) defined_e_or(v, i, u)]
     )
     [for (ci=c) [for (di=[0 : d-1]) ci[di] + w[di]]];
 
@@ -137,7 +137,7 @@ function rotate_p
   : let
     (
       d  = len(first(c)),
-      az = edefined_or(a, 2, is_scalar(a) ? a : 0),
+      az = defined_e_or(a, 2, is_scalar(a) ? a : 0),
 
       cg = cos(az), sg = sin(az),
 
@@ -146,8 +146,8 @@ function rotate_p
          : (is_undef(v) || is_list(a)) ?
             let
             (
-              ax = edefined_or(a, 0, 0),
-              ay = edefined_or(a, 1, 0),
+              ax = defined_e_or(a, 0, 0),
+              ay = defined_e_or(a, 1, 0),
 
               ca = cos(ax), cb = cos(ay),
               sa = sin(ax), sb = sin(ay),
@@ -213,7 +213,7 @@ function scale_p
     (
       d = len(first(c)),
       u = is_scalar(v) ? v : 1,
-      w = [for (i=[0 : d-1]) edefined_or(v, i, u)]
+      w = [for (i=[0 : d-1]) defined_e_or(v, i, u)]
     )
     [for (ci=c) [for (di=[0 : d-1]) ci[di] * w[di]]];
 
@@ -234,7 +234,7 @@ function resize_p
     (
       d = len(first(c)),
       u = is_scalar(v) ? v : 1,
-      w = [for (i=[0 : d-1]) edefined_or(v, i, u)],
+      w = [for (i=[0 : d-1]) defined_e_or(v, i, u)],
       m = [for (i=[0 : d-1]) let (cv = [for (ci=c) (ci[i])]) [min(cv), max(cv)]],
       s = [for (i=[0 : d-1]) second(m[i]) - first(m[i])]
     )

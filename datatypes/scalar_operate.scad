@@ -81,7 +81,7 @@ function defined_or
   \returns  <integer> The index position mapped into a circular list
             within the range <tt>[f : l+f-1]</tt>.
 *******************************************************************************/
-function cindex
+function index_c
 (
   i,
   l,

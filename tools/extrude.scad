@@ -111,8 +111,8 @@ module rotate_extrude_tre
   else
   {
     ld = is_scalar(l) ? l : 0;
-    lx = edefined_or(l, 0, ld);
-    ly = edefined_or(l, 1, ld);
+    lx = defined_e_or(l, 0, ld);
+    ly = defined_e_or(l, 1, ld);
 
     for
     (

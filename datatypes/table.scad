@@ -775,7 +775,7 @@ module table_write
   ];
   if ( heading_id )
     // reformat so that 'fs' exists only between feilds
-    log_echo ( lstr([for ( i = nhead(th_id_text) ) str(i,fs), last(th_id_text)]) );
+    log_echo ( lstr([for ( i = headn(th_id_text) ) str(i,fs), last(th_id_text)]) );
 
   // heading descriptions
   th_info_text =
@@ -791,7 +791,7 @@ module table_write
   ];
   if ( heading_info )
     // reformat so that 'fs' exists only between feilds
-    log_echo ( lstr([for ( i = nhead(th_info_text) ) str(i,fs), last(th_info_text)]) );
+    log_echo ( lstr([for ( i = headn(th_info_text) ) str(i,fs), last(th_info_text)]) );
 
   // row data
   for ( r_iter = r )
@@ -809,7 +809,7 @@ module table_write
         : empty_str,
 
         lstr_html(first(r_iter), p=[row_id_tags]), fs,
-        for ( c_iter = ntail(c, n=1) )
+        for ( c_iter = tailn(c, n=1) )
           if
           ( // when column selected
             is_undef( cs ) ||

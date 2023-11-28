@@ -135,9 +135,9 @@ module cuboid
   center = false
 )
 {
-  bx = edefined_or(size, 0, size);
-  by = edefined_or(size, 1, bx);
-  bz = edefined_or(size, 2, by);
+  bx = defined_e_or(size, 0, size);
+  by = defined_e_or(size, 1, bx);
+  bz = defined_e_or(size, 2, by);
 
   ef = bitwise_is_equal(vrm, 0, 0);
   vf = bitwise_is_equal(vrm, 1, 0);
@@ -217,8 +217,8 @@ module ellipsoid
   size
 )
 {
-  w = edefined_or(size, 0, size);
-  h = edefined_or(size, 1, w);
+  w = defined_e_or(size, 0, size);
+  h = defined_e_or(size, 1, w);
 
   if (w == h)
   {
@@ -251,8 +251,8 @@ module ellipsoid_s
   a2 = 0
 )
 {
-  w = edefined_or(size, 0, size);
-  h = edefined_or(size, 1, w);
+  w = defined_e_or(size, 0, size);
+  h = defined_e_or(size, 1, w);
 
   trx = w/2 * sqrt(2) + 1;
   try = w/2 * sqrt(2) + 1;
@@ -347,9 +347,9 @@ module pyramid_q
   center = false
 )
 {
-  tw = edefined_or(size, 0, size)/2;
-  th = edefined_or(size, 1, tw*2)/2;
-  ph = edefined_or(size, 2, th*2);
+  tw = defined_e_or(size, 0, size)/2;
+  th = defined_e_or(size, 1, tw*2)/2;
+  ph = defined_e_or(size, 2, th*2);
 
   translate(center==true ? [0,0,-ph/2] : origin3d)
   polyhedron
@@ -394,9 +394,9 @@ module star3d
   half = false
 )
 {
-  l = edefined_or(size, 0, size);
-  w = edefined_or(size, 1, l/2);
-  h = edefined_or(size, 2, w/2);
+  l = defined_e_or(size, 0, size);
+  w = defined_e_or(size, 1, l/2);
+  h = defined_e_or(size, 2, w/2);
 
   if (half == true)
   {

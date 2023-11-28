@@ -155,8 +155,8 @@ function polygon2d_line_p
  // zdx = (tp[0] == ip[0]),                                   // is delta-x zero
  // zdy = (tp[1] == ip[1]),                                   // is delta-y zero
  //
-    zdx = almost_equal_nv(tp[0], ip[0]),                      // is delta-x zero
-    zdy = almost_equal_nv(tp[1], ip[1]),                      // is delta-y zero
+    zdx = almost_eq_nv(tp[0], ip[0]),                         // is delta-x zero
+    zdy = almost_eq_nv(tp[1], ip[1]),                         // is delta-y zero
 
     // axis: 'y' if zdx, else use 'x'
     a   = zdx ? 1 : 0,
@@ -369,8 +369,8 @@ function polygon2d_elliptical_sector_p
 ) =
   let
   (
-    rx  = edefined_or(r, 0, r),
-    ry  = edefined_or(r, 1, rx),
+    rx  = defined_e_or(r, 0, r),
+    ry  = defined_e_or(r, 1, rx),
 
     va1 = is_number(v1) ? v1 : angle_ll(x_axis2d_uv, v1, s),
     va2 = is_number(v2) ? v2 : angle_ll(x_axis2d_uv, v2, s),
@@ -439,8 +439,8 @@ function polygon2d_trapezoid_p
 ) =
   let
   (
-    b1 = edefined_or(b, 0, b),
-    b2 = edefined_or(b, 1, b1),
+    b1 = defined_e_or(b, 0, b),
+    b2 = defined_e_or(b, 1, b1),
 
     // trapezoid vertices from origin
     p1 = [0, 0],

@@ -81,8 +81,8 @@ module rectangle
   center = false
 )
 {
-  rx = edefined_or(size, 0, size);
-  ry = edefined_or(size, 1, rx);
+  rx = defined_e_or(size, 0, size);
+  ry = defined_e_or(size, 1, rx);
 
   translate(center==true ? [-rx/2, -ry/2] : origin2d)
   {
@@ -117,10 +117,10 @@ module rectangle
     }
     else                                // individual rounding
     {
-      crv = [ edefined_or(vr, 0, 0),
-              edefined_or(vr, 1, 0),
-              edefined_or(vr, 2, 0),
-              edefined_or(vr, 3, 0) ];
+      crv = [ defined_e_or(vr, 0, 0),
+              defined_e_or(vr, 1, 0),
+              defined_e_or(vr, 2, 0),
+              defined_e_or(vr, 3, 0) ];
 
       for ( i =  [ [0, 0,  1, 0,  1],
                    [1, 1, -1, 0,  1],
@@ -212,8 +212,8 @@ module rectangle_c
   od = all_defined([t, core]) ? (core + t*2) : size;
   id = all_defined([t, size]) ? (size - t*2) : core;
 
-  rx = edefined_or(od, 0, od);
-  ry = edefined_or(od, 1, od);
+  rx = defined_e_or(od, 0, od);
+  ry = defined_e_or(od, 1, od);
 
   or = defined_or(vr1, vr);
   ir = defined_or(vr2, vr);
@@ -266,8 +266,8 @@ module rhombus
   center = false
 )
 {
-  rx = edefined_or(size, 0, size) / 2;
-  ry = edefined_or(size, 1, rx*2) / 2;
+  rx = defined_e_or(size, 0, size) / 2;
+  ry = defined_e_or(size, 1, rx*2) / 2;
 
   translate(center==true ? origin2d : [rx, ry])
   {
@@ -283,10 +283,10 @@ module rhombus
     {
       erc = is_scalar(vr) ? vr : 0;     // equal rounding
 
-      crv = [ edefined_or(vr, 0, erc),
-              edefined_or(vr, 1, erc),
-              edefined_or(vr, 2, erc),
-              edefined_or(vr, 3, erc) ];
+      crv = [ defined_e_or(vr, 0, erc),
+              defined_e_or(vr, 1, erc),
+              defined_e_or(vr, 2, erc),
+              defined_e_or(vr, 3, erc) ];
 
       a1 = angle_ll([[rx,0], [0,ry]], [[rx,0], [0,-ry]]) / 2;
       a2 = 90 - a1;
@@ -527,13 +527,13 @@ module triangle_ls_c
     }
   }
 
-  ts1 = edefined_or(vs, 0, vs);
-  ts2 = edefined_or(vs, 1, ts1);
-  ts3 = edefined_or(vs, 2, ts2);
+  ts1 = defined_e_or(vs, 0, vs);
+  ts2 = defined_e_or(vs, 1, ts1);
+  ts3 = defined_e_or(vs, 2, ts2);
 
-  tc1 = edefined_or(vc, 0, vc);
-  tc2 = edefined_or(vc, 1, tc1);
-  tc3 = edefined_or(vc, 2, tc2);
+  tc1 = defined_e_or(vc, 0, vc);
+  tc2 = defined_e_or(vc, 1, tc1);
+  tc3 = defined_e_or(vc, 2, tc2);
 
   vrs = defined_or(vr1, vr);
   vrc = defined_or(vr2, vr);
@@ -637,8 +637,8 @@ module ellipse
   size
 )
 {
-  rx = edefined_or(size, 0, size);
-  ry = edefined_or(size, 1, rx);
+  rx = defined_e_or(size, 0, size);
+  ry = defined_e_or(size, 1, rx);
 
   if ( rx == ry )
   {
@@ -722,8 +722,8 @@ module ellipse_s
   a2 = 0
 )
 {
-  rx = edefined_or(size, 0, size);
-  ry = edefined_or(size, 1, rx);
+  rx = defined_e_or(size, 0, size);
+  ry = defined_e_or(size, 1, rx);
 
   trx = rx * sqrt(2) + 1;
   try = ry * sqrt(2) + 1;
@@ -837,8 +837,8 @@ module star2d
   vr
 )
 {
-  l = edefined_or(size, 0, size);
-  w = edefined_or(size, 1, l/2);
+  l = defined_e_or(size, 0, size);
+  w = defined_e_or(size, 1, l/2);
 
   radial_repeat(n=n, angle=true, move=false)
   rotate([0, 0, -90])

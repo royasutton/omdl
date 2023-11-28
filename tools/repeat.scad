@@ -101,15 +101,15 @@ module grid_repeat
 {
   gridd = is_scalar(g) ? g : 1;
 
-  gridx = edefined_or(g, 0, gridd);
-  gridy = edefined_or(g, 1, gridd);
-  gridz = edefined_or(g, 2, gridd);
+  gridx = defined_e_or(g, 0, gridd);
+  gridy = defined_e_or(g, 1, gridd);
+  gridz = defined_e_or(g, 2, gridd);
 
   incrd = is_scalar(i) ? i : 0;
 
-  incrx = edefined_or(i, 0, incrd);
-  incry = edefined_or(i, 1, incrd);
-  incrz = edefined_or(i, 2, incrd);
+  incrx = defined_e_or(i, 0, incrd);
+  incry = defined_e_or(i, 1, incrd);
+  incrz = defined_e_or(i, 2, incrd);
 
   if ( ( $children * c ) > ( gridx * gridy * gridz ) )
   {
