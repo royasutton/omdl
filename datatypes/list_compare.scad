@@ -87,8 +87,8 @@ function almost_equal_nv
 
 //! Test if all elements of two iterable values are sufficiently equal.
 /***************************************************************************//**
-  \param    v1 \<iterable> An iterable data type value 1.
-  \param    v2 \<iterable> An iterable data type value 2.
+  \param    v1 <iterable> An iterable data type value 1.
+  \param    v2 <iterable> An iterable data type value 2.
   \param    p <number> The precision for numerical comparisons.
 
   \returns  (1) <boolean> \b true when all elements of each iterable

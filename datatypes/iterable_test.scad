@@ -86,7 +86,7 @@ function is_iterable
 
 //! Test if an iterable value is empty.
 /***************************************************************************//**
-  \param    v \<iterable> An iterable data type value.
+  \param    v <iterable> An iterable data type value.
 
   \returns  <boolean> \b true when the iterable value has zero elements
             and \b false otherwise. Returns \b true when \p v is not
@@ -100,7 +100,7 @@ function is_empty
 
 //! Test if all elements of an iterable value equal a comparison value.
 /***************************************************************************//**
-  \param    v \<iterable> An iterable data type value.
+  \param    v <iterable> An iterable data type value.
   \param    cv \<value> A comparison value.
 
   \returns  <boolean> \b true when all elements of \p v equal the value
@@ -144,7 +144,7 @@ function all_equal_oneof
 
 //! Test if any element of an iterable value equal a comparison value.
 /***************************************************************************//**
-  \param    v \<iterable> An iterable data type value.
+  \param    v <iterable> An iterable data type value.
   \param    cv \<value> A comparison value.
 
   \returns  <boolean> \b true when any element of \p v equals the value
@@ -162,7 +162,7 @@ function any_equal
 
 //! Test if no element of an iterable value has an undefined value.
 /***************************************************************************//**
-  \param    v \<iterable> An iterable data type value.
+  \param    v <iterable> An iterable data type value.
 
   \returns  <boolean> \b true when no element of \p v has its value
             equal to \b undef and \b false otherwise. Returns \b true
@@ -172,7 +172,7 @@ function all_defined(v) = !any_equal(v, undef);
 
 //! Test if at least one element of an iterable value has a defined value.
 /***************************************************************************//**
-  \param    v \<iterable> An iterable data type value.
+  \param    v <iterable> An iterable data type value.
 
   \returns  <boolean> \b true when any element of \p v has a defined
             value and \b false otherwise. Returns \b false when \p v is
@@ -182,7 +182,7 @@ function any_defined(v) = !all_equal(v, undef);
 
 //! Test if at least one element of an iterable value has an undefined value.
 /***************************************************************************//**
-  \param    v \<iterable> An iterable data type value.
+  \param    v <iterable> An iterable data type value.
 
   \returns  <boolean> \b true when any element of \p v has an undefined
             value and \b false otherwise. Returns \b false when \p v is
@@ -192,7 +192,7 @@ function any_undefined(v) = any_equal(v, undef);
 
 //! Test if all elements of an iterable value are scalar values.
 /***************************************************************************//**
-  \param    v \<iterable> An iterable data type value.
+  \param    v <iterable> An iterable data type value.
 
   \returns  <boolean> \b true when all elements of \p v are scalar
             values and \b false otherwise. Returns \b true when \p v is
@@ -209,7 +209,7 @@ function all_scalars
 
 //! Test if all elements of an iterable value are iterable.
 /***************************************************************************//**
-  \param    v \<iterable> An iterable data type value.
+  \param    v <iterable> An iterable data type value.
 
   \returns  <boolean> \b true when all elements of \p v are iterable
             and \b false otherwise. Returns \b true when \p v is a
@@ -226,7 +226,7 @@ function all_iterables
 
 //! Test if all elements of an iterable value are lists.
 /***************************************************************************//**
-  \param    v \<iterable> An iterable data type value.
+  \param    v <iterable> An iterable data type value.
   \param    c \<integer> (\em internal) Count of passing comparasions.
 
   \returns  <boolean> \b true when all elements of \p v are lists
@@ -251,7 +251,7 @@ function all_lists
 
 //! Test if all elements of an iterable value are strings.
 /***************************************************************************//**
-  \param    v \<iterable> An iterable data type value.
+  \param    v <iterable> An iterable data type value.
   \param    c \<integer> (\em internal) Count of passing comparasions.
 
   \returns  <boolean> \b true when all elements of \p v are strings
@@ -276,7 +276,7 @@ function all_strings
 
 //! Test if all elements of an iterable value are numbers.
 /***************************************************************************//**
-  \param    v \<iterable> An iterable data type value.
+  \param    v <iterable> An iterable data type value.
   \param    c \<integer> (\em internal) Count of passing comparasions.
 
   \returns  <boolean> \b true when all elements of \p v are numerical
@@ -301,7 +301,7 @@ function all_numbers
 
 //! Test if all elements of an iterable value are iterable with a fixed length.
 /***************************************************************************//**
-  \param    v \<iterable> An iterable data type value.
+  \param    v <iterable> An iterable data type value.
   \param    l <integer> The required length of each value.
 
   \returns  <boolean> \b true when all elements of \p v are iterable

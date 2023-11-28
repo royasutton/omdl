@@ -661,7 +661,7 @@ function pmerge
 
 //! Sort the elements of an iterable value using quick sort.
 /***************************************************************************//**
-  \param    v \<iterable> A iterable values.
+  \param    v <iterable> A iterable values.
   \param    i <integer> The sort element index for iterable values of \p v.
   \param    r <boolean> Reverse the sort order.
 
@@ -711,7 +711,7 @@ function qsort
 
 //! Sort the elements of an iterable value using quick sort and compare
 /***************************************************************************//**
-  \param    v \<iterable> A iterable values.
+  \param    v <iterable> A iterable values.
   \param    i <integer> The sort element index for iterable values of \p v.
   \param    d <integer> The recursive sort depth.
   \param    r <boolean> Reverse the sort order.
