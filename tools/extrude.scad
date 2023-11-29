@@ -123,7 +123,7 @@ module rotate_extrude_tre
              [+lx/2, -ly/2, 270, 7]
           ]
     )
-    if ( bitwise_is_equal(m, i[3], 1) )
+    if ( binary_bit_is(m, i[3], 1) )
     {
       translate([i[0], i[1], 0])
       rotate([0, 0, i[2]])
@@ -140,7 +140,7 @@ module rotate_extrude_tre
             [     lx/2, -r -ly/2, 270, lx, 6]
           ]
     )
-    if ( bitwise_is_equal(m, i[4], 1) )
+    if ( binary_bit_is(m, i[4], 1) )
     {
       translate([i[0], i[1], 0])
       rotate([90, 0, i[2]])

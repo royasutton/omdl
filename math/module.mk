@@ -11,7 +11,7 @@ local_library     :=  docs_module \
                       linear_algebra \
                       vector_algebra \
                       \
-                      bitwise \
+                      binary \
                       polygon_primitives \
                       polytope \
                       triangle \

@@ -934,9 +934,9 @@ module draft_arrow
       hull_if( !s2 )
       {
         draft_line_pp(pah, ptm, w=w);
-        if (bitwise_is_equal(s3, 0, 0))
+        if (binary_bit_is(s3, 0, 0))
           { draft_line_pp(ls1[0], ls1[1], w=w); draft_line_pp(ps1, ptm, w=w); }
-        if (bitwise_is_equal(s3, 1, 0))
+        if (binary_bit_is(s3, 1, 0))
         { draft_line_pp(ls2[0], ls2[1], w=w); draft_line_pp(ps2, ptm, w=w); }
       }
     }
@@ -945,26 +945,26 @@ module draft_arrow
       hull_if( !s2 )
       {
         draft_line_pp(pah, pam, w=w);
-        if (bitwise_is_equal(s3, 0, 0))
+        if (binary_bit_is(s3, 0, 0))
           { draft_line_pp(ls1[0], ls1[1], w=w); draft_line_pp(ps1, pam, w=w); }
       }
       hull_if( !s2 )
       {
         draft_line_pp(pah, pam, w=w);
-        if (bitwise_is_equal(s3, 1, 0))
+        if (binary_bit_is(s3, 1, 0))
         { draft_line_pp(ls2[0], ls2[1], w=w); draft_line_pp(ps2, pam, w=w); }
       }
     }
     else if ( s1 == 3 )
     { // open 3-point
-      if (bitwise_is_equal(s3, 0, 0))
+      if (binary_bit_is(s3, 0, 0))
         draft_line_pp(ls1[0], ls1[1], w=w);
-      if (bitwise_is_equal(s3, 1, 0))
+      if (binary_bit_is(s3, 1, 0))
         draft_line_pp(ls2[0], ls2[1], w=w);
     }
     else if ( s1 == 4 )
     { // slash / cross
-      if (bitwise_is_equal(s3+1, 0, 1))
+      if (binary_bit_is(s3+1, 0, 1))
       {
         xl1 = line2d_new(m=+al/3*2, a=alx+180-ca*2, p1=pah);
         xl2 = line2d_new(m=-al/3*2, a=alx+180-ca*2, p1=pah);
@@ -972,7 +972,7 @@ module draft_arrow
         draft_line_pp(xl1[0], xl1[1], w=w);
         draft_line_pp(xl2[0], xl2[1], w=w);
       }
-      if (bitwise_is_equal(s3+1, 1, 1))
+      if (binary_bit_is(s3+1, 1, 1))
       {
         xl1 = line2d_new(m=+al/3*2, a=alx-180+ca*2, p1=pah);
         xl2 = line2d_new(m=-al/3*2, a=alx-180+ca*2, p1=pah);

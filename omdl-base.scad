@@ -69,7 +69,7 @@ include <math/triangle.scad>;
 include <math/polytope.scad>;
 include <math/polygon_primitives.scad>;
 
-include <math/bitwise.scad>;
+include <math/binary.scad>;
 include <math/utility.scad>;
 
 //----------------------------------------------------------------------------//

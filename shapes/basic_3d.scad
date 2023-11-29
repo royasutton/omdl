@@ -139,8 +139,8 @@ module cuboid
   by = defined_e_or(size, 1, bx);
   bz = defined_e_or(size, 2, by);
 
-  ef = bitwise_is_equal(vrm, 0, 0);
-  vf = bitwise_is_equal(vrm, 1, 0);
+  ef = binary_bit_is(vrm, 0, 0);
+  vf = binary_bit_is(vrm, 1, 0);
 
   translate(center==true ? origin3d : [bx/2, by/2, bz/2])
   if ( is_undef(vr) )

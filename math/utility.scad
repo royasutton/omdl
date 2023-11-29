@@ -118,11 +118,11 @@ function histogram
     (
       hv = [for (i=unique(v)) [i, len(find(i, v, 0))]]
     )
-    bitwise_is_equal(m, 0, 0) ? hv
+    binary_bit_is(m, 0, 0) ? hv
   : let
     (
-      sm = bitwise_imi(m, 3, 1),
-      fm = bitwise_is_equal(m, 4, 1) ? true : false
+      sm = binary_iw2i(m, 3, 1),
+      fm = binary_bit_is(m, 4, 1) ? true : false
     )
     (sm == 0) ? [for (i=hv) str(first(i), "x", second(i))]
   : let

@@ -74,7 +74,7 @@
                 \b false.
             (2) Returns \b undef if \p v or \p b is not an integer.
 *******************************************************************************/
-function bitwise_is_equal
+function binary_bit_is
 (
   v,
   b,
@@ -98,7 +98,7 @@ function bitwise_is_equal
     \p w is greater than the minimum required bits, then the value will
     be padded with '0'.
 *******************************************************************************/
-function bitwise_i2v
+function binary_i2v
 (
   v,
   w = 1,
@@ -107,8 +107,8 @@ function bitwise_i2v
 ) = !is_integer(v) ? undef
   : !is_integer(w) ? undef
   : ((v == 0) && (bv >= pow(2, w))) ? empty_lst
-  : ((v % 2) > 0) ? concat(bitwise_i2v(floor(v/2), w, bv*2), 1)
-                  : concat(bitwise_i2v(floor(v/2), w, bv*2), 0);
+  : ((v % 2) > 0) ? concat(binary_i2v(floor(v/2), w, bv*2), 1)
+                  : concat(binary_i2v(floor(v/2), w, bv*2), 0);
 
 //! Decode a binary list of bits to an integer value.
 /***************************************************************************//**
@@ -117,14 +117,14 @@ function bitwise_i2v
   \returns  (1) <integer> value encoding of the binary list of bits.
             (2) Returns \b undef when \p v is not a list of bit values.
 *******************************************************************************/
-function bitwise_v2i
+function binary_v2i
 (
   v
 ) = is_empty(v) ? 0
     // all must be '0' or '1'
   : !all_oneof(v, [0, 1]) ? undef
-  : (first(v) == 1) ? bitwise_v2i(tailn(v)) + pow(2, len(v)-1)
-  : (first(v) == 0) ? bitwise_v2i(tailn(v))
+  : (first(v) == 1) ? binary_v2i(tailn(v)) + pow(2, len(v)-1)
+  : (first(v) == 0) ? binary_v2i(tailn(v))
   : undef;
 
 //! Encode an integer value as a binary string of bits.
@@ -135,13 +135,13 @@ function bitwise_v2i
   \returns  (1) <bit-string> of bits binary encoding of the integer value.
             (2) Returns \b undef when \p v or \p w is not an integer.
 *******************************************************************************/
-function bitwise_i2s
+function binary_i2s
 (
   v,
   w = 1
 ) = !is_integer(v) ? undef
   : !is_integer(w) ? undef
-  : strl(bitwise_i2v(v, w));
+  : strl(binary_i2v(v, w));
 
 //! Decode a binary string of bits to an integer value.
 /***************************************************************************//**
@@ -150,14 +150,14 @@ function bitwise_i2s
   \returns  (1) <integer> value encoding of the binary string of bits.
             (2) Returns \b undef when \p v is not a string of bit values.
 *******************************************************************************/
-function bitwise_s2i
+function binary_s2i
 (
   v
 ) = is_empty(v) ? 0
     // all must be '0' or '1'
   : !all_oneof(v, "01") ? undef
-  : (first(v) == "1") ? bitwise_s2i(strl(tailn(v))) + pow(2, len(v)-1)
-  : (first(v) == "0") ? bitwise_s2i(strl(tailn(v)))
+  : (first(v) == "1") ? binary_s2i(strl(tailn(v))) + pow(2, len(v)-1)
+  : (first(v) == "0") ? binary_s2i(strl(tailn(v)))
   : undef;
 
 //! Decode the binary bits of a bit window to an integer value.
@@ -171,7 +171,7 @@ function bitwise_s2i
             (2) Returns \b undef when \p v, \p w, or \p s is not an
                 integer.
 *******************************************************************************/
-function bitwise_imi
+function binary_iw2i
 (
   v,
   w,
@@ -179,7 +179,7 @@ function bitwise_imi
 ) = !is_integer(v) ? undef
   : !is_integer(w) ? undef
   : !is_integer(s) ? undef
-  : bitwise_rsh(bitwise_and(v, bitwise_lsh(pow(2,w)-1, s)), s);
+  : binary_rsh(binary_and(v, binary_lsh(pow(2,w)-1, s)), s);
 
 //! Base-2 binary AND operation for integers.
 /***************************************************************************//**
@@ -190,7 +190,7 @@ function bitwise_imi
   \returns  (1) <integer> the binary AND of \p v1 and \p v2.
             (2) Returns \b undef when \p v1 or \p v2 is not an integer.
 *******************************************************************************/
-function bitwise_and
+function binary_and
 (
   v1,
   v2,
@@ -199,8 +199,8 @@ function bitwise_and
   : !is_integer(v2) ? undef
   : ((v1 + v2) == 0) ? 0
   : (((v1 % 2) > 0) && ((v2 % 2) > 0)) ?
-    bitwise_and(floor(v1/2), floor(v2/2), bv*2) + bv
-  : bitwise_and(floor(v1/2), floor(v2/2), bv*2);
+    binary_and(floor(v1/2), floor(v2/2), bv*2) + bv
+  : binary_and(floor(v1/2), floor(v2/2), bv*2);
 
 //! Base-2 binary OR operation for integers.
 /***************************************************************************//**
@@ -211,7 +211,7 @@ function bitwise_and
   \returns  (1) <integer> the binary OR of \p v1 and \p v2.
             (2) Returns \b undef when \p v1 or \p v2 is not an integer.
 *******************************************************************************/
-function bitwise_or
+function binary_or
 (
   v1,
   v2,
@@ -220,8 +220,8 @@ function bitwise_or
   : !is_integer(v2) ? undef
   : ((v1 + v2) == 0) ? 0
   : (((v1 % 2) > 0) || ((v2 % 2) > 0)) ?
-    bitwise_or(floor(v1/2), floor(v2/2), bv*2) + bv
-  : bitwise_or(floor(v1/2), floor(v2/2), bv*2);
+    binary_or(floor(v1/2), floor(v2/2), bv*2) + bv
+  : binary_or(floor(v1/2), floor(v2/2), bv*2);
 
 //! Base-2 binary XOR operation for integers.
 /***************************************************************************//**
@@ -232,7 +232,7 @@ function bitwise_or
   \returns  (1) <integer> the binary XOR of \p v1 and \p v2.
             (2) Returns \b undef when \p v1 or \p v2 is not an integer.
 *******************************************************************************/
-function bitwise_xor
+function binary_xor
 (
   v1,
   v2,
@@ -241,8 +241,8 @@ function bitwise_xor
   : !is_integer(v2) ? undef
   : ((v1 + v2) == 0) ? 0
   : (((v1 % 2) > 0) != ((v2 % 2) > 0)) ?
-    bitwise_xor(floor(v1/2), floor(v2/2), bv*2) + bv
-  : bitwise_xor(floor(v1/2), floor(v2/2), bv*2);
+    binary_xor(floor(v1/2), floor(v2/2), bv*2) + bv
+  : binary_xor(floor(v1/2), floor(v2/2), bv*2);
 
 //! Base-2 binary NOT operation for an integer.
 /***************************************************************************//**
@@ -253,7 +253,7 @@ function bitwise_xor
   \returns  (1) <integer> the binary NOT of \p v.
             (2) Returns \b undef when \p v or \p w is not an integer.
 *******************************************************************************/
-function bitwise_not
+function binary_not
 (
   v,
   w = 1,
@@ -262,8 +262,8 @@ function bitwise_not
   : !is_integer(w) ? undef
   : ((v == 0) && (bv >= pow(2, w))) ? 0
   : ((v % 2) > 0) ?
-    bitwise_not(floor(v/2), w, bv*2)
-  : bitwise_not(floor(v/2), w, bv*2) + bv;
+    binary_not(floor(v/2), w, bv*2)
+  : binary_not(floor(v/2), w, bv*2) + bv;
 
 //! Base-2 binary left-shift operation for an integer.
 /***************************************************************************//**
@@ -276,7 +276,7 @@ function bitwise_not
                 by \p s bits.
             (2) Returns \b undef when \p v or \p s is not an integer.
 *******************************************************************************/
-function bitwise_lsh
+function binary_lsh
 (
   v,
   s = 1,
@@ -285,13 +285,13 @@ function bitwise_lsh
 ) = !is_integer(v) ? undef
   : !is_integer(s) ? undef
     // max bit position
-  : (bm < v) ? bitwise_lsh(v, s, bm*2, bv)
+  : (bm < v) ? binary_lsh(v, s, bm*2, bv)
     // shift value
-  : (s  > 0) ? bitwise_lsh(v*2, s-1, bm, bv)
+  : (s  > 0) ? binary_lsh(v*2, s-1, bm, bv)
   : (bv > bm) ? 0
     // encoded result
-  : ((v % 2) > 0) ? bitwise_lsh(floor(v/2), s, bm, bv*2) + bv
-                  : bitwise_lsh(floor(v/2), s, bm, bv*2);
+  : ((v % 2) > 0) ? binary_lsh(floor(v/2), s, bm, bv*2) + bv
+                  : binary_lsh(floor(v/2), s, bm, bv*2);
 
 //! Base-2 binary right-shift operation for an integer.
 /***************************************************************************//**
@@ -302,14 +302,14 @@ function bitwise_lsh
                 by \p s bits.
             (2) Returns \b undef when \p v or \p s is not an integer.
 *******************************************************************************/
-function bitwise_rsh
+function binary_rsh
 (
   v,
   s = 1
 ) = !is_integer(v) ? undef
   : !is_integer(s) ? undef
   : (s <= 0) ? v
-  : bitwise_rsh(floor(v/2), s-1);
+  : binary_rsh(floor(v/2), s-1);
 
 //! @}
 //! @}
@@ -362,7 +362,7 @@ BEGIN_SCOPE validate;
 
     good_r =
     [ // function
-      ["bitwise_is_equal_0", 2,
+      ["binary_bit_is_0", 2,
         undef,                          // t01
         undef,                          // t02
         true,                           // t03
@@ -376,7 +376,7 @@ BEGIN_SCOPE validate;
         true,                           // t11
         true                            // t12
       ],
-      ["bitwise_is_equal_1", 2,
+      ["binary_bit_is_1", 2,
         undef,                          // t01
         undef,                          // t02
         false,                          // t03
@@ -390,7 +390,7 @@ BEGIN_SCOPE validate;
         false,                          // t11
         false                           // t12
       ],
-      ["bitwise_i2v", 1,
+      ["binary_i2v", 1,
         undef,                          // t01
         undef,                          // t02
         [1,1,1,1,1,1,1,0],              // t03
@@ -404,7 +404,7 @@ BEGIN_SCOPE validate;
         [1,1,0,1,0,0,0,0,1,1],          // t11
         [1,1,0,1,0,1,1,0,0,0]           // t12
       ],
-      ["bitwise_i2v_v2i", 1,
+      ["binary_i2v_v2i", 1,
         0,                              // t01
         0,                              // t02
         254,                            // t03
@@ -418,7 +418,7 @@ BEGIN_SCOPE validate;
         835,                            // t11
         856                             // t12
       ],
-      ["bitwise_i2s", 1,
+      ["binary_i2s", 1,
         undef,                          // t01
         undef,                          // t02
         "11111110",                     // t03
@@ -432,7 +432,7 @@ BEGIN_SCOPE validate;
         "1101000011",                   // t11
         "1101011000"                    // t12
       ],
-      ["bitwise_i2s_s2i", 1,
+      ["binary_i2s_s2i", 1,
         0,                              // t01
         0,                              // t02
         254,                            // t03
@@ -446,7 +446,7 @@ BEGIN_SCOPE validate;
         835,                            // t11
         856                             // t12
       ],
-      ["bitwise_imi_32", 1,
+      ["binary_iw2i_32", 1,
         undef,                          // t01
         undef,                          // t02
         7,                              // t03
@@ -460,7 +460,7 @@ BEGIN_SCOPE validate;
         0,                              // t11
         6                               // t12
       ],
-      ["bitwise_and", 2,
+      ["binary_and", 2,
         undef,                          // t01
         undef,                          // t02
         0,                              // t03
@@ -474,7 +474,7 @@ BEGIN_SCOPE validate;
         769,                            // t11
         592                             // t12
       ],
-      ["bitwise_or", 2,
+      ["binary_or", 2,
         undef,                          // t01
         undef,                          // t02
         254,                            // t03
@@ -488,7 +488,7 @@ BEGIN_SCOPE validate;
         835,                            // t11
         889                             // t12
       ],
-      ["bitwise_xor", 2,
+      ["binary_xor", 2,
         undef,                          // t01
         undef,                          // t02
         254,                            // t03
@@ -502,7 +502,7 @@ BEGIN_SCOPE validate;
         66,                             // t11
         297                             // t12
       ],
-      ["bitwise_not", 1,
+      ["binary_not", 1,
         undef,                          // t01
         undef,                          // t02
         1,                              // t03
@@ -516,7 +516,7 @@ BEGIN_SCOPE validate;
         188,                            // t11
         167                             // t12
       ],
-      ["bitwise_lsh", 1,
+      ["binary_lsh", 1,
         undef,                          // t01
         undef,                          // t02
         508,                            // t03
@@ -530,7 +530,7 @@ BEGIN_SCOPE validate;
         1670,                           // t11
         1712                            // t12
       ],
-      ["bitwise_rsh", 1,
+      ["binary_rsh", 1,
         undef,                          // t01
         undef,                          // t02
         127,                            // t03
@@ -587,19 +587,19 @@ BEGIN_SCOPE validate;
 
     // Indirect function calls would be very useful here!!!
     run_ids = delete( test_ids, mv=["fac", "crp"] );
-    for (vid=run_ids) run("bitwise_is_equal_0",vid) test( "bitwise_is_equal_0", bitwise_is_equal(gv(vid,0),gv(vid,1),0), vid );
-    for (vid=run_ids) run("bitwise_is_equal_1",vid) test( "bitwise_is_equal_1", bitwise_is_equal(gv(vid,0),gv(vid,1),1), vid );
-    for (vid=run_ids) run("bitwise_i2v",vid) test( "bitwise_i2v", bitwise_i2v(gv(vid,0)), vid );
-    for (vid=run_ids) run("bitwise_i2v_v2i",vid) test( "bitwise_i2v_v2i", bitwise_v2i(bitwise_i2v(gv(vid,0))), vid );
-    for (vid=run_ids) run("bitwise_i2s",vid) test( "bitwise_i2s", bitwise_i2s(gv(vid,0)), vid );
-    for (vid=run_ids) run("bitwise_i2s_s2i",vid) test( "bitwise_i2s_s2i", bitwise_s2i(bitwise_i2s(gv(vid,0))), vid );
-    for (vid=run_ids) run("bitwise_imi_32",vid) test( "bitwise_imi_32", bitwise_imi(gv(vid,0),3,2), vid );
-    for (vid=run_ids) run("bitwise_and",vid) test( "bitwise_and", bitwise_and(gv(vid,0),gv(vid,1)), vid );
-    for (vid=run_ids) run("bitwise_or",vid) test( "bitwise_or", bitwise_or(gv(vid,0),gv(vid,1)), vid );
-    for (vid=run_ids) run("bitwise_xor",vid) test( "bitwise_xor", bitwise_xor(gv(vid,0),gv(vid,1)), vid );
-    for (vid=run_ids) run("bitwise_not",vid) test( "bitwise_not", bitwise_not(gv(vid,0)), vid );
-    for (vid=run_ids) run("bitwise_lsh",vid) test( "bitwise_lsh", bitwise_lsh(gv(vid,0)), vid );
-    for (vid=run_ids) run("bitwise_rsh",vid) test( "bitwise_rsh", bitwise_rsh(gv(vid,0)), vid );
+    for (vid=run_ids) run("binary_bit_is_0",vid) test( "binary_bit_is_0", binary_bit_is(gv(vid,0),gv(vid,1),0), vid );
+    for (vid=run_ids) run("binary_bit_is_1",vid) test( "binary_bit_is_1", binary_bit_is(gv(vid,0),gv(vid,1),1), vid );
+    for (vid=run_ids) run("binary_i2v",vid) test( "binary_i2v", binary_i2v(gv(vid,0)), vid );
+    for (vid=run_ids) run("binary_i2v_v2i",vid) test( "binary_i2v_v2i", binary_v2i(binary_i2v(gv(vid,0))), vid );
+    for (vid=run_ids) run("binary_i2s",vid) test( "binary_i2s", binary_i2s(gv(vid,0)), vid );
+    for (vid=run_ids) run("binary_i2s_s2i",vid) test( "binary_i2s_s2i", binary_s2i(binary_i2s(gv(vid,0))), vid );
+    for (vid=run_ids) run("binary_iw2i_32",vid) test( "binary_iw2i_32", binary_iw2i(gv(vid,0),3,2), vid );
+    for (vid=run_ids) run("binary_and",vid) test( "binary_and", binary_and(gv(vid,0),gv(vid,1)), vid );
+    for (vid=run_ids) run("binary_or",vid) test( "binary_or", binary_or(gv(vid,0),gv(vid,1)), vid );
+    for (vid=run_ids) run("binary_xor",vid) test( "binary_xor", binary_xor(gv(vid,0),gv(vid,1)), vid );
+    for (vid=run_ids) run("binary_not",vid) test( "binary_not", binary_not(gv(vid,0)), vid );
+    for (vid=run_ids) run("binary_lsh",vid) test( "binary_lsh", binary_lsh(gv(vid,0)), vid );
+    for (vid=run_ids) run("binary_rsh",vid) test( "binary_rsh", binary_rsh(gv(vid,0)), vid );
 
     // end-of-tests
   END_OPENSCAD;

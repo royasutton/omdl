@@ -98,7 +98,7 @@ module rectangle
                    [3, 0,  1, 1, -1, 270] ] )
       {
         translate([rx*i[1] + vr * i[2], ry*i[3] + vr * i[4]])
-        if ( bitwise_is_equal(vrm, i[0], 0) )
+        if ( binary_bit_is(vrm, i[0], 0) )
         {
           circle(r=vr);
         }
@@ -127,7 +127,7 @@ module rectangle
                    [2, 1, -1, 1, -1],
                    [3, 0,  1, 1, -1] ] )
       {
-        if ( (crv[i[0]] > 0) && bitwise_is_equal(vrm, i[0], 0) )
+        if ( (crv[i[0]] > 0) && binary_bit_is(vrm, i[0], 0) )
         {
          translate([rx*i[1] + crv[i[0]] * i[2], ry*i[3] + crv[i[0]] * i[4]])
          circle(r=crv[i[0]]);
