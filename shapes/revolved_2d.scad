@@ -270,7 +270,7 @@ BEGIN_SCOPE manifest;
 
     $fn = 36;
 
-    grid_repeat( g=4, i=150, center=true )
+    repeat_grid( g=4, i=150, center=true )
     {
       torus_rectangle_c( size=[40,20], core=[35,20], r=40, l=[25,60], co=[0,2.5], vr=4, vrm=15, m=63, center=true );
       torus_triangle_ls_c( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );

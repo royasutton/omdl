@@ -57,9 +57,9 @@
   \details
 
     \b Example
-    \amu_eval ( function=radial_repeat ${example_dim} )
+    \amu_eval ( function=repeat_radial ${example_dim} )
 *******************************************************************************/
-module radial_repeat
+module repeat_radial
 (
   n,
   r = 1,
@@ -89,9 +89,9 @@ module radial_repeat
   \details
 
     \b Example
-    \amu_eval ( function=grid_repeat ${example_dim} )
+    \amu_eval ( function=repeat_grid ${example_dim} )
 *******************************************************************************/
-module grid_repeat
+module repeat_grid
 (
   g,
   i,
@@ -178,13 +178,13 @@ BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
 
-    shape = "radial_repeat";
+    shape = "repeat_radial";
     $fn = 36;
 
-    if (shape == "radial_repeat")
-      radial_repeat( n=7, r=6, move=true ) square( [20,1], center=true );
-    else if (shape == "grid_repeat")
-      grid_repeat( g=[5,5,4], i=10, c=50, center=true ) {cube(10, center=true); sphere(10);}
+    if (shape == "repeat_radial")
+      repeat_radial( n=7, r=6, move=true ) square( [20,1], center=true );
+    else if (shape == "repeat_grid")
+      repeat_grid( g=[5,5,4], i=10, c=50, center=true ) {cube(10, center=true); sphere(10);}
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -193,8 +193,8 @@ BEGIN_SCOPE dim;
     views     name "views" views "diag";
     defines   name "shapes" define "shape"
               strings "
-                radial_repeat
-                grid_repeat
+                repeat_radial
+                repeat_grid
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter --view=axes";

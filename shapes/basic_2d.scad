@@ -840,7 +840,7 @@ module star2d
   l = defined_e_or(size, 0, size);
   w = defined_e_or(size, 1, l/2);
 
-  radial_repeat(n=n, angle=true, move=false)
+  repeat_radial(n=n, angle=true, move=false)
   rotate([0, 0, -90])
   translate([-w/2, 0])
   triangle_ls_c(vs=[w, l, l], vr=vr);
@@ -916,7 +916,7 @@ BEGIN_SCOPE manifest;
 
     $fn = 36;
 
-    grid_repeat( g=5, i=60, center=true )
+    repeat_grid( g=5, i=60, center=true )
     {
       rectangle( size=[25,40], vr=[0,10,10,5], vrm=4, center=true );
       rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, vrm2=3, co=[0,5], center=true );

@@ -188,7 +188,7 @@ BEGIN_SCOPE manifest;
 
     $fn = 36;
 
-    grid_repeat( g=5, i=60, center=true )
+    repeat_grid( g=5, i=60, center=true )
     {
       polygon_round( r=20, v1=[1,1], v2=135 );
       polygon_elliptical_sector( r=[20, 15], v1=115, v2=-115 );

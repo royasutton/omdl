@@ -402,7 +402,7 @@ module star3d
   {
     difference()
     {
-      radial_repeat(n=n, angle=true, move=false)
+      repeat_radial(n=n, angle=true, move=false)
       scale([1, 1, h/w])
       rotate([45, 0, 0])
       rotate([0, 90, 0])
@@ -414,7 +414,7 @@ module star3d
   }
   else
   {
-    radial_repeat(n=n, angle=true, move=false)
+    repeat_radial(n=n, angle=true, move=false)
     scale([1, 1, h/w])
     rotate([45, 0, 0])
     rotate([0, 90, 0])
@@ -480,7 +480,7 @@ BEGIN_SCOPE manifest;
 
     $fn = 36;
 
-    grid_repeat( g=4, i=60, center=true )
+    repeat_grid( g=4, i=60, center=true )
     {
       translate([0,0,-12.5]) cone( h=25, r=15, vr=2 );
       cuboid( size=[25,40,20], vr=5, center=true );

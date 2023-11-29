@@ -149,7 +149,7 @@ BEGIN_SCOPE logo;
 
     cone( h=20, r=10, vr=2 );
     rotate([0, 0, 360/20])
-    radial_repeat( n=5, angle=true )
+    repeat_radial( n=5, angle=true )
       translate([15,-5,0])
         extrude_linear_uls( h=10 )
           triangle_ls_c( vs=frame, vc=core, vr=vrnd );
@@ -178,7 +178,7 @@ BEGIN_SCOPE quickstart;
 
     cone( h=20, r=10, vr=2 );
     rotate([0, 0, 360/20])
-    radial_repeat( n=5, angle=true )
+    repeat_radial( n=5, angle=true )
       translate([15,-5,0])
         extrude_linear_uls( h=10 )
           triangle_ls_c( vs=frame, vc=core, vr=vrnd );
