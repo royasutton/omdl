@@ -48,7 +48,7 @@
 
 //! A rectangular cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
-  \copydoc rotate_extrude_tre()
+  \copydoc extrude_rotate_tre()
 
   \copydoc rectangle_c()
 
@@ -80,7 +80,7 @@ module torus_rectangle_c
   center = false
 )
 {
-  rotate_extrude_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
+  extrude_rotate_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
   rectangle_c
   (
     size=size, core=core, t=t,
@@ -93,7 +93,7 @@ module torus_rectangle_c
 
 //! A triangular cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
-  \copydoc rotate_extrude_tre()
+  \copydoc extrude_rotate_tre()
 
   \copydoc triangle_ls_c()
 
@@ -122,7 +122,7 @@ module torus_triangle_ls_c
   incenter = false
 )
 {
-  rotate_extrude_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
+  extrude_rotate_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
   triangle_ls_c
   (
     vs=vs, vc=vc,
@@ -134,7 +134,7 @@ module torus_triangle_ls_c
 
 //! An elliptical cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
-  \copydoc rotate_extrude_tre()
+  \copydoc extrude_rotate_tre()
 
   \copydoc ellipse_cs()
 
@@ -161,7 +161,7 @@ module torus_ellipse_cs
   cr = 0
 )
 {
-  rotate_extrude_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
+  extrude_rotate_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
   ellipse_cs
   (
     size=size, core=core, t=t,
@@ -172,7 +172,7 @@ module torus_ellipse_cs
 
 //! A trapezoidal cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
-  \copydoc rotate_extrude_tre()
+  \copydoc extrude_rotate_tre()
 
   \copydoc polygon_trapezoid()
 
@@ -206,7 +206,7 @@ module torus_polygon_trapezoid
   centroid = false
 )
 {
-  rotate_extrude_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
+  extrude_rotate_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
   polygon_trapezoid
   (
     b=b,

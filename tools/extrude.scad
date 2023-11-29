@@ -56,9 +56,9 @@
   \details
 
     \b Example
-    \amu_eval ( function=rotate_extrude_tr ${example_dim} )
+    \amu_eval ( function=extrude_rotate_tr ${example_dim} )
 *******************************************************************************/
-module rotate_extrude_tr
+module extrude_rotate_tr
 (
   r,
   pa = 0,
@@ -74,7 +74,7 @@ module rotate_extrude_tr
 
 //! Translate, rotate, and revolve a 2d shape about the z-axis with linear elongation.
 /***************************************************************************//**
-  \copydetails rotate_extrude_tr()
+  \copydetails extrude_rotate_tr()
 
   \param    l <decimal-list-2|decimal> The elongation length.
             A list [x, y] of decimals or a single decimal for (x=y)
@@ -87,12 +87,12 @@ module rotate_extrude_tr
   \details
 
     \b Example
-    \amu_eval ( function=rotate_extrude_tre ${example_dim} )
+    \amu_eval ( function=extrude_rotate_tre ${example_dim} )
 
   \note When elongating <tt>(l > 0)</tt>, \p ra is ignored. However, \p m
         may be used to control which complete revolution section to render.
 *******************************************************************************/
-module rotate_extrude_tre
+module extrude_rotate_tre
 (
   r,
   pa = 0,
@@ -105,7 +105,7 @@ module rotate_extrude_tre
 {
   if ( is_undef(l) || (profile==true) )
   {
-    rotate_extrude_tr(r=r, pa=pa, ra=ra, profile=profile)
+    extrude_rotate_tr(r=r, pa=pa, ra=ra, profile=profile)
     children();
   }
   else
@@ -127,7 +127,7 @@ module rotate_extrude_tre
     {
       translate([i[0], i[1], 0])
       rotate([0, 0, i[2]])
-      rotate_extrude_tr(r=r, pa=pa, ra=90, profile=profile)
+      extrude_rotate_tr(r=r, pa=pa, ra=90, profile=profile)
       children();
     }
 
@@ -180,12 +180,12 @@ module rotate_extrude_tre
   \details
 
     \b Example
-    \amu_eval ( function=linear_extrude_uls ${example_dim} )
+    \amu_eval ( function=extrude_linear_uls ${example_dim} )
 
   \todo This function should be rewritten to use the built-in scaling
         provided by linear_extrude() in the upper and lower scaling zones.
 *******************************************************************************/
-module linear_extrude_uls
+module extrude_linear_uls
 (
   h,
   center = false
@@ -263,15 +263,15 @@ BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
 
-    shape = "rotate_extrude_tr";
+    shape = "extrude_rotate_tr";
     $fn = 36;
 
-    if (shape == "rotate_extrude_tr")
-      rotate_extrude_tr( r=50, pa=45, ra=270 ) square( [10,5], center=true );
-    else if (shape == "rotate_extrude_tre")
-      rotate_extrude_tre( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
-    else if (shape == "linear_extrude_uls")
-      linear_extrude_uls( [5,10,15,-5], center=true ) square( [20,15], center=true );
+    if (shape == "extrude_rotate_tr")
+      extrude_rotate_tr( r=50, pa=45, ra=270 ) square( [10,5], center=true );
+    else if (shape == "extrude_rotate_tre")
+      extrude_rotate_tre( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
+    else if (shape == "extrude_linear_uls")
+      extrude_linear_uls( [5,10,15,-5], center=true ) square( [20,15], center=true );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -280,9 +280,9 @@ BEGIN_SCOPE dim;
     views     name "views" views "diag";
     defines   name "shapes" define "shape"
               strings "
-                rotate_extrude_tr
-                rotate_extrude_tre
-                linear_extrude_uls
+                extrude_rotate_tr
+                extrude_rotate_tre
+                extrude_linear_uls
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter --view=axes";
