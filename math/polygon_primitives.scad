@@ -196,9 +196,9 @@ function polygon2d_line_p
   )
     (a == 1) ?
     is_defined(x) ? undef                                     // (a == 1)
-  : [ for (py = pl) interpolate2d_linear_pp(ip, tp, y=py) ]   // interpolate for 'x'
+  : [ for (py = pl) interpolate2d_l_pp(ip, tp, y=py) ]        // interpolate for 'x'
   : is_defined(y) && zdy ? undef                              // (a == 0)
-  : [ for (px = pl) interpolate2d_linear_pp(ip, tp, x=px) ];  // interpolate for 'y'
+  : [ for (px = pl) interpolate2d_l_pp(ip, tp, x=px) ];       // interpolate for 'y'
 
 //! Compute coordinates of an arc with constant radius between two vectors in 2D.
 /***************************************************************************//**

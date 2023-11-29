@@ -199,7 +199,7 @@
     |  3  | [p1, p2]  | a line from 'p1' to 'p2'          |
 
     The functions is_point(), is_vector(), is_line(), line_dim(),
-    line_tp(), line_ip(), vector_to_line(), and line_to_vector(), are
+    line_tp(), line_ip(), vol_to_point(), and vol_to_origin(), are
     available for type identification and convertion.
 
     \b Example

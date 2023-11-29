@@ -131,7 +131,7 @@ function is_line
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function is_line_or_vector
+function is_vol
 (
   v
 ) = is_vector(v) ? true
@@ -369,7 +369,7 @@ function point_to_3d
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Linear_interpolation
 *******************************************************************************/
-function interpolate2d_linear_pp
+function interpolate2d_l_pp
 (
   p1,
   p2,
@@ -623,7 +623,7 @@ function line_ip
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function line_to_vector
+function vol_to_origin
 (
   l
 ) = is_vector(l) ? (len(l) == 1) ? l[0] : l
@@ -648,7 +648,7 @@ function line_to_vector
 
     See \ref dt_line for argument specification and conventions.
 *******************************************************************************/
-function vector_to_line
+function vol_to_point
 (
   l,
   p
@@ -660,7 +660,7 @@ function vector_to_line
                        : (line_dim(l) == 2) ? origin2d
                                             : origin3d
     )
-    [d, d + line_to_vector(l)];
+    [d, d + vol_to_origin(l)];
 
 //! Compute the dot product of two lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
@@ -686,10 +686,10 @@ function dot_ll
 (
   l1,
   l2
-) = !is_line_or_vector(l1) ? undef
-  : !is_line_or_vector(l2) ? undef
+) = !is_vol(l1) ? undef
+  : !is_vol(l2) ? undef
   : (len(l1) != len(l2)) ? undef
-  : (line_to_vector(l1) * line_to_vector(l2));
+  : (vol_to_origin(l1) * vol_to_origin(l2));
 
 //! Compute the cross product of two lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
@@ -719,10 +719,10 @@ function cross_ll
 (
   l1,
   l2
-) = !is_line_or_vector(l1) ? undef
-  : !is_line_or_vector(l2) ? undef
+) = !is_vol(l1) ? undef
+  : !is_vol(l2) ? undef
   : (len(l1) != len(l2)) ? undef
-  : cross(line_to_vector(l1), line_to_vector(l2));
+  : cross(vol_to_origin(l1), vol_to_origin(l2));
 
 //! Compute the scalar triple product of three lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
@@ -754,12 +754,12 @@ function striple_lll
   l1,
   l2,
   l3
-) = !is_line_or_vector(l1) ? undef
-  : !is_line_or_vector(l2) ? undef
-  : !is_line_or_vector(l3) ? undef
+) = !is_vol(l1) ? undef
+  : !is_vol(l2) ? undef
+  : !is_vol(l3) ? undef
   : (len(l1) != len(l2)) ? undef
   : (len(l2) != len(l3)) ? undef
-  : (line_to_vector(l1) * cross_ll(l2, l3));
+  : (vol_to_origin(l1) * cross_ll(l2, l3));
 
 //! Compute the angle between two lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
@@ -792,8 +792,8 @@ function angle_ll
   l1,
   l2,
   s = true
-) = !is_line_or_vector(l1) ? undef
-  : !is_line_or_vector(l2) ? undef
+) = !is_vol(l1) ? undef
+  : !is_vol(l2) ? undef
   : let
     (
       d = line_dim(l1) + line_dim(l2)
@@ -834,9 +834,9 @@ function angle_lll
   l1,
   l2,
   n
-) = !is_line_or_vector(l1) ? undef
-  : !is_line_or_vector(l2) ? undef
-  : !is_line_or_vector(n) ? undef
+) = !is_vol(l1) ? undef
+  : !is_vol(l2) ? undef
+  : !is_vol(n) ? undef
   : (len(l1) != len(l2)) ? undef
   : (len(l2) != len(n)) ? undef
   : atan2(striple_lll(n, l1, l2), dot_ll(l1, l2));
@@ -855,8 +855,8 @@ function angle_lll
 function unit_l
 (
   l
-) = !is_line_or_vector(l) ? undef
-  : line_to_vector(l) / distance_pp(line_to_vector(l));
+) = !is_vol(l) ? undef
+  : vol_to_origin(l) / distance_pp(vol_to_origin(l));
 
 //! Test if three lines or vectors are coplanar in 3d-space.
 /***************************************************************************//**
@@ -887,9 +887,9 @@ function are_coplanar_lll
   l2,
   l3,
   d = 6
-) = !is_line_or_vector(l1) ? undef
-  : !is_line_or_vector(l2) ? undef
-  : !is_line_or_vector(l3) ? undef
+) = !is_vol(l1) ? undef
+  : !is_vol(l2) ? undef
+  : !is_vol(l3) ? undef
   : (len(l1) != len(l2)) ? undef
   : (len(l2) != len(l3)) ? undef
   : (round_d(striple_lll(l1, l2, l3), d) ==  0);
@@ -924,7 +924,7 @@ function plane_to_normal
 ) = !is_plane(n) ? undef
 
     // n is normal
-  : is_vector(n) ? point_to_3d(line_to_vector(n))
+  : is_vector(n) ? point_to_3d(vol_to_origin(n))
 
     // make 3d
   : let
@@ -1091,7 +1091,7 @@ BEGIN_SCOPE validate;
         x_axis3d_uv,                                        // t08
         x_axis3d_uv                                         // t09
       ],
-      ["line_to_vector",
+      ["vol_to_origin",
         2,                                                  // fac
         4,                                                  // crp
         undef,                                              // t01
@@ -1259,7 +1259,7 @@ BEGIN_SCOPE validate;
     log_skip( "is_point()" );
     log_skip( "is_vector()" );
     log_skip( "is_line()" );
-    log_skip( "is_line_or_vector()" );
+    log_skip( "is_vol()" );
     log_skip( "is_plane()" );
 
     // set 2: point
@@ -1270,7 +1270,7 @@ BEGIN_SCOPE validate;
     log_skip( "point_closest_pl()" );
     log_skip( "point_closest_pn()" );
     for (vid=run_ids) run("point_to_3d",vid) test( "point_to_3d", point_to_3d(gv(vid,0)), vid, false );
-    log_skip( "interpolate2d_linear_pp()" );
+    log_skip( "interpolate2d_l_pp()" );
 
     // set 3: vector
 
@@ -1281,8 +1281,8 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("line_dim",vid) test( "line_dim", line_dim([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("line_tp",vid) test( "line_tp", line_tp([gv(vid,0),gv(vid,1)]), vid, true );
     for (vid=run_ids) run("line_ip",vid) test( "line_ip", line_ip([gv(vid,0),gv(vid,1)]), vid, true );
-    for (vid=run_ids) run("line_to_vector",vid) test( "line_to_vector", line_to_vector([gv(vid,0),gv(vid,1)]), vid, true );
-    log_skip( "vector_to_line()" );
+    for (vid=run_ids) run("vol_to_origin",vid) test( "vol_to_origin", vol_to_origin([gv(vid,0),gv(vid,1)]), vid, true );
+    log_skip( "vol_to_point()" );
     for (vid=run_ids) run("dot_ll",vid) test( "dot_ll", dot_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("cross_ll",vid) test( "cross_ll", cross_ll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)]), vid, true );
     for (vid=run_ids) run("striple_lll",vid) test( "striple_lll", striple_lll([gv(vid,0),gv(vid,1)],[gv(vid,2),gv(vid,3)],[gv(vid,4),gv(vid,5)]), vid, true );
