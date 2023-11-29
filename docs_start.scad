@@ -151,7 +151,8 @@ BEGIN_SCOPE logo;
     rotate([0, 0, 360/20])
     radial_repeat( n=5, angle=true )
       translate([15,-5,0])
-        etriangle_ls_c( vs=frame, vc=core, vr=vrnd, h=10 );
+        linear_extrude_uls( h=10 )
+          triangle_ls_c( vs=frame, vc=core, vr=vrnd );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -179,7 +180,8 @@ BEGIN_SCOPE quickstart;
     rotate([0, 0, 360/20])
     radial_repeat( n=5, angle=true )
       translate([15,-5,0])
-        etriangle_ls_c( vs=frame, vc=core, vr=vrnd, h=10 );
+        linear_extrude_uls( h=10 )
+          triangle_ls_c( vs=frame, vc=core, vr=vrnd );
 
     translate([0, -50, 0])
     linear_extrude(height=10)
