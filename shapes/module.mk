@@ -9,11 +9,10 @@ local_path        :=  shapes
 local_library     :=  docs_module \
                       \
                       basic_2d \
-                      basic_2de \
+                      polygon_2d \
                       basic_2dr \
-                      basic_3d \
                       \
-                      polygon_2d
+                      basic_3d
 
 local_release_add :=  svg/basic_2d_manifest.svg \
                       \

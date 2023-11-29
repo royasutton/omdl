@@ -76,7 +76,6 @@ include <math/utility.scad>;
 // shapes
 //----------------------------------------------------------------------------//
 include <shapes/basic_2d.scad>;
-include <shapes/basic_2de.scad>;
 include <shapes/basic_2dr.scad>;
 
 include <shapes/basic_3d.scad>;
