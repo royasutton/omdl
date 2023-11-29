@@ -48,7 +48,7 @@
 
 //! An edge round with constant radius between two vectors.
 /***************************************************************************//**
-  \copydetails polygon2d_round_p()
+  \copydetails polygon_round_p()
 
     The coordinate points are rendered using polygon(). Parameter \p cw
     = \b true preset.
@@ -73,7 +73,7 @@ module polygon_round
 
   pp = concat
   ( [c],
-    polygon2d_round_p(m=m, r=r, c=c, v1=v1, v2=v2, fn=fn, cw=cw)
+    polygon_round_p(m=m, r=r, c=c, v1=v1, v2=v2, fn=fn, cw=cw)
   );
 
   polygon( pp );
@@ -81,7 +81,7 @@ module polygon_round
 
 //! An elliptical sector.
 /***************************************************************************//**
-  \copydetails polygon2d_elliptical_sector_p()
+  \copydetails polygon_elliptical_sector_p()
 
     The coordinate points are rendered using polygon(). Parameter \p cw
     = \b true preset.
@@ -103,14 +103,14 @@ module polygon_elliptical_sector
 {
   cw = true;
 
-  c = polygon2d_elliptical_sector_p(r=r, c=c, v1=v1, v2=v2, s=s, fn=fn, cw=cw);
+  c = polygon_elliptical_sector_p(r=r, c=c, v1=v1, v2=v2, s=s, fn=fn, cw=cw);
 
   polygon( c );
 }
 
 //! A trapezoid with vertex rounding.
 /***************************************************************************//**
-  \copydetails polygon2d_trapezoid_p()
+  \copydetails polygon_trapezoid_p()
 
     The coordinate points are rendered using polygon(). Parameter \p cw
     = \b true preset.
@@ -136,7 +136,7 @@ module polygon_trapezoid
 {
   cw = true;
 
-  c = polygon2d_trapezoid_p(b=b, h=h, l=l, a=a, vr=vr, vrm=vrm, vfn=vfn, cw=cw);
+  c = polygon_trapezoid_p(b=b, h=h, l=l, a=a, vr=vr, vrm=vrm, vfn=vfn, cw=cw);
 
   translate ( (centroid==true) ? -polygon2d_centroid(c) : origin2d )
   polygon( c );

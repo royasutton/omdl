@@ -66,7 +66,7 @@
 
     hull()
     {
-      for ( p = polygon2d_regular_p( r=20, n=5, vr=vr ) )
+      for ( p = polygon_regular_p( r=20, n=5, vr=vr ) )
         translate( p )
         circle( r=vr );
     }
@@ -76,7 +76,7 @@
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Regular_polygon
 *******************************************************************************/
-function polygon2d_regular_p
+function polygon_regular_p
 (
   n,
   r,
@@ -132,7 +132,7 @@ function polygon2d_regular_p
     and \p p2. The order of precedence for interpolation is: \p x, \p
     y, \p r, \p fs, \p ft, \p fn.
 *******************************************************************************/
-function polygon2d_line_p
+function polygon_line_p
 (
   p1 = origin2d,
   p2 = x_axis2d_uv,
@@ -225,7 +225,7 @@ function polygon2d_line_p
 
   [facets]: \ref openscad_fn()
 *******************************************************************************/
-function polygon2d_arc_p
+function polygon_arc_p
 (
   r  = 1,
   c  = origin2d,
@@ -291,7 +291,7 @@ function polygon2d_arc_p
 
   [facets]: \ref openscad_fn()
 *******************************************************************************/
-function polygon2d_round_p
+function polygon_round_p
 (
   m  = 1,
   r  = 1,
@@ -324,8 +324,8 @@ function polygon2d_round_p
     tc2 = c + vim*unit_l(va2),
 
     // vertex rounding coordinate point list
-    vpl = (m == 1) ? polygon2d_arc_p(r=r, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=true)
-        : (m == 2) ? polygon2d_arc_p(r=r, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=false)
+    vpl = (m == 1) ? polygon_arc_p(r=r, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=true)
+        : (m == 2) ? polygon_arc_p(r=r, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=false)
         : empty_lst,
 
     // cw ordering
@@ -357,7 +357,7 @@ function polygon2d_round_p
 
   [facets]: \ref openscad_fn()
 *******************************************************************************/
-function polygon2d_elliptical_sector_p
+function polygon_elliptical_sector_p
 (
   r = 1,
   c = origin2d,
@@ -426,7 +426,7 @@ function polygon2d_elliptical_sector_p
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Trapezoid
 *******************************************************************************/
-function polygon2d_trapezoid_p
+function polygon_trapezoid_p
 (
   b = 1,
   h,

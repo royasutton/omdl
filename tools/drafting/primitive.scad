@@ -984,7 +984,7 @@ module draft_arrow
     else if ( s1 == 5 )
     { // circle
       hull_if( !s2 )
-      for ( ls = sequence_ns( polygon2d_arc_p( r=al/3, c=pah, fn=$draft_arrow_fn ), 2, 1 ) )
+      for ( ls = sequence_ns( polygon_arc_p( r=al/3, c=pah, fn=$draft_arrow_fn ), 2, 1 ) )
         draft_line_pp(ls[0], ls[1], w=w);
     }
   }
@@ -1098,7 +1098,7 @@ module draft_line
       s2 = defined_e_or(s, 1, 1)*lsm;         // length multiplier
       s3 = defined_e_or(s, 2, 2);             // stride
 
-      for ( ls = sequence_ns( polygon2d_line_p(l=l, ft=s2), 2, s3 ) )
+      for ( ls = sequence_ns( polygon_line_p(l=l, ft=s2), 2, s3 ) )
         draft_line_pp(ls[0], ls[1], w);
     }
     else if ( s1 == 3 )
@@ -1108,10 +1108,10 @@ module draft_line
       s4 = defined_e_or(s, 3, 2)*lsm;         // length multiplier 2
       s5 = defined_e_or(s, 4, 3);             // stride 2
 
-      for ( ls = sequence_ns( polygon2d_line_p(l=l, fs=s2), 2, s3 ) )
+      for ( ls = sequence_ns( polygon_line_p(l=l, fs=s2), 2, s3 ) )
         draft_line_pp(ls[0], ls[1], w);
 
-      for ( ls = sequence_ns( polygon2d_line_p(l=l, fs=s4), 2, s5 ) )
+      for ( ls = sequence_ns( polygon_line_p(l=l, fs=s4), 2, s5 ) )
         draft_line_pp(ls[0], ls[1], w);
     }
     else if ( s1 == 4 )
@@ -1130,7 +1130,7 @@ module draft_line
       // 'n' centered
       if (s2 > 0)
       {
-        mp = polygon2d_line_p(l=l, fn=s2+1);
+        mp = polygon_line_p(l=l, fn=s2+1);
         for (j = [1:len(mp)-2])
         {
           cl1 = line2d_new(s3/2, p1=mp[j], v=[t, i]);
@@ -1150,7 +1150,7 @@ module draft_line
       // *s5=90 invokes bug: https://github.com/CGAL/cgal/issues/2631
 
       la = angle_ll(x_axis2d_uv, l);
-      bp = polygon2d_line_p(l=l, fn=1+max(1,s2));
+      bp = polygon_line_p(l=l, fn=1+max(1,s2));
 
       xp =
       [
@@ -1158,8 +1158,8 @@ module draft_line
         let
         (
           mp = bp[i],                         // mid, cross, & line points
-          xp = polygon2d_regular_p(n=2, r=s4, o=la+s5, c=mp),
-          lp = polygon2d_regular_p(n=2, r=s3, o=la, c=mp)
+          xp = polygon_regular_p(n=2, r=s4, o=la+s5, c=mp),
+          lp = polygon_regular_p(n=2, r=s3, o=la, c=mp)
         )
         [ lp[1], xp[0], xp[1], lp[0] ]
       ];
@@ -1176,7 +1176,7 @@ module draft_line
 
 //! Draft an arc with configurable style and optional arrowheads.
 /***************************************************************************//**
-  \copydetails polygon2d_arc_p()
+  \copydetails polygon_arc_p()
     These coordinates will be used to draft an arc according to the
     following additional parameters.
 
@@ -1240,7 +1240,7 @@ module draft_arc
 
   if ( !all_equal([s1, a1, a2], 0) )
   {
-    pp = polygon2d_arc_p( r=r, c=c, v1=v1, v2=v2, fn=fn, cw=cw );
+    pp = polygon_arc_p( r=r, c=c, v1=v1, v2=v2, fn=fn, cw=cw );
 
     if ( s1 == 1 )
     { // solid line

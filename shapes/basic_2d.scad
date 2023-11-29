@@ -613,7 +613,7 @@ module ngon
   {
     hull()
     {
-      for ( c = polygon2d_regular_p( r=r, n=n, vr=vr ) )
+      for ( c = polygon_regular_p( r=r, n=n, vr=vr ) )
       {
         translate( c )
         circle( r=vr );
