@@ -1,4 +1,4 @@
-//! Mathematical base-2 bitwise binary functions.
+//! Base-2 binary math functions and operations.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Bitwise Math)
-    \amu_define group_brief (Base-two bitwise binary operations.)
+    \amu_define group_name  (Binary Operations)
+    \amu_define group_brief (Base-2 binary math functions and operations.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -63,13 +63,13 @@
 
 //----------------------------------------------------------------------------//
 
-//! Test if a base-2 bit position of an integer value equals a test bit.
+//! Test if a binary bit position of an integer value equals a test bit.
 /***************************************************************************//**
   \param    v <integer> An integer value.
-  \param    b <integer> A base-2 bit position.
+  \param    b <integer> A binary bit position.
   \param    t <bit> The bit test value [0|1].
 
-  \returns  (1) <boolean> \b true when the base-2 bit position in \p v
+  \returns  (1) <boolean> \b true when the binary bit position in \p v
                 specified by \p b equals \p t, otherwise returns
                 \b false.
             (2) Returns \b undef if \p v or \p b is not an integer.
@@ -83,13 +83,13 @@ function bitwise_is_equal
   : !is_integer(b) ? undef
   : ((floor(v / pow(2, b)) % 2) == t);
 
-//! Encode an integer value as a base-2 list of bits.
+//! Encode an integer value as a binary list of bits.
 /***************************************************************************//**
   \param    v <integer> An integer value.
   \param    w <integer> The minimum bit width.
   \param    bv (an internal recursion loop variable).
 
-  \returns  (1) <bit-list> of bits base-2 encoding of the integer value.
+  \returns  (1) <bit-list> of bits binary encoding of the integer value.
             (2) Returns \b undef when \p v or \p w is not an integer.
 
   \details
@@ -110,11 +110,11 @@ function bitwise_i2v
   : ((v % 2) > 0) ? concat(bitwise_i2v(floor(v/2), w, bv*2), 1)
                   : concat(bitwise_i2v(floor(v/2), w, bv*2), 0);
 
-//! Decode a base-2 list of bits to an integer value.
+//! Decode a binary list of bits to an integer value.
 /***************************************************************************//**
-  \param    v <bit-list> A value encoded as a base-2 list of bits.
+  \param    v <bit-list> A value encoded as a binary list of bits.
 
-  \returns  (1) <integer> value encoding of the base-2 list of bits.
+  \returns  (1) <integer> value encoding of the binary list of bits.
             (2) Returns \b undef when \p v is not a list of bit values.
 *******************************************************************************/
 function bitwise_v2i
@@ -127,12 +127,12 @@ function bitwise_v2i
   : (first(v) == 0) ? bitwise_v2i(tailn(v))
   : undef;
 
-//! Encode an integer value as a base-2 string of bits.
+//! Encode an integer value as a binary string of bits.
 /***************************************************************************//**
   \param    v <integer> An integer value.
   \param    w <integer> The minimum bit width.
 
-  \returns  (1) <bit-string> of bits base-2 encoding of the integer value.
+  \returns  (1) <bit-string> of bits binary encoding of the integer value.
             (2) Returns \b undef when \p v or \p w is not an integer.
 *******************************************************************************/
 function bitwise_i2s
@@ -143,11 +143,11 @@ function bitwise_i2s
   : !is_integer(w) ? undef
   : strl(bitwise_i2v(v, w));
 
-//! Decode a base-2 string of bits to an integer value.
+//! Decode a binary string of bits to an integer value.
 /***************************************************************************//**
-  \param    v <bit-string> A value encoded as a base-2 string of bits.
+  \param    v <bit-string> A value encoded as a binary string of bits.
 
-  \returns  (1) <integer> value encoding of the base-2 string of bits.
+  \returns  (1) <integer> value encoding of the binary string of bits.
             (2) Returns \b undef when \p v is not a string of bit values.
 *******************************************************************************/
 function bitwise_s2i
@@ -160,11 +160,11 @@ function bitwise_s2i
   : (first(v) == "0") ? bitwise_s2i(strl(tailn(v)))
   : undef;
 
-//! Decode the integer in a value at a shifted base-2 bit mask of width-w.
+//! Decode the binary bits of a bit window to an integer value.
 /***************************************************************************//**
   \param    v <integer> An integer value.
-  \param    w <integer> The bit mask width.
-  \param    s <integer> The bit mask shift offset.
+  \param    w <integer> The bit window width.
+  \param    s <integer> The bit window shift offset.
 
   \returns  (1) <integer> value of the \p w bits of \p v starting at bit
                 position \p s up to bit <tt>(w+s-1)</tt>.
@@ -181,13 +181,13 @@ function bitwise_imi
   : !is_integer(s) ? undef
   : bitwise_rsh(bitwise_and(v, bitwise_lsh(pow(2,w)-1, s)), s);
 
-//! Base-two bitwise AND operation for integers.
+//! Base-2 binary AND operation for integers.
 /***************************************************************************//**
   \param    v1 <integer> An integer value.
   \param    v2 <integer> An integer value.
   \param    bv (an internal recursion loop variable).
 
-  \returns  (1) <integer> the base-2 bitwise AND of \p v1 and \p v2.
+  \returns  (1) <integer> the binary AND of \p v1 and \p v2.
             (2) Returns \b undef when \p v1 or \p v2 is not an integer.
 *******************************************************************************/
 function bitwise_and
@@ -202,13 +202,13 @@ function bitwise_and
     bitwise_and(floor(v1/2), floor(v2/2), bv*2) + bv
   : bitwise_and(floor(v1/2), floor(v2/2), bv*2);
 
-//! Base-two bitwise OR operation for integers.
+//! Base-2 binary OR operation for integers.
 /***************************************************************************//**
   \param    v1 <integer> An integer value.
   \param    v2 <integer> An integer value.
   \param    bv (an internal recursion loop variable).
 
-  \returns  (1) <integer> the base-2 bitwise OR of \p v1 and \p v2.
+  \returns  (1) <integer> the binary OR of \p v1 and \p v2.
             (2) Returns \b undef when \p v1 or \p v2 is not an integer.
 *******************************************************************************/
 function bitwise_or
@@ -223,13 +223,13 @@ function bitwise_or
     bitwise_or(floor(v1/2), floor(v2/2), bv*2) + bv
   : bitwise_or(floor(v1/2), floor(v2/2), bv*2);
 
-//! Base-two bitwise XOR operation for integers.
+//! Base-2 binary XOR operation for integers.
 /***************************************************************************//**
   \param    v1 <integer> An integer value.
   \param    v2 <integer> An integer value.
   \param    bv (an internal recursion loop variable).
 
-  \returns  (1) <integer> the base-2 bitwise XOR of \p v1 and \p v2.
+  \returns  (1) <integer> the binary XOR of \p v1 and \p v2.
             (2) Returns \b undef when \p v1 or \p v2 is not an integer.
 *******************************************************************************/
 function bitwise_xor
@@ -244,13 +244,13 @@ function bitwise_xor
     bitwise_xor(floor(v1/2), floor(v2/2), bv*2) + bv
   : bitwise_xor(floor(v1/2), floor(v2/2), bv*2);
 
-//! Base-two bitwise NOT operation for an integer.
+//! Base-2 binary NOT operation for an integer.
 /***************************************************************************//**
   \param    v <integer> An integer value.
   \param    w <integer> The minimum bit width.
   \param    bv (an internal recursion loop variable).
 
-  \returns  (1) <integer> the base-2 bitwise NOT of \p v.
+  \returns  (1) <integer> the binary NOT of \p v.
             (2) Returns \b undef when \p v or \p w is not an integer.
 *******************************************************************************/
 function bitwise_not
@@ -265,14 +265,14 @@ function bitwise_not
     bitwise_not(floor(v/2), w, bv*2)
   : bitwise_not(floor(v/2), w, bv*2) + bv;
 
-//! Base-two bitwise left-shift operation for an integer.
+//! Base-2 binary left-shift operation for an integer.
 /***************************************************************************//**
   \param    v <integer> An integer value.
   \param    s <integer> The number of bits to shift.
   \param    bm (an internal recursion loop variable).
   \param    bv (an internal recursion loop variable).
 
-  \returns  (1) <integer> the base-2 bitwise left-shift of \p v
+  \returns  (1) <integer> the binary left-shift of \p v
                 by \p s bits.
             (2) Returns \b undef when \p v or \p s is not an integer.
 *******************************************************************************/
@@ -293,12 +293,12 @@ function bitwise_lsh
   : ((v % 2) > 0) ? bitwise_lsh(floor(v/2), s, bm, bv*2) + bv
                   : bitwise_lsh(floor(v/2), s, bm, bv*2);
 
-//! Base-two bitwise right-shift operation for an integer.
+//! Base-2 binary right-shift operation for an integer.
 /***************************************************************************//**
   \param    v <integer> An integer value.
   \param    s <integer> The number of bits to shift.
 
-  \returns  (1) <integer> the base-2 bitwise right-shift of \p v
+  \returns  (1) <integer> the binary right-shift of \p v
                 by \p s bits.
             (2) Returns \b undef when \p v or \p s is not an integer.
 *******************************************************************************/
