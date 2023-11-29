@@ -76,11 +76,10 @@ include <math/utility.scad>;
 // shapes
 //----------------------------------------------------------------------------//
 include <shapes/basic_2d.scad>;
-include <shapes/basic_2dr.scad>;
+include <shapes/polygon_2d.scad>;
+include <shapes/revolved_2d.scad>;
 
 include <shapes/basic_3d.scad>;
-
-include <shapes/polygon_2d.scad>;
 
 //----------------------------------------------------------------------------//
 // tools

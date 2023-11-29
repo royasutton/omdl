@@ -10,7 +10,7 @@ local_library     :=  docs_module \
                       \
                       basic_2d \
                       polygon_2d \
-                      basic_2dr \
+                      revolved_2d \
                       \
                       basic_3d
 

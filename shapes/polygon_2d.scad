@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (2d Polygon)
+    \amu_define group_name  (2d Polygons)
     \amu_define group_brief (Polygon shapes generated in 2D space.)
     \amu_define view        (top)
 
