@@ -190,7 +190,7 @@ module polytope_number
     include <omdl-base.scad>;
 
     s = second(xy_plane_os) * 25;
-    p = polygon2d_linear_extrude_pf(s, h=50);
+    p = polygon_linear_extrude_pf(s, h=50);
 
     polytope_frame(first(p), second(p))
     {

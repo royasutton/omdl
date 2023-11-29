@@ -601,7 +601,7 @@ function polytope_ft_triangulate
     The radius can be specified by either the circumradius \p r or the
     inradius \p a. If both are specified, \p r is used.
 *******************************************************************************/
-function polygon2d_regular_perimeter
+function polygon_regular_perimeter
 (
   n,
   r,
@@ -623,7 +623,7 @@ function polygon2d_regular_perimeter
     The radius can be specified by either the circumradius \p r or the
     inradius \p a. If both are specified, \p r is used.
 *******************************************************************************/
-function polygon2d_regular_area
+function polygon_regular_area
 (
   n,
   r,
@@ -648,7 +648,7 @@ function polygon2d_regular_area
   \note     When \p p is not given, the listed order of the coordinates
             \p c establishes the path.
 *******************************************************************************/
-function polygon2d_perimeter
+function polygon_perimeter
 (
   c,
   p
@@ -688,7 +688,7 @@ function polygon2d_perimeter
 
     [Wikipedia]: https://en.wikipedia.org/wiki/Shoelace_formula
 *******************************************************************************/
-function polygon2d_area
+function polygon_area
 (
   c,
   p,
@@ -779,7 +779,7 @@ function polygon3d_area
 
     [Wikipedia]: https://en.wikipedia.org/wiki/Centroid#Centroid_of_polygon
 *******************************************************************************/
-function polygon2d_centroid
+function polygon_centroid
 (
   c,
   p
@@ -808,7 +808,7 @@ function polygon2d_centroid
     ],
 
     sc = sum(cv),
-    sa = polygon2d_area(c, pm, true)
+    sa = polygon_area(c, pm, true)
   )
   sc/(6*sa);
 
@@ -829,14 +829,14 @@ function polygon2d_centroid
   \note     When \p p is not given, the listed order of the coordinates
             \p c establishes the path.
 *******************************************************************************/
-function polygon2d_is_clockwise
+function polygon_is_clockwise
 (
   c,
   p
 ) =
   let
   (
-    sa = polygon2d_area(c, p, true)
+    sa = polygon_area(c, p, true)
   )
     (sa < 0) ? true
   : (sa > 0) ? false
@@ -858,7 +858,7 @@ function polygon2d_is_clockwise
   \note     When \p p is not given, the listed order of the coordinates
             \p c establishes the path.
 *******************************************************************************/
-function polygon2d_is_convex
+function polygon_is_convex
 (
   c,
   p
@@ -915,7 +915,7 @@ function polygon2d_is_convex
   \warning  Where there are secondary paths, the vertex ordering of each
              must be the same as the primary path.
 *******************************************************************************/
-function polygon2d_winding
+function polygon_winding
 (
   c,
   p,
@@ -965,14 +965,14 @@ function polygon2d_winding
   \note     When \p p is not given, the listed order of the coordinates
             \p c establishes the path.
 
-    \sa polygon2d_winding for warning about secondary shapes.
+    \sa polygon_winding for warning about secondary shapes.
 *******************************************************************************/
-function polygon2d_wn_is_point_inside
+function polygon_wn_is_p_inside
 (
   c,
   p,
   t
-) = (polygon2d_winding(c=c, p=p, t=t) != 0);
+) = (polygon_winding(c=c, p=p, t=t) != 0);
 
 //! Test if a point is inside a polygon in a Euclidean 2d-space using angle summation.
 /***************************************************************************//**
@@ -997,7 +997,7 @@ function polygon2d_wn_is_point_inside
 
     [Wikipedia]: https://en.wikipedia.org/wiki/Point_in_polygon
 *******************************************************************************/
-function polygon2d_as_is_point_inside
+function polygon_as_is_p_inside
 (
   c,
   p,
@@ -1204,7 +1204,7 @@ function polytope_bounding_box_pf
   \note     When \p p is not given, the listed order of the coordinates
             \p c establishes the path.
 *******************************************************************************/
-function polygon2d_linear_extrude_pf
+function polygon_linear_extrude_pf
 (
   c,
   p,
@@ -1217,10 +1217,10 @@ function polygon2d_linear_extrude_pf
     pm = defined_or(p, [consts(len(c))]),
     pn = len([for (pi = pm) for (ci = pi) 1]),
 
-    po = (centroid == true) ? polygon2d_centroid(c, p) : origin2d,
+    po = (centroid == true) ? polygon_centroid(c, p) : origin2d,
     zr = (center == true) ? [-h/2, h/2] : [0, h],
 
-    cw = polygon2d_is_clockwise (c, p),
+    cw = polygon_is_clockwise (c, p),
 
     pp = [for (zi = zr) for (pi = pm) for (ci = pi) concat(c[ci] - po, zi)],
     pf =
@@ -1297,12 +1297,12 @@ function polygon2d_linear_extrude_pf
     m = [2,3,4,3];
     n = [3, 8, undef, undef];
 
-    p = polygon2d_vertices_round3_p(c=c, vr=r, vrm=m, vfn=n);
+    p = polygon_vertices_round3_p(c=c, vr=r, vrm=m, vfn=n);
 
     polygon( p );
     \endcode
 *******************************************************************************/
-function polygon2d_vertices_round3_p
+function polygon_vertices_round3_p
 (
   c,
   vr = 0,

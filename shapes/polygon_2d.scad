@@ -138,7 +138,7 @@ module polygon_trapezoid
 
   c = polygon_trapezoid_p(b=b, h=h, l=l, a=a, vr=vr, vrm=vrm, vfn=vfn, cw=cw);
 
-  translate ( (centroid==true) ? -polygon2d_centroid(c) : origin2d )
+  translate ( (centroid==true) ? -polygon_centroid(c) : origin2d )
   polygon( c );
 }
 

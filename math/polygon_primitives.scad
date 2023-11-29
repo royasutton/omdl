@@ -421,7 +421,7 @@ function polygon_elliptical_sector_p
 
     When both \p h and \p l are specified, \p h has precedence.
     Each vertex may be assigned one of the available rounding
-    \ref polygon2d_vertices_round3_p "modes". See [Wikipedia] for
+    \ref polygon_vertices_round3_p "modes". See [Wikipedia] for
     more information.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Trapezoid
@@ -453,7 +453,7 @@ function polygon_trapezoid_p
     // cw ordering
     c  = [p4, p1, p2, p3],
 
-    pp = polygon2d_vertices_round3_p(c=c, vr=vr, vrm=vrm, vfn=vfn, cw=true)
+    pp = polygon_vertices_round3_p(c=c, vr=vr, vrm=vrm, vfn=vfn, cw=true)
   )
   (cw == true) ? pp : reverse(pp);
 

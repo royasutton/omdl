@@ -1313,7 +1313,7 @@ module draft_rectangle
     draft_line(l=[cp[0], cp[1]], w=w, s=s);
 }
 
-//! .
+//! Draft a polygon with configurable style.
 /***************************************************************************//**
   \param    c <coords-2d> A list of 2d coordinate points.
 
@@ -1349,7 +1349,7 @@ module draft_rectangle
 
       polytope_number(pp, ei=false, fi=false);
 
-      rp = polygon2d_vertices_round3_p(c=pp, vr=length(1/4, "in"), vrm=1, cw=false);
+      rp = polygon_vertices_round3_p(c=pp, vr=length(1/4, "in"), vrm=1, cw=false);
       draft_polygon(rp, s=2);
     }
 
