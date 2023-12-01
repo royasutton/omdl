@@ -338,7 +338,7 @@ module map_dump
     keys = map_get_keys(m);
     maxl = max( [for (i = keys) len(i)] ) + 1;
 
-    for (key = sort ? sort_q(keys) : keys)
+    for (key = (sort == true) ? sort_q(keys) : keys)
     {
       idx = map_get_index(m, key);
 
@@ -428,7 +428,7 @@ module map_write
     keys = map_get_keys(m);
     maxl = max( [for (i = keys) len(i)] ) + 1;
 
-    for (key = sort ? sort_q(keys) : keys)
+    for (key = (sort == true) ? sort_q(keys) : keys)
     {
       idx = map_get_index(m, key);
 
