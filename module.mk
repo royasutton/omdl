@@ -26,7 +26,7 @@ local_submodules  :=  common \
                       database
 
 # add only when directory exists
-local_submodules  +=  $(wildcard database_src)
+local_submodules  +=  $(wildcard contrib)
 
 #------------------------------------------------------------------------------#
 # initialize omdl modules

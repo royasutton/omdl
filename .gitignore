@@ -1,8 +1,8 @@
 #
-# database source directory
+# library contributions
 #
 
-/database_src/
+/contrib/
 
 #
 # backup, build, and release directories
