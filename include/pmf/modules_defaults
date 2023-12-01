@@ -29,11 +29,14 @@ modules                                 :=
 modules_release_add                      =
 modules_backup_add                      :=
 
+ignore_modules_exclude                  := $(false)
+
 #------------------------------------------------------------------------------#
 # Modules Control Variable List
 #------------------------------------------------------------------------------#
 
-modules_control_variables               :=
+modules_control_variables               := \
+  ignore_modules_exclude
 
 ################################################################################
 # eof

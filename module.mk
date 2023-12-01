@@ -25,17 +25,17 @@ local_submodules  :=  common \
                       \
                       database
 
-# add only when present
+# add only when directory exists
 local_submodules  +=  $(wildcard database_src)
 
 #------------------------------------------------------------------------------#
 # initialize omdl modules
 #------------------------------------------------------------------------------#
 
-# add (this) root module
+# initialize modules with this root module
 modules +=  $(lastword $(MAKEFILE_LIST))
 
-# add local module
+# add local module defined above
 $(eval $(call add-local-module))
 
 # cleanup after last module

@@ -16,7 +16,7 @@ AMU_PM_INIT                   := $(AMU_PM_PREFIX)amu_pm_init
 AMU_PM_RULES                  := $(AMU_PM_PREFIX)amu_pm_rules
 AMU_PM_DESIGN_FLOW            := df1/
 
-# 'Modules' extensions to openscad-amu for omdl
+# 'modules' extension to openscad-amu for omdl
 AMU_PM_COMPONENTS_LOCAL_PATH  := include/pmf
 AMU_PM_COMPONENTS_LOCAL       := modules
 
@@ -100,6 +100,9 @@ endif
 # debug_seam_scanner                    := $(trueq)
 # debug_dif_filter                      := $(true)
 # debug_dif_scanner                     := $(true)
+
+# ignore_modules_exclude                := $(true)
+# ignore_scopes_exclude                 := $(true)
 
 output_root                             := build
 output_path_add_project_version         := $(false)
@@ -186,23 +189,25 @@ library_info        := README.md \
                        lgpl-2.1.txt
 
 #------------------------------------------------------------------------------#
-# Include Library Modules
+# Excluded Library Modules
 #------------------------------------------------------------------------------#
+# to exclude nothing from the command line, use: $ make modules_exclude="" all
+# or set 'ignore_modules_exclude := $(true)' above
 
-# root module
-include module.mk
+modules_exclude               := parts \
+                                 database/component \
+                                 database/material
 
 #------------------------------------------------------------------------------#
 # Excluded Design Flow Scopes
 #------------------------------------------------------------------------------#
-# to exclude nothing (ie: build everything) from the command line, use:
-# make scopes_exclude="" all
+# to exclude nothing from the command line, use: $ make scopes_exclude="" all
+# or set 'ignore_scopes_exclude := $(true)' above
 
 # exclude shape manifests; required only when doing a library "release."
 scopes_exclude                := manifest
 
 # exclude database tests and statitics; required for complete documentation
-# build, but may be skipped during routine library development.
 scopes_exclude                += db_autotest \
                                  db_autostat
 
@@ -220,6 +225,11 @@ release_archive_files_add      = $(library_info)
 #------------------------------------------------------------------------------#
 backup_files_add              := $(library_info) \
                                  $(modules_backup_add)
+
+#------------------------------------------------------------------------------#
+# Include Library Modules (starting with root module)
+#------------------------------------------------------------------------------#
+include module.mk
 
 #------------------------------------------------------------------------------#
 # Include Design Flow Rules (DO NO EDIT THIS SECTION)

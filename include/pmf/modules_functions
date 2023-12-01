@@ -21,6 +21,8 @@
 # arg6: backup files
 #------------------------------------------------------------------------------#
 define add-module
+  $(amu_pm_d6)
+
   # $2: design
   ifneq ($(strip $2),$(empty))
     design += $(addprefix $(if $(strip $1),$1/),$2)
@@ -29,11 +31,6 @@ define add-module
   # $3: library
   ifneq ($(strip $3),$(empty))
     library += $(addprefix $(if $(strip $1),$1/),$3)
-  endif
-
-  # $4: modules
-  ifneq ($(strip $4),$(empty))
-    modules += $(addsuffix /$(modules_name).mk,$(addprefix $(if $(strip $1),$1/),$4))
   endif
 
   # $5: modules_release_add
@@ -49,11 +46,27 @@ define add-module
     modules_backup_add += $(addprefix $(if $(strip $1),$1/),$6)
   endif
 
-  #
-  # load submodules ($4)
-  #
+  # $4: (sub)module
+  # remove modules in $(modules_exclude) when $(ignore_modules_exclude) not true
   ifneq ($(strip $4),$(empty))
-    include $(addsuffix /$(modules_name).mk,$(addprefix $(if $(strip $1),$1/),$4))
+
+    # (sub)module
+    modules += \
+      $(addsuffix /$(modules_name).mk,
+        $(filter-out
+          $(if $(call bool_decode,$(ignore_modules_exclude)),$(empty),$(modules_exclude)),
+          $(addprefix $(if $(strip $1),$1/),$4)
+        )
+      )
+
+    # include (sub)module makefiles
+    include \
+      $(addsuffix /$(modules_name).mk,
+        $(filter-out
+          $(if $(call bool_decode,$(ignore_modules_exclude)),$(empty),$(modules_exclude)),
+          $(addprefix $(if $(strip $1),$1/),$4)
+        )
+      )
   endif
 endef
 
