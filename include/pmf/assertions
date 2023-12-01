@@ -1,0 +1,46 @@
+#------------------------------------------------------------------------------#
+# Design Flow Tools and Configurations Assertions
+#------------------------------------------------------------------------------#
+ifeq ($(version_checks),$(true))
+
+#------------------------------------------------------------------------------#
+# require specific OpenSCAD version.
+#------------------------------------------------------------------------------#
+$(call check_version,openscad,eq,2021.01,$(true), \
+  $(call ANNOUNCE_OPENSCAD_VERSION,2021.01) \
+)
+
+#------------------------------------------------------------------------------#
+# require openscad-amu version stated by $(AMU_TOOL_VERSION).
+#------------------------------------------------------------------------------#
+$(call check_version,amuseam,ge,$(subst v,,$(AMU_TOOL_VERSION)),$(true), \
+  $(call ANNOUNCE_AMU_VERSION,$(AMU_TOOL_VERSION)) \
+)
+
+#------------------------------------------------------------------------------#
+# warn of known build issue when latax output configured.
+#------------------------------------------------------------------------------#
+ifeq ($(generate_latex),$(true))
+$(call check_version,doxygen,le,1.8.9.1,$(true), \
+  latex output broken since v1.8.9.1. \
+)
+endif
+
+#------------------------------------------------------------------------------#
+# require imagemagick/convert utility has eps-coder access rights.
+#------------------------------------------------------------------------------#
+ifneq ($(shell identify -list policy | $(grep) EPS),)
+  ifneq ($(strip $(shell \
+          identify -list policy \
+          | $(sed) -n '/pattern: EPS/{x;p;d;}; x' \
+          | $(sed) -n 's/^.*rights:[[:space:]]*//p' \
+       )),Read Write)
+    $(error $(call ANNOUNCE_IMAGEMAGICK_POLICY,EPS,Read Write,read|write))
+  endif
+endif
+
+endif
+
+################################################################################
+# eof
+################################################################################

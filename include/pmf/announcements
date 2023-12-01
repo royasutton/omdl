@@ -1,0 +1,62 @@
+#------------------------------------------------------------------------------#
+# Project Announcements
+#------------------------------------------------------------------------------#
+
+define ANNOUNCE_AMU_INIT
+
+  [$1] file not found...
+  Tried [$2].
+
+  Please review the definitions at the top of $(firstword $(MAKEFILE_LIST)) and
+  update as needed for your installation.
+
+endef
+
+define ANNOUNCE_AMU_VERSION
+
+  This library has been designed and tested to work with openscad-amu $1
+  or later. To install:
+
+  $$ wget http://git.io/setup-amu.bash && chmod +x setup-amu.bash
+  $$ sudo ./setup-amu.bash --branch $(AMU_TOOL_VERSION) --yes --install
+
+endef
+
+define ANNOUNCE_OPENSCAD_VERSION
+
+  This library has been designed and tested to work with OpenSCAD $1.
+
+  Please make sure this version is available in the search path. This
+  or all version checks can be disabled in this project makefile using
+  the control variable [version_checks] or individually in the tools
+  assertions section.
+
+  see: $(firstword $(MAKEFILE_LIST))
+  See: http://www.openscad.org/downloads.html
+
+endef
+
+define ANNOUNCE_IMAGEMAGICK_POLICY
+
+  The current ImageMagick security policy denies access rights ($2)
+  to a coder ($1) required to compile this library. Please grant
+  these rights in the policy.xml file as follows;
+
+    <policy domain="coder" rights="$3" pattern="$1" />
+
+  command:
+
+    $$ policy_path=$$(identify -list configure |
+        sed -n "/CONFIGURE_PATH/s/CONFIGURE_PATH[[:space:]]*//p")
+
+    $$ sudo sed -i.orig $\\
+        '/"$1"/s/rights="[^"]*"/rights="$3"/' $\\
+        $${policy_path}policy.xml
+
+  See: http://imagemagick.org/script/security-policy.php
+
+endef
+
+################################################################################
+# eof
+################################################################################
