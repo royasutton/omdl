@@ -116,32 +116,6 @@ function all_equal
   : (first(v) != cv) ? false
   : all_equal(tailn(v), cv);
 
-//! Test if all elements of an iterable value equal one of the comparison values.
-/***************************************************************************//**
-  \param    v <iterable> An iterable data type value.
-  \param    cv \<value> An iterable of one more more comparison values.
-
-  \returns  <boolean> \b true when all elements of \p v equal one of the
-            values in \p cv and \b false otherwise. Returns \b undef
-            when either \p v or \p cv is undefined.
-
-
-  \details
-
-    The iterable type for \p v and \p cv must be the same. When \p v is
-    a list, \p cv must also be a list. When \p v is a string, \p cv
-    must also be a string.
-*******************************************************************************/
-function all_oneof
-(
-  v,
-  cv
-) = !is_iterable(v) ? undef
-    // 'v' and 'cv' must be same iterable type
-  : (is_list(v) && !is_list(cv)) ? undef
-  : (is_string(v) && !is_string(cv)) ? undef
-  : !any_equal(search( v, cv, 0, 0), empty_lst);
-
 //! Test if any element of an iterable value equal a comparison value.
 /***************************************************************************//**
   \param    v <iterable> An iterable data type value.
@@ -159,6 +133,36 @@ function any_equal
   : is_empty(v) ? false
   : (first(v) == cv) ? true
   : any_equal(tailn(v), cv);
+
+//! Test if all elements of an iterable value equal one of the comparison values.
+/***************************************************************************//**
+  \param    v <iterable> An iterable data type value.
+  \param    cv \<value> An iterable of one more more comparison values.
+
+  \returns  <boolean> \b true when all elements of \p v equal one of
+            the values in \p cv and \b false otherwise.
+            Returns \b true when \p v is empty.
+
+  \details
+
+    When \p v is a srting, \p cv must also be a string.
+*******************************************************************************/
+function all_oneof
+(
+  v,
+  cv
+) = let
+  (
+     v_i = is_iterable(v),
+    cv_i = is_iterable(cv)
+  )
+    (!v_i && !cv_i) ? (v == cv)
+  : ( v_i && !cv_i) ? all_equal(v, cv)
+  : (!v_i &&  cv_i) ? any_equal(cv, v)
+    // v_i && cv_i: case 'v' is a string and 'cv' is not a string
+  : (is_string(v) && !is_string(cv)) ? false
+    // v_i && cv_i: remaining three cases
+  : !any_equal(search(v, cv, 0, 0), empty_lst);
 
 //! Test if no element of an iterable value has an undefined value.
 /***************************************************************************//**
@@ -369,10 +373,10 @@ BEGIN_SCOPE validate;
       ["all_equal_T",         f, f, t, f, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t],
       ["all_equal_F",         f, f, f, t, f, f, t, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f],
       ["all_equal_U",         t, f, f, f, f, f, t, t, f, f, t, f, f, f, f, f, f, f, t, f, f, f, f],
-      ["all_oneof_S1",        u, u, u, u, u, u, u, t, u, u, t, t, t, f, f, f, f, t, t, f, t, t, t],
       ["any_equal_T",         f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t],
       ["any_equal_F",         f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f],
       ["any_equal_U",         t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
+      ["all_oneof_S1",        t, t, t, t, f, f, f, t, f, f, t, t, t, f, f, f, f, t, t, f, t, t, t],
       ["all_defined",         f, t, t, t, t, t, t, t, t, t, f, t, t, t, t, t, t, f, f, t, t, t, t],
       ["any_defined",         f, t, t, t, t, t, f, f, t, t, f, t, t, t, t, t, t, t, f, t, t, t, t],
       ["any_undefined",       t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
@@ -396,10 +400,10 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "all_equal_T", 1, all_equal( v1(db,id), t ) );
     for (id=test_ids) table_validate( db, id, "all_equal_F", 1, all_equal( v1(db,id), f ) );
     for (id=test_ids) table_validate( db, id, "all_equal_U", 1, all_equal( v1(db,id), u ) );
-    for (id=test_ids) table_validate( db, id, "all_oneof_S1", 1, all_oneof( v1(db,id), [undef, 1, 2, 3, true, false] ) );
     for (id=test_ids) table_validate( db, id, "any_equal_T", 1, any_equal( v1(db,id), t ) );
     for (id=test_ids) table_validate( db, id, "any_equal_F", 1, any_equal( v1(db,id), f ) );
     for (id=test_ids) table_validate( db, id, "any_equal_U", 1, any_equal( v1(db,id), u ) );
+    for (id=test_ids) table_validate( db, id, "all_oneof_S1", 1, all_oneof( v1(db,id), [undef, 1, 2, 3, true, false] ) );
     for (id=test_ids) table_validate( db, id, "all_defined", 1, all_defined( v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "any_defined", 1, any_defined( v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "any_undefined", 1, any_undefined( v1(db,id) ) );
