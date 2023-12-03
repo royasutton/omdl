@@ -1,4 +1,4 @@
-#
+G#
 # library contributions
 #
 
@@ -25,6 +25,7 @@
 /docs/Gemfile
 /docs/Gemfile.lock
 /docs/_site/
+/docs/_staging/
 
 #
 # eof
