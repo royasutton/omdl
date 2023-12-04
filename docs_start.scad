@@ -32,10 +32,10 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \mainpage Overview
+  \mainpage Introduction
   \tableofcontents
 
-  \section introduction Introduction
+  \anchor introduction
 
     [omdl] is an [OpenSCAD] mechanical design library that provides
     open-source high-level design primitives with coherent

@@ -6,7 +6,7 @@
 #
 ################################################################################
 
-AMU_TOOL_VERSION                  := v2.7
+AMU_TOOL_VERSION                  := v2.8
 
 AMU_TOOL_PREFIX                   := /usr/local/bin/
 AMU_LIB_PATH                      := /usr/local/share/openscad-amu/$(AMU_TOOL_VERSION)
