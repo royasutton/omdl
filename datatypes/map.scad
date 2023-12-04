@@ -442,7 +442,7 @@ module map_write
         str
         (
           (number == true) ?
-            str(strl_html(idx, p=[index_tags]),fs)
+            str(strl_html([idx], p=[index_tags]),fs)
           : empty_str,
           strl_html(key, p=[key_tags]), fs,
           strl_html([map_get_value(m, key)], p=[value_tags]), fs

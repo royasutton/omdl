@@ -803,7 +803,7 @@ module table_write
       tdr_text =
       [
         (number == true) ?
-          str(strl_html(table_get_row_index(r, r_iter), p=[index_tags]),fs)
+          str(strl_html([table_get_row_index(r, r_iter)], p=[index_tags]),fs)
         : empty_str,
 
         strl_html(first(r_iter), p=[row_id_tags]), fs,
