@@ -197,12 +197,9 @@ function table_exists
   c,
   ri,
   ci
-) = ( is_defined(ri) && is_defined(ci) ) ?
-      is_defined(table_get_value(r, c, ri, ci))
-  : ( is_defined(ri) && is_undef(ci) ) ?
-      !is_empty(table_get_row_index(r,ri))
-  : ( is_undef(ri) && is_defined(ci) ) ?
-      !is_empty(table_get_column_index(c,ci))
+) = ( is_defined(ri) && is_defined(ci) ) ? is_defined(table_get_value(r, c, ri, ci))
+  : is_defined(ri) ? is_number(table_get_row_index(r,ri))
+  : is_defined(ci) ? is_number(table_get_column_index(c,ci))
   : false;
 
 //! Get the size of a table.
@@ -248,16 +245,17 @@ function table_get_copy
     if
     (
       is_undef( rs ) ||
-      !is_empty( first( search( r_iter, rs, 1, 0 ) ) )
+      is_number( first( search( r_iter, rs, 1, 0 ) ) )
     )
     [
       for ( c_iter = c )
         if
         (
           is_undef( cs ) ||
-          !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
+          is_number( first( search( c_iter, cs, 1, 0 ) ) )
         )
           table_get_value(r, c, r_iter, c_iter)
+
     ]
 ];
 
@@ -454,7 +452,7 @@ module table_dump
     if
     (
       is_undef( rs ) ||
-      !is_empty( first( search( r_iter, rs, 1, 0 ) ) )
+      is_number( first( search( r_iter, rs, 1, 0 ) ) )
     )
     {
       if ( number )
@@ -467,7 +465,7 @@ module table_dump
         if
         (
           is_undef( cs ) ||
-          !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
+          is_number( first( search( c_iter, cs, 1, 0 ) ) )
         )
         {
           log_echo
@@ -769,7 +767,7 @@ module table_write
       if
       ( // when column selected
         is_undef( cs ) ||
-        !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
+        is_number( first( search( c_iter, cs, 1, 0 ) ) )
       )
       first(c_iter)
   ];
@@ -785,7 +783,7 @@ module table_write
       if
       ( // when column selected
         is_undef( cs ) ||
-        !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
+        is_number( first( search( c_iter, cs, 1, 0 ) ) )
       )
       second(c_iter)
   ];
@@ -799,7 +797,7 @@ module table_write
     if
     ( // when row selected
       is_undef( rs ) ||
-      !is_empty( first( search( r_iter, rs, 1, 0 ) ) )
+      is_number( first( search( r_iter, rs, 1, 0 ) ) )
     )
     {
       tdr_text =
@@ -813,7 +811,7 @@ module table_write
           if
           ( // when column selected
             is_undef( cs ) ||
-            !is_empty( first( search( c_iter, cs, 1, 0 ) ) )
+            is_number( first( search( c_iter, cs, 1, 0 ) ) )
           )
             str(strl_html([table_get_value(r, c, r_iter, c_iter)], p=[value_tags]),fs)
       ];

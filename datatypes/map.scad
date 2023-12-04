@@ -435,7 +435,7 @@ module map_write
       if
       (
         is_undef( ks ) ||
-        !is_empty( first( search( [key], ks, 1, 0 ) ) )
+        is_number( first( search( [key], ks, 1, 0 ) ) )
       )
       log_echo
       (
