@@ -432,7 +432,7 @@ function line2d_new
 
     // using 'v' ('p1' and 'm')
   : !is_number(m) ? undef
-  : !is_undef(v) ? !is_vector(v) ? undef
+  : !is_undef(v) ? !is_vol(v) ? undef
       : [p1, p1 + m*unit_l(v)]
 
     // using 'a' ('p1' and 'm')
@@ -476,7 +476,7 @@ function line3d_new
 
     // using 'v' ('p1' and 'm')
   : !is_number(m) ? undef
-  : !is_undef(v) ? !is_vector(v) ? undef
+  : !is_undef(v) ? !is_vol(v) ? undef
       : [p1, p1 + m*unit_l(v)]
 
     // using 'a' and 't' ('p1' and 'm')
@@ -529,7 +529,7 @@ function line_new
 
     // using 'v' ('m')
   : !is_number(m) ? undef
-  : !is_undef(v) ? !is_vector(v) ? undef
+  : !is_undef(v) ? !is_vol(v) ? undef
       : let
         (
           pd = !is_undef(p1) ? p1
@@ -604,11 +604,11 @@ function line_ip
 (
   l
 ) = is_vector(l) ?
-        let
-        (
-          d = (len(l) == 1) ? len(l[0]) : len(l)
-        )
-        consts(d, 0)
+    let
+    (
+      d = (len(l) == 1) ? len(l[0]) : len(l)
+    )
+    consts(d, 0)
   : is_line(l) ? l[0]
   : undef;
 
