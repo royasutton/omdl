@@ -118,55 +118,36 @@ function length_unit_name_1d
   : u == "mi"   ? "mile"
   : undef;
 
-//! Return the long name for a length unit identifier with dimension.
+//! Return the name for a length unit identifier with dimension.
 /***************************************************************************//**
   \param    u <string> A length unit identifier.
   \param    d <integer> A dimension. One of [1|2|3].
+  \param    w <boolean> \b true for word and \b false for symbol format.
 
   \returns  <string> The long name for a length unit identifier with
             dimension.
             Returns \b undef for identifiers or dimensions that are
             not defined.
-
-  \private
-*******************************************************************************/
-function length_unit_name_symbol
-(
-  u = length_unit_default,
-  d = 1
-) = d == 1 ?      length_unit_name_1d( u )
-  : d == 2 ? str( length_unit_name_1d( u ), "^2" )
-  : d == 3 ? str( length_unit_name_1d( u ), "^3" )
-  : undef;
-
-//! Return the long name for a length unit identifier with dimension.
-/***************************************************************************//**
-  \copydetails length_unit_name_symbol()
-
-  \private
-*******************************************************************************/
-function length_unit_name_word
-(
-  u = length_unit_default,
-  d = 1
-) = d == 1 ?                 length_unit_name_1d( u )
-  : d == 2 ? str( "square ", length_unit_name_1d( u ) )
-  : d == 3 ? str( "cubic ",  length_unit_name_1d( u ) )
-  : undef;
-
-//! Return the name for a length unit identifier with dimension.
-/***************************************************************************//**
-  \param    w <boolean> \b true for word and \b false for symbol format.
-
-  \copydetails length_unit_name_symbol()
 *******************************************************************************/
 function length_unit_name
 (
   u = length_unit_default,
   d = 1,
   w = false
-) = w == true ? length_unit_name_word( u, d )
-  :             length_unit_name_symbol( u, d );
+) = (w == false) ?
+    (
+        d == 1 ?      length_unit_name_1d( u )
+      : d == 2 ? str( length_unit_name_1d( u ), "^2" )
+      : d == 3 ? str( length_unit_name_1d( u ), "^3" )
+      : undef
+    )
+  :
+    (
+        d == 1 ?                 length_unit_name_1d( u )
+      : d == 2 ? str( "square ", length_unit_name_1d( u ) )
+      : d == 3 ? str( "cubic ",  length_unit_name_1d( u ) )
+      : undef
+    );
 
 //! Convert a value from millimeters to other units.
 /***************************************************************************//**
