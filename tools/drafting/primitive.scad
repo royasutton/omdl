@@ -300,8 +300,8 @@ function draft_sheet_get_zone
 *******************************************************************************/
 function draft_table_get_point
 (
-  ix,
-  iy,
+  ix = 0,
+  iy = 0,
   map,
   fmap
 ) =
@@ -374,8 +374,8 @@ function draft_table_get_point
 *******************************************************************************/
 function draft_table_get_cell
 (
-  ix,
-  iy,
+  ix = 0,
+  iy = 0,
   zp = 0,
   limits = false,
   window = false,
@@ -480,8 +480,8 @@ function draft_table_get_cell
 *******************************************************************************/
 module draft_table_text
 (
-  ix,
-  iy,
+  ix = 0,
+  iy = 0,
   text,
   size,
   dfmt,
@@ -554,8 +554,8 @@ module draft_table_text
 *******************************************************************************/
 function draft_ztable_get_point
 (
-  ix,
-  iy,
+  ix = 0,
+  iy = 0,
   map
 ) =
   let
@@ -657,7 +657,7 @@ function draft_ztable_get_zone
     // point
     [cx, cy];
 
-//! Add text to ztable at a given a one.
+//! Add text to ztable at a given zone index.
 /***************************************************************************//**
   \param    i <integer> A ztable zone index.
 
