@@ -72,7 +72,9 @@ module cone
   vr2
 )
 {
-  cr = defined_or(r, d/2);
+  cr = is_defined(r) ? r
+     : is_defined(d) ? d/2
+     : 1;
 
   br = defined_or(vr1, vr);
   pr = defined_or(vr2, vr);
