@@ -135,39 +135,51 @@ function coordinate_unit_c2
 (
   c,
   to
-) = (to == "c") ? ( c )
-  : (to == "p") ?
-    (
-      let
-      (
-        r   = sqrt(pow(c.x,2) + pow(c.y,2)),
-        aa  = atan2(c.y, c.x),
-        aap = ((aa<0) && (coordinate_positive_angle==true)) ? aa+360 : aa
+) = !is_point(c) ? undef
+
+    // cartesian (2d, 3d)
+  : (to == "c") ? c
+
+  : let( d = line_dim(c) )
+
+    // polar (2d)
+    (to == "p") ? (d != 2 ) ? undef
+    : (
+        let
+        (
+          r   = sqrt(pow(c[0],2) + pow(c[1],2)),
+          aa  = atan2(c[1], c[0]),
+          aap = ((aa<0) && (coordinate_positive_angle==true)) ? aa+360 : aa
+        )
+        [r, aap]
       )
-      [r, aap]
-    )
-  : (to == "y") ?
-    (
-      let
-      (
-        r   = sqrt(pow(c.x,2) + pow(c.y,2)),
-        aa  = atan2(c.y, c.x),
-        aap = ((aa<0) && (coordinate_positive_angle==true)) ? aa+360 : aa,
-        z   = (c.z !=undef) ? c.z : 0
+
+    // cylindrical (3d)
+  : (to == "y") ? (d != 3 ) ? undef
+    : (
+        let
+        (
+          r   = sqrt(pow(c[0],2) + pow(c[1],2)),
+          aa  = atan2(c[1], c[0]),
+          aap = ((aa<0) && (coordinate_positive_angle==true)) ? aa+360 : aa,
+          z   = (c[2] !=undef) ? c[2] : 0
+        )
+        [r, aap, z]
       )
-      [r, aap, z]
-    )
-  : (to == "s") ?
-    (
-      let
-      (
-        r   = sqrt(pow(c.x,2) + pow(c.y,2) + pow(c.z,2)),
-        aa  = atan2(c.y, c.x),
-        aap = ((aa<0) && (coordinate_positive_angle==true)) ? aa+360 : aa,
-        pa  = acos(c.z / r)
+
+    // spherical (3d)
+  : (to == "s") ? (d != 3 ) ? undef
+    : (
+        let
+        (
+          r   = sqrt(pow(c[0],2) + pow(c[1],2) + pow(c[2],2)),
+          aa  = atan2(c[1], c[0]),
+          aap = ((aa<0) && (coordinate_positive_angle==true)) ? aa+360 : aa,
+          pa  = acos(c[2] / r)
+        )
+        [r, aap, pa]
       )
-      [r, aap, pa]
-    )
+
   : undef;
 
 //! Convert a point from some coordinate system to the Cartesian coordinate system.
@@ -185,36 +197,47 @@ function coordinate_unit_2c
 (
   c,
   from
-) = (from == "c") ? ( c )
-  : (from == "p") ?
-    (
-      let
-      (
-        x = c[0]*cos(c[1]),
-        y = c[0]*sin(c[1])
+) = !is_point(c) ? undef
+
+    // cartesian (2d, 3d)
+  : (from == "c") ? c
+
+  : let( d = line_dim(c) )
+
+    // polar (2d)
+    (from == "p") ? (d != 2 ) ? undef
+    : (
+        let
+        (
+          x = c[0]*cos(c[1]),
+          y = c[0]*sin(c[1])
+        )
+        [x, y]
       )
-      [x, y]
-    )
-  : (from == "y") ?
-    (
-      let
-      (
-        x = c[0]*cos(c[1]),
-        y = c[0]*sin(c[1]),
-        z = (c[2] != undef) ? c[2] : 0
+
+    // cylindrical (3d)
+  : (from == "y") ? (d != 3 ) ? undef
+    : (
+        let
+        (
+          x = c[0]*cos(c[1]),
+          y = c[0]*sin(c[1]),
+          z = (c[2] != undef) ? c[2] : 0
+        )
+        [x, y, z]
       )
-      [x, y, z]
-    )
-  : (from == "s") ?
-    (
-      let
-      (
-        x = c[0]*sin(c[2])*cos(c[1]),
-        y = c[0]*sin(c[2])*sin(c[1]),
-        z = c[0]*cos(c[2])
+
+    // spherical (3d)
+  : (from == "s") ? (d != 3 ) ? undef
+    : (
+        let
+        (
+          x = c[0]*sin(c[2])*cos(c[1]),
+          y = c[0]*sin(c[2])*sin(c[1]),
+          z = c[0]*cos(c[2])
+        )
+        [x, y, z]
       )
-      [x, y, z]
-    )
   : undef;
 
 //! Convert point from one coordinate system to another.
