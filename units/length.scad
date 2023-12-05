@@ -121,7 +121,7 @@ function length_unit_name_1d
 //! Return the name for a length unit identifier with dimension.
 /***************************************************************************//**
   \param    u <string> A length unit identifier.
-  \param    d <integer> A dimension. One of [1|2|3].
+  \param    d <integer> The unit dimension. One of [1|2|3].
   \param    w <boolean> \b true for word and \b false for symbol format.
 
   \returns  <string> The long name for a length unit identifier with
@@ -151,7 +151,7 @@ function length_unit_name
 
 //! Convert a value from millimeters to other units.
 /***************************************************************************//**
-  \param    v <decimal-list|decimal> The value(s) to convert.
+  \param    v <decimal-list|decimal> The value to convert.
   \param    to <string> The units to which the value should be converted.
 
   \returns  <decimal-list|decimal> The conversion result.
@@ -181,7 +181,7 @@ function length_unit_mm2
 
 //! Convert a value from some units to millimeters.
 /***************************************************************************//**
-  \param    v <decimal-list|decimal> The value(s) to convert.
+  \param    v <decimal-list|decimal> The value to convert.
   \param    from <string> The units of the value to be converted.
 
   \returns  <decimal-list|decimal> The conversion result.
@@ -197,14 +197,16 @@ function length_unit_2mm
 
 //! Convert a value from from one units to another.
 /***************************************************************************//**
-  \param    v <decimal-list|decimal> The value(s) to convert.
+  \param    v <decimal-list|decimal> The value to convert.
   \param    from <string> The units of the value to be converted.
   \param    to <string> A units to which the value should be converted.
 
   \returns  <decimal-list|decimal> The conversion result.
             Returns \b undef for identifiers that are not defined.
+
+  \private
 *******************************************************************************/
-function length
+function length_1d
 (
   v,
   from = length_unit_default,
@@ -212,43 +214,54 @@ function length
 ) = (from == to) ? v
   : length_unit_mm2( length_unit_2mm( v, from ), to );
 
-//! Convert a value from from one units to another.
-/***************************************************************************//**
-  \param    v <decimal-list|decimal> The value(s) to convert.
-  \param    from <string> The units of the value to be converted.
-  \param    to <string> A units to which the value should be converted.
-
-  \returns  <decimal-list|decimal> The conversion result.
-            Returns \b undef for identifiers that are not defined.
-*******************************************************************************/
-function length_inv
-(
-  v,
-  from = length_unit_base,
-  to   = length_unit_default
-) = (from == to) ? v
-  : length_unit_mm2( length_unit_2mm( v, from ), to );
-
 //! Convert a value from from one units to another with dimensions.
 /***************************************************************************//**
   \param    v <decimal> The value to convert.
   \param    from <string> The units of the value to be converted.
-  \param    to <string> A units to which the value should be converted.
-  \param    d <integer> A dimension. One of [1|2|3].
+  \param    to <string> The units to which the value should be converted.
+  \param    d <integer> The unit dimension. One of [1|2|3].
 
   \returns  <decimal> The conversion result.
             Returns \b undef for identifiers or dimensions that are
             not defined.
 *******************************************************************************/
-function length_d
+function length
 (
   v,
   from = length_unit_default,
   to   = length_unit_base,
   d    = 1
-) = d == 1 ?    ( length(v, from, to)    )
-  : d == 2 ? pow( length(v, from, to), 2 )
-  : d == 3 ? pow( length(v, from, to), 3 )
+) = d == 1 ?    ( length_1d(v, from, to)    )
+    // for multi-dimension, 'v' must be a scalar
+  : is_list(v) ? undef
+  : d == 2 ? pow( length_1d(v, from, to), 2 )
+  : d == 3 ? pow( length_1d(v, from, to), 3 )
+    // undefined for other dimensions
+  : undef;
+
+//! Convert a value from from one units to another with dimensions.
+/***************************************************************************//**
+  \param    v <decimal> The value to convert.
+  \param    from <string> The units of the value to be converted.
+  \param    to <string> The units to which the value should be converted.
+  \param    d <integer> The unit dimension. One of [1|2|3].
+
+  \returns  <decimal> The conversion result.
+            Returns \b undef for identifiers or dimensions that are
+            not defined.
+*******************************************************************************/
+function length_inv
+(
+  v,
+  from = length_unit_base,
+  to   = length_unit_default,
+  d    = 1
+) = d == 1 ?  length_1d(v, from, to)
+    // for multi-dimension, 'v' must be a scalar
+  : is_list(v) ? undef
+  : d == 2 ? length_1d(pow(v, 1/2), from, to)
+  : d == 3 ? length_1d(pow(v, 1/3), from, to)
+    // undefined for other dimensions
   : undef;
 
 //! @}
