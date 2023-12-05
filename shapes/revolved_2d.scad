@@ -202,7 +202,6 @@ module torus_polygon_trapezoid
   vr = 0,
   vrm = 1,
   vfn,
-  cw = true,
   centroid = false
 )
 {
@@ -216,7 +215,6 @@ module torus_polygon_trapezoid
     vr=vr,
     vrm=vrm,
     vfn=vfn,
-    cw=cw,
     centroid=centroid
   );
 }
