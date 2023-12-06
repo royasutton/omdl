@@ -4,7 +4,7 @@
 #   \file   setup-omdl.bash
 #
 #   \author Roy Allen Sutton <royasutton@hotmail.com>.
-#   \date   2016-2018
+#   \date   2016-2023
 #
 #   \copyright
 #
@@ -72,7 +72,7 @@ declare make_opts_add="generate_latex="
 
 declare commands
 
-# ( "variable-key" "description" "example-value" ... )
+# variables map: ( "variable-key" "description" "example-value" )
 declare -i conf_file_vw=3
 declare -a conf_file_va=(
   "skip_check"
@@ -234,7 +234,7 @@ function update_prerequisite_list() {
     git
     make
     unzip
-    openscad-nightly
+    openscad
   "
 
   packages_Linux="
