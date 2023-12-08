@@ -51,11 +51,12 @@
     use.
 
     [Validation] scripts are used to verify that the core operations
-    work as expected across evolving [OpenSCAD] versions (validation
-    performed when building the documentation). The library uses a
-    common set of conventions for specifying [data types] and is
-    divided into individual component modules of functionality,
-    organized into groups, that may be included as desired.
+    work as expected across evolving [OpenSCAD] versions. This
+    validation is performed when building and [installing] the library
+    documentation). The library uses a common set of conventions for
+    specifying [data types] and is divided into individual component
+    modules of functionality, organized into groups, that may be
+    included as desired.
 
   \section starting Getting Started
 
@@ -114,9 +115,9 @@
   [omdl repository]: https://github.com/royasutton/omdl
   [issue]: https://github.com/royasutton/omdl/issues
 
-  [Validation]: \ref validation
+  [Validation]: \ref tv
   [data types]: \ref dt
-  [installation]: \ref install
+  [installing]: \ref lb
 
   [openscad-amu]: https://royasutton.github.io/openscad-amu
 
@@ -124,7 +125,6 @@
   [markups]: http://www.doxygen.nl/manual/commands.html
 
   [OpenSCAD]: http://www.openscad.org
-  [library location]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Libraries
 
   [git]: http://git-scm.com
   [GitHub]: http://github.com

@@ -31,25 +31,55 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// conventions.
+// building
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page conventions Conventions
-    \li \subpage dt
+  \page lb Building and installing
+
+  [omdl]: https://royasutton.github.io/omdl
+  [repository]: https://github.com/royasutton/omdl
+  [openscad-amu]: https://royasutton.github.io/openscad-amu
+  [GNU Make]: https://www.gnu.org/software/make
 *******************************************************************************/
 
+//----------------------------------------------------------------------------//
+// using
+//----------------------------------------------------------------------------//
+
 /***************************************************************************//**
-  \page dt Data types
+  \page lu How to use library modules
+
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// conventions
+//----------------------------------------------------------------------------//
+
+/***************************************************************************//**
+  \page conventions Development conventions
+    \li \subpage dt
+
+  \page dt Data types and values
   \tableofcontents
 
-  \section dt_builtin Built-in
+    \li \subpage dt_base
+    \li \subpage dt_index
+    \li \subpage dt_vector
+*******************************************************************************/
 
-    [omdl] assumes a [value] is either a number, a boolean, a string, a
-    list, a range, or the undefined value. What is called a vector in
-    the [OpenSCAD types] documentation is refereed to as a \em list
-    here in order to distinguish between sequential lists of values and
-    [Euclidean vectors].
+//
+// base types
+//
+/***************************************************************************//**
+  \page dt_base Base types and values
+
+    OpenSCAD specified a \em value to be either a number, a boolean, a
+    string, a range, a vector or or the undefined value. See [OpenSCAD
+    types]. What is called a vector in the [OpenSCAD types]
+    documentation is refereed to as a \em list here in order to
+    distinguish between sequential lists of general or compound-values
+    and [Euclidean vectors] of numbers.
 
     | type      | description                                         |
     |:---------:|:----------------------------------------------------|
@@ -60,66 +90,79 @@
     | range     | an arithmetic sequence                              |
     | function  | a function literal or variable containing functions |
 
-  \subsection dt_special_sv Special values
+  \subsubsection dt_special Special values
 
     | value     | description                                         |
     |:---------:|:----------------------------------------------------|
     | undef     | a value with no definition                          |
-    | ""        | the empty string                                    |
-    | []        | the empty list                                      |
-
-  \subsection dt_special_snv Special numerical values
-
-    | value     | description                                         |
-    |:---------:|:----------------------------------------------------|
+    | ""        | a string with no characters, the empty string       |
+    | []        | a list with no element-values, the empty list       |
     | [nan]     | a numerical value which is not a number             |
     | [inf]     | a numerical value which is infinite                 |
 
-  \section dt_additions Additional conventions
+  \subsubsection dt_convention Specification conventions
 
-    | name        | description                                       |
-    |:-----------:|:--------------------------------------------------|
-    | [value]     | any valid OpenSCAD storable datum                 |
-    | iterable    | any iterable value                                |
-    | list-n      | a list of of n elements                           |
-    | list-l:u    | a list of l to u elements                         |
-    | type-list   | a list of elements with an expected type          |
-    | type-list-n | a list of n elements with an expected type        |
+    For convenience,  the flowing naming conventions are used to
+    reference common [data types] used within the library.
 
-    When a list has an expected number of elements 'n', the expected
-    number is appended following a '-'. When there is a range of
-    expected elements, the lower and upper bounds are separated by a
-    ':' and appended (order of bounds may be reversed). When the
-    elements values are of an expected data type, that \em type is
-    prepended.
+    | name          | description                                       |
+    |:-------------:|:--------------------------------------------------|
+    | [value]       | any dataum that can be stored in OpenSCAD         |
+    | [scalar]      | a single non-iterable value                       |
+    | [iterable]    | any value with iterable elements                  |
+    | [empty]       | any iterable value with zero elements             |
+    | [bit]         | a binary numerical value (0 or 1)                 |
+    | [integer]     | a positive, negative, or zero whole number        |
+    | [even]        | an even integer                                   |
+    | [odd]         | an odd integer                                    |
+    | [decimal]     | integer numbers with a fractional part            |
+    | [index]       | a list index sequence                             |
+    | [datastruct]  | a defined data structure                          |
+    | [data]        | an arbitrary data structure                       |
 
-  \subsection dt_distinctions Distinctions
+    When a list has an expected number of elements '-n', the expected
+    number is appended. When there is a range of expected elements, the
+    lower and upper bounds are separated by a ':' and appended. When
+    the list elements values are of a specified data type, that \em
+    type is added before the name. See the following tables for a few
+    examples.
 
-    [omdl] make the following distinctions on variable types.
+    | name          | description                                       |
+    |:-------------:|:--------------------------------------------------|
+    | list-n        | a list of of n elements values                    |
+    | list-l:u      | a list of l to u elements values                  |
+    | type-list     | a list of elements with an expected type          |
+    | type-list-n   | a list of n elements with an expected type        |
 
-    | name        | description                                       |
-    |:-----------:|:--------------------------------------------------|
-    | [scalar]    | a single non-iterable value                       |
-    | [iterable]  | a multi-part sequence of values                   |
-    | [empty]     | an iterable value with zero elements              |
-    | [even]      | an even numerical value                           |
-    | [odd]       | an odd numerical value                            |
+  [OpenSCAD types]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Values_and_data_types
+  [nan]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Infinities_and_NaNs
+  [inf]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Infinities_and_NaNs
 
-  \subsection dt_general General
+  [data types]: https://en.wikipedia.org/wiki/Data_type
 
-    From the fixed built-in set of [data types], [omdl] adds the
-    following general type specifications and conventions.
+  [value]: https://en.wikipedia.org/wiki/Value_(computer_science)
+  [scalar]: https://en.wikipedia.org/wiki/Variable_(computer_science)
+  [iterable]: https://en.wikipedia.org/wiki/Iterator
+  [empty]: https://en.wikipedia.org/wiki/Empty_set
 
-    | name          | description                                     |
-    |:-------------:|:------------------------------------------------|
-    | [bit]         | a binary numerical value (0 or 1)               |
-    | [integer]     | a positive, negative, or zero whole number      |
-    | [decimal]     | integer numbers with a fractional part          |
-    | [index]       | a list index sequence                           |
-    | [datastruct]  | a defined data structure                        |
-    | [data]        | an arbitrary data structure                     |
+  [bit]: https://en.wikipedia.org/wiki/Bit
 
-  \subsubsection dt_index Index sequence
+  [integer]: https://en.wikipedia.org/wiki/Integer
+  [even]: https://en.wikipedia.org/wiki/Parity_(mathematics)
+  [odd]: https://en.wikipedia.org/wiki/Parity_(mathematics)
+
+  [decimal]: https://en.wikipedia.org/wiki/Decimal
+  [index]: \ref dt_index
+  [datastruct]: https://en.wikipedia.org/wiki/Data_structure
+  [data]: https://en.wikipedia.org/wiki/Data
+
+*******************************************************************************/
+
+//
+// index generation
+//
+/***************************************************************************//**
+  \page dt_index Index sequence generation
 
     The data type \b index refers to a specified sequence of list
     element indexes. A list index sequence may be specified in one of
@@ -151,10 +194,15 @@
     index_gen(l1)          = [0,1,2,3,4,5]
     index_gen(l1, "rands") = [0,2,5]
     \endcode
+*******************************************************************************/
 
-  \subsection dt_geometric Geometric
+//
+// vector algebra
+//
+/***************************************************************************//**
+  \page dt_vector Vector algebra types
 
-    For [geometric] specifications and [geometric algebra], [omdl] adds
+    For [geometric] specifications and [geometric algebra], omdl adds
     the following type specifications and conventions.
 
     | name        | description                                       |
@@ -186,7 +234,7 @@
     has direction and magnitude, but also has location, as it starts at
     one point in space and ends at another. Although a line can be
     specified in one dimension, most library functions operate on two
-    and/or three dimensional lines. Operators in [omdl] make use of a
+    and/or three dimensional lines. Operators in omdl make use of a
     common convention for specifying Euclidean vectors and straight
     lines as summarized in the following table:
 
@@ -222,7 +270,7 @@
 
   \subsubsection dt_plane Planes
 
-    Operators in [omdl] use a common convention for specifying planes.
+    Operators in omdl use a common convention for specifying planes.
     A \b plane is identified by a [point] on its surface together with
     its [normal] vector specified by [pnorm], which is discussed in the
     following section. A list with a point and normal together specify
@@ -281,28 +329,6 @@
     pn1 == pn4
     \endcode
 
-  [omdl]: https://royasutton.github.io/omdl
-  [Data types]: https://en.wikipedia.org/wiki/Data_type
-  [value]: https://en.wikipedia.org/wiki/Value_(computer_science)
-  [Euclidean vectors]: https://en.wikipedia.org/wiki/Euclidean_vector
-
-  [OpenSCAD types]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Values_and_data_types
-  [nan]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Infinities_and_NaNs
-  [inf]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Infinities_and_NaNs
-
-  [scalar]: https://en.wikipedia.org/wiki/Variable_(computer_science)
-  [iterable]: https://en.wikipedia.org/wiki/Iterator
-  [empty]: https://en.wikipedia.org/wiki/Empty_set
-  [even]: https://en.wikipedia.org/wiki/Parity_(mathematics)
-  [odd]: https://en.wikipedia.org/wiki/Parity_(mathematics)
-
-  [bit]: https://en.wikipedia.org/wiki/Bit
-  [integer]: https://en.wikipedia.org/wiki/Integer
-  [decimal]: https://en.wikipedia.org/wiki/Decimal
-  [index]: \ref dt_index
-  [datastruct]: https://en.wikipedia.org/wiki/Data_structure
-  [data]: https://en.wikipedia.org/wiki/Data
-
   [geometric]: https://en.wikipedia.org/wiki/Geometry
   [geometric algebra]: https://en.wikipedia.org/wiki/Geometric_algebra
 
@@ -316,14 +342,16 @@
   [plane]: \ref dt_plane
   [coords]: https://en.wikipedia.org/wiki/Coordinate_system
   [matrix]: https://en.wikipedia.org/wiki/Matrix_(mathematics)
+
+  [Euclidean vectors]: https://en.wikipedia.org/wiki/Euclidean_vector
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// validation.
+// validation
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page validation Validation
+  \page tv Auto-tests and validation
 
   ### Scripts and Results ###
 
@@ -347,6 +375,10 @@
   [openscad-amu]: https://royasutton.github.io/openscad-amu
   [OpenSCAD]: http://www.openscad.org
 *******************************************************************************/
+
+//
+// validation subpages
+//
 
 /***************************************************************************//**
   /+

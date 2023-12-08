@@ -42,7 +42,7 @@
   \page tv_warn
     \amu_if ( -n ${tv_warn} ) {\ref ${group} warnings ${tv_warn_c}} endif
 
-  \page validation
+  \page tv
     \amu_if ( -n ${tv_fail} ) {\li \ref ${group} failed ${tv_fail_c}} endif
     \amu_if ( -n ${tv_warn} ) {\li \ref ${group} warnings ${tv_warn_c}} endif
 

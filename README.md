@@ -84,13 +84,16 @@ To update project Makefile and build HTML documentation:
 
 ```bash
 cd cache/omdl
-vi Makefile                   # (set AMU_* variables absolute paths)
+vi Makefile
 
 make help
 make info
-make generate_latex="" all    # skips latex generation
 ...
 ```
+
+The output of 'make info' shows all of the boolean control variables
+and configurable value variables that configure the build process.
+
 
 Contributing
 ------------
