@@ -88,7 +88,9 @@
     in the following example. To see a list of table identifiers
     consider the function table_get_row_ids(), table_get_column_ids(),
     or module table_dump(). See datatypes/table.scad for other
-    available table functions.
+    available table functions. For a general introduction to this
+    topic, see Wikipedia on [Polyhedron].
+
 
     \b Example
     \code{.C}
@@ -110,9 +112,16 @@
     polyhedron(sv, pf);
     \endcode
 
-    \b Autotests \include \amu_scope(index=1).log
+    \b Autotests
 
-    For more information see Wikipedia on [Polyhedron].
+    \amu_scope scope (index=1)
+    \amu_if ( -n ${scope} )
+      { \include ${scope}.log }
+    else
+      { \note Database verification results not included. To test and
+              include results, remove \c db_autotest from \c scopes_exclude
+              in library makefile. For more information see \ref lb. }
+    endif
 
     [Polyhedron]: https://en.wikipedia.org/wiki/Polyhedron
 

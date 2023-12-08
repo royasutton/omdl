@@ -103,15 +103,25 @@
         )
     \endlatexonly
 
+    \b Autostats
+
     \amu_scope        scope (index=1)
-    \amu_file       heading (file="${scope}.log"  last=1 ++rmecho ++rmnl ++read)
-    \amu_file         texts (file="${scope}.log" first=2 ++rmecho ++rmnl ++read)
+    \amu_file       heading (file="${scope}.log"  last=1 ++rmecho ++rmnl ++read ++quiet)
+    \amu_file         texts (file="${scope}.log" first=2 ++rmecho ++rmnl ++read ++quiet)
     \amu_word       columns (tokenizer="^" words="${heading}" ++count)
 
-    \amu_table
+    \amu_table table
       (
         columns=${columns} column_headings="${heading}" cell_texts="${texts}"
       )
+
+    \amu_if ( -w ${heading} )
+      { ${table} }
+    else
+      { \note Statistics table not available. To build and include, remove
+              \c db_autostat from \c scopes_exclude in library makefile.
+               For more information see \ref lb. }
+    endif
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
