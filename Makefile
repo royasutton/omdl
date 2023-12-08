@@ -6,7 +6,7 @@
 #
 ################################################################################
 
-AMU_TOOL_VERSION                  := v2.8
+AMU_TOOL_VERSION                  := v2.9
 
 AMU_TOOL_PREFIX                   := /usr/local/bin/
 AMU_LIB_PATH                      := /usr/local/share/openscad-amu/$(AMU_TOOL_VERSION)
@@ -50,7 +50,7 @@ include $(AMU_PM_COMPONENTS_LOCAL_PATH)/assertions
 # debug_dif_scanner               := $(true)
 
 # ignore_modules_exclude          := $(true)
-ignore_scopes_exclude             := $(true)
+# ignore_scopes_exclude           := $(true)
 
 output_root                       := build
 output_path_add_project_version   := $(false)
@@ -116,7 +116,7 @@ modules_exclude                   := parts \
 # exclude shape manifests; required only when doing a library "release."
 scopes_exclude                    := manifest
 
-# exclude database tests and statitics; required for complete documentation
+# exclude database tests and statitics
 scopes_exclude                    += db_autotest \
                                      db_autostat
 
