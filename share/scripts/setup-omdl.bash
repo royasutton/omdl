@@ -263,7 +263,7 @@ function update_prerequisite_list() {
 # Linux
 #==============================================================================
 
-function prerequisites_check.Linux() {
+function prerequisite_check.Linux() {
   dpkg-query --no-pager --show --showformat='${Status}\n' $1 2>/dev/null |
     grep -q "install ok installed" &&
       return 0
@@ -285,7 +285,7 @@ function prerequisites_install.Linux() {
   return 0
 }
 
-function openscad_nightly_install.Linux() {
+function prerequisite_install_openscad.Linux() {
   case "$(lsb_release -si)" in
     Ubuntu)
       local repo="deb http://download.opensuse.org/repositories/home:/t-paul/x$(lsb_release -si)_$(lsb_release -sr)/ ./"
@@ -339,8 +339,8 @@ function openscad_nightly_install.Linux() {
   fi
 
   # install package
-  print_m "installing [$*]..."
-  prerequisites_install.${sysname} $*
+  print_m "installing [$1]..."
+  prerequisites_install.${sysname} $1
 
   return 0
 }
@@ -349,7 +349,7 @@ function openscad_nightly_install.Linux() {
 # Cygwin
 #==============================================================================
 
-function prerequisites_check.CYGWIN_NT() {
+function prerequisite_check.CYGWIN_NT() {
   cygcheck --check-setup --dump-only $1 |
     tail -1 |
     grep -q $1 &&
@@ -372,30 +372,28 @@ function prerequisites_install.CYGWIN_NT() {
   return 0
 }
 
-function openscad_nightly_install.CYGWIN_NT() {
+function prerequisite_install_openscad.CYGWIN_NT() {
   local    ldir="openscad"
   local    lcmd="openscad-nightly"
 
   local    arch="x86-32"
+  local    fext=".zip"
+  local    fpat="OpenSCAD-....\...\...-${arch}${fext}"
   local    surl="http://files.openscad.org/snapshots"
+
   local    dist="${repo_cache_root}/distrib"
   local    path="${repo_cache_root}"
-  local    fext=".zip"
 
-  local    inst
-  local    fpat
-  local -i lcnt=1
   local    list
+  local -i lcnt=1
   local    pick
+  local    inst
 
   if [[ -x ${path}/${ldir}/${lcmd}.exe ]] ; then
     print_m "using ${lcmd} installed in cache."
   else
     # determine machine hardware
     [[ $(arch) == "x86_64" ]] && arch="x86-64"
-
-    # file selection filter pattern (regular expression)
-    fpat="OpenSCAD-....\...\...-${arch}${fext}"
 
     # get list of development snapshots
     list=$( \
@@ -715,7 +713,7 @@ function prerequisites_check() {
   update_prerequisite_list
 
   for r in ${packages} ; do
-    if prerequisites_check.${sysname} $r
+    if prerequisite_check.${sysname} $r
     then
       packages_installed+=" $r"
     else
@@ -779,7 +777,7 @@ function prerequisites_install() {
       # exception handler
       case "$r" in
         openscad-nightly)
-          openscad_nightly_install.${sysname} $r ;;
+          prerequisite_install_openscad.${sysname} $r ;;
         *)
           prerequisites_install.${sysname} $r ;;
       esac
