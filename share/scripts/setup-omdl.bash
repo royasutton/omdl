@@ -419,8 +419,8 @@ function openscad_nightly_install.CYGWIN_NT() {
     done
 
     # set install path for 'picked' snapshot
-    inst=${pick,,}
-    inst=${inst/-${arch}${fext}/}
+    inst=${pick}
+    inst=${inst/${fext}/}
 
     print_m "unpacking: [$pick]..."
     unzip -q -u -d ${path} ${dist}/${pick}
