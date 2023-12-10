@@ -94,7 +94,7 @@ doxygen_html_footer               := share/doxygen/html_footer.html
 doxygen_html_css                  := share/doxygen/html_style.css
 doxygen_layout                    := share/doxygen/html_layout.xml
 
-project_files_add                 := $(wildcard include/mf/*) \
+project_files_add                 := $(wildcard include/pmf/*) \
                                      $(wildcard include/mfs/*.mfs) \
                                      $(wildcard include/amu/*.amu)
 
