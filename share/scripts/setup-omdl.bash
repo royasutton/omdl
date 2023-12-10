@@ -286,61 +286,72 @@ function prerequisites_install.Linux() {
 }
 
 function prerequisite_install_openscad.Linux() {
-  case "$(lsb_release -si)" in
-    Ubuntu)
-      local repo="deb http://download.opensuse.org/repositories/home:/t-paul/x$(lsb_release -si)_$(lsb_release -sr)/ ./"
-    ;;
-    Debian)
-      local repo="deb http://download.opensuse.org/repositories/home:/t-paul/$(lsb_release -si)_$(lsb_release -sr)/ ./"
-    ;;
-    *)
-      print_m "ERROR: Configuration for [$(lsb_release -si)] required. aborting..."
-      exit 1
-    ;;
-  esac
+  local pkg="$1"
 
-  local name="openscad-development-snapshots"
-  local desc="OpenSCAD development snapshots"
-  local rkey="http://files.openscad.org/OBS-Repository-Key.pub"
-  local keyf="5F4A 8A2C 8BB1 1716 F294  82BB 75F3 214F 30EB 8E08"
+  function setup_repository(){
+    case "$(lsb_release -si)" in
+      Ubuntu)
+        local repo="deb https://download.opensuse.org/repositories/home:/t-paul/x$(lsb_release -si)_$(lsb_release -sr)/ ./"
+      ;;
+      Debian)
+        local repo="deb https://download.opensuse.org/repositories/home:/t-paul/$(lsb_release -si)_$(lsb_release -sr)/ ./"
+      ;;
+      *)
+        print_m "ERROR: Configuration for [$(lsb_release -si)] required. aborting..."
+        exit 1
+      ;;
+    esac
 
-  local list="/etc/apt/sources.list.d/${name}.list"
-  local update
+    local name="openscad-development-snapshots"
+    local desc="OpenSCAD development snapshots"
+    local rkey="https://files.openscad.org/OBS-Repository-Key.pub"
+    local keyf="5F4A 8A2C 8BB1 1716 F294  82BB 75F3 214F 30EB 8E08"
 
-  # setup repository key
-  print_m "repository: [${desc}]"
-  print_m "checking for repository source key..."
-  if [[ -n $(apt-key finger | grep "$keyf") ]] ; then
-    print_m "key found."
-  else
-    print_m "key not found, retreaving..."
-    wget --quiet --output-document - "$rkey" | sudo apt-key add -
+    local list="/etc/apt/sources.list.d/${name}.list"
+    local update
 
-    update="true"
-  fi
+    # setup repository key
+    print_m "repository: [${desc}]"
+    print_m "checking for repository source key..."
+    if [[ -n $(apt-key finger | grep "$keyf") ]] ; then
+      print_m "key found."
+    else
+      print_m "key not found, retreaving..."
+      wget --quiet --output-document - "$rkey" | sudo apt-key add -
 
-  # setup repository source file
-  print_m "checking for source file: [$list]..."
-  if [[ -f $list ]] ; then
-    print_m "source file exists."
-  else
-    print_m "source file not found, adding..."
-    echo "$repo" | sudo tee $list
+      update="true"
+    fi
 
-    update="true"
-  fi
+    # setup repository source file
+    print_m "checking for source file: [$list]..."
+    if [[ -f $list ]] ; then
+      print_m "source file exists."
+    else
+      print_m "source file not found, adding..."
+      echo "$repo" | sudo tee $list
 
-  # resynchronize package index files
-  if [[ "$update" == "true" ]] ; then
-    print_m "resynchronizing package index files..."
-    sudo apt-get --quiet update
-  else
-    print_m "package index resynchronization not required."
+      update="true"
+    fi
+
+    # resynchronize package index files
+    if [[ "$update" == "true" ]] ; then
+      print_m "resynchronizing package index files..."
+      sudo apt-get --quiet update
+    else
+      print_m "package index resynchronization not required."
+    fi
+  }
+
+  print_m "exception install: [${pkg}]..."
+
+  # development snapshots repository only required for openscad-nightly
+  if [[ "${pkg}" == "openscad-nightly" ]] ; then
+    print_m "setting up repository for ${pkg}"
+    setup_repository
   fi
 
   # install package
-  print_m "installing [$1]..."
-  prerequisites_install.${sysname} $1
+  prerequisites_install.${sysname} ${pkg}
 
   return 0
 }
@@ -373,79 +384,110 @@ function prerequisites_install.CYGWIN_NT() {
 }
 
 function prerequisite_install_openscad.CYGWIN_NT() {
-  local    ldir="openscad"
-  local    lcmd="openscad-nightly"
+  local    pkg="$1"
 
-  local    arch="x86-32"
-  local    fext=".zip"
-  local    fpat="OpenSCAD-....\...\...-${arch}${fext}"
-  local    surl="http://files.openscad.org/snapshots"
+  function install_openscad(){
+    local    pkg="$1"
 
-  local    dist="${repo_cache_root}/distrib"
-  local    path="${repo_cache_root}"
+    local    ldir="openscad"
+    local    lcmd="${pkg}"
 
-  local    list
-  local -i lcnt=1
-  local    pick
-  local    inst
+    local    arch="x86-32"
+    local    fext=".zip"
+    local    fpat
+    local    surl
 
-  if [[ -x ${path}/${ldir}/${lcmd}.exe ]] ; then
-    print_m "using ${lcmd} installed in cache."
-  else
-    # determine machine hardware
-    [[ $(arch) == "x86_64" ]] && arch="x86-64"
+    local    path="${repo_cache_root}"
+    local    dist="${repo_cache_root}/distrib"
 
-    # get list of development snapshots
-    list=$( \
-      wget --quiet --output-document - ${surl} |
-      grep --only-matching "${fpat}" |
-      sort --uniq |
-      tail --lines=${lcnt} \
-    )
+    local    list
+    local -i lcnt=1
+    local    pick
+    local    inst
 
-    # downloads snapshot(s)
-    print_m "downloading latest [$lcnt] development snapshot(s):"
-    for f in ${list} ; do
-      print_m "--> $f"
-      if [[ -e "${dist}/${f}" ]] ; then
-        print_m "[${dist}/${f}] exists."
-      else
-        wget --quiet --show-progress --directory-prefix=${dist} "${surl}/${f}"
+    case "${pkg}" in
+      openscad)
+        surl="https://files.openscad.org"
+        fpat="OpenSCAD-....\...-${arch}${fext}"
+      ;;
+      openscad-nightly)
+        surl="https://files.openscad.org/snapshots"
+        fpat="OpenSCAD-....\...\...-${arch}${fext}"
+      ;;
+      *)
+        print_m "ERROR: invalid package name [${pkg}]. aborting..."
+        exit 1
+      ;;
+    esac
+
+    # download, unpack, create symbolic links, and add to $PATH
+    if [[ -x ${path}/${ldir}/${lcmd}.exe ]] ; then
+      print_m "using ${lcmd} installed in cache."
+    else
+      # determine machine hardware
+      [[ $(arch) == "x86_64" ]] && arch="x86-64"
+
+      # get list of development snapshots
+      list=$( \
+        wget --quiet --output-document - ${surl} |
+        grep --only-matching "${fpat}" |
+        sort --uniq |
+        tail --lines=${lcnt} \
+      )
+
+      # downloads distribution(s)
+      print_m "downloading latest [$lcnt] distribution(s):"
+      for f in ${list} ; do
+        print_m "--> $f"
+        if [[ -e "${dist}/${f}" ]] ; then
+          print_m "[${dist}/${f}] exists."
+        else
+          wget --quiet --show-progress --directory-prefix=${dist} "${surl}/${f}"
+        fi
+
+        pick="$f"
+      done
+
+      # unpack distribution
+      print_m "unpacking: [$pick]..."
+      unzip -q -u -d ${path} ${dist}/${pick}
+
+      # set install path for 'picked' snapshot
+      # assumes  unpacked directory named: OpenSCAD-* or openscad-*
+      # using head -1 should choose the newest version from the list
+      inst=$(cd ${path} && ls -1d {OpenSCAD-*,openscad-*} 2>/dev/null | head -1)
+
+      if [[ -z "${inst}" ]] ; then
+        print_m "ERROR: unable to locate unpacked OpenSCAD distribution. aborting..."
+        exit 1
       fi
 
-      pick="$f"
-    done
+      # create path symbolic links
+      print_m "creating symbolic links..."
+      (
+        cd ${path} &&
+        ln --force --symbolic --verbose --no-target-directory \
+          ${inst} ${ldir}
+      )
 
-    # set install path for 'picked' snapshot
-    inst=${pick}
-    inst=${inst/${fext}/}
+      # iff: openscad-nightly, create command symbolic links
+      if [[ "${lcmd}" == "openscad-nightly" ]] ; then
+        (
+          cd ${path}/${inst} &&
+          ln --force --symbolic --verbose --no-target-directory \
+            openscad.exe ${lcmd}.exe
+        )
+        (
+          cd ${path}/${inst} &&
+          ln --force --symbolic --verbose --no-target-directory \
+            openscad.com ${lcmd}.com
+        )
+      fi
+    fi
 
-    print_m "unpacking: [$pick]..."
-    unzip -q -u -d ${path} ${dist}/${pick}
-
-    # create path links
-    print_m "creating symbolic links..."
-    (
-      cd ${path} &&
-      ln --force --symbolic --verbose --no-target-directory \
-        ${inst} ${ldir}
-    )
-    (
-      cd ${path}/${inst} &&
-      ln --force --symbolic --verbose --no-target-directory \
-        openscad.exe ${lcmd}.exe
-    )
-    (
-      cd ${path}/${inst} &&
-      ln --force --symbolic --verbose --no-target-directory \
-        openscad.com ${lcmd}.com
-    )
-  fi
-
-  # add temporary path
-  if [[ -z $(which 2>/dev/null ${lcmd}) ]] ; then
+    # add to path (temporary)
     print_m "adding (temporary) shell path [${work_path}/${path}/${ldir}]."
-    PATH="${work_path}/${path}/${ldir}:${PATH}"
+    export PATH="${work_path}/${path}/${ldir}:${PATH}"
 
     if [[ -z $(which 2>/dev/null ${lcmd}) ]] ; then
       print_m "ERROR: unable to locate or setup requirement: [${lcmd}]. aborting..."
@@ -453,36 +495,42 @@ function prerequisite_install_openscad.CYGWIN_NT() {
     else
       print_m "confirmed ${lcmd} added to shell path"
     fi
+
+    # output and record install note
+    local note="${path}/${lcmd}.readme"
+
+    if [[ -e ${note} ]] ; then
+      print_m "install note exists: [${note}]."
+    else
+      print_m -j
+      cat << EOF | tee ${note}
+      #####################################################################
+      #####################################################################
+      ##                                                                 ##
+      ## note:                                                           ##
+      ##                                                                 ##
+      ## omdl requires a recent build of OpenSCAD. One has been          ##
+      ## downloaded and installed to a cache at:                         ##
+      ##                                                                 ##
+      ##   PATH=${work_path}/${path}/${ldir}:\${PATH}
+      ##                                                                 ##
+      ## You should add the location to permanent install to your shell  ##
+      ## path if you plan to work with omdl from the command line.       ##
+      ##                                                                 ##
+      #####################################################################
+      #####################################################################
+EOF
+      print_m -j
+      sleep 10
+    fi
+  }
+
+  # check to see if ${lcmd} already exists in ${PATH}
+  if [[ -z $(which 2>/dev/null ${lcmd}) ]] ; then
+    print_m "exception install: [${pkg}]..."
+    install_openscad "${pkg}"
   else
     print_m "${lcmd} exists in shell path"
-  fi
-
-  # output and record install note
-  local note="${path}/${ldir}/${lcmd}.note"
-
-  if [[ -e ${note} ]] ; then
-    print_m "install note exists: [${note}]."
-  else
-    print_m -j
-    cat << EOF | tee ${note}
-    #####################################################################
-    #####################################################################
-    ##                                                                 ##
-    ## note:                                                           ##
-    ##                                                                 ##
-    ## omdl requires a recent build of OpenSCAD. One has been          ##
-    ## downloaded and installed to a cache at:                         ##
-    ##                                                                 ##
-    ##   PATH=${work_path}/${path}/${ldir}:\${PATH}
-    ##                                                                 ##
-    ## You should add the location to permanent install to your shell  ##
-    ## path if you plan to work with omdl from the command line.       ##
-    ##                                                                 ##
-    #####################################################################
-    #####################################################################
-EOF
-    print_m -j
-    sleep 10
   fi
 
   return 0
@@ -776,7 +824,7 @@ function prerequisites_install() {
 
       # exception handler
       case "$r" in
-        openscad-nightly)
+        openscad|openscad-nightly)
           prerequisite_install_openscad.${sysname} $r ;;
         *)
           prerequisites_install.${sysname} $r ;;
