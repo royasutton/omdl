@@ -99,7 +99,7 @@ project_files_add                 := $(wildcard include/pmf/*) \
                                      $(wildcard include/amu/*.amu)
 
 library_info                      := README.md \
-                                     lgpl-2.1.txt
+                                     gnu-lgpl-v2.1.txt
 
 # Excluded Modules:
 # to exclude nothing from the command line, use: $ make modules_exclude="" all
