@@ -3,7 +3,7 @@ omdl
 
 > A documented mechanical design library for [OpenSCAD].
 
-[![LGPL licensed](https://img.shields.io/badge/license-LGPL-blue.svg?style=flat)](https://raw.githubusercontent.com/royasutton/omdl/master/lgpl-2.1.txt)
+[![LGPL licensed](https://img.shields.io/badge/license-LGPL-blue.svg?style=flat)](https://raw.githubusercontent.com/royasutton/omdl/master/gnu-lgpl-v2.1.txt)
 
 View live docs on [GitHub Pages](https://royasutton.github.io/omdl).
 
