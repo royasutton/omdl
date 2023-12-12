@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2018
+  \date   2015-2023
 
   \copyright
 
@@ -43,7 +43,7 @@
 
 //----------------------------------------------------------------------------//
 
-//! Multiply all coordinates by a 4x4 3d-transformation matrix.
+//! Multiply all coordinates by a 4x4 transformation matrix in 3D.
 /***************************************************************************//**
   \param    c <coords-3d> A list of 3d coordinate points.
   \param    m <matrix-4x4> A 4x4 transformation matrix (decimal-list-4-list4).
@@ -58,25 +58,24 @@
     [Wikipedia]: https://en.wikipedia.org/wiki/Transformation_matrix
     [multmatrix]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Transformations#multmatrix
 *******************************************************************************/
-function multmatrix_lp
+function multmatrix_p
 (
   c,
   m
-) =
-  let
-  (
-    m11=m[0][0], m12=m[0][1], m13=m[0][2], m14=m[0][3],
-    m21=m[1][0], m22=m[1][1], m23=m[1][2], m24=m[1][3],
-    m31=m[2][0], m32=m[2][1], m33=m[2][2], m34=m[2][3]
-  )
-  [
-    for (ci=c)
-    let
+) = let
     (
-      x = ci[0], y = ci[1], z = ci[2]
+      m11=m[0][0], m12=m[0][1], m13=m[0][2], m14=m[0][3],
+      m21=m[1][0], m22=m[1][1], m23=m[1][2], m24=m[1][3],
+      m31=m[2][0], m32=m[2][1], m33=m[2][2], m34=m[2][3]
     )
-      [m11*x+m12*y+m13*z+m14, m21*x+m22*y+m23*z+m24, m31*x+m32*y+m33*z+m34]
-  ];
+    [
+      for (ci=c)
+      let
+      (
+        x = ci[0], y = ci[1], z = ci[2]
+      )
+        [m11*x+m12*y+m13*z+m14, m21*x+m22*y+m23*z+m24, m31*x+m32*y+m33*z+m34]
+    ];
 
 //! Translate all coordinates dimensions.
 /***************************************************************************//**
@@ -92,20 +91,20 @@ function multmatrix_lp
     [Wikipedia]: https://en.wikipedia.org/wiki/Translation_(geometry)
     [transformation matrix]: https://en.wikipedia.org/wiki/Transformation_matrix
 *******************************************************************************/
-function translate_lp
+function translate_p
 (
   c,
   v
-) = not_defined(v) ? c
+) = is_undef(v) ? c
   : let
     (
       d = len(first(c)),
       u = is_scalar(v) ? v : 0,
-      w = [for (i=[0 : d-1]) edefined_or(v, i, u)]
+      w = [for (i=[0 : d-1]) defined_e_or(v, i, u)]
     )
     [for (ci=c) [for (di=[0 : d-1]) ci[di] + w[di]]];
 
-//! Rotate all coordinates about one or more axes in Euclidean 2d or 3d space.
+//! Rotate all coordinates about one or more axes in 2D or 3D.
 /***************************************************************************//**
   \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
   \param    a <decimal-list-3|decimal> The axis rotation angle.
@@ -128,27 +127,27 @@ function translate_lp
     [transformation matrix]: https://en.wikipedia.org/wiki/Transformation_matrix
     [axis rotation]: http://inside.mines.edu/fs_home/gmurray/ArbitraryAxisRotation
 *******************************************************************************/
-function rotate_lp
+function rotate_p
 (
   c,
   a,
   v,
   o = origin3d
-) = not_defined(a) ? c
+) = is_undef(a) ? c
   : let
     (
       d  = len(first(c)),
-      az = edefined_or(a, 2, is_scalar(a) ? a : 0),
+      az = defined_e_or(a, 2, is_scalar(a) ? a : 0),
 
       cg = cos(az), sg = sin(az),
 
       rc = (d == 2) ? [for (ci=c) [cg*ci[0]-sg*ci[1], sg*ci[0]+cg*ci[1]]]
          : (d != 3) ? c
-         : (not_defined(v) || is_list(a)) ?
+         : (is_undef(v) || is_list(a)) ?
             let
             (
-              ax = edefined_or(a, 0, 0),
-              ay = edefined_or(a, 1, 0),
+              ax = defined_e_or(a, 0, 0),
+              ay = defined_e_or(a, 1, 0),
 
               ca = cos(ax), cb = cos(ay),
               sa = sin(ax), sb = sin(ay),
@@ -165,7 +164,7 @@ function rotate_lp
               m32 = cb*sa,
               m33 = ca*cb
             )
-            multmatrix_lp(c, [[m11,m12,m13,0], [m21,m22,m23,0], [m31,m32,m33,0]])
+            multmatrix_p(c, [[m11,m12,m13,0], [m21,m22,m23,0], [m31,m32,m33,0]])
          :  let
             (
               vx  = v[0],  vy  = v[1],  vz  = v[2],
@@ -194,7 +193,7 @@ function rotate_lp
               m33 = vz2+(vx2+vy2)*cg,
               m34 = (oz*(vx2+vy2)-vz*(ox*vx+oy*vy))*oc+(ox*vy-oy*vx)*ll*sg
             )
-            multmatrix_lp(c, [[m11,m12,m13,m14], [m21,m22,m23,m24], [m31,m32,m33,m34]])/l2
+            multmatrix_p(c, [[m11,m12,m13,m14], [m21,m22,m23,m24], [m31,m32,m33,m34]])/l2
     )
     rc;
 
@@ -205,16 +204,16 @@ function rotate_lp
 
   \returns  <coords-nd> A list of scaled coordinate points.
 *******************************************************************************/
-function scale_lp
+function scale_p
 (
   c,
   v
-) = not_defined(v) ? c
+) = is_undef(v) ? c
   : let
     (
       d = len(first(c)),
       u = is_scalar(v) ? v : 1,
-      w = [for (i=[0 : d-1]) edefined_or(v, i, u)]
+      w = [for (i=[0 : d-1]) defined_e_or(v, i, u)]
     )
     [for (ci=c) [for (di=[0 : d-1]) ci[di] * w[di]]];
 
@@ -226,16 +225,16 @@ function scale_lp
   \returns  <coords-nd> A list of proportionately scaled coordinate
             points which exactly fit the region bounds \p v.
 *******************************************************************************/
-function resize_lp
+function resize_p
 (
   c,
   v
-) = not_defined(v) ? c
+) = is_undef(v) ? c
   : let
     (
       d = len(first(c)),
       u = is_scalar(v) ? v : 1,
-      w = [for (i=[0 : d-1]) edefined_or(v, i, u)],
+      w = [for (i=[0 : d-1]) defined_e_or(v, i, u)],
       m = [for (i=[0 : d-1]) let (cv = [for (ci=c) (ci[i])]) [min(cv), max(cv)]],
       s = [for (i=[0 : d-1]) second(m[i]) - first(m[i])]
     )

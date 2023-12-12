@@ -1,0 +1,91 @@
+/+
+
+  see auto_file.amu
+
+  requires:
+    none.
+
+ +/
+
+  /+
+
+    html documentation directory
+
+    mirror hierarchy resulting from openscad-seam generated makefile
+    script target and subsequently copied into the documentation output
+    path by openscad-dif.
+
+   +/
+
+  \amu_filesystem
+    auto_path_amu
+    (
+      parent=${DOXYGEN_OUTPUT}
+      mkrelp=${AUTO_CONFIG_PATH}
+    )
+
+  \amu_define
+    auto_prefix_html
+    (${DOXYGEN_OUTPUT}${HTML_OUTPUT}/${auto_path_amu}/auto_file/${PATH_NAME})
+
+  \amu_eval
+    auto_prefix_html
+    (${auto_prefix_html})
+
+  \amu_define
+    auto_path_html
+    (${auto_prefix_html}/${extension})
+
+  \amu_define
+    auto_file_html
+    (${auto_path_html}/${STEM_NAME}_af${auto_file_index}.${extension})
+
+  \amu_define
+    auto_file_index
+    (0)
+
+  /+
+
+    assign empty string to 'auto_file_extensions' when not defined and
+    create an output directory for all declared extensions.
+
+   +/
+
+  \amu_if auto_file_extensions ( ! -d "${auto_file_extensions}" )
+    {}
+  else
+    {${auto_file_extensions}}
+  endif
+
+  \amu_filesystem
+    auto_file_dirs
+    (
+      parent=${auto_prefix_html}
+      mkdirp=${auto_file_extensions}
+      ++verbose
+    )
+
+  /+
+
+    show configuration summary when 'auto_file_debug' defined 'true'.
+
+   +/
+
+  \amu_if ( "${auto_file_debug}" == "true" )
+  {
+    <b>auto_file configuration</b>
+
+    \verbatim
+    output type = html
+     extensions = ${auto_file_extensions}
+         prefix = ${auto_prefix_html}
+           stem = ${STEM_NAME}
+          index = ${auto_file_index}
+
+     mkdirp out = ${auto_file_dirs}
+    \endverbatim
+  }
+  endif
+
+
+/+ end of file  +/

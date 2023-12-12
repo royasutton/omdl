@@ -13,9 +13,10 @@
   \amu_source   tv_file (++file)
 
   \amu_replace  tv_nott (text=${tv_log} search="not tested:" replace="1," ++format_no_copy)
-  \amu_replace  tv_pass (text=${tv_log} search="passed:" replace="1," ++format_no_copy)
   \amu_replace  tv_skip (text=${tv_log} search="-skip-:" replace="1," ++format_no_copy)
-  \amu_replace  tv_fail (text=${tv_log} search="failed:" replace="1," ++format_no_copy)
+  \amu_replace  tv_pass (text=${tv_log} search="PASSED:" replace="1," ++format_no_copy)
+  \amu_replace  tv_fail (text=${tv_log} search="FAILED:" replace="1," ++format_no_copy)
+  \amu_replace  tv_warn (text=${tv_log} search="WARNING:" replace="1," ++format_no_copy)
 
   \amu_word tv_td
   (
@@ -28,9 +29,10 @@
     words="\ref tv_${group}_r" ++list
 
     words=${tv_nott} ++count
-    words=${tv_pass} ++count
     words=${tv_skip} ++count
+    words=${tv_pass} ++count
     words=${tv_fail} ++count
+    words=${tv_warn} ++count
   )
 
 /+
@@ -42,7 +44,22 @@
   \amu_word    tv_fail_c (words=${tv_fail} ++count)
   \amu_replace tv_fail_td
   (
-    text=${tv_log} search="^.*failed:.*$" replace="&^"
+    text=${tv_log} search="^.*FAILED:.*$" replace="&^"
+    ++not_dot_newline
+    ++format_sed
+    ++format_no_copy
+  )
+
+/+
+
+  define list of tests with warnings
+
+ +/
+
+  \amu_word    tv_warn_c (words=${tv_warn} ++count)
+  \amu_replace tv_warn_td
+  (
+    text=${tv_log} search="^.*WARNING:.*$" replace="&^"
     ++not_dot_newline
     ++format_sed
     ++format_no_copy

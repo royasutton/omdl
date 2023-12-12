@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2017-2018
+  \date   2017-2023
 
   \copyright
 
@@ -27,13 +27,11 @@
 
   \details
 
-    \amu_define group_name  (Coordinates)
+    \amu_define group_name  (Coordinates Systems)
     \amu_define group_brief (Coordinate systems and conversions.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
-
-include <../constants.scad>;
 
 //----------------------------------------------------------------------------//
 // group.
@@ -81,10 +79,10 @@ include <../constants.scad>;
       \skip include
       \until to="c");
 
-    \b Result (base_unit_coordinate = \b c): \include \amu_scope(index=1)_c.log
-    \b Result (base_unit_coordinate = \b p): \include \amu_scope(index=1)_p.log
-    \b Result (base_unit_coordinate = \b y): \include \amu_scope(index=1)_y.log
-    \b Result (base_unit_coordinate = \b s): \include \amu_scope(index=1)_s.log
+    \b Result (coordinate_unit_base = \b c): \include \amu_scope(index=1)_c.log
+    \b Result (coordinate_unit_base = \b p): \include \amu_scope(index=1)_p.log
+    \b Result (coordinate_unit_base = \b y): \include \amu_scope(index=1)_y.log
+    \b Result (coordinate_unit_base = \b s): \include \amu_scope(index=1)_s.log
 
     [coordinate system]: https://en.wikipedia.org/wiki/Coordinate_system
     [cartesian]: https://en.wikipedia.org/wiki/Cartesian_coordinate_system
@@ -97,11 +95,14 @@ include <../constants.scad>;
 
 //----------------------------------------------------------------------------//
 
-//! <string> The base coordinate system.
-base_unit_coordinate = "c";
+//! <string> The base units for value storage.
+coordinate_unit_base = "c";
+
+//! <string> The default units when unspecified.
+coordinate_unit_default = "c";
 
 //! <boolean> When converting to angular measures add 360 to negative angles.
-coordinates_positive_angles = true;
+coordinate_positive_angle = true;
 
 //! Return the name of the given coordinate system identifier.
 /***************************************************************************//**
@@ -110,9 +111,9 @@ coordinates_positive_angles = true;
   \returns  <string> The system name for the given identifier.
             Returns \b undef for identifiers that are not defined.
 *******************************************************************************/
-function coordinates_name
+function coordinate_unit_name
 (
-  s = base_unit_coordinate
+  s = coordinate_unit_default
 ) = (s == "c") ? "cartesian"
   : (s == "p") ? "polar"
   : (s == "y") ? "cylindrical"
@@ -130,43 +131,55 @@ function coordinates_name
 
   \private
 *******************************************************************************/
-function coordinate_c_to
+function coordinate_unit_c2
 (
   c,
   to
-) = (to == "c") ? ( c )
-  : (to == "p") ?
-    (
-      let
-      (
-        r   = sqrt(pow(c.x,2) + pow(c.y,2)),
-        aa  = atan2(c.y, c.x),
-        aap = ((aa<0) && (coordinates_positive_angles==true)) ? aa+360 : aa
+) = !is_point(c) ? undef
+
+    // cartesian (2d, 3d)
+  : (to == "c") ? c
+
+  : let( d = line_dim(c) )
+
+    // polar (2d)
+    (to == "p") ? (d != 2 ) ? undef
+    : (
+        let
+        (
+          r   = sqrt(pow(c[0],2) + pow(c[1],2)),
+          aa  = atan2(c[1], c[0]),
+          aap = ((aa<0) && (coordinate_positive_angle==true)) ? aa+360 : aa
+        )
+        [r, aap]
       )
-      [r, aap]
-    )
-  : (to == "y") ?
-    (
-      let
-      (
-        r   = sqrt(pow(c.x,2) + pow(c.y,2)),
-        aa  = atan2(c.y, c.x),
-        aap = ((aa<0) && (coordinates_positive_angles==true)) ? aa+360 : aa,
-        z   = (c.z !=undef) ? c.z : 0
+
+    // cylindrical (3d)
+  : (to == "y") ? (d != 3 ) ? undef
+    : (
+        let
+        (
+          r   = sqrt(pow(c[0],2) + pow(c[1],2)),
+          aa  = atan2(c[1], c[0]),
+          aap = ((aa<0) && (coordinate_positive_angle==true)) ? aa+360 : aa,
+          z   = (c[2] !=undef) ? c[2] : 0
+        )
+        [r, aap, z]
       )
-      [r, aap, z]
-    )
-  : (to == "s") ?
-    (
-      let
-      (
-        r   = sqrt(pow(c.x,2) + pow(c.y,2) + pow(c.z,2)),
-        aa  = atan2(c.y, c.x),
-        aap = ((aa<0) && (coordinates_positive_angles==true)) ? aa+360 : aa,
-        pa  = acos(c.z / r)
+
+    // spherical (3d)
+  : (to == "s") ? (d != 3 ) ? undef
+    : (
+        let
+        (
+          r   = sqrt(pow(c[0],2) + pow(c[1],2) + pow(c[2],2)),
+          aa  = atan2(c[1], c[0]),
+          aap = ((aa<0) && (coordinate_positive_angle==true)) ? aa+360 : aa,
+          pa  = acos(c[2] / r)
+        )
+        [r, aap, pa]
       )
-      [r, aap, pa]
-    )
+
   : undef;
 
 //! Convert a point from some coordinate system to the Cartesian coordinate system.
@@ -180,40 +193,51 @@ function coordinate_c_to
 
   \private
 *******************************************************************************/
-function coordinate_to_c
+function coordinate_unit_2c
 (
   c,
   from
-) = (from == "c") ? ( c )
-  : (from == "p") ?
-    (
-      let
-      (
-        x = c[0]*cos(c[1]),
-        y = c[0]*sin(c[1])
+) = !is_point(c) ? undef
+
+    // cartesian (2d, 3d)
+  : (from == "c") ? c
+
+  : let( d = line_dim(c) )
+
+    // polar (2d)
+    (from == "p") ? (d != 2 ) ? undef
+    : (
+        let
+        (
+          x = c[0]*cos(c[1]),
+          y = c[0]*sin(c[1])
+        )
+        [x, y]
       )
-      [x, y]
-    )
-  : (from == "y") ?
-    (
-      let
-      (
-        x = c[0]*cos(c[1]),
-        y = c[0]*sin(c[1]),
-        z = (c[2] != undef) ? c[2] : 0
+
+    // cylindrical (3d)
+  : (from == "y") ? (d != 3 ) ? undef
+    : (
+        let
+        (
+          x = c[0]*cos(c[1]),
+          y = c[0]*sin(c[1]),
+          z = (c[2] != undef) ? c[2] : 0
+        )
+        [x, y, z]
       )
-      [x, y, z]
-    )
-  : (from == "s") ?
-    (
-      let
-      (
-        x = c[0]*sin(c[2])*cos(c[1]),
-        y = c[0]*sin(c[2])*sin(c[1]),
-        z = c[0]*cos(c[2])
+
+    // spherical (3d)
+  : (from == "s") ? (d != 3 ) ? undef
+    : (
+        let
+        (
+          x = c[0]*sin(c[2])*cos(c[1]),
+          y = c[0]*sin(c[2])*sin(c[1]),
+          z = c[0]*cos(c[2])
+        )
+        [x, y, z]
       )
-      [x, y, z]
-    )
   : undef;
 
 //! Convert point from one coordinate system to another.
@@ -227,12 +251,32 @@ function coordinate_to_c
   \returns  <point> The converted result.
             Returns \b undef for identifiers that are not defined.
 *******************************************************************************/
-function convert_coordinate
+function coordinate
 (
   c,
-  from = base_unit_coordinate,
-  to   = base_unit_coordinate
-) = coordinate_c_to( coordinate_to_c( c, from ), to );
+  from = coordinate_unit_default,
+  to   = coordinate_unit_base
+) = (from == to) ? c
+  : coordinate_unit_c2( coordinate_unit_2c( c, from ), to );
+
+//! Convert point from one coordinate system to another.
+/***************************************************************************//**
+  \param    c <point> A point to convert.
+  \param    from <string> The coordinate system identifier of the point
+            to be converted.
+  \param    to <string> The coordinate system identifier to which the point
+            should be converted.
+
+  \returns  <point> The converted result.
+            Returns \b undef for identifiers that are not defined.
+*******************************************************************************/
+function coordinate_inv
+(
+  c,
+  from = coordinate_unit_base,
+  to   = coordinate_unit_default
+) = (from == to) ? c
+  : coordinate_unit_c2( coordinate_unit_2c( c, from ), to );
 
 //! Radially scale a list of 2d cartesian coordinates.
 /***************************************************************************//**
@@ -248,7 +292,7 @@ function convert_coordinate
     radius \p r. When \p t is \b false, the radius of each coordinate
     is scaled by \p r.
 *******************************************************************************/
-function coordinates_cpc
+function coordinate_scale2d_cpc
 (
   c,
   r,
@@ -256,8 +300,8 @@ function coordinates_cpc
 ) =
   [
     for (i = c)
-    let (p = convert_coordinate(i, from="c", to="p"))
-      convert_coordinate([(t == true) ? r : r*p[0], p[1]], from="p", to="c")
+    let (p = coordinate(i, from="c", to="p"))
+      coordinate([(t == true) ? r : r*p[0], p[1]], from="p", to="c")
   ];
 
 //! Radially scale and convert a list of 2d polar coordinates to cartesian.
@@ -274,7 +318,7 @@ function coordinates_cpc
     radius \p r. When \p t is \b false, the radius of each coordinate
     is scaled by \p r.
 *******************************************************************************/
-function coordinates_pc
+function coordinate_scale2d_p2c
 (
   p,
   r,
@@ -282,10 +326,10 @@ function coordinates_pc
 ) =
   [
     for (i = p)
-      convert_coordinate([(t == true) ? r : r*i[0], i[1]], from="p", to="c")
+      coordinate([(t == true) ? r : r*i[0], i[1]], from="p", to="c")
   ];
 
-//! Radially scale a list of 3d cartesian coordinates.
+//! Spherically scale a list of 3d cartesian coordinates.
 /***************************************************************************//**
   \param    c <coords-3d> A list of cartesian coordinates [[x, y, z], ...].
   \param    r <decimal> A spherical radius.
@@ -299,7 +343,7 @@ function coordinates_pc
     radius \p r. When \p t is \b false, the radius of each coordinate
     is scaled by \p r.
 *******************************************************************************/
-function coordinates_csc
+function coordinate_scale3d_csc
 (
   c,
   r,
@@ -307,11 +351,11 @@ function coordinates_csc
 ) =
   [
     for (i = c)
-    let (s = convert_coordinate(i, from="c", to="s"))
-      convert_coordinate([(t == true) ? r : r*s[0], s[1], s[2]], from="s", to="c")
+    let (s = coordinate(i, from="c", to="s"))
+      coordinate([(t == true) ? r : r*s[0], s[1], s[2]], from="s", to="c")
   ];
 
-//! Radially scale and convert a list of 3d spherical coordinates to cartesian.
+//! Spherically scale and convert a list of 3d spherical coordinates to cartesian.
 /***************************************************************************//**
   \param    c <coords-3d> A list of spherical coordinates [[r, aa, pa], ...].
   \param    r <decimal> A spherical radius.
@@ -325,7 +369,7 @@ function coordinates_csc
     radius \p r. When \p t is \b false, the radius of each coordinate
     is scaled by \p r.
 *******************************************************************************/
-function coordinates_sc
+function coordinate_scale3d_s2c
 (
   s,
   r,
@@ -333,7 +377,7 @@ function coordinates_sc
 ) =
   [
     for (i = s)
-      convert_coordinate([(t == true) ? r : r*i[0], i[1], i[2]], from="s", to="c")
+      coordinate([(t == true) ? r : r*i[0], i[1], i[2]], from="s", to="c")
   ];
 
 //! @}
@@ -346,24 +390,27 @@ function coordinates_sc
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <units/coordinate.scad>;
+    include <omdl-base.scad>;
 
-    base_unit_coordinate = "c";
+    coordinate_unit_base = "c";
+    coordinate_unit_default = "p";
 
-    // get the base coordinate system name
-    cs = coordinates_name();
+    // get unit names
+    bu = coordinate_unit_name(coordinate_unit_base);
+    du = coordinate_unit_name();
 
     // absolute coordinates in a specified coordinate system.
-    c1 = convert_coordinate([1, 1, 1], "c");
-    c2 = convert_coordinate([1, 180], "p");
-    c3 = convert_coordinate([1, 90, -1], "y");
-    c4 = convert_coordinate([1, 5, 50], "s");
+    c1 = coordinate([1, 1, 1], "c");
+    c2 = coordinate([1, 180]);
+    c3 = coordinate([1, 90, -1], "y");
+    c4 = coordinate([1, 5, 50], "s");
 
     // convert between system.
-    c5 = convert_coordinate([10*sqrt(2), 45, 45], from="s", to="y");
-    c6 = convert_coordinate([sqrt(2), 45], from="p", to="c");
+    c5 = coordinate([10*sqrt(2), 45, 45], from="s", to="y");
+    c6 = coordinate([sqrt(2), 45], to="c");
 
-    echo( cs=cs );
+    echo( bu=bu );
+    echo( du=du );
     echo( c1=c1 );
     echo( c2=c2 );
     echo( c3=c3 );
@@ -373,9 +420,9 @@ BEGIN_SCOPE example;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
 
-    defines   name "system" define "base_unit_coordinate" strings "c p y s";
+    defines   name "system" define "coordinate_unit_base" strings "c p y s";
     variables add_opts_combine "system";
 
     include --path "${INCLUDE_PATH}" script_std.mfs;

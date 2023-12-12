@@ -1,0 +1,98 @@
+#!/usr/bin/make -f
+################################################################################
+#
+# Buildinfo
+#
+################################################################################
+
+################################################################################
+# Functions
+################################################################################
+
+#------------------------------------------------------------------------------#
+#  General
+#------------------------------------------------------------------------------#
+
+# buildinfo_output_path (empty)
+# returns output directory for current configuration.
+define buildinfo_output_path
+$(amu_pm_d0)$(call join_with,$(empty),
+  $(if $(call bool_decode,$(prefix_buildinfo_output_path)),$(output_path))
+  $(if $(call bool_decode,$(prefix_buildinfo_output_prefix)),$(buildinfo_output_prefix))
+)
+endef
+
+# buildinfo_target_name (arg1)
+# arg1: target group name.
+# returns target output filename for named group.
+buildinfo_target_name = $(buildinfo_output_path)$1$(buildinfo_output_ext)
+
+#------------------------------------------------------------------------------#
+# Build Information Rules Generation
+#------------------------------------------------------------------------------#
+
+# buildinfo_target (arg1)
+# arg1: target group name.
+# returns rules for generating output for named group.
+define buildinfo_target
+$(call buildinfo_target_name,$1): | $(buildinfo_output_path)
+$(amu_pm_d1)
+
+	$$(call target_begin)
+	$$(file > $$@,$$(call build_info_$1))
+	$$(call target_end)
+
+# add buildinfo_stamp dependency
+$(buildinfo_stamp): $(call buildinfo_target_name,$1)
+
+# add to clean file list
+buildinfo_clean_files += $(call buildinfo_target_name,$1)
+endef
+
+#------------------------------------------------------------------------------#
+# Build Information Group Output Functions
+#------------------------------------------------------------------------------#
+# add a space (' ') after '^' so that columns are rendered for empty values
+
+# build_info_general (empty)
+define build_info_general
+  omdl version^ $(project_version)^
+  openscad-amu version^ $(AMU_TOOL_VERSION)^
+  openscad-amu prefix^ $(AMU_TOOL_PREFIX)^
+  selected modules^ $(words $(modules))^
+  library files^ $(words $(src_files))^
+  embedded scripts^ $(words $(scopes_scripts_source))^
+  selected makefiles^ $(words $(scopes_mf))^
+  selected scripts^ $(words $(scopes_mf))^
+  build os^ $(os)^
+  architecture^ $(arch)^
+  build date^ $(datetime)^
+endef
+
+# build_info_toolchain (empty)
+define build_info_toolchain
+  openscad_dif^ $(amudifvn)^ $(path_openscad_dif)^
+  openscad_seam^ $(amuseamvn)^ $(path_openscad_seam)^
+  OpenSCAD^ $(openscadvn)^ $(path_openscad)^
+  Doxygen^ $(doxygenvn)^ $(path_doxygen)^
+  Bash^ $(bashvn)^ $(path_bash)^
+  GNU Make^ $(gnumakevn)^ $(path_gnumake)^
+endef
+
+# build_info_scopes (empty)
+define build_info_scopes
+  ignore_scopes_include^ ^ \$(call bool_string,$(ignore_scopes_include))^
+  ignore_scopes_exclude^ ^ \$(call bool_string,$(ignore_scopes_exclude))^
+  scopes_include^ $(words $(scopes_include))^ $(if $(scopes_include),(scopes_include),--)^
+  scopes_exclude^ $(words $(scopes_exclude))^ $(if $(scopes_exclude),$(scopes_exclude),--)^
+endef
+
+# build_info_modules (empty)
+define build_info_modules
+  ignore_modules_exclude^ ^ \$(call bool_string,$(ignore_modules_exclude))^
+  modules_exclude^ $(words $(modules_exclude))^ $(if $(modules_exclude),$(modules_exclude),--)^
+endef
+
+################################################################################
+# eof
+################################################################################

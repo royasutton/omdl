@@ -6,12 +6,11 @@ $(eval $(call clear-local-module))
 
 local_path        :=  units
 
-local_library     :=  module \
+local_library     :=  docs_module \
                       \
                       angle \
                       coordinate \
-                      length \
-                      resolution
+                      length
 
 local_release_add :=
 

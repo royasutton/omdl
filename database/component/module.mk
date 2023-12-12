@@ -6,7 +6,7 @@ $(eval $(call clear-local-module))
 
 local_path        :=  database/component
 
-local_library     :=  module
+local_library     :=  docs_module
 
 local_release_add :=
 

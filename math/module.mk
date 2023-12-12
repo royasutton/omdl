@@ -6,15 +6,13 @@ $(eval $(call clear-local-module))
 
 local_path        :=  math
 
-local_library     :=  module \
-                      \
-                      math-base \
+local_library     :=  docs_module \
                       \
                       linear_algebra \
                       vector_algebra \
                       \
-                      bitwise \
-                      other_shape \
+                      binary \
+                      polygon_primitives \
                       polytope \
                       triangle \
                       utility

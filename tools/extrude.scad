@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2018
+  \date   2015-2023
 
   \copyright
 
@@ -34,21 +34,19 @@
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
 
-include <../math/bitwise.scad>;
-
 //----------------------------------------------------------------------------//
-// openscad-amu macros
+// group and macros.
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/example_dim_table.amu)
-
   \amu_include (include/amu/group_in_parent_start.amu)
+
+  \amu_include (include/amu/example_dim_table.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
 
-//! Translate, rotate, and revolve the 2d shape about the z-axis.
+//! Translate, rotate, and revolve a 2d shape about the z-axis.
 /***************************************************************************//**
   \param    r <decimal> The rotation radius.
   \param    pa <decimal> The profile pitch angle in degrees.
@@ -58,9 +56,9 @@ include <../math/bitwise.scad>;
   \details
 
     \b Example
-    \amu_eval ( function=rotate_extrude_tr ${example_dim} )
+    \amu_eval ( function=extrude_rotate_tr ${example_dim} )
 *******************************************************************************/
-module rotate_extrude_tr
+module extrude_rotate_tr
 (
   r,
   pa = 0,
@@ -74,48 +72,47 @@ module rotate_extrude_tr
   children();
 }
 
-//! Translate, rotate, and revolve the 2d shape about the z-axis with linear elongation.
+//! Translate, rotate, and revolve a 2d shape about the z-axis with linear elongation.
 /***************************************************************************//**
-  \param    r <decimal> The rotation radius.
+  \copydetails extrude_rotate_tr()
+
   \param    l <decimal-list-2|decimal> The elongation length.
             A list [x, y] of decimals or a single decimal for (x=y)
-  \param    pa <decimal> The profile pitch angle in degrees.
-  \param    ra <decimal> The rotation sweep angle in degrees.
   \param    m <integer> The section render mode. An 8-bit encoded integer
             that indicates the revolution sections to render.
             Bit values \b 1 enables the corresponding section and bit values
             \b 0 are disabled. Sections are assigned to the bit position in
             counter-clockwise order.
-  \param    profile <boolean> Show profile only (do not extrude).
 
   \details
 
     \b Example
-    \amu_eval ( function=rotate_extrude_tre ${example_dim} )
+    \amu_eval ( function=extrude_rotate_tre ${example_dim} )
 
   \note When elongating <tt>(l > 0)</tt>, \p ra is ignored. However, \p m
         may be used to control which complete revolution section to render.
 *******************************************************************************/
-module rotate_extrude_tre
+module extrude_rotate_tre
 (
   r,
-  l,
   pa = 0,
   ra = 360,
-  m = 255,
-  profile = false
+  profile = false,
+
+  l,
+  m = 255
 )
 {
-  if ( not_defined(l) || (profile==true) )
+  if ( is_undef(l) || (profile==true) )
   {
-    rotate_extrude_tr(r=r, pa=pa, ra=ra, profile=profile)
+    extrude_rotate_tr(r=r, pa=pa, ra=ra, profile=profile)
     children();
   }
   else
   {
     ld = is_scalar(l) ? l : 0;
-    lx = edefined_or(l, 0, ld);
-    ly = edefined_or(l, 1, ld);
+    lx = defined_e_or(l, 0, ld);
+    ly = defined_e_or(l, 1, ld);
 
     for
     (
@@ -126,11 +123,11 @@ module rotate_extrude_tre
              [+lx/2, -ly/2, 270, 7]
           ]
     )
-    if ( bitwise_is_equal(m, i[3], 1) )
+    if ( binary_bit_is(m, i[3], 1) )
     {
       translate([i[0], i[1], 0])
       rotate([0, 0, i[2]])
-      rotate_extrude_tr(r=r, pa=pa, ra=90, profile=profile)
+      extrude_rotate_tr(r=r, pa=pa, ra=90, profile=profile)
       children();
     }
 
@@ -143,7 +140,7 @@ module rotate_extrude_tre
             [     lx/2, -r -ly/2, 270, lx, 6]
           ]
     )
-    if ( bitwise_is_equal(m, i[4], 1) )
+    if ( binary_bit_is(m, i[4], 1) )
     {
       translate([i[0], i[1], 0])
       rotate([90, 0, i[2]])
@@ -154,49 +151,47 @@ module rotate_extrude_tre
   }
 }
 
-//! Linearly extrude 2d shape with extrusion upper and lower scaling.
+//! Linearly extrude a 2d shape with upper and lower scaling.
 /***************************************************************************//**
   \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal to specify simple extrusion height.
+            decimal.
   \param    center <boolean> Center extrusion about origin.
 
   \details
 
     When \p h is a decimal, the shape is extruded linearly as normal.
     To scale the upper and lower slices of the extrusion, \p h must be
-    assigned a list with a minimum of three decimal values as described
-    in the following table.
+    a list with a minimum of three decimal values as described in the
+    following table. For symmetrical scaling, shape must be centered
+    about origin.
 
-      sym | h[n] | default | description
-    :----:|:----:|:-------:|:---------------------------------------
-      h   |  0   |         | total extrusion height
-      n1  |  1   |         | (+z) number of scaled extrusion slices
-      h1  |  2   |         | (+z) extrusion scale percentage
-      x1  |  3   | -h1     | (+z) x-dimension scale percentage
-      y1  |  4   |  x1     | (+z) y-dimension scale percentage
-      n2  |  5   |  n1     | (-z) number of scaled extrusion slices
-      h2  |  6   |  h1     | (-z) extrusion scale percentage
-      x2  |  7   |  x1     | (-z) x-dimension scale percentage
-      y2  |  8   |  y1     | (-z) y-dimension scale percentage
+     h[n] | default | description
+    :----:|:-------:|:---------------------------------------
+      0   |         | total extrusion height
+      1   |         | (+z) number of scaled extrusion slices
+      2   |         | (+z) extrusion scale percentage
+      3   | -h[2]   | (+z) x-dimension scale percentage
+      4   |  h[3]   | (+z) y-dimension scale percentage
+      5   |  h[1]   | (-z) number of scaled extrusion slices
+      6   |  h[2]   | (-z) extrusion scale percentage
+      7   |  h[3]   | (-z) x-dimension scale percentage
+      8   |  h[4]   | (-z) y-dimension scale percentage
 
   \details
 
     \b Example
-    \amu_eval ( function=linear_extrude_uls ${example_dim} )
-
-  \note When symmetrical scaling is desired, shape must be centered about
-        origin.
+    \amu_eval ( function=extrude_linear_uls ${example_dim} )
 
   \todo This function should be rewritten to use the built-in scaling
         provided by linear_extrude() in the upper and lower scaling zones.
 *******************************************************************************/
-module linear_extrude_uls
+module extrude_linear_uls
 (
   h,
   center = false
 )
 {
-  if ( not_defined(h) )
+  if ( is_undef(h) )
   {
     children();
   }
@@ -210,8 +205,8 @@ module linear_extrude_uls
   {
     z = h[0];                                   // total height
 
-    n1 = (len(h) >= 3) ? max(h[1], 0)  : undef; // number of scaled-slices
-    z1 = (len(h) >= 3) ? abs(h[2])/100 : undef; // z scale fraction
+    n1 = (len(h) >= 3) ? max(h[1], 0)  : 0; // number of scaled-slices
+    z1 = (len(h) >= 3) ? abs(h[2])/100 : 0; // z scale fraction
     x1 = (len(h) >= 4) ?     h[3] /100 : -z1;   // x scale fraction
     y1 = (len(h) >= 5) ?     h[4] /100 : x1;    // y scale fraction
 
@@ -266,17 +261,17 @@ module linear_extrude_uls
 /*
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <tools/extrude.scad>;
+    include <omdl-base.scad>;
 
-    shape = "rotate_extrude_tr";
-    $fn = 72;
+    shape = "extrude_rotate_tr";
+    $fn = 36;
 
-    if (shape == "rotate_extrude_tr")
-      rotate_extrude_tr( r=50, pa=45, ra=270 ) square( [10,5], center=true );
-    else if (shape == "rotate_extrude_tre")
-      rotate_extrude_tre( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
-    else if (shape == "linear_extrude_uls")
-      linear_extrude_uls( [5,10,15,-5], center=true ) square( [20,15], center=true );
+    if (shape == "extrude_rotate_tr")
+      extrude_rotate_tr( r=50, pa=45, ra=270 ) square( [10,5], center=true );
+    else if (shape == "extrude_rotate_tre")
+      extrude_rotate_tre( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
+    else if (shape == "extrude_linear_uls")
+      extrude_linear_uls( [5,10,15,-5], center=true ) square( [20,15], center=true );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -285,12 +280,12 @@ BEGIN_SCOPE dim;
     views     name "views" views "diag";
     defines   name "shapes" define "shape"
               strings "
-                rotate_extrude_tr
-                rotate_extrude_tre
-                linear_extrude_uls
+                extrude_rotate_tr
+                extrude_rotate_tre
+                extrude_linear_uls
               ";
     variables add_opts_combine "views shapes";
-    variables add_opts "--viewall --autocenter";
+    variables add_opts "--viewall --autocenter --view=axes";
 
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;

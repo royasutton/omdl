@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2018
+  \date   2015-2023
 
   \copyright
 
@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Lengths)
+    \amu_define group_name  (Length Units)
     \amu_define group_brief (Length units and conversions.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
@@ -43,7 +43,7 @@
   \details
 
     These functions allow for lengths to be specified with units.
-    Lengths specified with units are independent of (\ref base_unit_length).
+    Lengths specified with units are independent of (\ref length_unit_base).
     There are also unit conversion functions for converting from one unit
     to another.
 
@@ -71,10 +71,10 @@
       \skip include
       \until to="mm");
 
-    \b Result (base_unit_length = \b mm):  \include \amu_scope(index=1)_mm.log
-    \b Result (base_unit_length = \b cm):  \include \amu_scope(index=1)_cm.log
-    \b Result (base_unit_length = \b mil): \include \amu_scope(index=1)_mil.log
-    \b Result (base_unit_length = \b in):  \include \amu_scope(index=1)_in.log
+    \b Result (length_unit_base = \b mm):  \include \amu_scope(index=1)_mm.log
+    \b Result (length_unit_base = \b cm):  \include \amu_scope(index=1)_cm.log
+    \b Result (length_unit_base = \b mil): \include \amu_scope(index=1)_mil.log
+    \b Result (length_unit_base = \b in):  \include \amu_scope(index=1)_in.log
 
     \b Example (equivalent lengths)
 
@@ -84,8 +84,11 @@
 
 //----------------------------------------------------------------------------//
 
-//! <string> The base unit for length measurements.
-base_unit_length = "mm";
+//! <string> The base units for value storage.
+length_unit_base = "mm";
+
+//! <string> The default units when unspecified.
+length_unit_default = "mm";
 
 //! Return the long name for a length unit identifier.
 /***************************************************************************//**
@@ -96,9 +99,9 @@ base_unit_length = "mm";
 
   \private
 *******************************************************************************/
-function unit_length_name_id_lookup
+function length_unit_name_1d
 (
-  u = base_unit_length
+  u = length_unit_default
 ) = u == "pm"   ? "picometer"
   : u == "nm"   ? "nanometer"
   : u == "um"   ? "micrometer"
@@ -115,67 +118,48 @@ function unit_length_name_id_lookup
   : u == "mi"   ? "mile"
   : undef;
 
-//! Return the long name for a length unit identifier with dimension.
+//! Return the name for a length unit identifier with dimension.
 /***************************************************************************//**
   \param    u <string> A length unit identifier.
-  \param    d <integer> A dimension. One of [1|2|3].
+  \param    d <integer> The unit dimension. One of [1|2|3].
+  \param    w <boolean> \b true for word and \b false for symbol format.
 
   \returns  <string> The long name for a length unit identifier with
             dimension.
             Returns \b undef for identifiers or dimensions that are
             not defined.
-
-  \private
 *******************************************************************************/
-function unit_length_name_symbol
+function length_unit_name
 (
-  u = base_unit_length,
-  d = 1
-) = d == 1 ?      unit_length_name_id_lookup( u )
-  : d == 2 ? str( unit_length_name_id_lookup( u ), "^2" )
-  : d == 3 ? str( unit_length_name_id_lookup( u ), "^3" )
-  : undef;
-
-//! Return the long name for a length unit identifier with dimension.
-/***************************************************************************//**
-  \copydetails unit_length_name_symbol()
-
-  \private
-*******************************************************************************/
-function unit_length_name_word
-(
-  u = base_unit_length,
-  d = 1
-) = d == 1 ?                 unit_length_name_id_lookup( u )
-  : d == 2 ? str( "square ", unit_length_name_id_lookup( u ) )
-  : d == 3 ? str( "cubic ",  unit_length_name_id_lookup( u ) )
-  : undef;
-
-//! Return the name for a length unit identifier with dimension.
-/***************************************************************************//**
-  \param    w <boolean> \b true for word and \b false for symbol format.
-
-  \copydetails unit_length_name_symbol()
-*******************************************************************************/
-function unit_length_name
-(
-  u = base_unit_length,
+  u = length_unit_default,
   d = 1,
   w = false
-) = w == true ? unit_length_name_word( u, d )
-  :             unit_length_name_symbol( u, d );
+) = (w == false) ?
+    (
+        d == 1 ?      length_unit_name_1d( u )
+      : d == 2 ? str( length_unit_name_1d( u ), "^2" )
+      : d == 3 ? str( length_unit_name_1d( u ), "^3" )
+      : undef
+    )
+  :
+    (
+        d == 1 ?                 length_unit_name_1d( u )
+      : d == 2 ? str( "square ", length_unit_name_1d( u ) )
+      : d == 3 ? str( "cubic ",  length_unit_name_1d( u ) )
+      : undef
+    );
 
 //! Convert a value from millimeters to other units.
 /***************************************************************************//**
-  \param    v <decimal> A value to convert.
+  \param    v <decimal-list|decimal> The value to convert.
   \param    to <string> The units to which the value should be converted.
 
-  \returns  <decimal> The conversion result.
+  \returns  <decimal-list|decimal> The conversion result.
             Returns \b undef for identifiers that are not defined.
 
   \private
 *******************************************************************************/
-function unit_length_mm_to
+function length_unit_mm2
 (
   v,
   to
@@ -197,58 +181,87 @@ function unit_length_mm_to
 
 //! Convert a value from some units to millimeters.
 /***************************************************************************//**
-  \param    v <decimal> A value to convert.
+  \param    v <decimal-list|decimal> The value to convert.
   \param    from <string> The units of the value to be converted.
 
-  \returns  <decimal> The conversion result.
+  \returns  <decimal-list|decimal> The conversion result.
             Returns \b undef for identifiers that are not defined.
 
   \private
 *******************************************************************************/
-function unit_length_to_mm
+function length_unit_2mm
 (
   v,
   from
-) = v / unit_length_mm_to( 1, from );
+) = v / length_unit_mm2( 1, from );
 
 //! Convert a value from from one units to another.
 /***************************************************************************//**
-  \param    v <decimal> A value to convert.
+  \param    v <decimal-list|decimal> The value to convert.
   \param    from <string> The units of the value to be converted.
   \param    to <string> A units to which the value should be converted.
 
-  \returns  <decimal> The conversion result.
+  \returns  <decimal-list|decimal> The conversion result.
             Returns \b undef for identifiers that are not defined.
 
   \private
 *******************************************************************************/
-function unit_length_convert
+function length_1d
 (
   v,
-  from = base_unit_length,
-  to   = base_unit_length
-) = unit_length_mm_to( unit_length_to_mm( v, from ), to );
+  from = length_unit_default,
+  to   = length_unit_base
+) = (from == to) ? v
+  : length_unit_mm2( length_unit_2mm( v, from ), to );
 
 //! Convert a value from from one units to another with dimensions.
 /***************************************************************************//**
-  \param    v <decimal> A value to convert.
+  \param    v <decimal> The value to convert.
   \param    from <string> The units of the value to be converted.
-  \param    to <string> A units to which the value should be converted.
-  \param    d <integer> A dimension. One of [1|2|3].
+  \param    to <string> The units to which the value should be converted.
+  \param    d <integer> The unit dimension. One of [1|2|3].
 
   \returns  <decimal> The conversion result.
             Returns \b undef for identifiers or dimensions that are
             not defined.
 *******************************************************************************/
-function convert_length
+function length
 (
   v,
-  from = base_unit_length,
-  to   = base_unit_length,
+  from = length_unit_default,
+  to   = length_unit_base,
   d    = 1
-) = d == 1 ?    ( unit_length_convert(v, from, to)    )
-  : d == 2 ? pow( unit_length_convert(v, from, to), 2 )
-  : d == 3 ? pow( unit_length_convert(v, from, to), 3 )
+) = d == 1 ?    ( length_1d(v, from, to)    )
+    // for multi-dimension, 'v' must be a scalar
+  : is_list(v) ? undef
+  : d == 2 ? pow( length_1d(v, from, to), 2 )
+  : d == 3 ? pow( length_1d(v, from, to), 3 )
+    // undefined for other dimensions
+  : undef;
+
+//! Convert a value from from one units to another with dimensions.
+/***************************************************************************//**
+  \param    v <decimal> The value to convert.
+  \param    from <string> The units of the value to be converted.
+  \param    to <string> The units to which the value should be converted.
+  \param    d <integer> The unit dimension. One of [1|2|3].
+
+  \returns  <decimal> The conversion result.
+            Returns \b undef for identifiers or dimensions that are
+            not defined.
+*******************************************************************************/
+function length_inv
+(
+  v,
+  from = length_unit_base,
+  to   = length_unit_default,
+  d    = 1
+) = d == 1 ?  length_1d(v, from, to)
+    // for multi-dimension, 'v' must be a scalar
+  : is_list(v) ? undef
+  : d == 2 ? length_1d(pow(v, 1/2), from, to)
+  : d == 3 ? length_1d(pow(v, 1/3), from, to)
+    // undefined for other dimensions
   : undef;
 
 //! @}
@@ -261,24 +274,27 @@ function convert_length
 /*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
-    include <units/length.scad>;
+    include <omdl-base.scad>;
 
-    base_unit_length = "mm";
+    length_unit_base = "mm";
+    length_unit_default = "in";
 
-    // get base unit name
-    un = unit_length_name();
+    // get unit names
+    bu = length_unit_name(length_unit_base);
+    du = length_unit_name();
 
     // absolute length measurements in base unit.
-    c1 = convert_length(1/8, "in");
-    c2 = convert_length(3.175, "mm");
-    c3 = convert_length(25, "mil");
-    c4 = convert_length(1, "ft", d=3);
+    c1 = length(1/8);
+    c2 = length(3.175, "mm");
+    c3 = length(25, "mil");
+    c4 = length(1, "ft", d=3);
 
     // convert between units.
-    c5 = convert_length(10, from="mil", to="in");
-    c6 = convert_length(10, from="ft", to="mm");
+    c5 = length(10, from="mil", to="in");
+    c6 = length(10, from="ft", to="mm");
 
-    echo( un=un );
+    echo( bu=bu );
+    echo( du=du );
     echo( c1=c1 );
     echo( c2=c2 );
     echo( c3=c3 );
@@ -288,9 +304,9 @@ BEGIN_SCOPE example;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
 
-    defines   name "units" define "base_unit_length" strings "mm cm mil in";
+    defines   name "units" define "length_unit_base" strings "mm cm mil in";
     variables add_opts_combine "units";
 
     include --path "${INCLUDE_PATH}" script_std.mfs;
@@ -299,7 +315,7 @@ END_SCOPE;
 
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
-    include <units/length.scad>;
+    include <omdl-base.scad>;
 
     module dim( uv=1, un="cm" ) {
       mx = 200.0;
@@ -315,8 +331,8 @@ BEGIN_SCOPE dim;
         translate([+mx/2,0,0]) square( [tx, ty], true );
       }
 
-      l1l = convert_length( uv, "in", un );
-      l1u = unit_length_name( un );
+      l1l = length( uv, "in", un );
+      l1u = length_unit_name( un );
       l1s = str( l1l, " ", l1u );
 
       translate( [0, ts, 0] )

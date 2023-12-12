@@ -1,0 +1,106 @@
+#!/usr/bin/make -f
+################################################################################
+#
+# Modules
+#
+################################################################################
+
+################################################################################
+# Functions
+################################################################################
+
+# append module configuration
+#------------------------------------------------------------------------------#
+# macro: add-module (arg1,arg2,arg3,arg4,arg5,arg6)
+#------------------------------------------------------------------------------#
+# arg1: directory path
+# arg2: design files
+# arg3: library files
+# arg4: (sub)module list
+# arg5: release files
+# arg6: backup files
+#------------------------------------------------------------------------------#
+define add-module
+  $(amu_pm_d6)
+
+  # $2: design
+  ifneq ($(strip $2),$(empty))
+    design += $(addprefix $(if $(strip $1),$1/),$2)
+  endif
+
+  # $3: library
+  ifneq ($(strip $3),$(empty))
+    library += $(addprefix $(if $(strip $1),$1/),$3)
+  endif
+
+  # $5: modules_release_add
+  # released files are generated targets and the output path of the target
+  # must be identified with the macro $(call scopes_target_path,<input-path>).
+  # use delayed expansion '$$' for the correct evaluation within this macro.
+  ifneq ($(strip $5),$(empty))
+    modules_release_add += $(addprefix $$(call scopes_target_path,$(if $(strip $1),$1/)),$5)
+  endif
+
+  # $6: modules_backup_add
+  ifneq ($(strip $6),$(empty))
+    modules_backup_add += $(addprefix $(if $(strip $1),$1/),$6)
+  endif
+
+  # $4: (sub)module
+  # remove modules in $(modules_exclude) when $(ignore_modules_exclude) not true
+  ifneq ($(strip $4),$(empty))
+
+    # (sub)module
+    modules += \
+      $(addsuffix /$(modules_name).mk,
+        $(filter-out
+          $(if $(call bool_decode,$(ignore_modules_exclude)),$(empty),$(modules_exclude)),
+          $(addprefix $(if $(strip $1),$1/),$4)
+        )
+      )
+
+    # include (sub)module makefiles
+    include \
+      $(addsuffix /$(modules_name).mk,
+        $(filter-out
+          $(if $(call bool_decode,$(ignore_modules_exclude)),$(empty),$(modules_exclude)),
+          $(addprefix $(if $(strip $1),$1/),$4)
+        )
+      )
+  endif
+endef
+
+# simplified module addition using assumed local variable names
+#------------------------------------------------------------------------------#
+# macro: add-local-module ()
+#------------------------------------------------------------------------------#
+define add-local-module
+  $(call add-module, \
+    $(local_path), \
+    $(local_design), \
+    $(local_library), \
+    $(local_submodules), \
+    $(local_release_add), \
+    $(local_backup_add) \
+  )
+endef
+
+# simplified module cleanup using assumed local variable names
+#------------------------------------------------------------------------------#
+# macro: clear-local-module ()
+#------------------------------------------------------------------------------#
+define clear-local-module
+  undefine local_path
+
+  undefine local_design
+  undefine local_library
+
+  undefine local_submodules
+
+  undefine local_release_add
+  undefine local_backup_add
+endef
+
+################################################################################
+# eof
+################################################################################

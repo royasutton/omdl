@@ -1,8 +1,8 @@
-#
-# database source directory
+G#
+# library contributions
 #
 
-/database_src/
+/contrib/
 
 #
 # backup, build, and release directories
@@ -19,12 +19,12 @@
 /work/
 
 #
-# GitHub docs related
+# GitHub Pages
 #
 
-/docs/Gemfile
-/docs/Gemfile.lock
+/docs/.bundle/
 /docs/_site/
+/docs/_staging/
 
 #
 # eof

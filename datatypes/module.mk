@@ -6,17 +6,16 @@ $(eval $(call clear-local-module))
 
 local_path        :=  datatypes
 
-local_library     :=  module \
+local_library     :=  docs_module \
                       \
-                      datatypes-base \
+                      scalar_test \
+                      scalar_operate \
                       \
-                      identify_scalar \
-                      identify_iterable \
-                      identify_list \
+                      iterable_test \
+                      iterable_operate \
                       \
-                      operate_scalar \
-                      operate_iterable \
-                      operate_list \
+                      list_operate \
+                      list_compare \
                       \
                       map \
                       table

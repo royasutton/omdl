@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2017-2018
+  \date   2017-2019
 
   \copyright
 
@@ -27,13 +27,11 @@
 
   \details
 
-    \amu_define group_name  (Utilities)
+    \amu_define group_name  (Math Utilities)
     \amu_define group_brief (Miscellaneous mathematical utilities.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
-
-include <bitwise.scad>;
 
 //----------------------------------------------------------------------------//
 // group.
@@ -45,9 +43,25 @@ include <bitwise.scad>;
 
 //----------------------------------------------------------------------------//
 
-//----------------------------------------------------------------------------//
-// statistical / informational
-//----------------------------------------------------------------------------//
+//! Return facets number for the given arc radius.
+/***************************************************************************//**
+  \param    r <decimal> The arc radius.
+
+  \returns  <integer> The number of facets.
+
+  \details
+
+    This function impliments the \c get_fragments_from_r() code that is
+    used by OpenSCAD to calculates the number of fragments in a circle
+    or arc. The arc facets are controlled by the special variables \p
+    $fa, \p $fs, and \p $fn.
+*******************************************************************************/
+function openscad_fn
+(
+  r
+) = (r < grid_fine) ? 3
+  : ($fn > 0.0) ? ($fn >= 3) ? $fn : 3
+  : ceil( max( min(360/$fa, r*tau/$fs), 5 ) );
 
 //! Generate a histogram for the elements of a list of values.
 /***************************************************************************//**
@@ -69,7 +83,7 @@ include <bitwise.scad>;
     s1, value, s2, value-frequency, s3, fs
     \endverbatim
 
-    See lstr_html() for description of the html formatting parameters
+    See strl_html() for description of the html formatting parameters
     \p cb, \p cp, \p ca, \p cf, and \p d.
 
     Output mode selection:
@@ -90,7 +104,7 @@ include <bitwise.scad>;
     | 15  |  1  |  1  |  1  |  1  | custom formating  |
 
 *******************************************************************************/
-function hist
+function histogram
 (
   v,
   m = 0,
@@ -104,11 +118,11 @@ function hist
     (
       hv = [for (i=unique(v)) [i, len(find(i, v, 0))]]
     )
-    bitwise_is_equal(m, 0, 0) ? hv
+    binary_bit_is(m, 0, 0) ? hv
   : let
     (
-      sm = bitwise_imi(m, 3, 1),
-      fm = bitwise_is_equal(m, 4, 1) ? true : false
+      sm = binary_iw2i(m, 3, 1),
+      fm = binary_bit_is(m, 4, 1) ? true : false
     )
     (sm == 0) ? [for (i=hv) str(first(i), "x", second(i))]
   : let
@@ -138,10 +152,10 @@ function hist
          : (sm==4) ? undef
          :           cf
     )
-    lstr
+    strl
     ([
       for (i=[0:len(hv)-1])
-        lstr_html
+        strl_html
         (
           [s1, first(hv[i]), s2, second(hv[i]), s3, if ((i<(len(hv)-1)) || fm) fs],
           b=fb, p=fp, a=fa, f=ff, d=d

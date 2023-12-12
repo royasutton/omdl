@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2017-2018
+  \date   2017-2023
 
   \copyright
 
@@ -27,13 +27,11 @@
 
   \details
 
-    \amu_define group_name  (Polytopes)
+    \amu_define group_name  (Polytope Math)
     \amu_define group_brief (Polygon and polyhedron mathematical functions.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
-
-include <math-base.scad>;
 
 //----------------------------------------------------------------------------//
 // group.
@@ -70,7 +68,7 @@ function polytope_faces2edges
   (
     el =
     [
-      for (ip = [for (fi = f) for (ai = nssequence(fi, n=2, s=1, w=true)) ai])
+      for (ip = [for (fi = f) for (ai = sequence_ns(fi, n=2, s=1, w=true)) ai])
         [min(ip), max(ip)]
     ]
   )
@@ -88,11 +86,11 @@ function polytope_faces2edges
             of dimensions, a list of dimensions, or a single dimension.
   \param    s <boolean> Return box size rather than coordinate limits.
 
-  \returns  <datastruct> A list with the bounding-box limits (see: table).
+  \returns  <datastruct> The bounding-box limits (see: table).
 
   \details
 
-  The returned list will be of the following form:
+  The returned datastruct will be one of the following forms:
 
   |     |  s    |     x     |     y     |     z     |  datastruct form      |
   |:---:|:-----:|:---------:|:---------:|:---------:|:---------------------:|
@@ -125,7 +123,7 @@ function polytope_limits
          : undef,
 
       ad = (is_defined(a) && is_scalar(a)) ? a : 0,
-      ap = [for (j = ax) edefined_or(a, j, ad)],
+      ap = [for (j = ax) defined_e_or(a, j, ad)],
 
       pm = is_defined(f)
         ? [for (j = ax) [for (m = f) for (i=[0 : len(m)-1]) c[m[i]][j]]]
@@ -136,52 +134,6 @@ function polytope_limits
     for (j = ax)
       (s == true) ? b[j][1] - b[j][0] : [b[j][0], b[j][1]]
   ];
-
-//! Generate a bounding box polytope for another polytope in 3d or 2d.
-/***************************************************************************//**
-  \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
-            coordinates [[x, y (, z)], ...].
-  \param    f <integer-list-list> A list of faces (or paths) that enclose
-            the shape where each face is a list of coordinate indexes.
-  \param    a <decimal-list-1:3|decimal> The box padding.
-            A list of lengths to equally pad the box dimensions.
-
-  \returns  <datastruct> A structure: (1) <tt>[points, faces]</tt>,
-            where \c points are <coords-3d> and \c faces are a
-            <integer-list-list>, that define the bounding box of the
-            given polyhedron. Or: (2) <tt>[points, path]</tt>, where
-            \c points are <coords-2d> and \c path is a
-            <integer-list-list>, that define the bounding box of the
-            given polygon.
-
-  \details
-
-    Polyhedron faces will be ordered \em clockwise when looking from
-    outside the shape inwards. Polygon path will be ordered clockwise
-    when looking from the top (positive z) downwards.
-
-  \note     When \p f is not specified, all coordinates are used to
-            determine the geometric limits, which, simplifies the
-            calculation. Parameter \p f is needed when a subset of the
-            coordinates should be considered.
-
-    \sa polytope_limits for warning about secondary shapes.
-*******************************************************************************/
-function polytope_bbox_pf
-(
-  c,
-  f,
-  a
-) = let
-    (
-      b = polytope_limits(c=c, f=f, a=a, d=[0:2], s=false),
-      d  = len([for (i=b) if (i != [undef, undef]) i])
-    )
-    (d == 3) ?
-      [ [for (x=b[0], y=b[1], z=b[2]) [x, y, z]],
-        [[0,2,3,1], [4,0,1,5], [6,4,5,7], [2,6,7,3], [0,4,6,2], [3,7,5,1]] ]
-    : [ [for (x=b[0], y=b[1]) [x, y]],
-        [[0,1,3,2]] ];
 
 //! Get a line from an edge or any two vetices of a polytope.
 /***************************************************************************//**
@@ -218,7 +170,7 @@ function polytope_line
   l,
   r = false
 ) = is_defined(l) ? [c[first(l)], c[second(l)]]
-  : not_defined(i) ? undef
+  : is_undef(i) ? undef
   : let
     (
       fm = defined_or(f, [consts(len(c))]),
@@ -248,7 +200,7 @@ function polytope_line
             given, the listed order of the coordinates \p c establishes
             the polygon path.
 *******************************************************************************/
-function polytope_vertex_av
+function polytope_vertex_adjacent_vertices
 (
   f,
   i
@@ -261,7 +213,7 @@ function polytope_vertex_av
         for (j = [0:fn-1])
           if (i == fi[j])
             for (k = [-1, 1])
-              fi[circular_index(j + k, fn)]
+              fi[index_c(j + k, fn)]
     ]
   )
   unique(vn);
@@ -275,7 +227,7 @@ function polytope_vertex_av
   \returns  <integer-list> The list of face indexes adjacent to the
             given polytope vertex.
 *******************************************************************************/
-function polytope_vertex_af
+function polytope_vertex_adjacent_faces
 (
   f,
   i
@@ -297,7 +249,7 @@ function polytope_vertex_af
   \note     When \p e is not specified, it is computed from \p f using
             polytope_faces2edges().
 *******************************************************************************/
-function polytope_edge_af
+function polytope_edge_adjacent_faces
 (
   f,
   e,
@@ -326,7 +278,7 @@ function polytope_edge_af
             given, the listed order of the coordinates \p c establishes
             the polygon path.
 *******************************************************************************/
-function polytope_vertex_n
+function polytope_vertex_normal
 (
   c,
   f,
@@ -335,7 +287,7 @@ function polytope_vertex_n
     (
       fm = defined_or(f, [consts(len(c))])
     )
-    mean([for (j=polytope_vertex_af(fm, i)) unit_l(polytope_face_n(c, l=fm[j]))]);
+    mean([for (j=polytope_vertex_adjacent_faces(fm, i)) unit_l(polytope_face_normal(c, l=fm[j]))]);
 
 //! Get a normal vector for a polytope edge.
 /***************************************************************************//**
@@ -358,7 +310,7 @@ function polytope_vertex_n
   \note     When \p e is not specified, it is computed from \p f using
             polytope_faces2edges().
 *******************************************************************************/
-function polytope_edge_n
+function polytope_edge_normal
 (
   c,
   f,
@@ -369,7 +321,7 @@ function polytope_edge_n
       fm = defined_or(f, [consts(len(c))]),
       el = is_defined(e) ? e : polytope_faces2edges(fm)
     )
-    mean([for (j=polytope_edge_af(fm, el, i)) unit_l(polytope_face_n(c, l=fm[j]))]);
+    mean([for (j=polytope_edge_adjacent_faces(fm, el, i)) unit_l(polytope_face_normal(c, l=fm[j]))]);
 
 //! Get the normal vector of a polytope face.
 /***************************************************************************//**
@@ -394,7 +346,7 @@ function polytope_edge_n
             given, the listed order of the coordinates \p c establishes
             the polygon path.
 *******************************************************************************/
-function polytope_face_n
+function polytope_face_normal
 (
   c,
   f,
@@ -429,7 +381,7 @@ function polytope_face_n
             given, the listed order of the coordinates \p c establishes
             the polygon path.
 *******************************************************************************/
-function polytope_face_m
+function polytope_face_mean
 (
   c,
   f,
@@ -467,18 +419,18 @@ function polytope_face_m
             given, the listed order of the coordinates \p c establishes
             the polygon path.
 *******************************************************************************/
-function polytope_face_mn
+function polytope_face_mean_normal
 (
   c,
   f,
   i,
   l,
   cw = true
-) = [polytope_face_m(c, f, i, l), polytope_face_n(c, f, i, l, cw)];
+) = [polytope_face_mean(c, f, i, l), polytope_face_normal(c, f, i, l, cw)];
 
 //! Get a plane for a polytope face.
 /***************************************************************************//**
-  \copydetails polytope_face_mn()
+  \copydetails polytope_face_mean_normal()
 *******************************************************************************/
 function polytope_plane
 (
@@ -487,7 +439,7 @@ function polytope_plane
   i,
   l,
   cw=true
-) = polytope_face_mn(c, f, i, l, cw);
+) = polytope_face_mean_normal(c, f, i, l, cw);
 
 //! List the vertex counts for all polytope faces.
 /***************************************************************************//**
@@ -496,7 +448,7 @@ function polytope_plane
 
   \returns  <integer-list> A list with a vertex count of every face.
 *******************************************************************************/
-function polytope_face_vcounts
+function polytope_face_vertex_counts
 (
   f
 ) = [for (fi=f) len(fi)];
@@ -566,7 +518,7 @@ function polytope_edge_angles
   f
 ) =
   [
-    for (k=[for (j=f) for (i=nssequence(j, n=3, s=1, w=true)) i])
+    for (k=[for (j=f) for (i=sequence_ns(j, n=3, s=1, w=true)) i])
       angle_ll([c[k[0]], c[k[1]]], [c[k[1]], c[k[2]]])
   ];
 
@@ -600,8 +552,8 @@ function polytope_faces_are_regular
   (
     ce = is_defined(e) ? e : polytope_faces2edges(f),
 
-    ul = unique(sround(polytope_edge_lengths(c, ce), d)),
-    ua = unique(sround(polytope_edge_angles(c, f), d))
+    ul = unique(round_s(polytope_edge_lengths(c, ce), d)),
+    ua = unique(round_s(polytope_edge_angles(c, f), d))
   )
   ((len(ul) == 1) && (len(ua) == 1));
 
@@ -623,7 +575,7 @@ function polytope_faces_are_regular
 
   \warning  This method does not support concave polytopes.
 *******************************************************************************/
-function polytope_triangulate_ft
+function polytope_ft_triangulate
 (
   f
 ) =
@@ -635,6 +587,50 @@ function polytope_triangulate_ft
 //----------------------------------------------------------------------------//
 // polygon
 //----------------------------------------------------------------------------//
+
+//! Compute the perimeter of an n-sided regular polygon in 2D.
+/***************************************************************************//**
+  \param    n <integer> The number of sides.
+  \param    r <decimal> The vertex circumradius of the circumcircle.
+  \param    a <decimal> The inradius of the incircle.
+
+  \returns  <decimal> Perimeter length of the n-sided regular polygon.
+
+  \details
+
+    The radius can be specified by either the circumradius \p r or the
+    inradius \p a. If both are specified, \p r is used.
+*******************************************************************************/
+function polygon_regular_perimeter
+(
+  n,
+  r,
+  a
+) = is_defined(r) ? 2 * n * r * sin(180/n)
+  : is_defined(a) ? 2 * n * a * tan(180/n)
+  : 0;
+
+//! Compute the area of an n-sided regular polygon in 2D.
+/***************************************************************************//**
+  \param    n <integer> The number of sides.
+  \param    r <decimal> The vertex circumradius of the circumcircle.
+  \param    a <decimal> The inradius of the incircle.
+
+  \returns  <decimal> Area of the n-sided regular polygon.
+
+  \details
+
+    The radius can be specified by either the circumradius \p r or the
+    inradius \p a. If both are specified, \p r is used.
+*******************************************************************************/
+function polygon_regular_area
+(
+  n,
+  r,
+  a
+) = is_defined(r) ? pow(r, 2) * n * sin(360/n) / 2
+  : is_defined(a) ? pow(a, 2) * n * tan(180/n)
+  : 0;
 
 //! Calculate the perimeter length of a polygon in 2d.
 /***************************************************************************//**
@@ -652,7 +648,7 @@ function polytope_triangulate_ft
   \note     When \p p is not given, the listed order of the coordinates
             \p c establishes the path.
 *******************************************************************************/
-function polygon2d_perimeter
+function polygon_perimeter
 (
   c,
   p
@@ -692,7 +688,7 @@ function polygon2d_perimeter
 
     [Wikipedia]: https://en.wikipedia.org/wiki/Shoelace_formula
 *******************************************************************************/
-function polygon2d_area
+function polygon_area
 (
   c,
   p,
@@ -783,7 +779,7 @@ function polygon3d_area
 
     [Wikipedia]: https://en.wikipedia.org/wiki/Centroid#Centroid_of_polygon
 *******************************************************************************/
-function polygon2d_centroid
+function polygon_centroid
 (
   c,
   p
@@ -812,7 +808,7 @@ function polygon2d_centroid
     ],
 
     sc = sum(cv),
-    sa = polygon2d_area(c, pm, true)
+    sa = polygon_area(c, pm, true)
   )
   sc/(6*sa);
 
@@ -833,14 +829,14 @@ function polygon2d_centroid
   \note     When \p p is not given, the listed order of the coordinates
             \p c establishes the path.
 *******************************************************************************/
-function polygon2d_is_cw
+function polygon_is_clockwise
 (
   c,
   p
 ) =
   let
   (
-    sa = polygon2d_area(c, p, true)
+    sa = polygon_area(c, p, true)
   )
     (sa < 0) ? true
   : (sa > 0) ? false
@@ -862,11 +858,11 @@ function polygon2d_is_cw
   \note     When \p p is not given, the listed order of the coordinates
             \p c establishes the path.
 *******************************************************************************/
-function polygon2d_is_convex
+function polygon_is_convex
 (
   c,
   p
-) = not_defined(c) ? undef
+) = is_undef(c) ? undef
   : len(c) < 3 ? undef
   : !all_len(c, 2) ? undef
   : let
@@ -919,7 +915,7 @@ function polygon2d_is_convex
   \warning  Where there are secondary paths, the vertex ordering of each
              must be the same as the primary path.
 *******************************************************************************/
-function polygon2d_winding
+function polygon_winding
 (
   c,
   p,
@@ -969,14 +965,14 @@ function polygon2d_winding
   \note     When \p p is not given, the listed order of the coordinates
             \p c establishes the path.
 
-    \sa polygon2d_winding for warning about secondary shapes.
+    \sa polygon_winding for warning about secondary shapes.
 *******************************************************************************/
-function polygon2d_is_pip_wn
+function polygon_wn_is_p_inside
 (
   c,
   p,
   t
-) = (polygon2d_winding(c=c, p=p, t=t) != 0);
+) = (polygon_winding(c=c, p=p, t=t) != 0);
 
 //! Test if a point is inside a polygon in a Euclidean 2d-space using angle summation.
 /***************************************************************************//**
@@ -1001,7 +997,7 @@ function polygon2d_is_pip_wn
 
     [Wikipedia]: https://en.wikipedia.org/wiki/Point_in_polygon
 *******************************************************************************/
-function polygon2d_is_pip_as
+function polygon_as_is_p_inside
 (
   c,
   p,
@@ -1066,7 +1062,7 @@ function polyhedron_area
   [Wikipedia]: https://en.wikipedia.org/wiki/Polyhedron#Volume
   [divergence theorem]: https://en.wikipedia.org/wiki/Divergence_theorem
 *******************************************************************************/
-function polyhedron_volume_tf
+function polyhedron_tf_volume
 (
   c,
   f
@@ -1111,7 +1107,7 @@ function polyhedron_volume_tf
   [Wikipedia]: https://en.wikipedia.org/wiki/Centroid
   [divergence theorem]: https://en.wikipedia.org/wiki/Divergence_theorem
 *******************************************************************************/
-function polyhedron_centroid_tf
+function polyhedron_tf_centroid
 (
   c,
   f
@@ -1133,15 +1129,61 @@ function polyhedron_centroid_tf
     ],
 
     ws = sum(wv),
-    tv = polyhedron_volume_tf(c, f)
+    tv = polyhedron_tf_volume(c, f)
   )
   ws/(24*tv);
 
 //----------------------------------------------------------------------------//
-// other: polygon to polyhedron
+// shape generation and transformation
 //----------------------------------------------------------------------------//
 
-//! Convert a polygon to a polyhedron by adding a height dimension.
+//! Generate a bounding box polytope for another polytope in 3d or 2d.
+/***************************************************************************//**
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
+            coordinates [[x, y (, z)], ...].
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+  \param    a <decimal-list-1:3|decimal> The box padding.
+            A list of lengths to equally pad the box dimensions.
+
+  \returns  <datastruct> A structure: (1) <tt>[points, faces]</tt>,
+            where \c points are <coords-3d> and \c faces are a
+            <integer-list-list>, that define the bounding box of the
+            given polyhedron. Or: (2) <tt>[points, path]</tt>, where
+            \c points are <coords-2d> and \c path is a
+            <integer-list-list>, that define the bounding box of the
+            given polygon.
+
+  \details
+
+    Polyhedron faces will be ordered \em clockwise when looking from
+    outside the shape inwards. Polygon path will be ordered clockwise
+    when looking from the top (positive z) downwards.
+
+  \note     When \p f is not specified, all coordinates are used to
+            determine the geometric limits, which, simplifies the
+            calculation. Parameter \p f is needed when a subset of the
+            coordinates should be considered.
+
+    \sa polytope_limits for warning about secondary shapes.
+*******************************************************************************/
+function polytope_bounding_box_pf
+(
+  c,
+  f,
+  a
+) = let
+    (
+      b = polytope_limits(c=c, f=f, a=a, d=[0:2], s=false),
+      d  = len([for (i=b) if (i != [undef, undef]) i])
+    )
+    (d == 3) ?
+      [ [for (x=b[0], y=b[1], z=b[2]) [x, y, z]],
+        [[0,2,3,1], [4,0,1,5], [6,4,5,7], [2,6,7,3], [0,4,6,2], [3,7,5,1]] ]
+    : [ [for (x=b[0], y=b[1]) [x, y]],
+        [[0,1,3,2]] ];
+
+//! Convert a polygon in 2D to a polyhedron by adding a height dimension.
 /***************************************************************************//**
   \param    c <coords-2d> A list of 2d cartesian coordinates
             [[x, y], ...].
@@ -1162,7 +1204,7 @@ function polyhedron_centroid_tf
   \note     When \p p is not given, the listed order of the coordinates
             \p c establishes the path.
 *******************************************************************************/
-function linear_extrude_pp2pf
+function polygon_linear_extrude_pf
 (
   c,
   p,
@@ -1175,10 +1217,10 @@ function linear_extrude_pp2pf
     pm = defined_or(p, [consts(len(c))]),
     pn = len([for (pi = pm) for (ci = pi) 1]),
 
-    po = (centroid == true) ? polygon2d_centroid(c, p) : origin2d,
+    po = (centroid == true) ? polygon_centroid(c, p) : origin2d,
     zr = (center == true) ? [-h/2, h/2] : [0, h],
 
-    cw = polygon2d_is_cw (c, p),
+    cw = polygon_is_clockwise (c, p),
 
     pp = [for (zi = zr) for (pi = pm) for (ci = pi) concat(c[ci] - po, zi)],
     pf =
@@ -1192,6 +1234,174 @@ function linear_extrude_pp2pf
     ]
   )
   [pp, pf];
+
+//! Round the vertices of a polygon in 2d space.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of \em n 2d cartesian coordinates
+            [[x1, y1], [x2, y2], ..., [xn, yn]].
+  \param    vr <decimal-list-n|decimal> The vertices rounding radius.
+            A list [v1r, v2r, v3r, ... vnr] of \em n decimals or a
+            single decimal for (v1r=v2r=v3r= ... =vnr). Unspecified
+            vertices are not rounded.
+  \param    vrm <integer-list-n|integer> The vertices rounding mode.
+            A list [v1rm, v2rm, v3rm, ... vnrm] of \em n integers or a
+            single integer for (v1rm=v2rm=v3rm= ... =vnrm). Unspecified
+            vertices are not rounded.
+  \param    vfn <integer-list-n> The vertices arc fragment number.
+            A list [v1fn, v2fn, v3fn, ... vnfn] of \em n integers or a
+            single integer for (v1fn=v2fn=v3fn= ... =vnfn).
+  \param    w <boolean> Wrap-at-end during 3-point coordinate selection.
+  \param    cw <boolean> Polygon vertex ordering.
+
+  \returns  <coords-2d> A new list of coordinates points [[x, y], ...]
+            that define the polygon with rounded vertices.
+
+  \details
+
+    Assumes polygon is defined in 2D space on the x-y plane. There
+    should be no repeating adjacent vertices along the polygon path
+    (ie: no adjacent vertex with identical coordinates). Any vertex
+    determined to be collinear with its adjacent previous and next
+    vertex is returned unmodified.
+
+    Each vertex may be individually rounded using one of the following
+    modes:
+
+     mode | name                |        description
+     :---:|:-------------------:|:--------------------------------------
+       0  | none                | return vertex unchanged
+       1  | round               | previous to next edge round
+       2  | e-hollow / i-circle | previous to next edge inverse round
+       3  | n-fillet            | next edge pass return fillet
+       4  | p-fillet            | previous edge pass return fillet
+       5  | chamfer             | previous to next edge bevel
+       6  | e-circle / i-hollow | previous to next edge inverse round
+       7  | n-round             | next edge pass return round
+       8  | p-round             | previous edge pass return round
+       9  | n-chamfer           | next edge pass return bevel
+      10  | p-chamfer           | previous edge pass return bevel
+
+    Vertex arc fragments can be specified using \p vfn. When any \p
+    vnfn is \b undef, the special variables \p $fa, \p $fs, and \p $fn
+    control facet generation. Each vertex is processed using 3-point
+    (the previous and following vertex). The resulting triangle \ref
+    triangle2d_incenter "incircles" and \ref triangle2d_excenter
+    "excircles" are used to create the round and fillet \ref
+    polygon_arc_p "arc" segments. All arcs and chamfers use constant
+    radius.
+
+    \b Example:
+    \code{.C}
+    c = [[1,1], [1,10], [10,12], [18,2]];
+    r = [1,1,5,8];
+    m = [2,3,4,3];
+    n = [3, 8, undef, undef];
+
+    p = polygon_vertices_round3_p(c=c, vr=r, vrm=m, vfn=n);
+
+    polygon( p );
+    \endcode
+*******************************************************************************/
+function polygon_vertices_round3_p
+(
+  c,
+  vr = 0,
+  vrm = 1,
+  vfn,
+  w = true,
+  cw = true
+) =
+  let
+  (
+    // constant vertex rounding radius, mode, and facets
+    crr = is_scalar(vr) ? vr : 0,
+    crm = is_scalar(vrm) ? vrm : 0,
+    cfn = is_scalar(vfn) ? vfn : undef,
+
+    // function assumes cw order, reverse if required
+    cp  = (cw == true) ? c : reverse(c),
+
+    // adjacent vertices sequence [ [v[n-1], v[n], v[n+1]] ... ]
+    avl = sequence_ns(cp, 3, w=w),
+
+    // polygon coordinate point list
+    ppl =
+    [
+      for ( i = [0 : len(avl)-1] )
+      let
+      (
+        av  = avl[i],                     // vertices [vp, vc, vn]
+
+        vp  = first(av),                  // vertex coordinate v[n-1]
+        vc  = second(av),                 // vertex coordinate v[n]
+        vn  = third(av),                  // vertex coordinate v[n+1]
+
+        il  = is_left_ppp(vp, vn, vc),    // identify position of vc
+
+        rr  = defined_e_or(vr, i, crr),   // vertex rounding radius
+        rm  = (rr == 0) ? 0               // vertex rounding mode
+            : (il == 0) ? 0               // vp,vc,vn collinear, set rm=0
+            : defined_e_or(vrm, i, crm),
+        fn  = defined_e_or(vfn, i, cfn),  // vertex rounding arc fragments
+
+        // reverse arc sweep on interior corners
+        // not relevant for rm={0|5|9|10}
+        ras = (il < 0),
+
+        // tangent circle radius
+        tcr = (rm == 0) ? 0
+            : (rm == 1 || rm == 2) ?
+              triangle2d_inradius(av)
+            : (rm == 3) ?
+              triangle2d_exradius(av, 1)
+            : (rm == 4) ?
+              triangle2d_exradius(av, 3)
+            : 0,
+
+        // tangent circle center coordinate
+        tcc = (rm == 0) ? origin2d
+            : (rm == 1 || rm == 2) ?
+              (vc-rr/(rr-tcr) * triangle2d_incenter(av)) * (tcr-rr)/tcr
+            : (rm == 3) ?
+              (vc-rr/(rr-tcr) * triangle2d_excenter(av, 1)) * (tcr-rr)/tcr
+            : (rm == 4) ?
+              (vc-rr/(rr-tcr) * triangle2d_excenter(av, 3)) * (tcr-rr)/tcr
+            : origin2d,
+
+        // distance from vertex to inflection points
+        vim = (rm == 0) ? 0
+            : (rm <= 4) ?
+              sqrt( pow(distance_pp(vc, tcc),2) - pow(rr,2) )
+            : rr,
+
+        // inflection coordinates
+        tc1 = (rm == 0 || rm > 10) ? origin2d
+            : (rm == 3 || rm == 7 || rm == 9) ?
+              vc + vim * unit_l([vp, vc])
+            : vc + vim * unit_l([vc, vp]),
+
+        tc2 = (rm == 0 || rm > 10) ? origin2d
+            : (rm == 4 || rm == 8 || rm == 10) ?
+              vc + vim * unit_l([vn, vc])
+            : vc + vim * unit_l([vc, vn]),
+
+        // vertex rounding coordinate point list
+        vpl = (rm == 0 || rm > 10) ? [vc]
+            : (rm == 1) ?
+              polygon_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=!ras)
+            : (rm == 2 || rm == 3 || rm == 4) ?
+              polygon_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=ras)
+            : (rm == 6 || rm == 7 || rm == 8) ?
+              polygon_arc_p(r=rr, c=vc, v1=[vc, tc1], v2=[vc, tc2], fn=fn, cw=!ras)
+            : [tc1, tc2]
+      )
+      vpl
+    ],
+
+    // polygon points
+    pp = merge_s( ppl )
+  )
+  (cw == true) ? pp : reverse(pp);
 
 //! @}
 //! @}

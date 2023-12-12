@@ -1,0 +1,58 @@
+#!/usr/bin/make -f
+################################################################################
+#
+# Buildinfo
+#
+################################################################################
+
+################################################################################
+# Defaults
+################################################################################
+# use recursive assignment '=' for references that use derived paths
+
+# generate build info output files
+generate_buildinfo                      := $(true)
+
+# prefix output paths to build info output root directory
+prefix_buildinfo_output_path            := $(true)
+prefix_buildinfo_output_prefix          := $(true)
+
+# buildinfo targets depend on scope targets
+buildinfo_depends_scopes                := $(true)
+
+# doxygen depends on buildinfo targets
+doxygen_depends_buildinfo               := $(true)
+
+# output prefix
+buildinfo_output_prefix                 := buildinfo/
+
+# output file extension
+buildinfo_output_ext                    := .amu
+
+# output group list
+#   see: build_info_GROUPNAME in buildinfo_functions
+buildinfo_groups                        := general \
+                                           toolchain \
+                                           components \
+                                           scopes \
+                                           modules
+
+# output file names
+buildinfo_stamp_name                     = buildinfo$(stamp_ext)
+
+#------------------------------------------------------------------------------#
+# Control Variable List
+#------------------------------------------------------------------------------#
+
+buildinfo_control_variables := \
+  generate_buildinfo \
+  \
+  prefix_buildinfo_output_path \
+  prefix_buildinfo_output_prefix \
+  \
+  buildinfo_depends_scopes \
+  doxygen_depends_buildinfo
+
+################################################################################
+# eof
+################################################################################

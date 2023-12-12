@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2017-2018
+  \date   2017-2019
 
   \copyright
 
@@ -32,9 +32,6 @@
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
-
-include <../math/polytope.scad>;
-include <align.scad>;
 
 //----------------------------------------------------------------------------//
 // group.
@@ -103,13 +100,13 @@ module polytope_number
 
   // vertex
   color("green")
-  for (i = get_index(c, vi))
+  for (i = index_gen(c, vi))
   {
     p = c[i];
-    n = polytope_vertex_n(c, fm, i);
+    n = polytope_vertex_normal(c, fm, i);
 
     translate(p)
-    orient_ll(rl=n)
+    orient_ll(r=is_nan(n) ? z_axis3d_uv : n)
     translate(fo) rotate(tr)
     if (pd == 3)
       linear_extrude(fh, center=true)
@@ -120,13 +117,13 @@ module polytope_number
 
   // face
   color("red")
-  for (i = get_index(fm, fi))
+  for (i = index_gen(fm, fi))
   {
-    p = polytope_face_m(c, l=fm[i]);
-    n = polytope_face_n(c, l=fm[i]);
+    p = polytope_face_mean(c, l=fm[i]);
+    n = polytope_face_normal(c, l=fm[i]);
 
     translate(p)
-    orient_ll(rl=n)
+    orient_ll(r=is_nan(n) ? z_axis3d_uv : n)
     translate(fo) rotate(tr)
     if (pd == 3)
       linear_extrude(fh, center=true)
@@ -137,13 +134,13 @@ module polytope_number
 
   // edge
   color("blue")
-  for (i = get_index(el, ei))
+  for (i = index_gen(el, ei))
   {
     p = mean([c[first(el[i])], c[second(el[i])]]);
-    n = polytope_edge_n(c, fm, el, i);
+    n = polytope_edge_normal(c, fm, el, i);
 
     translate(p)
-    orient_ll(rl=n)
+    orient_ll(r=is_nan(n) ? z_axis3d_uv : n)
     translate(fo) rotate(tr)
     if (pd == 3)
       linear_extrude(fh, center=true)
@@ -190,10 +187,10 @@ module polytope_number
     \b Example
 
     \code{.c}
-    include <tools/polytope.scad>;
+    include <omdl-base.scad>;
 
     s = second(xy_plane_os) * 25;
-    p = linear_extrude_pp2pf(s, h=50);
+    p = polygon_linear_extrude_pf(s, h=50);
 
     polytope_frame(first(p), second(p))
     {
@@ -233,13 +230,13 @@ module polytope_frame
   // vertex
   if (is_between(vc, 0, $children-1) && ($children > 0))
   {
-    for (i = get_index(c, vi))
+    for (i = index_gen(c, vi))
     {
       p = c[i];
-      n = polytope_vertex_n(c, fm, i);
+      n = polytope_vertex_normal(c, fm, i);
 
       translate(p)
-      orient_ll(rl=n)
+      orient_ll(r=is_nan(n) ? z_axis3d_uv : n)
       children(vc);
     }
   }
@@ -247,13 +244,13 @@ module polytope_frame
   // face
   if (is_between(fc, 0, $children-1) && ($children > 0))
   {
-    for (i = get_index(fm, fi))
+    for (i = index_gen(fm, fi))
     {
-      p = polytope_face_m(c, l=fm[i]);
-      n = polytope_face_n(c, l=fm[i]);
+      p = polytope_face_mean(c, l=fm[i]);
+      n = polytope_face_normal(c, l=fm[i]);
 
       translate(p)
-      orient_ll(rl=n)
+      orient_ll(r=is_nan(n) ? z_axis3d_uv : n)
       children(fc);
     }
   }
@@ -261,13 +258,13 @@ module polytope_frame
   // edge
   if (is_between(ec, 0, $children-1) && ($children > 0))
   {
-    for (i = get_index(el, ei))
+    for (i = index_gen(el, ei))
     {
-      p1 = dimension_2to3_v(c[first(el[i])]);   // 3d points required for
-      p2 = dimension_2to3_v(c[second(el[i])]);  // polygons.
+      p1 = point_to_3d(c[first(el[i])]);        // 3d points required for
+      p2 = point_to_3d(c[second(el[i])]);       // polygons.
 
       translate((p1+p2)/2)
-      orient_ll(rl=[p1, p2])
+      orient_ll(r=[p1, p2])
       linear_extrude(distance_pp(p1, p2), center=true)
       children(ec);
     }
@@ -296,7 +293,7 @@ module polytope_frame
 
     \sa polytope_limits for warning about secondary shapes.
 *******************************************************************************/
-module polytope_bbox
+module polytope_bounding_box
 (
   c,
   f,

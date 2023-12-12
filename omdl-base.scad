@@ -1,8 +1,8 @@
-//! Include wrapper of base omdl includes files.
+//! Include wrapper of base library components.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2018
+  \date   2015-2023
 
   \copyright
 
@@ -33,51 +33,65 @@
 //----------------------------------------------------------------------------//
 // console + constants
 //----------------------------------------------------------------------------//
-//  include <console.scad>;
-//  include <constants.scad>;
-
-//----------------------------------------------------------------------------//
-// units
-//----------------------------------------------------------------------------//
-//  include <units/length.scad>;
-include <units/angle.scad>;
-include <units/coordinate.scad>;
-include <units/resolution.scad>;
+include <common/console.scad>;
+include <common/constants.scad>;
 
 //----------------------------------------------------------------------------//
 // data types
 //----------------------------------------------------------------------------//
-//  include <datatypes/datatypes-base.scad>;
+include <datatypes/scalar_test.scad>;
+include <datatypes/scalar_operate.scad>;
+
+include <datatypes/iterable_test.scad>;
+include <datatypes/iterable_operate.scad>;
+
+include <datatypes/list_operate.scad>;
+include <datatypes/list_compare.scad>;
 
 include <datatypes/map.scad>;
 include <datatypes/table.scad>;
 
 //----------------------------------------------------------------------------//
+// units
+//----------------------------------------------------------------------------//
+include <units/angle.scad>;
+include <units/coordinate.scad>;
+include <units/length.scad>;
+
+//----------------------------------------------------------------------------//
 // math
 //----------------------------------------------------------------------------//
-//  include <math/math-base.scad>;
+include <math/vector_algebra.scad>;
+include <math/linear_algebra.scad>;
 
-//  include <math/triangle.scad>;
-//  include <math/other_shape.scad>;
-//  include <math/polytope.scad>;
-//  include <math/bitwise.scad>;
+include <math/triangle.scad>;
+
+include <math/polytope.scad>;
+include <math/polygon_primitives.scad>;
+
+include <math/binary.scad>;
 include <math/utility.scad>;
 
 //----------------------------------------------------------------------------//
 // shapes
 //----------------------------------------------------------------------------//
-//  include <shapes/derivative_2d.scad>;
-include <shapes/derivative_2de.scad>;
-include <shapes/derivative_3d.scad>;
+include <shapes/basic_2d.scad>;
+include <shapes/polygon_2d.scad>;
+include <shapes/revolved_2d.scad>;
+
+include <shapes/basic_3d.scad>;
 
 //----------------------------------------------------------------------------//
 // tools
 //----------------------------------------------------------------------------//
-//  include <tools/align.scad>;
-include <tools/edge.scad>;
-//  include <tools/extrude.scad>;
+include <tools/align.scad>;
+
+include <tools/extrude.scad>;
+include <tools/repeat.scad>;
+
 include <tools/polytope.scad>;
-//  include <tools/repeat.scad>;
+
+include <tools/general.scad>;
 
 //----------------------------------------------------------------------------//
 // end of file

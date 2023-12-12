@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2017-2018
+  \date   2017-2023
 
   \copyright
 
@@ -84,17 +84,17 @@
     | f     | faces               |
     | e     | edges               |
 
-    Use the functions get_table_v() to retrieve feild data as show in
-    the following example. To see a list of table identifiers consider
-    the function get_table_ridl(), get_table_cidl(), or module
-    table_dump(). See datatypes/table.scad for other available table
-    functions.
+    Use the functions table_get_value() to retrieve feild data as show
+    in the following example. To see a list of table identifiers
+    consider the function table_get_row_ids(), table_get_column_ids(),
+    or module table_dump(). See datatypes/table.scad for other
+    available table functions. For a general introduction to this
+    topic, see Wikipedia on [Polyhedron].
+
 
     \b Example
     \code{.C}
-    include <units/coordinate.scad>;
-    include <tools/polytope.scad>;
-    include <datatypes/table.scad>;
+    include <omdl-base.scad>;
     include <database/geometry/polyhedra/platonic.scad>;
 
     tc = dtc_polyhedra_platonic;
@@ -102,19 +102,26 @@
 
     id = "dodecahedron";
 
-    pv = get_table_v(tr, tc, id, "c");
-    pf = get_table_v(tr, tc, id, "f");
+    pv = table_get_value(tr, tc, id, "c");
+    pf = table_get_value(tr, tc, id, "f");
 
-    sv = coordinates_csc(pv, 100);
+    sv = coordinate_scale3d_csc(pv, 100);
 
     polytope_number(sv, pf, to=[0,0,5]);
     polytope_frame(sv, pf) {circle(r=2); color("grey") sphere(r=4);}
     polyhedron(sv, pf);
     \endcode
 
-    \b Autotests \include \amu_scope(index=1).log
+    \b Autotests
 
-    For more information see Wikipedia on [Polyhedron].
+    \amu_scope scope (index=1)
+    \amu_if ( -n ${scope} )
+      { \include ${scope}.log }
+    else
+      { \note Database verification results not included. To test and
+              include results, remove \c db_autotest from \c scopes_exclude
+              in library makefile. For more information see \ref lb. }
+    endif
 
     [Polyhedron]: https://en.wikipedia.org/wiki/Polyhedron
 
@@ -21501,9 +21508,7 @@ dtr_polyhedra_polyhedra_all =
 BEGIN_SCOPE db;
 BEGIN_SCOPE autotest;
   BEGIN_OPENSCAD;
-    include <math/polytope.scad>;
-    include <units/coordinate.scad>;
-    include <datatypes/table.scad>;
+    include <omdl-base.scad>;
     include <database/geometry/polyhedra/polyhedra_all.scad>;
 
     coordinates_positive_angles = false;
@@ -21521,26 +21526,26 @@ BEGIN_SCOPE autotest;
     log_echo("  (1) spherical with converted cartesian coordinates:");
     log_echo("  (2) edge list from faces definition:");
 
-    for ( id = get_table_ridl( tr ) )
+    for ( id = table_get_row_ids( tr ) )
     {
-      c  = get_table_v(tr, tc, id, "c");
-      s  = get_table_v(tr, tc, id, "s");
-      f  = get_table_v(tr, tc, id, "f");
-      e  = get_table_v(tr, tc, id, "e");
+      c  = table_get_value(tr, tc, id, "c");
+      s  = table_get_value(tr, tc, id, "s");
+      f  = table_get_value(tr, tc, id, "f");
+      e  = table_get_value(tr, tc, id, "e");
 
       // convert stored spherical and compare with cartesian coordinates.
       for( i = [0 : len(c)-1] )
       {
-        cc = convert_coordinate(s[i], from="s");
+        cc = coordinate(s[i], from="s");
 
-        if ( !n_almost_equal(c[i], cc) )
+        if ( !almost_eq_nv(c[i], cc) )
         {
-          cs = convert_coordinate(c[i], to="s");
+          cs = coordinate(c[i], to="s");
 
-          n = get_table_v(tr, tc, id, "n");
-          o = get_table_v(tr, tc, id, "o");
-          g = get_table_v(tr, tc, id, "g");
-          d = get_table_v(tr, tc, id, "d");
+          n = table_get_value(tr, tc, id, "n");
+          o = table_get_value(tr, tc, id, "o");
+          g = table_get_value(tr, tc, id, "g");
+          d = table_get_value(tr, tc, id, "d");
 
           log_warn("coordinate mismatch");
           log_info(str("id=", id,", n=", n, ", o=", o, ", g=", g, ", d=", d));
@@ -21549,21 +21554,21 @@ BEGIN_SCOPE autotest;
       }
 
       // re-create sorted edge list and compare with stored.
-      ce = qsort2(polytope_faces2edges(f, d=1), d=1);
+      ce = sort_q2(polytope_faces2edges(f), d=1);
 
       if ( e != ce )
       {
-        se = qsort2(e, d=1);
+        se = sort_q2(e, d=1);
         if ( se == ce )
         {
           log_info(str("edge-list not sorted: id=", id));
         }
         else
         {
-          n = get_table_v(tr, tc, id, "n");
-          o = get_table_v(tr, tc, id, "o");
-          g = get_table_v(tr, tc, id, "g");
-          d = get_table_v(tr, tc, id, "d");
+          n = table_get_value(tr, tc, id, "n");
+          o = table_get_value(tr, tc, id, "o");
+          g = table_get_value(tr, tc, id, "g");
+          d = table_get_value(tr, tc, id, "d");
 
           log_warn("edge-list mismatch");
           log_info(str("id=", id,", n=", n, ", o=", o, ", g=", g, ", d=", d));
@@ -21575,12 +21580,12 @@ BEGIN_SCOPE autotest;
     }
 
     echo();
-    log_echo(str(get_table_size(tr)," polyhedra checked."));
+    log_echo(str(table_get_size(tr)," polyhedra checked."));
 
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_csg}.mfs;
+    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
     include --path "${INCLUDE_PATH}" script_std.mfs;
   END_MFSCRIPT;
 END_SCOPE;
