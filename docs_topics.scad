@@ -31,11 +31,42 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// building
+// Building and installing
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
   \page lb Building and installing
+
+    A script is available to build the library documentation. If the
+    setup script does not detect that [openscad-amu], the development
+    environment used by [omdl], is installed, it will download and set
+    it up in local cache director in the current path.
+
+    Download the omdl setup script:
+    \code{bash}
+    $ mkdir tmp && cd tmp
+    $ wget https://git.io/setup-omdl.bash
+    $ chmod +x setup-omdl.bash
+    \endcode
+
+    Fetch and install the latest library distribution:
+    \code{bash}
+    ./setup-omdl.bash --branch-list tags1 --yes --install
+    \endcode
+
+    A specific version, say v2.9, can be installed using:
+    \code{bash}
+    ./setup-omdl.bash --branch v2.9 --yes --install
+    \endcode
+
+    View documentation:
+    \code{bash}
+    $ firefox .local/share/OpenSCAD/docs/html/index.html
+    \endcode
+
+    The \c html documentation will be installed to the OpenSCAD user
+    library path in a sub-folder \c 'docs/html'. The above example
+    assumes a Linux OS.
 
   [omdl]: https://royasutton.github.io/omdl
   [repository]: https://github.com/royasutton/omdl
@@ -44,24 +75,50 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// using
+// How to use library modules
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
   \page lu How to use library modules
 
+    \amu_shell omdl_base    ( "grep include omdl-base.scad | awk -v FS='(<|>)' '{print $2}'" ++rmnl )
+    \amu_word omdl_base_cnt ( words="${omdl_base}" t=" " r="^" ++count)
+    \amu_word omdl_base     ( words="${omdl_base}" t=" " r="^" ++list)
+    \amu_table
+    (
+      id="omdl_base" table_caption="files included by omdl-base.scad"
+      columns="4" column_headings="c1^c2^c3^c4"
+      cell_texts="${omdl_base}"
+    )
+
+    To use the library, include \c omdl-base.scad:
+
+    \code{.C}
+    include <omdl-base.scad>;
+
+    ...
+    \endcode
+
+    This will read all of the \amu_eval(${omdl_base_cnt}) files listed
+    in table above. Source not listed in this table must be included
+    manually prior to use. See  the \ref starting example.
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// conventions
+// Development conventions
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
   \page conventions Development conventions
+
+  /+
+    add to main conventions page until the section contents grows
+
     \li \subpage dt
 
   \page dt Data types and values
   \tableofcontents
+  +/
 
     \li \subpage dt_base
     \li \subpage dt_index
@@ -69,8 +126,10 @@
 *******************************************************************************/
 
 //
-// base types
+// Data types and values
 //
+
+// Base types and values
 /***************************************************************************//**
   \page dt_base Base types and values
 
@@ -158,9 +217,7 @@
 
 *******************************************************************************/
 
-//
-// index generation
-//
+// Index sequence generation
 /***************************************************************************//**
   \page dt_index Index sequence generation
 
@@ -196,9 +253,7 @@
     \endcode
 *******************************************************************************/
 
-//
-// vector algebra
-//
+// Vector algebra types
 /***************************************************************************//**
   \page dt_vector Vector algebra types
 
@@ -347,7 +402,7 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// validation
+// Auto-tests and validation
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
@@ -376,10 +431,7 @@
   [OpenSCAD]: http://www.openscad.org
 *******************************************************************************/
 
-//
-// validation subpages
-//
-
+// Validation Tests and Results
 /***************************************************************************//**
   /+
       Define seperate pages for validation results. Modules can
@@ -394,6 +446,55 @@
 
   \page tv_fail Current Tests Failures
   \page tv_warn Current Tests Warnings
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// Build versions
+//----------------------------------------------------------------------------//
+
+/***************************************************************************//**
+  \page bv Build versions
+
+  \amu_file bi_general (file="${DOXYGEN_OUTPUT}buildinfo/general.amu" ++read)
+  \amu_table
+  (
+    id="bi_general"    table_caption="General"
+    columns="2"       column_headings="name^value"
+    cell_texts="${bi_general}"
+  )
+
+  \amu_file bi_toolchain (file="${DOXYGEN_OUTPUT}buildinfo/toolchain.amu" ++read)
+  \amu_table
+  (
+    id="bi_toolchain"    table_caption="Toolchain"
+    columns="3"       column_headings="name^version^path"
+    cell_texts="${bi_toolchain}"
+  )
+
+  \amu_file bi_scopes (file="${DOXYGEN_OUTPUT}buildinfo/scopes.amu" ++read)
+  \amu_table
+  (
+    id="bi_scopes"    table_caption="Scopes Filter"
+    columns="3"       column_headings="name^count^value"
+    cell_texts="${bi_scopes}"
+  )
+
+  \amu_file bi_modules (file="${DOXYGEN_OUTPUT}buildinfo/modules.amu" ++read)
+  \amu_table
+  (
+    id="bi_modules"    table_caption="Modules Filter"
+    columns="3"       column_headings="name^count^value"
+    cell_texts="${bi_modules}"
+  )
+
+*******************************************************************************/
+
+/***************************************************************************//**
+  \page Copyright Copyright Notice
+
+  \verbatim
+  \amu_include (gnu-lgpl-v2.1.txt)
+  \endverbatim
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
