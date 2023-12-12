@@ -9,24 +9,8 @@
 # GitHub Pages theme
 theme: jekyll-theme-cayman
 
-# omdl api release
-api:            api/html
-vcurrent:       omdl-v0.6.1
-api_vcurrent:   api/html/omdl-v0.6.1
-
-# omdl groups
-omdl_groups:
-  - constants
-  - database
-  - datatypes
-  - math
-  - shapes
-  - tools
-  - units
-  - utilities
-
-# removed until parts are added.
-#  - parts
+# versions
+vopenscad:    2021.01
 
 #
 # eof

@@ -1,11 +1,11 @@
 omdl
 ====
 
-> An open mechanical design library for [OpenSCAD].
+> A documented mechanical design library for [OpenSCAD].
 
 [![LGPL licensed](https://img.shields.io/badge/license-LGPL-blue.svg?style=flat)](https://raw.githubusercontent.com/royasutton/omdl/master/lgpl-2.1.txt)
 
-View live docs on [GitHib Pages](https://royasutton.github.io/omdl).
+View live docs on [GitHub Pages](https://royasutton.github.io/omdl).
 
 
 Setup
@@ -84,11 +84,10 @@ To update project Makefile and build HTML documentation:
 
 ```bash
 cd cache/omdl
-vi Makefile
-
 make help
 make info
-...
+
+make all
 ```
 
 The output of 'make info' shows all of the boolean control variables
