@@ -16,9 +16,10 @@ AMU_PM_INIT                       := $(AMU_PM_PREFIX)amu_pm_init
 AMU_PM_RULES                      := $(AMU_PM_PREFIX)amu_pm_rules
 AMU_PM_DESIGN_FLOW                := df1/
 
-# 'modules' extension to openscad-amu for omdl
+# openscad-amu component extensions to for omdl
 AMU_PM_COMPONENTS_LOCAL_PATH      := include/pmf
-AMU_PM_COMPONENTS_LOCAL           := modules
+AMU_PM_COMPONENTS_LOCAL           := modules \
+                                     buildinfo
 
 # Uncomment for increased verbosity and/or debugging.
 # AMU_PM_VERBOSE                  := defined
@@ -63,6 +64,12 @@ prefix_scopes_input_prefix        := $(true)
 doxygen_output_prefix             := docs/
 prefix_doxygen_output_path        := $(true)
 prefix_doxygen_output_prefix      := $(true)
+
+buildinfo_output_prefix           := docs/buildinfo/
+prefix_buildinfo_output_path      := $(true)
+prefix_buildinfo_output_prefix    := $(true)
+buildinfo_depends_scopes          := $(true)
+doxygen_depends_buildinfo         := $(true)
 
 targets_depends_project           := $(false)
 version_checks                    := $(true)
