@@ -38,28 +38,82 @@ To get started using [omdl], please see the GitHub source [repository].
 Design Examples
 ---------------
 
-* <a href="examples/solar_mount.jpg">
-    <img src="examples/solar_mount.jpg" alt="solar mount" height="42" />
-  </a>
-  [A Portable solar panel tripod mount](http://www.thingiverse.com/thing:2051608):
-  Design took approximately 48 hours from concept to assembly and
-  documentation using [omdl] and [openscad-amu].
-* <a href="examples/hp_usb_vid.jpg">
-    <img src="examples/hp_usb_vid.jpg" alt="solar mount" height="42" />
-  </a>
-  [Quad HP-USB video adapter monitor post mount](https://www.thingiverse.com/thing:2807314).
-* <a href="examples/webcam_mount.jpg">
-    <img src="examples/webcam_mount.jpg" alt="solar mount" height="42" />
-  </a>
-  [Webcam tripod mount](https://www.thingiverse.com/thing:2811619).
-* <a href="examples/pci_bracket.jpg">
-    <img src="examples/pci_bracket.jpg" alt="solar mount" height="42" />
-  </a>
-  [PCI Bracket Generator](https://www.thingiverse.com/thing:2836187).
-* <a href="examples/pcie_riser.jpg">
-    <img src="examples/pcie_riser.jpg" alt="solar mount" height="42" />
-  </a>
-  [PCI-E 1x Riser Card Bracket](https://www.thingiverse.com/thing:2841089).
+<table>
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>example</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>
+<center>
+<a href="assets/examples/solar_mount.jpg">
+<img src="assets/examples/solar_mount.jpg" height="75" />
+</a>
+</center>
+</td>
+<td>
+<a href="http://www.thingiverse.com/thing:2051608">
+A Portable solar panel tripod mount
+</a>: Designed in 48 hours from concept to assembly using omdl and openscad-amu.
+</td>
+</tr>
+
+<tr>
+<td>
+<center>
+<a href="assets/examples/pci_bracket.jpg">
+<img src="assets/examples/pci_bracket.jpg" height="75" />
+</a>
+</center>
+</td>
+<td>
+<a href="http://www.thingiverse.com/thing:2836187">
+PCI Bracket Generator
+</a>
+</td>
+</tr>
+
+<tr>
+<td>
+<center>
+<a href="assets/examples/pcie_riser.jpg">
+<img src="assets/examples/pcie_riser.jpg" height="75" />
+</a>
+</center>
+</td>
+<td>
+<a href="http://www.thingiverse.com/thing:2841089">
+PCI-E 1x Riser Card Bracket
+</a>
+</td>
+</tr>
+
+<tr>
+<td>
+<center>
+<a href="assets/examples/webcam_mount.jpg">
+<img src="assets/examples/webcam_mount.jpg" height="75" />
+</a>
+</center>
+</td>
+<td>
+<a href="http://www.thingiverse.com/thing:2811619">
+Webcam tripod mount
+</a>
+</td>
+</tr>
+
+</tbody>
+</table>
+
 
 [omdl]: https://royasutton.github.io/omdl
 [repository]: https://github.com/royasutton/omdl
