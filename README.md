@@ -11,12 +11,13 @@ View live docs on [GitHub Pages](https://royasutton.github.io/omdl).
 Setup
 -----
 
-In order to use [omdl], it must be first be installed to an OpenSCAD
-[library location] on your system. It can be copied manually, as
-described in the OpenSCAD documentation, or can be installed via
-[openscad-amu], the framework used to develop [omdl]. If [openscad-amu]
-is used, the library documentation will be generated and added to an
-index of [installed libraries] for convenient design reference.
+In order to use [omdl], it should be first be installed to the OpenSCAD
+[library location] on the development system. It can be copied
+manually, as described in the OpenSCAD documentation, or can be
+installed via [openscad-amu], the framework used to develop [omdl]. If
+openscad-amu is used, the library documentation will be generated and
+added to a local index of installed libraries, next to the OpenSCAD
+local library location, for convenient design reference.
 
 
 Evaluation
@@ -124,8 +125,6 @@ you can contact the maintainer of the project or file an [issue].
 [omdl]: https://royasutton.github.io/omdl
 [repository]: https://github.com/royasutton/omdl
 [issue]: https://github.com/royasutton/omdl/issues
-
-[installed libraries]: https://royasutton.github.io/omdl/api/html
 
 [openscad-amu]: https://royasutton.github.io/openscad-amu
 [installing openscad-amu]: https://github.com/royasutton/openscad-amu#installing
