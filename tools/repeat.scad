@@ -188,7 +188,7 @@ BEGIN_SCOPE dim;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
 
     views     name "views" views "diag";
     defines   name "shapes" define "shape"
@@ -199,7 +199,7 @@ BEGIN_SCOPE dim;
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

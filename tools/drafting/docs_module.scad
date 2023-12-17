@@ -233,17 +233,17 @@ BEGIN_SCOPE dim;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
     table_unset_all sizes;
 
     images    name "sizes" aspect "4:3" wsizes "2048";
     views     name "views" distance "600" views "top";
     variables add_opts_combine "views";
 
-    include --path "${INCLUDE_PATH}" script_new.mfs;
+    include --path "${INCLUDE_PATH}" scr_new_mf.mfs;
 
-    include --path "${INCLUDE_PATH}" config_svg.mfs;
-    include --path "${INCLUDE_PATH}" script_app.mfs;
+    include --path "${INCLUDE_PATH}" var_gen_svg.mfs;
+    include --path "${INCLUDE_PATH}" scr_app_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

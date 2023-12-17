@@ -156,13 +156,13 @@ BEGIN_SCOPE logo;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
 
     views     name "views" distance "250" views "top";
     images    name "slogo" aspect "1:1" xsizes "55";
     variables set_opts_combine "views slogo";
 
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 
@@ -189,16 +189,16 @@ BEGIN_SCOPE quickstart;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
 
     views     name "views" views "top bottom right diag";
     variables add_opts_combine "views";
     variables add_opts "--viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" script_new.mfs;
+    include --path "${INCLUDE_PATH}" scr_new_mf.mfs;
 
-    include --path "${INCLUDE_PATH}" config_stl.mfs;
-    include --path "${INCLUDE_PATH}" script_app.mfs;
+    include --path "${INCLUDE_PATH}" var_gen_stl.mfs;
+    include --path "${INCLUDE_PATH}" scr_app_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */
