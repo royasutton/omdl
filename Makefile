@@ -25,12 +25,16 @@ AMU_PM_COMPONENTS_LOCAL           := modules \
 # AMU_PM_VERBOSE                  := defined
 # AMU_PM_DEBUG                    := defined
 
-# Include asserts announcements
-include $(AMU_PM_COMPONENTS_LOCAL_PATH)/announcements
+# skip toolchain version checks or versions warnings
+version_checks                    := $(true)
+version_checks_skip_warnings      := $(true)
 
 #------------------------------------------------------------------------------#
 # Design Flow Init (DO NO EDIT THIS SECTION)
 #------------------------------------------------------------------------------#
+# Include asserts announcements
+include $(AMU_PM_COMPONENTS_LOCAL_PATH)/announcements
+
 ifeq ($(wildcard $(AMU_PM_INIT)),)
   $(info $(call ANNOUNCE_AMU_INIT,AMU_PM_INIT,$(AMU_PM_INIT)))
   $(error unable to continue.)
@@ -72,8 +76,6 @@ buildinfo_depends_scopes          := $(true)
 doxygen_depends_buildinfo         := $(true)
 
 targets_depends_project           := $(false)
-version_checks                    := $(true)
-version_checks_skip_warnings      := $(true)
 generate_latex                    := $(false)
 
 release_root                      := release
