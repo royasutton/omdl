@@ -25,10 +25,6 @@ AMU_PM_COMPONENTS_LOCAL           := modules \
 # AMU_PM_VERBOSE                  := defined
 # AMU_PM_DEBUG                    := defined
 
-# skip toolchain version checks or versions warnings
-version_checks                    := $(true)
-version_checks_skip_warnings      := $(true)
-
 #------------------------------------------------------------------------------#
 # Design Flow Init (DO NO EDIT THIS SECTION)
 #------------------------------------------------------------------------------#
@@ -41,6 +37,10 @@ ifeq ($(wildcard $(AMU_PM_INIT)),)
 else
   include $(AMU_PM_INIT)
 endif
+
+# Design Flow toolchain version checks or warnings
+version_checks                    := $(true)
+version_checks_skip_warnings      := $(false)
 
 # Include tools and configurations assertions
 include $(AMU_PM_COMPONENTS_LOCAL_PATH)/assertions
