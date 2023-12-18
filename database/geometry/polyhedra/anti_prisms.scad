@@ -38,8 +38,6 @@
       \li the [Polyhedron Database] maintained by [Netlib], and
       \li an [Encyclopedia of Polyhedra] by [George W. Hart].
 
-  \note Include this library file using the \b include statement.
-
   [omdl]: https://github.com/royasutton/omdl
 
   [Anthony Thyssen]: http://www.ict.griffith.edu.au/anthony/anthony.html
@@ -62,12 +60,13 @@
   \addtogroup \amu_eval(${group})
   @{
     <br>
-    ### File: anti_prisms.scad ###
+    ### Anti Prisms ###
+    \amu_include (include/amu/includes_required.amu)
 
     \amu_eval
       (
         ++global
-        title="Anti Prisms"
+        title="Examples"
         stem=anti_prisms scope=db_dim size=qvga view=diag
       )
 

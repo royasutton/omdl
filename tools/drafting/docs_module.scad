@@ -39,6 +39,13 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent.amu)
+
+  /+
+    remove this file and add draft-base.scad file as required include
+  +/
+  \amu_define FILE_NAME ()
+  \amu_define includes_required_add (${PATH_NAME}/draft-base.scad)
+  \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

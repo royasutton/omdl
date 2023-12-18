@@ -64,6 +64,7 @@
   \defgroup \amu_eval(${group1} ${group1_name})
   \brief    \amu_eval(${group1_brief})
   @{
+  \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -90,6 +91,7 @@ phi = (1 + sqrt(5)) / 2;
   \defgroup \amu_eval(${group2} ${group2_name})
   \brief    \amu_eval(${group2_brief})
   @{
+  \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -128,6 +130,7 @@ grid_fine = 0.000001;
   \defgroup \amu_eval(${group3} ${group3_name})
   \brief    \amu_eval(${group3_brief})
   @{
+  \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

@@ -39,6 +39,7 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/includes_required.amu)
 
   \amu_define auto_file_debug (false)
   \amu_define auto_file_extensions (svg)

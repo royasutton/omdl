@@ -49,6 +49,7 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/includes_required.amu)
 
   \details
 
