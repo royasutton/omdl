@@ -4,7 +4,7 @@
 
   defined include requirements as follows:
 
-  \amu_define includes_required
+  \amu_define includes_required_add
   (
     path/dependent1.scad
     path/to/dependent2.scad
@@ -18,10 +18,10 @@
   \amu_shell includes_required_base_present ("grep ${FILE_NAME} ${includes_required_base}")
 
   /+ add specified includes to base if defined +/
-  \amu_if includes_required ( -d ${includes_required} )
+  \amu_if includes_required ( -d ${includes_required_add} )
   {
     ${includes_required_base}
-    ${includes_required}
+    ${includes_required_add}
   }
   else
   {
