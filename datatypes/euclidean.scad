@@ -1,4 +1,4 @@
-//! Vector algebra mathematical functions.
+//! Tests and operations for Euclidean 3d space.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Vector Algebra)
-    \amu_define group_brief (Algebraic operations on Euclidean vectors.)
+    \amu_define group_name  (Euclidean)
+    \amu_define group_brief (Tests and operations for Euclidean 3d space.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/

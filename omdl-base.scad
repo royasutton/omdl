@@ -48,6 +48,7 @@ include <datatypes/iterable_operate.scad>;
 include <datatypes/list_operate.scad>;
 include <datatypes/list_compare.scad>;
 
+include <datatypes/euclidean.scad>;
 include <datatypes/binary.scad>;
 
 include <datatypes/map.scad>;
@@ -63,7 +64,6 @@ include <units/length.scad>;
 //----------------------------------------------------------------------------//
 // math
 //----------------------------------------------------------------------------//
-include <math/vector_algebra.scad>;
 include <math/linear_algebra.scad>;
 
 include <math/triangle.scad>;
