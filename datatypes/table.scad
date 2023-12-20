@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Tables Operations)
+    \amu_define group_name  (Tables)
     \amu_define group_brief (Table data type and operations.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
