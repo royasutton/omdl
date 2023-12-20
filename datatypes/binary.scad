@@ -1,4 +1,4 @@
-//! Base-2 binary math functions and operations.
+//! Base-2 binary numbers tests and operations.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Binary Operations)
-    \amu_define group_brief (Base-2 binary math functions and operations.)
+    \amu_define group_name  (Binary Numbers)
+    \amu_define group_brief (Base-2 binary numbers tests and operations.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/

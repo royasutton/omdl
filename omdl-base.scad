@@ -48,6 +48,8 @@ include <datatypes/iterable_operate.scad>;
 include <datatypes/list_operate.scad>;
 include <datatypes/list_compare.scad>;
 
+include <datatypes/binary.scad>;
+
 include <datatypes/map.scad>;
 include <datatypes/table.scad>;
 
@@ -69,7 +71,6 @@ include <math/triangle.scad>;
 include <math/polytope.scad>;
 include <math/polygon_shapes.scad>;
 
-include <math/binary.scad>;
 include <math/utility.scad>;
 
 //----------------------------------------------------------------------------//
