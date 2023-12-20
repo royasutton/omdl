@@ -12,7 +12,7 @@ local_library     :=  docs_module \
                       vector_algebra \
                       \
                       binary \
-                      polygon_primitives \
+                      polygon_shapes \
                       polytope \
                       triangle \
                       utility
