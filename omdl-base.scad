@@ -67,7 +67,7 @@ include <math/linear_algebra.scad>;
 include <math/triangle.scad>;
 
 include <math/polytope.scad>;
-include <math/polygon_primitives.scad>;
+include <math/polygon_shapes.scad>;
 
 include <math/binary.scad>;
 include <math/utility.scad>;
