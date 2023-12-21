@@ -276,6 +276,7 @@ function length_inv
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <units/length.scad>;
 
     length_unit_base = "mm";
     length_unit_default = "in";
@@ -317,6 +318,7 @@ END_SCOPE;
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <units/length.scad>;
 
     module dim( uv=1, un="cm" ) {
       mx = 200.0;

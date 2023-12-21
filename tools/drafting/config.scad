@@ -686,6 +686,8 @@ concat
 BEGIN_SCOPE config;
   BEGIN_SCOPE defaults;
     BEGIN_OPENSCAD;
+      include <units/angle.scad>;
+      include <units/length.scad>;
       include <omdl-base.scad>;
       include <tools/drafting/draft-base.scad>;
       length_unit_base = "mm";
@@ -702,6 +704,8 @@ BEGIN_SCOPE config;
   BEGIN_SCOPE sheet;
     BEGIN_SCOPE in;
       BEGIN_OPENSCAD;
+        include <units/angle.scad>;
+        include <units/length.scad>;
         include <omdl-base.scad>;
         include <tools/drafting/draft-base.scad>;
         length_unit_base = "in";
@@ -717,6 +721,8 @@ BEGIN_SCOPE config;
 
     BEGIN_SCOPE mm;
       BEGIN_OPENSCAD;
+        include <units/angle.scad>;
+        include <units/length.scad>;
         include <omdl-base.scad>;
         include <tools/drafting/draft-base.scad>;
         length_unit_base = "mm";

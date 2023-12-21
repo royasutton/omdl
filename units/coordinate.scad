@@ -392,6 +392,7 @@ function coordinate_scale3d_s2c
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <units/coordinate.scad>;
 
     coordinate_unit_base = "c";
     coordinate_unit_default = "p";

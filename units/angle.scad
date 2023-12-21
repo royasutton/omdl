@@ -176,6 +176,7 @@ function angle_inv
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <units/angle.scad>;
 
     angle_unit_base = "d";
     angle_unit_default = "r";

@@ -892,6 +892,7 @@ END_SCOPE;
 BEGIN_SCOPE example2;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <units/length.scad>;
 
     base_unit_length = "mm";
 
