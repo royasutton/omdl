@@ -39,6 +39,10 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_define includes_required_add
+  (
+    tools/align.scad
+  )
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 

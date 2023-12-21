@@ -55,21 +55,13 @@ include <datatypes/map.scad>;
 include <datatypes/table.scad>;
 
 //----------------------------------------------------------------------------//
-// units
-//----------------------------------------------------------------------------//
-include <units/angle.scad>;
-include <units/coordinate.scad>;
-include <units/length.scad>;
-
-//----------------------------------------------------------------------------//
 // math
 //----------------------------------------------------------------------------//
+include <math/triangle.scad>;
 include <math/linear_algebra.scad>;
 
-include <math/triangle.scad>;
-
-include <math/polytope.scad>;
 include <math/polygon_shapes.scad>;
+include <math/polytope.scad>;
 
 include <math/utility.scad>;
 
@@ -78,21 +70,18 @@ include <math/utility.scad>;
 //----------------------------------------------------------------------------//
 include <shapes/basic_2d.scad>;
 include <shapes/polygon_2d.scad>;
-include <shapes/revolved_2d.scad>;
 
 include <shapes/basic_3d.scad>;
 
 //----------------------------------------------------------------------------//
 // tools
 //----------------------------------------------------------------------------//
-include <tools/align.scad>;
-
 include <tools/extrude.scad>;
 include <tools/repeat.scad>;
 
-include <tools/polytope.scad>;
-
-include <tools/general.scad>;
+//----------------------------------------------------------------------------//
+// units
+//----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
 // end of file

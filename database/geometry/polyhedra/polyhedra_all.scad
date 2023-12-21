@@ -93,6 +93,8 @@
     \b Example
     \code{.C}
     include <omdl-base.scad>;
+    include <units/coordinate.scad>;
+    include <tools/polytope.scad>;
     include <database/geometry/polyhedra/platonic.scad>;
 
     tc = dtc_polyhedra_platonic;
@@ -21507,6 +21509,8 @@ BEGIN_SCOPE db;
 BEGIN_SCOPE autotest;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <units/coordinate.scad>;
+    include <tools/polytope.scad>;
     include <database/geometry/polyhedra/polyhedra_all.scad>;
 
     coordinates_positive_angles = false;

@@ -44,7 +44,15 @@
     remove this file and add draft-base.scad file as required include
   +/
   \amu_define FILE_NAME ()
-  \amu_define includes_required_add (${PATH_NAME}/draft-base.scad)
+  \amu_define includes_required_add
+  (
+    units/length.scad
+    units/angle.scad
+    tools/align.scad
+    tools/general.scad
+    tools/polytope.scad
+  ${PATH_NAME}/draft-base.scad
+  )
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
@@ -88,6 +96,10 @@
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <units/length.scad>;
+    include <units/angle.scad>;
+    include <tools/align.scad>;
+    include <tools/general.scad>;
     include <tools/drafting/draft-base.scad>;
 
     length_unit_base = "mm";
