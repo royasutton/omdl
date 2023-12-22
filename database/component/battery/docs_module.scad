@@ -1,4 +1,4 @@
-//! Mechanical Module documentation.
+//! Electric battery documentation.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Mechanical)
-    \amu_define group_brief (Mechanical component specifications.)
+    \amu_define group_name  (Battery)
+    \amu_define group_brief (Electric battery specifications.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

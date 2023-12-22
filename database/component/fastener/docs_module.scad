@@ -1,4 +1,4 @@
-//! Electrical Module documentation.
+//! Mechanical fastener specifications.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Electrical)
-    \amu_define group_brief (Electrical component specifications.)
+    \amu_define group_name  (Fastener)
+    \amu_define group_brief (Mechanical fastener specifications.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

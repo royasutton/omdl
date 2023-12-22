@@ -121,7 +121,6 @@ library_info                      := README.md \
 # or set 'ignore_modules_exclude := $(true)' above
 
 modules_exclude                   := parts \
-                                     database/component \
                                      database/material
 
 # Excluded Scopes:

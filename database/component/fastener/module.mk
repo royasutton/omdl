@@ -4,7 +4,7 @@
 $(eval $(call clear-local-module))
 #------------------------------------------------------------------------------#
 
-local_path        :=  database/component/electrical
+local_path        :=  database/component/fastener
 
 local_library     :=  docs_module
 
