@@ -765,7 +765,9 @@ module table_write
   // heading identifiers and/or text descriptions
   th_text =
   [
-    number ? thn : empty_str,
+    if(number == true)
+      thn,
+
     for ( c_iter = c )
       if
       ( // when column selected
@@ -793,9 +795,8 @@ module table_write
     {
       tdr_text =
       [
-        (number == true) ?
-          str(strl_html([table_get_row_index(r, r_iter)], p=[index_tags]),fs)
-        : empty_str,
+        if (number == true)
+          str(strl_html([table_get_row_index(r, r_iter)], p=[index_tags]),fs),
 
         strl_html(first(r_iter), p=[row_id_tags]), fs,
         for ( c_iter = tailn(c, n=1) )
