@@ -70,7 +70,7 @@
     polyhedra_all.scad contains all polyhedra from all files. Each
     table uses the following column data structure.
 
-    | feild | description         |
+    | field | description         |
     |:-----:|:--------------------|
     | id    | identifier          |
     | n     | name                |
@@ -82,7 +82,7 @@
     | f     | faces               |
     | e     | edges               |
 
-    Use the functions table_get_value() to retrieve feild data as show
+    Use the functions table_get_value() to retrieve field data as show
     in the following example. To see a list of table identifiers
     consider the function table_get_row_ids(), table_get_column_ids(),
     or module table_dump(). See datatypes/table.scad for other

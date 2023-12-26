@@ -366,7 +366,7 @@ module map_dump
   \param    ks <string-list> A list of selected keys.
   \param    sort <boolean> Sort the output by key.
   \param    number <boolean> Output index number.
-  \param    fs <string> A feild separator.
+  \param    fs <string> A field separator.
   \param    index_tags <string-list> List of html formatting tags.
   \param    key_tags <string-list> List of html formatting tags.
   \param    value_tags <string-list> List of html formatting tags.

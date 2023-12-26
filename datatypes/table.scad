@@ -443,7 +443,7 @@ module table_dump
   number = true
 )
 {
-  // determine maximum feild lengths
+  // determine maximum field lengths
   maxr0 = max( [for (r_iter = r) len( first(r_iter) )] ) + 1;
   maxc0 = max( [for (c_iter = c) len( first(c_iter) )] ) + 1;
   maxc1 = max( [for (c_iter = c) len( c_iter[1] )] ) + 1;
@@ -706,7 +706,7 @@ verbose = false
   \param    number <boolean> Number the rows.
   \param    heading_id <boolean> Output table heading identifiers.
   \param    heading_text <boolean> Output table heading description text.
-  \param    fs <string> A feild separator.
+  \param    fs <string> A field separator.
   \param    index_tags <string-list> List of html formatting tags.
   \param    row_id_tags <string-list> List of html formatting tags.
   \param    value_tags <string-list> List of html formatting tags.

@@ -327,7 +327,7 @@ module draft_sheet
     }
 
     //
-    // feild grid
+    // field grid
     //
     grid_w = defined_e_or(defined_or(grid, glc), 0, defined_or(grid, glc));
     if ( grid_w )
