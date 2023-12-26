@@ -705,7 +705,7 @@ verbose = false
   \param    cs <string-list> A list of selected column identifiers.
   \param    number <boolean> Number the rows.
   \param    heading_id <boolean> Output table heading identifiers.
-  \param    heading_info <boolean> Output table heading descriptions.
+  \param    heading_text <boolean> Output table heading description text.
   \param    fs <string> A feild separator.
   \param    index_tags <string-list> List of html formatting tags.
   \param    row_id_tags <string-list> List of html formatting tags.
@@ -753,7 +753,7 @@ module table_write
   cs,
   number = false,
   heading_id = true,
-  heading_info = false,
+  heading_text = false,
   fs = "^",
   index_tags = empty_lst,
   row_id_tags = ["b"],
@@ -788,7 +788,7 @@ module table_write
       )
       second(c_iter)
   ];
-  if ( heading_info )
+  if ( heading_text )
     // reformat so that 'fs' exists only between feilds
     log_echo ( strl([for ( i = headn(th_info_text) ) str(i,fs), last(th_info_text)]) );
 
