@@ -707,6 +707,7 @@ verbose = false
   \param    heading_id <boolean> Output table heading identifiers.
   \param    heading_text <boolean> Output table heading description text.
   \param    fs <string> A field separator.
+  \param    thn <string> Column heading for numbered row output.
   \param    index_tags <string-list> List of html formatting tags.
   \param    row_id_tags <string-list> List of html formatting tags.
   \param    value_tags <string-list> List of html formatting tags.
@@ -755,6 +756,7 @@ module table_write
   heading_id = true,
   heading_text = false,
   fs = "^",
+  thn = "idx",
   index_tags = empty_lst,
   row_id_tags = ["b"],
   value_tags = empty_lst
@@ -763,7 +765,7 @@ module table_write
   // heading identifiers and/or text descriptions
   th_text =
   [
-    number ? "-" : empty_str,
+    number ? thn : empty_str,
     for ( c_iter = c )
       if
       ( // when column selected

@@ -367,6 +367,7 @@ module map_dump
   \param    sort <boolean> Sort the output by key.
   \param    number <boolean> Output index number.
   \param    fs <string> A field separator.
+  \param    thn <string> Column heading for numbered row output.
   \param    index_tags <string-list> List of html formatting tags.
   \param    key_tags <string-list> List of html formatting tags.
   \param    value_tags <string-list> List of html formatting tags.
@@ -407,6 +408,7 @@ module map_write
   sort = false,
   number = false,
   fs = "^",
+  thn = "idx",
   index_tags = empty_lst,
   key_tags = ["b"],
   value_tags = empty_lst
@@ -419,7 +421,7 @@ module map_write
     (
       str
       (
-        number ? str("index",fs) : empty_str,
+        number ? str(thn,fs) : empty_str,
         "key", fs,
         "value"
       )
