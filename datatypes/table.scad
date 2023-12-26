@@ -760,8 +760,8 @@ module table_write
   value_tags = empty_lst
 )
 {
-  // heading identifiers
-  th_id_text =
+  // heading identifiers and/or text descriptions
+  th_text =
   [
     number ? "-" : empty_str,
     for ( c_iter = c )
@@ -770,27 +770,15 @@ module table_write
         is_undef( cs ) ||
         is_number( first( search( c_iter, cs, 1, 0 ) ) )
       )
-      first(c_iter)
+        (heading_id && heading_text) ? str(second(c_iter)," (", first(c_iter), ")")
+      : (heading_id                ) ? first(c_iter)
+      : (              heading_text) ? second(c_iter)
+      : empty_str
   ];
-  if ( heading_id )
-    // reformat so that 'fs' exists only between feilds
-    log_echo ( strl([for ( i = headn(th_id_text) ) str(i,fs), last(th_id_text)]) );
 
-  // heading descriptions
-  th_info_text =
-  [
-    number ? "-" : empty_str,
-    for ( c_iter = c )
-      if
-      ( // when column selected
-        is_undef( cs ) ||
-        is_number( first( search( c_iter, cs, 1, 0 ) ) )
-      )
-      second(c_iter)
-  ];
-  if ( heading_text )
-    // reformat so that 'fs' exists only between feilds
-    log_echo ( strl([for ( i = headn(th_info_text) ) str(i,fs), last(th_info_text)]) );
+  if ( heading_id  || heading_text )
+    // reformat so that 'fs' exists only between fields
+    log_echo ( strl([for ( i = headn(th_text) ) str(i,fs), last(th_text)]) );
 
   // row data
   for ( r_iter = r )
