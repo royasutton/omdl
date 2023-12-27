@@ -622,8 +622,8 @@ module draft_ruler
 
 //! Construct a text table that is populated by rows and columns.
 /***************************************************************************//**
-  \param    map <matrix-2xN> A table definition map.
-  \param    fmap <matrix-2xN> A table format map.
+  \param    map <map> A table definition map.
+  \param    fmap <map> A table format map.
 
   \param    zp <integer-list-2|integer> The center coordinate scaler. A
             list [zpx, zpy] of decimals or a single decimal for (zpx=zpy).
@@ -786,7 +786,7 @@ module draft_table
             is <string|string-list>, a single or multi-line string for
             the corresponding zone.
 
-  \param    map <matrix-2xN> A zone table definition map.
+  \param    map <map> A zone table definition map.
 
   \param    zp <integer-list-2|integer> The center coordinate scaler. A
             list [zpx, zpy] of decimals or a single decimal for (zpx=zpy).

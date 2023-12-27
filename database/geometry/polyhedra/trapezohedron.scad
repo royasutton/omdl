@@ -124,7 +124,7 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! <matrix-2x9> \c trapezohedron polyhedra data table columns definition.
+//! <map> \c trapezohedron polyhedra data table columns definition.
 //! \hideinitializer
 dtc_polyhedra_trapezohedron =
 [
@@ -139,7 +139,7 @@ dtc_polyhedra_trapezohedron =
   ["e", "edges"]
 ];
 
-//! <matrix-9xR> \c trapezohedron polyhedra data table rows.
+//! <table> \c trapezohedron polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_trapezohedron =
 [

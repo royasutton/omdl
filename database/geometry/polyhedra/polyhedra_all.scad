@@ -129,7 +129,7 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! <matrix-2x9> \c polyhedra_all polyhedra data table columns definition.
+//! <map> \c polyhedra_all polyhedra data table columns definition.
 //! \hideinitializer
 dtc_polyhedra_polyhedra_all =
 [
@@ -144,7 +144,7 @@ dtc_polyhedra_polyhedra_all =
   ["e", "edges"]
 ];
 
-//! <matrix-9xR> \c polyhedra_all polyhedra data table rows.
+//! <table> \c polyhedra_all polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_polyhedra_all =
 [

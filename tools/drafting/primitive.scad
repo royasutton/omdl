@@ -290,8 +290,8 @@ function draft_sheet_get_zone
   \param    ix <integer> A table column vertical line index.
   \param    iy <integer> A table row horizontal line index.
 
-  \param    map <matrix-2xN> A table definition map.
-  \param    fmap <matrix-2xN> A table format map.
+  \param    map <map> A table definition map.
+  \param    fmap <map> A table format map.
 
   \returns  <point-2d> The table column and row intersection coordinate
             point.
@@ -352,8 +352,8 @@ function draft_table_get_point
   \param    limits <boolean> Return cell limits rather than coordinates.
   \param    window <boolean> Return cell window rather than point.
 
-  \param    map <matrix-2xN> A table definition map.
-  \param    fmap <matrix-2xN> A table format map.
+  \param    map <map> A table definition map.
+  \param    fmap <map> A table format map.
 
   \returns  <datastruct> The table cell coordinates.
 
@@ -439,8 +439,8 @@ function draft_table_get_cell
 
   \param    dfmt <datastruct> The default text format.
 
-  \param    map <matrix-2xN> A table definition map.
-  \param    fmap <matrix-2xN> A table format map.
+  \param    map <map> A table definition map.
+  \param    fmap <map> A table format map.
 
   \details
 
@@ -545,7 +545,7 @@ module draft_table_text
   \param    ix <integer> A ztable column vertical line index.
   \param    iy <integer> A ztable row horizontal line index.
 
-  \param    map <matrix-2xN> A ztable definition map.
+  \param    map <map> A ztable definition map.
 
   \returns  <point-2d> The ztable column and row intersection coordinate
             point.
@@ -585,7 +585,7 @@ function draft_ztable_get_point
   \param    limits <boolean> Return zone limits rather than coordinates.
   \param    window <boolean> Return zone window rather than point.
 
-  \param    map <matrix-2xN> A ztable definition map.
+  \param    map <map> A ztable definition map.
 
   \returns  <datastruct> The ztable cell coordinates.
 
@@ -668,7 +668,7 @@ function draft_ztable_get_zone
   \param    fmt <datastruct> The text format.
   \param    dfmt <datastruct> The default text format.
 
-  \param    map <matrix-2xN> A ztable definition map.
+  \param    map <map> A ztable definition map.
 
   \details
 

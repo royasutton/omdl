@@ -124,7 +124,7 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! <matrix-2x9> \c dipyramids polyhedra data table columns definition.
+//! <map> \c dipyramids polyhedra data table columns definition.
 //! \hideinitializer
 dtc_polyhedra_dipyramids =
 [
@@ -139,7 +139,7 @@ dtc_polyhedra_dipyramids =
   ["e", "edges"]
 ];
 
-//! <matrix-9xR> \c dipyramids polyhedra data table rows.
+//! <table> \c dipyramids polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_dipyramids =
 [

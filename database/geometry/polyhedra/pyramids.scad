@@ -124,7 +124,7 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! <matrix-2x9> \c pyramids polyhedra data table columns definition.
+//! <map> \c pyramids polyhedra data table columns definition.
 //! \hideinitializer
 dtc_polyhedra_pyramids =
 [
@@ -139,7 +139,7 @@ dtc_polyhedra_pyramids =
   ["e", "edges"]
 ];
 
-//! <matrix-9xR> \c pyramids polyhedra data table rows.
+//! <table> \c pyramids polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_pyramids =
 [

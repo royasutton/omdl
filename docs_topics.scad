@@ -184,6 +184,8 @@
     | [index]       | a list index sequence                             |
     | [datastruct]  | a defined data structure                          |
     | [data]        | an arbitrary data structure                       |
+    | [map]         | data store of keys mapped to values               |
+    | [table]       | data store of values arranged in rows and columns |
 
     When a list has an expected number of elements '-n', the expected
     number is appended. When there is a range of expected elements, the
@@ -220,6 +222,9 @@
   [index]: \ref dt_index
   [datastruct]: https://en.wikipedia.org/wiki/Data_structure
   [data]: https://en.wikipedia.org/wiki/Data
+
+  [map]: https://en.wikipedia.org/wiki/Associative_array
+  [table]: https://en.wikipedia.org/wiki/Table_(information)
 
 *******************************************************************************/
 

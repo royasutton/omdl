@@ -124,7 +124,7 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! <matrix-2x9> \c cupolas polyhedra data table columns definition.
+//! <map> \c cupolas polyhedra data table columns definition.
 //! \hideinitializer
 dtc_polyhedra_cupolas =
 [
@@ -139,7 +139,7 @@ dtc_polyhedra_cupolas =
   ["e", "edges"]
 ];
 
-//! <matrix-9xR> \c cupolas polyhedra data table rows.
+//! <table> \c cupolas polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_cupolas =
 [

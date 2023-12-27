@@ -124,7 +124,7 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! <matrix-2x9> \c platonic polyhedra data table columns definition.
+//! <map> \c platonic polyhedra data table columns definition.
 //! \hideinitializer
 dtc_polyhedra_platonic =
 [
@@ -139,7 +139,7 @@ dtc_polyhedra_platonic =
   ["e", "edges"]
 ];
 
-//! <matrix-9xR> \c platonic polyhedra data table rows.
+//! <table> \c platonic polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_platonic =
 [

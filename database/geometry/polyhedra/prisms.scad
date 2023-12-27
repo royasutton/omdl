@@ -124,7 +124,7 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! <matrix-2x9> \c prisms polyhedra data table columns definition.
+//! <map> \c prisms polyhedra data table columns definition.
 //! \hideinitializer
 dtc_polyhedra_prisms =
 [
@@ -139,7 +139,7 @@ dtc_polyhedra_prisms =
   ["e", "edges"]
 ];
 
-//! <matrix-9xR> \c prisms polyhedra data table rows.
+//! <table> \c prisms polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_prisms =
 [

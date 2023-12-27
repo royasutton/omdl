@@ -474,7 +474,7 @@ function select_ci
 
 //! Select a specified mapped value from list of key-value pairs or return a default.
 /***************************************************************************//**
-  \param    v <matrix-2xN> A matrix of N key-value pairs [[key, value], ...].
+  \param    v <map> A matrix of N key-value pairs [[key, value], ...].
   \param    mv \<value> A selection key value.
   \param    l <bool> Last element is default. When \b false, the first
               element is the default.

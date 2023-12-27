@@ -152,8 +152,8 @@ module validate_skip( fn ) { validate_log ( str("ignore: '", fn, "'") ); }
 
 //! Create data structure for related table validation functions.
 /***************************************************************************//**
-  \param    tr <matrix-CxR> The test data table rows.
-  \param    gr <matrix-CxR> The expected result data table rows.
+  \param    tr <table> The test data table rows.
+  \param    gr <table> The expected result data table rows.
 
   \returns  <datastruct> A structure used with the related table
             validation functions.
@@ -331,7 +331,7 @@ module table_validate
 
 //! Create data structure for related map validation functions.
 /***************************************************************************//**
-  \param    m <matrix-2xN> The test data map.
+  \param    m <map> The test data map.
   \param    fn <string> The function name.
 
   \returns  <datastruct> A structure used with the related map

@@ -124,7 +124,7 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! <matrix-2x9> \c johnson polyhedra data table columns definition.
+//! <map> \c johnson polyhedra data table columns definition.
 //! \hideinitializer
 dtc_polyhedra_johnson =
 [
@@ -139,7 +139,7 @@ dtc_polyhedra_johnson =
   ["e", "edges"]
 ];
 
-//! <matrix-9xR> \c johnson polyhedra data table rows.
+//! <table> \c johnson polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_johnson =
 [

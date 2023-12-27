@@ -124,7 +124,7 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! <matrix-2x9> \c archimedean_duals polyhedra data table columns definition.
+//! <map> \c archimedean_duals polyhedra data table columns definition.
 //! \hideinitializer
 dtc_polyhedra_archimedean_duals =
 [
@@ -139,7 +139,7 @@ dtc_polyhedra_archimedean_duals =
   ["e", "edges"]
 ];
 
-//! <matrix-9xR> \c archimedean_duals polyhedra data table rows.
+//! <table> \c archimedean_duals polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_archimedean_duals =
 [
