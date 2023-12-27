@@ -8,6 +8,7 @@ local_path        :=  database/component/battery
 
 local_library     :=  docs_module \
                       \
+                      button \
                       cylindrical
 
 local_release_add :=
