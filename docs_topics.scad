@@ -128,7 +128,7 @@
 
     \li \subpage dt_base
     \li \subpage dt_index
-    \li \subpage dt_vector
+    \li \subpage dt_euclidean
 *******************************************************************************/
 
 //
@@ -264,11 +264,11 @@
     \endcode
 *******************************************************************************/
 
-// Vector algebra types
+// Euclidean space data types
 /***************************************************************************//**
-  \page dt_vector Vector algebra types
+  \page dt_euclidean Euclidean space data types
 
-    For [geometric] specifications and [geometric algebra], omdl adds
+    For [geometric] specifications and [geometric algebra], omdl adopts
     the following type specifications and conventions.
 
     | name        | description                                       |
