@@ -152,8 +152,8 @@ module validate_skip( fn ) { validate_log ( str("ignore: '", fn, "'") ); }
 
 //! Create data structure for related table validation functions.
 /***************************************************************************//**
-  \param    tr <table> The test data table rows.
-  \param    gr <table> The expected result data table rows.
+  \param    tr \<table> The test data table rows.
+  \param    gr \<table> The expected result data table rows.
 
   \returns  <datastruct> A structure used with the related table
             validation functions.

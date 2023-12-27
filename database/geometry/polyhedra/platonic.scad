@@ -139,7 +139,7 @@ dtc_polyhedra_platonic =
   ["e", "edges"]
 ];
 
-//! <table> \c platonic polyhedra data table rows.
+//! \<table> \c platonic polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_platonic =
 [

@@ -139,7 +139,7 @@ dtc_polyhedra_johnson =
   ["e", "edges"]
 ];
 
-//! <table> \c johnson polyhedra data table rows.
+//! \<table> \c johnson polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_johnson =
 [

@@ -139,7 +139,7 @@ dtc_polyhedra_cupolas =
   ["e", "edges"]
 ];
 
-//! <table> \c cupolas polyhedra data table rows.
+//! \<table> \c cupolas polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_cupolas =
 [

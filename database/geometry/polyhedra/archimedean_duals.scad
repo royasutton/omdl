@@ -139,7 +139,7 @@ dtc_polyhedra_archimedean_duals =
   ["e", "edges"]
 ];
 
-//! <table> \c archimedean_duals polyhedra data table rows.
+//! \<table> \c archimedean_duals polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_archimedean_duals =
 [

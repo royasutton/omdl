@@ -144,7 +144,7 @@ dtc_polyhedra_polyhedra_all =
   ["e", "edges"]
 ];
 
-//! <table> \c polyhedra_all polyhedra data table rows.
+//! \<table> \c polyhedra_all polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_polyhedra_all =
 [

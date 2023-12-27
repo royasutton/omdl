@@ -139,7 +139,7 @@ dtc_polyhedra_prisms =
   ["e", "edges"]
 ];
 
-//! <table> \c prisms polyhedra data table rows.
+//! \<table> \c prisms polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_prisms =
 [

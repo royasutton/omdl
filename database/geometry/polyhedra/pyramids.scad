@@ -139,7 +139,7 @@ dtc_polyhedra_pyramids =
   ["e", "edges"]
 ];
 
-//! <table> \c pyramids polyhedra data table rows.
+//! \<table> \c pyramids polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_pyramids =
 [

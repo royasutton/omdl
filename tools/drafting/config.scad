@@ -313,7 +313,7 @@ draft_sheet_size_tc =
   ["id", "sheet size"], ["sdx", "sheet x-dimension"], ["sdy", "sheet y-dimension"]
 ];
 
-//! <table> sheet sizes data table rows.
+//! \<table> sheet sizes data table rows.
 /***************************************************************************//**
   \hideinitializer
   \private
@@ -393,7 +393,7 @@ draft_sheet_config_tc =
   ["olc", "origin line and arrow config"]
 ];
 
-//! <table> Sheet configuration data table rows.
+//! \<table> Sheet configuration data table rows.
 /***************************************************************************//**
   \hideinitializer
   \private

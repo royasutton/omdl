@@ -139,7 +139,7 @@ dtc_polyhedra_trapezohedron =
   ["e", "edges"]
 ];
 
-//! <table> \c trapezohedron polyhedra data table rows.
+//! \<table> \c trapezohedron polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_trapezohedron =
 [

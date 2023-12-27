@@ -139,7 +139,7 @@ dtc_polyhedra_anti_prisms =
   ["e", "edges"]
 ];
 
-//! <table> \c anti_prisms polyhedra data table rows.
+//! \<table> \c anti_prisms polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_anti_prisms =
 [
