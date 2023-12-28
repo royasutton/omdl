@@ -61,14 +61,14 @@ To setup the development branch, use:
 Installing
 ----------
 
-To install the latest tagged release to the OpenSCAD user library path
-on your system, use these options:
+To install the latest release to the standard OpenSCAD user library
+path, use these options:
 
 ```bash
 ./setup-omdl.bash --branch-list tags1 --no-excludes --yes --install
 ```
 
-To install a specific library version, for example v0.6.1, use:
+To install a specific version, ie v0.6.1, use:
 
 ```bash
 ./setup-omdl.bash --branch v0.6.1 --no-excludes --yes --install
