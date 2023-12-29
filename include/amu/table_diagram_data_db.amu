@@ -1,0 +1,91 @@
+/+
+
+  create parameter diagrams and data table.
+
+  requires:
+    mfs-scope: db/{diagram,table}
+
+    defines:  ${data_name}
+              ${image_views}
+              ${image_size}
+
+    optional: ${image_columns} (default = 3)
+              ${diagram_notes}
+              ${data_notes}
+
+ +/
+
+  /+
+    diagram table
+  +/
+
+  \amu_scope scope_root   (++root)
+
+  \amu_foreach png_files
+  (
+    words="${image_views}"
+    text="${OUTPUT_PREFIX}/png/${scope_root}_db_diagram_${image_size}_\${x}.png"
+    separator=" "
+  )
+
+  \amu_foreach eps_files
+  (
+    words="${image_views}"
+    text="${OUTPUT_PREFIX}/png2eps/${scope_root}_db_diagram_${image_size}_\${x}.eps"
+    separator=" "
+  )
+
+  \amu_foreach cell_captions
+  (
+    words="${image_views}"
+    text="\${x}"
+    separator="^"
+  )
+
+  \amu_foreach cell_titles
+  (
+    words="${image_views}"
+    text="expand \${x}"
+    separator="^"
+  )
+
+  \amu_if image_columns (-d ${image_columns}) {${image_columns}} else {3} endif
+
+  \amu_if (-d ${diagram_notes}) {${diagram_notes}} endif
+
+  \htmlonly
+    \amu_image_table
+      (
+        type=html columns=${image_columns} image_width="256"
+        table_caption="${data_name} parameters"
+        cell_files="${png_files}"
+        cell_captions="${cell_captions}"
+        cell_titles="${cell_titles}"
+        cell_urls="${png_files}"
+      )
+  \endhtmlonly
+  \latexonly
+    \amu_image_table
+      (
+        type=latex columns=${image_columns} image_width="1.25in"
+        table_caption="${data_name} parameters"
+        cell_files="${eps_files}"
+        cell_captions="${cell_captions}"
+      )
+  \endlatexonly
+
+  /+
+    data table
+  +/
+
+  \amu_file th (file="${scope_root}_db_table.log" first=1 last=1 ++rmecho ++rmnl ++read)
+  \amu_file td (file="${scope_root}_db_table.log" first=2        ++rmecho ++rmnl ++read)
+  \amu_word tc (tokenizer="^" words="${th}" ++count)
+
+  \amu_if (-d ${data_notes}) {${data_notes}} endif
+
+  <b>\amu_eval(${data_name}) data table</b>
+
+  \amu_table (columns=${tc} column_headings=${th} cell_texts=${td})
+
+/+ end of file  +/
