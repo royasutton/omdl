@@ -42,7 +42,7 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_include (include/amu/includes_required.amu)
 
-  \amu_include (include/amu/example_dim_table.amu)
+  \amu_include (include/amu/table_example_dim.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
