@@ -76,8 +76,21 @@
     \amu_scope  mfscript (index=1)
     \amu_define img_conf (2048x1536_top)
 
-    \amu_image (caption="Result (png)" file="${mfscript}_${img_conf}.png" width=640)
-    \amu_image (caption="Result (svg)" file="${mfscript}.svg" width=640)
+    \amu_image
+    (
+      caption="Result (png)"
+      title="click to expand"
+      file="${mfscript}_${img_conf}.png"
+      url="${mfscript}_${img_conf}.png"
+      width=640
+    )
+    \amu_image
+    (
+      caption="Result (svg)"
+      file="${mfscript}.svg"
+      url="${mfscript}.svg"
+      width=640
+    )
 
     \b Script
 
@@ -93,7 +106,7 @@
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE dim;
+BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <units/length.scad>;
