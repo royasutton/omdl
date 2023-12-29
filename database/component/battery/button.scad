@@ -39,19 +39,15 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_include (include/amu/includes_required.amu)
 
-  \amu_scope scope (index=1)
-  \amu_file th (file="${scope}.log" first=1 last=1 ++rmecho ++rmnl ++read)
-  \amu_file td (file="${scope}.log" first=2        ++rmecho ++rmnl ++read)
-  \amu_word tc (tokenizer="^" words="${th}" ++count)
-
   \details
 
-    Naming is based on [IEC] standards.
+    \amu_define data_name     (Button cell batteries)
+    \amu_define image_views   (top right diag)
+    \amu_define image_size    (sxga)
+    \amu_define diagram_notes (See Wikipedia battery [sizes] for information.)
+    \amu_define data_notes    (Identifier names are based on [IEC] standards.)
 
-    <b>Battery sizes table</b>:
-    \amu_table (columns=${tc} column_headings=${th} cell_texts=${td})
-
-    See Wikipedia battery [sizes] for information.
+    \amu_include (include/amu/table_diagram_data_db.amu)
 
   [sizes]: https://en.wikipedia.org/wiki/List_of_battery_sizes
   [IEC]: https://en.wikipedia.org/wiki/International_Electrotechnical_Commission
@@ -110,6 +106,54 @@ dtr_battery_button =
 
 /*
 BEGIN_SCOPE db;
+BEGIN_SCOPE diagram;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+
+    include <units/length.scad>;
+    include <units/angle.scad>;
+    include <tools/align.scad>;
+    include <tools/general.scad>;
+    include <tools/drafting/draft-base.scad>;
+
+    include <database/component/battery/cylindrical.scad>;
+
+    $fn=36;
+
+    d = 50; dt = d*9/10;
+    h = 15; ht = h*1/10;
+
+    cylinder(d=d, h=h-ht);
+    color("lightgray")
+    translate([0,0,h-ht])
+    cylinder(d=dt, h=ht);
+
+    __mfs__top = false;
+    __mfs__right = false;
+
+    if ( __mfs__top )
+      color("black")
+      draft_dim_line(p1=[-d/2,0], p2=[+d/2,0], d=d*6/10, e=d*4/10, es=2, t="d");
+
+    if ( __mfs__right )
+      color("black")
+      translate([0, d/2, h/2]) rotate([0,90])
+      draft_dim_line(p1=[-h/2,0], p2=[+h/2,0], d=d*3/10, e=h*4/10, es=2, t="h");
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "top right diag";
+
+    variables set_opts_combine "sizes views";
+
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
 BEGIN_SCOPE table;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
