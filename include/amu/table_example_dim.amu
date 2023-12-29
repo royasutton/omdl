@@ -4,6 +4,7 @@
 
   requires:
     definitions from one of pgid_*.
+    mfs-scope: dim
 
  +/
 
