@@ -47,20 +47,110 @@
 //! Conditionally apply the convex hull transformation.
 /***************************************************************************//**
   \param    c <boolean> conditional.
+  \param    s <integer|integer-list|range> child object selection(s).
 
   \details
 
-    When \p c == \b true, apply the transformation to the child object,
-    otherwise return the object unmodified.
+    When \p c is \b true, apply the transformation to the children
+    objects, otherwise return the children unmodified. When a child
+    object selection is specified, only the selected children are
+    returned irrespective of \p c.
 *******************************************************************************/
 module hull_if
 (
-  c = true
+  c = true,
+  s
 )
 {
-  if ( c )
+  if ( is_defined(s) )
+    children(s);
+  else if ( c )
     hull()
     children();
+  else
+    children();
+}
+
+//! Conditionally apply the union boolean operation.
+/***************************************************************************//**
+  \param    c <boolean> conditional.
+  \param    s <integer|integer-list|range> child object selection(s).
+
+  \details
+
+    When \p c is \b true, apply the operation on the children objects,
+    otherwise return the children unmodified. When a child object
+    selection is specified, only the selected children are returned
+    irrespective of \p c.
+*******************************************************************************/
+module union_if
+(
+  c = true,
+  s
+)
+{
+  if ( is_defined(s) )
+    children(s);
+  else if ( c )
+    union()
+      children();
+  else
+    children();
+}
+
+//! Conditionally apply the difference boolean operation.
+/***************************************************************************//**
+  \param    c <boolean> conditional.
+  \param    s <integer|integer-list|range> child object selection(s).
+
+  \details
+
+    When \p c is \b true, apply the operation on the children objects,
+    otherwise return the children unmodified. When a child object
+    selection is specified, only the selected children are returned
+    irrespective of \p c.
+*******************************************************************************/
+module difference_if
+(
+  c = true,
+  s
+)
+{
+  if ( is_defined(s) )
+    children(s);
+  else if ( c && $children > 1 )
+    difference()
+    {
+      children(0);
+      children([1:$children-1]);
+    }
+  else
+    children();
+}
+
+//! Conditionally apply the difference intersection operation.
+/***************************************************************************//**
+  \param    c <boolean> conditional.
+  \param    s <integer|integer-list|range> child object selection(s).
+
+  \details
+
+    When \p c is \b true, apply the operation on the children objects,
+    otherwise return the children unmodified. When a child object
+    selection is specified, only the selected children are returned
+    irrespective of \p c.
+*******************************************************************************/
+module intersection_if
+(
+  c = true,
+  s
+)
+{
+  if ( is_defined(s) )
+    children(s);
+  else if ( c )
+    intersection()
+      children();
   else
     children();
 }
