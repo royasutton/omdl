@@ -115,6 +115,7 @@ module extrude_rotate_tre
     lx = defined_e_or(l, 0, ld);
     ly = defined_e_or(l, 1, ld);
 
+    // corner rotation
     for
     (
       i = [
@@ -132,6 +133,7 @@ module extrude_rotate_tre
       children();
     }
 
+    // linear extrusion
     for
     (
       i = [
@@ -145,7 +147,8 @@ module extrude_rotate_tre
     {
       translate([i[0], i[1], 0])
       rotate([90, 0, i[2]])
-      linear_extrude(height=i[3])
+      translate([0, 0, -eps])
+      linear_extrude(height=i[3] + eps*2)
       rotate([0, 0, pa])
       children();
     }
@@ -206,8 +209,8 @@ module extrude_linear_uls
   {
     z = h[0];                                   // total height
 
-    n1 = (len(h) >= 3) ? max(h[1], 0)  : 0; // number of scaled-slices
-    z1 = (len(h) >= 3) ? abs(h[2])/100 : 0; // z scale fraction
+    n1 = (len(h) >= 3) ? max(h[1], 0)  : 0;     // number of scaled-slices
+    z1 = (len(h) >= 3) ? abs(h[2])/100 : 0;     // z scale fraction
     x1 = (len(h) >= 4) ?     h[3] /100 : -z1;   // x scale fraction
     y1 = (len(h) >= 5) ?     h[4] /100 : x1;    // y scale fraction
 
