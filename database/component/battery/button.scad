@@ -113,7 +113,7 @@ BEGIN_SCOPE diagram;
     include <units/length.scad>;
     include <units/angle.scad>;
     include <tools/align.scad>;
-    include <tools/general.scad>;
+    include <tools/operation_if.scad>;
     include <tools/drafting/draft-base.scad>;
 
     include <database/component/battery/cylindrical.scad>;

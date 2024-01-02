@@ -10,7 +10,7 @@ local_library     :=  docs_module \
                       \
                       align \
                       extrude \
-                      general \
+                      operation_if \
                       polytope \
                       repeat
 
