@@ -71,6 +71,39 @@ module hull_if
     children();
 }
 
+//! Conditionally apply the minkowski sum transformation.
+/***************************************************************************//**
+  \param    c <boolean> conditional.
+  \param    s <integer|integer-list|range> child object selection(s).
+  \param    convexity <integer> The maximum number of front sides (or back
+            sides) a ray intersection the object might penetrate..
+
+  \details
+
+    When \p c is \b true, apply the transformation to the children
+    objects, otherwise return the children unmodified. When a child
+    object selection is specified, only the selected children are
+    returned irrespective of \p c.
+*******************************************************************************/
+module minkowski_if
+(
+  c = true,
+  s,
+  convexity
+)
+{
+  if ( is_defined(s) )
+    children(s);
+  else if ( c )
+    minkowski(convexity)
+    {
+      children(0);
+      children([1:$children-1]);
+    }
+  else
+    children();
+}
+
 //! Conditionally apply the union boolean operation.
 /***************************************************************************//**
   \param    c <boolean> conditional.
