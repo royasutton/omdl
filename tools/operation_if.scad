@@ -1,4 +1,4 @@
-//! General and other category tools.
+//! Conditional version of standard transformations and operations.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (General)
-    \amu_define group_brief (General and other category tools.)
+    \amu_define group_name  (Conditional Operations)
+    \amu_define group_brief (Conditional transformations and operations.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
