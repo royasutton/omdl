@@ -56,7 +56,7 @@
     object selection is specified, only the selected children are
     returned irrespective of \p c.
 *******************************************************************************/
-module hull_if
+module hull_cs
 (
   c = true,
   s
@@ -85,7 +85,7 @@ module hull_if
     object selection is specified, only the selected children are
     returned irrespective of \p c.
 *******************************************************************************/
-module minkowski_if
+module minkowski_cs
 (
   c = true,
   s,
@@ -116,7 +116,7 @@ module minkowski_if
     selection is specified, only the selected children are returned
     irrespective of \p c.
 *******************************************************************************/
-module union_if
+module union_cs
 (
   c = true,
   s
@@ -143,7 +143,7 @@ module union_if
     selection is specified, only the selected children are returned
     irrespective of \p c.
 *******************************************************************************/
-module difference_if
+module difference_cs
 (
   c = true,
   s
@@ -173,7 +173,7 @@ module difference_if
     selection is specified, only the selected children are returned
     irrespective of \p c.
 *******************************************************************************/
-module intersection_if
+module intersection_cs
 (
   c = true,
   s

@@ -49,7 +49,7 @@
     units/length.scad
     units/angle.scad
     tools/align.scad
-    tools/operation_if.scad
+    tools/operation_cs.scad
     tools/polytope.scad
     ${PATH_NAME}/draft-base.scad
   )
@@ -112,7 +112,7 @@ BEGIN_SCOPE example;
     include <units/length.scad>;
     include <units/angle.scad>;
     include <tools/align.scad>;
-    include <tools/operation_if.scad>;
+    include <tools/operation_cs.scad>;
     include <tools/drafting/draft-base.scad>;
 
     length_unit_base = "mm";

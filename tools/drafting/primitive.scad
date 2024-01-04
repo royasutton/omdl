@@ -931,7 +931,7 @@ module draft_arrow
 
     if ( s1 == 1 )
     { // closed 3-point
-      hull_if( !s2 )
+      hull_cs( !s2 )
       {
         draft_line_pp(pah, ptm, w=w);
         if (binary_bit_is(s3, 0, 0))
@@ -942,13 +942,13 @@ module draft_arrow
     }
     else if ( s1 == 2 )
     { // closed 4-point
-      hull_if( !s2 )
+      hull_cs( !s2 )
       {
         draft_line_pp(pah, pam, w=w);
         if (binary_bit_is(s3, 0, 0))
           { draft_line_pp(ls1[0], ls1[1], w=w); draft_line_pp(ps1, pam, w=w); }
       }
-      hull_if( !s2 )
+      hull_cs( !s2 )
       {
         draft_line_pp(pah, pam, w=w);
         if (binary_bit_is(s3, 1, 0))
@@ -983,7 +983,7 @@ module draft_arrow
     }
     else if ( s1 == 5 )
     { // circle
-      hull_if( !s2 )
+      hull_cs( !s2 )
       for ( ls = sequence_ns( polygon_arc_p( r=al/3, c=pah, fn=$draft_arrow_fn ), 2, 1 ) )
         draft_line_pp(ls[0], ls[1], w=w);
     }
