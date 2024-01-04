@@ -160,14 +160,17 @@ module extrude_rotate_tre
   \param    h <decimal-list-3:9|decimal> A list of decimals or a single
             decimal.
   \param    center <boolean> Center extrusion about origin.
+  \param    c <boolean> conditional.
 
   \details
 
-    When \p h is a decimal, the shape is extruded linearly as normal.
-    To scale the upper and lower slices of the extrusion, \p h must be
-    a list with a minimum of three decimal values as described in the
-    following table. For symmetrical scaling, shape must be centered
-    about origin.
+    When \p c is \b true, apply the transformation to the children
+    objects, otherwise return the children unmodified. When \p h is a
+    decimal, the shape is extruded linearly as normal. To scale the
+    upper and lower slices of the extrusion, \p h must be a list with a
+    minimum of three decimal values as described in the following
+    table. For symmetrical scaling, shape must be centered about
+    origin.
 
      h[n] | default | description
     :----:|:-------:|:---------------------------------------
@@ -192,10 +195,11 @@ module extrude_rotate_tre
 module extrude_linear_uls
 (
   h,
-  center = false
+  center = false,
+  c = true
 )
 {
-  if ( is_undef(h) )
+  if ( is_undef(h) || (c == false) )
   {
     children();
   }
