@@ -418,7 +418,7 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "all_len_2", 1, all_len( v1(db,id), 2 ) );
     for (id=test_ids) table_validate( db, id, "all_len_3", 1, all_len( v1(db,id), 3 ) );
 
-    // end-of-tests
+    // eof
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;

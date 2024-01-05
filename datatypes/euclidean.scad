@@ -1295,7 +1295,7 @@ BEGIN_SCOPE validate;
     // set 5: plane and pnorm
     for (vid=run_ids) run("plane_to_normal",vid) test( "plane_to_normal", plane_to_normal([gv(vid,0),gv(vid,1)]), vid, true );
 
-    // end-of-tests
+    // eof
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;

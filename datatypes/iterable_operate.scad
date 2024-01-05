@@ -1328,7 +1328,7 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "mask_01R", 1, mask( v1(db,id), [0,1], r=true ) );
     for (id=test_ids) table_validate( db, id, "unique", 1, unique( v1(db,id) ) );
 
-    // end-of-tests
+    // eof
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;

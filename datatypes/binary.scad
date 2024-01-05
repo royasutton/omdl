@@ -602,7 +602,7 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("binary_lsh",vid) test( "binary_lsh", binary_lsh(gv(vid,0)), vid );
     for (vid=run_ids) run("binary_rsh",vid) test( "binary_rsh", binary_rsh(gv(vid,0)), vid );
 
-    // end-of-tests
+    // eof
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;

@@ -383,7 +383,7 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "almost_eq_p2", 2, almost_eq( v1(db,id), v2(db,id), 2) );
     for (id=test_ids) table_validate( db, id, "compare", 2, compare( v1(db,id), v2(db,id) ) );
 
-    // end-of-tests
+    // eof
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;

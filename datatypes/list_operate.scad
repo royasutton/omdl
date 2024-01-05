@@ -1092,7 +1092,7 @@ BEGIN_SCOPE validate;
     validate_skip( "sort_q()" );
     validate_skip( "sort_q2()" );
 
-    // end-of-tests
+    // eof
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
