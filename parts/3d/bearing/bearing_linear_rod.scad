@@ -353,6 +353,7 @@ BEGIN_SCOPE example;
       rotate(a) ngon(n=c, r=r);
       sphere(r=ball/2);
     }
+
     // end_include
   END_OPENSCAD;
 
