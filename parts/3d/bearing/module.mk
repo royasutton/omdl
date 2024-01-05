@@ -4,7 +4,7 @@
 $(eval $(call clear-local-module))
 #------------------------------------------------------------------------------#
 
-local_path        :=  parts
+local_path        :=  parts/3d/bearing/
 
 local_library     :=  docs_module
 
@@ -12,7 +12,7 @@ local_release_add :=
 
 local_backup_add  :=
 
-local_submodules  := 3d
+local_submodules  :=
 
 #------------------------------------------------------------------------------#
 # add local module

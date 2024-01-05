@@ -1,8 +1,8 @@
-//! Parts Module documentation.
+//! 3d Bearing Parts Module documentation.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2018-2024
+  \date   2024
 
   \copyright
 
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Parts)
-    \amu_define group_brief (Parts, part generators, and small assemblies.)
+    \amu_define group_name  (Bearing)
+    \amu_define group_brief (Bearing.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
@@ -38,7 +38,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group.amu)
+  \amu_include (include/amu/group_in_parent.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
