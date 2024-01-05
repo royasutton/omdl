@@ -6,7 +6,9 @@ $(eval $(call clear-local-module))
 
 local_path        :=  parts/3d/bearing/
 
-local_library     :=  docs_module
+local_library     :=  docs_module \
+                      \
+                      bearing_linear_rod
 
 local_release_add :=
 
