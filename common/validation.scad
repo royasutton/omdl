@@ -84,7 +84,7 @@ validation_skip = [number_min, number_max, number_inf];
 
       \dontinclude \amu_scope(index=1).scad
       \skip include
-      \until eof
+      \until end_include
 
     \b Result \b 1 \include \amu_scope(index=1).log
 *******************************************************************************/
@@ -286,7 +286,7 @@ module table_validate_start( db, verbose=false )
 
       \dontinclude \amu_scope(index=2).scad
       \skip include
-      \until eof
+      \until end_include
 
     \b Result \b 2 \include \amu_scope(index=2).log
 *******************************************************************************/
@@ -467,7 +467,7 @@ module map_validate_start( db, verbose=false )
 
       \dontinclude \amu_scope(index=3).scad
       \skip include
-      \until eof
+      \until end_include
 
     \b Result \b 3 \include \amu_scope(index=3).log
 *******************************************************************************/
@@ -567,7 +567,7 @@ BEGIN_SCOPE example1;
     log_type( "EXAMPLE 3", "almost equal to 4 digits" );
     log_info( validate("test-d", tvae1, "almost", tvae2, 4) );
 
-    // eof
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -617,7 +617,7 @@ BEGIN_SCOPE example_table;
     for (id=test_ids) table_validate( db, id, "is_string", 1, is_string( v1(db, id) ) );
     for (id=test_ids) table_validate( db, id,   "is_list", 1,   is_list( v1(db, id) ) );
 
-    // eof
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -653,7 +653,7 @@ BEGIN_SCOPE example_map;
     for ( id = map_validate_get_ids( db ) )
       map_validate( db, id, 2, defined_or ( v1(db, id), v2(db, id) ) );
 
-    // eof
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;

@@ -96,7 +96,7 @@
 
     \dontinclude \amu_eval(${mfscript}).scad
     \skip include
-    \until // eof
+    \until // end_include
 
   [LibreCAD]: https://librecad.org
 *******************************************************************************/
@@ -261,7 +261,7 @@ BEGIN_SCOPE example;
       }
     }
 
-    // eof
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;

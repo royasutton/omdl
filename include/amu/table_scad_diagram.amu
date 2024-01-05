@@ -14,13 +14,13 @@
 
               ${image_columns}          (default = 3)
               ${scope_id}               (default = example)
-              ${scad_end}               (default = eof)
+              ${scad_end}               (default = end_include)
 
  +/
 
   \amu_if image_columns (-d ${image_columns}) {${image_columns}} else {3} endif
   \amu_if scope_id (-d ${scope_id}) {${scope_id}} else {example} endif
-  \amu_if scad_end (-d ${scad_end}) {${scad_end}} else {eof} endif
+  \amu_if scad_end (-d ${scad_end}) {${scad_end}} else {end_include} endif
 
   \amu_scope scope_root (++root)
 

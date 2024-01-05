@@ -124,7 +124,7 @@ BEGIN_SCOPE validate;
     for ( id = map_validate_get_ids( db ) )
       map_validate( db, id, 2, defined_or ( v1(db, id), v2(db, id) ) );
 
-    // eof
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;

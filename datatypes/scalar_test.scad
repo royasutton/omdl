@@ -342,7 +342,7 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "is_string", 1, is_string( v1(db,id)) );
     for (id=test_ids) table_validate( db, id, "is_list", 1, is_list( v1(db,id)) );
 
-    // eof
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
