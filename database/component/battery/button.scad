@@ -47,7 +47,7 @@
     \amu_define diagram_notes (See Wikipedia battery [sizes] for information.)
     \amu_define data_notes    (Identifier names are based on [IEC] standards.)
 
-    \amu_include (include/amu/table_diagram_data_db.amu)
+    \amu_include (include/amu/table_diagram_data.amu)
 
   [sizes]: https://en.wikipedia.org/wiki/List_of_battery_sizes
   [IEC]: https://en.wikipedia.org/wiki/International_Electrotechnical_Commission
@@ -105,7 +105,6 @@ dtr_battery_button =
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE db;
 BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
@@ -174,7 +173,6 @@ BEGIN_SCOPE table;
     include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
     include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
-END_SCOPE;
 END_SCOPE;
 */
 

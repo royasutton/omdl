@@ -46,7 +46,7 @@
     \amu_define image_size    (sxga)
     \amu_define diagram_notes (See Wikipedia battery [sizes] for information.)
 
-    \amu_include (include/amu/table_diagram_data_db.amu)
+    \amu_include (include/amu/table_diagram_data.amu)
 
   [sizes]: https://en.wikipedia.org/wiki/List_of_battery_sizes
 *******************************************************************************/
@@ -104,7 +104,6 @@ dtr_battery_cylindrical =
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE db;
 BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
@@ -173,7 +172,6 @@ BEGIN_SCOPE table;
     include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
     include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
-END_SCOPE;
 END_SCOPE;
 */
 

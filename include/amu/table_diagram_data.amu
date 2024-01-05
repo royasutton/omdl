@@ -3,35 +3,42 @@
   create parameter diagrams and data table.
 
   requires:
-    mfs-scope: db/{diagram,table}
+    mfs-scope: diagram,table
 
     defines:  ${data_name}
               ${image_views}
               ${image_size}
 
-    optional: ${image_columns} (default = 3)
-              ${diagram_notes}
+    optional: ${diagram_notes}
               ${data_notes}
 
+              ${image_columns}          (default = 3)
+              ${scope_diagram_id}       (default = diagram)
+              ${scope_table_id}         (default = table)
+
  +/
+
+  \amu_if image_columns (-d ${image_columns}) {${image_columns}} else {3} endif
+  \amu_if scope_diagram_id (-d ${scope_diagram_id}) {${scope_diagram_id}} else {diagram} endif
+  \amu_if scope_table_id (-d ${scope_table_id}) {${scope_table_id}} else {table} endif
+
+  \amu_scope scope_root (++root)
 
   /+
     diagram table
   +/
 
-  \amu_scope scope_root   (++root)
-
   \amu_foreach png_files
   (
     words="${image_views}"
-    text="${OUTPUT_PREFIX}/png/${scope_root}_db_diagram_${image_size}_\${x}.png"
+    text="${OUTPUT_PREFIX}/png/${scope_root}_${scope_diagram_id}_${image_size}_\${x}.png"
     separator=" "
   )
 
   \amu_foreach eps_files
   (
     words="${image_views}"
-    text="${OUTPUT_PREFIX}/png2eps/${scope_root}_db_diagram_${image_size}_\${x}.eps"
+    text="${OUTPUT_PREFIX}/png2eps/${scope_root}_${scope_diagram_id}_${image_size}_\${x}.eps"
     separator=" "
   )
 
@@ -48,8 +55,6 @@
     text="expand \${x}"
     separator="^"
   )
-
-  \amu_if image_columns (-d ${image_columns}) {${image_columns}} else {3} endif
 
   \amu_if (-d ${diagram_notes}) {${diagram_notes}} endif
 
@@ -78,8 +83,8 @@
     data table
   +/
 
-  \amu_file th (file="${scope_root}_db_table.log" first=1 last=1 ++rmecho ++rmnl ++read)
-  \amu_file td (file="${scope_root}_db_table.log" first=2        ++rmecho ++rmnl ++read)
+  \amu_file th (file="${scope_root}_${scope_table_id}.log" first=1 last=1 ++rmecho ++rmnl ++read)
+  \amu_file td (file="${scope_root}_${scope_table_id}.log" first=2        ++rmecho ++rmnl ++read)
   \amu_word tc (tokenizer="^" words="${th}" ++count)
 
   \amu_if (-d ${data_notes}) {${data_notes}} endif
