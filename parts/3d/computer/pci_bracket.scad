@@ -52,13 +52,13 @@
   \param  fins  <integer> fin placements
           (0=none, 1=side one, 2=side two, 3=both sides).
 
-  \param  vents <list-2> vent specification.
+  \param  vents <data-list-2> vent specification.
 
-  \param  ribs  <list-4> rib specification.
+  \param  ribs  <data-list-4> rib specification.
 
-  \param  tabs  <list-n> tab specification.
+  \param  tabs  <list-list-n> tab specification.
 
-  \param  align <list-3> part alignment.
+  \param  align <integer-list-3> part alignment.
 
   \details
 
@@ -74,66 +74,63 @@
 
     \b vents
 
-     no.| type              | description
-    :---|:-----------------:|---------------------------------------------
-      0 | <integer>         | vent hole count
-      1 | <decimal>         | vent hole radius
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <integer>         | 0                 | vent hole count
+      1 | <decimal>         | 3.0               | vent hole radius
 
     \b ribs
 
-     no.| type              | description
-    :---|:-----------------:|---------------------------------------------
-      0 | <integer>         | location (0=top, 1=none, 2=bottom, 3=both)
-      1 | <integer>         | shape (0=cylinder, 1=ellipse)
-      2 | <integer>         | number of divisions
-      3 | <decimal-list-n>  | division positions list [p1, p2, ..., pn]
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <integer>         | 3                 | location (0=top, 1=none, 2=bottom, 3=both)
+      1 | <integer>         | 1                 | shape (0=cylinder, 1=ellipse)
+      2 | <integer>         | 10                | number of divisions
+      3 | <decimal-list-n>  | [3, 7]            | division positions list [p1, p2, ..., pn]
 
     \b tabs
 
-     no.| type              | description
-    :---|:-----------------:|---------------------------------------------
-      0 | <decimal-list-3>  | tab-0: [offset-y, offset-x, hole-diameter]
-     ...| ...               | ...
-      n | <decimal-list-3>  | tab-n: [offset-y, offset-x, hole-diameter]
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <decimal-list-3>  |                   | tab-0: [offset-y, offset-x, hole-diameter]
+     ...| ...               |                   | ...
+      n | <decimal-list-3>  |                   | tab-n: [offset-y, offset-x, hole-diameter]
 
     \b align
 
-     no.| type              | description
-    :---|:-----------------:|---------------------------------------------
-      0 | <integer>         | align-x
-      1 | <integer>         | align-y
-      2 | <integer>         | align-z
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <integer>         | 0                 | align-x
+      1 | <integer>         | 0                 | align-y
+      2 | <integer>         | 0                 | align-z
 
-    The possible x, y, and z alignment values are described in the
-    following table:
+    The possible x, y, and z alignment locations and configuration
+    values are described in the following table:
 
-      value     | description
-    :-----------|---------------------------------------------------------
-     \p align-x | \b x-position
-      0         | bracket outside
-      1         | bracket center
-      2         | bracket inside
-      3         | bracket tab screw center-x
-      4         | back of tab
-      5         | pci connector alignment slot
-     \p align-y | \b y-position
-      0         | bracket edge away from circuit board
-      1         | bracket tab edge away from circuit board
-      2         | circuit board bottom edge
-      3         | bracket tab screw center-y
-      4         | bracket edge near circuit board
-      5         | connectors window edge away from circuit board
-      6         | connectors window center
-      7         | connectors window edge near circuit board
-     \p align-z | \b z-position
-      0         | bracket bottom
-      1         | top of pci connector
-      2         | bottom of board / board stop
-      3         | bottom of bracket tab
-      4         | top of bracket tab
-      5         | connectors window bottom
-      6         | connectors window center
-      7         | connectors window top
+    | parameter |  value    | value description
+    |:---------:|:---------:|:--------------------------------------------------------
+    | align-x   | 0         | bracket outside
+    |           | 1         | bracket center
+    |           | 2         | bracket inside
+    |           | 3         | bracket tab screw center-x
+    |           | 4         | back of tab
+    |           | 5         | pci connector alignment slot
+    | align-y   | 0         | bracket edge away from circuit board
+    |           | 1         | bracket tab edge away from circuit board
+    |           | 2         | circuit board bottom edge
+    |           | 3         | bracket tab screw center-y
+    |           | 4         | bracket edge near circuit board
+    |           | 5         | connectors window edge away from circuit board
+    |           | 6         | connectors window center
+    |           | 7         | connectors window edge near circuit board
+    | align-z   | 0         | bracket bottom
+    |           | 1         | top of pci connector
+    |           | 2         | bottom of board / board stop
+    |           | 3         | bottom of bracket tab
+    |           | 4         | top of bracket tab
+    |           | 5         | connectors window bottom
+    |           | 6         | connectors window center
+    |           | 7         | connectors window top
 
     \amu_define example_name  (PCI bracket)
     \amu_define image_views   (left right back diag)
