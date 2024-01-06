@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2017-2019
+  \date   2017-2024
 
   \copyright
 
@@ -51,9 +51,9 @@
 //! Label the vertices, paths, and edges of a polytope.
 /***************************************************************************//**
   \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
-  \param    f <integer-list-list> A list of faces (or paths) that enclose
+  \param    f <<integer-list>-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
-  \param    e <integer-list-2-list> A list of edges where each edge is
+  \param    e <<integer-list-2>-list> A list of edges where each edge is
             a list of two coordinate indexes.
 
   \param    vi <index> Vertex index. An index sequence [specification].
@@ -66,15 +66,14 @@
   \param    th <decimal> The text extrusion height override.
 
   \param    to <vector-3d|vector-2d> The text offset override.
-  \param    tr <decimal-list-1:3|decimal> The text rotation (in degrees).
+  \param    tr <decimal-list-[1:3]|decimal> The text rotation (in degrees).
 
   \details
 
-  \note     Parameter \p f is optional for polygons. When it is not
-            given, the listed order of the coordinates \p c establishes
-            the polygon path.
-  \note     When \p e is not specified, it is computed from \p f using
-            polytope_faces2edges().
+    Label the vertices, paths, and edges of a polytope. Parameter \p f
+    is optional for polygons. When it is not given, the listed order of
+    the coordinates \p c establishes the polygon path. When \p e is not
+    specified, it is computed from \p f using polytope_faces2edges().
 
   [specification]: \ref dt_index
 *******************************************************************************/
@@ -168,51 +167,32 @@ module polytope_number
 //! Assemble a polytope skeletal frame using child objects.
 /***************************************************************************//**
   \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
-  \param    f <integer-list-list> A list of faces (or paths) that enclose
+  \param    f <<integer-list>-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
-  \param    e <integer-list-2-list> A list of edges where each edge is
+  \param    e <<integer-list-2>-list> A list of edges where each edge is
             a list of two coordinate indexes.
 
   \param    vi <index> Vertex index. An index sequence [specification].
   \param    fi <index> Face index. An index sequence [specification].
   \param    ei <index> Edge index. An index sequence [specification].
 
-  \param    vc <integer> Vertex child index.
-  \param    fc <integer> Face child index.
-  \param    ec <integer> Edge child index.
+  \param    vc <integer> Vertex child object index.
+  \param    fc <integer> Face child object index.
+  \param    ec <integer> Edge child object index.
 
   \details
 
-    This function constructs a skeletal frame for a given polytope. A
-    2d child object is linearly extruded along specified edges of the
-    polytope to form the frame. Additional 3d child objects can be
-    centered on specified vertices and/or the mean coordinates of
-    specified faces.
+    Construct a skeletal frame for a given polytope. A 2d child object
+    is linearly extruded along specified edges of the polytope to form
+    the frame. Additional 3d child objects can be centered on specified
+    vertices and/or the mean coordinates of specified faces.
 
-    \b Example
-
-    \code{.c}
-    include <omdl-base.scad>;
-
-    s = second(xy_plane_os) * 25;
-    p = polygon_linear_extrude_pf(s, h=50);
-
-    polytope_frame(first(p), second(p))
-    {
-      circle(r=2);
-      color("grey") sphere(r=4);
-      color("blue") cube(4);
-    }
-    \endcode
-
-  \note     To disable a child assignment to the vertices, faces, or
-            edges, use an index that is less than zero or greater than
-            the number of children.
-  \note     Parameter \p f is optional for polygons. When it is not
-            given, the listed order of the coordinates \p c establishes
-            the polygon path.
-  \note     When \p e is not specified, it is computed from \p f using
-            polytope_faces2edges().
+    To disable a child assignment to the vertices, faces, or edges, use
+    an index that is less than zero or greater than the number of
+    children. Parameter \p f is optional for polygons. When it is not
+    given, the listed order of the coordinates \p c establishes the
+    polygon path. When \p e is not specified, it is computed from \p f
+    using polytope_faces2edges().
 
   [specification]: \ref dt_index
 *******************************************************************************/
@@ -278,12 +258,11 @@ module polytope_frame
 
 //! The 3d or 2d bounding box shape for a polytope.
 /***************************************************************************//**
-  \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
-            coordinates [[x, y (, z)], ...].
-  \param    f <integer-list-list> A list of faces (or paths) that enclose
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
+  \param    f <<integer-list>-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
-  \param    a <decimal-list-1:3|decimal> The box padding.
-            A list of lengths to equally pad the box dimensions.
+  \param    a <decimal-list-1:3|decimal> The box padding. A list of
+            lengths to equally pad the box dimensions.
 
   \details
 
@@ -291,10 +270,8 @@ module polytope_frame
     defined 3d polyhedron with the box sides oriented parallel to the
     coordinate axes. Or: (2) the 2d box shape that exactly encloses the
     defined 2d polygon with the box sides oriented parallel to the
-    coordinate axes.
-
-  \note     When \p f is not given, the listed order of the coordinates
-            \p c establishes the path.
+    coordinate axes. When \p f is not given, the listed order of the
+    coordinates \p c establishes the path.
 
     \sa polytope_limits for warning about secondary shapes.
 *******************************************************************************/
