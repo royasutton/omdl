@@ -6,7 +6,9 @@ $(eval $(call clear-local-module))
 
 local_path        :=  parts/3d/computer
 
-local_library     :=  docs_module
+local_library     :=  docs_module \
+                      \
+                      pci_bracket
 
 local_release_add :=
 
