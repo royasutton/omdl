@@ -866,6 +866,11 @@ module draft_line_pp
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       grid = [1, 3/4] * 10;
@@ -1053,6 +1058,11 @@ module draft_arrow
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       line = [[0,0], [50,0]];
@@ -1209,6 +1219,11 @@ module draft_line
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       for ( s=[1:2] )
@@ -1275,6 +1290,11 @@ module draft_arc
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       draft_rectangle ([50, 30], s=[4, 3, 2, 5]);
@@ -1338,6 +1358,11 @@ module draft_rectangle
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       pp = length
