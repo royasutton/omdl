@@ -68,6 +68,11 @@
     \amu_openscad (args="--render --o ${auto_file_name}")
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       s = 10;
@@ -134,6 +139,11 @@ function triangle_ppp2sss
     \amu_openscad (args="--render --o ${auto_file_name}")
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       s = 10;
@@ -197,6 +207,11 @@ function triangle_sas2sss
     \amu_openscad (args="--render --o ${auto_file_name}")
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       s = 10;
@@ -263,6 +278,11 @@ function triangle_asa2sss
     \amu_openscad (args="--render --o ${auto_file_name}")
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       s = 10;
@@ -335,6 +355,11 @@ function triangle_aas2sss
     \amu_openscad (args="--render --o ${auto_file_name}")
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       s = 10;
