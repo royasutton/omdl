@@ -71,32 +71,12 @@
     scale as needed for the sheet size and target output page. (5)
     Finally print or save a PDF file.
 
-    \b Example
+    \amu_define example_name  (Drafting)
+    \amu_define image_views   (top)
+    \amu_define image_size    (uxga)
+    \amu_define html_image_w  (768)
 
-    \amu_scope  mfscript (index=1)
-    \amu_define img_conf (2048x1536_top)
-
-    \amu_image
-    (
-      caption="Result (png)"
-      title="click to expand"
-      file="${mfscript}_${img_conf}.png"
-      url="${mfscript}_${img_conf}.png"
-      width=640
-    )
-    \amu_image
-    (
-      caption="Result (svg)"
-      file="${mfscript}.svg"
-      url="${mfscript}.svg"
-      width=640
-    )
-
-    \b Script
-
-    \dontinclude \amu_eval(${mfscript}).scad
-    \skip include
-    \until // end_include
+    \amu_include (include/amu/table_scad_diagram.amu)
 
   [LibreCAD]: https://librecad.org
 *******************************************************************************/
@@ -268,14 +248,13 @@ BEGIN_SCOPE example;
     include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
     table_unset_all sizes;
 
-    images    name "sizes" aspect "4:3" wsizes "2048";
+    images    name "sizes" types "uxga";
     views     name "views" distance "600" views "top";
-    variables add_opts_combine "views";
 
-    include --path "${INCLUDE_PATH}" scr_new_mf.mfs;
+    variables set_opts_combine "sizes views";
+    variables add_opts "--autocenter";
 
-    include --path "${INCLUDE_PATH}" var_gen_svg.mfs;
-    include --path "${INCLUDE_PATH}" scr_app_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */
