@@ -60,33 +60,14 @@
 
   \section starting Getting Started
 
-    \b Example:
+    \amu_define example_name  (Hello world)
+    \amu_define image_views   (top bottom right diag)
+    \amu_define image_size    (sxga)
+    \amu_define image_columns (4)
+    \amu_define scope_id      (quickstart)
+    \amu_define diagram_notes (Click image above to expand.)
 
-    \dontinclude \amu_scope(index=2).scad
-    \skip include
-    \until valign="center" );
-
-    \amu_make png_files (append=quickstart extension=png)
-    \amu_make eps_files (append=quickstart extension=png2eps)
-    \amu_make stl_files (append=quickstart extension=stl)
-
-    \htmlonly
-      \amu_image_table
-        (
-          type=html columns=4 image_width="200" table_caption="Example Result"
-          cell_captions="Bottom^Diagonal^Right^Top"
-          cell_files="${png_files}"
-          cell_urls="${stl_files} ${stl_files} ${stl_files} ${stl_files}"
-        )
-    \endhtmlonly
-    \latexonly
-      \amu_image_table
-        (
-          type=latex columns=4 image_width="1.25in" table_caption="Example Result"
-          cell_captions="Bottom^Diagonal^Right^Top"
-          cell_files="${eps_files}"
-        )
-    \endlatexonly
+    \amu_include (include/amu/table_scad_diagram.amu)
 
   \section contributing Contributing
 
@@ -186,19 +167,21 @@ BEGIN_SCOPE quickstart;
     translate([0, -50, 0])
     linear_extrude(height=10)
     text( text="omdl", size=20, halign="center", valign="center" );
+
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
     include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
 
+    images    name "sizes" types "sxga";
     views     name "views" views "top bottom right diag";
-    variables add_opts_combine "views";
+
+    variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" scr_new_mf.mfs;
-
-    include --path "${INCLUDE_PATH}" var_gen_stl.mfs;
-    include --path "${INCLUDE_PATH}" scr_app_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */
