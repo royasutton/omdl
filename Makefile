@@ -100,7 +100,6 @@ output_root                       := build
 
 scopes_output_prefix              := amu/
 seam_defines                      := INCLUDE_PATH=include/mfs
-scad_lib_path_add                 := .
 
 doxygen_output_prefix             := docs/
 doxygen_config                    := share/doxygen/Doxyfile
