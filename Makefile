@@ -63,19 +63,15 @@ include $(AMU_PM_COMPONENTS_LOCAL_PATH)/assertions
 # ignore_modules_exclude          := $(true)
 # ignore_scopes_exclude           := $(true)
 
-output_root                       := build
 output_path_add_project_version   := $(false)
 
-scopes_output_prefix              := amu/
 prefix_scopes_output_path         := $(true)
 prefix_scopes_output_prefix       := $(true)
 prefix_scopes_input_prefix        := $(true)
 
-doxygen_output_prefix             := docs/
 prefix_doxygen_output_path        := $(true)
 prefix_doxygen_output_prefix      := $(true)
 
-buildinfo_output_prefix           := docs/buildinfo/
 prefix_buildinfo_output_path      := $(true)
 prefix_buildinfo_output_prefix    := $(true)
 buildinfo_depends_scopes          := $(true)
@@ -100,15 +96,22 @@ project_name                      := omdl
 project_version                   := $(shell git describe --tags --dirty --always)
 project_brief                     := OpenSCAD Mechanical Design Library
 
-docs_group_id                     := omdl
-project_logo                      := docs_start_logo_top_55x55
+output_root                       := build
+
+scopes_output_prefix              := amu/
 seam_defines                      := INCLUDE_PATH=include/mfs
 scad_lib_path_add                 := .
 
+doxygen_output_prefix             := docs/
 doxygen_config                    := share/doxygen/Doxyfile
 doxygen_html_footer               := share/doxygen/html_footer.html
 doxygen_html_css                  := share/doxygen/html_style.css
 doxygen_layout                    := share/doxygen/html_layout.xml
+
+docs_group_id                     := omdl
+project_logo                      := docs_start_logo_top_55x55
+
+buildinfo_output_prefix           := docs/buildinfo/
 
 project_files_add                 := $(wildcard include/pmf/*) \
                                      $(wildcard include/mfs/*.mfs) \
