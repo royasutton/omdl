@@ -50,7 +50,7 @@
 
 //! Transform 2d or 3d shape into a linear rod ball or sled bearing.
 /***************************************************************************//**
-  \param    pipe <decimal-list-2> pipe or rod diameter (outer and inner).
+  \param    pipe <decimal-list-2> pipe or rod diameter [outer, inner].
 
   \param    ball <decimal> ball bearing diameter.
 
@@ -58,7 +58,7 @@
 
   \param    angle <decimal> ball bearing tunnel angle.
 
-  \param    h <decimal-decimal-boolean> bearing block height.
+  \param    h <data-list-3> bearing block height.
 
   \param    tunnel <decimal-list-2> ball bearing tunnel size.
 
@@ -97,44 +97,43 @@
     values. For example, the following table are all valid
     specifications for \p h:
 
-     h                    | options specified
-    :---------------------|:------------------------------------------------
-     10.5                 | bearing block height, defaults for remaining.
-     [10.5]               | same as above.
-     [10.5, 5]            | block height and end cap thickness.
-     [10.5, undef, false] | block height and extrusion options only.
-     [10.5, 5, false]     | block height, end cap thickness and extrusion.
+     parameter h            | value description
+    :-----------------------|:--------------------------------------------------------
+     10.5                   | bearing block height, defaults for remaining
+     [10.5]                 | same as above
+     [10.5, 5]              | block height and end cap thickness
+     [10.5, undef, false]   | block height and extrusion options only
+     [10.5, 5, false]       | block height, end cap thickness and extrusion
 
     A single scalar value can be used to specify the first value of a
     multi-value parameter as shown in the above table.
-
 
     Multi-value parameters
     ----------------------
 
     \b h
 
-     no.| default             | description
-    :---|:--------------------|:----------------------------------
-      0 | required            | total bearing height
-      1 | ball/4              | bearing end-cap height
-      2 | \b true             | extrude child object
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | decimal           | required          | total bearing height
+      1 | decimal           | ball/4            | bearing end-cap height
+      2 | boolean           | \b true           | extrude child object
 
     \b tunnel
 
-     no.| default             | description
-    :---|:--------------------|:----------------------------------
-      0 | ball/4              | perpendicular tunnel dimension
-      1 | ball                | tunnel corner turn radius
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | decimal           | ball/4            | perpendicular tunnel dimension
+      1 | decimal           | ball              | tunnel corner turn radius
 
     \b feed
 
-     no.| default             | description
-    :---|:--------------------|:----------------------------------
-      0 | 1                   | ball bearing feeder size factor
-      1 | 0                   | tunnel position factor [0:1]
-      2 | 0                   | rotation angle
-      3 | tunnel-diameter     | ball bearing feeder length
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | decimal           | 1                 | ball bearing feeder size factor
+      1 | decimal           | 0                 | tunnel position factor [0:1]
+      2 | decimal           | 0                 | rotation angle
+      3 | decimal           | tunnel-diameter   | ball bearing feeder length
 
     When the first value position of \p feed is assigned 0, the feed
     option is disabled. The bearing feed can also be disabled by
