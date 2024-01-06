@@ -103,6 +103,7 @@ project_brief                     := OpenSCAD Mechanical Design Library
 docs_group_id                     := omdl
 project_logo                      := docs_start_logo_top_55x55
 seam_defines                      := INCLUDE_PATH=include/mfs
+scad_lib_path_add                 := .
 
 doxygen_config                    := share/doxygen/Doxyfile
 doxygen_html_footer               := share/doxygen/html_footer.html
