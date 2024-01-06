@@ -10,13 +10,13 @@
 
     optional: ${image_columns}          (default = 3)
               ${html_image_w}           (default = 256)
-              ${latex_image_w}          (default = 1.25in)
+              ${latex_image_w}          (default = 1.5in)
 
  +/
 
   \amu_if image_columns (-d ${image_columns}) {${image_columns}} else {3} endif
   \amu_if html_image_w (-d ${html_image_w}) {${html_image_w}} else {256} endif
-  \amu_if latex_image_w (-d ${latex_image_w}) {${latex_image_w}} else {1.25in} endif
+  \amu_if latex_image_w (-d ${latex_image_w}) {${latex_image_w}} else {1.5in} endif
 
   \amu_include (include/amu/macro_example_dim.amu)
 
