@@ -26,7 +26,9 @@ AMU_PM_COMPONENTS_LOCAL           := modules \
 # AMU_PM_DEBUG                    := defined
 
 #------------------------------------------------------------------------------#
-# Path overrides
+# Path overrides (for development snapshots, change. ie:)
+# path_openscad                   := openscad-nightly
+# version_checks                  := $(false)
 #------------------------------------------------------------------------------#
 path_openscad                     :=
 path_doxygen                      :=
