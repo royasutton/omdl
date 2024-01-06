@@ -122,8 +122,6 @@ BEGIN_SCOPE logo;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
 
-    $fn = 36;
-
     frame = triangle_ppp2sss( [[30,40], [30,0], [0,40]] );
     core  = 2 * frame / 3;
     vrnd  = [1, 2, 4];
@@ -133,7 +131,7 @@ BEGIN_SCOPE logo;
     repeat_radial( n=5, angle=true )
       translate([15,-5,0])
         extrude_linear_uls( h=10 )
-          triangle_ls_c( vs=frame, vc=core, vr=vrnd );
+          triangle_ls_c( vs=frame, vc=core, vr=vrnd, $fn=36 );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -151,8 +149,6 @@ BEGIN_SCOPE quickstart;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
 
-    $fn = 36;
-
     frame = triangle_ppp2sss( [[30,40], [30,0], [0,40]] );
     core  = 2 * frame / 3;
     vrnd  = [1, 2, 4];
@@ -162,10 +158,10 @@ BEGIN_SCOPE quickstart;
     repeat_radial( n=5, angle=true )
       translate([15,-5,0])
         extrude_linear_uls( h=10 )
-          triangle_ls_c( vs=frame, vc=core, vr=vrnd );
+          triangle_ls_c( vs=frame, vc=core, vr=vrnd, $fn=36 );
 
     translate([0, -50, 0])
-    linear_extrude(height=10)
+    linear_extrude( height=10 )
     text( text="omdl", size=20, halign="center", valign="center" );
 
     // end_include
