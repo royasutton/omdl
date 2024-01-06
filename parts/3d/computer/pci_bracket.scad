@@ -74,66 +74,66 @@
 
     \b vents
 
-    | field | type              | description
-    |-------|:-----------------:|-------------------
-    | 0     | <integer>         | vent hole count
-    | 1     | <decimal>         | vent hole radius
+     no.| type              | description
+    :---|:-----------------:|---------------------------------------------
+      0 | <integer>         | vent hole count
+      1 | <decimal>         | vent hole radius
 
     \b ribs
 
-    | field | type              | description
-    |-------|:-----------------:|---------------------------------------------
-    | 0     | <integer>         | location (0=top, 1=none, 2=bottom, 3=both)
-    | 1     | <integer>         | shape (0=cylinder, 1=ellipse)
-    | 2     | <integer>         | number of divisions
-    | 3     | <decimal-list-n>  | division positions list [p1, p2, ..., pn]
+     no.| type              | description
+    :---|:-----------------:|---------------------------------------------
+      0 | <integer>         | location (0=top, 1=none, 2=bottom, 3=both)
+      1 | <integer>         | shape (0=cylinder, 1=ellipse)
+      2 | <integer>         | number of divisions
+      3 | <decimal-list-n>  | division positions list [p1, p2, ..., pn]
 
     \b tabs
 
-    | field | type              | description
-    |-------|:-----------------:|---------------------------------------------
-    | 0     | <decimal-list-3>  | tab-0: [offset-y, offset-x, hole-diameter]
-    | ...   | ...               | ...
-    | n     | <decimal-list-3>  | tab-n: [offset-y, offset-x, hole-diameter]
+     no.| type              | description
+    :---|:-----------------:|---------------------------------------------
+      0 | <decimal-list-3>  | tab-0: [offset-y, offset-x, hole-diameter]
+     ...| ...               | ...
+      n | <decimal-list-3>  | tab-n: [offset-y, offset-x, hole-diameter]
 
     \b align
 
-    | field | type              | description
-    |-------|:-----------------:|-------------
-    | 0     | <integer>         | align-x
-    | 1     | <integer>         | align-y
-    | 2     | <integer>         | align-z
+     no.| type              | description
+    :---|:-----------------:|---------------------------------------------
+      0 | <integer>         | align-x
+      1 | <integer>         | align-y
+      2 | <integer>         | align-z
 
     The possible x, y, and z alignment values are described in the
     following table:
 
-    | field value | description
-    |-------------|-------------------------------------------------
-    |\p align-x   | \b x-position
-    |  0          | bracket outside
-    |  1          | bracket center
-    |  2          | bracket inside
-    |  3          | bracket tab screw center-x
-    |  4          | back of tab
-    |  5          | pci connector alignment slot
-    | \p align-y  | \b y-position
-    |  0          | bracket edge away from circuit board
-    |  1          | bracket tab edge away from circuit board
-    |  2          | circuit board bottom edge
-    |  3          | bracket tab screw center-y
-    |  4          | bracket edge near circuit board
-    |  5          | connectors window edge away from circuit board
-    |  6          | connectors window center
-    |  7          | connectors window edge near circuit board
-    | \p align-z  | \b z-position
-    |  0          | bracket bottom
-    |  1          | top of pci connector
-    |  2          | bottom of board / board stop
-    |  3          | bottom of bracket tab
-    |  4          | top of bracket tab
-    |  5          | connectors window bottom
-    |  6          | connectors window center
-    |  7          | connectors window top
+      value     | description
+    :-----------|---------------------------------------------------------
+     \p align-x | \b x-position
+      0         | bracket outside
+      1         | bracket center
+      2         | bracket inside
+      3         | bracket tab screw center-x
+      4         | back of tab
+      5         | pci connector alignment slot
+     \p align-y | \b y-position
+      0         | bracket edge away from circuit board
+      1         | bracket tab edge away from circuit board
+      2         | circuit board bottom edge
+      3         | bracket tab screw center-y
+      4         | bracket edge near circuit board
+      5         | connectors window edge away from circuit board
+      6         | connectors window center
+      7         | connectors window edge near circuit board
+     \p align-z | \b z-position
+      0         | bracket bottom
+      1         | top of pci connector
+      2         | bottom of board / board stop
+      3         | bottom of bracket tab
+      4         | top of bracket tab
+      5         | connectors window bottom
+      6         | connectors window center
+      7         | connectors window top
 
     \amu_define example_name  (PCI bracket)
     \amu_define image_views   (left right back diag)
@@ -235,7 +235,6 @@ module pci_bracket
         0
       ]
       , defined_e_or(align, 2, 0) );
-
 
   //
   // bracket
