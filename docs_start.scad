@@ -61,7 +61,7 @@
   \section starting Getting Started
 
     \amu_define example_name  (Hello world)
-    \amu_define image_views   (top bottom right diag)
+    \amu_define image_views   (right top front diag)
     \amu_define image_size    (sxga)
     \amu_define image_columns (4)
     \amu_define scope_id      (quickstart)
@@ -148,21 +148,40 @@ END_SCOPE;
 BEGIN_SCOPE quickstart;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <units/length.scad>;
+    include <units/angle.scad>;
+    include <tools/operation_cs.scad>;
+    include <tools/drafting/draft-base.scad>;
+    include <parts/3d/bearing/bearing_linear_rod.scad>;
 
-    frame = triangle_ppp2sss( [[30,40], [30,0], [0,40]] );
-    core  = 2 * frame / 3;
-    vrnd  = [1, 2, 4];
+    $fn = 36;
 
-    cone( h=20, r=10, vr=2 );
-    rotate([0, 0, 360/20])
-    repeat_radial( n=5, angle=true )
-      translate([15,-5,0])
-        extrude_linear_uls( h=10 )
-          triangle_ls_c( vs=frame, vc=core, vr=vrnd, $fn=36 );
+    p = [length(0.706, "in"), length(0.622, "in")];
+    b = length(6, "mm");
 
-    translate([0, -50, 0])
-    linear_extrude( height=10 )
-    text( text="omdl", size=20, halign="center", valign="center" );
+    r = 21.5; c = 6; a = 85;
+    h = [b*8, undef, false];
+
+    __mfs__diag = false;
+    v = __mfs__diag ? undef : 2;
+
+    make_bearing_linear_rod(pipe=p, ball=b, count=c, angle=a, h=h, align=4, view=v)
+    minkowski() {cylinder(r=r-b*2/3, h=h[0]-b*3/2, center=true); sphere(r=r/5);};
+
+    __mfs__top = false;
+    if ( __mfs__top ) color("brown"){
+      draft_dim_center(r=r);
+      draft_dim_radius(r=r, v=[+1,-1], u="mm");
+      draft_dim_line(p1=[-r,0], p2=[+r,0], d=r*1.25, u ="mm");
+      draft_dim_line(p1=[-p[0]/2,0], p2=[+p[0]/2,0], d=r*3/4, u ="mm");
+    }
+
+    __mfs__front = false;
+    if ( __mfs__front ) color("brown") rotate([90,0,0]) translate([0,0,0]) {
+      draft_dim_line(p1=[-r,0], p2=[+r,0], d=r*3/4, u ="mm");
+      draft_dim_line(p1=[-p[0]/2,0], p2=[+p[0]/2,0], u ="mm");
+      draft_dim_line(p1=[0,0], p2=[0,-h[0]], d=-r*1.25, u ="mm");
+    }
 
     // end_include
   END_OPENSCAD;
@@ -172,7 +191,7 @@ BEGIN_SCOPE quickstart;
     table_unset_all sizes;
 
     images    name "sizes" types "sxga";
-    views     name "views" views "top bottom right diag";
+    views     name "views" views "diag front right top";
 
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter --view=axes";
