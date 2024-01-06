@@ -12,15 +12,21 @@
     optional: ${diagram_notes}
               ${data_notes}
 
-              ${image_columns}          (default = 3)
               ${scope_diagram_id}       (default = diagram)
               ${scope_table_id}         (default = table)
 
+              ${image_columns}          (default = 3)
+              ${html_image_w}           (default = 256)
+              ${latex_image_w}          (default = 1.25in)
+
  +/
 
-  \amu_if image_columns (-d ${image_columns}) {${image_columns}} else {3} endif
   \amu_if scope_diagram_id (-d ${scope_diagram_id}) {${scope_diagram_id}} else {diagram} endif
   \amu_if scope_table_id (-d ${scope_table_id}) {${scope_table_id}} else {table} endif
+
+  \amu_if image_columns (-d ${image_columns}) {${image_columns}} else {3} endif
+  \amu_if html_image_w (-d ${html_image_w}) {${html_image_w}} else {256} endif
+  \amu_if latex_image_w (-d ${latex_image_w}) {${latex_image_w}} else {1.25in} endif
 
   \amu_scope scope_root (++root)
 
@@ -61,7 +67,9 @@
   \htmlonly
     \amu_image_table
       (
-        type=html columns=${image_columns} image_width="256"
+        type=html
+        columns=${image_columns}
+        image_width="${html_image_w}"
         table_caption="${data_name} parameters"
         cell_files="${png_files}"
         cell_captions="${cell_captions}"
@@ -72,7 +80,9 @@
   \latexonly
     \amu_image_table
       (
-        type=latex columns=${image_columns} image_width="1.25in"
+        type=latex
+        columns=${image_columns}
+        image_width="${latex_image_w}"
         table_caption="${data_name} parameters"
         cell_files="${eps_files}"
         cell_captions="${cell_captions}"
