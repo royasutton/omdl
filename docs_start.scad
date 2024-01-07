@@ -66,6 +66,10 @@
     \amu_define image_columns (4)
     \amu_define scope_id      (quickstart)
     \amu_define diagram_notes (Click image above to expand.)
+    \amu_define scad_notes
+      ( The \ref make_bearing_linear_rod operations can be used to
+        transform 2D and 3D objects into 3D-printable linear rod
+        bearings with arbitrary bearing-ball and rod sizes. )
 
     \amu_include (include/amu/table_scad_diagram.amu)
 
@@ -166,21 +170,21 @@ BEGIN_SCOPE quickstart;
     v = __mfs__diag ? undef : 2;
 
     make_bearing_linear_rod(pipe=p, ball=b, count=c, angle=a, h=h, align=4, view=v)
-    minkowski() {cylinder(r=r-b*2/3, h=h[0]-b*3/2, center=true); sphere(r=r/5);};
+    minkowski() {cylinder(r=r-b*2/3, h=first(h)-b*3/2, center=true); sphere(r=r/5);};
 
     __mfs__top = false;
     if ( __mfs__top ) color("brown"){
       draft_dim_center(r=r);
       draft_dim_radius(r=r, v=[+1,-1], u="mm");
       draft_dim_line(p1=[-r,0], p2=[+r,0], d=r*1.25, u ="mm");
-      draft_dim_line(p1=[-p[0]/2,0], p2=[+p[0]/2,0], d=r*3/4, u ="mm");
+      draft_dim_line(p1=[-first(p)/2,0], p2=[+first(p)/2,0], d=r*3/4, u ="mm");
     }
 
     __mfs__front = false;
-    if ( __mfs__front ) color("brown") rotate([90,0,0]) translate([0,0,0]) {
+    if ( __mfs__front ) color("brown") rotate([90,0,0]) {
       draft_dim_line(p1=[-r,0], p2=[+r,0], d=r*3/4, u ="mm");
-      draft_dim_line(p1=[-p[0]/2,0], p2=[+p[0]/2,0], u ="mm");
-      draft_dim_line(p1=[0,0], p2=[0,-h[0]], d=-r*1.25, u ="mm");
+      draft_dim_line(p1=[-first(p)/2,0], p2=[+first(p)/2,0], u ="mm");
+      draft_dim_line(p1=[0,0], p2=[0,-first(h)], d=-r*1.25, u ="mm");
     }
 
     // end_include
