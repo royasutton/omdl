@@ -38,7 +38,17 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent.amu)
+  \amu_include (include/amu/group_in_parent_start.amu)
+
+    See Wikipedia for a introduction to [linear] and [rotational]
+    mechanical [bearings].
+
+  [bearings]: https://en.wikipedia.org/wiki/Bearing_(mechanical)
+  [rotational]: https://en.wikipedia.org/wiki/Ball_bearing
+  [linear]: https://en.wikipedia.org/wiki/Linear-motion_bearing
+
+  @}
+  @}
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
