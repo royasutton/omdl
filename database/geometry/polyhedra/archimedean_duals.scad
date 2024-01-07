@@ -38,8 +38,6 @@
       \li the [Polyhedron Database] maintained by [Netlib], and
       \li an [Encyclopedia of Polyhedra] by [George W. Hart].
 
-  \note Include this library file using the \b include statement.
-
   [omdl]: https://github.com/royasutton/omdl
 
   [Anthony Thyssen]: http://www.ict.griffith.edu.au/anthony/anthony.html
@@ -62,12 +60,13 @@
   \addtogroup \amu_eval(${group})
   @{
     <br>
-    ### File: archimedean_duals.scad ###
+    ### Archimedean Duals ###
+    \amu_include (include/amu/includes_required.amu)
 
     \amu_eval
       (
         ++global
-        title="Archimedean Duals"
+        title="Examples"
         stem=archimedean_duals scope=db_dim size=qvga view=diag
       )
 
@@ -125,7 +124,7 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! <matrix-2x9> \c archimedean_duals polyhedra data table columns definition.
+//! <map> \c archimedean_duals polyhedra data table columns definition.
 //! \hideinitializer
 dtc_polyhedra_archimedean_duals =
 [
@@ -140,7 +139,7 @@ dtc_polyhedra_archimedean_duals =
   ["e", "edges"]
 ];
 
-//! <matrix-9xR> \c archimedean_duals polyhedra data table rows.
+//! \<table> \c archimedean_duals polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_archimedean_duals =
 [
@@ -2856,8 +2855,8 @@ BEGIN_SCOPE autostat;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 END_SCOPE;
@@ -2868,6 +2867,9 @@ BEGIN_SCOPE db;
 BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <units/coordinate.scad>;
+    include <tools/align.scad>;
+    include <tools/polytope.scad>;
     include <database/geometry/polyhedra/archimedean_duals.scad>;
 
     config = 0;
@@ -2905,7 +2907,7 @@ BEGIN_SCOPE dim;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
 
     views     name "views" views "diag";
     defines   name "ids" define "id"
@@ -2928,13 +2930,13 @@ BEGIN_SCOPE dim;
     variables add_opts_combine "views ids";
     variables add_opts "-D config=0 --viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" script_new.mfs;
+    include --path "${INCLUDE_PATH}" scr_new_mf.mfs;
 
-    include --path "${INCLUDE_PATH}" config_stl.mfs;
+    include --path "${INCLUDE_PATH}" var_gen_stl.mfs;
     variables add_opts_combine "ids";
     variables add_opts "-D config=1";
 
-    include --path "${INCLUDE_PATH}" script_app.mfs;
+    include --path "${INCLUDE_PATH}" scr_app_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 END_SCOPE;

@@ -1,0 +1,64 @@
+/+
+
+  Output list of required includes files for current file.
+
+  defined include requirements as follows:
+
+  \amu_define includes_required_add
+  (
+    path/dependent1.scad
+    path/to/dependent2.scad
+    path/to/more/dependent3.scad
+  )
+
+ +/
+
+  /+ base include file +/
+  \amu_define includes_required_base (omdl-base.scad)
+  \amu_shell includes_required_base_present ("grep ${FILE_NAME} ${includes_required_base}")
+
+  /+ add specified includes to base if defined +/
+  \amu_if includes_required ( -d ${includes_required_add} )
+  {
+    ${includes_required_base}
+    ${includes_required_add}
+  }
+  else
+  {
+    ${includes_required_base}
+  }
+  endif
+
+  /+ create list of include dependencies +/
+  \amu_if includes_required ( -w ${includes_required_base_present} )
+  {
+    ${includes_required}
+  }
+  else
+  {
+    ${includes_required}
+    ${FILE_NAME}
+  }
+  endif
+
+  /+ strip newlines from list +/
+  \amu_file includes_required (text="${includes_required}" separator=" " ++rmnl ++read)
+
+  /+ define new-line +/
+  \amu_define amu_NL
+  (
+  )
+
+  /+ output requirements table +/
+  | Requires: |
+  |:----------|
+  \amu_foreach
+  (
+    var="x"
+    words="${includes_required}"
+    text="| include <\${x}>; |"
+    separator="${amu_NL}"
+  )
+  \endcode
+
+/+ end of file  +/

@@ -1,8 +1,8 @@
-//! General and other category tools.
+//! Electric battery documentation.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2019
+  \date   2018-2023
 
   \copyright
 
@@ -27,10 +27,10 @@
 
   \details
 
-    \amu_define group_name  (General)
-    \amu_define group_brief (General and other category tools.)
+    \amu_define group_name  (Battery)
+    \amu_define group_brief (Electric battery specifications.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -38,34 +38,20 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/group_in_parent.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
 
-//! Conditionally apply the convex hull transformation.
 /***************************************************************************//**
-  \param    c <boolean> conditional.
+  \addtogroup \amu_eval(${group})
 
   \details
 
-    When \p c == \b true, apply the transformation to the child object,
-    otherwise return the object unmodified.
-*******************************************************************************/
-module hull_if
-(
-  c = false
-)
-{
-  if ( c )
-    hull()
-    children();
-  else
-    children();
-}
+    General information on electric batteries is available at [wikipedia].
 
-//! @}
-//! @}
+  [wikipedia]: https://en.wikipedia.org/wiki/Electric_battery
+*******************************************************************************/
 
 //----------------------------------------------------------------------------//
 // end of file

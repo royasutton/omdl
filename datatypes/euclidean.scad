@@ -1,4 +1,4 @@
-//! Vector algebra mathematical functions.
+//! Tests and operations for Euclidean 3d space.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Vector Algebra)
-    \amu_define group_brief (Algebraic operations on Euclidean vectors.)
+    \amu_define group_name  (Euclidean)
+    \amu_define group_brief (Tests and operations for Euclidean 3d space.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -49,6 +49,7 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/includes_required.amu)
 
   \details
 
@@ -1294,12 +1295,12 @@ BEGIN_SCOPE validate;
     // set 5: plane and pnorm
     for (vid=run_ids) run("plane_to_normal",vid) test( "plane_to_normal", plane_to_normal([gv(vid,0),gv(vid,1)]), vid, true );
 
-    // end-of-tests
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

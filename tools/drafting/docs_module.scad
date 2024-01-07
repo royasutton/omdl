@@ -39,6 +39,21 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent.amu)
+
+  /+
+    remove this file and add draft-base.scad file as required include
+  +/
+  \amu_define FILE_NAME ()
+  \amu_define includes_required_add
+  (
+    units/length.scad
+    units/angle.scad
+    tools/align.scad
+    tools/operation_cs.scad
+    tools/polytope.scad
+    ${PATH_NAME}/draft-base.scad
+  )
+  \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -56,19 +71,12 @@
     scale as needed for the sheet size and target output page. (5)
     Finally print or save a PDF file.
 
-    \b Example
+    \amu_define example_name  (Drafting)
+    \amu_define image_views   (top)
+    \amu_define image_size    (uxga)
+    \amu_define html_image_w  (768)
 
-    \amu_scope  mfscript (index=1)
-    \amu_define img_conf (2048x1536_top)
-
-    \amu_image (caption="Result (png)" file="${mfscript}_${img_conf}.png" width=640)
-    \amu_image (caption="Result (svg)" file="${mfscript}.svg" width=640)
-
-    \b Script
-
-    \dontinclude \amu_eval(${mfscript}).scad
-    \skip include
-    \until // EOS
+    \amu_include (include/amu/table_scad_diagram.amu)
 
   [LibreCAD]: https://librecad.org
 *******************************************************************************/
@@ -78,9 +86,13 @@
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE dim;
+BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <units/length.scad>;
+    include <units/angle.scad>;
+    include <tools/align.scad>;
+    include <tools/operation_cs.scad>;
     include <tools/drafting/draft-base.scad>;
 
     length_unit_base = "mm";
@@ -229,21 +241,20 @@ BEGIN_SCOPE dim;
       }
     }
 
-    // EOS
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
     table_unset_all sizes;
 
-    images    name "sizes" aspect "4:3" wsizes "2048";
+    images    name "sizes" types "uxga";
     views     name "views" distance "600" views "top";
-    variables add_opts_combine "views";
 
-    include --path "${INCLUDE_PATH}" script_new.mfs;
+    variables set_opts_combine "sizes views";
+    variables add_opts "--autocenter";
 
-    include --path "${INCLUDE_PATH}" config_svg.mfs;
-    include --path "${INCLUDE_PATH}" script_app.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

@@ -94,6 +94,11 @@ module draft_in_layers
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       draft_sheet();
@@ -181,6 +186,11 @@ module draft_move
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       draft_sheet( sheet=[5, [5, 4, 5, 5, 25]] );
@@ -327,7 +337,7 @@ module draft_sheet
     }
 
     //
-    // feild grid
+    // field grid
     //
     grid_w = defined_e_or(defined_or(grid, glc), 0, defined_or(grid, glc));
     if ( grid_w )
@@ -404,6 +414,11 @@ module draft_sheet
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       draft_axes([[-10,100], [-10,60]], w=[1/2, 3], s=[2, 1], a=[0, [1,1,2,2]], ts=5);
@@ -534,6 +549,11 @@ module draft_axes
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       draft_ruler();
@@ -622,8 +642,8 @@ module draft_ruler
 
 //! Construct a text table that is populated by rows and columns.
 /***************************************************************************//**
-  \param    map <matrix-2xN> A table definition map.
-  \param    fmap <matrix-2xN> A table format map.
+  \param    map <map> A table definition map.
+  \param    fmap <map> A table format map.
 
   \param    zp <integer-list-2|integer> The center coordinate scaler. A
             list [zpx, zpy] of decimals or a single decimal for (zpx=zpy).
@@ -638,6 +658,11 @@ module draft_ruler
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       map=
@@ -786,7 +811,7 @@ module draft_table
             is <string|string-list>, a single or multi-line string for
             the corresponding zone.
 
-  \param    map <matrix-2xN> A zone table definition map.
+  \param    map <map> A zone table definition map.
 
   \param    zp <integer-list-2|integer> The center coordinate scaler. A
             list [zpx, zpy] of decimals or a single decimal for (zpx=zpy).
@@ -802,6 +827,11 @@ module draft_table
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       text=
@@ -969,6 +999,11 @@ module draft_ztable
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       for (i = [[-40, "left", [1,0]], [0, "center", [4,0]], [40, "right", 3]] )

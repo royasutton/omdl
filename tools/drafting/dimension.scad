@@ -93,6 +93,11 @@
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       draft_dim_leader (l1=25, v2=0, t="1");
@@ -250,6 +255,11 @@ module draft_dim_leader
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       draft_dim_line (p1=[0,0], p2=[100,0], u="cm");
@@ -460,6 +470,11 @@ module draft_dim_line
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       draft_arc (r=50, v1=90, s=2);
@@ -668,6 +683,11 @@ module draft_dim_radius
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       draft_dim_angle (r=50, v1=0, v2=angle(pi/4+pi/16,"r"), u="dms");
@@ -852,6 +872,11 @@ module draft_dim_angle
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       draft_arc (r=25, w=1/4);

@@ -1,4 +1,4 @@
-//! Base-2 binary math functions and operations.
+//! Base-2 binary numbers tests and operations.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Binary Operations)
-    \amu_define group_brief (Base-2 binary math functions and operations.)
+    \amu_define group_name  (Binary Numbers)
+    \amu_define group_brief (Base-2 binary numbers tests and operations.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -49,6 +49,7 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/includes_required.amu)
 
   \details
 
@@ -601,12 +602,12 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("binary_lsh",vid) test( "binary_lsh", binary_lsh(gv(vid,0)), vid );
     for (vid=run_ids) run("binary_rsh",vid) test( "binary_rsh", binary_rsh(gv(vid,0)), vid );
 
-    // end-of-tests
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

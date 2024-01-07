@@ -4,9 +4,12 @@
 $(eval $(call clear-local-module))
 #------------------------------------------------------------------------------#
 
-local_path        :=  database/component/mechanical
+local_path        :=  database/component/battery
 
-local_library     :=  docs_module
+local_library     :=  docs_module \
+                      \
+                      button \
+                      cylindrical
 
 local_release_add :=
 

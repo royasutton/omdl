@@ -9,11 +9,10 @@ local_path        :=  math
 local_library     :=  docs_module \
                       \
                       linear_algebra \
-                      vector_algebra \
                       \
-                      binary \
-                      polygon_primitives \
+                      polygon_shapes \
                       polytope \
+                      \
                       triangle \
                       utility
 

@@ -1,8 +1,8 @@
-//! Electrical Module documentation.
+//! 3d Parts Module documentation.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2018-2023
+  \date   2024
 
   \copyright
 
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Electrical)
-    \amu_define group_brief (Electrical component specifications.)
+    \amu_define group_name  (3d Parts)
+    \amu_define group_brief (3d parts, part generators, and small assemblies.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

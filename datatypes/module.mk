@@ -17,6 +17,9 @@ local_library     :=  docs_module \
                       list_operate \
                       list_compare \
                       \
+                      euclidean \
+                      binary \
+                      \
                       map \
                       table
 

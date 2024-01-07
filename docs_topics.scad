@@ -81,17 +81,21 @@
 /***************************************************************************//**
   \page lu How to use library modules
 
+    The \em standard library includes are wrapped into a base include
+    file. There has been an attempt to include only the smallest set
+    required or commonly used library features. All other modules must
+    be manually included as needed prior to use.
+
     \amu_shell omdl_base    ( "grep include omdl-base.scad | awk -v FS='(<|>)' '{print $2}'" ++rmnl )
     \amu_word omdl_base_cnt ( words="${omdl_base}" t=" " r="^" ++count)
     \amu_word omdl_base     ( words="${omdl_base}" t=" " r="^" ++list)
     \amu_table
     (
-      id="omdl_base" table_caption="files included by omdl-base.scad"
-      columns="4" column_headings="c1^c2^c3^c4"
-      cell_texts="${omdl_base}"
+      id="omdl_base" table_caption="standard base includes (omdl-base.scad)"
+      columns="3" cell_texts="${omdl_base}"
     )
 
-    To use the library, include \c omdl-base.scad:
+    To include the base library modules, use the wrapper as follows:
 
     \code{.C}
     include <omdl-base.scad>;
@@ -99,9 +103,11 @@
     ...
     \endcode
 
-    This will read all of the \amu_eval(${omdl_base_cnt}) files listed
-    in table above. Source not listed in this table must be included
-    manually prior to use. See  the \ref starting example.
+    This will read the \b \amu_eval(${omdl_base_cnt}) files listed in
+    table above. Library modules not listed, must be explicitly
+    included prior to use. The include requirements are outlined at the
+    start of the detailed description for each module. See the example
+    script in \ref tools_drafting for more information.
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -122,7 +128,7 @@
 
     \li \subpage dt_base
     \li \subpage dt_index
-    \li \subpage dt_vector
+    \li \subpage dt_euclidean
 *******************************************************************************/
 
 //
@@ -178,6 +184,8 @@
     | [index]       | a list index sequence                             |
     | [datastruct]  | a defined data structure                          |
     | [data]        | an arbitrary data structure                       |
+    | [map]         | data store of keys mapped to values               |
+    | [table]       | data store of values arranged in rows and columns |
 
     When a list has an expected number of elements '-n', the expected
     number is appended. When there is a range of expected elements, the
@@ -214,6 +222,9 @@
   [index]: \ref dt_index
   [datastruct]: https://en.wikipedia.org/wiki/Data_structure
   [data]: https://en.wikipedia.org/wiki/Data
+
+  [map]: https://en.wikipedia.org/wiki/Associative_array
+  [table]: https://en.wikipedia.org/wiki/Table_(information)
 
 *******************************************************************************/
 
@@ -253,11 +264,11 @@
     \endcode
 *******************************************************************************/
 
-// Vector algebra types
+// Euclidean space data types
 /***************************************************************************//**
-  \page dt_vector Vector algebra types
+  \page dt_euclidean Euclidean space data types
 
-    For [geometric] specifications and [geometric algebra], omdl adds
+    For [geometric] specifications and [geometric algebra], omdl adopts
     the following type specifications and conventions.
 
     | name        | description                                       |

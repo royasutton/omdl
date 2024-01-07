@@ -125,7 +125,7 @@ function draft_get_default
   k
 ) = map_get_value(draft_defaults_map, k);
 
-//! <matrix-2xN> A drafting configuration defaults map (style1).
+//! <map> A drafting configuration defaults map (style1).
 /***************************************************************************//**
   \amu_scope scope (index=1)
   \amu_file mh (file="${scope}.log" first=1 last=1 ++rmecho ++rmnl ++read)
@@ -258,7 +258,7 @@ draft_defaults_style1_map =
   ["layers-dim",                        ["all", "dim"]]
 ];
 
-//! <matrix-2xN> Drafting configuration defaults map.
+//! <map> Drafting configuration defaults map.
 /***************************************************************************//**
   \details
 
@@ -303,7 +303,7 @@ function draft_sheet_get_size
       ci=ci
     );
 
-//! <matrix-2x3> sheet sizes data table columns definition.
+//! <map> sheet sizes data table columns definition.
 /***************************************************************************//**
   \hideinitializer
   \private
@@ -313,7 +313,7 @@ draft_sheet_size_tc =
   ["id", "sheet size"], ["sdx", "sheet x-dimension"], ["sdy", "sheet y-dimension"]
 ];
 
-//! <matrix-3xR> sheet sizes data table rows.
+//! \<table> sheet sizes data table rows.
 /***************************************************************************//**
   \hideinitializer
   \private
@@ -362,7 +362,7 @@ function draft_sheet_get_config
       ci=ci
     );
 
-//! <matrix-2xC> Sheet configuration data table columns definition.
+//! <map> Sheet configuration data table columns definition.
 /***************************************************************************//**
   \hideinitializer
   \private
@@ -393,7 +393,7 @@ draft_sheet_config_tc =
   ["olc", "origin line and arrow config"]
 ];
 
-//! <matrix-CxR> Sheet configuration data table rows.
+//! \<table> Sheet configuration data table rows.
 /***************************************************************************//**
   \hideinitializer
   \private
@@ -445,7 +445,7 @@ draft_sheet_config_tr =
   ]
 ];
 
-//! <matrix-2xN> The default title block definition map.
+//! <map> The default title block definition map.
 /***************************************************************************//**
   \details
 
@@ -566,7 +566,7 @@ draft_title_block_map =
   ]
 ];
 
-//! <matrix-2xN> Table format map definitions; common.
+//! <map> Table format map definitions; common.
 /***************************************************************************//**
   \hideinitializer
   \private
@@ -603,7 +603,7 @@ draft_table_format_common_map =
   ]
 ];
 
-//! <matrix-2xN> Table format map definitions; centered-centered-centered justified.
+//! <map> Table format map definitions; centered-centered-centered justified.
 /***************************************************************************//**
   \hideinitializer
 *******************************************************************************/
@@ -627,7 +627,7 @@ concat
   ]
 );
 
-//! <matrix-2xN> Table format map definitions; centered-left-left justified.
+//! <map> Table format map definitions; centered-left-left justified.
 /***************************************************************************//**
   \hideinitializer
 *******************************************************************************/
@@ -651,7 +651,7 @@ concat
   ]
 );
 
-//! <matrix-2xN> Table format map definitions; centered-right-right justified.
+//! <map> Table format map definitions; centered-right-right justified.
 /***************************************************************************//**
   \hideinitializer
 *******************************************************************************/
@@ -686,6 +686,8 @@ concat
 BEGIN_SCOPE config;
   BEGIN_SCOPE defaults;
     BEGIN_OPENSCAD;
+      include <units/angle.scad>;
+      include <units/length.scad>;
       include <omdl-base.scad>;
       include <tools/drafting/draft-base.scad>;
       length_unit_base = "mm";
@@ -694,14 +696,16 @@ BEGIN_SCOPE config;
     END_OPENSCAD;
 
     BEGIN_MFSCRIPT;
-      include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
-      include --path "${INCLUDE_PATH}" script_std.mfs;
+      include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+      include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
     END_MFSCRIPT;
   END_SCOPE;
 
   BEGIN_SCOPE sheet;
     BEGIN_SCOPE in;
       BEGIN_OPENSCAD;
+        include <units/angle.scad>;
+        include <units/length.scad>;
         include <omdl-base.scad>;
         include <tools/drafting/draft-base.scad>;
         length_unit_base = "in";
@@ -710,13 +714,15 @@ BEGIN_SCOPE config;
       END_OPENSCAD;
 
       BEGIN_MFSCRIPT;
-        include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
-        include --path "${INCLUDE_PATH}" script_std.mfs;
+        include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+        include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
       END_MFSCRIPT;
     END_SCOPE;
 
     BEGIN_SCOPE mm;
       BEGIN_OPENSCAD;
+        include <units/angle.scad>;
+        include <units/length.scad>;
         include <omdl-base.scad>;
         include <tools/drafting/draft-base.scad>;
         length_unit_base = "mm";
@@ -725,8 +731,8 @@ BEGIN_SCOPE config;
       END_OPENSCAD;
 
       BEGIN_MFSCRIPT;
-        include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
-        include --path "${INCLUDE_PATH}" script_std.mfs;
+        include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+        include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
       END_MFSCRIPT;
     END_SCOPE;
   END_SCOPE;

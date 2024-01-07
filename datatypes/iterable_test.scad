@@ -49,6 +49,7 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/includes_required.amu)
 
   \details
 
@@ -417,12 +418,12 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "all_len_2", 1, all_len( v1(db,id), 2 ) );
     for (id=test_ids) table_validate( db, id, "all_len_3", 1, all_len( v1(db,id), 3 ) );
 
-    // end-of-tests
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

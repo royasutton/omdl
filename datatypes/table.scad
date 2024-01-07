@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Tables Operations)
+    \amu_define group_name  (Tables)
     \amu_define group_brief (Table data type and operations.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
@@ -39,6 +39,7 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/includes_required.amu)
 
   \details
 
@@ -56,7 +57,7 @@
 
 //! Get the table row index that matches a table row identifier.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
+  \param    r \<table> The table data matrix (C-columns x R-rows).
   \param    ri <string> The row identifier.
 
   \returns  <integer> The row index where the identifier exists.
@@ -70,7 +71,7 @@ function table_get_row_index
 
 //! Get the table row that matches a table row identifier.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
+  \param    r \<table> The table data matrix (C-columns x R-rows).
   \param    ri <string> The row identifier.
 
   \returns  <list-C> The table row where the row identifier exists.
@@ -84,7 +85,7 @@ function table_get_row
 
 //! Get the table column index that matches a table column identifier.
 /***************************************************************************//**
-  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    c <map> The table column matrix (2 x C-columns).
   \param    ci <string> The column identifier.
 
   \returns  <integer> The column index where the identifier exists.
@@ -98,7 +99,7 @@ function table_get_column_index
 
 //! Get the table column that matches a table column identifier.
 /***************************************************************************//**
-  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    c <map> The table column matrix (2 x C-columns).
   \param    ci <string> The column identifier.
 
   \returns  <list-2> The table column where the column identifier exists.
@@ -112,8 +113,8 @@ function table_get_column
 
 //! Get the table cell value for a specified row and column identifier.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    r \<table> The table data matrix (C-columns x R-rows).
+  \param    c <map> The table column matrix (2 x C-columns).
   \param    ri <string> The row identifier.
   \param    ci <string> The column identifier.
 
@@ -130,8 +131,8 @@ function table_get_value
 
 //! Form a list of a select column across all table rows.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    r \<table> The table data matrix (C-columns x R-rows).
+  \param    c <map> The table column matrix (2 x C-columns).
   \param    ci <string> The column identifier.
 
   \returns  \<list> The list of a select column across all rows.
@@ -148,7 +149,7 @@ function table_get_columns
 
 //! Form a list of all table row identifiers.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
+  \param    r \<table> The table data matrix (C-columns x R-rows).
 
   \returns  \<list> The list of all row identifiers.
 
@@ -167,7 +168,7 @@ function table_get_row_ids
 
 //! Form a list of all table column identifiers.
 /***************************************************************************//**
-  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    c <map> The table column matrix (2 x C-columns).
 
   \returns  \<list> The list of all column identifiers.
 
@@ -183,8 +184,8 @@ function table_get_column_ids
 
 //! Test the existence of a table row and column identifier.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    r \<table> The table data matrix (C-columns x R-rows).
+  \param    c <map> The table column matrix (2 x C-columns).
   \param    ri <string> The row identifier.
   \param    ci <string> The column identifier.
 
@@ -204,8 +205,8 @@ function table_exists
 
 //! Get the size of a table.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    r \<table> The table data matrix (C-columns x R-rows).
+  \param    c <map> The table column matrix (2 x C-columns).
 
   \returns  <integer> The table size.
 
@@ -226,8 +227,8 @@ function table_get_size
 
 //! Create a new matrix from select rows and columns of a table.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    r \<table> The table data matrix (C-columns x R-rows).
+  \param    c <map> The table column matrix (2 x C-columns).
   \param    rs <string-list> A list of selected row identifiers.
   \param    cs <string-list> A list of selected column identifiers.
 
@@ -261,8 +262,8 @@ function table_get_copy
 
 //! Sum select rows and columns of a table.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    r \<table> The table data matrix (C-columns x R-rows).
+  \param    c <map> The table column matrix (2 x C-columns).
   \param    rs <string-list> A list of selected row identifiers.
   \param    cs <string-list> A list of selected column identifiers.
 
@@ -278,8 +279,8 @@ function table_get_sum
 
 //! Perform basic format checks on a table and return errors.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    r \<table> The table data matrix (C-columns x R-rows).
+  \param    c <map> The table column matrix (2 x C-columns).
 
   \returns  <list-N> A list of table format errors.
 
@@ -341,8 +342,8 @@ function table_errors
 
 //! Perform basic format checks on a table and output errors to console.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    r \<table> The table data matrix (C-columns x R-rows).
+  \param    c <map> The table column matrix (2 x C-columns).
   \param    verbose <boolean> Be verbose during check.
 
   \details
@@ -420,8 +421,8 @@ module table_check
 
 //! Dump a table to the console.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    r \<table> The table data matrix (C-columns x R-rows).
+  \param    c <map> The table column matrix (2 x C-columns).
   \param    rs <string-list> A list of selected row identifiers.
   \param    cs <string-list> A list of selected column identifiers.
   \param    number <boolean> Number the rows.
@@ -442,7 +443,7 @@ module table_dump
   number = true
 )
 {
-  // determine maximum feild lengths
+  // determine maximum field lengths
   maxr0 = max( [for (r_iter = r) len( first(r_iter) )] ) + 1;
   maxc0 = max( [for (c_iter = c) len( first(c_iter) )] ) + 1;
   maxc1 = max( [for (c_iter = c) len( c_iter[1] )] ) + 1;
@@ -499,8 +500,8 @@ module table_dump
 
 //! Dump table getter functions to the console.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    r \<table> The table data matrix (C-columns x R-rows).
+  \param    c <map> The table column matrix (2 x C-columns).
   \param    tr <string> The table data matrix variable name.
   \param    tc <string> The table column matrix variable name.
   \param    ri <string|value> The row identifier variable name or value.
@@ -698,14 +699,15 @@ verbose = false
 
 //! Write formatted map entries to the console.
 /***************************************************************************//**
-  \param    r <matrix-CxR> The table data matrix (C-columns x R-rows).
-  \param    c <matrix-2xC> The table column matrix (2 x C-columns).
+  \param    r \<table> The table data matrix (C-columns x R-rows).
+  \param    c <map> The table column matrix (2 x C-columns).
   \param    rs <string-list> A list of selected row identifiers.
   \param    cs <string-list> A list of selected column identifiers.
   \param    number <boolean> Number the rows.
   \param    heading_id <boolean> Output table heading identifiers.
-  \param    heading_info <boolean> Output table heading descriptions.
-  \param    fs <string> A feild separator.
+  \param    heading_text <boolean> Output table heading description text.
+  \param    fs <string> A field separator.
+  \param    thn <string> Column heading for numbered row output.
   \param    index_tags <string-list> List of html formatting tags.
   \param    row_id_tags <string-list> List of html formatting tags.
   \param    value_tags <string-list> List of html formatting tags.
@@ -752,44 +754,35 @@ module table_write
   cs,
   number = false,
   heading_id = true,
-  heading_info = false,
+  heading_text = false,
   fs = "^",
+  thn = "idx",
   index_tags = empty_lst,
   row_id_tags = ["b"],
   value_tags = empty_lst
 )
 {
-  // heading identifiers
-  th_id_text =
+  // heading identifiers and/or text descriptions
+  th_text =
   [
-    number ? "-" : empty_str,
-    for ( c_iter = c )
-      if
-      ( // when column selected
-        is_undef( cs ) ||
-        is_number( first( search( c_iter, cs, 1, 0 ) ) )
-      )
-      first(c_iter)
-  ];
-  if ( heading_id )
-    // reformat so that 'fs' exists only between feilds
-    log_echo ( strl([for ( i = headn(th_id_text) ) str(i,fs), last(th_id_text)]) );
+    if(number == true)
+      thn,
 
-  // heading descriptions
-  th_info_text =
-  [
-    number ? "-" : empty_str,
     for ( c_iter = c )
       if
       ( // when column selected
         is_undef( cs ) ||
         is_number( first( search( c_iter, cs, 1, 0 ) ) )
       )
-      second(c_iter)
+        (heading_id && heading_text) ? str(second(c_iter)," (", first(c_iter), ")")
+      : (heading_id                ) ? first(c_iter)
+      : (              heading_text) ? second(c_iter)
+      : empty_str
   ];
-  if ( heading_info )
-    // reformat so that 'fs' exists only between feilds
-    log_echo ( strl([for ( i = headn(th_info_text) ) str(i,fs), last(th_info_text)]) );
+
+  if ( heading_id  || heading_text )
+    // reformat so that 'fs' exists only between fields
+    log_echo ( strl([for ( i = headn(th_text) ) str(i,fs), last(th_text)]) );
 
   // row data
   for ( r_iter = r )
@@ -802,9 +795,8 @@ module table_write
     {
       tdr_text =
       [
-        (number == true) ?
-          str(strl_html([table_get_row_index(r, r_iter)], p=[index_tags]),fs)
-        : empty_str,
+        if (number == true)
+          str(strl_html([table_get_row_index(r, r_iter)], p=[index_tags]),fs),
 
         strl_html(first(r_iter), p=[row_id_tags]), fs,
         for ( c_iter = tailn(c, n=1) )
@@ -832,6 +824,7 @@ module table_write
 BEGIN_SCOPE example1;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <units/length.scad>;
 
     base_unit_length = "mm";
 
@@ -882,14 +875,15 @@ BEGIN_SCOPE example1;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 
 BEGIN_SCOPE example2;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <units/length.scad>;
 
     base_unit_length = "mm";
 
@@ -918,8 +912,8 @@ BEGIN_SCOPE example2;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

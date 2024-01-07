@@ -39,6 +39,7 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/includes_required.amu)
 
   \details
 
@@ -175,6 +176,7 @@ function angle_inv
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <units/angle.scad>;
 
     angle_unit_base = "d";
     angle_unit_default = "r";
@@ -204,12 +206,12 @@ BEGIN_SCOPE example;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
 
     defines   name "units" define "angle_unit_base" strings "r d dms";
     variables add_opts_combine "units";
 
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

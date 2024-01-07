@@ -39,6 +39,7 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -83,7 +84,7 @@ validation_skip = [number_min, number_max, number_inf];
 
       \dontinclude \amu_scope(index=1).scad
       \skip include
-      \until end-of-example
+      \until end_include
 
     \b Result \b 1 \include \amu_scope(index=1).log
 *******************************************************************************/
@@ -151,8 +152,8 @@ module validate_skip( fn ) { validate_log ( str("ignore: '", fn, "'") ); }
 
 //! Create data structure for related table validation functions.
 /***************************************************************************//**
-  \param    tr <matrix-CxR> The test data table rows.
-  \param    gr <matrix-CxR> The expected result data table rows.
+  \param    tr \<table> The test data table rows.
+  \param    gr \<table> The expected result data table rows.
 
   \returns  <datastruct> A structure used with the related table
             validation functions.
@@ -285,7 +286,7 @@ module table_validate_start( db, verbose=false )
 
       \dontinclude \amu_scope(index=2).scad
       \skip include
-      \until end-of-example
+      \until end_include
 
     \b Result \b 2 \include \amu_scope(index=2).log
 *******************************************************************************/
@@ -330,7 +331,7 @@ module table_validate
 
 //! Create data structure for related map validation functions.
 /***************************************************************************//**
-  \param    m <matrix-2xN> The test data map.
+  \param    m <map> The test data map.
   \param    fn <string> The function name.
 
   \returns  <datastruct> A structure used with the related map
@@ -466,7 +467,7 @@ module map_validate_start( db, verbose=false )
 
       \dontinclude \amu_scope(index=3).scad
       \skip include
-      \until end-of-example
+      \until end_include
 
     \b Result \b 3 \include \amu_scope(index=3).log
 *******************************************************************************/
@@ -566,12 +567,12 @@ BEGIN_SCOPE example1;
     log_type( "EXAMPLE 3", "almost equal to 4 digits" );
     log_info( validate("test-d", tvae1, "almost", tvae2, 4) );
 
-    // end-of-example
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 
@@ -616,12 +617,12 @@ BEGIN_SCOPE example_table;
     for (id=test_ids) table_validate( db, id, "is_string", 1, is_string( v1(db, id) ) );
     for (id=test_ids) table_validate( db, id,   "is_list", 1,   is_list( v1(db, id) ) );
 
-    // end-of-example
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 
@@ -652,12 +653,12 @@ BEGIN_SCOPE example_map;
     for ( id = map_validate_get_ids( db ) )
       map_validate( db, id, 2, defined_or ( v1(db, id), v2(db, id) ) );
 
-    // end-of-example
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

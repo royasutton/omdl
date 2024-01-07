@@ -40,8 +40,9 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/includes_required.amu)
 
-  \amu_include (include/amu/example_dim_table.amu)
+  \amu_include (include/amu/table_example_dim.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -114,6 +115,7 @@ module extrude_rotate_tre
     lx = defined_e_or(l, 0, ld);
     ly = defined_e_or(l, 1, ld);
 
+    // corner rotation
     for
     (
       i = [
@@ -131,6 +133,7 @@ module extrude_rotate_tre
       children();
     }
 
+    // linear extrusion
     for
     (
       i = [
@@ -144,7 +147,8 @@ module extrude_rotate_tre
     {
       translate([i[0], i[1], 0])
       rotate([90, 0, i[2]])
-      linear_extrude(height=i[3])
+      translate([0, 0, -eps])
+      linear_extrude(height=i[3] + eps*2)
       rotate([0, 0, pa])
       children();
     }
@@ -156,14 +160,17 @@ module extrude_rotate_tre
   \param    h <decimal-list-3:9|decimal> A list of decimals or a single
             decimal.
   \param    center <boolean> Center extrusion about origin.
+  \param    c <boolean> conditional.
 
   \details
 
-    When \p h is a decimal, the shape is extruded linearly as normal.
-    To scale the upper and lower slices of the extrusion, \p h must be
-    a list with a minimum of three decimal values as described in the
-    following table. For symmetrical scaling, shape must be centered
-    about origin.
+    When \p c is \b true, apply the transformation to the children
+    objects, otherwise return the children unmodified. When \p h is a
+    decimal, the shape is extruded linearly as normal. To scale the
+    upper and lower slices of the extrusion, \p h must be a list with a
+    minimum of three decimal values as described in the following
+    table. For symmetrical scaling, shape must be centered about
+    origin.
 
      h[n] | default | description
     :----:|:-------:|:---------------------------------------
@@ -188,10 +195,11 @@ module extrude_rotate_tre
 module extrude_linear_uls
 (
   h,
-  center = false
+  center = false,
+  c = true
 )
 {
-  if ( is_undef(h) )
+  if ( is_undef(h) || (c == false) )
   {
     children();
   }
@@ -205,8 +213,8 @@ module extrude_linear_uls
   {
     z = h[0];                                   // total height
 
-    n1 = (len(h) >= 3) ? max(h[1], 0)  : 0; // number of scaled-slices
-    z1 = (len(h) >= 3) ? abs(h[2])/100 : 0; // z scale fraction
+    n1 = (len(h) >= 3) ? max(h[1], 0)  : 0;     // number of scaled-slices
+    z1 = (len(h) >= 3) ? abs(h[2])/100 : 0;     // z scale fraction
     x1 = (len(h) >= 4) ?     h[3] /100 : -z1;   // x scale fraction
     y1 = (len(h) >= 5) ?     h[4] /100 : x1;    // y scale fraction
 
@@ -275,7 +283,7 @@ BEGIN_SCOPE dim;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
 
     views     name "views" views "diag";
     defines   name "shapes" define "shape"
@@ -287,7 +295,7 @@ BEGIN_SCOPE dim;
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

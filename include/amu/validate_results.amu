@@ -18,7 +18,7 @@
   \page tv_\amu_eval(${group})_s Script
     \dontinclude \amu_eval(${tv_scope}).scad
     \skip include
-    \until end-of-tests
+    \until end_include
 
   \page tv_\amu_eval(${group})_r Results
 

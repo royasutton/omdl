@@ -290,8 +290,8 @@ function draft_sheet_get_zone
   \param    ix <integer> A table column vertical line index.
   \param    iy <integer> A table row horizontal line index.
 
-  \param    map <matrix-2xN> A table definition map.
-  \param    fmap <matrix-2xN> A table format map.
+  \param    map <map> A table definition map.
+  \param    fmap <map> A table format map.
 
   \returns  <point-2d> The table column and row intersection coordinate
             point.
@@ -352,8 +352,8 @@ function draft_table_get_point
   \param    limits <boolean> Return cell limits rather than coordinates.
   \param    window <boolean> Return cell window rather than point.
 
-  \param    map <matrix-2xN> A table definition map.
-  \param    fmap <matrix-2xN> A table format map.
+  \param    map <map> A table definition map.
+  \param    fmap <map> A table format map.
 
   \returns  <datastruct> The table cell coordinates.
 
@@ -439,8 +439,8 @@ function draft_table_get_cell
 
   \param    dfmt <datastruct> The default text format.
 
-  \param    map <matrix-2xN> A table definition map.
-  \param    fmap <matrix-2xN> A table format map.
+  \param    map <map> A table definition map.
+  \param    fmap <map> A table format map.
 
   \details
 
@@ -545,7 +545,7 @@ module draft_table_text
   \param    ix <integer> A ztable column vertical line index.
   \param    iy <integer> A ztable row horizontal line index.
 
-  \param    map <matrix-2xN> A ztable definition map.
+  \param    map <map> A ztable definition map.
 
   \returns  <point-2d> The ztable column and row intersection coordinate
             point.
@@ -585,7 +585,7 @@ function draft_ztable_get_point
   \param    limits <boolean> Return zone limits rather than coordinates.
   \param    window <boolean> Return zone window rather than point.
 
-  \param    map <matrix-2xN> A ztable definition map.
+  \param    map <map> A ztable definition map.
 
   \returns  <datastruct> The ztable cell coordinates.
 
@@ -668,7 +668,7 @@ function draft_ztable_get_zone
   \param    fmt <datastruct> The text format.
   \param    dfmt <datastruct> The default text format.
 
-  \param    map <matrix-2xN> A ztable definition map.
+  \param    map <map> A ztable definition map.
 
   \details
 
@@ -866,6 +866,11 @@ module draft_line_pp
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       grid = [1, 3/4] * 10;
@@ -931,7 +936,7 @@ module draft_arrow
 
     if ( s1 == 1 )
     { // closed 3-point
-      hull_if( !s2 )
+      hull_cs( !s2 )
       {
         draft_line_pp(pah, ptm, w=w);
         if (binary_bit_is(s3, 0, 0))
@@ -942,13 +947,13 @@ module draft_arrow
     }
     else if ( s1 == 2 )
     { // closed 4-point
-      hull_if( !s2 )
+      hull_cs( !s2 )
       {
         draft_line_pp(pah, pam, w=w);
         if (binary_bit_is(s3, 0, 0))
           { draft_line_pp(ls1[0], ls1[1], w=w); draft_line_pp(ps1, pam, w=w); }
       }
-      hull_if( !s2 )
+      hull_cs( !s2 )
       {
         draft_line_pp(pah, pam, w=w);
         if (binary_bit_is(s3, 1, 0))
@@ -983,7 +988,7 @@ module draft_arrow
     }
     else if ( s1 == 5 )
     { // circle
-      hull_if( !s2 )
+      hull_cs( !s2 )
       for ( ls = sequence_ns( polygon_arc_p( r=al/3, c=pah, fn=$draft_arrow_fn ), 2, 1 ) )
         draft_line_pp(ls[0], ls[1], w=w);
     }
@@ -1053,6 +1058,11 @@ module draft_arrow
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       line = [[0,0], [50,0]];
@@ -1209,6 +1219,11 @@ module draft_line
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       for ( s=[1:2] )
@@ -1275,6 +1290,11 @@ module draft_arc
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       draft_rectangle ([50, 30], s=[4, 3, 2, 5]);
@@ -1338,6 +1358,11 @@ module draft_rectangle
     \amu_openscad (args="--render --o ${auto_file_name}" ++script)
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       pp = length

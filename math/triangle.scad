@@ -39,6 +39,7 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/includes_required.amu)
 
   \amu_define auto_file_debug (false)
   \amu_define auto_file_extensions (svg)
@@ -67,6 +68,11 @@
     \amu_openscad (args="--render --o ${auto_file_name}")
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       s = 10;
@@ -133,6 +139,11 @@ function triangle_ppp2sss
     \amu_openscad (args="--render --o ${auto_file_name}")
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       s = 10;
@@ -196,6 +207,11 @@ function triangle_sas2sss
     \amu_openscad (args="--render --o ${auto_file_name}")
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       s = 10;
@@ -262,6 +278,11 @@ function triangle_asa2sss
     \amu_openscad (args="--render --o ${auto_file_name}")
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       s = 10;
@@ -334,6 +355,11 @@ function triangle_aas2sss
     \amu_openscad (args="--render --o ${auto_file_name}")
     {
       include <omdl-base.scad>;
+      include <units/length.scad>;
+      include <units/angle.scad>;
+      include <tools/align.scad>;
+      include <tools/operation_cs.scad>;
+      include <tools/polytope.scad>;
       include <tools/drafting/draft-base.scad>;
 
       s = 10;

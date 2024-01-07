@@ -49,6 +49,7 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/includes_required.amu)
 
   \details
 
@@ -473,7 +474,7 @@ function select_ci
 
 //! Select a specified mapped value from list of key-value pairs or return a default.
 /***************************************************************************//**
-  \param    v <matrix-2xN> A matrix of N key-value pairs [[key, value], ...].
+  \param    v <map> A matrix of N key-value pairs [[key, value], ...].
   \param    mv \<value> A selection key value.
   \param    l <bool> Last element is default. When \b false, the first
               element is the default.
@@ -1091,12 +1092,12 @@ BEGIN_SCOPE validate;
     validate_skip( "sort_q()" );
     validate_skip( "sort_q2()" );
 
-    // end-of-tests
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

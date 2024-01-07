@@ -38,8 +38,6 @@
       \li the [Polyhedron Database] maintained by [Netlib], and
       \li an [Encyclopedia of Polyhedra] by [George W. Hart].
 
-  \note Include this library file using the \b include statement.
-
   [omdl]: https://github.com/royasutton/omdl
 
   [Anthony Thyssen]: http://www.ict.griffith.edu.au/anthony/anthony.html
@@ -72,7 +70,7 @@
     polyhedra_all.scad contains all polyhedra from all files. Each
     table uses the following column data structure.
 
-    | feild | description         |
+    | field | description         |
     |:-----:|:--------------------|
     | id    | identifier          |
     | n     | name                |
@@ -84,7 +82,7 @@
     | f     | faces               |
     | e     | edges               |
 
-    Use the functions table_get_value() to retrieve feild data as show
+    Use the functions table_get_value() to retrieve field data as show
     in the following example. To see a list of table identifiers
     consider the function table_get_row_ids(), table_get_column_ids(),
     or module table_dump(). See datatypes/table.scad for other
@@ -95,6 +93,8 @@
     \b Example
     \code{.C}
     include <omdl-base.scad>;
+    include <units/coordinate.scad>;
+    include <tools/polytope.scad>;
     include <database/geometry/polyhedra/platonic.scad>;
 
     tc = dtc_polyhedra_platonic;
@@ -129,7 +129,7 @@
 *******************************************************************************/
 //----------------------------------------------------------------------------//
 
-//! <matrix-2x9> \c polyhedra_all polyhedra data table columns definition.
+//! <map> \c polyhedra_all polyhedra data table columns definition.
 //! \hideinitializer
 dtc_polyhedra_polyhedra_all =
 [
@@ -144,7 +144,7 @@ dtc_polyhedra_polyhedra_all =
   ["e", "edges"]
 ];
 
-//! <matrix-9xR> \c polyhedra_all polyhedra data table rows.
+//! \<table> \c polyhedra_all polyhedra data table rows.
 //! \hideinitializer
 dtr_polyhedra_polyhedra_all =
 [
@@ -21509,6 +21509,8 @@ BEGIN_SCOPE db;
 BEGIN_SCOPE autotest;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <units/coordinate.scad>;
+    include <tools/polytope.scad>;
     include <database/geometry/polyhedra/polyhedra_all.scad>;
 
     coordinates_positive_angles = false;
@@ -21585,8 +21587,8 @@ BEGIN_SCOPE autotest;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 END_SCOPE;

@@ -39,6 +39,7 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/includes_required.amu)
 
   \details
 
@@ -391,6 +392,7 @@ function coordinate_scale3d_s2c
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <units/coordinate.scad>;
 
     coordinate_unit_base = "c";
     coordinate_unit_default = "p";
@@ -420,12 +422,12 @@ BEGIN_SCOPE example;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
 
     defines   name "system" define "coordinate_unit_base" strings "c p y s";
     variables add_opts_combine "system";
 
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

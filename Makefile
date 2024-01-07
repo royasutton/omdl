@@ -6,7 +6,7 @@
 #
 ################################################################################
 
-AMU_TOOL_VERSION                  := v3.0
+AMU_TOOL_VERSION                  := v3.2
 
 AMU_TOOL_PREFIX                   := /usr/local/bin/
 AMU_LIB_PATH                      := /usr/local/share/openscad-amu/$(AMU_TOOL_VERSION)
@@ -25,18 +25,30 @@ AMU_PM_COMPONENTS_LOCAL           := modules \
 # AMU_PM_VERBOSE                  := defined
 # AMU_PM_DEBUG                    := defined
 
-# Include asserts announcements
-include $(AMU_PM_COMPONENTS_LOCAL_PATH)/announcements
+#------------------------------------------------------------------------------#
+# Path overrides (for development snapshots, change. ie:)
+# path_openscad                   := openscad-nightly
+# version_checks                  := $(false)
+#------------------------------------------------------------------------------#
+path_openscad                     :=
+path_doxygen                      :=
 
 #------------------------------------------------------------------------------#
 # Design Flow Init (DO NO EDIT THIS SECTION)
 #------------------------------------------------------------------------------#
+# Include asserts announcements
+include $(AMU_PM_COMPONENTS_LOCAL_PATH)/announcements
+
 ifeq ($(wildcard $(AMU_PM_INIT)),)
   $(info $(call ANNOUNCE_AMU_INIT,AMU_PM_INIT,$(AMU_PM_INIT)))
   $(error unable to continue.)
 else
   include $(AMU_PM_INIT)
 endif
+
+# Design Flow toolchain version checks or warnings
+version_checks                    := $(true)
+version_checks_skip_warnings      := $(false)
 
 # Include tools and configurations assertions
 include $(AMU_PM_COMPONENTS_LOCAL_PATH)/assertions
@@ -53,27 +65,21 @@ include $(AMU_PM_COMPONENTS_LOCAL_PATH)/assertions
 # ignore_modules_exclude          := $(true)
 # ignore_scopes_exclude           := $(true)
 
-output_root                       := build
 output_path_add_project_version   := $(false)
 
-scopes_output_prefix              := amu/
 prefix_scopes_output_path         := $(true)
 prefix_scopes_output_prefix       := $(true)
 prefix_scopes_input_prefix        := $(true)
 
-doxygen_output_prefix             := docs/
 prefix_doxygen_output_path        := $(true)
 prefix_doxygen_output_prefix      := $(true)
 
-buildinfo_output_prefix           := docs/buildinfo/
 prefix_buildinfo_output_path      := $(true)
 prefix_buildinfo_output_prefix    := $(true)
 buildinfo_depends_scopes          := $(true)
 doxygen_depends_buildinfo         := $(true)
 
 targets_depends_project           := $(false)
-version_checks                    := $(true)
-version_checks_skip_warnings      := $(true)
 generate_latex                    := $(false)
 
 release_root                      := release
@@ -92,14 +98,21 @@ project_name                      := omdl
 project_version                   := $(shell git describe --tags --dirty --always)
 project_brief                     := OpenSCAD Mechanical Design Library
 
-docs_group_id                     := omdl
-project_logo                      := docs_start_logo_top_55x55
+output_root                       := build
+
+scopes_output_prefix              := amu/
 seam_defines                      := INCLUDE_PATH=include/mfs
 
+doxygen_output_prefix             := docs/
 doxygen_config                    := share/doxygen/Doxyfile
 doxygen_html_footer               := share/doxygen/html_footer.html
 doxygen_html_css                  := share/doxygen/html_style.css
 doxygen_layout                    := share/doxygen/html_layout.xml
+
+docs_group_id                     := omdl
+project_logo                      := docs_start_logo_top_55x55
+
+buildinfo_output_prefix           := docs/buildinfo/
 
 project_files_add                 := $(wildcard include/pmf/*) \
                                      $(wildcard include/mfs/*.mfs) \
@@ -112,9 +125,7 @@ library_info                      := README.md \
 # to exclude nothing from the command line, use: $ make modules_exclude="" all
 # or set 'ignore_modules_exclude := $(true)' above
 
-modules_exclude                   := parts \
-                                     database/component \
-                                     database/material
+modules_exclude                   := database/material
 
 # Excluded Scopes:
 # to exclude nothing from the command line, use: $ make scopes_exclude="" all

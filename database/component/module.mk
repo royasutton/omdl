@@ -12,8 +12,8 @@ local_release_add :=
 
 local_backup_add  :=
 
-local_submodules  :=  electrical \
-                      mechanical
+local_submodules  :=  battery \
+                      fastener
 
 #------------------------------------------------------------------------------#
 # add local module

@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2017-2019
+  \date   2017-2024
 
   \copyright
 
@@ -39,6 +39,11 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_define includes_required_add
+  (
+    tools/align.scad
+  )
+  \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -46,9 +51,9 @@
 //! Label the vertices, paths, and edges of a polytope.
 /***************************************************************************//**
   \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
-  \param    f <integer-list-list> A list of faces (or paths) that enclose
+  \param    f <<integer-list>-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
-  \param    e <integer-list-2-list> A list of edges where each edge is
+  \param    e <<integer-list-2>-list> A list of edges where each edge is
             a list of two coordinate indexes.
 
   \param    vi <index> Vertex index. An index sequence [specification].
@@ -61,15 +66,21 @@
   \param    th <decimal> The text extrusion height override.
 
   \param    to <vector-3d|vector-2d> The text offset override.
-  \param    tr <decimal-list-1:3|decimal> The text rotation (in degrees).
+  \param    tr <decimal-list-[1:3]|decimal> The text rotation (in degrees).
 
   \details
 
-  \note     Parameter \p f is optional for polygons. When it is not
-            given, the listed order of the coordinates \p c establishes
-            the polygon path.
-  \note     When \p e is not specified, it is computed from \p f using
-            polytope_faces2edges().
+    Label the vertices, paths, and edges of a polytope. Parameter \p f
+    is optional for polygons. When it is not given, the listed order of
+    the coordinates \p c establishes the polygon path. When \p e is not
+    specified, it is computed from \p f using polytope_faces2edges().
+
+    \amu_define scope_id      (example_number)
+    \amu_define example_name  (Numbering)
+    \amu_define image_views   (top front diag)
+    \amu_define image_size    (sxga)
+
+    \amu_include (include/amu/table_scad_diagram.amu)
 
   [specification]: \ref dt_index
 *******************************************************************************/
@@ -163,51 +174,46 @@ module polytope_number
 //! Assemble a polytope skeletal frame using child objects.
 /***************************************************************************//**
   \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
-  \param    f <integer-list-list> A list of faces (or paths) that enclose
+  \param    f <<integer-list>-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
-  \param    e <integer-list-2-list> A list of edges where each edge is
+  \param    e <<integer-list-2>-list> A list of edges where each edge is
             a list of two coordinate indexes.
 
   \param    vi <index> Vertex index. An index sequence [specification].
   \param    fi <index> Face index. An index sequence [specification].
   \param    ei <index> Edge index. An index sequence [specification].
 
-  \param    vc <integer> Vertex child index.
-  \param    fc <integer> Face child index.
-  \param    ec <integer> Edge child index.
+  \param    vc <integer> Vertex child object index.
+  \param    fc <integer> Face child object index.
+  \param    ec <integer> Edge child object index.
 
   \details
 
-    This function constructs a skeletal frame for a given polytope. A
-    2d child object is linearly extruded along specified edges of the
-    polytope to form the frame. Additional 3d child objects can be
-    centered on specified vertices and/or the mean coordinates of
-    specified faces.
+    Construct a skeletal frame for a given polytope. A 2d child object
+    is linearly extruded along specified edges of the polytope to form
+    the frame. Additional 3d child objects can be centered on specified
+    vertices and/or the mean coordinates of specified faces.
 
-    \b Example
+    To disable a child assignment to the vertices, faces, or edges, use
+    an index that is less than zero or greater than the number of
+    children. Parameter \p f is optional for polygons. When it is not
+    given, the listed order of the coordinates \p c establishes the
+    polygon path. When \p e is not specified, it is computed from \p f
+    using polytope_faces2edges().
 
-    \code{.c}
-    include <omdl-base.scad>;
+    \amu_define scope_id      (example_frame_a)
+    \amu_define example_name  (A. Framing)
+    \amu_define image_views   (top right diag)
+    \amu_define image_size    (sxga)
 
-    s = second(xy_plane_os) * 25;
-    p = polygon_linear_extrude_pf(s, h=50);
+    \amu_include (include/amu/table_scad_diagram.amu)
 
-    polytope_frame(first(p), second(p))
-    {
-      circle(r=2);
-      color("grey") sphere(r=4);
-      color("blue") cube(4);
-    }
-    \endcode
+    \amu_define scope_id      (example_frame_b)
+    \amu_define example_name  (B. Framing)
+    \amu_define image_views   (diag)
+    \amu_define image_size    (sxga)
 
-  \note     To disable a child assignment to the vertices, faces, or
-            edges, use an index that is less than zero or greater than
-            the number of children.
-  \note     Parameter \p f is optional for polygons. When it is not
-            given, the listed order of the coordinates \p c establishes
-            the polygon path.
-  \note     When \p e is not specified, it is computed from \p f using
-            polytope_faces2edges().
+    \amu_include (include/amu/table_scad_diagram.amu)
 
   [specification]: \ref dt_index
 *******************************************************************************/
@@ -273,12 +279,11 @@ module polytope_frame
 
 //! The 3d or 2d bounding box shape for a polytope.
 /***************************************************************************//**
-  \param    c <coords-3d|coords-2d> A list of 3d or 2d cartesian
-            coordinates [[x, y (, z)], ...].
-  \param    f <integer-list-list> A list of faces (or paths) that enclose
+  \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
+  \param    f <<integer-list>-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
-  \param    a <decimal-list-1:3|decimal> The box padding.
-            A list of lengths to equally pad the box dimensions.
+  \param    a <decimal-list-1:3|decimal> The box padding. A list of
+            lengths to equally pad the box dimensions.
 
   \details
 
@@ -286,10 +291,15 @@ module polytope_frame
     defined 3d polyhedron with the box sides oriented parallel to the
     coordinate axes. Or: (2) the 2d box shape that exactly encloses the
     defined 2d polygon with the box sides oriented parallel to the
-    coordinate axes.
+    coordinate axes. When \p f is not given, the listed order of the
+    coordinates \p c establishes the path.
 
-  \note     When \p f is not given, the listed order of the coordinates
-            \p c establishes the path.
+    \amu_define scope_id      (example_bbox)
+    \amu_define example_name  (Bounding box)
+    \amu_define image_views   (top front diag)
+    \amu_define image_size    (sxga)
+
+    \amu_include (include/amu/table_scad_diagram.amu)
 
     \sa polytope_limits for warning about secondary shapes.
 *******************************************************************************/
@@ -313,6 +323,167 @@ module polytope_bounding_box
 
 //! @}
 //! @}
+
+//----------------------------------------------------------------------------//
+// openscad-amu auxiliary scripts
+//----------------------------------------------------------------------------//
+
+/*
+BEGIN_SCOPE example_number;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/align.scad>;
+    include <units/coordinate.scad>;
+    include <database/geometry/polyhedra/johnson.scad>;
+    include <tools/polytope.scad>;
+
+    tc = dtc_polyhedra_johnson;
+    tr = dtr_polyhedra_johnson;
+    id = "metagyrate_diminished_rhombicosidodecahedron";
+
+    c = table_get_value(tr, tc, id, "c");
+    f = table_get_value(tr, tc, id, "f");
+    v = coordinate_scale3d_csc(c, 100);
+
+    polytope_number(v, f, sp=true, $fn = 36);
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "top front diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE example_frame_a;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/align.scad>;
+    include <units/coordinate.scad>;
+    include <database/geometry/polyhedra/cupolas.scad>;
+    include <tools/polytope.scad>;
+
+    tc = dtc_polyhedra_cupolas;
+    tr = dtr_polyhedra_cupolas;
+    id = "pentagonal_cupola";
+
+    c = table_get_value(tr, tc, id, "c");
+    f = table_get_value(tr, tc, id, "f");
+
+    v1 = coordinate_scale3d_csc(c, 100);
+    v2 = coordinate_scale3d_csc(c, 100, true);
+
+    repeat_grid(2, 225, center=true, $fn=36)
+    {
+      polytope_frame(v1, f) {circle(r=4); color("grey") sphere(r=6);}
+      polytope_frame(v2, f) {circle(r=4); color("grey") sphere(r=6);}
+    }
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "top right diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE example_frame_b;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/align.scad>;
+    include <units/coordinate.scad>;
+    include <database/geometry/polyhedra/archimedean.scad>;
+    include <tools/polytope.scad>;
+
+    tc = dtc_polyhedra_archimedean;
+    tr = dtr_polyhedra_archimedean;
+    id = "truncated_cuboctahedron";
+
+    c = table_get_value(tr, tc, id, "c");
+    f = table_get_value(tr, tc, id, "f");
+    v = coordinate_scale3d_csc(c, 100);
+
+    polytope_frame(v, f, fi="even", $fn = 36)
+    {
+      circle(r=2);
+      color("grey") sphere(r=4);
+      color("red") star3d(20);
+    }
+
+    polytope_frame(v, f, fi="odd", fc=0, vc=-1, ec=-1)
+    color("blue") star3d(20);
+
+    %polyhedron(v, f);
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE example_bbox;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <database/geometry/polyhedra/archimedean.scad>;
+    include <tools/polytope.scad>;
+
+    tc = dtc_polyhedra_archimedean;
+    tr = dtr_polyhedra_archimedean;
+    id = "truncated_cuboctahedron";
+
+    c = table_get_value(tr, tc, id, "c");
+    f = table_get_value(tr, tc, id, "f");
+
+    polyhedron(c, f);
+    %polytope_bounding_box(c,f );
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "top front diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+*/
 
 //----------------------------------------------------------------------------//
 // end of file

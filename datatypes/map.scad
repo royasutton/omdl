@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Map Operations)
+    \amu_define group_name  (Maps)
     \amu_define group_brief (Map data type and operations.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
@@ -39,6 +39,7 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/includes_required.amu)
 
   \details
 
@@ -56,7 +57,7 @@
 
 //! Return the index of a map key.
 /***************************************************************************//**
-  \param    m <matrix-2xN> A list of N key-value map pairs.
+  \param    m <map> A list of N key-value map pairs.
   \param    k <string> A map key.
 
   \returns  <integer> The index of the map entry if it exists.
@@ -73,7 +74,7 @@ function map_get_index
 
 //! Test if a key exists.
 /***************************************************************************//**
-  \param    m <matrix-2xN> A list of N key-value map pairs.
+  \param    m <map> A list of N key-value map pairs.
   \param    k <string> A map key.
 
   \returns  <boolean> \b true when the key exists and \b false otherwise.
@@ -86,7 +87,7 @@ function map_exists
 
 //! Get the map value associated with a key.
 /***************************************************************************//**
-  \param    m <matrix-2xN> A list of N key-value map pairs.
+  \param    m <map> A list of N key-value map pairs.
   \param    k <string> A map key.
 
   \returns  \<value> The value associated  with \p key.
@@ -100,7 +101,7 @@ function map_get_value
 
 //! Get a list of all map keys.
 /***************************************************************************//**
-  \param    m <matrix-2xN> A list of N key-value map pairs.
+  \param    m <map> A list of N key-value map pairs.
 
   \returns  <string-list-N> A list of key strings for all N map entries.
 *******************************************************************************/
@@ -111,7 +112,7 @@ function map_get_keys
 
 //! Get a list of all map values.
 /***************************************************************************//**
-  \param    m <matrix-2xN> A list of N key-value map pairs.
+  \param    m <map> A list of N key-value map pairs.
 
   \returns  <list-N> A list of values for all N map entries.
 *******************************************************************************/
@@ -122,8 +123,8 @@ function map_get_values
 
 //! Get the the first value associated with an existing key in one of two maps.
 /***************************************************************************//**
-  \param    m1 <matrix-2xN> A list of N key-value map pairs.
-  \param    m2 <matrix-2xN> A list of N key-value map pairs.
+  \param    m1 <map> A list of N key-value map pairs.
+  \param    m2 <map> A list of N key-value map pairs.
   \param    k <string> A map key.
   \param    d \<value> A default return value.
 
@@ -143,7 +144,7 @@ function map_get_firstof2_or
 
 //! Get the number of map entries.
 /***************************************************************************//**
-  \param    m <matrix-2xN> A list of N key-value map pairs.
+  \param    m <map> A list of N key-value map pairs.
 
   \returns  <integer> The number of map entries.
 *******************************************************************************/
@@ -154,8 +155,8 @@ function map_get_size
 
 //! Merge the unique key-value pairs of a second map with those of a first.
 /***************************************************************************//**
-  \param    m1 <matrix-2xN> A list of N key-value map pairs.
-  \param    m2 <matrix-2xN> A list of N key-value map pairs.
+  \param    m1 <map> A list of N key-value map pairs.
+  \param    m2 <map> A list of N key-value map pairs.
 
   \returns  \<value> The key value-pairs of \p m1 together with the
             unique key value-pairs of \p m2 that are absent in \p m1.
@@ -177,7 +178,7 @@ function map_merge
 
 //! Perform basic format checks on a map and return errors.
 /***************************************************************************//**
-  \param    m <matrix-2xN> A list of N key-value map pairs.
+  \param    m <map> A list of N key-value map pairs.
 
   \returns  <list-N> A list of map format errors.
 
@@ -238,7 +239,7 @@ function map_errors
 
 //! Perform basic format checks on a map and output errors to console.
 /***************************************************************************//**
-  \param    m <matrix-2xN> A list of N key-value map pairs.
+  \param    m <map> A list of N key-value map pairs.
 
   \param    verbose <boolean> Be verbose during check.
 
@@ -320,7 +321,7 @@ module map_check
 
 //! Dump each map entry to the console.
 /***************************************************************************//**
-  \param    m <matrix-2xN> A list of N key-value map pairs.
+  \param    m <map> A list of N key-value map pairs.
   \param    sort <boolean> Sort the output by key.
   \param    number <boolean> Output index number.
   \param    p <integer> Number of places for zero-padded numbering.
@@ -361,11 +362,12 @@ module map_dump
 
 //! Write formatted map entries to the console.
 /***************************************************************************//**
-  \param    m <matrix-2xN> A list of N key-value map pairs.
+  \param    m <map> A list of N key-value map pairs.
   \param    ks <string-list> A list of selected keys.
   \param    sort <boolean> Sort the output by key.
   \param    number <boolean> Output index number.
-  \param    fs <string> A feild separator.
+  \param    fs <string> A field separator.
+  \param    thn <string> Column heading for numbered row output.
   \param    index_tags <string-list> List of html formatting tags.
   \param    key_tags <string-list> List of html formatting tags.
   \param    value_tags <string-list> List of html formatting tags.
@@ -406,6 +408,7 @@ module map_write
   sort = false,
   number = false,
   fs = "^",
+  thn = "idx",
   index_tags = empty_lst,
   key_tags = ["b"],
   value_tags = empty_lst
@@ -418,7 +421,7 @@ module map_write
     (
       str
       (
-        number ? str("index",fs) : empty_str,
+        number ? str(thn,fs) : empty_str,
         "key", fs,
         "value"
       )
@@ -497,8 +500,8 @@ BEGIN_SCOPE example1;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 
@@ -520,8 +523,8 @@ BEGIN_SCOPE example2;
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_term}.mfs;
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

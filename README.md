@@ -5,93 +5,72 @@ omdl
 
 [![LGPL licensed](https://img.shields.io/badge/license-LGPL-blue.svg?style=flat)](https://raw.githubusercontent.com/royasutton/omdl/master/gnu-lgpl-v2.1.txt)
 
-View live docs on [GitHub Pages](https://royasutton.github.io/omdl).
-
 
 Setup
 -----
 
-In order to use [omdl], it must be first be installed to an OpenSCAD
-[library location] on your system. It can be copied manually, as
-described in the OpenSCAD documentation, or can be installed via
-[openscad-amu], the framework used to develop [omdl]. If [openscad-amu]
-is used, the library documentation will be generated and added to an
-index of [installed libraries] for convenient design reference.
+In order to use [omdl], it should be be installed to the OpenSCAD
+[library location]. It can be copied manually, as described in the
+OpenSCAD documentation, or can be installed via [openscad-amu] (the
+framework used to develop omdl). If latter is used, the library will be
+tested and the documentation will be generated.
+
+A setup script is available to download, build, and install the
+dependencies.
 
 
 Evaluation
 ----------
 
-A setup script is available to build the development environment and
-install the library to a temporary directory:
+To setup the library to a temporary directory using the setup script,
+open the command shell and type:
 
 ```bash
 mkdir tmp && cd tmp
-wget https://git.io/setup-omdl.bash
-chmod +x setup-omdl.bash
+```
 
+```bash
+wget https://git.io/setup-omdl.bash && chmod +x setup-omdl.bash
+```
+
+```bash
 ./setup-omdl.bash --cache --branch-list tags1 --yes --install
 ```
 
 The option `--yes` can be omitted if you prefer to confirm the
-installation of each required package (see: `setup-omdl.bash --help`).
-If you don't like shortened URLs, here is the full URL to
-[setup-omdl.bash].
+installation of the required packages (see: `setup-omdl.bash --help`
+for more details). If you don't like shortened URLs, here is the full
+URL to [setup-omdl.bash] at the source repository.
 
-If all goes well, the library (and development framework) will have
-been installed into a temporary directory named `cache`. Subsequently,
-the omdl library documentation can be viewed by typing:
+Once setup successfully completes, the library documentation can be
+viewed from the temporary 'cache' directory:
 
 ```bash
 firefox cache/local/share/OpenSCAD/docs/html/index.html
+```
+
+To setup the development branch, use:
+
+```bash
+./setup-omdl.bash --cache --branch develop --yes --install
 ```
 
 
 Installing
 ----------
 
-To install the latest tagged release of [omdl] to the OpenSCAD user
-library path on your system, use these options:
+To install the latest release to the standard OpenSCAD user library
+path, use these options:
 
 ```bash
 ./setup-omdl.bash --branch-list tags1 --no-excludes --yes --install
 ```
 
-To install a specific [omdl] library version, for example v0.6.1, use:
+To install a specific version, ie v0.6.1, use:
 
 ```bash
 ./setup-omdl.bash --branch v0.6.1 --no-excludes --yes --install
 ```
-
-Use library components in your OpenSCAD designs as expected, replacing
-the version number as appropriate:
-
-```bash
-include <omdl-v0.6.1/omdl-base.scad>;
-...
-```
-
-Manual Compilation
-------------------
-
-To make changes to [omdl] or rebuild it manually, make sure the
-variables `AMU_LIB_PATH` and `AMU_TOOL_PREFIX` (trailing directory
-slash required for the latter) are set to the *absolute paths* for your
-installation of [openscad-amu] in the project `Makefile`. See
-[installing openscad-amu] for more information.
-
-To update project Makefile and build HTML documentation:
-
-```bash
-cd cache/omdl
-make help
-make info
-
-make all
-```
-
-The output of 'make info' shows all of the boolean control variables
-and configurable value variables that configure the build process.
 
 
 Contributing
@@ -110,11 +89,10 @@ Ideas, requests, comments, contributions, and constructive criticism
 are welcome.
 
 
-Contact and Support
--------------------
+Bug reporting
+-------------
 
-In case you have any questions or would like to make feature requests,
-you can contact the maintainer of the project or file an [issue].
+Please feel free to raise any problems, concerns, or [issues].
 
 
 [GNU Lesser General Public License]: https://www.gnu.org/licenses/lgpl.html
@@ -123,9 +101,7 @@ you can contact the maintainer of the project or file an [issue].
 
 [omdl]: https://royasutton.github.io/omdl
 [repository]: https://github.com/royasutton/omdl
-[issue]: https://github.com/royasutton/omdl/issues
-
-[installed libraries]: https://royasutton.github.io/omdl/api/html
+[issues]: https://github.com/royasutton/omdl/issues
 
 [openscad-amu]: https://royasutton.github.io/openscad-amu
 [installing openscad-amu]: https://github.com/royasutton/openscad-amu#installing

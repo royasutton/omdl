@@ -60,33 +60,18 @@
 
   \section starting Getting Started
 
-    \b Example:
+    \amu_define example_name  (Hello world)
+    \amu_define image_views   (right top front diag)
+    \amu_define image_size    (sxga)
+    \amu_define image_columns (4)
+    \amu_define scope_id      (quickstart)
+    \amu_define diagram_notes (Click image above to expand.)
+    \amu_define scad_notes
+      ( The \ref make_bearing_linear_rod operations can be used to
+        transform 2D and 3D objects into 3D-printable linear rod
+        bearings with arbitrary bearing-ball and rod sizes. )
 
-    \dontinclude \amu_scope(index=2).scad
-    \skip include
-    \until valign="center" );
-
-    \amu_make png_files (append=quickstart extension=png)
-    \amu_make eps_files (append=quickstart extension=png2eps)
-    \amu_make stl_files (append=quickstart extension=stl)
-
-    \htmlonly
-      \amu_image_table
-        (
-          type=html columns=4 image_width="200" table_caption="Example Result"
-          cell_captions="Bottom^Diagonal^Right^Top"
-          cell_files="${png_files}"
-          cell_urls="${stl_files} ${stl_files} ${stl_files} ${stl_files}"
-        )
-    \endhtmlonly
-    \latexonly
-      \amu_image_table
-        (
-          type=latex columns=4 image_width="1.25in" table_caption="Example Result"
-          cell_captions="Bottom^Diagonal^Right^Top"
-          cell_files="${eps_files}"
-        )
-    \endlatexonly
+    \amu_include (include/amu/table_scad_diagram.amu)
 
   \section contributing Contributing
 
@@ -141,8 +126,6 @@ BEGIN_SCOPE logo;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
 
-    $fn = 36;
-
     frame = triangle_ppp2sss( [[30,40], [30,0], [0,40]] );
     core  = 2 * frame / 3;
     vrnd  = [1, 2, 4];
@@ -152,53 +135,72 @@ BEGIN_SCOPE logo;
     repeat_radial( n=5, angle=true )
       translate([15,-5,0])
         extrude_linear_uls( h=10 )
-          triangle_ls_c( vs=frame, vc=core, vr=vrnd );
+          triangle_ls_c( vs=frame, vc=core, vr=vrnd, $fn=36 );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
 
     views     name "views" distance "250" views "top";
     images    name "slogo" aspect "1:1" xsizes "55";
     variables set_opts_combine "views slogo";
 
-    include --path "${INCLUDE_PATH}" script_std.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 
 BEGIN_SCOPE quickstart;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <units/length.scad>;
+    include <units/angle.scad>;
+    include <tools/operation_cs.scad>;
+    include <tools/drafting/draft-base.scad>;
+    include <parts/3d/bearing/bearing_linear_rod.scad>;
 
     $fn = 36;
 
-    frame = triangle_ppp2sss( [[30,40], [30,0], [0,40]] );
-    core  = 2 * frame / 3;
-    vrnd  = [1, 2, 4];
+    p = [length(0.706, "in"), length(0.622, "in")];
+    b = length(6, "mm");
 
-    cone( h=20, r=10, vr=2 );
-    rotate([0, 0, 360/20])
-    repeat_radial( n=5, angle=true )
-      translate([15,-5,0])
-        extrude_linear_uls( h=10 )
-          triangle_ls_c( vs=frame, vc=core, vr=vrnd );
+    r = 21.5; c = 6; a = 85;
+    h = [b*8, undef, false];
 
-    translate([0, -50, 0])
-    linear_extrude(height=10)
-    text( text="omdl", size=20, halign="center", valign="center" );
+    __mfs__diag = false;
+    v = __mfs__diag ? undef : 2;
+
+    make_bearing_linear_rod(pipe=p, ball=b, count=c, angle=a, h=h, align=4, view=v)
+    minkowski() {cylinder(r=r-b*2/3, h=first(h)-b*3/2, center=true); sphere(r=r/5);};
+
+    __mfs__top = false;
+    if ( __mfs__top ) color("brown"){
+      draft_dim_center(r=r);
+      draft_dim_radius(r=r, v=[+1,-1], u="mm");
+      draft_dim_line(p1=[-r,0], p2=[+r,0], d=r*1.25, u ="mm");
+      draft_dim_line(p1=[-first(p)/2,0], p2=[+first(p)/2,0], d=r*3/4, u ="mm");
+    }
+
+    __mfs__front = false;
+    if ( __mfs__front ) color("brown") rotate([90,0,0]) {
+      draft_dim_line(p1=[-r,0], p2=[+r,0], d=r*3/4, u ="mm");
+      draft_dim_line(p1=[-first(p)/2,0], p2=[+first(p)/2,0], u ="mm");
+      draft_dim_line(p1=[0,0], p2=[0,-first(h)], d=-r*1.25, u ="mm");
+    }
+
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {config_base,config_png}.mfs;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
 
-    views     name "views" views "top bottom right diag";
-    variables add_opts_combine "views";
+    images    name "sizes" types "sxga";
+    views     name "views" views "diag front right top";
+
+    variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" script_new.mfs;
-
-    include --path "${INCLUDE_PATH}" config_stl.mfs;
-    include --path "${INCLUDE_PATH}" script_app.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

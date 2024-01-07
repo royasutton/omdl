@@ -1,8 +1,8 @@
-//! Mechanical Module documentation.
+//! 3d Computer Parts Module documentation.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2018-2023
+  \date   2024
 
   \copyright
 
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Mechanical)
-    \amu_define group_brief (Mechanical component specifications.)
+    \amu_define group_name  (Computer)
+    \amu_define group_brief (Computer.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

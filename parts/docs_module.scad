@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2018-2023
+  \date   2018-2024
 
   \copyright
 
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Parts)
-    \amu_define group_brief (Small parts and assemblies.)
+    \amu_define group_brief (Parts, part generators, and small assemblies.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
