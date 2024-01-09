@@ -127,14 +127,11 @@ BEGIN_SCOPE diagram;
     translate([0,0,h-ht])
     cylinder(d=dt, h=ht);
 
-    __mfs__top = false;
-    __mfs__right = false;
-
-    if ( __mfs__top )
+    if ( !is_undef(__mfs__top) )
       color("black")
       draft_dim_line(p1=[-d/2,0], p2=[+d/2,0], d=d*6/10, e=d*4/10, es=2, t="d");
 
-    if ( __mfs__right )
+    if ( !is_undef(__mfs__right) )
       color("black")
       translate([0, d/2, h/2]) rotate([0,90])
       draft_dim_line(p1=[-h/2,0], p2=[+h/2,0], d=d*3/10, e=h*4/10, es=2, t="h");
