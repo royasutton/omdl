@@ -29,7 +29,6 @@
 
     \amu_define group_name  (2d Shapes)
     \amu_define group_brief (Basic 2D derivative shapes.)
-    \amu_define view        (top)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -42,6 +41,7 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_include (include/amu/includes_required.amu)
 
+  \amu_define view (top)
   \amu_include (include/amu/table_example_dim.amu)
 *******************************************************************************/
 

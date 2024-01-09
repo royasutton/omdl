@@ -29,7 +29,6 @@
 
     \amu_define group_name  (Extrude)
     \amu_define group_brief (Shape extrusion tools.)
-    \amu_define view        (diag)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -42,6 +41,7 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_include (include/amu/includes_required.amu)
 
+  \amu_define view (diag)
   \amu_include (include/amu/table_example_dim.amu)
 *******************************************************************************/
 
