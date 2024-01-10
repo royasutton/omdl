@@ -104,6 +104,7 @@ dtr_battery_cylindrical =
 //----------------------------------------------------------------------------//
 
 /*
+BEGIN_SCOPE db;
 BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
@@ -169,6 +170,7 @@ BEGIN_SCOPE table;
     include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
     include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
   END_MFSCRIPT;
+END_SCOPE;
 END_SCOPE;
 */
 

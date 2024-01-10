@@ -3,7 +3,7 @@
   create parameter diagrams and data table.
 
   requires:
-    mfs-scope: diagram,table
+    mfs-scope: ${scope_id}_{diagram,table}
 
     defines:  ${data_name}
               ${image_views}
@@ -12,8 +12,7 @@
     optional: ${diagram_notes}
               ${data_notes}
 
-              ${scope_diagram_id}       (default = diagram)
-              ${scope_table_id}         (default = table)
+              ${scope_id}               (default = db)
 
               ${image_columns}          (default = 3)
               ${html_image_w}           (default = 256)
@@ -21,8 +20,7 @@
 
  +/
 
-  \amu_if scope_diagram_id (-d ${scope_diagram_id}) {${scope_diagram_id}} else {diagram} endif
-  \amu_if scope_table_id (-d ${scope_table_id}) {${scope_table_id}} else {table} endif
+  \amu_if scope_id (-d ${scope_id}) {${scope_id}} else {data} endif
 
   \amu_if image_columns (-d ${image_columns}) {${image_columns}} else {3} endif
   \amu_if html_image_w (-d ${html_image_w}) {${html_image_w}} else {256} endif
@@ -37,14 +35,14 @@
   \amu_foreach png_files
   (
     words="${image_views}"
-    text="${OUTPUT_PREFIX}/png/${scope_root}_${scope_diagram_id}_${image_size}_\${x}.png"
+    text="${OUTPUT_PREFIX}/png/${scope_root}_${scope_id}_diagram_${image_size}_\${x}.png"
     separator=" "
   )
 
   \amu_foreach eps_files
   (
     words="${image_views}"
-    text="${OUTPUT_PREFIX}/png2eps/${scope_root}_${scope_diagram_id}_${image_size}_\${x}.eps"
+    text="${OUTPUT_PREFIX}/png2eps/${scope_root}_${scope_id}_diagram_${image_size}_\${x}.eps"
     separator=" "
   )
 
@@ -93,8 +91,8 @@
     data table
   +/
 
-  \amu_file th (file="${scope_root}_${scope_table_id}.log" first=1 last=1 ++rmecho ++rmnl ++read)
-  \amu_file td (file="${scope_root}_${scope_table_id}.log" first=2        ++rmecho ++rmnl ++read)
+  \amu_file th (file="${scope_root}_${scope_id}_table.log" first=1 last=1 ++rmecho ++rmnl ++read)
+  \amu_file td (file="${scope_root}_${scope_id}_table.log" first=2        ++rmecho ++rmnl ++read)
   \amu_word tc (tokenizer="^" words="${th}" ++count)
 
   \amu_if (-d ${data_notes}) {${data_notes}} endif
