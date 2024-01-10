@@ -20,7 +20,7 @@
 
  +/
 
-  \amu_if scope_id (-d ${scope_id}) {${scope_id}} else {data} endif
+  \amu_if scope_id (-d ${scope_id}) {${scope_id}} else {db} endif
 
   \amu_if image_columns (-d ${image_columns}) {${image_columns}} else {3} endif
   \amu_if html_image_w (-d ${html_image_w}) {${html_image_w}} else {256} endif
