@@ -89,6 +89,9 @@
 
   /+
     data table
+
+    assumes:  (1) first line is table headings.
+              (2) remaining lines are table data.
   +/
 
   \amu_file th (file="${scope_root}_${scope_id}_table.log" first=1 last=1 ++rmecho ++rmnl ++read)
