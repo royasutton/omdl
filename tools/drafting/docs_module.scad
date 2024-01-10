@@ -76,7 +76,7 @@
     \amu_define image_size    (uxga)
     \amu_define html_image_w  (768)
 
-    \amu_include (include/amu/table_scad_diagram.amu)
+    \amu_include (include/amu/scope_scad_diagrams.amu)
 
   [LibreCAD]: https://librecad.org
 *******************************************************************************/

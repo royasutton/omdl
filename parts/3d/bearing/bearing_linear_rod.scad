@@ -147,7 +147,7 @@
     ( This example uses the \p view options to see the bearing internals.
       Click image above to expand. )
 
-    \amu_include (include/amu/table_scad_diagram.amu)
+    \amu_include (include/amu/scope_scad_diagrams.amu)
 *******************************************************************************/
 module make_bearing_linear_rod
 (

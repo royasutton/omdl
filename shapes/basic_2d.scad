@@ -42,7 +42,7 @@
   \amu_include (include/amu/includes_required.amu)
 
   \amu_define view (top)
-  \amu_include (include/amu/table_example_dim.amu)
+  \amu_include (include/amu/scope_diagrams_in_pg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

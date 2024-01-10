@@ -46,7 +46,7 @@
     \amu_define image_size    (sxga)
     \amu_define diagram_notes (See Wikipedia battery [sizes] for information.)
 
-    \amu_include (include/amu/table_diagram_data.amu)
+    \amu_include (include/amu/scope_diagrams_table.amu)
 
   [sizes]: https://en.wikipedia.org/wiki/List_of_battery_sizes
 *******************************************************************************/

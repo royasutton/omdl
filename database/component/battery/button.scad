@@ -47,7 +47,7 @@
     \amu_define diagram_notes (See Wikipedia battery [sizes] for information.)
     \amu_define data_notes    (Identifier names are based on [IEC] standards.)
 
-    \amu_include (include/amu/table_diagram_data.amu)
+    \amu_include (include/amu/scope_diagrams_table.amu)
 
   [sizes]: https://en.wikipedia.org/wiki/List_of_battery_sizes
   [IEC]: https://en.wikipedia.org/wiki/International_Electrotechnical_Commission

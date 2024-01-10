@@ -18,7 +18,7 @@
   \amu_if html_image_w (-d ${html_image_w}) {${html_image_w}} else {256} endif
   \amu_if latex_image_w (-d ${latex_image_w}) {${latex_image_w}} else {1.5in} endif
 
-  \amu_include (include/amu/macro_example_dim.amu)
+  \amu_include (include/amu/scope_diagram_object.amu)
 
   \amu_make png_files (append=dim extension=png)
   \amu_make eps_files (append=dim extension=png2eps)
