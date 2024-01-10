@@ -1,9 +1,12 @@
 /+
 
-  define parent and group. add to parent and group.
+  define: ${parent} = <path>_<parent_id>
+          ${group}  = <path>_<stem>
+
+     add: to parent group and group.
 
   requires:
-    parent_id must be set.
+    <parent_id> must be set prior.
 
  +/
 

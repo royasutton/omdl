@@ -1,6 +1,9 @@
 /+
 
-  define parent and group. add to group.
+  define: ${parent} = <path>
+          ${group}  = <path>_<stem>
+
+     add: to group.
 
   requires:
     none.
