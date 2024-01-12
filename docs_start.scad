@@ -74,7 +74,7 @@
         scope [ \em ${scope_id} ] for the the dimension operations used
         in the above example. )
 
-    \amu_include (include/amu/scope_scad_diagrams.amu)
+    \amu_include (include/amu/scope_diagrams.amu)
 
   \section contributing Contributing
 

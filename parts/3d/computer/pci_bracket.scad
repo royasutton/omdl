@@ -137,7 +137,7 @@
     \amu_define image_size    (sxga)
     \amu_define image_columns (4)
 
-    \amu_include (include/amu/scope_scad_diagrams.amu)
+    \amu_include (include/amu/scope_diagrams.amu)
 *******************************************************************************/
 module pci_bracket
 (
