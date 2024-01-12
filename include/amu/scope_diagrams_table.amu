@@ -18,8 +18,8 @@
 
                 ${image_columns}        (default = 3)
 
-                ${diagram_notes}
-                ${data_notes}
+                ${notes_diagram}
+                ${notes_table}
 
  +/
 
@@ -64,7 +64,7 @@
     separator="^"
   )
 
-  \amu_if (-d ${diagram_notes}) {${diagram_notes}} endif
+  \amu_if (-d ${notes_diagram}) {${notes_diagram}} endif
 
   \htmlonly
     \amu_image_table
@@ -102,7 +102,7 @@
   \amu_file td (file="${scope_root}_${scope_id}_table.log" first=2        ++rmecho ++rmnl ++read)
   \amu_word tc (tokenizer="^" words="${th}" ++count)
 
-  \amu_if (-d ${data_notes}) {${data_notes}} endif
+  \amu_if (-d ${notes_table}) {${notes_table}} endif
 
   <b>\amu_eval(${data_name}) data table</b>
 

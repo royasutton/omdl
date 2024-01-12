@@ -12,8 +12,8 @@
                 ${scad_begin}           (default = include)
                 ${scad_end}             (default = end_include)
 
-                ${scad_notes}
-                ${console_notes}
+                ${notes_scad}
+                ${notes_console}
 
  +/
 
@@ -36,7 +36,7 @@
   \skip \amu_eval(${scad_begin})
   \until \amu_eval(${scad_end})
 
-  \amu_if (-d ${scad_notes}) {${scad_notes}} endif
+  \amu_if (-d ${notes_scad}) {${notes_scad}} endif
 
   /+
     console output
@@ -46,6 +46,6 @@
 
   \include \amu_eval(${scope_root}_${scope_id}).log
 
-  \amu_if (-d ${console_notes}) {${console_notes}} endif
+  \amu_if (-d ${notes_console}) {${notes_console}} endif
 
 /+ end of file  +/

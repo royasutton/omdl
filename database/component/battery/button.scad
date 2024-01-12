@@ -44,8 +44,8 @@
     \amu_define data_name     (Button cell batteries)
     \amu_define image_views   (top right diag)
     \amu_define image_size    (sxga)
-    \amu_define diagram_notes (See Wikipedia battery [sizes] for information.)
-    \amu_define data_notes    (Identifier names are based on [IEC] standards.)
+    \amu_define notes_diagram (See Wikipedia battery [sizes] for information.)
+    \amu_define notes_table   (Identifier names are based on [IEC] standards.)
 
     \amu_include (include/amu/scope_diagrams_table.amu)
 

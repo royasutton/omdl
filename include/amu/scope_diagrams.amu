@@ -20,8 +20,8 @@
 
                 ${image_columns}        (default = 3)
 
-                ${scad_notes}
-                ${diagram_notes}
+                ${notes_scad}
+                ${notes_diagram}
 
  +/
 
@@ -49,7 +49,7 @@
   \skip \amu_eval(${scad_begin})
   \until \amu_eval(${scad_end})
 
-  \amu_if (-d ${scad_notes}) {${scad_notes}} endif
+  \amu_if (-d ${notes_scad}) {${notes_scad}} endif
 
   /+
     diagram table
@@ -108,6 +108,6 @@
       )
   \endlatexonly
 
-  \amu_if (-d ${diagram_notes}) {${diagram_notes}} endif
+  \amu_if (-d ${notes_diagram}) {${notes_diagram}} endif
 
 /+ end of file  +/
