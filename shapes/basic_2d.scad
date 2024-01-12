@@ -41,8 +41,14 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_include (include/amu/includes_required.amu)
 
-  \amu_define view (top)
-  \amu_include (include/amu/scope_diagrams_in_pg.amu)
+  \amu_define image_view (top)
+  \amu_include (include/amu/scope_diagram_object.amu)
+
+  \amu_define group_id (${parent})
+  \amu_include (include/amu/scope_diagrams_in_group.amu)
+
+  \amu_define group_id (${group})
+  \amu_include (include/amu/scope_diagrams_in_group.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -64,8 +70,7 @@
 
   \details
 
-    \b Example
-    \amu_eval ( function=rectangle ${example_dim} )
+    \amu_eval ( object_name=rectangle ${object_script_example} )
 
   \note     A corner \em round replaces an edge with a quarter circle of
             radius \p vr, inset <tt>[vr, vr]</tt> from the corner vertex.
@@ -191,8 +196,7 @@ module rectangle
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
     \li <tt>size = core + t</tt>; when \p t and \p core are given.
 
-    \b Example
-    \amu_eval ( function=rectangle_c ${example_dim} )
+    \amu_eval ( object_name=rectangle_c ${object_script_example} )
 *******************************************************************************/
 module rectangle_c
 (
@@ -253,8 +257,7 @@ module rectangle_c
 
   \details
 
-    \b Example
-    \amu_eval ( function=rhombus ${example_dim} )
+    \amu_eval ( object_name=rhombus ${object_script_example} )
 
     See [Wikipedia] for more information.
 
@@ -351,8 +354,7 @@ module rhombus
 
   \details
 
-    \b Example
-    \amu_eval ( function=triangle_ppp ${example_dim} )
+    \amu_eval ( object_name=triangle_ppp ${object_script_example} )
 
   \warning  Currently, in order to round any vertex, all must be given
             a rounding radius, either via \p vr or individually.
@@ -439,8 +441,7 @@ module triangle_ppp
 
   \details
 
-    \b Example
-    \amu_eval ( function=triangle_ls_c ${example_dim} )
+    \amu_eval ( object_name=triangle_ls_c ${object_script_example} )
 
   \note     The outer and inner triangles centroids are aligned prior to
             the core removal.
@@ -592,8 +593,7 @@ module triangle_ls_c
 
   \details
 
-    \b Example
-    \amu_eval ( function=ngon ${example_dim} )
+    \amu_eval ( object_name=ngon ${object_script_example} )
 
     See [Wikipedia] for more information.
 
@@ -630,8 +630,7 @@ module ngon
 
   \details
 
-    \b Example
-    \amu_eval ( function=ellipse ${example_dim} )
+    \amu_eval ( object_name=ellipse ${object_script_example} )
 *******************************************************************************/
 module ellipse
 (
@@ -671,8 +670,7 @@ module ellipse
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
     \li <tt>size = core + t</tt>; when \p t and \p core are given.
 
-    \b Example
-    \amu_eval ( function=ellipse_c ${example_dim} )
+    \amu_eval ( object_name=ellipse_c ${object_script_example} )
 *******************************************************************************/
 module ellipse_c
 (
@@ -713,8 +711,7 @@ module ellipse_c
 
   \details
 
-    \b Example
-    \amu_eval ( function=ellipse_s ${example_dim} )
+    \amu_eval ( object_name=ellipse_s ${object_script_example} )
 *******************************************************************************/
 module ellipse_s
 (
@@ -781,8 +778,7 @@ module ellipse_s
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
     \li <tt>size = core + t</tt>; when \p t and \p core are given.
 
-    \b Example
-    \amu_eval ( function=ellipse_cs ${example_dim} )
+    \amu_eval ( object_name=ellipse_cs ${object_script_example} )
 *******************************************************************************/
 module ellipse_cs
 (
@@ -828,8 +824,7 @@ module ellipse_cs
 
   \details
 
-    \b Example
-    \amu_eval ( function=star2d ${example_dim} )
+    \amu_eval ( object_name=star2d ${object_script_example} )
 *******************************************************************************/
 module star2d
 (

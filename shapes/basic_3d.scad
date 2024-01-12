@@ -41,8 +41,14 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_include (include/amu/includes_required.amu)
 
-  \amu_define view (diag)
-  \amu_include (include/amu/scope_diagrams_in_pg.amu)
+  \amu_define image_view (diag)
+  \amu_include (include/amu/scope_diagram_object.amu)
+
+  \amu_define group_id (${parent})
+  \amu_include (include/amu/scope_diagrams_in_group.amu)
+
+  \amu_define group_id (${group})
+  \amu_include (include/amu/scope_diagrams_in_group.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -60,8 +66,7 @@
 
   \details
 
-    \b Example
-    \amu_eval ( function=cone ${example_dim} )
+    \amu_eval ( object_name=cone ${object_script_example} )
 *******************************************************************************/
 module cone
 (
@@ -113,8 +118,7 @@ module cone
 
   \details
 
-    \b Example
-    \amu_eval ( function=cuboid ${example_dim} )
+    \amu_eval ( object_name=cuboid ${object_script_example} )
 
     | vrm | B1  | B0  | Description                                 |
     |:---:|:---:|:---:|:--------------------------------------------|
@@ -212,8 +216,7 @@ module cuboid
 
   \details
 
-    \b Example
-    \amu_eval ( function=ellipsoid ${example_dim} )
+    \amu_eval ( object_name=ellipsoid ${object_script_example} )
 *******************************************************************************/
 module ellipsoid
 (
@@ -244,8 +247,7 @@ module ellipsoid
 
   \details
 
-    \b Example
-    \amu_eval ( function=ellipsoid_s ${example_dim} )
+    \amu_eval ( object_name=ellipsoid_s ${object_script_example} )
 *******************************************************************************/
 module ellipsoid_s
 (
@@ -300,8 +302,7 @@ module ellipsoid_s
 
   \details
 
-    \b Example
-    \amu_eval ( function=pyramid_t ${example_dim} )
+    \amu_eval ( object_name=pyramid_t ${object_script_example} )
 *******************************************************************************/
 module pyramid_t
 (
@@ -341,8 +342,7 @@ module pyramid_t
 
   \details
 
-    \b Example
-    \amu_eval ( function=pyramid_q ${example_dim} )
+    \amu_eval ( object_name=pyramid_q ${object_script_example} )
 *******************************************************************************/
 module pyramid_q
 (
@@ -387,8 +387,7 @@ module pyramid_q
 
   \details
 
-    \b Example
-    \amu_eval ( function=star3d ${example_dim} )
+    \amu_eval ( object_name=star3d ${object_script_example} )
 *******************************************************************************/
 module star3d
 (

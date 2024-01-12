@@ -41,8 +41,14 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_include (include/amu/includes_required.amu)
 
-  \amu_define view (top)
-  \amu_include (include/amu/scope_diagrams_in_pg.amu)
+  \amu_define image_view (top)
+  \amu_include (include/amu/scope_diagram_object.amu)
+
+  \amu_define group_id (${parent})
+  \amu_include (include/amu/scope_diagrams_in_group.amu)
+
+  \amu_define group_id (${group})
+  \amu_include (include/amu/scope_diagrams_in_group.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -56,10 +62,8 @@
 
   \details
 
-    \b Example
-    \amu_eval ( function=polygon_round ${example_dim} )
+    \amu_eval ( object_name=polygon_round ${object_script_example} )
 *******************************************************************************/
-
 module polygon_round
 (
   m  = 1,
@@ -89,8 +93,7 @@ module polygon_round
 
   \details
 
-    \b Example
-    \amu_eval ( function=polygon_elliptical_sector ${example_dim} )
+    \amu_eval ( object_name=polygon_elliptical_sector ${object_script_example} )
 *******************************************************************************/
 module polygon_elliptical_sector
 (
@@ -120,8 +123,7 @@ module polygon_elliptical_sector
 
   \details
 
-    \b Example
-    \amu_eval ( function=polygon_trapezoid ${example_dim} )
+    \amu_eval ( object_name=polygon_trapezoid ${object_script_example} )
 *******************************************************************************/
 module polygon_trapezoid
 (

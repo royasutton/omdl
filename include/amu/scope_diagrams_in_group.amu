@@ -1,0 +1,93 @@
+/+
+
+  create a table of example images in parent group and group
+
+  requires:
+    mfs-scope:  ${scope_id}
+
+                ${group_name}
+                ${group_id}
+                  or ${group}           (from pgid_*.)
+
+    defines:    ${image_view}
+
+    optional:   ${group_id}             (default = ${group})
+
+                ${image_size}           (default = qvga)
+
+                ${scope_id}             (default = dim)
+
+                ${html_image_w}         (default = 256)
+                ${latex_image_w}        (default = 1.5in)
+
+                ${image_columns}        (default = 3)
+
+ +/
+
+  \amu_if image_size (-d ${image_size}) {${image_size}} else {qvga} endif
+
+  \amu_if group_id (-d ${group_id}) {${group_id}} else {${group}} endif
+
+  \amu_if scope_id (-d ${scope_id}) {${scope_id}} else {dim} endif
+
+  \amu_if html_image_w (-d ${html_image_w}) {${html_image_w}} else {256} endif
+  \amu_if latex_image_w (-d ${latex_image_w}) {${latex_image_w}} else {1.5in} endif
+
+  \amu_if image_columns (-d ${image_columns}) {${image_columns}} else {3} endif
+
+  \amu_scope scope_root (++root)
+
+  /+ evaluate and object store prefix for use with search and replace below +/
+  \amu_define object_prefix (${scope_root}_${scope_id}_${image_size}_${image_view}_)
+  \amu_eval   object_prefix (${object_prefix})
+
+  \amu_make files_png (append=dim extension=png)
+  \amu_make files_eps (append=dim extension=png2eps)
+
+  \amu_word files_num (words="${files_png}" ++count)
+  \amu_seq  files_num (last="${files_num}" ++roman)
+
+  \amu_filename object_name (files="${files_png}" ++stem)
+  \amu_replace  object_name (text="${object_name}" search="${object_prefix}")
+  \amu_combine  object_name ("${object_name}" p="<center>" s="()</center>" j="" f="^")
+
+  /+
+
+    add to group
+
+      With htmlonly omitted, doxygen creates function name links in the
+      generated image tables. This may cause issue with latex output.
+
+   +/
+
+  \addtogroup \amu_eval(${group_id})
+  @{
+
+  /+ \htmlonly +/
+    \amu_image_table
+      (
+        type=html
+        columns=${image_columns}
+        image_width="${html_image_w}"
+        cell_files="${files_png}"
+        table_caption="${group_name}"
+        cell_captions="${files_num}"
+        cell_end="${object_name}"
+        cell_urls="${files_png}"
+      )
+  /+ \endhtmlonly +/
+  \latexonly
+    \amu_image_table
+      (
+        type=latex
+        columns=${image_columns}
+        image_width="${latex_image_w}"
+        cell_files="${files_eps}"
+        table_caption="${group_name}"
+        cell_captions="${files_num}"
+      )
+  \endlatexonly
+
+  @}
+
+/+ end of file  +/

@@ -1,23 +1,69 @@
 /+
 
-  insert a module generated example image.
-
-    \amu_eval ( view=<VIEW> function=<NAME> ${example_dim} )
+  defines for including object example script and result.
 
   requires:
-    none.
+    mfs-scope:  ${scope_id}
+
+    defines:    ${object_name}
+
+                ${image_view}
+
+    optional:   ${image_size}           (default = qvga)
+
+                ${scope_id}             (default = dim)
+
+                ${html_image_w}         (default = 256)
+                ${latex_image_w}        (default = 1.5in)
+
+  examples:
+    (1) \amu_eval ( image_view=<VIEW> object_name=<NAME> ${object_script_example} )
+    (2) \amu_eval ( image_view=<VIEW> object_name=<NAME> ${object_example_script} )
+    (3) \amu_eval ( image_view=<VIEW> object_name=<NAME> ${object_example} )
 
  +/
 
-  \amu_scope  mfscript  (index=1)
-  \amu_source stem      (++stem)
-  \amu_eval             (++global scope=dim size=qvga)
-  \amu_define img_stem  (${stem}_${scope}_${size}_${view}_${function})
-  \amu_define example_dim
+  \amu_if image_size (-d ${image_size}) {${image_size}} else {qvga} endif
+
+  \amu_if scope_id (-d ${scope_id}) {${scope_id}} else {dim} endif
+
+  \amu_if html_image_w (-d ${html_image_w}) {${html_image_w}} else {256} endif
+  \amu_if latex_image_w (-d ${latex_image_w}) {${latex_image_w}} else {1.5in} endif
+
+  \amu_scope scope_root (++root)
+
+  \amu_define object_stem (${scope_root}_${scope_id}_${image_size}_${image_view}_${object_name})
+
+  /+
+    object script then example
+   +/
+  \amu_define object_script_example
   (
-    \image html  ${img_stem}.png "${function}"
-    \image latex ${img_stem}.eps "${function}" width=2.5in
-    \dontinclude ${mfscript}.scad \skipline ${function}(
+    \b Example
+    \dontinclude ${scope_root}_${scope_id}.scad \skipline ${object_name}(
+    \image html  ${object_stem}.png "${object_name}" width=${html_image_w}
+    \image latex ${object_stem}.eps "${object_name}" width=${latex_image_w}
+  )
+
+  /+
+    object example then script
+   +/
+  \amu_define object_example_script
+  (
+    \b Example
+    \image html  ${object_stem}.png "${object_name}" width=${html_image_w}
+    \image latex ${object_stem}.eps "${object_name}" width=${latex_image_w}
+    \dontinclude ${scope_root}_${scope_id}.scad \skipline ${object_name}(
+  )
+
+  /+
+    object example only
+   +/
+  \amu_define object_example
+  (
+    \b Example
+    \image html  ${object_stem}.png "${object_name}" width=${html_image_w}
+    \image latex ${object_stem}.eps "${object_name}" width=${latex_image_w}
   )
 
 /+ end of file  +/

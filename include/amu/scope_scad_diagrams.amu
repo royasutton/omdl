@@ -3,22 +3,25 @@
   output scad script example and script-result diagram table.
 
   requires:
-    mfs-scope: example
+    mfs-scope:  ${scope_id}
 
-    defines:  ${example_name}
-              ${image_views}
-              ${image_size}
+    defines:    ${example_name}
 
-    optional: ${scad_notes}
-              ${diagram_notes}
+                ${image_views}
+                ${image_size}
 
-              ${scope_id}               (default = example)
-              ${scad_begin}             (default = include)
-              ${scad_end}               (default = end_include)
+    optional:
+                ${scope_id}             (default = example)
+                ${scad_begin}           (default = include)
+                ${scad_end}             (default = end_include)
 
-              ${image_columns}          (default = 3)
-              ${html_image_w}           (default = 256)
-              ${latex_image_w}          (default = 1.5in)
+                ${html_image_w}         (default = 256)
+                ${latex_image_w}        (default = 1.5in)
+
+                ${image_columns}        (default = 3)
+
+                ${scad_notes}
+                ${diagram_notes}
 
  +/
 
@@ -26,9 +29,10 @@
   \amu_if scad_begin (-d ${scad_begin}) {${scad_begin}} else {include} endif
   \amu_if scad_end (-d ${scad_end}) {${scad_end}} else {end_include} endif
 
-  \amu_if image_columns (-d ${image_columns}) {${image_columns}} else {3} endif
   \amu_if html_image_w (-d ${html_image_w}) {${html_image_w}} else {256} endif
   \amu_if latex_image_w (-d ${latex_image_w}) {${latex_image_w}} else {1.5in} endif
+
+  \amu_if image_columns (-d ${image_columns}) {${image_columns}} else {3} endif
 
   \amu_scope scope_root (++root)
 
@@ -51,14 +55,14 @@
     diagram table
   +/
 
-  \amu_foreach png_files
+  \amu_foreach files_png
   (
     words="${image_views}"
     text="${OUTPUT_PREFIX}/png/${scope_root}_${scope_id}_${image_size}_\${x}.png"
     separator=" "
   )
 
-  \amu_foreach eps_files
+  \amu_foreach files_eps
   (
     words="${image_views}"
     text="${OUTPUT_PREFIX}/png2eps/${scope_root}_${scope_id}_${image_size}_\${x}.eps"
@@ -86,10 +90,10 @@
         columns=${image_columns}
         image_width="${html_image_w}"
         table_caption="${example_name} diagram example"
-        cell_files="${png_files}"
+        cell_files="${files_png}"
         cell_captions="${cell_captions}"
         cell_titles="${cell_titles}"
-        cell_urls="${png_files}"
+        cell_urls="${files_png}"
       )
   \endhtmlonly
   \latexonly
@@ -99,7 +103,7 @@
         columns=${image_columns}
         image_width="${latex_image_w}"
         table_caption="${example_name} diagram example"
-        cell_files="${eps_files}"
+        cell_files="${files_eps}"
         cell_captions="${cell_captions}"
       )
   \endlatexonly

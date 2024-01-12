@@ -41,8 +41,14 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_include (include/amu/includes_required.amu)
 
-  \amu_define view (diag)
-  \amu_include (include/amu/scope_diagrams_in_pg.amu)
+  \amu_define image_view (diag)
+  \amu_include (include/amu/scope_diagram_object.amu)
+
+  \amu_define group_id (${parent})
+  \amu_include (include/amu/scope_diagrams_in_group.amu)
+
+  \amu_define group_id (${group})
+  \amu_include (include/amu/scope_diagrams_in_group.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -56,8 +62,7 @@
 
   \details
 
-    \b Example
-    \amu_eval ( function=extrude_rotate_tr ${example_dim} )
+    \amu_eval ( object_name=extrude_rotate_tr ${object_script_example} )
 *******************************************************************************/
 module extrude_rotate_tr
 (
@@ -87,8 +92,7 @@ module extrude_rotate_tr
 
   \details
 
-    \b Example
-    \amu_eval ( function=extrude_rotate_tre ${example_dim} )
+    \amu_eval ( object_name=extrude_rotate_tre ${object_script_example} )
 
   \note When elongating <tt>(l > 0)</tt>, \p ra is ignored. However, \p m
         may be used to control which complete revolution section to render.
@@ -186,8 +190,7 @@ module extrude_rotate_tre
 
   \details
 
-    \b Example
-    \amu_eval ( function=extrude_linear_uls ${example_dim} )
+    \amu_eval ( object_name=extrude_linear_uls ${object_script_example} )
 
   \todo This function should be rewritten to use the built-in scaling
         provided by linear_extrude() in the upper and lower scaling zones.
