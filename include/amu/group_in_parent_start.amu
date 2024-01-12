@@ -4,7 +4,8 @@
   groups must be explicitly close via @} @}.
 
   requires:
-    definitions from one of pgid_*.
+                ${group*}               (from pgid_*.)
+                ${parent}
 
  +/
 

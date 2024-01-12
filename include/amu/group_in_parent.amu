@@ -3,7 +3,8 @@
   define a group and add to a parent group.
 
   requires:
-    definitions from one of pgid_*.
+                ${group*}               (from pgid_*.)
+                ${parent}
 
  +/
 

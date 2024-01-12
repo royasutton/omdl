@@ -3,8 +3,9 @@
   output validation results summary table.
 
   requires:
-    definitions from one of pgid_*.
-    definitions from validate_log_{th,td}.amu.
+                ${group}                (from pgid_*.)
+
+                ${tv_*}                 (from validate_log_{th,td}.amu)
 
  +/
 

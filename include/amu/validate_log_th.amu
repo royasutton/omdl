@@ -3,7 +3,7 @@
   define the validation result table headings.
 
   requires:
-    none.
+                ${tv_th}                (from validate_log_th.amu)
 
  +/
 

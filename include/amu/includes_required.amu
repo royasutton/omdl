@@ -2,7 +2,10 @@
 
   Output list of required includes files for current file.
 
-  defined include requirements as follows:
+  requires:
+    none.
+
+  example use:
 
   \amu_define includes_required_add
   (
