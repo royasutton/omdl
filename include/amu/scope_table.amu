@@ -1,0 +1,77 @@
+/+
+
+  create data table.
+
+  requires:
+    mfs-scope:  ${scope_id}
+
+    defines:    ${table_name}
+
+    optional:
+                ${scope_id}             (default = table)
+
+                ${output_scad}          (default = true)
+                ${output_console}       (default = true)
+
+                ${notes_scad}
+                ${notes_console}
+                ${notes_table}
+
+ +/
+
+  \amu_if scope_id (-d ${scope_id}) {${scope_id}} else {db} endif
+
+  \amu_if output_scad (-d ${output_scad}) {${output_scad}} else {true} endif
+  \amu_if output_console (-d ${output_console}) {${output_console}} else {true} endif
+
+  \amu_scope scope_root (++root)
+
+
+  /+
+    OpenSCAD script
+  +/
+
+  \amu_if ( "${output_scad}" == "true" )
+  {
+    <b>${table_name} script</b>
+
+    \dontinclude ${scope_root}_${scope_id}.scad
+    \skip ${scad_begin}
+    \until ${scad_end}
+  }
+  endif
+
+  \amu_if (-d ${notes_scad}) {${notes_scad}} endif
+
+  /+
+    OpenSCAD script console output
+  +/
+
+  \amu_if ( "${output_console}" == "true" )
+  {
+    <b>${table_name} script output</b>
+
+    \include ${scope_root}_${scope_id}.log
+  }
+  endif
+
+  \amu_if (-d ${notes_console}) {${notes_console}} endif
+
+  /+
+    data table
+
+    assumes:  (1) first line is table headings.
+              (2) remaining lines are table data.
+  +/
+
+  \amu_file th (file="${scope_root}_${scope_id}.log" first=1 last=1 ++rmecho ++rmnl ++read)
+  \amu_file td (file="${scope_root}_${scope_id}.log" first=2        ++rmecho ++rmnl ++read)
+  \amu_word tc (tokenizer="^" words="${th}" ++count)
+
+  <b>\amu_eval(${table_name}) data table</b>
+
+  \amu_table (columns=${tc} column_headings=${th} cell_texts=${td})
+
+  \amu_if (-d ${notes_table}) {${notes_table}} endif
+
+/+ end of file  +/
