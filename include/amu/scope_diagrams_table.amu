@@ -21,6 +21,10 @@
 
       ${image_columns}        (default = 3)
 
+      $(th_line)              (default = 1)
+      $(td_line_begin)        (default = 2)
+      $(td_line_end)          (default = 0, 0=eof)
+
       ${notes_diagrams}
       ${notes_table}
 
@@ -34,6 +38,10 @@
   \amu_if latex_image_w (-d ${latex_image_w}) {${latex_image_w}} else {1.5in} endif
 
   \amu_if image_columns (-d ${image_columns}) {${image_columns}} else {3} endif
+
+  \amu_if th_line (-d ${th_line}) {${th_line}} else {1} endif
+  \amu_if td_line_begin (-d ${td_line_begin}) {${td_line_begin}} else {2} endif
+  \amu_if td_line_end (-d ${td_line_end}) {${td_line_end}} else {0} endif
 
   \amu_scope scope_root (++root)
 
@@ -109,11 +117,11 @@
 
    +/
 
-  \amu_file th (file="${scope_root}_${scope_id}_table.log" first=1 last=1 ++rmecho ++rmnl ++read)
-  \amu_file td (file="${scope_root}_${scope_id}_table.log" first=2        ++rmecho ++rmnl ++read)
+  \amu_file th (file="${scope_root}_${scope_id}_table.log" first="${th_line}" last="${th_line}" ++rmecho ++rmnl ++read)
+  \amu_file td (file="${scope_root}_${scope_id}_table.log" first="${td_line_begin}" last="${td_line_end}" ++rmecho ++rmnl ++read)
   \amu_word tc (tokenizer="^" words="${th}" ++count)
 
-  <b>\amu_eval(${data_name}) data table</b>
+  <b>\amu_eval(${data_name}) table</b>
 
   \amu_table (columns=${tc} column_headings=${th} cell_texts=${td})
 

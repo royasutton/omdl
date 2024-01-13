@@ -18,6 +18,10 @@
 
       ${output_console}       (default = true)
 
+      $(th_line)              (default = 1)
+      $(td_line_begin)        (default = 2)
+      $(td_line_end)          (default = 0, 0=eof)
+
       ${notes_scad}
       ${notes_console}
       ${notes_table}
@@ -31,6 +35,10 @@
   \amu_if scad_end (-d ${scad_end}) {${scad_end}} else {end_include} endif
 
   \amu_if output_console (-d ${output_console}) {${output_console}} else {true} endif
+
+  \amu_if th_line (-d ${th_line}) {${th_line}} else {1} endif
+  \amu_if td_line_begin (-d ${td_line_begin}) {${td_line_begin}} else {2} endif
+  \amu_if td_line_end (-d ${td_line_end}) {${td_line_end}} else {0} endif
 
   \amu_scope scope_root (++root)
 
@@ -78,11 +86,11 @@
 
    +/
 
-  \amu_file th (file="${scope_root}_${scope_id}.log" first=1 last=1 ++rmecho ++rmnl ++read)
-  \amu_file td (file="${scope_root}_${scope_id}.log" first=2        ++rmecho ++rmnl ++read)
+  \amu_file th (file="${scope_root}_${scope_id}.log" first="${th_line}" last="${th_line}" ++rmecho ++rmnl ++read)
+  \amu_file td (file="${scope_root}_${scope_id}.log" first="${td_line_begin}" last="${td_line_end}" ++rmecho ++rmnl ++read)
   \amu_word tc (tokenizer="^" words="${th}" ++count)
 
-  <b>\amu_eval(${table_name}) data table</b>
+  <b>\amu_eval(${table_name}) table</b>
 
   \amu_table (columns=${tc} column_headings=${th} cell_texts=${td})
 
