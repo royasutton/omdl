@@ -72,13 +72,13 @@ draft_sheet_scale = 1;
   \details
 
     \b ANSI sheet sizes (inches):
-    \amu_table (columns=3 column_headings=${th_in} cell_texts=${td_in})
+    \amu_table (columns=4 column_headings=${th_in} cell_texts=${td_in})
 
     \b ISO-A sheet sizes (millimeters):
-    \amu_table (columns=3 column_headings=${th_mm} cell_texts=${td_mma})
+    \amu_table (columns=4 column_headings=${th_mm} cell_texts=${td_mma})
 
     \b ISO-B sheet sizes (millimeters):
-    \amu_table (columns=3 column_headings=${th_mm} cell_texts=${td_mmb})
+    \amu_table (columns=4 column_headings=${th_mm} cell_texts=${td_mmb})
 *******************************************************************************/
 draft_sheet_size = "A";
 
@@ -310,7 +310,10 @@ function draft_sheet_get_size
 *******************************************************************************/
 draft_sheet_size_tc =
 [
-  ["id", "sheet size"], ["sdx", "sheet x-dimension"], ["sdy", "sheet y-dimension"]
+  ["id", "sheet size"],
+  ["std", "standard"],
+  ["sdx", "sheet x-dimension"],
+  ["sdy", "sheet y-dimension"]
 ];
 
 //! \<table> sheet sizes data table rows.
@@ -321,27 +324,27 @@ draft_sheet_size_tc =
 draft_sheet_size_tr =
 [
   // ANSI
-  [ "A", length( 8.5, "in"), length(  11, "in")],
-  [ "B", length(  11, "in"), length(  17, "in")],
-  [ "C", length(  17, "in"), length(  22, "in")],
-  [ "D", length(  22, "in"), length(  34, "in")],
-  [ "E", length(  34, "in"), length(  44, "in")],
+  [ "A", "ANSI", length( 8.5, "in"), length(  11, "in")],
+  [ "B", "ANSI", length(  11, "in"), length(  17, "in")],
+  [ "C", "ANSI", length(  17, "in"), length(  22, "in")],
+  [ "D", "ANSI", length(  22, "in"), length(  34, "in")],
+  [ "E", "ANSI", length(  34, "in"), length(  44, "in")],
 
   // ISO A
-  ["A5", length( 149, "mm"), length( 210, "mm")],
-  ["A4", length( 210, "mm"), length( 297, "mm")],
-  ["A3", length( 297, "mm"), length( 420, "mm")],
-  ["A2", length( 420, "mm"), length( 594, "mm")],
-  ["A1", length( 594, "mm"), length( 841, "mm")],
-  ["A0", length( 841, "mm"), length(1189, "mm")],
+  ["A5", "ISO A", length( 149, "mm"), length( 210, "mm")],
+  ["A4", "ISO A", length( 210, "mm"), length( 297, "mm")],
+  ["A3", "ISO A", length( 297, "mm"), length( 420, "mm")],
+  ["A2", "ISO A", length( 420, "mm"), length( 594, "mm")],
+  ["A1", "ISO A", length( 594, "mm"), length( 841, "mm")],
+  ["A0", "ISO A", length( 841, "mm"), length(1189, "mm")],
 
   // ISO B
-  ["B5", length( 177, "mm"), length( 250, "mm")],
-  ["B4", length( 250, "mm"), length( 354, "mm")],
-  ["B3", length( 354, "mm"), length( 500, "mm")],
-  ["B2", length( 500, "mm"), length( 707, "mm")],
-  ["B1", length( 707, "mm"), length(1000, "mm")],
-  ["B0", length(1000, "mm"), length(1414, "mm")]
+  ["B5", "ISO B", length( 177, "mm"), length( 250, "mm")],
+  ["B4", "ISO B", length( 250, "mm"), length( 354, "mm")],
+  ["B3", "ISO B", length( 354, "mm"), length( 500, "mm")],
+  ["B2", "ISO B", length( 500, "mm"), length( 707, "mm")],
+  ["B1", "ISO B", length( 707, "mm"), length(1000, "mm")],
+  ["B0", "ISO B", length(1000, "mm"), length(1414, "mm")]
 ];
 
 //! Get sheet configuration value helper function.
