@@ -143,7 +143,7 @@
     \amu_define image_views   (top right diag)
     \amu_define image_size    (sxga)
 
-    \amu_define notes_diagram
+    \amu_define notes_diagrams
     ( This example uses the \p view options to see the bearing internals.
       Click image above to expand. )
 

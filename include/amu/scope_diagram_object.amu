@@ -1,20 +1,23 @@
 /+
 
-  defines for including object example script and result.
+  defines: define macro for named object diagram.
 
-  requires:
-    mfs-scope:  ${scope_id}
+  requirements:
+    scope:
+      ${scope_id}
 
-    defines:    ${object_name}
+    defines:
+      ${object_name}
 
-                ${image_view}
+      ${image_view}
 
-    optional:   ${image_size}           (default = qvga)
+    optional:
+      ${scope_id}             (default = dim)
 
-                ${scope_id}             (default = dim)
+      ${image_size}           (default = qvga)
 
-                ${html_image_w}         (default = 256)
-                ${latex_image_w}        (default = 1.5in)
+      ${html_image_w}         (default = 256)
+      ${latex_image_w}        (default = 1.5in)
 
   examples:
     (1) \amu_eval ( image_view=<VIEW> object_name=<NAME> ${object_script_example} )
@@ -23,9 +26,9 @@
 
  +/
 
-  \amu_if image_size (-d ${image_size}) {${image_size}} else {qvga} endif
-
   \amu_if scope_id (-d ${scope_id}) {${scope_id}} else {dim} endif
+
+  \amu_if image_size (-d ${image_size}) {${image_size}} else {qvga} endif
 
   \amu_if html_image_w (-d ${html_image_w}) {${html_image_w}} else {256} endif
   \amu_if latex_image_w (-d ${latex_image_w}) {${latex_image_w}} else {1.5in} endif
@@ -34,9 +37,13 @@
 
   \amu_define object_stem (${scope_root}_${scope_id}_${image_size}_${image_view}_${object_name})
 
+
   /+
-    object script then example
+
+    object script then diagram
+
    +/
+
   \amu_define object_script_example
   (
     \b Example
@@ -46,8 +53,11 @@
   )
 
   /+
-    object example then script
+
+    object diagram then script
+
    +/
+
   \amu_define object_example_script
   (
     \b Example
@@ -57,8 +67,11 @@
   )
 
   /+
-    object example only
+
+    object diagram only
+
    +/
+
   \amu_define object_example
   (
     \b Example

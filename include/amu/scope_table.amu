@@ -1,35 +1,45 @@
 /+
 
-  create data table.
+  output: scope scad script data table.
 
-  requires:
-    mfs-scope:  ${scope_id}
+  requirements:
+    scope:
+      ${scope_id}
 
-    defines:    ${table_name}
+    defines:
+      ${table_name}
 
     optional:
-                ${scope_id}             (default = table)
+      ${scope_id}             (default = table)
 
-                ${output_scad}          (default = true)
-                ${output_console}       (default = true)
+      ${output_scad}          (default = true)
+      ${scad_begin}           (default = include)
+      ${scad_end}             (default = end_include)
 
-                ${notes_scad}
-                ${notes_console}
-                ${notes_table}
+      ${output_console}       (default = true)
+
+      ${notes_scad}
+      ${notes_console}
+      ${notes_table}
 
  +/
 
-  \amu_if scope_id (-d ${scope_id}) {${scope_id}} else {db} endif
+  \amu_if scope_id (-d ${scope_id}) {${scope_id}} else {table} endif
 
   \amu_if output_scad (-d ${output_scad}) {${output_scad}} else {true} endif
+  \amu_if scad_begin (-d ${scad_begin}) {${scad_begin}} else {include} endif
+  \amu_if scad_end (-d ${scad_end}) {${scad_end}} else {end_include} endif
+
   \amu_if output_console (-d ${output_console}) {${output_console}} else {true} endif
 
   \amu_scope scope_root (++root)
 
 
   /+
-    OpenSCAD script
-  +/
+
+    scad script
+
+   +/
 
   \amu_if ( "${output_scad}" == "true" )
   {
@@ -44,8 +54,10 @@
   \amu_if (-d ${notes_scad}) {${notes_scad}} endif
 
   /+
-    OpenSCAD script console output
-  +/
+
+    scad script console output
+
+   +/
 
   \amu_if ( "${output_console}" == "true" )
   {
@@ -58,11 +70,13 @@
   \amu_if (-d ${notes_console}) {${notes_console}} endif
 
   /+
+
     data table
 
     assumes:  (1) first line is table headings.
               (2) remaining lines are table data.
-  +/
+
+   +/
 
   \amu_file th (file="${scope_root}_${scope_id}.log" first=1 last=1 ++rmecho ++rmnl ++read)
   \amu_file td (file="${scope_root}_${scope_id}.log" first=2        ++rmecho ++rmnl ++read)

@@ -1,29 +1,34 @@
 /+
 
-  create parameter diagrams and data table.
+  output: scope scad script table of diagrams and data table.
 
-  requires:
-    mfs-scope:  ${scope_id}_{diagram,table}
+  requirements:
+    scope:
+      ${scope_id}_{diagram,table}
 
-    defines:    ${data_name}
+    defines:
+      ${data_name}
 
-                ${image_views}
-                ${image_size}
+      ${image_views}
 
     optional:
-                ${scope_id}             (default = db)
+      ${scope_id}             (default = db)
 
-                ${html_image_w}         (default = 256)
-                ${latex_image_w}        (default = 1.5in)
+      ${image_size}           (default = qvga)
 
-                ${image_columns}        (default = 3)
+      ${html_image_w}         (default = 256)
+      ${latex_image_w}        (default = 1.5in)
 
-                ${notes_diagram}
-                ${notes_table}
+      ${image_columns}        (default = 3)
+
+      ${notes_diagrams}
+      ${notes_table}
 
  +/
 
   \amu_if scope_id (-d ${scope_id}) {${scope_id}} else {db} endif
+
+  \amu_if image_size (-d ${image_size}) {${image_size}} else {qvga} endif
 
   \amu_if html_image_w (-d ${html_image_w}) {${html_image_w}} else {256} endif
   \amu_if latex_image_w (-d ${latex_image_w}) {${latex_image_w}} else {1.5in} endif
@@ -32,9 +37,12 @@
 
   \amu_scope scope_root (++root)
 
+
   /+
+
     diagram table
-  +/
+
+   +/
 
   \amu_foreach files_png
   (
@@ -64,8 +72,6 @@
     separator="^"
   )
 
-  \amu_if (-d ${notes_diagram}) {${notes_diagram}} endif
-
   \htmlonly
     \amu_image_table
       (
@@ -79,6 +85,7 @@
         cell_urls="${files_png}"
       )
   \endhtmlonly
+
   \latexonly
     \amu_image_table
       (
@@ -91,21 +98,25 @@
       )
   \endlatexonly
 
+  \amu_if (-d ${notes_diagrams}) {${notes_diagrams}} endif
+
   /+
+
     data table
 
     assumes:  (1) first line is table headings.
               (2) remaining lines are table data.
-  +/
+
+   +/
 
   \amu_file th (file="${scope_root}_${scope_id}_table.log" first=1 last=1 ++rmecho ++rmnl ++read)
   \amu_file td (file="${scope_root}_${scope_id}_table.log" first=2        ++rmecho ++rmnl ++read)
   \amu_word tc (tokenizer="^" words="${th}" ++count)
 
-  \amu_if (-d ${notes_table}) {${notes_table}} endif
-
   <b>\amu_eval(${data_name}) data table</b>
 
   \amu_table (columns=${tc} column_headings=${th} cell_texts=${td})
+
+  \amu_if (-d ${notes_table}) {${notes_table}} endif
 
 /+ end of file  +/

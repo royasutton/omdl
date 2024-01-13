@@ -69,7 +69,7 @@
       ( The \ref make_bearing_linear_rod operations can be used to
         transform 2D and 3D objects into 3D-printable linear rod
         bearings with arbitrary bearing-ball and rod sizes. )
-    \amu_define notes_diagram
+    \amu_define notes_diagrams
       ( Click image above to expand. See the end of ${FILE_NAME} in the
         scope [ \em ${scope_id} ] for the the dimension operations used
         in the above example. )

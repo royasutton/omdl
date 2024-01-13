@@ -41,10 +41,10 @@
 
   \details
 
-    \amu_define data_name     (Cylindrical batteries)
-    \amu_define image_views   (top right diag)
-    \amu_define image_size    (sxga)
-    \amu_define notes_diagram (See Wikipedia battery [sizes] for information.)
+    \amu_define data_name       (Cylindrical batteries)
+    \amu_define image_views     (top right diag)
+    \amu_define image_size      (sxga)
+    \amu_define notes_diagrams  (See Wikipedia battery [sizes] for information.)
 
     \amu_include (include/amu/scope_diagrams_table.amu)
 

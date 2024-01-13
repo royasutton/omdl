@@ -1,50 +1,70 @@
 /+
 
-  output scad script example and console output.
+  output: scope scad script and script console output.
 
-  requires:
-    mfs-scope:  ${scope_id}
+  requirements:
+    scope:
+      ${scope_id}             (1 scope, 1 target)
 
-    defines:    ${example_name}
+    defines:
+      ${example_name}
 
     optional:
-                ${scope_id}             (default = example)
-                ${scad_begin}           (default = include)
-                ${scad_end}             (default = end_include)
+      ${scope_id}             (default = example)
 
-                ${notes_scad}
-                ${notes_console}
+      ${output_scad}          (default = true)
+      ${scad_begin}           (default = include)
+      ${scad_end}             (default = end_include)
+
+      ${output_console}       (default = true)
+
+      ${notes_scad}
+      ${notes_console}
 
  +/
 
   \amu_if scope_id (-d ${scope_id}) {${scope_id}} else {example} endif
+
+  \amu_if output_scad (-d ${output_scad}) {${output_scad}} else {true} endif
   \amu_if scad_begin (-d ${scad_begin}) {${scad_begin}} else {include} endif
   \amu_if scad_end (-d ${scad_end}) {${scad_end}} else {end_include} endif
 
+  \amu_if output_console (-d ${output_console}) {${output_console}} else {true} endif
+
   \amu_scope scope_root (++root)
 
-  /+ set amu_eval field separator to empty string +/
-  \amu_define EFS()
 
   /+
-    OpenSCAD script
-  +/
 
-  <b>\amu_eval(${example_name}) script example</b>
+    scad script
 
-  \dontinclude \amu_eval(${scope_root}_${scope_id}).scad
-  \skip \amu_eval(${scad_begin})
-  \until \amu_eval(${scad_end})
+   +/
+
+  \amu_if ( "${output_scad}" == "true" )
+  {
+    <b>${example_name} script</b>
+
+    \dontinclude ${scope_root}_${scope_id}.scad
+    \skip ${scad_begin}
+    \until ${scad_end}
+  }
+  endif
 
   \amu_if (-d ${notes_scad}) {${notes_scad}} endif
 
   /+
-    console output
-  +/
 
-  <b>\amu_eval(${example_name}) script output</b>
+    scad script console output
 
-  \include \amu_eval(${scope_root}_${scope_id}).log
+   +/
+
+  \amu_if ( "${output_console}" == "true" )
+  {
+    <b>${example_name} script output</b>
+
+    \include ${scope_root}_${scope_id}.log
+  }
+  endif
 
   \amu_if (-d ${notes_console}) {${notes_console}} endif
 
