@@ -67,7 +67,7 @@ draft_sheet_scale = 1;
   \amu_scope scope_mm (index=3)
   \amu_file th_mm  (file="${scope_mm}.log" first=1  last=1 ++rmecho ++rmnl ++read)
   \amu_file td_mma (file="${scope_mm}.log" first=7  last=12 ++rmecho ++rmnl ++read)
-  \amu_file td_mmb (file="${scope_mm}.log" first=13 last=0 ++rmecho ++rmnl ++read)
+  \amu_file td_mmb (file="${scope_mm}.log" first=13 last=18 ++rmecho ++rmnl ++read)
 
   \details
 
@@ -344,7 +344,18 @@ draft_sheet_size_tr =
   ["B3", "ISO B", length( 354, "mm"), length( 500, "mm")],
   ["B2", "ISO B", length( 500, "mm"), length( 707, "mm")],
   ["B1", "ISO B", length( 707, "mm"), length(1000, "mm")],
-  ["B0", "ISO B", length(1000, "mm"), length(1414, "mm")]
+  ["B0", "ISO B", length(1000, "mm"), length(1414, "mm")],
+
+  // Others
+  ["Letter",    "Other", length( 215.9, "mm"), length( 279.4, "mm")],
+  ["Legal",     "Other", length( 215.9, "mm"), length( 355.6, "mm")],
+  ["Executive", "Other", length( 190.5, "mm"), length( 254.0, "mm")],
+  ["C5E",       "Other", length( 163.0, "mm"), length( 229.0, "mm")],
+  ["Comm10",    "Other", length( 105.0, "mm"), length( 241.0, "mm")],
+  ["DLE",       "Other", length( 110.0, "mm"), length( 220.0, "mm")],
+  ["Folio",     "Other", length( 210.0, "mm"), length( 330.0, "mm")],
+  ["Ledger",    "Other", length( 432.0, "mm"), length( 279.0, "mm")],
+  ["Tabloid",   "Other", length( 279.0, "mm"), length( 432.0, "mm")]
 ];
 
 //! Get sheet configuration value helper function.
