@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2023
+  \date   2015-2024
 
   \copyright
 
@@ -43,14 +43,9 @@
 
   \details
 
-    \b Example
-
-      \dontinclude \amu_scope(index=1).scad
-      \skip include
-      \until comment=2 );
-
-    \b Result \include \amu_scope(index=1).log
-
+    \amu_define example_name (Table use)
+    \amu_define scope_id (example_use)
+    \amu_include (include/amu/scope.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -720,31 +715,20 @@ verbose = false
     <tt>cs = ["c1", "c2"]</tt>. The output can then be processed to
     produce documentation tables as shown in the example below.
 
-    /+
-        read scope output log to define example table
-     +/
+    \amu_define table_name (Table write)
+    \amu_define scope_id (example_table)
 
-    \amu_scope scope  (index=2)
-    \amu_file log  (file="${scope}.log" ++rmecho ++read)
-    \amu_file th1  (text="${log}" first=1 last=1 ++read)
-    \amu_file td1  (text="${log}" first=2 last=9 ++read)
-    \amu_file th2  (text="${log}" first=10 last=10 ++read)
-    \amu_file td2  (text="${log}" first=11 ++read)
-    \amu_word th2c (words="${th2}" tokenizer="^" ++count)
+    \amu_define th_line (1)
+    \amu_define td_line_begin (2)
+    \amu_define td_line_end (9)
+    \amu_include (include/amu/scope_table.amu)
 
-    \b Example
-
-      \dontinclude \amu_eval(${scope}).scad
-      \skip include
-      \until table_cols);
-
-    \b Result \include \amu_eval(${scope}).log
-
-    \b Key
-      \amu_table (columns=2 column_headings=${th1} cell_texts=${td1})
-
-    \b Table
-      \amu_table (columns=${th2c} column_headings=${th2} cell_texts=${td2})
+    \amu_define output_scad (false)
+    \amu_define output_console (false)
+    \amu_define th_line (10)
+    \amu_define td_line_begin (11)
+    \amu_define td_line_end (0)
+    \amu_include (include/amu/scope_table.amu)
 *******************************************************************************/
 module table_write
 (
@@ -821,7 +805,7 @@ module table_write
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE example1;
+BEGIN_SCOPE example_use;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <units/length.scad>;
@@ -872,6 +856,8 @@ BEGIN_SCOPE example1;
     table_dump_getters( r=table_rows, c=table_cols,
       tr="table_rows", tc="table_cols",
       ri="my_config", vri=true, name="get_my_value", comment=2 );
+
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -880,7 +866,7 @@ BEGIN_SCOPE example1;
   END_MFSCRIPT;
 END_SCOPE;
 
-BEGIN_SCOPE example2;
+BEGIN_SCOPE example_table;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <units/length.scad>;
@@ -909,6 +895,8 @@ BEGIN_SCOPE example2;
 
     map_write(table_cols, value_tags=["i"]);
     table_write(table_rows, table_cols);
+
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;

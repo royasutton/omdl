@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2023
+  \date   2015-2024
 
   \copyright
 
@@ -56,15 +56,27 @@
      d         | degree                 | decimal         |
      dms       | degree, minute, second | decimal-list-3  |
 
-    \b Example
 
-      \dontinclude \amu_scope(index=1).scad
-      \skip include
-      \until to="dms");
+    \amu_define example_name (Angle base unit example)
+    \amu_define scope_id (example)
+    \amu_define output_scad (true)
+    \amu_define output_console (false)
+    \amu_include (include/amu/scope.amu)
 
-    \b Result (angle_unit_base = \b r):   \include \amu_scope(index=1)_r.log
-    \b Result (angle_unit_base = \b d):   \include \amu_scope(index=1)_d.log
-    \b Result (angle_unit_base = \b dms): \include \amu_scope(index=1)_dms.log
+    \amu_define output_scad (false)
+    \amu_define output_console (true)
+
+    \amu_define example_name (angle_unit_base=r)
+    \amu_define scope_id (example_r)
+    \amu_include (include/amu/scope.amu)
+
+    \amu_define example_name (angle_unit_base=d)
+    \amu_define scope_id (example_d)
+    \amu_include (include/amu/scope.amu)
+
+    \amu_define example_name (angle_unit_base=dms)
+    \amu_define scope_id (example_dms)
+    \amu_include (include/amu/scope.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -195,8 +207,11 @@ BEGIN_SCOPE example;
     c5 = angle([30, 15, 50], from="dms", to="r");
     c6 = angle(0.528205, to="dms");
 
+    // end_include
+
     echo( bu=bu );
     echo( du=du );
+    echo( );
     echo( c1=c1 );
     echo( c2=c2 );
     echo( c3=c3 );

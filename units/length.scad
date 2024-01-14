@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2023
+  \date   2015-2024
 
   \copyright
 
@@ -66,21 +66,39 @@
      yd        | yard
      mi        | mile
 
-    \b Example
+    \amu_define example_name (Length base units example)
+    \amu_define scope_id (example)
+    \amu_define output_scad (true)
+    \amu_define output_console (false)
+    \amu_include (include/amu/scope.amu)
 
-      \dontinclude \amu_scope(index=1).scad
-      \skip include
-      \until to="mm");
+    \amu_define output_scad (false)
+    \amu_define output_console (true)
 
-    \b Result (length_unit_base = \b mm):  \include \amu_scope(index=1)_mm.log
-    \b Result (length_unit_base = \b cm):  \include \amu_scope(index=1)_cm.log
-    \b Result (length_unit_base = \b mil): \include \amu_scope(index=1)_mil.log
-    \b Result (length_unit_base = \b in):  \include \amu_scope(index=1)_in.log
+    \amu_define example_name (length_unit_base=mm)
+    \amu_define scope_id (example_mm)
+    \amu_include (include/amu/scope.amu)
 
-    \b Example (equivalent lengths)
+    \amu_define example_name (length_unit_base=cm)
+    \amu_define scope_id (example_cm)
+    \amu_include (include/amu/scope.amu)
 
-    \image html  length_dim_qvga_top.png "Unit Lengths"
-    \image latex length_dim_qvga_top.eps "Unit Lengths" width=4in
+    \amu_define example_name (length_unit_base=mil)
+    \amu_define scope_id (example_mil)
+    \amu_include (include/amu/scope.amu)
+
+    \amu_define example_name (length_unit_base=in)
+    \amu_define scope_id (example_in)
+    \amu_include (include/amu/scope.amu)
+
+    /+
+      include diagram
+    +/
+    \amu_define example_name  (Equivalent lengths)
+    \amu_define image_views   (top)
+    \amu_define image_size    (qvga)
+    \amu_define scope_id      (equivalents)
+    \amu_include (include/amu/scope_diagrams.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -295,8 +313,11 @@ BEGIN_SCOPE example;
     c5 = length(10, from="mil", to="in");
     c6 = length(10, from="ft", to="mm");
 
+    // end_include
+
     echo( bu=bu );
     echo( du=du );
+    echo( );
     echo( c1=c1 );
     echo( c2=c2 );
     echo( c3=c3 );
@@ -315,7 +336,7 @@ BEGIN_SCOPE example;
   END_MFSCRIPT;
 END_SCOPE;
 
-BEGIN_SCOPE dim;
+BEGIN_SCOPE equivalents;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <units/length.scad>;

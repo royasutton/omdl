@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2019-2023
+  \date   2019-2024
 
   \copyright
 
@@ -60,25 +60,20 @@ draft_sheet_scale = 1;
 
 //! <string> Drafting sheet size identifier.
 /***************************************************************************//**
-  \amu_scope scope_in (index=2)
-  \amu_file th_in (file="${scope_in}.log" first=1 last=1 ++rmecho ++rmnl ++read)
-  \amu_file td_in (file="${scope_in}.log" first=2 last=6 ++rmecho ++rmnl ++read)
-
-  \amu_scope scope_mm (index=3)
-  \amu_file th_mm  (file="${scope_mm}.log" first=1  last=1 ++rmecho ++rmnl ++read)
-  \amu_file td_mma (file="${scope_mm}.log" first=7  last=12 ++rmecho ++rmnl ++read)
-  \amu_file td_mmb (file="${scope_mm}.log" first=13 last=18 ++rmecho ++rmnl ++read)
-
   \details
 
-    \b ANSI sheet sizes (inches):
-    \amu_table (columns=4 column_headings=${th_in} cell_texts=${td_in})
+    <b>Sheet sizes</b>
 
-    \b ISO-A sheet sizes (millimeters):
-    \amu_table (columns=4 column_headings=${th_mm} cell_texts=${td_mma})
+    \amu_define output_scad (false)
+    \amu_define output_console (false)
 
-    \b ISO-B sheet sizes (millimeters):
-    \amu_table (columns=4 column_headings=${th_mm} cell_texts=${td_mmb})
+    \amu_define table_name (Available sizes in inches)
+    \amu_define scope_id (sheet_sizes_in)
+    \amu_include (include/amu/scope_table.amu)
+
+    \amu_define table_name (Available sizes in mm)
+    \amu_define scope_id (sheet_sizes_mm)
+    \amu_include (include/amu/scope_table.amu)
 *******************************************************************************/
 draft_sheet_size = "A";
 
@@ -88,10 +83,12 @@ draft_sheet_size = "A";
 
     Available configurations:
 
-      name        | description
-    :-------------|:--------------------------------------------------------
-      \b L84TS    | Small sheet landscape layout with 8x4 traditional zones
-      \b P48TS    | Small sheet Portrait layout with 4x8 traditional zones
+    \amu_define table_name (Sheet configurations)
+    \amu_define scope_id (sheet_config)
+    \amu_define output_scad (false)
+    \amu_define output_console (false)
+
+    \amu_include (include/amu/scope_table.amu)
 *******************************************************************************/
 draft_sheet_config = "L84TS";
 
@@ -127,10 +124,6 @@ function draft_get_default
 
 //! <map> A drafting configuration defaults map (style1).
 /***************************************************************************//**
-  \amu_scope scope (index=1)
-  \amu_file mh (file="${scope}.log" first=1 last=1 ++rmecho ++rmnl ++read)
-  \amu_file md (file="${scope}.log" first=2 last=0 ++rmecho ++rmnl ++read)
-
   \details
 
     Configuration values for drafting primitives and tools. Specific
@@ -138,8 +131,13 @@ function draft_get_default
     completely new maps may assembled to implement new styles as
     desired.
 
-    All lengths are in millimeters:
-    \amu_table (columns=2 column_headings=${mh} cell_texts=${md})
+    \amu_define table_name (style1)
+    \amu_define scope_id (dfraft_style1)
+    \amu_define output_scad (false)
+    \amu_define output_console (false)
+    \amu_define notes_table (All dimensions are in millimeters.)
+
+    \amu_include (include/amu/scope_table.amu)
 
   \hideinitializer
 *******************************************************************************/
@@ -271,14 +269,14 @@ draft_defaults_style1_map =
     draft_defaults_map =
       map_merge
       (
-        [ // define overrides first
+        [ // define value overrides first
           ["line-use-hull", false],
           ["dim-offset", length(2/64)],
           ["dim-leader-length", length(3/8)],
           ["dim-line-distance", length(3/8)],
           ["dim-line-extension-length", length(2/8)]
         ],
-          // merge with existing style
+          // start with existing style map
           draft_defaults_style1_map
       );
     \endcode
@@ -384,6 +382,7 @@ function draft_sheet_get_config
 draft_sheet_config_tc =
 [
   ["id",  "configuration name"],
+  ["info", "configuration description"],
 
   // sheet layout
   ["sll", "sheet landscape layout"],
@@ -416,6 +415,7 @@ draft_sheet_config_tr =
 [
   [
     "L84TS",
+    "Small sheet landscape layout with 8x4 traditional zones",
 
     true,
     length(3/4, "in"),
@@ -438,6 +438,7 @@ draft_sheet_config_tr =
 
   [
     "P48TS",
+    "Small sheet Portrait layout with 4x8 traditional zones",
 
     false,
     length(1/2, "in"),
@@ -697,59 +698,60 @@ concat
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE config;
-  BEGIN_SCOPE defaults;
-    BEGIN_OPENSCAD;
-      include <units/angle.scad>;
-      include <units/length.scad>;
-      include <omdl-base.scad>;
-      include <tools/drafting/draft-base.scad>;
-      length_unit_base = "mm";
+BEGIN_SCOPE dfraft_style1;
+  BEGIN_OPENSCAD;
+    include <units/angle.scad>;
+    include <units/length.scad>;
+    include <omdl-base.scad>;
+    include <tools/drafting/draft-base.scad>;
+    length_unit_base = "mm";
 
-      map_write( draft_defaults_style1_map );
-    END_OPENSCAD;
+    map_write( draft_defaults_style1_map );
+  END_OPENSCAD;
 
-    BEGIN_MFSCRIPT;
-      include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
-      include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
-    END_MFSCRIPT;
-  END_SCOPE;
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
 
-  BEGIN_SCOPE sheet;
-    BEGIN_SCOPE in;
-      BEGIN_OPENSCAD;
-        include <units/angle.scad>;
-        include <units/length.scad>;
-        include <omdl-base.scad>;
-        include <tools/drafting/draft-base.scad>;
-        length_unit_base = "in";
+BEGIN_SCOPE sheet_sizes;
+  BEGIN_OPENSCAD;
+    include <units/angle.scad>;
+    include <units/length.scad>;
+    include <omdl-base.scad>;
+    include <tools/drafting/draft-base.scad>;
+    length_unit_base = "in";
 
-        table_write( draft_sheet_size_tr, draft_sheet_size_tc );
-      END_OPENSCAD;
+    table_write( draft_sheet_size_tr, draft_sheet_size_tc, heading_text=true );
+  END_OPENSCAD;
 
-      BEGIN_MFSCRIPT;
-        include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
-        include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
-      END_MFSCRIPT;
-    END_SCOPE;
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
 
-    BEGIN_SCOPE mm;
-      BEGIN_OPENSCAD;
-        include <units/angle.scad>;
-        include <units/length.scad>;
-        include <omdl-base.scad>;
-        include <tools/drafting/draft-base.scad>;
-        length_unit_base = "mm";
+    defines name "units" define "length_unit_base" strings "in mm";
+    variables add_opts_combine "units";
 
-        table_write( draft_sheet_size_tr, draft_sheet_size_tc );
-      END_OPENSCAD;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
 
-      BEGIN_MFSCRIPT;
-        include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
-        include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
-      END_MFSCRIPT;
-    END_SCOPE;
-  END_SCOPE;
+BEGIN_SCOPE sheet_config;
+  BEGIN_OPENSCAD;
+    include <units/angle.scad>;
+    include <units/length.scad>;
+    include <omdl-base.scad>;
+    include <tools/drafting/draft-base.scad>;
+    length_unit_base = "mm";
+
+    table_write ( r=draft_sheet_config_tr, c=draft_sheet_config_tc,
+                  cs=["id", "info"], heading_text=true );
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+  END_MFSCRIPT;
 END_SCOPE;
 */
 

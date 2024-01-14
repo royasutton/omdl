@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2019-2023
+  \date   2019-2024
 
   \copyright
 
@@ -71,10 +71,11 @@
     scale as needed for the sheet size and target output page. (5)
     Finally print or save a PDF file.
 
-    \amu_define example_name  (Drafting)
-    \amu_define image_views   (top)
-    \amu_define image_size    (uxga)
-    \amu_define html_image_w  (768)
+    \amu_define example_name      (Drafting)
+    \amu_define image_views       (top)
+    \amu_define image_size        (uxga)
+    \amu_define html_image_w      (768)
+    \amu_define output_scad_last  (true)
 
     \amu_include (include/amu/scope_diagrams.amu)
 

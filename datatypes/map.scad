@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2023
+  \date   2015-2024
 
   \copyright
 
@@ -43,14 +43,9 @@
 
   \details
 
-    \b Example
-
-      \dontinclude \amu_scope(index=1).scad
-      \skip include
-      \until map_dump(map);
-
-    \b Result \include \amu_scope(index=1).log
-
+    \amu_define example_name (Map use)
+    \amu_define scope_id (example_use)
+    \amu_include (include/amu/scope.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -380,26 +375,9 @@ module map_dump
     output can then be processed to produce documentation tables as
     shown in the example below.
 
-    /+
-        read scope output log to define example table
-     +/
-
-    \amu_scope scope  (index=2)
-    \amu_file log     (file="${scope}.log" ++rmecho ++read)
-    \amu_file th      (text="${log}" last=1 ++read)
-    \amu_file td      (text="${log}" first=2 ++read)
-    \amu_word th_cnt  (words="${th}" tokenizer="^" ++count)
-
-    \b Example
-
-      \dontinclude \amu_eval(${scope}).scad
-      \skip include
-      \until ["center","i"]);
-
-    \b Result \include \amu_eval(${scope}).log
-
-    \b Table
-      \amu_table (columns=${th_cnt} column_headings=${th} cell_texts=${td})
+    \amu_define table_name (Map write)
+    \amu_define scope_id (example_table)
+    \amu_include (include/amu/scope_table.amu)
 *******************************************************************************/
 module map_write
 (
@@ -463,7 +441,7 @@ module map_write
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE example1;
+BEGIN_SCOPE example_use;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
 
@@ -497,6 +475,8 @@ BEGIN_SCOPE example1;
       );
 
     map_dump(map);
+
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -505,7 +485,7 @@ BEGIN_SCOPE example1;
   END_MFSCRIPT;
 END_SCOPE;
 
-BEGIN_SCOPE example2;
+BEGIN_SCOPE example_table;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
 
@@ -520,6 +500,8 @@ BEGIN_SCOPE example2;
     ];
 
     map_write(map, index_tags=["center","i"]);
+
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;

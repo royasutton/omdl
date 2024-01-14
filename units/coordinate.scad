@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2017-2023
+  \date   2017-2024
 
   \copyright
 
@@ -71,19 +71,33 @@
 
   \note The [azimuthal] angle is a measure of the radial vector orthogonal
         projection onto the xy-plane measured from the positive x-axis.
-  \note The polar angle is measured from the z-axis ([zenith]) to the
+        The polar angle is measured from the z-axis ([zenith]) to the
         radial vector.
 
-    \b Example
+    \amu_define example_name (Coordinate system base example)
+    \amu_define scope_id (example)
+    \amu_define output_scad (true)
+    \amu_define output_console (false)
+    \amu_include (include/amu/scope.amu)
 
-      \dontinclude \amu_scope(index=1).scad
-      \skip include
-      \until to="c");
+    \amu_define output_scad (false)
+    \amu_define output_console (true)
 
-    \b Result (coordinate_unit_base = \b c): \include \amu_scope(index=1)_c.log
-    \b Result (coordinate_unit_base = \b p): \include \amu_scope(index=1)_p.log
-    \b Result (coordinate_unit_base = \b y): \include \amu_scope(index=1)_y.log
-    \b Result (coordinate_unit_base = \b s): \include \amu_scope(index=1)_s.log
+    \amu_define example_name (coordinate_unit_base=c)
+    \amu_define scope_id (example_c)
+    \amu_include (include/amu/scope.amu)
+
+    \amu_define example_name (coordinate_unit_base=p)
+    \amu_define scope_id (example_p)
+    \amu_include (include/amu/scope.amu)
+
+    \amu_define example_name (coordinate_unit_base=y)
+    \amu_define scope_id (example_y)
+    \amu_include (include/amu/scope.amu)
+
+    \amu_define example_name (coordinate_unit_base=s)
+    \amu_define scope_id (example_s)
+    \amu_include (include/amu/scope.amu)
 
     [coordinate system]: https://en.wikipedia.org/wiki/Coordinate_system
     [cartesian]: https://en.wikipedia.org/wiki/Cartesian_coordinate_system
@@ -411,8 +425,11 @@ BEGIN_SCOPE example;
     c5 = coordinate([10*sqrt(2), 45, 45], from="s", to="y");
     c6 = coordinate([sqrt(2), 45], to="c");
 
+    // end_include
+
     echo( bu=bu );
     echo( du=du );
+    echo( );
     echo( c1=c1 );
     echo( c2=c2 );
     echo( c3=c3 );

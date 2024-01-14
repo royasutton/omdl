@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2023
+  \date   2015-2024
 
   \copyright
 
@@ -43,13 +43,8 @@
 
   \details
 
-    \b Example
-
-      \dontinclude \amu_scope(index=1).scad
-      \skip include
-      \until log_error( message );
-
-    \b Result \include \amu_scope(index=1).log
+    \amu_define example_name (Console)
+    \amu_include (include/amu/scope.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -236,6 +231,8 @@ BEGIN_SCOPE example;
 
     // error
     log_error( message );
+
+    // end_include
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
