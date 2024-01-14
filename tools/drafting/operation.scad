@@ -842,7 +842,7 @@ module draft_table
         ["data12.0", "data12.1", "data12.2", "data12.3"]
       ];
 
-      draft_ztable( text=text, map=draft_title_block_map );
+      draft_ztable( text=text, map=draft_title_block_map_style1 );
     }
 
     \b Result
@@ -1084,7 +1084,7 @@ module draft_note
 module draft_title_block
 (
   text,
-  map = draft_title_block_map,
+  map = draft_title_block_map_style1,
   zp = 0,
   number = false,
   window = false,

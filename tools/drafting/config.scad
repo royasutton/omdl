@@ -505,7 +505,7 @@ draft_sheet_config_tr =
   \sa draft_ztable().
   \hideinitializer
 *******************************************************************************/
-draft_title_block_map =
+draft_title_block_map_style1 =
 [
   // table cell horizontal width minimum
   [ "cmh",    length(3/8, "in") ],
