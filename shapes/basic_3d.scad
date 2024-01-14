@@ -66,7 +66,7 @@
 
   \details
 
-    \amu_eval ( object_name=cone ${object_script_example} )
+    \amu_eval ( object=cone ${object_ex_diagram} )
 *******************************************************************************/
 module cone
 (
@@ -118,7 +118,7 @@ module cone
 
   \details
 
-    \amu_eval ( object_name=cuboid ${object_script_example} )
+    \amu_eval ( object=cuboid ${object_ex_diagram} )
 
     | vrm | B1  | B0  | Description                                 |
     |:---:|:---:|:---:|:--------------------------------------------|
@@ -216,7 +216,7 @@ module cuboid
 
   \details
 
-    \amu_eval ( object_name=ellipsoid ${object_script_example} )
+    \amu_eval ( object=ellipsoid ${object_ex_diagram} )
 *******************************************************************************/
 module ellipsoid
 (
@@ -247,7 +247,7 @@ module ellipsoid
 
   \details
 
-    \amu_eval ( object_name=ellipsoid_s ${object_script_example} )
+    \amu_eval ( object=ellipsoid_s ${object_ex_diagram} )
 *******************************************************************************/
 module ellipsoid_s
 (
@@ -302,7 +302,7 @@ module ellipsoid_s
 
   \details
 
-    \amu_eval ( object_name=pyramid_t ${object_script_example} )
+    \amu_eval ( object=pyramid_t ${object_ex_diagram} )
 *******************************************************************************/
 module pyramid_t
 (
@@ -342,7 +342,7 @@ module pyramid_t
 
   \details
 
-    \amu_eval ( object_name=pyramid_q ${object_script_example} )
+    \amu_eval ( object=pyramid_q ${object_ex_diagram} )
 *******************************************************************************/
 module pyramid_q
 (
@@ -387,7 +387,7 @@ module pyramid_q
 
   \details
 
-    \amu_eval ( object_name=star3d ${object_script_example} )
+    \amu_eval ( object=star3d ${object_ex_diagram} )
 *******************************************************************************/
 module star3d
 (

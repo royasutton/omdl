@@ -61,7 +61,7 @@
 
   \details
 
-    \amu_eval ( object_name=torus_rectangle_c ${object_script_example} )
+    \amu_eval ( object=torus_rectangle_c ${object_ex_diagram} )
 *******************************************************************************/
 module torus_rectangle_c
 (
@@ -105,7 +105,7 @@ module torus_rectangle_c
 
   \details
 
-    \amu_eval ( object_name=torus_triangle_ls_c ${object_script_example} )
+    \amu_eval ( object=torus_triangle_ls_c ${object_ex_diagram} )
 *******************************************************************************/
 module torus_triangle_ls_c
 (
@@ -145,7 +145,7 @@ module torus_triangle_ls_c
 
   \details
 
-    \amu_eval ( object_name=torus_ellipse_cs ${object_script_example} )
+    \amu_eval ( object=torus_ellipse_cs ${object_ex_diagram} )
 *******************************************************************************/
 module torus_ellipse_cs
 (
@@ -185,7 +185,7 @@ module torus_ellipse_cs
 
   \details
 
-    \amu_eval ( object_name=torus_polygon_trapezoid ${object_script_example} )
+    \amu_eval ( object=torus_polygon_trapezoid ${object_ex_diagram} )
 
   \todo Use generic rounded trapezoid function for profile.
 *******************************************************************************/

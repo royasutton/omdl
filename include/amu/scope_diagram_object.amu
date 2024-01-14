@@ -7,7 +7,7 @@
       ${scope_id}
 
     defines:
-      ${object_name}
+      ${object}
 
       ${image_view}
 
@@ -20,9 +20,9 @@
       ${latex_image_w}        (default = 1.5in)
 
   examples:
-    (1) \amu_eval ( image_view=<VIEW> object_name=<NAME> ${object_script_example} )
-    (2) \amu_eval ( image_view=<VIEW> object_name=<NAME> ${object_example_script} )
-    (3) \amu_eval ( image_view=<VIEW> object_name=<NAME> ${object_example} )
+    (1) \amu_eval ( image_view=<VIEW> object=<NAME> ${object_ex_diagram} )
+    (2) \amu_eval ( image_view=<VIEW> object=<NAME> ${object_diagram_ex} )
+    (3) \amu_eval ( image_view=<VIEW> object=<NAME> ${object_diagram} )
 
  +/
 
@@ -35,35 +35,35 @@
 
   \amu_scope scope_root (++root)
 
-  \amu_define object_stem (${scope_root}_${scope_id}_${image_size}_${image_view}_${object_name})
+  \amu_define object_stem (${scope_root}_${scope_id}_${image_size}_${image_view}_${object})
 
 
   /+
 
-    object script then diagram
+    object example script then diagram
 
    +/
 
-  \amu_define object_script_example
+  \amu_define object_ex_diagram
   (
-    \b Example
-    \dontinclude ${scope_root}_${scope_id}.scad \skipline ${object_name}(
-    \image html  ${object_stem}.png "${object_name}" width=${html_image_w}
-    \image latex ${object_stem}.eps "${object_name}" width=${latex_image_w}
+    <b>Object example</b>
+    \dontinclude ${scope_root}_${scope_id}.scad \skipline ${object}(
+    \image html  ${object_stem}.png "${object}" width=${html_image_w}
+    \image latex ${object_stem}.eps "${object}" width=${latex_image_w}
   )
 
   /+
 
-    object diagram then script
+    object diagram then example script
 
    +/
 
-  \amu_define object_example_script
+  \amu_define object_diagram_ex
   (
-    \b Example
-    \image html  ${object_stem}.png "${object_name}" width=${html_image_w}
-    \image latex ${object_stem}.eps "${object_name}" width=${latex_image_w}
-    \dontinclude ${scope_root}_${scope_id}.scad \skipline ${object_name}(
+    <b>Object example</b>
+    \image html  ${object_stem}.png "${object}" width=${html_image_w}
+    \image latex ${object_stem}.eps "${object}" width=${latex_image_w}
+    \dontinclude ${scope_root}_${scope_id}.scad \skipline ${object}(
   )
 
   /+
@@ -72,11 +72,11 @@
 
    +/
 
-  \amu_define object_example
+  \amu_define object_diagram
   (
-    \b Example
-    \image html  ${object_stem}.png "${object_name}" width=${html_image_w}
-    \image latex ${object_stem}.eps "${object_name}" width=${latex_image_w}
+    <b>Object example</b>
+    \image html  ${object_stem}.png "${object}" width=${html_image_w}
+    \image latex ${object_stem}.eps "${object}" width=${latex_image_w}
   )
 
 /+ end of file  +/

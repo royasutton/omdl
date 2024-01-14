@@ -62,7 +62,7 @@
 
   \details
 
-    \amu_eval ( object_name=extrude_rotate_tr ${object_script_example} )
+    \amu_eval ( object=extrude_rotate_tr ${object_ex_diagram} )
 *******************************************************************************/
 module extrude_rotate_tr
 (
@@ -92,7 +92,7 @@ module extrude_rotate_tr
 
   \details
 
-    \amu_eval ( object_name=extrude_rotate_tre ${object_script_example} )
+    \amu_eval ( object=extrude_rotate_tre ${object_ex_diagram} )
 
   \note When elongating <tt>(l > 0)</tt>, \p ra is ignored. However, \p m
         may be used to control which complete revolution section to render.
@@ -190,7 +190,7 @@ module extrude_rotate_tre
 
   \details
 
-    \amu_eval ( object_name=extrude_linear_uls ${object_script_example} )
+    \amu_eval ( object=extrude_linear_uls ${object_ex_diagram} )
 
   \todo This function should be rewritten to use the built-in scaling
         provided by linear_extrude() in the upper and lower scaling zones.

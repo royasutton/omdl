@@ -62,7 +62,7 @@
 
   \details
 
-    \amu_eval ( object_name=polygon_round ${object_script_example} )
+    \amu_eval ( object=polygon_round ${object_ex_diagram} )
 *******************************************************************************/
 module polygon_round
 (
@@ -93,7 +93,7 @@ module polygon_round
 
   \details
 
-    \amu_eval ( object_name=polygon_elliptical_sector ${object_script_example} )
+    \amu_eval ( object=polygon_elliptical_sector ${object_ex_diagram} )
 *******************************************************************************/
 module polygon_elliptical_sector
 (
@@ -123,7 +123,7 @@ module polygon_elliptical_sector
 
   \details
 
-    \amu_eval ( object_name=polygon_trapezoid ${object_script_example} )
+    \amu_eval ( object=polygon_trapezoid ${object_ex_diagram} )
 *******************************************************************************/
 module polygon_trapezoid
 (

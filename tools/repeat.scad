@@ -63,7 +63,7 @@
 
   \details
 
-    \amu_eval ( object_name=repeat_radial ${object_script_example} )
+    \amu_eval ( object=repeat_radial ${object_ex_diagram} )
 *******************************************************************************/
 module repeat_radial
 (
@@ -94,7 +94,7 @@ module repeat_radial
 
   \details
 
-    \amu_eval ( object_name=repeat_grid ${object_script_example} )
+    \amu_eval ( object=repeat_grid ${object_ex_diagram} )
 *******************************************************************************/
 module repeat_grid
 (

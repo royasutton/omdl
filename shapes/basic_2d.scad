@@ -70,7 +70,7 @@
 
   \details
 
-    \amu_eval ( object_name=rectangle ${object_script_example} )
+    \amu_eval ( object=rectangle ${object_ex_diagram} )
 
   \note     A corner \em round replaces an edge with a quarter circle of
             radius \p vr, inset <tt>[vr, vr]</tt> from the corner vertex.
@@ -196,7 +196,7 @@ module rectangle
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
     \li <tt>size = core + t</tt>; when \p t and \p core are given.
 
-    \amu_eval ( object_name=rectangle_c ${object_script_example} )
+    \amu_eval ( object=rectangle_c ${object_ex_diagram} )
 *******************************************************************************/
 module rectangle_c
 (
@@ -257,7 +257,7 @@ module rectangle_c
 
   \details
 
-    \amu_eval ( object_name=rhombus ${object_script_example} )
+    \amu_eval ( object=rhombus ${object_ex_diagram} )
 
     See [Wikipedia] for more information.
 
@@ -354,7 +354,7 @@ module rhombus
 
   \details
 
-    \amu_eval ( object_name=triangle_ppp ${object_script_example} )
+    \amu_eval ( object=triangle_ppp ${object_ex_diagram} )
 
   \warning  Currently, in order to round any vertex, all must be given
             a rounding radius, either via \p vr or individually.
@@ -441,7 +441,7 @@ module triangle_ppp
 
   \details
 
-    \amu_eval ( object_name=triangle_ls_c ${object_script_example} )
+    \amu_eval ( object=triangle_ls_c ${object_ex_diagram} )
 
   \note     The outer and inner triangles centroids are aligned prior to
             the core removal.
@@ -593,7 +593,7 @@ module triangle_ls_c
 
   \details
 
-    \amu_eval ( object_name=ngon ${object_script_example} )
+    \amu_eval ( object=ngon ${object_ex_diagram} )
 
     See [Wikipedia] for more information.
 
@@ -630,7 +630,7 @@ module ngon
 
   \details
 
-    \amu_eval ( object_name=ellipse ${object_script_example} )
+    \amu_eval ( object=ellipse ${object_ex_diagram} )
 *******************************************************************************/
 module ellipse
 (
@@ -670,7 +670,7 @@ module ellipse
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
     \li <tt>size = core + t</tt>; when \p t and \p core are given.
 
-    \amu_eval ( object_name=ellipse_c ${object_script_example} )
+    \amu_eval ( object=ellipse_c ${object_ex_diagram} )
 *******************************************************************************/
 module ellipse_c
 (
@@ -711,7 +711,7 @@ module ellipse_c
 
   \details
 
-    \amu_eval ( object_name=ellipse_s ${object_script_example} )
+    \amu_eval ( object=ellipse_s ${object_ex_diagram} )
 *******************************************************************************/
 module ellipse_s
 (
@@ -778,7 +778,7 @@ module ellipse_s
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
     \li <tt>size = core + t</tt>; when \p t and \p core are given.
 
-    \amu_eval ( object_name=ellipse_cs ${object_script_example} )
+    \amu_eval ( object=ellipse_cs ${object_ex_diagram} )
 *******************************************************************************/
 module ellipse_cs
 (
@@ -824,7 +824,7 @@ module ellipse_cs
 
   \details
 
-    \amu_eval ( object_name=star2d ${object_script_example} )
+    \amu_eval ( object=star2d ${object_ex_diagram} )
 *******************************************************************************/
 module star2d
 (
