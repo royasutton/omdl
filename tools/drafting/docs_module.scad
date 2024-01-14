@@ -116,7 +116,7 @@ BEGIN_SCOPE example;
           ["dim-line-distance", length(3)],
           ["dim-line-extension-length", length(5)]
         ],
-        draft_defaults_style1_map
+        draft_defaults_map_style1
       );
 
     draft_sheet(grid=0);
@@ -160,7 +160,7 @@ BEGIN_SCOPE example;
                     ]
           ]
         ],
-        fmap=draft_table_format_ccc_map,
+        fmap=draft_table_format_map_ccc,
         zp=[-1,-1]
       );
 

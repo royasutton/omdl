@@ -681,7 +681,7 @@ module draft_ruler
         ]
       ];
 
-      draft_table( map=map, fmap=draft_table_format_ccc_map );
+      draft_table( map=map, fmap=draft_table_format_map_ccc );
     }
 
     \b Result
@@ -1065,9 +1065,9 @@ module draft_note
     ];
 
     // local table format map
-    fmap  = (halign == "center") ? draft_table_format_ccc_map
-          : (halign == "left")   ? draft_table_format_cll_map
-          : (halign == "right")  ? draft_table_format_crr_map
+    fmap  = (halign == "center") ? draft_table_format_map_ccc
+          : (halign == "left")   ? draft_table_format_map_cll
+          : (halign == "right")  ? draft_table_format_map_crr
           : undef;
 
     draft_table

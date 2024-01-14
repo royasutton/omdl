@@ -141,7 +141,7 @@ function draft_get_default
 
   \hideinitializer
 *******************************************************************************/
-draft_defaults_style1_map =
+draft_defaults_map_style1 =
 [
   //
   // fonts
@@ -277,11 +277,11 @@ draft_defaults_style1_map =
           ["dim-line-extension-length", length(2/8)]
         ],
           // start with existing style map
-          draft_defaults_style1_map
+          draft_defaults_map_style1
       );
     \endcode
 *******************************************************************************/
-draft_defaults_map = draft_defaults_style1_map;
+draft_defaults_map = draft_defaults_map_style1;
 
 //! Get sheet size value helper function.
 /***************************************************************************//**
@@ -586,7 +586,7 @@ draft_title_block_map =
   \hideinitializer
   \private
 *******************************************************************************/
-draft_table_format_common_map =
+draft_table_format_map_common =
 [
   [ "cmh",  length(1/4, "in") ],
   [ "cmv",  length(1/4, "in") ],
@@ -622,10 +622,10 @@ draft_table_format_common_map =
 /***************************************************************************//**
   \hideinitializer
 *******************************************************************************/
-draft_table_format_ccc_map =
+draft_table_format_map_ccc =
 concat
 (
-  draft_table_format_common_map,
+  draft_table_format_map_common,
   [
     [ "hdefs",
         [
@@ -646,10 +646,10 @@ concat
 /***************************************************************************//**
   \hideinitializer
 *******************************************************************************/
-draft_table_format_cll_map =
+draft_table_format_map_cll =
 concat
 (
-  draft_table_format_common_map,
+  draft_table_format_map_common,
   [
     [ "hdefs",
         [
@@ -670,10 +670,10 @@ concat
 /***************************************************************************//**
   \hideinitializer
 *******************************************************************************/
-draft_table_format_crr_map =
+draft_table_format_map_crr =
 concat
 (
-  draft_table_format_common_map,
+  draft_table_format_map_common,
   [
     [ "hdefs",
         [
@@ -706,7 +706,7 @@ BEGIN_SCOPE dfraft_style1;
     include <tools/drafting/draft-base.scad>;
     length_unit_base = "mm";
 
-    map_write( draft_defaults_style1_map );
+    map_write( draft_defaults_map_style1 );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
