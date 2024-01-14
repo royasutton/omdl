@@ -43,7 +43,7 @@
 
   \details
 
-    \amu_define example_name (Table use)
+    \amu_define title (Table use)
     \amu_define scope_id (example_use)
     \amu_include (include/amu/scope.amu)
 *******************************************************************************/

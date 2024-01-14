@@ -57,7 +57,7 @@
      dms       | degree, minute, second | decimal-list-3  |
 
 
-    \amu_define example_name (Angle base unit example)
+    \amu_define title (Angle base unit example)
     \amu_define scope_id (example)
     \amu_define output_scad (true)
     \amu_define output_console (false)
@@ -66,15 +66,15 @@
     \amu_define output_scad (false)
     \amu_define output_console (true)
 
-    \amu_define example_name (angle_unit_base=r)
+    \amu_define title (angle_unit_base=r)
     \amu_define scope_id (example_r)
     \amu_include (include/amu/scope.amu)
 
-    \amu_define example_name (angle_unit_base=d)
+    \amu_define title (angle_unit_base=d)
     \amu_define scope_id (example_d)
     \amu_include (include/amu/scope.amu)
 
-    \amu_define example_name (angle_unit_base=dms)
+    \amu_define title (angle_unit_base=dms)
     \amu_define scope_id (example_dms)
     \amu_include (include/amu/scope.amu)
 *******************************************************************************/

@@ -74,7 +74,7 @@
         The polar angle is measured from the z-axis ([zenith]) to the
         radial vector.
 
-    \amu_define example_name (Coordinate system base example)
+    \amu_define title (Coordinate system base example)
     \amu_define scope_id (example)
     \amu_define output_scad (true)
     \amu_define output_console (false)
@@ -83,19 +83,19 @@
     \amu_define output_scad (false)
     \amu_define output_console (true)
 
-    \amu_define example_name (coordinate_unit_base=c)
+    \amu_define title (coordinate_unit_base=c)
     \amu_define scope_id (example_c)
     \amu_include (include/amu/scope.amu)
 
-    \amu_define example_name (coordinate_unit_base=p)
+    \amu_define title (coordinate_unit_base=p)
     \amu_define scope_id (example_p)
     \amu_include (include/amu/scope.amu)
 
-    \amu_define example_name (coordinate_unit_base=y)
+    \amu_define title (coordinate_unit_base=y)
     \amu_define scope_id (example_y)
     \amu_include (include/amu/scope.amu)
 
-    \amu_define example_name (coordinate_unit_base=s)
+    \amu_define title (coordinate_unit_base=s)
     \amu_define scope_id (example_s)
     \amu_include (include/amu/scope.amu)
 

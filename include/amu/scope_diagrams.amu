@@ -7,7 +7,7 @@
       ${scope_id}
 
     defines:
-      ${example_name}
+      ${title}
 
       ${image_views}
 
@@ -56,7 +56,7 @@
 
   \amu_if ( "${output_scad}" == "true" && "${output_scad_last}" == "false" )
   {
-    <b>${example_name} script</b>
+    <b>${title} script</b>
 
     \dontinclude ${scope_root}_${scope_id}.scad
     \skip ${scad_begin}
@@ -106,7 +106,7 @@
         type=html
         columns=${image_columns}
         image_width="${html_image_w}"
-        table_caption="${example_name} diagram"
+        table_caption="${title} diagram"
         cell_files="${files_png}"
         cell_captions="${cell_captions}"
         cell_titles="${cell_titles}"
@@ -119,7 +119,7 @@
         type=latex
         columns=${image_columns}
         image_width="${latex_image_w}"
-        table_caption="${example_name} diagram"
+        table_caption="${title} diagram"
         cell_files="${files_eps}"
         cell_captions="${cell_captions}"
       )
@@ -135,7 +135,7 @@
 
   \amu_if ( "${output_scad}" == "true" && "${output_scad_last}" == "true" )
   {
-    <b>${example_name} script</b>
+    <b>${title} script</b>
 
     \dontinclude ${scope_root}_${scope_id}.scad
     \skip ${scad_begin}

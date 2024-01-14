@@ -139,7 +139,7 @@
     option is disabled. The bearing feed can also be disabled by
     assigning \p load = 0.
 
-    \amu_define example_name  (Bearing)
+    \amu_define title         (Bearing)
     \amu_define image_views   (top right diag)
     \amu_define image_size    (sxga)
 

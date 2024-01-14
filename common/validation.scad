@@ -80,7 +80,7 @@ validation_skip = [number_min, number_max, number_inf];
             \p ev to the number of decimal digits specified by \p p. The
             comparison is performed by the function almost_eq().
 
-    \amu_define example_name (Validate function)
+    \amu_define title (Validate function)
     \amu_define scope_id (example_validate)
     \amu_include (include/amu/scope.amu)
 *******************************************************************************/
@@ -278,7 +278,7 @@ module table_validate_start( db, verbose=false )
     See function validate() for more information on possible values for
     parameters \p t and \p p.
 
-    \amu_define example_name (Table-based validation)
+    \amu_define title (Table-based validation)
     \amu_define scope_id (example_table)
     \amu_include (include/amu/scope.amu)
 *******************************************************************************/
@@ -455,7 +455,7 @@ module map_validate_start( db, verbose=false )
     See function validate() for more information on possible values for
     parameters \p t and \p p.
 
-    \amu_define example_name (Map-based validation)
+    \amu_define title (Map-based validation)
     \amu_define scope_id (example_map)
     \amu_include (include/amu/scope.amu)
 *******************************************************************************/

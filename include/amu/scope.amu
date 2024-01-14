@@ -7,7 +7,7 @@
       ${scope_id}             (1 scope, 1 target)
 
     defines:
-      ${example_name}
+      ${title}
 
     optional:
       ${scope_id}             (default = example)
@@ -42,7 +42,7 @@
 
   \amu_if ( "${output_scad}" == "true" )
   {
-    <b>${example_name} script</b>
+    <b>${title} script</b>
 
     \dontinclude ${scope_root}_${scope_id}.scad
     \skip ${scad_begin}
@@ -60,7 +60,7 @@
 
   \amu_if ( "${output_console}" == "true" )
   {
-    <b>${example_name} script output</b>
+    <b>${title} script output</b>
 
     \include ${scope_root}_${scope_id}.log
   }

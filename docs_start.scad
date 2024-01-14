@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2023
+  \date   2015-2024
 
   \copyright
 
@@ -60,7 +60,7 @@
 
   \section starting Getting Started
 
-    \amu_define example_name  (Hello world)
+    \amu_define title         (Hello world)
     \amu_define image_views   (right top front diag)
     \amu_define image_size    (sxga)
     \amu_define image_columns (4)

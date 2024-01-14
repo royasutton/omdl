@@ -66,7 +66,7 @@
      yd        | yard
      mi        | mile
 
-    \amu_define example_name (Length base units example)
+    \amu_define title (Length base units example)
     \amu_define scope_id (example)
     \amu_define output_scad (true)
     \amu_define output_console (false)
@@ -75,26 +75,26 @@
     \amu_define output_scad (false)
     \amu_define output_console (true)
 
-    \amu_define example_name (length_unit_base=mm)
+    \amu_define title (length_unit_base=mm)
     \amu_define scope_id (example_mm)
     \amu_include (include/amu/scope.amu)
 
-    \amu_define example_name (length_unit_base=cm)
+    \amu_define title (length_unit_base=cm)
     \amu_define scope_id (example_cm)
     \amu_include (include/amu/scope.amu)
 
-    \amu_define example_name (length_unit_base=mil)
+    \amu_define title (length_unit_base=mil)
     \amu_define scope_id (example_mil)
     \amu_include (include/amu/scope.amu)
 
-    \amu_define example_name (length_unit_base=in)
+    \amu_define title (length_unit_base=in)
     \amu_define scope_id (example_in)
     \amu_include (include/amu/scope.amu)
 
     /+
       include diagram
     +/
-    \amu_define example_name  (Equivalent lengths)
+    \amu_define title  (Equivalent lengths)
     \amu_define image_views   (top)
     \amu_define image_size    (qvga)
     \amu_define scope_id      (equivalents)

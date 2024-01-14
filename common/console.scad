@@ -43,7 +43,7 @@
 
   \details
 
-    \amu_define example_name (Console)
+    \amu_define title (Console)
     \amu_include (include/amu/scope.amu)
 *******************************************************************************/
 
