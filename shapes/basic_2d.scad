@@ -42,13 +42,13 @@
   \amu_include (include/amu/includes_required.amu)
 
   \amu_define image_view (top)
-  \amu_include (include/amu/scope_diagram_object.amu)
+  \amu_include (include/amu/scope_diagram_3d_object.amu)
 
   \amu_define group_id (${parent})
-  \amu_include (include/amu/scope_diagrams_in_group.amu)
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
 
   \amu_define group_id (${group})
-  \amu_include (include/amu/scope_diagrams_in_group.amu)
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -70,7 +70,7 @@
 
   \details
 
-    \amu_eval ( object=rectangle ${object_ex_diagram} )
+    \amu_eval ( object=rectangle ${object_ex_diagram_3d} )
 
   \note     A corner \em round replaces an edge with a quarter circle of
             radius \p vr, inset <tt>[vr, vr]</tt> from the corner vertex.
@@ -196,7 +196,7 @@ module rectangle
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
     \li <tt>size = core + t</tt>; when \p t and \p core are given.
 
-    \amu_eval ( object=rectangle_c ${object_ex_diagram} )
+    \amu_eval ( object=rectangle_c ${object_ex_diagram_3d} )
 *******************************************************************************/
 module rectangle_c
 (
@@ -257,7 +257,7 @@ module rectangle_c
 
   \details
 
-    \amu_eval ( object=rhombus ${object_ex_diagram} )
+    \amu_eval ( object=rhombus ${object_ex_diagram_3d} )
 
     See [Wikipedia] for more information.
 
@@ -354,7 +354,7 @@ module rhombus
 
   \details
 
-    \amu_eval ( object=triangle_ppp ${object_ex_diagram} )
+    \amu_eval ( object=triangle_ppp ${object_ex_diagram_3d} )
 
   \warning  Currently, in order to round any vertex, all must be given
             a rounding radius, either via \p vr or individually.
@@ -441,7 +441,7 @@ module triangle_ppp
 
   \details
 
-    \amu_eval ( object=triangle_ls_c ${object_ex_diagram} )
+    \amu_eval ( object=triangle_ls_c ${object_ex_diagram_3d} )
 
   \note     The outer and inner triangles centroids are aligned prior to
             the core removal.
@@ -593,7 +593,7 @@ module triangle_ls_c
 
   \details
 
-    \amu_eval ( object=ngon ${object_ex_diagram} )
+    \amu_eval ( object=ngon ${object_ex_diagram_3d} )
 
     See [Wikipedia] for more information.
 
@@ -630,7 +630,7 @@ module ngon
 
   \details
 
-    \amu_eval ( object=ellipse ${object_ex_diagram} )
+    \amu_eval ( object=ellipse ${object_ex_diagram_3d} )
 *******************************************************************************/
 module ellipse
 (
@@ -670,7 +670,7 @@ module ellipse
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
     \li <tt>size = core + t</tt>; when \p t and \p core are given.
 
-    \amu_eval ( object=ellipse_c ${object_ex_diagram} )
+    \amu_eval ( object=ellipse_c ${object_ex_diagram_3d} )
 *******************************************************************************/
 module ellipse_c
 (
@@ -711,7 +711,7 @@ module ellipse_c
 
   \details
 
-    \amu_eval ( object=ellipse_s ${object_ex_diagram} )
+    \amu_eval ( object=ellipse_s ${object_ex_diagram_3d} )
 *******************************************************************************/
 module ellipse_s
 (
@@ -778,7 +778,7 @@ module ellipse_s
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
     \li <tt>size = core + t</tt>; when \p t and \p core are given.
 
-    \amu_eval ( object=ellipse_cs ${object_ex_diagram} )
+    \amu_eval ( object=ellipse_cs ${object_ex_diagram_3d} )
 *******************************************************************************/
 module ellipse_cs
 (
@@ -824,7 +824,7 @@ module ellipse_cs
 
   \details
 
-    \amu_eval ( object=star2d ${object_ex_diagram} )
+    \amu_eval ( object=star2d ${object_ex_diagram_3d} )
 *******************************************************************************/
 module star2d
 (

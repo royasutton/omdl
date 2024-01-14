@@ -80,7 +80,7 @@
     \amu_define image_views   (top front diag)
     \amu_define image_size    (sxga)
 
-    \amu_include (include/amu/scope_diagrams.amu)
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 
   [specification]: \ref dt_index
 *******************************************************************************/
@@ -206,14 +206,14 @@ module polytope_number
     \amu_define image_views   (top right diag)
     \amu_define image_size    (sxga)
 
-    \amu_include (include/amu/scope_diagrams.amu)
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 
     \amu_define scope_id      (example_frame_b)
     \amu_define title         (B. Framing)
     \amu_define image_views   (diag)
     \amu_define image_size    (sxga)
 
-    \amu_include (include/amu/scope_diagrams.amu)
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 
   [specification]: \ref dt_index
 *******************************************************************************/
@@ -299,7 +299,7 @@ module polytope_frame
     \amu_define image_views   (top front diag)
     \amu_define image_size    (sxga)
 
-    \amu_include (include/amu/scope_diagrams.amu)
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 
     \sa polytope_limits for warning about secondary shapes.
 *******************************************************************************/

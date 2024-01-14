@@ -98,7 +98,7 @@
     \amu_define image_views   (top)
     \amu_define image_size    (qvga)
     \amu_define scope_id      (equivalents)
-    \amu_include (include/amu/scope_diagrams.amu)
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

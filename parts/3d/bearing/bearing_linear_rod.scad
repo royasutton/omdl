@@ -147,7 +147,7 @@
     ( This example uses the \p view options to see the bearing internals.
       Click image above to expand. )
 
-    \amu_include (include/amu/scope_diagrams.amu)
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
 module make_bearing_linear_rod
 (

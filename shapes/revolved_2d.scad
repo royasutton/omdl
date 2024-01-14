@@ -42,13 +42,13 @@
   \amu_include (include/amu/includes_required.amu)
 
   \amu_define image_view (diag)
-  \amu_include (include/amu/scope_diagram_object.amu)
+  \amu_include (include/amu/scope_diagram_3d_object.amu)
 
   \amu_define group_id (${parent})
-  \amu_include (include/amu/scope_diagrams_in_group.amu)
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
 
   \amu_define group_id (${group})
-  \amu_include (include/amu/scope_diagrams_in_group.amu)
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -61,7 +61,7 @@
 
   \details
 
-    \amu_eval ( object=torus_rectangle_c ${object_ex_diagram} )
+    \amu_eval ( object=torus_rectangle_c ${object_ex_diagram_3d} )
 *******************************************************************************/
 module torus_rectangle_c
 (
@@ -105,7 +105,7 @@ module torus_rectangle_c
 
   \details
 
-    \amu_eval ( object=torus_triangle_ls_c ${object_ex_diagram} )
+    \amu_eval ( object=torus_triangle_ls_c ${object_ex_diagram_3d} )
 *******************************************************************************/
 module torus_triangle_ls_c
 (
@@ -145,7 +145,7 @@ module torus_triangle_ls_c
 
   \details
 
-    \amu_eval ( object=torus_ellipse_cs ${object_ex_diagram} )
+    \amu_eval ( object=torus_ellipse_cs ${object_ex_diagram_3d} )
 *******************************************************************************/
 module torus_ellipse_cs
 (
@@ -185,7 +185,7 @@ module torus_ellipse_cs
 
   \details
 
-    \amu_eval ( object=torus_polygon_trapezoid ${object_ex_diagram} )
+    \amu_eval ( object=torus_polygon_trapezoid ${object_ex_diagram_3d} )
 
   \todo Use generic rounded trapezoid function for profile.
 *******************************************************************************/

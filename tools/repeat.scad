@@ -42,13 +42,13 @@
   \amu_include (include/amu/includes_required.amu)
 
   \amu_define image_view (diag)
-  \amu_include (include/amu/scope_diagram_object.amu)
+  \amu_include (include/amu/scope_diagram_3d_object.amu)
 
   \amu_define group_id (${parent})
-  \amu_include (include/amu/scope_diagrams_in_group.amu)
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
 
   \amu_define group_id (${group})
-  \amu_include (include/amu/scope_diagrams_in_group.amu)
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -63,7 +63,7 @@
 
   \details
 
-    \amu_eval ( object=repeat_radial ${object_ex_diagram} )
+    \amu_eval ( object=repeat_radial ${object_ex_diagram_3d} )
 *******************************************************************************/
 module repeat_radial
 (
@@ -94,7 +94,7 @@ module repeat_radial
 
   \details
 
-    \amu_eval ( object=repeat_grid ${object_ex_diagram} )
+    \amu_eval ( object=repeat_grid ${object_ex_diagram_3d} )
 *******************************************************************************/
 module repeat_grid
 (

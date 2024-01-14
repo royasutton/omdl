@@ -77,7 +77,7 @@
     \amu_define html_image_w      (768)
     \amu_define output_scad_last  (true)
 
-    \amu_include (include/amu/scope_diagrams.amu)
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 
   [LibreCAD]: https://librecad.org
 *******************************************************************************/

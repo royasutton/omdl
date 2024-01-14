@@ -42,13 +42,13 @@
   \amu_include (include/amu/includes_required.amu)
 
   \amu_define image_view (diag)
-  \amu_include (include/amu/scope_diagram_object.amu)
+  \amu_include (include/amu/scope_diagram_3d_object.amu)
 
   \amu_define group_id (${parent})
-  \amu_include (include/amu/scope_diagrams_in_group.amu)
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
 
   \amu_define group_id (${group})
-  \amu_include (include/amu/scope_diagrams_in_group.amu)
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -66,7 +66,7 @@
 
   \details
 
-    \amu_eval ( object=cone ${object_ex_diagram} )
+    \amu_eval ( object=cone ${object_ex_diagram_3d} )
 *******************************************************************************/
 module cone
 (
@@ -118,7 +118,7 @@ module cone
 
   \details
 
-    \amu_eval ( object=cuboid ${object_ex_diagram} )
+    \amu_eval ( object=cuboid ${object_ex_diagram_3d} )
 
     | vrm | B1  | B0  | Description                                 |
     |:---:|:---:|:---:|:--------------------------------------------|
@@ -216,7 +216,7 @@ module cuboid
 
   \details
 
-    \amu_eval ( object=ellipsoid ${object_ex_diagram} )
+    \amu_eval ( object=ellipsoid ${object_ex_diagram_3d} )
 *******************************************************************************/
 module ellipsoid
 (
@@ -247,7 +247,7 @@ module ellipsoid
 
   \details
 
-    \amu_eval ( object=ellipsoid_s ${object_ex_diagram} )
+    \amu_eval ( object=ellipsoid_s ${object_ex_diagram_3d} )
 *******************************************************************************/
 module ellipsoid_s
 (
@@ -302,7 +302,7 @@ module ellipsoid_s
 
   \details
 
-    \amu_eval ( object=pyramid_t ${object_ex_diagram} )
+    \amu_eval ( object=pyramid_t ${object_ex_diagram_3d} )
 *******************************************************************************/
 module pyramid_t
 (
@@ -342,7 +342,7 @@ module pyramid_t
 
   \details
 
-    \amu_eval ( object=pyramid_q ${object_ex_diagram} )
+    \amu_eval ( object=pyramid_q ${object_ex_diagram_3d} )
 *******************************************************************************/
 module pyramid_q
 (
@@ -387,7 +387,7 @@ module pyramid_q
 
   \details
 
-    \amu_eval ( object=star3d ${object_ex_diagram} )
+    \amu_eval ( object=star3d ${object_ex_diagram_3d} )
 *******************************************************************************/
 module star3d
 (

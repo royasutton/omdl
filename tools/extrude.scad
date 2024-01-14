@@ -42,13 +42,13 @@
   \amu_include (include/amu/includes_required.amu)
 
   \amu_define image_view (diag)
-  \amu_include (include/amu/scope_diagram_object.amu)
+  \amu_include (include/amu/scope_diagram_3d_object.amu)
 
   \amu_define group_id (${parent})
-  \amu_include (include/amu/scope_diagrams_in_group.amu)
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
 
   \amu_define group_id (${group})
-  \amu_include (include/amu/scope_diagrams_in_group.amu)
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -62,7 +62,7 @@
 
   \details
 
-    \amu_eval ( object=extrude_rotate_tr ${object_ex_diagram} )
+    \amu_eval ( object=extrude_rotate_tr ${object_ex_diagram_3d} )
 *******************************************************************************/
 module extrude_rotate_tr
 (
@@ -92,7 +92,7 @@ module extrude_rotate_tr
 
   \details
 
-    \amu_eval ( object=extrude_rotate_tre ${object_ex_diagram} )
+    \amu_eval ( object=extrude_rotate_tre ${object_ex_diagram_3d} )
 
   \note When elongating <tt>(l > 0)</tt>, \p ra is ignored. However, \p m
         may be used to control which complete revolution section to render.
@@ -190,7 +190,7 @@ module extrude_rotate_tre
 
   \details
 
-    \amu_eval ( object=extrude_linear_uls ${object_ex_diagram} )
+    \amu_eval ( object=extrude_linear_uls ${object_ex_diagram_3d} )
 
   \todo This function should be rewritten to use the built-in scaling
         provided by linear_extrude() in the upper and lower scaling zones.
