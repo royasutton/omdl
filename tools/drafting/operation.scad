@@ -1054,7 +1054,7 @@ module draft_note
       ["cmh",     cmh],
       ["cmv",     cmv],
 
-      is_undef(htd) ? empty_lst :
+      is_undef(head) ? empty_lst :
       ["heads",   [[htd], defined_e_or(size, 2, 1)]],
 
       ["cols",    [defined_e_or(size, 0, defined_or(size,1))]],
