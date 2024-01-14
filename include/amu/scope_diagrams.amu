@@ -15,6 +15,7 @@
       ${scope_id}             (default = example)
 
       ${output_scad}          (default = true)
+      ${output_scad_last}     (default = false)
       ${scad_begin}           (default = include)
       ${scad_end}             (default = end_include)
 
@@ -33,6 +34,7 @@
   \amu_if scope_id (-d ${scope_id}) {${scope_id}} else {example} endif
 
   \amu_if output_scad (-d ${output_scad}) {${output_scad}} else {true} endif
+  \amu_if output_scad_last (-d ${output_scad_last}) {${output_scad_last}} else {false} endif
   \amu_if scad_begin (-d ${scad_begin}) {${scad_begin}} else {include} endif
   \amu_if scad_end (-d ${scad_end}) {${scad_end}} else {end_include} endif
 
@@ -52,7 +54,7 @@
 
    +/
 
-  \amu_if ( "${output_scad}" == "true" )
+  \amu_if ( "${output_scad}" == "true" && "${output_scad_last}" == "false" )
   {
     <b>${example_name} script</b>
 
@@ -62,7 +64,7 @@
   }
   endif
 
-  \amu_if (-d ${notes_scad}) {${notes_scad}} endif
+  \amu_if (-d ${notes_scad} && "${output_scad_last}" == "false") {${notes_scad}} endif
 
   /+
 
@@ -104,7 +106,7 @@
         type=html
         columns=${image_columns}
         image_width="${html_image_w}"
-        table_caption="${example_name} diagram example"
+        table_caption="${example_name} diagram"
         cell_files="${files_png}"
         cell_captions="${cell_captions}"
         cell_titles="${cell_titles}"
@@ -117,12 +119,30 @@
         type=latex
         columns=${image_columns}
         image_width="${latex_image_w}"
-        table_caption="${example_name} diagram example"
+        table_caption="${example_name} diagram"
         cell_files="${files_eps}"
         cell_captions="${cell_captions}"
       )
   \endlatexonly
 
   \amu_if (-d ${notes_diagrams}) {${notes_diagrams}} endif
+
+  /+
+
+    scad script (last)
+
+   +/
+
+  \amu_if ( "${output_scad}" == "true" && "${output_scad_last}" == "true" )
+  {
+    <b>${example_name} script</b>
+
+    \dontinclude ${scope_root}_${scope_id}.scad
+    \skip ${scad_begin}
+    \until ${scad_end}
+  }
+  endif
+
+  \amu_if (-d ${notes_scad} && "${output_scad_last}" == "true") {${notes_scad}} endif
 
 /+ end of file  +/
