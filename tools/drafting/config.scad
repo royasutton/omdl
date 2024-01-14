@@ -108,6 +108,14 @@ draft_sheet_config = "L84TS";
 *******************************************************************************/
 draft_layers_show = ["all"];
 
+//----------------------------------------------------------------------------//
+// drafting style defaults:
+//
+//  (1) configuration getter function
+//  (2) configuration map "style1"
+//  (3) user assignable style map variable
+//----------------------------------------------------------------------------//
+
 //! Get drafting configuration default helper function.
 /***************************************************************************//**
   \param    k <string> A map key.
@@ -121,6 +129,9 @@ function draft_get_default
 (
   k
 ) = map_get_value(draft_defaults_map, k);
+
+//! \name Format Maps
+//! @{
 
 //! <map> A drafting configuration defaults map (style1).
 /***************************************************************************//**
@@ -256,6 +267,8 @@ draft_defaults_map_style1 =
   ["layers-dim",                        ["all", "dim"]]
 ];
 
+//! @}
+
 //! <map> Drafting configuration defaults map.
 /***************************************************************************//**
   \details
@@ -282,6 +295,13 @@ draft_defaults_map_style1 =
     \endcode
 *******************************************************************************/
 draft_defaults_map = draft_defaults_map_style1;
+
+//----------------------------------------------------------------------------//
+// sheet size:
+//
+//  (1) configuration getter function
+//  (2) internal table definitions
+//----------------------------------------------------------------------------//
 
 //! Get sheet size value helper function.
 /***************************************************************************//**
@@ -355,6 +375,13 @@ draft_sheet_size_tr =
   ["Ledger",    "Other", length( 432.0, "mm"), length( 279.0, "mm")],
   ["Tabloid",   "Other", length( 279.0, "mm"), length( 432.0, "mm")]
 ];
+
+//----------------------------------------------------------------------------//
+// sheet layout configuration:
+//
+//  (1) configuration getter function
+//  (2) internal table definitions
+//----------------------------------------------------------------------------//
 
 //! Get sheet configuration value helper function.
 /***************************************************************************//**
@@ -459,6 +486,13 @@ draft_sheet_config_tr =
     [3,1,13/8, [1,1,0,1,3]]
   ]
 ];
+
+//----------------------------------------------------------------------------//
+// pre-configured formatting maps:
+//----------------------------------------------------------------------------//
+
+//! \name Format Maps
+//! @{
 
 //! <map> The default title block definition map.
 /***************************************************************************//**
@@ -689,6 +723,8 @@ concat
     ]
   ]
 );
+
+//! @}
 
 //! @}
 //! @}
