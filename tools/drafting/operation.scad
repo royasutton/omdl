@@ -706,7 +706,7 @@ module draft_table
   {
     translate( -draft_table_get_cell(zp=zp, map=map, fmap=fmap) )
     if (window)
-    { // solid retangular window
+    { // solid rectangular window
       polygon(draft_table_get_cell(window=true, map=map, fmap=fmap));
     }
     else
@@ -864,7 +864,7 @@ module draft_ztable
   {
     translate( -draft_ztable_get_zone(zp=zp, map=map) )
     if (window)
-    { // solid retangular window
+    { // solid rectangular window
       polygon(draft_ztable_get_zone(window=true, map=map));
     }
     else
@@ -1057,7 +1057,7 @@ module draft_note
       is_undef(head) ? empty_lst :
       ["heads",   [[htd], defined_e_or(size, 2, 1)]],
 
-      ["cols",    [defined_e_or(size, 0, defined_or(size,1))]],
+      ["cols",    [defined_e_or(size, 0, defined_or(size, 1))]],
       ["rows",    [[[note], defined_e_or(size, 1, 1)]]],
 
       ["hlines",  concat(consts(3,lnc[0]), consts(2,lnc[1]))],
