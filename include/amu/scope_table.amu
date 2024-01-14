@@ -7,7 +7,7 @@
       ${scope_id}
 
     defines:
-      ${table_name}
+      ${title}
 
     optional:
       ${scope_id}             (default = table)
@@ -51,7 +51,7 @@
 
   \amu_if ( "${output_scad}" == "true" )
   {
-    <b>${table_name} script</b>
+    <b>${title} script</b>
 
     \dontinclude ${scope_root}_${scope_id}.scad
     \skip ${scad_begin}
@@ -69,7 +69,7 @@
 
   \amu_if ( "${output_console}" == "true" )
   {
-    <b>${table_name} script output</b>
+    <b>${title} script output</b>
 
     \include ${scope_root}_${scope_id}.log
   }
@@ -90,7 +90,7 @@
   \amu_file td (file="${scope_root}_${scope_id}.log" first="${td_line_begin}" last="${td_line_end}" ++rmecho ++rmnl ++read)
   \amu_word tc (tokenizer="^" words="${th}" ++count)
 
-  <b>\amu_eval(${table_name}) table</b>
+  <b>\amu_eval(${title}) table</b>
 
   \amu_table (columns=${tc} column_headings=${th} cell_texts=${td})
 

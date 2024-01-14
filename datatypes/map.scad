@@ -375,7 +375,7 @@ module map_dump
     output can then be processed to produce documentation tables as
     shown in the example below.
 
-    \amu_define table_name (Map write)
+    \amu_define title (Map write)
     \amu_define scope_id (example_table)
     \amu_include (include/amu/scope_table.amu)
 *******************************************************************************/

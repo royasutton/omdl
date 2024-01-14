@@ -715,7 +715,7 @@ verbose = false
     <tt>cs = ["c1", "c2"]</tt>. The output can then be processed to
     produce documentation tables as shown in the example below.
 
-    \amu_define table_name (Table write)
+    \amu_define title (Table write)
     \amu_define scope_id (example_table)
 
     \amu_define th_line (1)

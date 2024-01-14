@@ -67,11 +67,11 @@ draft_sheet_scale = 1;
     \amu_define output_scad (false)
     \amu_define output_console (false)
 
-    \amu_define table_name (Available sizes in inches)
+    \amu_define title (Available sizes in inches)
     \amu_define scope_id (sheet_sizes_in)
     \amu_include (include/amu/scope_table.amu)
 
-    \amu_define table_name (Available sizes in mm)
+    \amu_define title (Available sizes in mm)
     \amu_define scope_id (sheet_sizes_mm)
     \amu_include (include/amu/scope_table.amu)
 *******************************************************************************/
@@ -83,7 +83,7 @@ draft_sheet_size = "A";
 
     Available configurations:
 
-    \amu_define table_name (Sheet configurations)
+    \amu_define title (Sheet configurations)
     \amu_define scope_id (sheet_config)
     \amu_define output_scad (false)
     \amu_define output_console (false)
@@ -131,7 +131,7 @@ function draft_get_default
     completely new maps may assembled to implement new styles as
     desired.
 
-    \amu_define table_name (style1)
+    \amu_define title (style1)
     \amu_define scope_id (dfraft_style1)
     \amu_define output_scad (false)
     \amu_define output_console (false)
