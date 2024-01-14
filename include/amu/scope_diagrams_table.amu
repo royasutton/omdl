@@ -7,7 +7,7 @@
       ${scope_id}_{diagram,table}
 
     defines:
-      ${data_name}
+      ${title}
 
       ${image_views}
 
@@ -86,7 +86,7 @@
         type=html
         columns=${image_columns}
         image_width="${html_image_w}"
-        table_caption="${data_name} parameters"
+        table_caption="${title} parameters"
         cell_files="${files_png}"
         cell_captions="${cell_captions}"
         cell_titles="${cell_titles}"
@@ -100,7 +100,7 @@
         type=latex
         columns=${image_columns}
         image_width="${latex_image_w}"
-        table_caption="${data_name} parameters"
+        table_caption="${title} parameters"
         cell_files="${files_eps}"
         cell_captions="${cell_captions}"
       )
@@ -121,7 +121,7 @@
   \amu_file td (file="${scope_root}_${scope_id}_table.log" first="${td_line_begin}" last="${td_line_end}" ++rmecho ++rmnl ++read)
   \amu_word tc (tokenizer="^" words="${th}" ++count)
 
-  <b>\amu_eval(${data_name}) table</b>
+  <b>\amu_eval(${title}) table</b>
 
   \amu_table (columns=${tc} column_headings=${th} cell_texts=${td})
 
