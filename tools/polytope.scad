@@ -76,7 +76,7 @@
     specified, it is computed from \p f using polytope_faces2edges().
 
     \amu_define scope_id      (example_number)
-    \amu_define title         (Numbering)
+    \amu_define title         (Numbering example)
     \amu_define image_views   (top front diag)
     \amu_define image_size    (sxga)
 
@@ -202,14 +202,14 @@ module polytope_number
     using polytope_faces2edges().
 
     \amu_define scope_id      (example_frame_a)
-    \amu_define title         (A. Framing)
+    \amu_define title         (A. Framing example)
     \amu_define image_views   (top right diag)
     \amu_define image_size    (sxga)
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 
     \amu_define scope_id      (example_frame_b)
-    \amu_define title         (B. Framing)
+    \amu_define title         (B. Framing example)
     \amu_define image_views   (diag)
     \amu_define image_size    (sxga)
 
@@ -295,7 +295,7 @@ module polytope_frame
     coordinates \p c establishes the path.
 
     \amu_define scope_id      (example_bbox)
-    \amu_define title         (Bounding box)
+    \amu_define title         (Bounding box example)
     \amu_define image_views   (top front diag)
     \amu_define image_size    (sxga)
 

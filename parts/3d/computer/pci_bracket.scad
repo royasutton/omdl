@@ -132,7 +132,7 @@
     |           | 6         | connectors window center
     |           | 7         | connectors window top
 
-    \amu_define title         (PCI bracket)
+    \amu_define title         (PCI bracket example)
     \amu_define image_views   (left right back diag)
     \amu_define image_size    (sxga)
     \amu_define image_columns (4)

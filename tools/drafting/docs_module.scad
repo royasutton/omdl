@@ -71,7 +71,7 @@
     scale as needed for the sheet size and target output page. (5)
     Finally print or save a PDF file.
 
-    \amu_define title             (Drafting)
+    \amu_define title             (Drafting example)
     \amu_define image_views       (top)
     \amu_define image_size        (uxga)
     \amu_define html_image_w      (768)
