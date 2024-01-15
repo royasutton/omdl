@@ -51,6 +51,9 @@
 // dimension operations
 //----------------------------------------------------------------------------//
 
+//! \name Dimensioning
+//! @{
+
 //! Construct a dimension leader line at a point.
 /***************************************************************************//**
   \param    p <point-2d> The leader line point.
@@ -955,6 +958,8 @@ module draft_dim_center
 
   }
 }
+
+//! @}
 
 //! @}
 //! @}

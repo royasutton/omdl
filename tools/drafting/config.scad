@@ -42,6 +42,11 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+// global configuration variables
+//----------------------------------------------------------------------------//
+
+//! \name Globals
+//! @{
 
 //! <boolean> Extrude 2D drafted constructions to 3D.
 $draft_make_3d = false;
@@ -108,6 +113,11 @@ draft_sheet_config = "L84TS";
 *******************************************************************************/
 draft_layers_show = ["all"];
 
+//! @}
+
+//! \name Getters
+//! @{
+
 //----------------------------------------------------------------------------//
 // drafting style defaults:
 //
@@ -130,7 +140,9 @@ function draft_get_default
   k
 ) = map_get_value(draft_defaults_map, k);
 
-//! \name Format Maps
+//! @}
+
+//! \name Maps
 //! @{
 
 //! <map> A drafting configuration defaults map (style1).
@@ -269,6 +281,9 @@ draft_defaults_map_style1 =
 
 //! @}
 
+//! \name Globals
+//! @{
+
 //! <map> Drafting configuration defaults map.
 /***************************************************************************//**
   \details
@@ -295,6 +310,11 @@ draft_defaults_map_style1 =
     \endcode
 *******************************************************************************/
 draft_defaults_map = draft_defaults_map_style1;
+
+//! @}
+
+//! \name Getters
+//! @{
 
 //----------------------------------------------------------------------------//
 // sheet size:
@@ -487,11 +507,13 @@ draft_sheet_config_tr =
   ]
 ];
 
+//! @}
+
 //----------------------------------------------------------------------------//
-// pre-configured formatting maps:
+// layout, style and formatting maps:
 //----------------------------------------------------------------------------//
 
-//! \name Format Maps
+//! \name Maps
 //! @{
 
 //! <map> The default title block definition map.
