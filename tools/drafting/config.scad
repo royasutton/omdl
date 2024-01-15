@@ -94,6 +94,13 @@ draft_sheet_size = "A";
     \amu_define output_console (false)
 
     \amu_include (include/amu/scope_table.amu)
+
+    \amu_define title (Configuration keys)
+    \amu_define scope_id (sheet_config_keys)
+    \amu_define output_scad (false)
+    \amu_define output_console (false)
+
+    \amu_include (include/amu/scope_table.amu)
 *******************************************************************************/
 draft_sheet_config = "L84TS";
 
@@ -130,8 +137,17 @@ draft_layers_show = ["all"];
 /***************************************************************************//**
   \param    k <string> A map key.
 
-  \returns  \<value> The default value from the configuration map if it
-            exists.
+  \returns  \<value> The value associated with key \p k in the
+            configuration map assigned to \ref draft_defaults_map.
+
+  \details
+
+    \b Example:
+
+    \verbatim
+      layers = draft_get_default("layers-dim");
+      dimll1 = draft_get_default("dim-leader-length");
+    \endverbatim
 
   \sa draft_defaults_map.
 *******************************************************************************/
@@ -145,7 +161,7 @@ function draft_get_default
 //! \name Maps
 //! @{
 
-//! <map> A drafting configuration defaults map (style1).
+//! <map> A drafting configuration map; style1.
 /***************************************************************************//**
   \details
 
@@ -329,6 +345,19 @@ draft_defaults_map = draft_defaults_map_style1;
 
   \returns  \<value> The value of the identified column for the
             configured sheet size set by \ref draft_sheet_size.
+
+  \details
+
+    \b Example:
+
+    \verbatim
+      std = draft_sheet_get_size(ci="std");
+
+      sdx = draft_sheet_get_size(ci="sdx") * draft_sheet_scale;
+      sdy = draft_sheet_get_size(ci="sdy") * draft_sheet_scale;
+    \endverbatim
+
+  \sa draft_sheet_size.
 *******************************************************************************/
 function draft_sheet_get_size
 (
@@ -409,6 +438,19 @@ draft_sheet_size_tr =
 
   \returns  \<value> The value of the identified column for the
             current sheet configured by \ref draft_sheet_config.
+
+  \details
+
+    \b Example:
+
+    \verbatim
+      zoy = draft_sheet_get_config(ci="zoy")
+
+      smx = draft_sheet_get_config(ci="smx") * draft_sheet_scale;
+      smy = draft_sheet_get_config(ci="smy") * draft_sheet_scale;
+    \endverbatim
+
+  \sa draft_sheet_config.
 *******************************************************************************/
 function draft_sheet_get_config
 (
@@ -516,14 +558,17 @@ draft_sheet_config_tr =
 //! \name Maps
 //! @{
 
-//! <map> The default title block definition map.
+//! <map> A title block map; style 1.
 /***************************************************************************//**
   \details
 
-    Title blocks are constructed using zoned tables. A new title block
-    layout can be constructed by defining a new zoned table map. This
-    default map may be used as a starting point example.
+    A title block is constructed using \ref draft_ztable "zoned tables".
+    A new layout can be designed by defining a new map or by merging
+    overrides to this style map. The map keys and structure depends on
+    the implementation of the \ref draft_title_block "title block"
+    rendering  operation.
 
+  \sa draft_title_block().
   \sa draft_ztable().
   \hideinitializer
 *******************************************************************************/
@@ -637,7 +682,7 @@ draft_title_block_map_style1 =
   ]
 ];
 
-//! <map> Table format map definitions; common.
+//! <map> Table format map; common.
 /***************************************************************************//**
   \hideinitializer
   \private
@@ -674,7 +719,7 @@ draft_table_format_map_common =
   ]
 ];
 
-//! <map> Table format map definitions; centered-centered-centered justified.
+//! <map> Table format map; centered, centered, centered --justified.
 /***************************************************************************//**
   \hideinitializer
 *******************************************************************************/
@@ -698,7 +743,7 @@ concat
   ]
 );
 
-//! <map> Table format map definitions; centered-left-left justified.
+//! <map> Table format map; centered, left, left --justified.
 /***************************************************************************//**
   \hideinitializer
 *******************************************************************************/
@@ -722,7 +767,7 @@ concat
   ]
 );
 
-//! <map> Table format map definitions; centered-right-right justified.
+//! <map> Table format map; centered, right, right --justified.
 /***************************************************************************//**
   \hideinitializer
 *******************************************************************************/
@@ -804,6 +849,23 @@ BEGIN_SCOPE sheet_config;
 
     table_write ( r=draft_sheet_config_tr, c=draft_sheet_config_tc,
                   cs=["id", "info"], heading_text=true );
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE sheet_config_keys;
+  BEGIN_OPENSCAD;
+    include <units/angle.scad>;
+    include <units/length.scad>;
+    include <omdl-base.scad>;
+    include <tools/drafting/draft-base.scad>;
+    length_unit_base = "mm";
+
+    map_write( draft_sheet_config_tc );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
