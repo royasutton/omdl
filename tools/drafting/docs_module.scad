@@ -106,7 +106,7 @@ BEGIN_SCOPE example;
     //draft_layers_show = ["default", "dim"];
     //draft_layers_show = ["default"];
 
-    draft_defaults_map =
+    draft_config_map =
       map_merge
       (
         [ // override defaults
@@ -116,7 +116,7 @@ BEGIN_SCOPE example;
           ["dim-line-distance", length(3)],
           ["dim-line-extension-length", length(5)]
         ],
-        draft_defaults_map_style1
+        draft_config_map_style1
       );
 
     draft_sheet(grid=0);

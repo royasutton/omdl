@@ -59,7 +59,7 @@
 *******************************************************************************/
 function draft_layers_any_active
 (
-  layers = draft_get_default("layers-default")
+  layers = draft_get_config("layers-default")
 ) = exists( is_list(layers) ? layers : [layers], draft_layers_show, true );
 
 //! @}
@@ -114,22 +114,22 @@ function draft_sheet_get_window
     //
 
     // sheet size
-    sdx = draft_sheet_get_size(ci="sdx") * draft_sheet_scale,
-    sdy = draft_sheet_get_size(ci="sdy") * draft_sheet_scale,
+    sdx = draft_get_sheet_size(ci="sdx") * draft_sheet_scale,
+    sdy = draft_get_sheet_size(ci="sdy") * draft_sheet_scale,
 
     // sheet layout
-    sll = draft_sheet_get_config(ci="sll"),
+    sll = draft_get_sheet_config(ci="sll"),
 
     // sheet frame and zone margins
-    smx = draft_sheet_get_config(ci="smx") * draft_sheet_scale,
-    smy = draft_sheet_get_config(ci="smy") * draft_sheet_scale,
-    szm = draft_sheet_get_config(ci="szm") * draft_sheet_scale,
+    smx = draft_get_sheet_config(ci="smx") * draft_sheet_scale,
+    smy = draft_get_sheet_config(ci="smy") * draft_sheet_scale,
+    szm = draft_get_sheet_config(ci="szm") * draft_sheet_scale,
 
     // reference zone labels
-    zox = draft_sheet_get_config(ci="zox"),
-    zoy = draft_sheet_get_config(ci="zoy"),
-    zlx = draft_sheet_get_config(ci="zlx"),
-    zly = draft_sheet_get_config(ci="zly"),
+    zox = draft_get_sheet_config(ci="zox"),
+    zoy = draft_get_sheet_config(ci="zoy"),
+    zlx = draft_get_sheet_config(ci="zlx"),
+    zly = draft_get_sheet_config(ci="zly"),
 
     // sheet layout dimensions
     ldx = sll ? sdy : sdx,
@@ -337,11 +337,11 @@ function draft_table_get_point
   let
   (
     // get table format
-    cmh = map_get_firstof2_or(map, fmap, "cmh", draft_get_default("table-cmh")) * $draft_scale,
-    cmv = map_get_firstof2_or(map, fmap, "cmv", draft_get_default("table-cmv")) * $draft_scale,
+    cmh = map_get_firstof2_or(map, fmap, "cmh", draft_get_config("table-cmh")) * $draft_scale,
+    cmv = map_get_firstof2_or(map, fmap, "cmv", draft_get_config("table-cmv")) * $draft_scale,
 
-    coh = map_get_firstof2_or(map, fmap, "coh", draft_get_default("table-coh")),
-    cov = map_get_firstof2_or(map, fmap, "cov", draft_get_default("table-cov")),
+    coh = map_get_firstof2_or(map, fmap, "coh", draft_get_config("table-coh")),
+    cov = map_get_firstof2_or(map, fmap, "cov", draft_get_config("table-cov")),
 
     // get table data
     title = map_get_value(map, "title"),
@@ -794,10 +794,10 @@ module draft_ztable_text
 
     \ref $draft_line_fn sets arc fragment number for line construction.
 
-    | see: \ref draft_defaults_map  |
-    |:-----------------------------:|
-    | line-width-min                |
-    | line-use-hull                 |
+    | see: \ref draft_config_map  |
+    |:---------------------------:|
+    | line-width-min              |
+    | line-use-hull               |
 *******************************************************************************/
 module draft_line_pp
 (
@@ -807,9 +807,9 @@ module draft_line_pp
 )
 {
   $fn = $draft_line_fn;
-  p = draft_get_default("line-width-min") * w * $draft_scale;
+  p = draft_get_config("line-width-min") * w * $draft_scale;
 
-  if ( draft_get_default("line-use-hull")  )
+  if ( draft_get_config("line-use-hull")  )
   {
     // hulled end-circles
     hull() { translate(i) circle(d=p); translate(t) circle(d=p); }
@@ -881,10 +881,10 @@ module draft_line_pp
     \ref $draft_arrow_fn sets arc fragment number for arrowhead
     construction. The line segments are constructed by \ref draft_line_pp().
 
-    | see: \ref draft_defaults_map  |
-    |:-----------------------------:|
-    | arrow-line-length-min         |
-    | arrow-angle-min               |
+    | see: \ref draft_config_map  |
+    |:---------------------------:|
+    | arrow-line-length-min       |
+    | arrow-angle-min             |
 *******************************************************************************/
 module draft_arrow
 (
@@ -904,10 +904,10 @@ module draft_arrow
     s5  = defined_e_or(s, 4, 1);              // angle multiplier
 
 
-    al  = draft_get_default("arrow-line-length-min") * s4 * $draft_scale;
+    al  = draft_get_config("arrow-line-length-min") * s4 * $draft_scale;
                                               // length
 
-    ca  = draft_get_default("arrow-angle-min") * s5;
+    ca  = draft_get_config("arrow-angle-min") * s5;
                                               // cut angle
 
     alx = angle_ll(x_axis2d_uv, l, true);     // line angle
@@ -1071,9 +1071,9 @@ module draft_arrow
 
     The line segments are constructed by \ref draft_line_pp().
 
-    | see: \ref draft_defaults_map  |
-    |:-----------------------------:|
-    | line-segment-min              |
+    | see: \ref draft_config_map  |
+    |:---------------------------:|
+    | line-segment-min            |
 *******************************************************************************/
 module draft_line
 (
@@ -1088,7 +1088,7 @@ module draft_line
 
   if ( !all_equal([s1, a1, a2], 0) )
   {
-    lsm = draft_get_default("line-segment-min") * $draft_scale;
+    lsm = draft_get_config("line-segment-min") * $draft_scale;
 
     i  = line_ip(l);
     t  = line_tp(l);
@@ -1417,9 +1417,9 @@ module draft_polygon
     When \ref $draft_make_3d is \b true, all children objects are
     extruded to 3D.
 
-    | see: \ref draft_defaults_map  |
-    |:-----------------------------:|
-    | make-3d-height                |
+    | see: \ref draft_config_map  |
+    |:---------------------------:|
+    | make-3d-height              |
 *******************************************************************************/
 module draft_make_3d_if_configured
 (
@@ -1428,7 +1428,7 @@ module draft_make_3d_if_configured
   if ( $draft_make_3d )
     linear_extrude
     (
-      height=draft_get_default("make-3d-height") * $draft_scale, center=true
+      height=draft_get_config("make-3d-height") * $draft_scale, center=true
     )
     children();
   else

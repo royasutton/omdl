@@ -138,23 +138,23 @@ draft_layers_show = ["all"];
   \param    k <string> A map key.
 
   \returns  \<value> The value associated with key \p k in the
-            configuration map assigned to \ref draft_defaults_map.
+            configuration map assigned to \ref draft_config_map.
 
   \details
 
     \b Example:
 
     \verbatim
-      layers = draft_get_default("layers-dim");
-      dimll1 = draft_get_default("dim-leader-length");
+      layers = draft_get_config("layers-dim");
+      dimll1 = draft_get_config("dim-leader-length");
     \endverbatim
 
-  \sa draft_defaults_map.
+  \sa draft_config_map.
 *******************************************************************************/
-function draft_get_default
+function draft_get_config
 (
   k
-) = map_get_value(draft_defaults_map, k);
+) = map_get_value(draft_config_map, k);
 
 //! @}
 
@@ -166,7 +166,7 @@ function draft_get_default
   \details
 
     Configuration values for drafting primitives and tools. Specific
-    values can be overridden as shown in \ref draft_defaults_map or
+    values can be overridden as shown in \ref draft_config_map or
     completely new maps may assembled to implement new styles as
     desired.
 
@@ -180,7 +180,7 @@ function draft_get_default
 
   \hideinitializer
 *******************************************************************************/
-draft_defaults_map_style1 =
+draft_config_map_style1 =
 [
   //
   // fonts
@@ -310,7 +310,7 @@ draft_defaults_map_style1 =
     \b Example:
 
     \code{.C}
-    draft_defaults_map =
+    draft_config_map =
       map_merge
       (
         [ // define value overrides first
@@ -321,11 +321,11 @@ draft_defaults_map_style1 =
           ["dim-line-extension-length", length(2/8)]
         ],
           // start with existing style map
-          draft_defaults_map_style1
+          draft_config_map_style1
       );
     \endcode
 *******************************************************************************/
-draft_defaults_map = draft_defaults_map_style1;
+draft_config_map = draft_config_map_style1;
 
 //! @}
 
@@ -351,15 +351,15 @@ draft_defaults_map = draft_defaults_map_style1;
     \b Example:
 
     \verbatim
-      std = draft_sheet_get_size(ci="std");
+      std = draft_get_sheet_size(ci="std");
 
-      sdx = draft_sheet_get_size(ci="sdx") * draft_sheet_scale;
-      sdy = draft_sheet_get_size(ci="sdy") * draft_sheet_scale;
+      sdx = draft_get_sheet_size(ci="sdx") * draft_sheet_scale;
+      sdy = draft_get_sheet_size(ci="sdy") * draft_sheet_scale;
     \endverbatim
 
   \sa draft_sheet_size.
 *******************************************************************************/
-function draft_sheet_get_size
+function draft_get_sheet_size
 (
   ci
 ) = table_get_value
@@ -444,15 +444,15 @@ draft_sheet_size_tr =
     \b Example:
 
     \verbatim
-      zoy = draft_sheet_get_config(ci="zoy")
+      zoy = draft_get_sheet_config(ci="zoy")
 
-      smx = draft_sheet_get_config(ci="smx") * draft_sheet_scale;
-      smy = draft_sheet_get_config(ci="smy") * draft_sheet_scale;
+      smx = draft_get_sheet_config(ci="smx") * draft_sheet_scale;
+      smy = draft_get_sheet_config(ci="smy") * draft_sheet_scale;
     \endverbatim
 
   \sa draft_sheet_config.
 *******************************************************************************/
-function draft_sheet_get_config
+function draft_get_sheet_config
 (
   ci
 ) = table_get_value
@@ -515,7 +515,7 @@ draft_sheet_config_tr =
     +1,
     ["A", "B", "C", "D", "E", "F", "G", "H"],
     ["1", "2", "3", "4"],
-    draft_get_default("font-sheet-zone-reference"),
+    draft_get_config("font-sheet-zone-reference"),
     5/8,
 
     [1,[4,3,2,5]],
@@ -538,7 +538,7 @@ draft_sheet_config_tr =
     +1,
     ["A", "B", "C", "D"],
     ["1", "2", "3", "4", "5", "6", "7", "8"],
-    draft_get_default("font-sheet-zone-reference"),
+    draft_get_config("font-sheet-zone-reference"),
     5/8,
 
     [1,[4,3,2,5]],
@@ -639,7 +639,7 @@ draft_title_block_map_style1 =
   [ "hdefs",
       [
         empty_str, [ 0, +1], [ 0, -1], [0, -1-4/10],  0,   1,
-        ["center", "center"], draft_get_default("font-title-block-heading")
+        ["center", "center"], draft_get_config("font-title-block-heading")
       ]
   ],
 
@@ -647,7 +647,7 @@ draft_title_block_map_style1 =
   [ "edefs",
       [
         empty_str, [ 0, +1], [ 0, -2-1/2], [0, -1-4/10],  0, 3/2,
-        ["center", "center"], draft_get_default("font-title-block-entry")
+        ["center", "center"], draft_get_config("font-title-block-entry")
       ]
   ],
 
@@ -714,7 +714,7 @@ draft_table_format_map_common =
   [ "tdefs",
       [
         empty_str, [ 0, -1], [ 0, -1/2-4/10], [0, -1-2/10], 0, 1,
-        ["center", "center"], draft_get_default("font-table-title")
+        ["center", "center"], draft_get_config("font-table-title")
       ]
   ]
 ];
@@ -731,13 +731,13 @@ concat
     [ "hdefs",
         [
           empty_str, [ 0, -1], [ 0, -1/2-3/10], [0, -1-2/10], 0, 1,
-          ["center", "center"], draft_get_default("font-table-heading")
+          ["center", "center"], draft_get_config("font-table-heading")
         ]
     ],
     [ "edefs",
         [
           empty_str, [ 0, -1], [ 0, -1/2-4/10], [0, -1-2/10], 0, 1,
-          ["center", "center"], draft_get_default("font-table-entry")
+          ["center", "center"], draft_get_config("font-table-entry")
         ]
     ]
   ]
@@ -755,13 +755,13 @@ concat
     [ "hdefs",
         [
           empty_str, [-1, -1], [2/5,  -4/5], [0, -1-1/5], 0, 1,
-          ["left", "center"], draft_get_default("font-table-heading")
+          ["left", "center"], draft_get_config("font-table-heading")
         ]
     ],
     [ "edefs",
         [
           empty_str, [-1, -1], [2/5, -9/10], [0, -1-1/5], 0, 1,
-          ["left", "center"], draft_get_default("font-table-entry")
+          ["left", "center"], draft_get_config("font-table-entry")
         ]
     ]
   ]
@@ -779,13 +779,13 @@ concat
     [ "hdefs",
         [
           empty_str, [+1, -1], [-2/5,  -4/5], [0, -1-1/5], 0, 1,
-          ["right", "center"], draft_get_default("font-table-heading")
+          ["right", "center"], draft_get_config("font-table-heading")
         ]
     ],
     [ "edefs",
         [
           empty_str, [+1, -1], [-2/5, -9/10], [0, -1-1/5], 0, 1,
-          ["right", "center"], draft_get_default("font-table-entry")
+          ["right", "center"], draft_get_config("font-table-entry")
         ]
     ]
   ]
@@ -809,7 +809,7 @@ BEGIN_SCOPE dfraft_style1;
     include <tools/drafting/draft-base.scad>;
     length_unit_base = "mm";
 
-    map_write( draft_defaults_map_style1 );
+    map_write( draft_config_map_style1 );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;

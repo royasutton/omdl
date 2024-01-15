@@ -118,7 +118,7 @@ module draft_dim_leader
   p = origin2d,
 
   v1 = 30,
-  l1 = draft_get_default("dim-leader-length"),
+  l1 = draft_get_config("dim-leader-length"),
   v2,
   l2,
 
@@ -129,20 +129,20 @@ module draft_dim_leader
   tr,
   ta = "center",
 
-  bw = draft_get_default("dim-leader-box-weight"),
-  bs = draft_get_default("dim-leader-box-style"),
+  bw = draft_get_config("dim-leader-box-weight"),
+  bs = draft_get_config("dim-leader-box-style"),
 
-  w = draft_get_default("dim-leader-weight"),
-  s = draft_get_default("dim-leader-style"),
-  a = draft_get_default("dim-leader-arrow"),
+  w = draft_get_config("dim-leader-weight"),
+  s = draft_get_config("dim-leader-style"),
+  a = draft_get_config("dim-leader-arrow"),
 
-  o  = draft_get_default("dim-offset"),
+  o  = draft_get_config("dim-offset"),
 
-  cmh = draft_get_default("dim-cmh"),
-  cmv = draft_get_default("dim-cmv"),
+  cmh = draft_get_config("dim-cmh"),
+  cmv = draft_get_config("dim-cmv"),
 
   window = false,
-  layers = draft_get_default("layers-dim")
+  layers = draft_get_config("layers-dim")
 )
 {
   if (draft_layers_any_active(layers))
@@ -288,27 +288,27 @@ module draft_dim_line
   t,
   u,
 
-  d  = draft_get_default("dim-line-distance"),
-  e  = draft_get_default("dim-line-extension-length"),
-  es = draft_get_default("dim-line-extension-style"),
+  d  = draft_get_config("dim-line-distance"),
+  e  = draft_get_config("dim-line-extension-length"),
+  es = draft_get_config("dim-line-extension-style"),
 
-  w  = draft_get_default("dim-line-weight"),
-  s  = draft_get_default("dim-line-style"),
-  a  = draft_get_default("dim-line-arrow"),
+  w  = draft_get_config("dim-line-weight"),
+  s  = draft_get_config("dim-line-style"),
+  a  = draft_get_config("dim-line-arrow"),
 
   a1,
   a2,
 
-  o  = draft_get_default("dim-offset"),
+  o  = draft_get_config("dim-offset"),
 
-  ts = draft_get_default("dim-text-size"),
-  tp = draft_get_default("dim-text-place"),
-  rm = draft_get_default("dim-round-mode"),
+  ts = draft_get_config("dim-text-size"),
+  tp = draft_get_config("dim-text-place"),
+  rm = draft_get_config("dim-round-mode"),
 
-  cmh = draft_get_default("dim-cmh"),
-  cmv = draft_get_default("dim-cmv"),
+  cmh = draft_get_config("dim-cmh"),
+  cmv = draft_get_config("dim-cmv"),
 
-  layers = draft_get_default("layers-dim")
+  layers = draft_get_config("layers-dim")
 )
 {
   if (draft_layers_any_active(layers))
@@ -506,23 +506,23 @@ module draft_dim_radius
 
   d  = false,
 
-  w  = draft_get_default("dim-radius-weight"),
-  s  = draft_get_default("dim-radius-style"),
-  a  = draft_get_default("dim-radius-arrow"),
+  w  = draft_get_config("dim-radius-weight"),
+  s  = draft_get_config("dim-radius-style"),
+  a  = draft_get_config("dim-radius-arrow"),
 
   a1,
   a2,
 
-  o  = draft_get_default("dim-offset"),
+  o  = draft_get_config("dim-offset"),
 
-  ts = draft_get_default("dim-text-size"),
-  tp = draft_get_default("dim-text-place"),
-  rm = draft_get_default("dim-round-mode"),
+  ts = draft_get_config("dim-text-size"),
+  tp = draft_get_config("dim-text-place"),
+  rm = draft_get_config("dim-round-mode"),
 
-  cmh = draft_get_default("dim-cmh"),
-  cmv = draft_get_default("dim-cmv"),
+  cmh = draft_get_config("dim-cmh"),
+  cmv = draft_get_config("dim-cmv"),
 
-  layers = draft_get_default("layers-dim")
+  layers = draft_get_config("layers-dim")
 )
 {
   if (draft_layers_any_active(layers))
@@ -720,26 +720,26 @@ module draft_dim_angle
   t,
   u,
 
-  e  = draft_get_default("dim-angle-extension-ratio"),
-  es = draft_get_default("dim-angle-extension-style"),
+  e  = draft_get_config("dim-angle-extension-ratio"),
+  es = draft_get_config("dim-angle-extension-style"),
 
-  w  = draft_get_default("dim-angle-weight"),
-  s  = draft_get_default("dim-angle-style"),
-  a  = draft_get_default("dim-angle-arrow"),
+  w  = draft_get_config("dim-angle-weight"),
+  s  = draft_get_config("dim-angle-style"),
+  a  = draft_get_config("dim-angle-arrow"),
 
   a1,
   a2,
 
-  o  = draft_get_default("dim-offset"),
+  o  = draft_get_config("dim-offset"),
 
-  ts = draft_get_default("dim-text-size"),
-  tp = draft_get_default("dim-text-place"),
-  rm = draft_get_default("dim-round-mode"),
+  ts = draft_get_config("dim-text-size"),
+  tp = draft_get_config("dim-text-place"),
+  rm = draft_get_config("dim-round-mode"),
 
-  cmh = draft_get_default("dim-cmh"),
-  cmv = draft_get_default("dim-cmv"),
+  cmh = draft_get_config("dim-cmh"),
+  cmv = draft_get_config("dim-cmv"),
 
-  layers = draft_get_default("layers-dim")
+  layers = draft_get_config("layers-dim")
 )
 {
   if (draft_layers_any_active(layers))
@@ -899,15 +899,15 @@ module draft_dim_center
   r,
 
   v = 0,
-  l = draft_get_default("dim-center-length"),
+  l = draft_get_config("dim-center-length"),
 
   e,
-  es = draft_get_default("dim-angle-extension-style"),
+  es = draft_get_config("dim-angle-extension-style"),
 
-  w  = draft_get_default("dim-center-weight"),
-  s  = draft_get_default("dim-center-style"),
+  w  = draft_get_config("dim-center-weight"),
+  s  = draft_get_config("dim-center-style"),
 
-  layers = draft_get_default("layers-dim")
+  layers = draft_get_config("layers-dim")
 )
 {
   if (draft_layers_any_active(layers))
