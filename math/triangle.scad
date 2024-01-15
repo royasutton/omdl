@@ -41,9 +41,9 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_include (include/amu/includes_required.amu)
 
-  \amu_define auto_file_debug (false)
-  \amu_define auto_file_extensions (svg)
-  \amu_include (include/amu/auto_file_html.amu)
+  \amu_define html_image_w  (512)
+  \amu_define latex_image_w (2.25in)
+  \amu_include (include/amu/scope_diagram_2d_object.amu)
 
   \details
 
@@ -64,44 +64,7 @@
 
     Each side length is opposite the corresponding vertex.
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}")
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      s = 10;
-      t = [6, 8, 7];
-
-      r = min(t)/len(t)*s;
-      c = translate_p(rotate_p(triangle2d_sss2ppp(t), 15), [0, 0])*s;
-
-      draft_polygon(c, w=s*2/3);
-
-      for (i = [0 : len(c)-1])
-      {
-        cv = c[i];
-        os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
-
-        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s, cmv=s);
-
-        if ( false )
-        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
-
-        if ( false )
-        draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
-
-      }
-    }
-
-    \b Result
-
-    \amu_image (file=${auto_file_name} height=240)
+    \amu_eval ( object=triangle_ppp2sss ${object_diagram_2d} )
 
     No verification is performed to ensure that the given sides specify
     a valid triangle. See [Wikipedia] for more information.
@@ -135,43 +98,7 @@ function triangle_ppp2sss
 
     Each side length is opposite the corresponding vertex.
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}")
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      s = 10;
-      t = [6, 8, 7];
-
-      r = min(t)/len(t)*s;
-      c = translate_p(rotate_p(triangle2d_sss2ppp(t), 15), [0, 0])*s;
-
-      draft_polygon(c, w=s*2/3);
-
-      for (i = [0 : len(c)-1])
-      {
-        cv = c[i];
-        os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
-
-        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s, cmv=s);
-
-        if ( i == 2 )
-        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
-
-        if ( i < 2 )
-        draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
-      }
-    }
-
-    \b Result
-
-    \amu_image (file=${auto_file_name} height=240)
+    \amu_eval ( object=triangle_sas2sss ${object_diagram_2d} )
 
     No verification is performed to ensure that the given sides specify
     a valid triangle. See [Wikipedia] for more information.
@@ -203,43 +130,7 @@ function triangle_sas2sss
 
     Each side length is opposite the corresponding vertex.
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}")
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      s = 10;
-      t = [6, 8, 7];
-
-      r = min(t)/len(t)*s;
-      c = translate_p(rotate_p(triangle2d_sss2ppp(t), 15), [0, 0])*s;
-
-      draft_polygon(c, w=s*2/3);
-
-      for (i = [0 : len(c)-1])
-      {
-        cv = c[i];
-        os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
-
-        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s, cmv=s);
-
-        if ( i < 2 )
-        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
-
-        if ( i == 2 )
-        draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
-      }
-    }
-
-    \b Result
-
-    \amu_image (file=${auto_file_name} height=240)
+    \amu_eval ( object=triangle_asa2sss ${object_diagram_2d} )
 
     No verification is performed to ensure that the given sides specify
     a valid triangle. See [Wikipedia] for more information.
@@ -274,43 +165,7 @@ function triangle_asa2sss
 
     Each side length is opposite the corresponding vertex.
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}")
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      s = 10;
-      t = [6, 8, 7];
-
-      r = min(t)/len(t)*s;
-      c = translate_p(rotate_p(triangle2d_sss2ppp(t), 15), [0, 0])*s;
-
-      draft_polygon(c, w=s*2/3);
-
-      for (i = [0 : len(c)-1])
-      {
-        cv = c[i];
-        os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
-
-        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s, cmv=s);
-
-        if ( i < 2 )
-        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
-
-        if ( i == 0 )
-        draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
-      }
-    }
-
-    \b Result
-
-    \amu_image (file=${auto_file_name} height=240)
+    \amu_eval ( object=triangle_aas2sss ${object_diagram_2d} )
 
     No verification is performed to ensure that the given sides specify
     a valid triangle. See [Wikipedia] for more information.
@@ -351,44 +206,7 @@ function triangle_aas2sss
     on the 'x' axis or side \em s3 will be on the 'y' axis as
     determined by parameter \p a.
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}")
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      s = 10;
-      t = [6, 8, 7];
-
-      r = min(t)/len(t)*s;
-      c = translate_p(rotate_p(triangle2d_sss2ppp(t), 0), [0, 0])*s;
-
-      draft_polygon(c, w=s*2/3);
-      draft_axes([[0,12], [0,7]]*s, ts=s/2);
-
-      for (i = [0 : len(c)-1])
-      {
-        cv = c[i];
-        os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
-
-        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s, cmv=s);
-
-        if ( false )
-        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
-
-        if ( true )
-        draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
-      }
-    }
-
-    \b Result
-
-    \amu_image (file=${auto_file_name} height=240)
+    \amu_eval ( object=triangle2d_sss2ppp ${object_diagram_2d} )
 
     No verification is performed to ensure that the given sides specify
     a valid triangle. See [Wikipedia] for more information.
@@ -739,6 +557,74 @@ function triangle2d_is_pit
 
 //! @}
 //! @}
+
+//----------------------------------------------------------------------------//
+// openscad-amu auxiliary scripts
+//----------------------------------------------------------------------------//
+
+/*
+BEGIN_SCOPE diagram;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <units/length.scad>;
+    include <units/angle.scad>;
+    include <tools/operation_cs.scad>;
+    include <tools/drafting/draft-base.scad>;
+
+    module dt (vl, al, sl)
+    {
+      s = 10;
+      t = [6, 8, 7];
+      r = min(t)/len(t)*s;
+
+      c = triangle2d_sss2ppp(t)*s;
+
+      draft_polygon(c, w=s*2/3);
+      draft_axes([[0,12], [0,7]]*s, ts=s/2);
+
+      for (i = [0 : len(c)-1])
+      {
+        cv = c[i];
+        os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
+
+        if ( !is_empty( find( mv=i, v=vl )) )
+        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s*1, cmv=s);
+
+        if ( !is_empty( find( mv=i, v=al )) )
+        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
+
+        if ( !is_empty( find( mv=i, v=sl )) )
+        draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
+      }
+    }
+
+    object = "triangle_sas2sss";
+
+    if (object == "triangle_ppp2sss") dt( vl = [0,1,2], al = [], sl = []);
+    if (object == "triangle_sas2sss") dt( vl = [0,1,2], al = [2], sl = [0,1]);
+    if (object == "triangle_asa2sss") dt( vl = [0,1,2], al = [0,1], sl = [2]);
+    if (object == "triangle_aas2sss") dt( vl = [0,1,2], al = [0,1], sl = [0]);
+    if (object == "triangle2d_sss2ppp") dt( vl = [], al = [], sl = [0,1,2]);
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_svg}.mfs;
+
+    defines   name "objects" define "object"
+              strings "
+                triangle_ppp2sss
+                triangle_sas2sss
+                triangle_asa2sss
+                triangle_aas2sss
+                triangle2d_sss2ppp
+              ";
+    variables add_opts_combine "objects";
+    variables add_opts "--viewall --autocenter";
+
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
 
 //----------------------------------------------------------------------------//
 // end of file

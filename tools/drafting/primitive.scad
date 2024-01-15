@@ -40,9 +40,7 @@
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
 
-  \amu_define auto_file_debug (false)
-  \amu_define auto_file_extensions (svg)
-  \amu_include (include/amu/auto_file_html.amu)
+  \amu_include (include/amu/scope_diagram_2d_object.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -856,27 +854,7 @@ module draft_line_pp
       4     | slash / cross arrowhead
       5     | circle arrowhead
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      grid = [1, 3/4] * 10;
-
-      for ( s=[1:5], f=[0:1], p=[0:2] )
-        translate( [(p+1)*first(grid) + f*3*first(grid), s*second(grid)] )
-        draft_arrow( l=x_axis2d_ul, s=[s, f, p] );
-    }
-
-    \b Result
-
-    \amu_image (caption="Arrowhead Styles" file=${auto_file_name} width=320)
+    \amu_eval ( object=draft_arrow ${object_diagram_2d} )
 
     \ref $draft_arrow_fn sets arc fragment number for arrowhead
     construction. The line segments are constructed by \ref draft_line_pp().
@@ -1048,26 +1026,7 @@ module draft_arrow
       3     | break width multiplier          | <decimal>           | 2
       4     | break angle                     | <decimal>           | 67.5
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      line = [[0,0], [50,0]];
-      for ( s=[1:5] )
-        translate( [0, s*5] )
-        draft_line(l=line, s=s);
-    }
-
-    \b Result
-
-    \amu_image (caption="Line Styles" file=${auto_file_name} width=320)
+    \amu_eval ( object=draft_line ${object_diagram_2d} )
 
     The line segments are constructed by \ref draft_line_pp().
 
@@ -1209,24 +1168,7 @@ module draft_line
     :------:|:--------------------------------|:--------------------|:-------:
       1     | stride                          | <decimal>           | 2
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      for ( s=[1:2] )
-        draft_arc (r=50-5*s, v1=[-1,1], v2=45, cw=true, s=s);
-    }
-
-    \b Result
-
-    \amu_image (caption="Arc Styles" file=${auto_file_name} width=320)
+    \amu_eval ( object=draft_arc ${object_diagram_2d} )
 
     The line segments are constructed by \ref draft_line_pp().
 *******************************************************************************/
@@ -1280,23 +1222,7 @@ module draft_arc
 
   \details
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      draft_rectangle ([50, 30], s=[4, 3, 2, 5]);
-    }
-
-    \b Result
-
-    \amu_image (caption="Example" file=${auto_file_name} width=320)
+    \amu_eval ( object=draft_rectangle ${object_diagram_2d} )
 
     The line segments are constructed by \ref draft_line().
 *******************************************************************************/
@@ -1348,33 +1274,7 @@ module draft_rectangle
     polytope_faces2edges(). Parameter \p i allows coordinate indexes to
     be selected using several selection [schemes][specification].
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      pp = length
-      (
-        [ [+1.5 + 1/3, -1.25], [+1.5/4, 0], [+1.5 - 1/3, +1.25],
-          [-1.5 + 1/3, +1.25], [-1.5/4, 0], [-1.5 - 1/3, -1.25]
-        ], "in"
-      );
-
-      polytope_number(pp, ei=false, fi=false);
-
-      rp = polygon_vertices_round3_p(c=pp, vr=length(1/4, "in"), vrm=1, cw=false);
-      draft_polygon(rp, s=2);
-    }
-
-    \b Result
-
-    \amu_image (caption="Example" file=${auto_file_name} width=320)
+    \amu_eval ( object=draft_polygon ${object_diagram_2d} )
 
     The line segments are constructed by \ref draft_line().
 
@@ -1439,6 +1339,86 @@ module draft_make_3d_if_configured
 
 //! @}
 //! @}
+
+//----------------------------------------------------------------------------//
+// openscad-amu auxiliary scripts
+//----------------------------------------------------------------------------//
+
+/*
+BEGIN_SCOPE diagram;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <units/length.scad>;
+    include <units/angle.scad>;
+    include <tools/align.scad>;
+    include <tools/operation_cs.scad>;
+    include <tools/polytope.scad>;
+    include <tools/drafting/draft-base.scad>;
+
+    object = "draft_arrow";
+
+    if (object == "draft_arrow")
+    {
+      grid = [20, 10];
+
+      for ( s=[1:5], f=[0:1], p=[0:2] )
+        translate( [(p+1)*first(grid) + f*3*first(grid), s*second(grid)] )
+        draft_arrow( l=x_axis2d_ul, s=[s, f, p] );
+    }
+
+    if (object == "draft_line")
+    {
+      line = [[0,0], [100,0]];
+      for ( s=[1:5] )
+        translate( [0, s*5] )
+        draft_line(l=line, s=s);
+    }
+
+    if (object == "draft_arc")
+    {
+      for ( s=[1:2] )
+        draft_arc (r=50-5*s, v1=[-1,1], v2=45, cw=true, s=s);
+    }
+
+    if (object == "draft_rectangle")
+    {
+      draft_rectangle ([100, 30], s=[4, 3, 2, 5]);
+    }
+
+    if (object == "draft_polygon")
+    {
+      pp = length
+      (
+        [ [+1.5 + 1/3, -1.25], [+1.5/4, 0], [+1.5 - 1/3, +1.25],
+          [-1.5 + 1/3, +1.25], [-1.5/4, 0], [-1.5 - 1/3, -1.25]
+        ], "in"
+      );
+
+      polytope_number(pp, vi=true, ei=false, fi=false);
+
+      rp = polygon_vertices_round3_p(c=pp, vr=length(1/4, "in"), vrm=1, cw=false);
+      draft_polygon(rp, s=2);
+    }
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_svg}.mfs;
+
+    defines   name "objects" define "object"
+              strings "
+                draft_arrow
+                draft_line
+                draft_arc
+                draft_rectangle
+                draft_polygon
+              ";
+    variables add_opts_combine "objects";
+    variables add_opts "--viewall --autocenter";
+
+    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
 
 //----------------------------------------------------------------------------//
 // end of file
