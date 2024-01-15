@@ -47,9 +47,29 @@
 
 //----------------------------------------------------------------------------//
 
+//! \name Layers
+//! @{
+
+//! Check if any identified layers are active.
+/***************************************************************************//**
+  \param    layers <string-list> The list of layer names.
+
+  \returns  <boolean> \b true if any identified layer is active as
+            indicated by \ref draft_layers_show.
+*******************************************************************************/
+function draft_layers_any_active
+(
+  layers = draft_get_default("layers-default")
+) = exists( is_list(layers) ? layers : [layers], draft_layers_show, true );
+
+//! @}
+
 //----------------------------------------------------------------------------//
-// base primitives
-//----------------------------------------------------------------------------//
+
+//! \name Placement
+//! @{
+
+//! \cond DOXYGEN_SHOULD_SKIP_THIS
 
 //! Get sheet, sheet-frame, or sheet-zone reference window or limits.
 /***************************************************************************//**
@@ -171,6 +191,8 @@ function draft_sheet_get_window
     // window points in cw order from [xmin, ymin]
   : [[wx[0],wy[0]], [wx[0],wy[1]], [wx[1],wy[1]], [wx[1],wy[0]]];
 
+//! \endcond
+
 //! Get sheet, sheet-frame, or sheet-zone reference coordinates.
 /***************************************************************************//**
   \param    rx <string-list|string> Sheet x-axis zone reference identifier(s).
@@ -284,6 +306,13 @@ function draft_sheet_get_zone
     )
     // point
     [cx, cy];
+
+//! @}
+
+//----------------------------------------------------------------------------//
+
+//! \name Tables
+//! @{
 
 //! Get a coordinate point for a defined draft table column and row.
 /***************************************************************************//**
@@ -748,46 +777,12 @@ module draft_ztable_text
   );
 }
 
-//! Check if any identified layers are active.
-/***************************************************************************//**
-  \param    layers <string-list> The list of layer names.
-
-  \returns  <boolean> \b true if any identified layer is active as
-            indicated by \ref draft_layers_show.
-*******************************************************************************/
-function draft_layers_any_active
-(
-  layers = draft_get_default("layers-default")
-) = exists( is_list(layers) ? layers : [layers], draft_layers_show, true );
-
-//! Extrude 2D drafted constructions to 3D if configured.
-/***************************************************************************//**
-  \details
-
-    When \ref $draft_make_3d is \b true, all children objects are
-    extruded to 3D.
-
-    | see: \ref draft_defaults_map  |
-    |:-----------------------------:|
-    | make-3d-height                |
-*******************************************************************************/
-module draft_make_3d_if_configured
-(
-)
-{
-  if ( $draft_make_3d )
-    linear_extrude
-    (
-      height=draft_get_default("make-3d-height") * $draft_scale, center=true
-    )
-    children();
-  else
-    children();
-}
+//! @}
 
 //----------------------------------------------------------------------------//
-// basic shapes
-//----------------------------------------------------------------------------//
+
+//! \name Shapes
+//! @{
 
 //! Draft a simple line from an initial to a terminal point.
 /***************************************************************************//**
@@ -1407,6 +1402,40 @@ module draft_polygon
   for (i = index_gen(el, i))        // allow edge selection index
     draft_line(l=[c[first(el[i])], c[second(el[i])]], w=w, s=s);
 }
+
+//! @}
+
+//----------------------------------------------------------------------------//
+
+//! \name Miscellaneous
+//! @{
+
+//! Extrude 2D drafted constructions to 3D if configured.
+/***************************************************************************//**
+  \details
+
+    When \ref $draft_make_3d is \b true, all children objects are
+    extruded to 3D.
+
+    | see: \ref draft_defaults_map  |
+    |:-----------------------------:|
+    | make-3d-height                |
+*******************************************************************************/
+module draft_make_3d_if_configured
+(
+)
+{
+  if ( $draft_make_3d )
+    linear_extrude
+    (
+      height=draft_get_default("make-3d-height") * $draft_scale, center=true
+    )
+    children();
+  else
+    children();
+}
+
+//! @}
 
 //! @}
 //! @}
