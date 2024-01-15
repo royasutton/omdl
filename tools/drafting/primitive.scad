@@ -300,8 +300,8 @@ function draft_sheet_get_zone
 *******************************************************************************/
 function draft_table_get_point
 (
-  ix = 0,
-  iy = 0,
+  ix,
+  iy,
   map,
   fmap
 ) =
@@ -374,8 +374,8 @@ function draft_table_get_point
 *******************************************************************************/
 function draft_table_get_cell
 (
-  ix = 0,
-  iy = 0,
+  ix,
+  iy,
   zp = 0,
   limits = false,
   window = false,
@@ -480,8 +480,8 @@ function draft_table_get_cell
 *******************************************************************************/
 module draft_table_text
 (
-  ix = 0,
-  iy = 0,
+  ix,
+  iy,
   text,
   size,
   dfmt,
@@ -554,8 +554,8 @@ module draft_table_text
 *******************************************************************************/
 function draft_ztable_get_point
 (
-  ix = 0,
-  iy = 0,
+  ix,
+  iy,
   map
 ) =
   let
