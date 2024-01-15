@@ -321,14 +321,16 @@ function draft_table_get_point
     rows  = map_get_value(map, "rows"),
 
     // vertical line index
-    xu  = (ix <= 0) ? 0                     // left
+    xu  = is_undef(ix) ? 0                  // not specified
+        : (ix <= 0) ? 0                     // left
         : sum([for( i=[1:ix] ) cols[i-1]]), // sum column units widths
 
     yt  = defined_e_or(title, 1, 0),        // title: '0' unit default height
     yh  = defined_e_or(heads, 1, 0),        // heads: '0' unit default height
 
     // horizontal line index
-    yu  = (iy <= 0) ? 0                     // top
+    yu  = is_undef(iy) ? 0                  // not specified
+        : (iy <= 0) ? 0                     // top
         : (iy == 1) ? yt                    // title
         : (iy == 2) ? sum( [yt, yh] )       // title + heads
         : sum
@@ -389,13 +391,13 @@ function draft_table_get_cell
     rows = map_get_value(map, "rows"),
 
     // vertical lines
-    lv  = (iy <= 0) ?       [0, len(cols)]      // title cell
-        : is_defined(ix) ?  [ix, ix+1]          // heading or row
-        :                   [0, len(cols)],     // table width
+    lv  = is_undef(ix) ?    [0, len(cols)]      // table width
+        : (iy <= 0) ?       [0, len(cols)]      // title cell
+        :                   [ix, ix+1],         // heading or row
 
     // horizontal lines
-    lh  = is_defined(iy) ?  [iy, iy+1]          // any row
-        :                   [0, len(rows)+2],   // table height
+    lh  = is_undef(iy) ?    [0, len(rows)+2]    // table height
+        :                   [iy, iy+1],         // any row
 
     // get cell window xy-limits [min, max]
     wl =
@@ -570,8 +572,8 @@ function draft_ztable_get_point
     vlines = map_get_value(map, "vlines"),
     hlines = map_get_value(map, "hlines"),
 
-    x = sum([for( i=[0:ix] ) vlines[i][0]]) * cmh * coh,
-    y = sum([for( i=[0:iy] ) hlines[i][0]]) * cmv * cov
+    x = is_undef(ix) ? 0 : sum([for( i=[0:ix] ) vlines[i][0]]) * cmh * coh,
+    y = is_undef(iy) ? 0 : sum([for( i=[0:iy] ) hlines[i][0]]) * cmv * cov
   )
   [x, y];
 
@@ -617,14 +619,11 @@ function draft_ztable_get_zone
     // get table configuration
     zones  = map_get_value(map, "zones"),
 
-    zx  = is_defined(i) ?
-          zones[i][0]
-          // [min vline, max vline]
-        : [0, len(map_get_value(map, "vlines"))-1],
-    zy  = is_defined(i) ?
-          zones[i][1]
-          // [min hline, max hline]
-        : [0, len(map_get_value(map, "hlines"))-1],
+                        // [min vline, max vline]
+    zx  = is_undef(i) ? [0, len(map_get_value(map, "vlines"))-1] : zones[i][0],
+
+                        // [min hline, max hline]
+    zy  = is_undef(i) ? [0, len(map_get_value(map, "hlines"))-1] : zones[i][1],
 
     // get zone window xy-limits [min, max]
     wl =
