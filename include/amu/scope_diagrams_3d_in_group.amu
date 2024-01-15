@@ -1,6 +1,6 @@
 /+
 
-  output: scope script table of diagrams in named group.
+  output: scope script table of 3d diagrams in named group.
 
   requirements:
     scope:

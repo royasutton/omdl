@@ -1,6 +1,6 @@
 /+
 
-  output: scope scad script table of diagrams and data table.
+  output: scope scad script table of 3d diagrams and data table.
 
   requirements:
     scope:
