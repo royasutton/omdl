@@ -231,7 +231,7 @@ module torus_polygon_trapezoid
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE dim;
+BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <shapes/revolved_2d.scad>;

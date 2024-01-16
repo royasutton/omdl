@@ -433,7 +433,7 @@ module star3d
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE dim;
+BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
 
