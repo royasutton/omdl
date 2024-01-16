@@ -102,8 +102,8 @@ module polytope_number
   fm = defined_or(f, [consts(len(c))]);
   el = is_defined(e) ? e : polytope_faces2edges(fm);
 
-  bb = polytope_limits(c, fm, d=[0:2], s=true);
-  pd = all_defined(bb) ? 3 : 2;
+  bb = polytope_limits(c=c, f=fm, s=true);
+  pd = len(bb);
 
   fs = defined_or(ts, ceil(max(bb)/50));
   fh = defined_or(th, ceil(min(bb)/100));
@@ -310,8 +310,8 @@ module polytope_bounding_box
   a
 )
 {
-  b = polytope_limits(c=c, f=f, a=a, d=[0:2], s=false);
-  d = len([for (i=b) if (i != [undef, undef]) i]);
+  b = polytope_limits(c=c, f=f, a=a, s=false);
+  d = len(b);
 
   if (d == 3)
     translate([b[0][0], b[1][0], b[2][0]])

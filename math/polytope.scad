@@ -104,6 +104,10 @@ function polytope_faces2edges
             determine the geometric limits, which, simplifies the
             calculation. Parameter \p f is needed when a subset of the
             coordinates should be considered.
+  \note     When \p d is not specified, a check will be performed to
+            see if all coordinates of \p c are 3, 2, or 1 dimensional
+            and, if so, all axes for the determined dimension will be
+            used for \p d.
   \warning  This function does not track secondary shapes subtraction as
             implemented by the polygon() function.
 *******************************************************************************/
@@ -112,13 +116,20 @@ function polytope_limits
   c,
   f,
   a,
-  d = [0:2],
+  d,
   s = true
 ) =
   [
     let
     (
-      ax = is_range(d) ? [for (di=d) di]
+      ax = is_undef(d)
+         ? (
+              all_len(c, 3) ? [0,1,2]
+            : all_len(c, 2) ? [0,1]
+            : all_len(c, 1) ? [0]
+            : undef
+           )
+         : is_range(d) ? [for (di=d) di]
          : is_list(d) ? d
          : is_integer(d) ? [d]
          : undef,
@@ -1175,7 +1186,7 @@ function polytope_bounding_box_pf
   a
 ) = let
     (
-      b = polytope_limits(c=c, f=f, a=a, d=[0:2], s=false),
+      b = polytope_limits(c=c, f=f, a=a, s=false),
       d  = len([for (i=b) if (i != [undef, undef]) i])
     )
     (d == 3) ?
