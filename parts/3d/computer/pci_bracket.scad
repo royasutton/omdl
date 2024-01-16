@@ -292,7 +292,7 @@ module pci_bracket
       mirror([0,1,1])
       rotate([0,90,0])
       extrude_linear_uls(h=tbfl)
-      triangle_ppp(v1=[tbf,tbf],v2=[tbf,0],v3=[0,0]);
+      polygon([[tbf,tbf], [tbf,0], [0,0]]);
 
       // bracket
       vrf  = select_ci( [[4.00,4.00,0,2.5], [4.00,4.00,1.5,0]], bff);
@@ -378,7 +378,7 @@ module pci_bracket
             rotate([270,180,0])
             mirror([0,0,0])
             extrude_linear_uls(h=tw)
-            triangle_ppp(v1=[tbf,tbf],v2=[tbf,0],v3=[0,0]);
+            polygon([[tbf,tbf], [tbf,0], [0,0]]);
           }
           translate([tx, tw/2, -tt/2])
           cylinder(d=hd, h=tt*2);
