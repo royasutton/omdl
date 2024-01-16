@@ -105,7 +105,7 @@ dtr_battery_button =
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE db;
+BEGIN_SCOPE data;
 BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
