@@ -35,7 +35,7 @@
 
   \amu_scope scope_root (++root)
 
-  \amu_define object_stem (${scope_root}_${scope_id}_${image_size}_${image_view}_${object})
+  \amu_define object_stem_3d (${scope_root}_${scope_id}_${image_size}_${image_view}_${object})
 
 
   /+
@@ -48,8 +48,8 @@
   (
     <b>Object example</b>
     \dontinclude ${scope_root}_${scope_id}.scad \skipline ${object}(
-    \image html  ${object_stem}.png "${object}" width=${html_image_w}
-    \image latex ${object_stem}.eps "${object}" width=${latex_image_w}
+    \image html  ${object_stem_3d}.png "${object}" width=${html_image_w}
+    \image latex ${object_stem_3d}.eps "${object}" width=${latex_image_w}
   )
 
   /+
@@ -61,8 +61,8 @@
   \amu_define object_diagram_3d_ex
   (
     <b>Object example</b>
-    \image html  ${object_stem}.png "${object}" width=${html_image_w}
-    \image latex ${object_stem}.eps "${object}" width=${latex_image_w}
+    \image html  ${object_stem_3d}.png "${object}" width=${html_image_w}
+    \image latex ${object_stem_3d}.eps "${object}" width=${latex_image_w}
     \dontinclude ${scope_root}_${scope_id}.scad \skipline ${object}(
   )
 
@@ -75,8 +75,8 @@
   \amu_define object_diagram_3d
   (
     <b>Object example</b>
-    \image html  ${object_stem}.png "${object}" width=${html_image_w}
-    \image latex ${object_stem}.eps "${object}" width=${latex_image_w}
+    \image html  ${object_stem_3d}.png "${object}" width=${html_image_w}
+    \image latex ${object_stem_3d}.eps "${object}" width=${latex_image_w}
   )
 
 /+ end of file  +/

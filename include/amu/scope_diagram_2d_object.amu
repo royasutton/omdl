@@ -29,7 +29,7 @@
 
   \amu_scope scope_root (++root)
 
-  \amu_define object_stem (${scope_root}_${scope_id}_${object})
+  \amu_define object_stem_2d (${scope_root}_${scope_id}_${object})
 
 
   /+
@@ -42,8 +42,8 @@
   (
     <b>Object example</b>
     \dontinclude ${scope_root}_${scope_id}.scad \skipline ${object}(
-    \image html  ${object_stem}.svg "${object}" width=${html_image_w}
-    \image latex ${object_stem}.svg "${object}" width=${latex_image_w}
+    \image html  ${object_stem_2d}.svg "${object}" width=${html_image_w}
+    \image latex ${object_stem_2d}.svg "${object}" width=${latex_image_w}
   )
 
   /+
@@ -55,8 +55,8 @@
   \amu_define object_diagram_2d_ex
   (
     <b>Object example</b>
-    \image html  ${object_stem}.svg "${object}" width=${html_image_w}
-    \image latex ${object_stem}.svg "${object}" width=${latex_image_w}
+    \image html  ${object_stem_2d}.svg "${object}" width=${html_image_w}
+    \image latex ${object_stem_2d}.svg "${object}" width=${latex_image_w}
     \dontinclude ${scope_root}_${scope_id}.scad \skipline ${object}(
   )
 
@@ -69,8 +69,8 @@
   \amu_define object_diagram_2d
   (
     <b>Object example</b>
-    \image html  ${object_stem}.svg "${object}" width=${html_image_w}
-    \image latex ${object_stem}.svg "${object}" width=${latex_image_w}
+    \image html  ${object_stem_2d}.svg "${object}" width=${html_image_w}
+    \image latex ${object_stem_2d}.svg "${object}" width=${latex_image_w}
   )
 
 /+ end of file  +/
