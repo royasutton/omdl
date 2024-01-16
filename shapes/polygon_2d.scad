@@ -42,13 +42,14 @@
   \amu_include (include/amu/includes_required.amu)
 
   \amu_define image_view (top)
-  \amu_include (include/amu/scope_diagram_3d_object.amu)
 
   \amu_define group_id (${parent})
   \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
 
   \amu_define group_id (${group})
   \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
+
+  \amu_include (include/amu/scope_diagram_3d_object.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
