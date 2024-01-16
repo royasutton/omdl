@@ -404,9 +404,9 @@ module triangle_ppp
     a2 = angle_ll([v2, v3], [v2, ic]);
     a3 = angle_ll([v3, v1], [v3, ic]);
 
-    c1 = v1 + cr1/sin(a1) * unit_l([v1, ic]);
-    c2 = v2 + cr2/sin(a2) * unit_l([v2, ic]);
-    c3 = v3 + cr3/sin(a3) * unit_l([v3, ic]);
+    c1 = v1 - cr1/sin(a1) * unit_l([v1, ic]);
+    c2 = v2 - cr2/sin(a2) * unit_l([v2, ic]);
+    c3 = v3 - cr3/sin(a3) * unit_l([v3, ic]);
 
     hull()
     {
