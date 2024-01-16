@@ -359,8 +359,7 @@ module rhombus
   \warning  Currently, in order to round any vertex, all must be given
             a rounding radius, either via \p vr or individually.
 
-  \todo     Replace the hull() operation with calculated tangential
-            intersection of the rounded vertexes.
+  \todo     Simplify centroid and incenter translations.
   \todo     Remove the all or nothing requirement for vertex rounding.
 *******************************************************************************/
 module triangle_ppp
@@ -445,6 +444,7 @@ module triangle_ppp
 
   \note     The outer and inner triangles centroids are aligned prior to
             the core removal.
+  \todo     Simplify centroid and incenter translations.
 *******************************************************************************/
 module triangle_ls_c
 (
