@@ -1,4 +1,4 @@
-//! Triangle solutions mathematical functions.
+//! Triangle shapes, conversions, properties, and tests functions.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Triangle Math)
-    \amu_define group_brief (Triangle related mathematical functions.)
+    \amu_define group_name  (Triangles)
+    \amu_define group_brief (Triangle mathematical functions.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -55,7 +55,7 @@
 // shape generation
 //----------------------------------------------------------------------------//
 
-//! \name Shape
+//! \name Shapes
 //! @{
 
 //! Compute the side lengths of a triangle given its vertex coordinates.
@@ -252,7 +252,7 @@ function triangle2d_sss2ppp
 // shape properties
 //----------------------------------------------------------------------------//
 
-//! \name Property
+//! \name Properties
 //! @{
 
 //! Compute the area of a triangle given its vertex coordinates in 2D.
@@ -481,7 +481,7 @@ function triangle_circumcenter
 // shape rounding
 //----------------------------------------------------------------------------//
 
-//! \name Round
+//! \name Rounding
 //! @{
 
 //! Compute the rounding center coordinate for a given radius of a triangle vertex in 2D.
@@ -524,7 +524,7 @@ function triangle2d_vround3_tangents
 // shape property tests
 //----------------------------------------------------------------------------//
 
-//! \name Test
+//! \name Tests
 //! @{
 
 //! Test the vertex ordering, or orientation, of a triangle in 2D.

@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Linear Algebra)
-    \amu_define group_brief (Linear algebra transformations on Euclidean coordinates.)
+    \amu_define group_brief (Euclidean linear algebra functions.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/

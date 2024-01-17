@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Polygon Math)
-    \amu_define group_brief (Polygon mathematical functions.)
+    \amu_define group_name  (Polygons)
+    \amu_define group_brief (Polygon mathematical functions; 2-polytope.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
