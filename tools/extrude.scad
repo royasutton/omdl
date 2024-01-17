@@ -93,12 +93,12 @@ module extrude_rotate_tr
 
   \details
 
-    \amu_eval ( object=extrude_rotate_tre ${object_ex_diagram_3d} )
+    \amu_eval ( object=extrude_rotate_trl ${object_ex_diagram_3d} )
 
   \note When elongating <tt>(l > 0)</tt>, \p ra is ignored. However, \p m
         may be used to control which complete revolution section to render.
 *******************************************************************************/
-module extrude_rotate_tre
+module extrude_rotate_trl
 (
   r,
   pa = 0,
@@ -280,8 +280,8 @@ BEGIN_SCOPE diagram;
 
     if (shape == "extrude_rotate_tr")
       extrude_rotate_tr( r=50, pa=45, ra=270 ) square( [10,5], center=true );
-    else if (shape == "extrude_rotate_tre")
-      extrude_rotate_tre( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
+    else if (shape == "extrude_rotate_trl")
+      extrude_rotate_trl( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
     else if (shape == "extrude_linear_uls")
       extrude_linear_uls( [5,10,15,-5], center=true ) square( [20,15], center=true );
   END_OPENSCAD;
@@ -293,7 +293,7 @@ BEGIN_SCOPE diagram;
     defines   name "shapes" define "shape"
               strings "
                 extrude_rotate_tr
-                extrude_rotate_tre
+                extrude_rotate_trl
                 extrude_linear_uls
               ";
     variables add_opts_combine "views shapes";

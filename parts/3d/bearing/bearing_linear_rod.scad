@@ -282,7 +282,7 @@ module make_bearing_linear_rod
       align_ball_tunnel()
       union_cs()
       { // tunnel
-        extrude_rotate_tre(r=ball_tunnel_r, l=[ball_tunnel_w, ball_tunnel_l])
+        extrude_rotate_trl(r=ball_tunnel_r, l=[ball_tunnel_w, ball_tunnel_l])
         circle(d=ball_tunnel_d);
 
         // feed
@@ -298,7 +298,7 @@ module make_bearing_linear_rod
     // add solid slide bearing
     if ( type == 1 )
     align_ball_tunnel()
-    extrude_rotate_tre(r=ball_tunnel_r, l=[ball_tunnel_w, ball_tunnel_l], m=(8+16+32))
+    extrude_rotate_trl(r=ball_tunnel_r, l=[ball_tunnel_w, ball_tunnel_l], m=(8+16+32))
     circle(d=ball_tunnel_d + eps);
 
     // internal view assist

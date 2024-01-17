@@ -56,7 +56,7 @@
 
 //! A rectangular cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
-  \copydoc extrude_rotate_tre()
+  \copydoc extrude_rotate_trl()
 
   \copydoc rectangle_c()
 
@@ -87,7 +87,7 @@ module torus_rectangle_c
   center = false
 )
 {
-  extrude_rotate_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
+  extrude_rotate_trl( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
   rectangle_c
   (
     size=size, core=core, t=t,
@@ -100,7 +100,7 @@ module torus_rectangle_c
 
 //! An elliptical cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
-  \copydoc extrude_rotate_tre()
+  \copydoc extrude_rotate_trl()
 
   \copydoc ellipse_cs()
 
@@ -126,7 +126,7 @@ module torus_ellipse_cs
   cr = 0
 )
 {
-  extrude_rotate_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
+  extrude_rotate_trl( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
   ellipse_cs
   (
     size=size, core=core, t=t,
@@ -137,7 +137,7 @@ module torus_ellipse_cs
 
 //! A trapezoidal cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
-  \copydoc extrude_rotate_tre()
+  \copydoc extrude_rotate_trl()
 
   \copydoc polygon_trapezoid()
 
@@ -169,7 +169,7 @@ module torus_polygon_trapezoid
   centroid = false
 )
 {
-  extrude_rotate_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
+  extrude_rotate_trl( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
   polygon_trapezoid
   (
     b=b,
