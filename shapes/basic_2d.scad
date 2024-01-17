@@ -339,252 +339,6 @@ module rhombus
   }
 }
 
-//! A general triangle specified by three vertices.
-/***************************************************************************//**
-  \param    v1 <point-2d> A point [x, y] for vertex 1.
-  \param    v2 <point-2d> A point [x, y] for vertex 2.
-  \param    v3 <point-2d> A point [x, y] for vertex 3.
-
-  \param    vr <decimal> The default vertex rounding radius.
-  \param    v1r <decimal> Vertex 1 rounding radius.
-  \param    v2r <decimal> Vertex 2 rounding radius.
-  \param    v3r <decimal> Vertex 3 rounding radius.
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-
-  \details
-
-    \amu_eval ( object=triangle_ppp ${object_ex_diagram_3d} )
-
-  \warning  Currently, in order to round any vertex, all must be given
-            a rounding radius, either via \p vr or individually.
-
-  \todo     Simplify centroid and incenter translations.
-  \todo     Remove the all or nothing requirement for vertex rounding.
-*******************************************************************************/
-module triangle_ppp
-(
-  v1,
-  v2,
-  v3,
-  vr,
-  v1r,
-  v2r,
-  v3r,
-  centroid = false,
-  incenter = false
-)
-{
-  cr1 = defined_or(v1r, vr);
-  cr2 = defined_or(v2r, vr);
-  cr3 = defined_or(v3r, vr);
-
-  translate
-  (
-    ( centroid==false ) && ( incenter==true )
-      ? -triangle2d_incenter( [v1, v2, v3] )
-      : origin2d
-  )
-  translate
-  (
-    ( centroid==true ) && ( incenter==false )
-      ? -triangle_centroid( [v1, v2, v3] )
-      : origin2d
-  )
-  if ( any_undefined([cr1, cr2, cr3]) )
-  {
-    polygon( points=[v1, v2, v3], paths=[[0,1,2]] );
-  }
-  else
-  {
-    ic = triangle2d_incenter( [v1, v2, v3] );
-
-    a1 = angle_ll([v1, v2], [v1, ic]);
-    a2 = angle_ll([v2, v3], [v2, ic]);
-    a3 = angle_ll([v3, v1], [v3, ic]);
-
-    c1 = v1 - cr1/sin(a1) * unit_l([v1, ic]);
-    c2 = v2 - cr2/sin(a2) * unit_l([v2, ic]);
-    c3 = v3 - cr3/sin(a3) * unit_l([v3, ic]);
-
-    hull()
-    {
-      translate( c1 )
-      circle( r=cr1 );
-      translate( c2 )
-      circle( r=cr2 );
-      translate( c3 )
-      circle( r=cr3 );
-    }
-  }
-}
-
-//! A general triangle specified by its sides with a removed triangular core.
-/***************************************************************************//**
-  \param    vs <decimal-list-3|decimal> The size. A list [s1, s2, s3] of
-            decimals or a single decimal for (s1=s2=s3).
-  \param    vc <decimal-list-3|decimal> The core. A list [s1, s2, s3] of
-            decimals or a single decimal for (s1=s2=s3).
-
-  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
-  \param    cr <decimal> Core z-rotation.
-
-  \param    vr <decimal-list-3|decimal> The default vertex rounding radius.
-            A list [v1r, v2r, v3r] of decimals or a single decimal for
-            (v1r=v2r=v3r).
-  \param    vr1 <decimal-list-3|decimal> The outer vertex rounding radius.
-  \param    vr2 <decimal-list-3|decimal> The core vertex rounding radius.
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-
-  \details
-
-    \amu_eval ( object=triangle_ls_c ${object_ex_diagram_3d} )
-
-  \note     The outer and inner triangles centroids are aligned prior to
-            the core removal.
-  \todo     Simplify centroid and incenter translations.
-*******************************************************************************/
-module triangle_ls_c
-(
-  vs,
-  vc,
-  co,
-  cr = 0,
-  vr,
-  vr1,
-  vr2,
-  centroid = false,
-  incenter = false
-)
-{
-  module triangle_sss
-  (
-    s1,
-    s2,
-    s3,
-    vr,
-    v1r,
-    v2r,
-    v3r,
-    centroid = false,
-    incenter = false
-  )
-  {
-    a1 = acos( (s2*s2 + s3*s3 - s1*s1) / (2 * s2 * s3) );
-    a2 = acos( (s1*s1 + s3*s3 - s2*s2) / (2 * s1 * s3) );
-    a3 = 180 - a1 - a2;
-
-    p3 = [s2*cos(a3), s2*sin(a3)];
-
-    if ( is_nan( p3[0] ) || is_nan( p3[1] ) )
-    {
-      log_warn
-      (
-        str( "can not render triangle with sides (", s1, ", ", s2, ", ", s3, ")" )
-      );
-    }
-    else
-    {
-      v1 = origin2d;
-      v2 = [s1, 0];
-      v3 = [s1 - p3[0], p3[1]];
-
-      triangle_ppp
-      (
-        v1=v1, v2=v2, v3=v3,
-        vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
-        centroid=centroid, incenter=incenter
-      );
-    }
-  }
-
-  module triangle_ls
-  (
-    v,
-    vr,
-    centroid = false,
-    incenter = false
-  )
-  {
-
-    if ( is_scalar(vr) )
-    {
-      triangle_sss
-      (
-        s1=v[0], s2=v[1], s3=v[2],
-        vr=vr,
-        centroid=centroid, incenter=incenter
-      );
-    }
-    else
-    {
-      triangle_sss
-      (
-        s1=v[0], s2=v[1], s3=v[2],
-        v1r=vr[0], v2r=vr[1], v3r=vr[2],
-        centroid=centroid, incenter=incenter
-      );
-    }
-  }
-
-  ts1 = defined_e_or(vs, 0, vs);
-  ts2 = defined_e_or(vs, 1, ts1);
-  ts3 = defined_e_or(vs, 2, ts2);
-
-  tc1 = defined_e_or(vc, 0, vc);
-  tc2 = defined_e_or(vc, 1, tc1);
-  tc3 = defined_e_or(vc, 2, tc2);
-
-  vrs = defined_or(vr1, vr);
-  vrc = defined_or(vr2, vr);
-
-  if ( is_defined(vc) )
-  {
-    translate
-    (
-      ( centroid==false ) && ( incenter==true )
-        ? -triangle2d_incenter( triangle2d_sss2ppp([ts1, ts2, ts3]) )
-        : origin2d
-    )
-    translate
-    (
-      ( centroid==true ) && ( incenter==false )
-        ? origin2d
-        : triangle_centroid( triangle2d_sss2ppp([ts1, ts2, ts3]) )
-    )
-    difference()
-    {
-      triangle_ls
-      (
-        v=[ts1, ts2, ts3],
-        vr=vrs,
-        centroid=true, incenter=false
-      );
-
-      translate(is_defined(co) ? co : origin2d)
-      rotate([0, 0, cr])
-      triangle_ls
-      (
-        v=[tc1, tc2, tc3],
-        vr=vrc,
-        centroid=true, incenter=false
-      );
-    }
-  }
-  else
-  {
-    triangle_ls
-    (
-      v=[ts1, ts2, ts3],
-      vr=vrs,
-      centroid=centroid, incenter=incenter
-    );
-  }
-}
-
 //! An n-sided equiangular/equilateral regular polygon.
 /***************************************************************************//**
   \param    n <integer> The number of sides.
@@ -840,7 +594,7 @@ module star2d
   repeat_radial(n=n, angle=true, move=false)
   rotate([0, 0, -90])
   translate([-w/2, 0])
-  triangle_ls_c(vs=[w, l, l], vr=vr);
+  polygon(polygon_vertices_round3_p(triangle2d_sss2ppp([l, w, l]), vr=vr));
 }
 
 //! @}
@@ -864,10 +618,6 @@ BEGIN_SCOPE diagram;
       rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, vrm2=3, co=[0,5], center=true );
     else if (shape == "rhombus")
       rhombus( size=[40,25], vr=[2,4,2,4], center=true );
-    else if (shape == "triangle_ppp")
-      triangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], vr=2, centroid=true );
-    else if (shape == "triangle_ls_c")
-      triangle_ls_c( vs=[30,50,50], vc=[20,40,40], co=[0,-4], vr1=[1,1,6], vr2=4, centroid=true );
     else if (shape == "ngon")
       ngon( n=6, r=25, vr=6 );
     else if (shape == "ellipse")
@@ -891,8 +641,6 @@ BEGIN_SCOPE diagram;
                 rectangle
                 rectangle_c
                 rhombus
-                triangle_ppp
-                triangle_ls_c
                 ngon
                 ellipse
                 ellipse_c
@@ -918,8 +666,6 @@ BEGIN_SCOPE manifest;
       rectangle( size=[25,40], vr=[0,10,10,5], vrm=4, center=true );
       rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, vrm2=3, co=[0,5], center=true );
       rhombus( size=[40,25], vr=[2,4,2,4], center=true );
-      triangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], vr=2, centroid=true );
-      triangle_ls_c( vs=[30,50,50], vc=[20,40,40], co=[0,-4], vr1=[1,1,6], vr2=4, centroid=true );
       ngon( n=6, r=25, vr=6 );
       ellipse( size=[25, 40] );
       ellipse_c( size=[25,40], core=[16,10], co=[0,10], cr=45 );

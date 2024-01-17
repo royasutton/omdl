@@ -129,16 +129,27 @@ BEGIN_SCOPE logo;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
 
-    frame = triangle_ppp2sss( [[30,40], [30,0], [0,40]] );
-    core  = 2 * frame / 3;
-    vrnd  = [1, 2, 4];
+    s  = 10;
 
-    cone( h=20, r=10, vr=2 );
+    fs = [3, 5, 4] * s;
+    cs = fs * 2 / 3;
+    vr = [4, 2, 1]/10 * s;
+
+    ft = triangle2d_sss2ppp(fs);
+    ct = triangle2d_sss2ppp(cs);
+
+    cone( h=s*2, r=s, vr=2/10*s );
     rotate([0, 0, 360/20])
     repeat_radial( n=5, angle=true )
-      translate([15,-5,0])
-        extrude_linear_uls( h=10 )
-          triangle_ls_c( vs=frame, vc=core, vr=vrnd, $fn=36 );
+    extrude_linear_uls( h=s )
+    translate(triangle_centroid(ft) + [-15,2]/s)
+    difference()
+    {
+      translate(-triangle_centroid(ft))
+      polygon( polygon_vertices_round3_p(ft, vr=vr) );
+      translate(-triangle_centroid(ct))
+      polygon( polygon_vertices_round3_p(ct, vr=vr) );
+    }
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
