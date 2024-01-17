@@ -93,7 +93,7 @@ module rectangle
 
   translate(center==true ? [-rx/2, -ry/2] : origin2d)
   {
-    if ( is_undef(vr) )              // no rounding
+    if ( is_undef(vr) )                 // no rounding
     {
       square([rx, ry]);
     }
