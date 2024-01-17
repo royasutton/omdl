@@ -1,8 +1,8 @@
-//! Mathematical functions of polygon primitive shapes.
+//! Polygon shapes, conversions, properties, and tests functions.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2023
+  \date   2015-2024
 
   \copyright
 
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Polygon Shapes)
-    \amu_define group_brief (Mathematical functions of polygon primitive shapes.)
+    \amu_define group_name  (Polygon Math)
+    \amu_define group_brief (Polygon mathematical functions.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -455,6 +455,664 @@ function polygon_trapezoid_p
     c  = [p4, p1, p2, p3],
 
     pp = polygon_vertices_round3_p(c=c, vr=vr, vrm=vrm, vfn=vfn, cw=true)
+  )
+  (cw == true) ? pp : reverse(pp);
+
+//----------------------------------------------------------------------------//
+// polygon
+//----------------------------------------------------------------------------//
+
+//! Compute the perimeter of an n-sided regular polygon in 2D.
+/***************************************************************************//**
+  \param    n <integer> The number of sides.
+  \param    r <decimal> The vertex circumradius of the circumcircle.
+  \param    a <decimal> The inradius of the incircle.
+
+  \returns  <decimal> Perimeter length of the n-sided regular polygon.
+
+  \details
+
+    The radius can be specified by either the circumradius \p r or the
+    inradius \p a. If both are specified, \p r is used.
+*******************************************************************************/
+function polygon_regular_perimeter
+(
+  n,
+  r,
+  a
+) = is_defined(r) ? 2 * n * r * sin(180/n)
+  : is_defined(a) ? 2 * n * a * tan(180/n)
+  : 0;
+
+//! Compute the area of an n-sided regular polygon in 2D.
+/***************************************************************************//**
+  \param    n <integer> The number of sides.
+  \param    r <decimal> The vertex circumradius of the circumcircle.
+  \param    a <decimal> The inradius of the incircle.
+
+  \returns  <decimal> Area of the n-sided regular polygon.
+
+  \details
+
+    The radius can be specified by either the circumradius \p r or the
+    inradius \p a. If both are specified, \p r is used.
+*******************************************************************************/
+function polygon_regular_area
+(
+  n,
+  r,
+  a
+) = is_defined(r) ? pow(r, 2) * n * sin(360/n) / 2
+  : is_defined(a) ? pow(a, 2) * n * tan(180/n)
+  : 0;
+
+//! Calculate the perimeter length of a polygon in 2d.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+
+  \returns  <decimal> The sum of all polygon primary and secondary
+            perimeter lengths.
+
+  \details
+
+  \note     When \p p is not given, the listed order of the coordinates
+            \p c establishes the path.
+*******************************************************************************/
+function polygon_perimeter
+(
+  c,
+  p
+) =
+  let
+  (
+    pm = defined_or(p, [consts(len(c))]),
+
+    lv =
+    [
+      for (k = pm) let (n = len(k))
+        for (i=[0 : n-1]) let (j = (i == 0) ? n-1 : i-1)
+          distance_pp(c[k[j]], c[k[i]])
+    ]
+  )
+  sum(lv);
+
+//! Compute the signed area of a polygon in a Euclidean 2d-space.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+  \param    s <boolean> Return the vertex ordering sign.
+
+  \returns  <decimal> The area of the given polygon.
+
+  \details
+
+    See [Wikipedia] for more information.
+
+  \note     When \p p is not given, the listed order of the coordinates
+            \p c establishes the path.
+  \warning  This function does not track secondary shapes subtraction as
+            implemented by the polygon() function.
+
+    [Wikipedia]: https://en.wikipedia.org/wiki/Shoelace_formula
+*******************************************************************************/
+function polygon_area
+(
+  c,
+  p,
+  s = false
+) =
+  let
+  (
+    pm = defined_or(p, [consts(len(c))]),
+
+    av =
+    [
+      for (k = pm) let (n = len(k))
+        for (i=[0 : n-1]) let (j = (i == 0) ? n-1 : i-1)
+          (c[k[j]][0] + c[k[i]][0]) * (c[k[i]][1] - c[k[j]][1])
+    ],
+
+    sa = sum(av)/2
+  )
+  (s == false) ? abs(sa) : sa;
+
+//! Compute the area of a polygon in a Euclidean 3d-space.
+/***************************************************************************//**
+  \param    c <coords-3d> A list of 3d cartesian coordinates
+            [[x, y, z], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+  \param    n <vector-3d> An \em optional normal vector, [x, y, z],
+            to the polygon plane. When not given, a normal vector is
+            constructed from the first three points of the primary path.
+
+  \returns  <decimal> The area of the given polygon.
+
+  \details
+
+    Function patterned after [Dan Sunday, 2012].
+
+  \note     When \p p is not given, the listed order of the coordinates
+            \p c establishes the path.
+  \warning  This function does not track secondary shapes subtraction as
+            implemented by the polygon() function.
+
+    [Dan Sunday, 2012]: http://geomalgorithms.com/a01-_area.html
+*******************************************************************************/
+function polygon3d_area
+(
+  c,
+  p,
+  n
+) =
+  let
+  (
+    pm = defined_or(p, [consts(len(c))]),
+    nv = defined_or(n, cross_ll([c[pm[0][0]], c[pm[0][1]]], [c[pm[0][0]], c[pm[0][2]]])),
+
+    ac = [abs(nv[0]), abs(nv[1]), abs(nv[2])],
+    am = max(ac),
+    ai = (am == ac[2]) ? 2 : (am == ac[1]) ? 1 : 0,
+
+    pv = [
+          for (k = pm) let (m = len(k))
+            for (i=[1 : m])
+              c[k[i%m]][(ai+1)%3] * (c[k[(i+1)%m]][(ai+2)%3] - c[k[(i-1)%m]][(ai+2)%3])
+         ],
+
+    sf = (distance_pp(nv)/(2*nv[ai]))
+  )
+  (sum(pv) * sf);
+
+//! Compute the center of mass of a polygon in a Euclidean 2d-space.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+
+  \returns  <point-2d> The center of mass of the given polygon.
+
+  \details
+
+    See [Wikipedia] for more information.
+
+  \note     When \p p is not given, the listed order of the coordinates
+            \p c establishes the path.
+  \warning  This function does not track secondary shapes subtraction as
+            implemented by the polygon() function.
+
+    [Wikipedia]: https://en.wikipedia.org/wiki/Centroid#Centroid_of_polygon
+*******************************************************************************/
+function polygon_centroid
+(
+  c,
+  p
+) =
+  let
+  (
+    pm = defined_or(p, [consts(len(c))]),
+
+    cv =
+    [
+      for (k = pm) let (n = len(k))
+        for (i=[0 : n-1])
+        let
+        (
+          j  = (i == 0) ? n-1 : i-1,
+
+          xc = c[k[j]][0],
+          yc = c[k[j]][1],
+
+          xn = c[k[i]][0],
+          yn = c[k[i]][1],
+
+          cd = (xc*yn - xn*yc)
+        )
+          [(xc + xn) * cd, (yc + yn) * cd]
+    ],
+
+    sc = sum(cv),
+    sa = polygon_area(c, pm, true)
+  )
+  sc/(6*sa);
+
+//! Test the vertex ordering of a polygon in a Euclidean 2d-space.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+
+  \returns  <boolean> \b true if the vertex are ordered \em clockwise,
+            \b false if the vertex are \em counterclockwise ordered, and
+            \b undef if the ordering can not be determined.
+
+  \details
+
+  \note     When \p p is not given, the listed order of the coordinates
+            \p c establishes the path.
+*******************************************************************************/
+function polygon_is_clockwise
+(
+  c,
+  p
+) =
+  let
+  (
+    sa = polygon_area(c, p, true)
+  )
+    (sa < 0) ? true
+  : (sa > 0) ? false
+  : undef;
+
+//! Test the convexity of a polygon in a Euclidean 2d-space.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+
+  \returns  <boolean> \b true if the polygon is \em convex, \b false
+            otherwise.
+
+  \details
+
+  \note     When \p p is not given, the listed order of the coordinates
+            \p c establishes the path.
+*******************************************************************************/
+function polygon_is_convex
+(
+  c,
+  p
+) = is_undef(c) ? undef
+  : len(c) < 3 ? undef
+  : !all_len(c, 2) ? undef
+  : let
+    (
+      pm = defined_or(p, [consts(len(c))]),
+
+      sv =
+      [
+        for (k = pm) let (n = len(k))
+          for (i=[0 : n-1])
+            sign(cross_ll([c[k[i]], c[k[(i+1)%n]]], [c[k[(i+1)%n]], c[k[(i+2)%n]]]))
+      ],
+
+      us = unique(sv)
+    )
+    (len(us) == 1);
+
+//! Compute the winding number of a polygon about a point in a Euclidean 2d-space.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+  \param    t <point-2d> A test point coordinate [x, y].
+
+  \returns  <integer> The winding number.
+
+  \details
+
+    Computes the [winding number], the total number of counterclockwise
+    turns that the polygon paths makes around the test point in a
+    Euclidean 2d-space. Will be 0 \em iff the point is outside of the
+    polygon. Function patterned after [Dan Sunday, 2012].
+
+  \copyright
+
+    Copyright 2000 softSurfer, 2012 Dan Sunday
+    This code may be freely used and modified for any purpose
+    providing that this copyright notice is included with it.
+    iSurfer.org makes no warranty for this code, and cannot be held
+    liable for any real or imagined damage resulting from its use.
+    Users of this code must verify correctness for their application.
+
+    [Dan Sunday, 2012]: http://geomalgorithms.com/a03-_inclusion.html
+    [winding number]: https://en.wikipedia.org/wiki/Winding_number
+
+  \note     When \p p is not given, the listed order of the coordinates
+            \p c establishes the path.
+  \warning  Where there are secondary paths, the vertex ordering of each
+             must be the same as the primary path.
+*******************************************************************************/
+function polygon_winding
+(
+  c,
+  p,
+  t
+) =
+  let
+  (
+    pm = defined_or(p, [consts(len(c))]),
+
+    wv =
+    [
+      for (k = pm) let (n = len(k))
+        for (i=[0 : n-1])
+        let
+        (
+          j = (i == 0) ? n-1 : i-1,
+
+          t = (
+                (c[k[j]][1] <= t[1]) && (c[k[i]][1] >  t[1])
+                && (is_left_ppp(c[k[j]], c[k[i]], t) > 0)
+              ) ? +1
+            : (
+                (c[k[j]][1] >  t[1]) && (c[k[i]][1] <= t[1])
+                && (is_left_ppp(c[k[j]], c[k[i]], t) < 0)
+              ) ? -1
+            : 0
+        )
+          t
+    ]
+  )
+  sum(wv);
+
+//! Test if a point is inside a polygon in a Euclidean 2d-space using winding number.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+  \param    t <point-2d> A test point coordinate [x, y].
+
+  \returns  <boolean> \b true when the point is \em inside the polygon and
+            \b false otherwise.
+
+  \details
+
+  \note     When \p p is not given, the listed order of the coordinates
+            \p c establishes the path.
+
+    \sa polygon_winding for warning about secondary shapes.
+*******************************************************************************/
+function polygon_wn_is_p_inside
+(
+  c,
+  p,
+  t
+) = (polygon_winding(c=c, p=p, t=t) != 0);
+
+//! Test if a point is inside a polygon in a Euclidean 2d-space using angle summation.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+  \param    t <point-2d> A test point coordinate [x, y].
+
+  \returns  <boolean> \b true when the point is \em inside the polygon and
+            \b false otherwise.
+
+  \details
+
+    See [Wikipedia] for more information.
+
+  \note     When \p p is not given, the listed order of the coordinates
+            \p c establishes the path.
+  \warning  This function does not track secondary shapes subtraction as
+            implemented by the polygon() function.
+
+    [Wikipedia]: https://en.wikipedia.org/wiki/Point_in_polygon
+*******************************************************************************/
+function polygon_as_is_p_inside
+(
+  c,
+  p,
+  t
+) =
+  let
+  (
+    pm = defined_or(p, [consts(len(c))]),
+
+    av =
+    [
+      for (k = pm) let (n = len(k))
+        for (i=[0 : n-1])
+        let
+        (
+          j = (i == 0) ? n-1 : i-1
+        )
+          angle_ll([t, c[k[i]]], [t, c[k[j]]])
+    ],
+
+    sa = abs(sum(av))
+  )
+  (sa > 180);
+
+//! Convert a polygon in 2D to a polyhedron by adding a height dimension.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+  \param    h <decimal> The polyhedron height.
+  \param    centroid <boolean> Center polygon centroid at z-axis.
+  \param    center <boolean> Center polyhedron height about xy-plane.
+
+  \returns  <datastruct> A structure <tt>[points, faces]</tt>, where
+            \c points are <coords-3d> and \c faces are a
+            <integer-list-list>, that define the bounding box of the
+            given polyhedron.
+
+  \details
+
+  \note     When \p p is not given, the listed order of the coordinates
+            \p c establishes the path.
+*******************************************************************************/
+function polygon_linear_extrude_pf
+(
+  c,
+  p,
+  h = 1,
+  centroid = false,
+  center = false
+) =
+  let
+  (
+    pm = defined_or(p, [consts(len(c))]),
+    pn = len([for (pi = pm) for (ci = pi) 1]),
+
+    po = (centroid == true) ? polygon_centroid(c, p) : origin2d,
+    zr = (center == true) ? [-h/2, h/2] : [0, h],
+
+    cw = polygon_is_clockwise (c, p),
+
+    pp = [for (zi = zr) for (pi = pm) for (ci = pi) concat(c[ci] - po, zi)],
+    pf =
+    [
+      [for (pi = pm) for (ci = pi) ci],
+      [for (pi = pm) for (cn = [len(pi)-1 : -1 : 0]) pi[cn] + pn],
+      for (pi = pm) for (ci = pi)
+        (cw == true)
+        ? [ci, ci+pn, (ci+1)%pn+pn, (ci+1)%pn]
+        : [ci, (ci+1)%pn, (ci+1)%pn+pn, ci+pn]
+    ]
+  )
+  [pp, pf];
+
+//! Round the vertices of a polygon in 2d space.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of \em n 2d cartesian coordinates
+            [[x1, y1], [x2, y2], ..., [xn, yn]].
+  \param    vr <decimal-list-n|decimal> The vertices rounding radius.
+            A list [v1r, v2r, v3r, ... vnr] of \em n decimals or a
+            single decimal for (v1r=v2r=v3r= ... =vnr). Unspecified
+            vertices are not rounded.
+  \param    vrm <integer-list-n|integer> The vertices rounding mode.
+            A list [v1rm, v2rm, v3rm, ... vnrm] of \em n integers or a
+            single integer for (v1rm=v2rm=v3rm= ... =vnrm). Unspecified
+            vertices are not rounded.
+  \param    vfn <integer-list-n> The vertices arc fragment number.
+            A list [v1fn, v2fn, v3fn, ... vnfn] of \em n integers or a
+            single integer for (v1fn=v2fn=v3fn= ... =vnfn).
+  \param    w <boolean> Wrap-at-end during 3-point coordinate selection.
+  \param    cw <boolean> Polygon vertex ordering.
+
+  \returns  <coords-2d> A new list of coordinates points [[x, y], ...]
+            that define the polygon with rounded vertices.
+
+  \details
+
+    Assumes polygon is defined in 2D space on the x-y plane. There
+    should be no repeating adjacent vertices along the polygon path
+    (ie: no adjacent vertex with identical coordinates). Any vertex
+    determined to be collinear with its adjacent previous and next
+    vertex is returned unmodified.
+
+    Each vertex may be individually rounded using one of the following
+    modes:
+
+     mode | name                |        description
+     :---:|:-------------------:|:--------------------------------------
+       0  | none                | return vertex unchanged
+       1  | round               | previous to next edge round
+       2  | e-hollow / i-circle | previous to next edge inverse round
+       3  | n-fillet            | next edge pass return fillet
+       4  | p-fillet            | previous edge pass return fillet
+       5  | chamfer             | previous to next edge bevel
+       6  | e-circle / i-hollow | previous to next edge inverse round
+       7  | n-round             | next edge pass return round
+       8  | p-round             | previous edge pass return round
+       9  | n-chamfer           | next edge pass return bevel
+      10  | p-chamfer           | previous edge pass return bevel
+
+    Vertex arc fragments can be specified using \p vfn. When any \p
+    vnfn is \b undef, the special variables \p $fa, \p $fs, and \p $fn
+    control facet generation. Each vertex is processed using 3-point
+    (the previous and following vertex). The resulting triangle \ref
+    triangle2d_incenter "incircles" and \ref triangle2d_excenter
+    "excircles" are used to create the round and fillet \ref
+    polygon_arc_p "arc" segments. All arcs and chamfers use constant
+    radius.
+
+    \b Example:
+    \code{.C}
+    c = [[1,1], [1,10], [10,12], [18,2]];
+    r = [1,1,5,8];
+    m = [2,3,4,3];
+    n = [3, 8, undef, undef];
+
+    p = polygon_vertices_round3_p(c=c, vr=r, vrm=m, vfn=n);
+
+    polygon( p );
+    \endcode
+*******************************************************************************/
+function polygon_vertices_round3_p
+(
+  c,
+  vr = 0,
+  vrm = 1,
+  vfn,
+  w = true,
+  cw = true
+) =
+  let
+  (
+    // constant vertex rounding radius, mode, and facets
+    crr = is_scalar(vr) ? vr : 0,
+    crm = is_scalar(vrm) ? vrm : 0,
+    cfn = is_scalar(vfn) ? vfn : undef,
+
+    // function assumes cw order, reverse if required
+    cp  = (cw == true) ? c : reverse(c),
+
+    // adjacent vertices sequence [ [v[n-1], v[n], v[n+1]] ... ]
+    avl = sequence_ns(cp, 3, w=w),
+
+    // polygon coordinate point list
+    ppl =
+    [
+      for ( i = [0 : len(avl)-1] )
+      let
+      (
+        av  = avl[i],                     // vertices [vp, vc, vn]
+
+        vp  = first(av),                  // vertex coordinate v[n-1]
+        vc  = second(av),                 // vertex coordinate v[n]
+        vn  = third(av),                  // vertex coordinate v[n+1]
+
+        il  = is_left_ppp(vp, vn, vc),    // identify position of vc
+
+        rr  = defined_e_or(vr, i, crr),   // vertex rounding radius
+        rm  = (rr == 0) ? 0               // vertex rounding mode
+            : (il == 0) ? 0               // vp,vc,vn collinear, set rm=0
+            : defined_e_or(vrm, i, crm),
+        fn  = defined_e_or(vfn, i, cfn),  // vertex rounding arc fragments
+
+        // reverse arc sweep on interior corners
+        // not relevant for rm={0|5|9|10}
+        ras = (il < 0),
+
+        // tangent circle radius
+        tcr = (rm == 0) ? 0
+            : (rm == 1 || rm == 2) ?
+              triangle2d_inradius(av)
+            : (rm == 3) ?
+              triangle2d_exradius(av, 1)
+            : (rm == 4) ?
+              triangle2d_exradius(av, 3)
+            : 0,
+
+        // tangent circle center coordinate
+        tcc = (rm == 0) ? origin2d
+            : (rm == 1 || rm == 2) ?
+              (vc-rr/(rr-tcr) * triangle2d_incenter(av)) * (tcr-rr)/tcr
+            : (rm == 3) ?
+              (vc-rr/(rr-tcr) * triangle2d_excenter(av, 1)) * (tcr-rr)/tcr
+            : (rm == 4) ?
+              (vc-rr/(rr-tcr) * triangle2d_excenter(av, 3)) * (tcr-rr)/tcr
+            : origin2d,
+
+        // distance from vertex to inflection points
+        vim = (rm == 0) ? 0
+            : (rm <= 4) ?
+              sqrt( pow(distance_pp(vc, tcc),2) - pow(rr,2) )
+            : rr,
+
+        // inflection coordinates
+        tc1 = (rm == 0 || rm > 10) ? origin2d
+            : (rm == 3 || rm == 7 || rm == 9) ?
+              vc + vim * unit_l([vp, vc])
+            : vc + vim * unit_l([vc, vp]),
+
+        tc2 = (rm == 0 || rm > 10) ? origin2d
+            : (rm == 4 || rm == 8 || rm == 10) ?
+              vc + vim * unit_l([vn, vc])
+            : vc + vim * unit_l([vc, vn]),
+
+        // vertex rounding coordinate point list
+        vpl = (rm == 0 || rm > 10) ? [vc]
+            : (rm == 1) ?
+              polygon_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=!ras)
+            : (rm == 2 || rm == 3 || rm == 4) ?
+              polygon_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=ras)
+            : (rm == 6 || rm == 7 || rm == 8) ?
+              polygon_arc_p(r=rr, c=vc, v1=[vc, tc1], v2=[vc, tc2], fn=fn, cw=!ras)
+            : [tc1, tc2]
+      )
+      vpl
+    ],
+
+    // polygon points
+    pp = merge_s( ppl )
   )
   (cw == true) ? pp : reverse(pp);
 

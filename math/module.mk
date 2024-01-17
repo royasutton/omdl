@@ -11,6 +11,7 @@ local_library     :=  docs_module \
                       linear_algebra \
                       \
                       polygon \
+                      polyhedron \
                       polytope \
                       \
                       triangle \

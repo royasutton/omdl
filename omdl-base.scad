@@ -61,6 +61,7 @@ include <math/triangle.scad>;
 include <math/linear_algebra.scad>;
 
 include <math/polygon.scad>;
+include <math/polyhedron.scad>;
 include <math/polytope.scad>;
 
 include <math/utility.scad>;
