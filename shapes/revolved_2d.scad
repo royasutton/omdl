@@ -98,46 +98,6 @@ module torus_rectangle_c
   );
 }
 
-//! A triangular cross-sectional profile revolved about the z-axis.
-/***************************************************************************//**
-  \copydoc extrude_rotate_tre()
-
-  \copydoc triangle_ls_c()
-
-  \details
-
-    \amu_eval ( object=torus_triangle_ls_c ${object_ex_diagram_3d} )
-*******************************************************************************/
-module torus_triangle_ls_c
-(
-  r,
-  pa = 0,
-  ra = 360,
-  profile = false,
-  l,
-  m = 255,
-
-  vs,
-  vc,
-  co,
-  cr = 0,
-  vr,
-  vr1,
-  vr2,
-  centroid = false,
-  incenter = false
-)
-{
-  extrude_rotate_tre( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
-  triangle_ls_c
-  (
-    vs=vs, vc=vc,
-    co=co, cr=cr,
-    vr=vr, vr1=vr1, vr2=vr2,
-    centroid=centroid, incenter=incenter
-  );
-}
-
 //! An elliptical cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
   \copydoc extrude_rotate_tre()
@@ -241,8 +201,6 @@ BEGIN_SCOPE diagram;
 
     if (shape == "torus_rectangle_c")
       torus_rectangle_c( size=[40,20], core=[35,20], r=40, l=[90,60], co=[0,2.5], vr=4, vrm=15, m=63, center=true );
-    else if (shape == "torus_triangle_ls_c")
-      torus_triangle_ls_c( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
     else if (shape == "torus_ellipse_cs")
       torus_ellipse_cs( size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
     else if (shape == "torus_polygon_trapezoid")
@@ -256,7 +214,6 @@ BEGIN_SCOPE diagram;
     defines   name "shapes" define "shape"
               strings "
                 torus_rectangle_c
-                torus_triangle_ls_c
                 torus_ellipse_cs
                 torus_polygon_trapezoid
               ";
@@ -277,7 +234,6 @@ BEGIN_SCOPE manifest;
     repeat_grid( g=4, i=150, center=true )
     {
       torus_rectangle_c( size=[40,20], core=[35,20], r=40, l=[25,60], co=[0,2.5], vr=4, vrm=15, m=63, center=true );
-      torus_triangle_ls_c( vs=40, vc=30, r=60, co=[0,-4], vr=4, pa=90, ra=270, centroid=true );
       torus_ellipse_cs( size=[20,15], t=[2,4], r=60, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
       torus_polygon_trapezoid( b=[20,30], sl=30, a=45, vr=[5,5,5,5], vrm=[3,2,1,4], r=40, l=[25,60], m=63, centroid=true );
     }
