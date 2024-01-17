@@ -332,7 +332,7 @@ BEGIN_SCOPE example;
     defines   name "units" define "length_unit_base" strings "mm cm mil in";
     variables add_opts_combine "units";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 
@@ -374,7 +374,7 @@ BEGIN_SCOPE equivalents;
     views     name "views" translate "0,60,0" distance "400" views "top";
     variables add_opts_combine "views";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

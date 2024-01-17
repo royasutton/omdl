@@ -1071,7 +1071,7 @@ BEGIN_SCOPE diagram;
     variables add_opts_combine "objects";
     variables add_opts "--viewall --autocenter";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

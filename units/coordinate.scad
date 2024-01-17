@@ -444,7 +444,7 @@ BEGIN_SCOPE example;
     defines   name "system" define "coordinate_unit_base" strings "c p y s";
     variables add_opts_combine "system";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

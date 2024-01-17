@@ -2962,7 +2962,7 @@ BEGIN_SCOPE autostat;
 
   BEGIN_MFSCRIPT;
     include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 END_SCOPE;
@@ -3036,13 +3036,15 @@ BEGIN_SCOPE dim;
     variables add_opts_combine "views ids";
     variables add_opts "-D config=0 --viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" scr_new_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf_begin.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf_add_ext.mfs;
 
     include --path "${INCLUDE_PATH}" var_gen_stl.mfs;
     variables add_opts_combine "ids";
     variables add_opts "-D config=1";
 
-    include --path "${INCLUDE_PATH}" scr_app_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf_add_ext.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf_end.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 END_SCOPE;
