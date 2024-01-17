@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2019
+  \date   2019-2024
 
   \copyright
 
@@ -63,9 +63,9 @@
 
   \details
 
-    \amu_eval ( object=polygon_round ${object_ex_diagram_3d} )
+    \amu_eval ( object=polygon_corner_round ${object_ex_diagram_3d} )
 *******************************************************************************/
-module polygon_round
+module polygon_corner_round
 (
   m  = 1,
   r  = 1,
@@ -158,11 +158,11 @@ BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
 
-    shape = "polygon_round";
+    shape = "polygon_corner_round";
     $fn = 36;
 
-    if (shape == "polygon_round")
-      polygon_round( r=20, v1=[1,1], v2=135 );
+    if (shape == "polygon_corner_round")
+      polygon_corner_round( r=20, v1=[1,1], v2=135 );
     else if (shape == "polygon_elliptical_sector")
       polygon_elliptical_sector( r=[20, 15], v1=115, v2=-115 );
     else if (shape == "polygon_trapezoid")
@@ -175,7 +175,7 @@ BEGIN_SCOPE diagram;
     views     name "views" views "top";
     defines   name "shapes" define "shape"
               strings "
-                polygon_round
+                polygon_corner_round
                 polygon_elliptical_sector
                 polygon_trapezoid
               ";
@@ -194,7 +194,7 @@ BEGIN_SCOPE manifest;
 
     repeat_grid( g=5, i=60, center=true )
     {
-      polygon_round( r=20, v1=[1,1], v2=135 );
+      polygon_corner_round( r=20, v1=[1,1], v2=135 );
       polygon_elliptical_sector( r=[20, 15], v1=115, v2=-115 );
       polygon_trapezoid( b=[20,20], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
     }
