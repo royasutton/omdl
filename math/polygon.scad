@@ -43,6 +43,11 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+// shape generation
+//----------------------------------------------------------------------------//
+
+//! \name Shapes
+//! @{
 
 //! Compute coordinates for an n-sided regular polygon in 2D.
 /***************************************************************************//**
@@ -458,9 +463,14 @@ function polygon_trapezoid_p
   )
   (cw == true) ? pp : reverse(pp);
 
+//! @}
+
 //----------------------------------------------------------------------------//
-// polygon
+// shape properties
 //----------------------------------------------------------------------------//
+
+//! \name Properties
+//! @{
 
 //! Compute the perimeter of an n-sided regular polygon in 2D.
 /***************************************************************************//**
@@ -686,74 +696,6 @@ function polygon_centroid
   )
   sc/(6*sa);
 
-//! Test the vertex ordering of a polygon in a Euclidean 2d-space.
-/***************************************************************************//**
-  \param    c <coords-2d> A list of 2d cartesian coordinates
-            [[x, y], ...].
-  \param    p <integer-list-list> An \em optional list of paths that
-            define one or more closed shapes where each is a list of
-            coordinate indexes.
-
-  \returns  <boolean> \b true if the vertex are ordered \em clockwise,
-            \b false if the vertex are \em counterclockwise ordered, and
-            \b undef if the ordering can not be determined.
-
-  \details
-
-  \note     When \p p is not given, the listed order of the coordinates
-            \p c establishes the path.
-*******************************************************************************/
-function polygon_is_clockwise
-(
-  c,
-  p
-) =
-  let
-  (
-    sa = polygon_area(c, p, true)
-  )
-    (sa < 0) ? true
-  : (sa > 0) ? false
-  : undef;
-
-//! Test the convexity of a polygon in a Euclidean 2d-space.
-/***************************************************************************//**
-  \param    c <coords-2d> A list of 2d cartesian coordinates
-            [[x, y], ...].
-  \param    p <integer-list-list> An \em optional list of paths that
-            define one or more closed shapes where each is a list of
-            coordinate indexes.
-
-  \returns  <boolean> \b true if the polygon is \em convex, \b false
-            otherwise.
-
-  \details
-
-  \note     When \p p is not given, the listed order of the coordinates
-            \p c establishes the path.
-*******************************************************************************/
-function polygon_is_convex
-(
-  c,
-  p
-) = is_undef(c) ? undef
-  : len(c) < 3 ? undef
-  : !all_len(c, 2) ? undef
-  : let
-    (
-      pm = defined_or(p, [consts(len(c))]),
-
-      sv =
-      [
-        for (k = pm) let (n = len(k))
-          for (i=[0 : n-1])
-            sign(cross_ll([c[k[i]], c[k[(i+1)%n]]], [c[k[(i+1)%n]], c[k[(i+2)%n]]]))
-      ],
-
-      us = unique(sv)
-    )
-    (len(us) == 1);
-
 //! Compute the winding number of a polygon about a point in a Euclidean 2d-space.
 /***************************************************************************//**
   \param    c <coords-2d> A list of 2d cartesian coordinates
@@ -821,6 +763,83 @@ function polygon_winding
     ]
   )
   sum(wv);
+
+//! @}
+
+//----------------------------------------------------------------------------//
+// shape property tests
+//----------------------------------------------------------------------------//
+
+//! \name Tests
+//! @{
+
+//! Test the vertex ordering of a polygon in a Euclidean 2d-space.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+
+  \returns  <boolean> \b true if the vertex are ordered \em clockwise,
+            \b false if the vertex are \em counterclockwise ordered, and
+            \b undef if the ordering can not be determined.
+
+  \details
+
+  \note     When \p p is not given, the listed order of the coordinates
+            \p c establishes the path.
+*******************************************************************************/
+function polygon_is_clockwise
+(
+  c,
+  p
+) =
+  let
+  (
+    sa = polygon_area(c, p, true)
+  )
+    (sa < 0) ? true
+  : (sa > 0) ? false
+  : undef;
+
+//! Test the convexity of a polygon in a Euclidean 2d-space.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of 2d cartesian coordinates
+            [[x, y], ...].
+  \param    p <integer-list-list> An \em optional list of paths that
+            define one or more closed shapes where each is a list of
+            coordinate indexes.
+
+  \returns  <boolean> \b true if the polygon is \em convex, \b false
+            otherwise.
+
+  \details
+
+  \note     When \p p is not given, the listed order of the coordinates
+            \p c establishes the path.
+*******************************************************************************/
+function polygon_is_convex
+(
+  c,
+  p
+) = is_undef(c) ? undef
+  : len(c) < 3 ? undef
+  : !all_len(c, 2) ? undef
+  : let
+    (
+      pm = defined_or(p, [consts(len(c))]),
+
+      sv =
+      [
+        for (k = pm) let (n = len(k))
+          for (i=[0 : n-1])
+            sign(cross_ll([c[k[i]], c[k[(i+1)%n]]], [c[k[(i+1)%n]], c[k[(i+2)%n]]]))
+      ],
+
+      us = unique(sv)
+    )
+    (len(us) == 1);
 
 //! Test if a point is inside a polygon in a Euclidean 2d-space using winding number.
 /***************************************************************************//**
@@ -896,6 +915,15 @@ function polygon_as_is_p_inside
   )
   (sa > 180);
 
+//! @}
+
+//----------------------------------------------------------------------------//
+// shape transforms
+//----------------------------------------------------------------------------//
+
+//! \name Transforms
+//! @{
+
 //! Convert a polygon in 2D to a polyhedron by adding a height dimension.
 /***************************************************************************//**
   \param    c <coords-2d> A list of 2d cartesian coordinates
@@ -947,6 +975,15 @@ function polygon_linear_extrude_pf
     ]
   )
   [pp, pf];
+
+//! @}
+
+//----------------------------------------------------------------------------//
+// shape rounding
+//----------------------------------------------------------------------------//
+
+//! \name Rounding
+//! @{
 
 //! Round the vertices of a polygon in 2d space.
 /***************************************************************************//**
@@ -1115,6 +1152,8 @@ function polygon_vertices_round3_p
     pp = merge_s( ppl )
   )
   (cw == true) ? pp : reverse(pp);
+
+//! @}
 
 //! @}
 //! @}
