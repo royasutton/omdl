@@ -186,7 +186,8 @@ BEGIN_SCOPE quickstart;
     if ( !is_undef(__mfs__front) ) color("brown") rotate([90,0,0]) {
       draft_dim_line(p1=[-r,0], p2=[+r,0], d=r*3/4, u ="mm");
       draft_dim_line(p1=[-first(p)/2,0], p2=[+first(p)/2,0], u ="mm");
-      draft_dim_line(p1=[0,0], p2=[0,-first(h)], d=-r*1.25, u ="mm");
+      draft_dim_line(p1=[0,0], p2=[0,-first(h)], d=+r*1.25, u ="mm");
+      draft_dim_leader(p=[-r+r/20,-r/15], v1=135, v2=180, l1=7, l2=7, t="r/5", tr=0, s=2);
     }
 
   END_OPENSCAD;
