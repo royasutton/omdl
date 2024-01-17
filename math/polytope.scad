@@ -444,7 +444,7 @@ function polytope_face_mean_normal
 /***************************************************************************//**
   \copydetails polytope_face_mean_normal()
 *******************************************************************************/
-function polytope_plane
+function polytope_face_plane
 (
   c,
   f,
