@@ -478,49 +478,6 @@ function triangle_circumcenter
 //! @}
 
 //----------------------------------------------------------------------------//
-// shape rounding
-//----------------------------------------------------------------------------//
-
-//! \name Rounding
-//! @{
-
-//! Compute the rounding center coordinate for a given radius of a triangle vertex in 2D.
-/***************************************************************************//**
-  \param    c <coords-2d> A list of vertex coordinates [v1, v2, v3].
-  \param    r <decimal> The vertex rounding radius.
-
-  \returns  <decimal> The rounding center coordinate.
-*******************************************************************************/
-function triangle2d_vround3_center
-(
-  c,
-  r
-) = let( ir = triangle2d_inradius(c) )
-    (c[1]-r/(r-ir) * triangle2d_incenter(c)) * (ir-r)/ir;
-
-//! Compute the rounding tangent coordinates for a given radius of a triangle vertex in 2D.
-/***************************************************************************//**
-  \param    c <coords-2d> A list of vertex coordinates [v1, v2, v3].
-  \param    r <decimal> The vertex rounding radius.
-
-  \returns  <decimal> The rounding tangent coordinates [t1, t2].
-*******************************************************************************/
-function triangle2d_vround3_tangents
-(
-  c,
-  r
-) = let
-    (
-      rc = triangle2d_vround3_center(c, r),
-      im = sqrt( pow(distance_pp(c[1], rc),2) - pow(r,2) ),
-      t1 = c[1] + im * unit_l([c[1], c[0]]),
-      t2 = c[1] + im * unit_l([c[1], c[2]])
-    )
-    [t1, t2];
-
-//! @}
-
-//----------------------------------------------------------------------------//
 // shape property tests
 //----------------------------------------------------------------------------//
 
@@ -586,6 +543,49 @@ function triangle2d_is_pit
   )
     (b < 0) ? false
   : ((a + b) < 1);
+
+//! @}
+
+//----------------------------------------------------------------------------//
+// shape rounding
+//----------------------------------------------------------------------------//
+
+//! \name Rounding
+//! @{
+
+//! Compute the rounding center coordinate for a given radius of a triangle vertex in 2D.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of vertex coordinates [v1, v2, v3].
+  \param    r <decimal> The vertex rounding radius.
+
+  \returns  <decimal> The rounding center coordinate.
+*******************************************************************************/
+function triangle2d_vround3_center
+(
+  c,
+  r
+) = let( ir = triangle2d_inradius(c) )
+    (c[1]-r/(r-ir) * triangle2d_incenter(c)) * (ir-r)/ir;
+
+//! Compute the rounding tangent coordinates for a given radius of a triangle vertex in 2D.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of vertex coordinates [v1, v2, v3].
+  \param    r <decimal> The vertex rounding radius.
+
+  \returns  <decimal> The rounding tangent coordinates [t1, t2].
+*******************************************************************************/
+function triangle2d_vround3_tangents
+(
+  c,
+  r
+) = let
+    (
+      rc = triangle2d_vround3_center(c, r),
+      im = sqrt( pow(distance_pp(c[1], rc),2) - pow(r,2) ),
+      t1 = c[1] + im * unit_l([c[1], c[0]]),
+      t2 = c[1] + im * unit_l([c[1], c[2]])
+    )
+    [t1, t2];
 
 //! @}
 
