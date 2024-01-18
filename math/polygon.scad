@@ -361,12 +361,10 @@ function polygon_trapezoid_p
     b2 = defined_e_or(b, 1, b1),
 
     // trapezoid vertices from origin
-    p1 = o + [0, 0],
-    p2 = o + ( is_defined(h) ?
-                h*[cos(a), 1]
-              : l*[cos(a), sin(a)] ),
-    p3 = o + p2 + [b2, 0],
-    p4 = o + [b1, 0],
+    p1 = o,
+    p2 = o  + (is_undef(h) ? l*[cos(a), sin(a)] : h*[cos(a), 1]),
+    p3 = p2 + [b2, 0],
+    p4 = o  + [b1, 0],
 
     // cw ordering
     pp  = [p4, p1, p2, p3]
