@@ -64,8 +64,8 @@
 *******************************************************************************/
 module polygon_corner_round
 (
-  m  = 1,
   r  = 1,
+  m  = 1,
   c  = origin2d,
   v1 = x_axis2d_uv,
   v2 = y_axis2d_uv
