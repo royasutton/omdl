@@ -335,26 +335,18 @@ function polygon_elliptical_sector_p
   \param    l <decimal> The left side leg length.
   \param    a <decimal> The angle between the lower base and left leg.
   \param    vr <decimal-list-4|decimal> The vertices rounding radius.
-            A list [v1r, v2r, v3r, v4r] of 4 decimals or a single
-            decimal for (v1r=v2r=v3r=v4r). Unspecified corners are not
-            rounded.
   \param    vrm <integer-list-4|integer> The vertices rounding mode.
-            A list [v1rm, v2rm, v3rm,v4rm] of 4 integers or a single
-            integer for (v1rm=v2rm=v3rm=v4rm). Unspecified vertices are
-            not rounded.
   \param    vfn <integer-list-4> The vertices arc fragment number.
-            A list [v1fn, v2fn, v3fn, v4fn] of 4 integers or a single
-            integer for (v1fn=v2fn=v3fn=v4fn).
   \param    cw <boolean> Polygon vertex ordering.
 
   \returns  <coords-2d> A list of coordinates points [[x, y], ...].
 
   \details
 
-    When both \p h and \p l are specified, \p h has precedence.
-    Each vertex may be assigned one of the available rounding
-    \ref polygon_round_eve_all_p "modes". See [Wikipedia] for
-    more information.
+    When both \p h and \p l are specified, \p h has precedence. Each
+    vertex may be assigned individual rounding radius, rounding mode,
+    and facet number as described in \ref polygon_round_eve_all_p. See
+    [Wikipedia] for more general information.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Trapezoid
 *******************************************************************************/
@@ -991,11 +983,11 @@ function polygon_round_eve_p
             [[x1, y1], [x2, y2], ..., [xn, yn]].
   \param    vr <decimal-list-n|decimal> The vertices rounding radius.
             A list [v1r, v2r, v3r, ... vnr] of \em n decimals or a
-            single decimal for (v1r=v2r=v3r= ... =vnr). Unspecified
+            single decimal for (v1r=v2r=v3r= ... =vnr). Undefined
             vertices are not rounded.
   \param    vrm <integer-list-n|integer> The vertices rounding mode.
             A list [v1rm, v2rm, v3rm, ... vnrm] of \em n integers or a
-            single integer for (v1rm=v2rm=v3rm= ... =vnrm). Unspecified
+            single integer for (v1rm=v2rm=v3rm= ... =vnrm). Undefined
             vertices are not rounded.
   \param    vfn <integer-list-n> The vertices arc fragment number.
             A list [v1fn, v2fn, v3fn, ... vnfn] of \em n integers or a
