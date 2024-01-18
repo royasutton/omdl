@@ -54,7 +54,7 @@
 
 //----------------------------------------------------------------------------//
 
-//! A rectangle with edge, round, or chamfer corners.
+//! A rectangle with corner rounds or chamfers.
 /***************************************************************************//**
   \param    size <decimal-list-2|decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
@@ -73,12 +73,10 @@
 
     \amu_eval ( object=rectangle ${object_ex_diagram_3d} )
 
-  \note     A corner \em round replaces an edge with a quarter circle of
-            radius \p vr, inset <tt>[vr, vr]</tt> from the corner vertex.
-  \note     A corner \em chamfer replaces an edge with an isosceles right
-            triangle with side lengths equal to the corresponding corner
-            rounding radius \p vr. Therefore the chamfer length will be
-            <tt>vr*sqrt(2)</tt> at 45 degree angles.
+    Corner \em round is of constant radius \p vr. A corner \em chamfer
+    replaces the last \p vr length of the corners edge with an
+    isosceles right triangle with a chamfer length of (vr * sqrt(2))
+    cut at 45 degrees.
 *******************************************************************************/
 module rectangle
 (
