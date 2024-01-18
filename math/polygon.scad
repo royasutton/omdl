@@ -356,7 +356,7 @@ function polygon_trapezoid_p
   h,
   l = 1,
   a = 90,
-  vr = 0,
+  vr,
   vrm = 1,
   vfn,
   cw = true
@@ -377,7 +377,7 @@ function polygon_trapezoid_p
     // cw ordering
     c  = [p4, p1, p2, p3],
 
-    pp = polygon_round_eve_all_p(c=c, vr=vr, vrm=vrm, vfn=vfn, cw=true)
+    pp = is_undef(vr) ? c : polygon_round_eve_all_p(c=c, vr=vr, vrm=vrm, vfn=vfn, cw=true)
   )
   (cw == true) ? pp : reverse(pp);
 
