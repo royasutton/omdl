@@ -163,10 +163,9 @@ module torus_pg_trapezoid
   h,
   sl = 1,
   a = 90,
-  vr = 0,
+  vr,
   vrm = 1,
-  vfn,
-  centroid = false
+  vfn
 )
 {
   extrude_rotate_trl( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
@@ -178,8 +177,7 @@ module torus_pg_trapezoid
     a=a,
     vr=vr,
     vrm=vrm,
-    vfn=vfn,
-    centroid=centroid
+    vfn=vfn
   );
 }
 
@@ -204,7 +202,7 @@ BEGIN_SCOPE diagram;
     else if (shape == "torus_ellipse_cs")
       torus_ellipse_cs( size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
     else if (shape == "torus_pg_trapezoid")
-      torus_pg_trapezoid( b=[20,30], sl=30, a=45, vr=[5,5,5,5], vrm=[3,2,1,4], r=40, l=[90,60], m=63, centroid=true );
+      torus_pg_trapezoid( b=[20,30], sl=30, a=45, vr=[5,5,5,5], vrm=[3,2,1,4], r=40, l=[90,60], m=63 );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -235,7 +233,7 @@ BEGIN_SCOPE manifest;
     {
       torus_rectangle_c( size=[40,20], core=[35,20], r=40, l=[25,60], co=[0,2.5], vr=4, vrm=15, m=63, center=true );
       torus_ellipse_cs( size=[20,15], t=[2,4], r=60, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
-      torus_pg_trapezoid( b=[20,30], sl=30, a=45, vr=[5,5,5,5], vrm=[3,2,1,4], r=40, l=[25,60], m=63, centroid=true );
+      torus_pg_trapezoid( b=[20,30], sl=30, a=45, vr=[5,5,5,5], vrm=[3,2,1,4], r=40, l=[25,60], m=63 );
     }
   END_OPENSCAD;
 

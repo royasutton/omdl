@@ -102,6 +102,10 @@ module pg_elliptical_sector
 /***************************************************************************//**
   \copydetails polygon_trapezoid_p()
 
+  \param    vr <decimal-list-4|decimal> The vertices rounding radius.
+  \param    vrm <integer-list-4|integer> The vertices rounding mode.
+  \param    vfn <integer-list-4> The vertices arc fragment number.
+
   \details
 
     \amu_eval ( object=pg_trapezoid ${object_ex_diagram_3d} )
@@ -112,12 +116,15 @@ module pg_trapezoid
   h,
   l = 1,
   a = 90,
+  o = origin2d,
   vr,
   vrm = 1,
   vfn
 )
 {
-  p = polygon_trapezoid_p(b=b, h=h, l=l, a=a, vr=vr, vrm=vrm, vfn=vfn);
+  c = polygon_trapezoid_p(b=b, h=h, l=l, a=a, o=o);
+
+  p = is_undef( vr ) ? c : polygon_round_eve_all_p(c=c, vr=vr, vrm=vrm, vfn=vfn);
 
   polygon( p );
 }
