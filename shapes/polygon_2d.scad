@@ -119,12 +119,15 @@ module pg_trapezoid
   o = origin2d,
   vr,
   vrm = 1,
-  vfn
+  vfn,
+  centroid = false
 )
 {
   c = polygon_trapezoid_p(b=b, h=h, l=l, a=a, o=o);
 
-  p = is_undef( vr ) ? c : polygon_round_eve_all_p(c=c, vr=vr, vrm=vrm, vfn=vfn);
+  m = (centroid == false) ? c : translate_p(c, o-polygon_centroid(c));
+
+  p = is_undef( vr ) ? m : polygon_round_eve_all_p(c=m, vr=vr, vrm=vrm, vfn=vfn);
 
   polygon( p );
 }
@@ -149,7 +152,7 @@ BEGIN_SCOPE diagram;
     else if (shape == "pg_elliptical_sector")
       pg_elliptical_sector( r=[20, 15], v1=115, v2=-115 );
     else if (shape == "pg_trapezoid")
-      pg_trapezoid( b=[20,20], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
+      pg_trapezoid( b=[50,20], l=25, a=45, vr=2, centroid=true);
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -179,7 +182,7 @@ BEGIN_SCOPE manifest;
     {
       pg_corner_round( r=20, v1=[1,1], v2=135 );
       pg_elliptical_sector( r=[20, 15], v1=115, v2=-115 );
-      pg_trapezoid( b=[20,20], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
+      pg_trapezoid( b=[20,20], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4], centroid=true );
     }
   END_OPENSCAD;
 
