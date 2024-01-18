@@ -54,7 +54,7 @@
 
 //----------------------------------------------------------------------------//
 
-//! An edge round with constant radius between two vectors.
+//! A polygon edge round with constant radius between two vectors.
 /***************************************************************************//**
   \copydetails polygon_round_eve_p()
 
@@ -76,7 +76,7 @@ module pg_corner_round
   polygon( p );
 }
 
-//! An elliptical sector.
+//! A polygon elliptical sector.
 /***************************************************************************//**
   \copydetails polygon_elliptical_sector_p()
 
@@ -98,7 +98,7 @@ module pg_elliptical_sector
   polygon( p );
 }
 
-//! A trapezoid with individual vertex rounding and arc facets.
+//! A polygon trapezoid with individual vertex rounding and arc facets.
 /***************************************************************************//**
   \copydetails polygon_trapezoid_p()
 
