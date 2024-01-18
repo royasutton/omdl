@@ -58,9 +58,6 @@
 /***************************************************************************//**
   \copydetails polygon_round_p()
 
-    The coordinate points are rendered using polygon(). Parameter \p cw
-    = \b true preset.
-
   \details
 
     \amu_eval ( object=polygon_corner_round ${object_ex_diagram_3d} )
@@ -86,9 +83,6 @@ module polygon_corner_round
 /***************************************************************************//**
   \copydetails polygon_elliptical_sector_p()
 
-    The coordinate points are rendered using polygon(). Parameter \p cw
-    = \b true preset.
-
   \details
 
     \amu_eval ( object=polygon_elliptical_sector ${object_ex_diagram_3d} )
@@ -107,14 +101,9 @@ module polygon_elliptical_sector
   polygon( c );
 }
 
-//! A trapezoid with vertex rounding.
+//! A trapezoid with individual vertex rounding and arc facets.
 /***************************************************************************//**
   \copydetails polygon_trapezoid_p()
-
-    The coordinate points are rendered using polygon(). Parameter \p cw
-    = \b true preset.
-
-  \param    centroid <boolean> Center polygon centroid at origin.
 
   \details
 
