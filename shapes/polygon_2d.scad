@@ -102,8 +102,8 @@ module pg_elliptical_sector
 /***************************************************************************//**
   \copydetails polygon_trapezoid_p()
 
-  \param    vr <decimal-list-4|decimal> The vertices rounding radius.
-  \param    vrm <integer-list-4|integer> The vertices rounding mode.
+  \param    vr  <decimal-list-4 | decimal> The vertices rounding radius.
+  \param    vrm <integer-list-4 | integer> The vertices rounding mode.
   \param    vfn <integer-list-4> The vertices arc fragment number.
 
   \details
