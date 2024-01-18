@@ -334,18 +334,13 @@ function polygon_elliptical_sector_p
   \param    h <decimal> The perpendicular height between bases.
   \param    l <decimal> The left side leg length.
   \param    a <decimal> The angle between the lower base and left leg.
-  \param    vr <decimal-list-4|decimal> The vertices rounding radius.
-  \param    vrm <integer-list-4|integer> The vertices rounding mode.
-  \param    vfn <integer-list-4> The vertices arc fragment number.
   \param    cw <boolean> Polygon vertex ordering.
 
   \returns  <coords-2d> A list of coordinates points [[x, y], ...].
 
   \details
 
-    When both \p h and \p l are specified, \p h has precedence. Each
-    vertex may be assigned individual rounding radius, rounding mode,
-    and facet number as described in \ref polygon_round_eve_all_p. See
+    When both \p h and \p l are specified, \p h has precedence. See
     [Wikipedia] for more general information.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Trapezoid
@@ -356,9 +351,6 @@ function polygon_trapezoid_p
   h,
   l = 1,
   a = 90,
-  vr,
-  vrm = 1,
-  vfn,
   cw = true
 ) =
   let
@@ -375,9 +367,7 @@ function polygon_trapezoid_p
     p4 = [b1, 0],
 
     // cw ordering
-    c  = [p4, p1, p2, p3],
-
-    pp = is_undef(vr) ? c : polygon_round_eve_all_p(c=c, vr=vr, vrm=vrm, vfn=vfn, cw=true)
+    pp  = [p4, p1, p2, p3]
   )
   (cw == true) ? pp : reverse(pp);
 
