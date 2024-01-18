@@ -71,12 +71,9 @@ module polygon_corner_round
   v2 = y_axis2d_uv
 )
 {
-  pp = concat
-  ( [c],
-    polygon_round_eve_p(r=r, m=m, c=c, v1=v1, v2=v2)
-  );
+  p = concat([c], polygon_round_eve_p(r=r, m=m, c=c, v1=v1, v2=v2));
 
-  polygon( pp );
+  polygon( p );
 }
 
 //! An elliptical sector.
@@ -96,9 +93,9 @@ module polygon_elliptical_sector
   s = true
 )
 {
-  c = polygon_elliptical_sector_p(r=r, c=c, v1=v1, v2=v2, s=s);
+  p = polygon_elliptical_sector_p(r=r, c=c, v1=v1, v2=v2, s=s);
 
-  polygon( c );
+  polygon( p );
 }
 
 //! A trapezoid with individual vertex rounding and arc facets.
@@ -120,9 +117,9 @@ module polygon_trapezoid
   vfn
 )
 {
-  c = polygon_trapezoid_p(b=b, h=h, l=l, a=a, vr=vr, vrm=vrm, vfn=vfn);
+  p = polygon_trapezoid_p(b=b, h=h, l=l, a=a, vr=vr, vrm=vrm, vfn=vfn);
 
-  polygon( c );
+  polygon( p );
 }
 
 //! @}
