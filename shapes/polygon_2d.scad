@@ -71,15 +71,12 @@ module polygon_corner_round
   r  = 1,
   c  = origin2d,
   v1 = x_axis2d_uv,
-  v2 = y_axis2d_uv,
-  fn
+  v2 = y_axis2d_uv
 )
 {
-  cw = true;
-
   pp = concat
   ( [c],
-    polygon_round_p(m=m, r=r, c=c, v1=v1, v2=v2, fn=fn, cw=cw)
+    polygon_round_p(m=m, r=r, c=c, v1=v1, v2=v2)
   );
 
   polygon( pp );
@@ -102,13 +99,10 @@ module polygon_elliptical_sector
   c = origin2d,
   v1 = x_axis2d_uv,
   v2 = x_axis2d_uv,
-  s = true,
-  fn
+  s = true
 )
 {
-  cw = true;
-
-  c = polygon_elliptical_sector_p(r=r, c=c, v1=v1, v2=v2, s=s, fn=fn, cw=cw);
+  c = polygon_elliptical_sector_p(r=r, c=c, v1=v1, v2=v2, s=s);
 
   polygon( c );
 }
@@ -134,15 +128,11 @@ module polygon_trapezoid
   a = 90,
   vr = 0,
   vrm = 1,
-  vfn,
-  centroid = false
+  vfn
 )
 {
-  cw = true;
+  c = polygon_trapezoid_p(b=b, h=h, l=l, a=a, vr=vr, vrm=vrm, vfn=vfn);
 
-  c = polygon_trapezoid_p(b=b, h=h, l=l, a=a, vr=vr, vrm=vrm, vfn=vfn, cw=cw);
-
-  translate ( (centroid==true) ? -polygon_centroid(c) : origin2d )
   polygon( c );
 }
 
