@@ -334,6 +334,7 @@ function polygon_elliptical_sector_p
   \param    h <decimal> The perpendicular height between bases.
   \param    l <decimal> The left side leg length.
   \param    a <decimal> The angle between the lower base and left leg.
+  \param    o <point-2d> The origin offset crdinate [x, y].
   \param    cw <boolean> Polygon vertex ordering.
 
   \returns  <coords-2d> A list of coordinates points [[x, y], ...].
@@ -351,6 +352,7 @@ function polygon_trapezoid_p
   h,
   l = 1,
   a = 90,
+  o = origin2d,
   cw = true
 ) =
   let
@@ -359,12 +361,12 @@ function polygon_trapezoid_p
     b2 = defined_e_or(b, 1, b1),
 
     // trapezoid vertices from origin
-    p1 = [0, 0],
-    p2 = is_defined(h)
-       ? h*[cos(a), 1]
-       : l*[cos(a), sin(a)],
-    p3 = p2 + [b2, 0],
-    p4 = [b1, 0],
+    p1 = o + [0, 0],
+    p2 = o + ( is_defined(h) ?
+                h*[cos(a), 1]
+              : l*[cos(a), sin(a)] ),
+    p3 = o + p2 + [b2, 0],
+    p4 = o + [b1, 0],
 
     // cw ordering
     pp  = [p4, p1, p2, p3]
