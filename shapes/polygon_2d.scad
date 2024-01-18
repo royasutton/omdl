@@ -112,7 +112,7 @@ module polygon_trapezoid
   h,
   l = 1,
   a = 90,
-  vr = 0,
+  vr,
   vrm = 1,
   vfn
 )
