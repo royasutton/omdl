@@ -437,8 +437,8 @@ function polygon_regular_area
 
   \details
 
-  \note     When \p p is not given, the listed order of the coordinates
-            \p c establishes the path.
+    When \p p is not defined, the listed order of the coordinates will
+    be used.
 *******************************************************************************/
 function polygon_perimeter
 (
@@ -473,8 +473,9 @@ function polygon_perimeter
 
     See [Wikipedia] for more information.
 
-  \note     When \p p is not given, the listed order of the coordinates
-            \p c establishes the path.
+    When \p p is not defined, the listed order of the coordinates will
+    be used.
+
   \warning  This function does not track secondary shapes subtraction as
             implemented by the polygon() function.
 
@@ -518,8 +519,9 @@ function polygon_area
 
     Function patterned after [Dan Sunday, 2012].
 
-  \note     When \p p is not given, the listed order of the coordinates
-            \p c establishes the path.
+    When \p p is not defined, the listed order of the coordinates will
+    be used.
+
   \warning  This function does not track secondary shapes subtraction as
             implemented by the polygon() function.
 
@@ -564,8 +566,9 @@ function polygon3d_area
 
     See [Wikipedia] for more information.
 
-  \note     When \p p is not given, the listed order of the coordinates
-            \p c establishes the path.
+    When \p p is not defined, the listed order of the coordinates will
+    be used.
+
   \warning  This function does not track secondary shapes subtraction as
             implemented by the polygon() function.
 
@@ -634,8 +637,9 @@ function polygon_centroid
     [Dan Sunday, 2012]: http://geomalgorithms.com/a03-_inclusion.html
     [winding number]: https://en.wikipedia.org/wiki/Winding_number
 
-  \note     When \p p is not given, the listed order of the coordinates
-            \p c establishes the path.
+    When \p p is not defined, the listed order of the coordinates will
+    be used.
+
   \warning  Where there are secondary paths, the vertex ordering of each
              must be the same as the primary path.
 *******************************************************************************/
@@ -695,8 +699,8 @@ function polygon_winding
 
   \details
 
-  \note     When \p p is not given, the listed order of the coordinates
-            \p c establishes the path.
+    When \p p is not defined, the listed order of the coordinates will
+    be used.
 *******************************************************************************/
 function polygon_is_clockwise
 (
@@ -724,8 +728,8 @@ function polygon_is_clockwise
 
   \details
 
-  \note     When \p p is not given, the listed order of the coordinates
-            \p c establishes the path.
+    When \p p is not defined, the listed order of the coordinates will
+    be used.
 *******************************************************************************/
 function polygon_is_convex
 (
@@ -763,8 +767,8 @@ function polygon_is_convex
 
   \details
 
-  \note     When \p p is not given, the listed order of the coordinates
-            \p c establishes the path.
+    When \p p is not defined, the listed order of the coordinates will
+    be used.
 
     \sa polygon_winding for warning about secondary shapes.
 *******************************************************************************/
@@ -791,8 +795,9 @@ function polygon_wn_is_p_inside
 
     See [Wikipedia] for more information.
 
-  \note     When \p p is not given, the listed order of the coordinates
-            \p c establishes the path.
+    When \p p is not defined, the listed order of the coordinates will
+    be used.
+
   \warning  This function does not track secondary shapes subtraction as
             implemented by the polygon() function.
 
@@ -850,8 +855,8 @@ function polygon_as_is_p_inside
 
   \details
 
-  \note     When \p p is not given, the listed order of the coordinates
-            \p c establishes the path.
+    When \p p is not defined, the listed order of the coordinates will
+    be used.
 *******************************************************************************/
 function polygon_linear_extrude_pf
 (
