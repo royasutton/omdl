@@ -1396,7 +1396,7 @@ BEGIN_SCOPE diagram;
 
       polytope_number(pp, vi=true, ei=false, fi=false);
 
-      rp = polygon_vertices_round3_p(c=pp, vr=length(1/4, "in"), vrm=1, cw=false);
+      rp = polygon_round_eve_all_p(c=pp, vr=length(1/4, "in"), vrm=1, cw=false);
       draft_polygon(rp, s=2);
     }
   END_OPENSCAD;

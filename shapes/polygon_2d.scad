@@ -56,7 +56,7 @@
 
 //! An edge round with constant radius between two vectors.
 /***************************************************************************//**
-  \copydetails polygon_round_p()
+  \copydetails polygon_round_eve_p()
 
   \details
 
@@ -73,7 +73,7 @@ module polygon_corner_round
 {
   pp = concat
   ( [c],
-    polygon_round_p(m=m, r=r, c=c, v1=v1, v2=v2)
+    polygon_round_eve_p(m=m, r=r, c=c, v1=v1, v2=v2)
   );
 
   polygon( pp );

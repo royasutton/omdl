@@ -98,7 +98,7 @@ module cone
     translate([-cr, 0])
     difference()
     {
-      polygon (polygon_vertices_round3_p(triangle2d_sss2ppp([hl, cr*2, hl]), vr=[br, br, pr]));
+      polygon (polygon_round_eve_all_p(triangle2d_sss2ppp([hl, cr*2, hl]), vr=[br, br, pr]));
       square( size=[cr,h], center=false );
     }
   }

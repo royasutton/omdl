@@ -592,7 +592,7 @@ module star2d
   w = defined_e_or(size, 1, l/2);
 
   t = triangle2d_sss2ppp([l, w, l]);
-  p = is_undef(vr) ? t : polygon_vertices_round3_p(c=t, vr=vr);
+  p = is_undef(vr) ? t : polygon_round_eve_all_p(c=t, vr=vr);
 
   repeat_radial(n=n, angle=true, move=false)
   rotate([0, 0, -90])

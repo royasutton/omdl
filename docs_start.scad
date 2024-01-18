@@ -146,9 +146,9 @@ BEGIN_SCOPE logo;
     difference()
     {
       translate(-triangle_centroid(ft))
-      polygon( polygon_vertices_round3_p(ft, vr=vr) );
+      polygon( polygon_round_eve_all_p(ft, vr=vr) );
       translate(-triangle_centroid(ct))
-      polygon( polygon_vertices_round3_p(ct, vr=vr) );
+      polygon( polygon_round_eve_all_p(ct, vr=vr) );
     }
   END_OPENSCAD;
 
