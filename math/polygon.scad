@@ -913,8 +913,8 @@ function polygon_linear_extrude_pf
 
 //! Compute coordinates for a constant radius vertex round between two edge vectors in 2D.
 /***************************************************************************//**
-  \param    m <integer> The round mode.
   \param    r <decimal> The round radius.
+  \param    m <integer> The round mode.
   \param    c <point-2d> The round center coordinate [x, y].
   \param    v1 <line-2d|decimal> The round start angle.
             A 2d line, vector, or decimal angle 1.
@@ -945,8 +945,8 @@ function polygon_linear_extrude_pf
 *******************************************************************************/
 function polygon_round_eve_p
 (
-  m  = 1,
   r  = 1,
+  m  = 1,
   c  = origin2d,
   v1 = x_axis2d_uv,
   v2 = y_axis2d_uv,
