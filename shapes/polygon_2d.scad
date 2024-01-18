@@ -60,9 +60,9 @@
 
   \details
 
-    \amu_eval ( object=polygon_corner_round ${object_ex_diagram_3d} )
+    \amu_eval ( object=pg_corner_round ${object_ex_diagram_3d} )
 *******************************************************************************/
-module polygon_corner_round
+module pg_corner_round
 (
   r  = 1,
   m  = 1,
@@ -82,9 +82,9 @@ module polygon_corner_round
 
   \details
 
-    \amu_eval ( object=polygon_elliptical_sector ${object_ex_diagram_3d} )
+    \amu_eval ( object=pg_elliptical_sector ${object_ex_diagram_3d} )
 *******************************************************************************/
-module polygon_elliptical_sector
+module pg_elliptical_sector
 (
   r = 1,
   c = origin2d,
@@ -104,9 +104,9 @@ module polygon_elliptical_sector
 
   \details
 
-    \amu_eval ( object=polygon_trapezoid ${object_ex_diagram_3d} )
+    \amu_eval ( object=pg_trapezoid ${object_ex_diagram_3d} )
 *******************************************************************************/
-module polygon_trapezoid
+module pg_trapezoid
 (
   b = 1,
   h,
@@ -134,15 +134,15 @@ BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
 
-    shape = "polygon_corner_round";
+    shape = "pg_corner_round";
     $fn = 36;
 
-    if (shape == "polygon_corner_round")
-      polygon_corner_round( r=20, v1=[1,1], v2=135 );
-    else if (shape == "polygon_elliptical_sector")
-      polygon_elliptical_sector( r=[20, 15], v1=115, v2=-115 );
-    else if (shape == "polygon_trapezoid")
-      polygon_trapezoid( b=[20,20], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
+    if (shape == "pg_corner_round")
+      pg_corner_round( r=20, v1=[1,1], v2=135 );
+    else if (shape == "pg_elliptical_sector")
+      pg_elliptical_sector( r=[20, 15], v1=115, v2=-115 );
+    else if (shape == "pg_trapezoid")
+      pg_trapezoid( b=[20,20], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -151,9 +151,9 @@ BEGIN_SCOPE diagram;
     views     name "views" views "top";
     defines   name "shapes" define "shape"
               strings "
-                polygon_corner_round
-                polygon_elliptical_sector
-                polygon_trapezoid
+                pg_corner_round
+                pg_elliptical_sector
+                pg_trapezoid
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter --view=axes";
@@ -170,9 +170,9 @@ BEGIN_SCOPE manifest;
 
     repeat_grid( g=5, i=60, center=true )
     {
-      polygon_corner_round( r=20, v1=[1,1], v2=135 );
-      polygon_elliptical_sector( r=[20, 15], v1=115, v2=-115 );
-      polygon_trapezoid( b=[20,20], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
+      pg_corner_round( r=20, v1=[1,1], v2=135 );
+      pg_elliptical_sector( r=[20, 15], v1=115, v2=-115 );
+      pg_trapezoid( b=[20,20], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
     }
   END_OPENSCAD;
 

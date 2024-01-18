@@ -139,18 +139,18 @@ module torus_ellipse_cs
 /***************************************************************************//**
   \copydoc extrude_rotate_trl()
 
-  \copydoc polygon_trapezoid()
+  \copydoc pg_trapezoid()
 
   \param    sl <decimal> The left side leg length of the trapezoid
             polygon \p l.
 
   \details
 
-    \amu_eval ( object=torus_polygon_trapezoid ${object_ex_diagram_3d} )
+    \amu_eval ( object=torus_pg_trapezoid ${object_ex_diagram_3d} )
 
   \todo Use generic rounded trapezoid function for profile.
 *******************************************************************************/
-module torus_polygon_trapezoid
+module torus_pg_trapezoid
 (
   r,
   pa = 0,
@@ -170,7 +170,7 @@ module torus_polygon_trapezoid
 )
 {
   extrude_rotate_trl( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
-  polygon_trapezoid
+  pg_trapezoid
   (
     b=b,
     h=h,
@@ -203,8 +203,8 @@ BEGIN_SCOPE diagram;
       torus_rectangle_c( size=[40,20], core=[35,20], r=40, l=[90,60], co=[0,2.5], vr=4, vrm=15, m=63, center=true );
     else if (shape == "torus_ellipse_cs")
       torus_ellipse_cs( size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
-    else if (shape == "torus_polygon_trapezoid")
-      torus_polygon_trapezoid( b=[20,30], sl=30, a=45, vr=[5,5,5,5], vrm=[3,2,1,4], r=40, l=[90,60], m=63, centroid=true );
+    else if (shape == "torus_pg_trapezoid")
+      torus_pg_trapezoid( b=[20,30], sl=30, a=45, vr=[5,5,5,5], vrm=[3,2,1,4], r=40, l=[90,60], m=63, centroid=true );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -215,7 +215,7 @@ BEGIN_SCOPE diagram;
               strings "
                 torus_rectangle_c
                 torus_ellipse_cs
-                torus_polygon_trapezoid
+                torus_pg_trapezoid
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter --view=axes";
@@ -235,7 +235,7 @@ BEGIN_SCOPE manifest;
     {
       torus_rectangle_c( size=[40,20], core=[35,20], r=40, l=[25,60], co=[0,2.5], vr=4, vrm=15, m=63, center=true );
       torus_ellipse_cs( size=[20,15], t=[2,4], r=60, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
-      torus_polygon_trapezoid( b=[20,30], sl=30, a=45, vr=[5,5,5,5], vrm=[3,2,1,4], r=40, l=[25,60], m=63, centroid=true );
+      torus_pg_trapezoid( b=[20,30], sl=30, a=45, vr=[5,5,5,5], vrm=[3,2,1,4], r=40, l=[25,60], m=63, centroid=true );
     }
   END_OPENSCAD;
 
