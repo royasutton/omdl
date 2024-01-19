@@ -223,27 +223,6 @@ BEGIN_SCOPE diagram;
     include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
-
-BEGIN_SCOPE manifest;
-  BEGIN_OPENSCAD;
-    include <omdl-base.scad>;
-    include <shapes/revolved_2d.scad>;
-
-    $fn = 36;
-
-    repeat_grid( g=4, i=150, center=true )
-    {
-      torus_rectangle_c( size=[40,20], core=[35,20], r=40, l=[25,60], co=[0,2.5], vr=4, vrm=15, m=63, center=true );
-      torus_ellipse_cs( size=[20,15], t=[2,4], r=60, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
-      torus_pg_trapezoid( b=[20,30], sl=30, a=45, vr=[5,5,5,5], vrm=[3,2,1,4], r=40, l=[25,60], m=63, centroid=true );
-    }
-  END_OPENSCAD;
-
-  BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {var_init,var_gen_stl}.mfs;
-    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
-  END_MFSCRIPT;
-END_SCOPE;
 */
 
 //----------------------------------------------------------------------------//

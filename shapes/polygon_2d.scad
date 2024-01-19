@@ -171,26 +171,6 @@ BEGIN_SCOPE diagram;
     include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
-
-BEGIN_SCOPE manifest;
-  BEGIN_OPENSCAD;
-    include <omdl-base.scad>;
-
-    $fn = 36;
-
-    repeat_grid( g=5, i=60, center=true )
-    {
-      pg_corner_round( r=20, v1=[1,1], v2=135 );
-      pg_elliptical_sector( r=[20, 15], v1=115, v2=-115 );
-      pg_trapezoid( b=[20,20], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4], centroid=true );
-    }
-  END_OPENSCAD;
-
-  BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {var_init,var_gen_svg}.mfs;
-    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
-  END_MFSCRIPT;
-END_SCOPE;
 */
 
 //----------------------------------------------------------------------------//

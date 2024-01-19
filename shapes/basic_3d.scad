@@ -476,30 +476,6 @@ BEGIN_SCOPE diagram;
     include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
-
-BEGIN_SCOPE manifest;
-  BEGIN_OPENSCAD;
-    include <omdl-base.scad>;
-
-    $fn = 36;
-
-    repeat_grid( g=4, i=60, center=true )
-    {
-      translate([0,0,-12.5]) cone( h=25, r=15, vr=2 );
-      cuboid( size=[25,40,20], vr=5, center=true );
-      ellipsoid( size=[40,25] );
-      ellipsoid_s( size=[60,15], a1=0, a2=270 );
-      pyramid_t( size=15, center=true );
-      pyramid_q( size=[35,40,25], center=true );
-      star3d( size=40, n=5, half=false );
-    }
-  END_OPENSCAD;
-
-  BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {var_init,var_gen_stl}.mfs;
-    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
-  END_MFSCRIPT;
-END_SCOPE;
 */
 
 //----------------------------------------------------------------------------//

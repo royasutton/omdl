@@ -655,32 +655,6 @@ BEGIN_SCOPE diagram;
     include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
-
-BEGIN_SCOPE manifest;
-  BEGIN_OPENSCAD;
-    include <omdl-base.scad>;
-
-    $fn = 36;
-
-    repeat_grid( g=5, i=60, center=true )
-    {
-      rectangle( size=[25,40], vr=[0,10,10,5], vrm=4, center=true );
-      rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, vrm2=3, co=[0,5], center=true );
-      rhombus( size=[40,25], vr=[2,4,2,4], center=true );
-      ngon( n=6, r=25, vr=6 );
-      ellipse( size=[25, 40] );
-      ellipse_c( size=[25,40], core=[16,10], co=[0,10], cr=45 );
-      ellipse_s( size=[25,40], a1=90, a2=180 );
-      ellipse_cs( size=[25,40], t=[10,5], a1=90, a2=180, co=[10,0], cr=45);
-      star2d( size=[40, 15], n=5, vr=2 );
-    }
-  END_OPENSCAD;
-
-  BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {var_init,var_gen_svg}.mfs;
-    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
-  END_MFSCRIPT;
-END_SCOPE;
 */
 
 //----------------------------------------------------------------------------//

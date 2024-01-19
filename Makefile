@@ -131,9 +131,6 @@ modules_exclude                   := database/material
 # to exclude nothing from the command line, use: $ make scopes_exclude="" all
 # or set 'ignore_scopes_exclude := $(true)' above
 
-# exclude shape manifests; required only when doing a library "release."
-scopes_exclude                    := manifest
-
 # exclude database tests and statitics
 scopes_exclude                    += db_autotest \
                                      db_autostat
