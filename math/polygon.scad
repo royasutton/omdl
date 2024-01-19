@@ -334,7 +334,7 @@ function polygon_elliptical_sector_p
   \param    h <decimal> The perpendicular height between bases.
   \param    l <decimal> The left side leg length.
   \param    a <decimal> The angle between the lower base and left leg.
-  \param    o <point-2d> The origin offset crdinate [x, y].
+  \param    o <point-2d> The origin offset coordinate [x, y].
   \param    cw <boolean> Polygon vertex ordering.
 
   \returns  <coords-2d> A list of coordinates points [[x, y], ...].
