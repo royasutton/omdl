@@ -1,4 +1,4 @@
-//! Basic 2D shapes revolved about the z-axis.
+//! Select 2D shapes revolved about the z-axis.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (2d Revolutions)
-    \amu_define group_brief (Basic 2D shapes revolved about the z-axis.)
+    \amu_define group_name  (Revolutions)
+    \amu_define group_brief (Select 2D shapes revolved about the z-axis.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/

@@ -1,4 +1,4 @@
-//! Basic 2D derivative shapes.
+//! Basic 2D shapes.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (2d Shapes)
-    \amu_define group_brief (Basic 2D derivative shapes.)
+    \amu_define group_name  (Basic 2d)
+    \amu_define group_brief (Basic 2D shape.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/

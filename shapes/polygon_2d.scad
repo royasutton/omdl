@@ -1,4 +1,4 @@
-//! Polygon shapes generated in 2D space.
+//! Roundable polygons generated in 2D space.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (2d Polygons)
-    \amu_define group_brief (Polygon shapes generated in 2D space.)
+    \amu_define group_name  (Polygons)
+    \amu_define group_brief (Roundable polygons generated in 2D space.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/

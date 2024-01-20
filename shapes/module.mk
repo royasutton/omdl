@@ -9,10 +9,9 @@ local_path        :=  shapes
 local_library     :=  docs_module \
                       \
                       basic_2d \
+                      basic_3d \
                       polygon_2d \
-                      revolved_2d \
-                      \
-                      basic_3d
+                      revolved_2d
 
 local_release_add :=
 

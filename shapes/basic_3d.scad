@@ -1,4 +1,4 @@
-//! Basic 3D derivative shapes.
+//! Basic 3D shapes.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (3d Shapes)
-    \amu_define group_brief (Basic 3D derivative shapes.)
+    \amu_define group_name  (Basic 3d)
+    \amu_define group_brief (Basic 3D shapes.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
