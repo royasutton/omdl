@@ -177,6 +177,31 @@ function angle_inv
 ) = (from == to) ? a
   : angle_unit_d2( angle_unit_2d( a, from ), to );
 
+//----------------------------------------------------------------------------//
+// shorthand conversions
+//----------------------------------------------------------------------------//
+
+//! \name Shorts
+//! @{
+
+//! Shorthand angle conversion to degrees.
+/***************************************************************************//**
+  \param    a <decimal> The angle to convert.
+
+  \returns  <decimal> The conversion result.
+*******************************************************************************/
+function a_deg(a) = angle(a=a, from="d");
+
+//! Shorthand angle conversion to radians.
+/***************************************************************************//**
+  \param    a <decimal> The angle to convert.
+
+  \returns  <decimal> The conversion result.
+*******************************************************************************/
+function a_rad(a) = angle(a=a, from="r");
+
+//! @}
+
 //! @}
 //! @}
 
