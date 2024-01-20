@@ -70,9 +70,8 @@ include <math/utility.scad>;
 // shapes
 //----------------------------------------------------------------------------//
 include <shapes/basic_2d.scad>;
-include <shapes/polygon_2d.scad>;
-
 include <shapes/basic_3d.scad>;
+include <shapes/polygon.scad>;
 
 //----------------------------------------------------------------------------//
 // tools

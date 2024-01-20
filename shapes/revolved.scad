@@ -194,7 +194,7 @@ module torus_pg_trapezoid
 BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <shapes/revolved_2d.scad>;
+    include <shapes/revolved.scad>;
 
     shape = "torus_rectangle_c";
     $fn = 36;
