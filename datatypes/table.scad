@@ -808,7 +808,6 @@ module table_write
 BEGIN_SCOPE example_use;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <units/length.scad>;
 
     base_unit_length = "mm";
 
@@ -869,7 +868,6 @@ END_SCOPE;
 BEGIN_SCOPE example_table;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <units/length.scad>;
 
     base_unit_length = "mm";
 

@@ -46,7 +46,6 @@
   \amu_define FILE_NAME ()
   \amu_define includes_required_add
   (
-    units/length.scad
     units/angle.scad
     tools/align.scad
     tools/operation_cs.scad
@@ -90,7 +89,6 @@
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <units/length.scad>;
     include <units/angle.scad>;
     include <tools/align.scad>;
     include <tools/operation_cs.scad>;

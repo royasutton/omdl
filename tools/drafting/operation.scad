@@ -985,7 +985,6 @@ module draft_title_block
 BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <units/length.scad>;
     include <units/angle.scad>;
     include <tools/align.scad>;
     include <tools/operation_cs.scad>;

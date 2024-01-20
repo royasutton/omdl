@@ -888,7 +888,6 @@ module draft_dim_center
 BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <units/length.scad>;
     include <units/angle.scad>;
     include <tools/align.scad>;
     include <tools/operation_cs.scad>;

@@ -545,7 +545,6 @@ END_SCOPE;
 BEGIN_SCOPE diagram_label;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <units/length.scad>;
     include <units/angle.scad>;
     include <tools/operation_cs.scad>;
     include <tools/drafting/draft-base.scad>;

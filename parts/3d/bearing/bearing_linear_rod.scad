@@ -328,7 +328,6 @@ BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <tools/operation_cs.scad>;
-    include <units/length.scad>;
     include <parts/3d/bearing/bearing_linear_rod.scad>;
 
     emt  = [length(0.706, "in"), length(0.622, "in")];
