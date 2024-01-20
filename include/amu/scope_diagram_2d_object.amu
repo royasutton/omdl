@@ -12,6 +12,8 @@
     optional:
       ${scope_id}             (default = diagram)
 
+      ${title}                (default = Object example)
+
       ${html_image_w}         (default = 384)
       ${latex_image_w}        (default = 2.25in)
 
@@ -23,6 +25,8 @@
  +/
 
   \amu_if scope_id (-d ${scope_id}) {${scope_id}} else {diagram} endif
+
+  \amu_if title (-d ${title}) {${title}} else {Object example} endif
 
   \amu_if html_image_w (-d ${html_image_w}) {${html_image_w}} else {384} endif
   \amu_if latex_image_w (-d ${latex_image_w}) {${latex_image_w}} else {2.25in} endif
@@ -40,7 +44,7 @@
 
   \amu_define object_ex_diagram_2d
   (
-    <b>Object example</b>
+    <b>${title}</b>
     \dontinclude ${scope_root}_${scope_id}.scad \skipline ${object}(
     \image html  ${object_stem_2d}.svg "${object}" width=${html_image_w}
     \image latex ${object_stem_2d}.svg "${object}" width=${latex_image_w}
@@ -54,7 +58,7 @@
 
   \amu_define object_diagram_2d_ex
   (
-    <b>Object example</b>
+    <b>${title}</b>
     \image html  ${object_stem_2d}.svg "${object}" width=${html_image_w}
     \image latex ${object_stem_2d}.svg "${object}" width=${latex_image_w}
     \dontinclude ${scope_root}_${scope_id}.scad \skipline ${object}(
@@ -68,7 +72,7 @@
 
   \amu_define object_diagram_2d
   (
-    <b>Object example</b>
+    <b>${title}</b>
     \image html  ${object_stem_2d}.svg "${object}" width=${html_image_w}
     \image latex ${object_stem_2d}.svg "${object}" width=${latex_image_w}
   )
