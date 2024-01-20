@@ -166,7 +166,6 @@ END_SCOPE;
 BEGIN_SCOPE quickstart;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <units/angle.scad>;
     include <tools/operation_cs.scad>;
     include <tools/drafting/draft-base.scad>;
     include <parts/3d/bearing/bearing_linear_rod.scad>;

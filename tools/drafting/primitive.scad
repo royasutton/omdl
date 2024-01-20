@@ -1348,7 +1348,6 @@ module draft_make_3d_if_configured
 BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <units/angle.scad>;
     include <tools/align.scad>;
     include <tools/operation_cs.scad>;
     include <tools/polytope.scad>;

@@ -804,7 +804,6 @@ concat
 BEGIN_SCOPE dfraft_style1;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <units/angle.scad>;
     include <tools/drafting/draft-base.scad>;
     length_unit_base = "mm";
 
@@ -820,7 +819,6 @@ END_SCOPE;
 BEGIN_SCOPE sheet_sizes;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <units/angle.scad>;
     include <tools/drafting/draft-base.scad>;
     length_unit_base = "in";
 
@@ -840,7 +838,6 @@ END_SCOPE;
 BEGIN_SCOPE sheet_config;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <units/angle.scad>;
     include <tools/drafting/draft-base.scad>;
     length_unit_base = "mm";
 
@@ -857,7 +854,6 @@ END_SCOPE;
 BEGIN_SCOPE sheet_config_keys;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <units/angle.scad>;
     include <tools/drafting/draft-base.scad>;
     length_unit_base = "mm";
 

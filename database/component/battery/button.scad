@@ -109,7 +109,6 @@ BEGIN_SCOPE data;
 BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <units/angle.scad>;
     include <tools/align.scad>;
     include <tools/operation_cs.scad>;
     include <tools/drafting/draft-base.scad>;
