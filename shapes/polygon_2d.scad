@@ -73,7 +73,7 @@ module pg_corner_round
 {
   p = concat([c], polygon_round_eve_p(r=r, m=m, c=c, v1=v1, v2=v2));
 
-  polygon( p );
+  polygon(p);
 }
 
 //! A polygon elliptical sector.
@@ -95,7 +95,7 @@ module pg_elliptical_sector
 {
   p = polygon_elliptical_sector_p(r=r, c=c, v1=v1, v2=v2, s=s);
 
-  polygon( p );
+  polygon(p);
 }
 
 //! A polygon trapezoid with individual vertex rounding and arc facets.
@@ -105,6 +105,8 @@ module pg_elliptical_sector
   \param    vr  <decimal-list-4 | decimal> The vertices rounding radius.
   \param    vrm <integer-list-4 | integer> The vertices rounding mode.
   \param    vfn <integer-list-4> The vertices arc fragment number.
+
+  \param    center <boolean> Center origin at trapezoid centroid.
 
   \details
 
@@ -120,16 +122,15 @@ module pg_trapezoid
   vr,
   vrm = 1,
   vfn,
-  centroid = false
+  center = false
 )
 {
   c = polygon_trapezoid_p(b=b, h=h, l=l, a=a, o=o);
 
-  m = (centroid == false) ? c : translate_p(c, o-polygon_centroid(c));
-
+  m = (center == false) ? c : translate_p(c, o-polygon_centroid(c));
   p = is_undef( vr ) ? m : polygon_round_eve_all_p(c=m, vr=vr, vrm=vrm, vfn=vfn);
 
-  polygon( p );
+  polygon(p);
 }
 
 //! @}
@@ -152,7 +153,7 @@ BEGIN_SCOPE diagram;
     else if (shape == "pg_elliptical_sector")
       pg_elliptical_sector( r=[20, 15], v1=115, v2=-115 );
     else if (shape == "pg_trapezoid")
-      pg_trapezoid( b=[50,20], l=25, a=45, vr=2, centroid=true);
+      pg_trapezoid( b=[50,20], l=25, a=45, vr=2, center=true);
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
