@@ -184,7 +184,7 @@ function angle_inv
 //! \name Shorts
 //! @{
 
-//! Shorthand angle conversion to degrees.
+//! Shorthand angle conversion for degrees.
 /***************************************************************************//**
   \param    a <decimal> The angle to convert.
 
@@ -192,7 +192,7 @@ function angle_inv
 *******************************************************************************/
 function a_deg(a) = angle(a=a, from="d");
 
-//! Shorthand angle conversion to radians.
+//! Shorthand angle conversion for radians.
 /***************************************************************************//**
   \param    a <decimal> The angle to convert.
 

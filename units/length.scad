@@ -290,7 +290,7 @@ function length_inv
 //! \name Shorts
 //! @{
 
-//! Shorthand length conversion to millimeters.
+//! Shorthand length conversion for millimeters.
 /***************************************************************************//**
   \param    v <decimal> The value to convert.
 
@@ -298,7 +298,7 @@ function length_inv
 *******************************************************************************/
 function l_mm(v) = length(v=v, from="mm");
 
-//! Shorthand length conversion to inches.
+//! Shorthand length conversion for inches.
 /***************************************************************************//**
   \param    v <decimal> The value to convert.
 
