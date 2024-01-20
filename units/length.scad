@@ -283,6 +283,31 @@ function length_inv
     // undefined for other dimensions
   : undef;
 
+//----------------------------------------------------------------------------//
+// shorthand conversions
+//----------------------------------------------------------------------------//
+
+//! \name Shorts
+//! @{
+
+//! Shorthand length conversion to millimeters.
+/***************************************************************************//**
+  \param    v <decimal> The value to convert.
+
+  \returns  <decimal> The conversion result.
+*******************************************************************************/
+function l_mm(v) = length(v=v, from="mm");
+
+//! Shorthand length conversion to inches.
+/***************************************************************************//**
+  \param    v <decimal> The value to convert.
+
+  \returns  <decimal> The conversion result.
+*******************************************************************************/
+function l_in(v) = length(v=v, from="in");
+
+//! @}
+
 //! @}
 //! @}
 
