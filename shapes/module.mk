@@ -11,7 +11,8 @@ local_library     :=  docs_module \
                       basic_2d \
                       basic_3d \
                       polygon \
-                      revolved
+                      revolved \
+                      polyhedron_db
 
 local_release_add :=
 
