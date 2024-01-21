@@ -65,7 +65,7 @@ dtc_battery_button =
   ["h", "battery height"]
 ];
 
-//! \<table> Button cell batteries data table.
+//! \<table> Button cell batteries data table rows.
 //! \hideinitializer
 dtr_battery_button =
 [

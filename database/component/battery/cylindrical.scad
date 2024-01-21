@@ -63,7 +63,7 @@ dtc_battery_cylindrical =
   ["h", "battery height"]
 ];
 
-//! \<table> Cylindrical batteries data table.
+//! \<table> Cylindrical batteries data table rows.
 //! \hideinitializer
 dtr_battery_cylindrical =
 [
