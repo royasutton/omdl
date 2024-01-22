@@ -27,23 +27,28 @@
 
   \details
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
-
     \amu_define group_name  (Constant Definitions)
     \amu_define group_brief (Common mechanical design constants.)
 
-      \amu_define group1        (${group}_general)
-      \amu_define group1_name   (General)
-      \amu_define group1_brief  (General mathematical constants.)
+  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+*******************************************************************************/
 
-      \amu_define group2        (${group}_system)
-      \amu_define group2_name   (System)
-      \amu_define group2_brief  (System and program limits.)
+//----------------------------------------------------------------------------//
+// subgroups.
+//----------------------------------------------------------------------------//
 
-      \amu_define group3        (${group}_euclidean)
-      \amu_define group3_name   (Euclidean)
-      \amu_define group3_brief  (Euclidean space axis mapping.)
+/***************************************************************************//**
+  \amu_define group1        (${group}_general)
+  \amu_define group1_name   (General)
+  \amu_define group1_brief  (General mathematical constants.)
 
+  \amu_define group2        (${group}_system)
+  \amu_define group2_name   (System)
+  \amu_define group2_brief  (System and program limits.)
+
+  \amu_define group3        (${group}_euclidean)
+  \amu_define group3_name   (Euclidean)
+  \amu_define group3_brief  (Euclidean space axis mapping.)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
