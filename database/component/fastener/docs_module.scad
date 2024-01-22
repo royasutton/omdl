@@ -38,8 +38,74 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent.amu)
+  \amu_include (include/amu/group_in_parent_start.amu)
 *******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// subgroups.
+//----------------------------------------------------------------------------//
+
+/***************************************************************************//**
+  /+
+
+    NOTE: each word of a class name or subgroup should be capitalized.
+
+  +/
+
+  /+ define fastener class subgroups +/
+
+  \amu_define class_subgroups
+  (
+    Screws
+    Nuts
+  )
+
+  /+ remove newline from each identifiers +/
+
+  \amu_replace class_subgroups (text="${class_subgroups}" search="\n" replace=", ")
+
+  /+ expand subgroups and classes +/
+
+  \amu_define new_line
+  (
+  )
+
+  \amu_define class (Imperial)
+  \amu_foreach defgroup_subgroups_imperial
+  (
+    words=${class_subgroups} separator="${new_line}"
+    text="\defgroup ${group}_${class}_\${x} \${x}"
+  )
+
+  \amu_define class (Metric)
+  \amu_foreach defgroup_subgroups_metric
+  (
+    words=${class_subgroups} separator="${new_line}"
+    text="\defgroup ${group}_${class}_\${x} \${x}"
+  )
+*******************************************************************************/
+
+/***************************************************************************//**
+  /+ instantiate classes and subgroups +/
+
+  \amu_if (true)
+  {
+    \defgroup ${group}_Imperial   Imperial
+    @{
+    ${defgroup_subgroups_imperial}
+    @}
+
+    \defgroup ${group}_Metric     Metric
+    @{
+    ${defgroup_subgroups_metric}
+    @}
+  }
+  endif
+*******************************************************************************/
+
+//! @}
+//! @}
+
 
 //----------------------------------------------------------------------------//
 // end of file
