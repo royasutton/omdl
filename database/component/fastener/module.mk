@@ -6,7 +6,20 @@ $(eval $(call clear-local-module))
 
 local_path        :=  database/component/fastener
 
-local_library     :=  docs_module
+local_library     :=  docs_module \
+                      \
+                      ansi_b18_3_5m \
+                      \
+                      din_125a \
+                      din_985 \
+                      \
+                      iso_4014a \
+                      iso_4014b \
+                      iso_4032 \
+                      iso_4033 \
+                      iso_4035 \
+                      iso_4161 \
+                      iso_4762
 
 local_release_add :=
 

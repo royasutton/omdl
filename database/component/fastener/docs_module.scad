@@ -56,8 +56,10 @@
 
   \amu_define class_subgroups
   (
+    Bolts
     Screws
     Nuts
+    Washers
   )
 
   /+ remove newline from each identifiers +/
