@@ -4,7 +4,8 @@
 
   requirements:
     scope:
-      ${scope_id}_{diagram,table}
+      ${scope_id_diagram}
+      ${scope_id_table}
 
     defines:
       ${title}
@@ -12,7 +13,8 @@
       ${image_views}
 
     optional:
-      ${scope_id}             (default = data)
+      ${scope_id_diagram}     (default = diagram)
+      ${scope_id_table}       (default = table)
 
       ${image_size}           (default = qvga)
 
@@ -30,7 +32,8 @@
 
  +/
 
-  \amu_if scope_id (-d ${scope_id}) {${scope_id}} else {data} endif
+  \amu_if scope_id_diagram (-d ${scope_id_diagram}) {${scope_id_diagram}} else {diagram} endif
+  \amu_if scope_id_table (-d ${scope_id_table}) {${scope_id_table}} else {table} endif
 
   \amu_if image_size (-d ${image_size}) {${image_size}} else {qvga} endif
 
@@ -55,14 +58,14 @@
   \amu_foreach files_png
   (
     words="${image_views}"
-    text="${OUTPUT_PREFIX}/png/${scope_root}_${scope_id}_diagram_${image_size}_\${x}.png"
+    text="${OUTPUT_PREFIX}/png/${scope_root}_${scope_id_diagram}_${image_size}_\${x}.png"
     separator=" "
   )
 
   \amu_foreach files_eps
   (
     words="${image_views}"
-    text="${OUTPUT_PREFIX}/png2eps/${scope_root}_${scope_id}_diagram_${image_size}_\${x}.eps"
+    text="${OUTPUT_PREFIX}/png2eps/${scope_root}_${scope_id_diagram}_${image_size}_\${x}.eps"
     separator=" "
   )
 
@@ -117,8 +120,8 @@
 
    +/
 
-  \amu_file th (file="${scope_root}_${scope_id}_table.log" first="${th_line}" last="${th_line}" ++rmecho ++rmnl ++read)
-  \amu_file td (file="${scope_root}_${scope_id}_table.log" first="${td_line_begin}" last="${td_line_end}" ++rmecho ++rmnl ++read)
+  \amu_file th (file="${scope_root}_${scope_id_table}.log" first="${th_line}" last="${th_line}" ++rmecho ++rmnl ++read)
+  \amu_file td (file="${scope_root}_${scope_id_table}.log" first="${td_line_begin}" last="${td_line_end}" ++rmecho ++rmnl ++read)
   \amu_word tc (tokenizer="^" words="${th}" ++count)
 
   <b>\amu_eval(${title}) table</b>
