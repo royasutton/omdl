@@ -1,4 +1,4 @@
-//! [metric/screws] Socket cap screws; ISO 4762; DIN EN ISO.
+//! [metric/screws] Socket cap screws; ISO 4762; DIN 912.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (ISO 4762)
-    \amu_define group_brief ([metric/screws] Socket cap screws; ISO 4762; DIN EN ISO.)
+    \amu_define group_brief ([metric/screws] Socket cap screws; ISO 4762; DIN 912.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
   \amu_if parent (true) {${parent}_Metric_Screws} endif
@@ -58,7 +58,7 @@
     | References:     |
     |:----------------|
     | ISO 4762        |
-    | DIN EN ISO      |
+    | DIN 912         |
     | [ISO 4762]      |
     | [fasteners.eu]  |
 
