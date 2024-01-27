@@ -70,7 +70,7 @@ dtc_fastener_metric_washers_din_125a =
 [
   ["id", "identifier"],
   ["id_max", "internal diameter"],
-  ["id_max", "internal diameter"],
+  ["id_min", "internal diameter"],
   ["od_max", "outside diameter"],
   ["od_min", "outside diameter"],
   ["t_max", "thickness"],
