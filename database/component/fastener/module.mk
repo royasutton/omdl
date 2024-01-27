@@ -21,7 +21,14 @@ local_library     :=  docs_module \
                       iso_4161 \
                       iso_4762 \
                       iso_7046_1p \
-                      iso_7046_1s
+                      iso_7046_1s \
+                      iso_7089 \
+                      iso_7091 \
+                      iso_7092 \
+                      iso_7093 \
+                      iso_7380 \
+                      iso_8677 \
+                      iso_8678
 
 local_release_add :=
 
