@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2018-2023
+  \date   2024
 
   \copyright
 
@@ -48,13 +48,13 @@
 /***************************************************************************//**
   /+
 
-    NOTE: each word of a class name or subgroup should be capitalized.
+    NOTE: each word group identifier should be capitalized.
 
   +/
 
-  /+ define fastener class subgroups +/
+  /+ define level2 groups +/
 
-  \amu_define class_subgroups
+  \amu_define groups_level2
   (
     Bolts
     Screws
@@ -62,44 +62,44 @@
     Washers
   )
 
-  /+ remove newline from each identifiers +/
+  /+ remove newlines from identifiers +/
 
-  \amu_replace class_subgroups (text="${class_subgroups}" search="\n" replace=", ")
+  \amu_replace groups_level2 (text="${groups_level2}" search="\n" replace=", ")
 
-  /+ expand subgroups and classes +/
+  /+ expand level2 groups +/
 
   \amu_define new_line
   (
   )
 
-  \amu_define class (Imperial)
-  \amu_foreach defgroup_subgroups_imperial
+  \amu_define groups_level1 (Imperial)
+  \amu_foreach defgroup_imperial
   (
-    words=${class_subgroups} separator="${new_line}"
-    text="\defgroup ${group}_${class}_\${x} \${x}"
+    words=${groups_level2} separator="${new_line}"
+    text="\defgroup ${group}_${groups_level1}_\${x} \${x}"
   )
 
-  \amu_define class (Metric)
-  \amu_foreach defgroup_subgroups_metric
+  \amu_define groups_level1 (Metric)
+  \amu_foreach defgroup_metric
   (
-    words=${class_subgroups} separator="${new_line}"
-    text="\defgroup ${group}_${class}_\${x} \${x}"
+    words=${groups_level2} separator="${new_line}"
+    text="\defgroup ${group}_${groups_level1}_\${x} \${x}"
   )
 *******************************************************************************/
 
 /***************************************************************************//**
-  /+ instantiate classes and subgroups +/
+  /+ instantiate level2 groups +/
 
   \amu_if (true)
   {
     \defgroup ${group}_Imperial   Imperial
     @{
-    ${defgroup_subgroups_imperial}
+    ${defgroup_imperial}
     @}
 
     \defgroup ${group}_Metric     Metric
     @{
-    ${defgroup_subgroups_metric}
+    ${defgroup_metric}
     @}
   }
   endif
