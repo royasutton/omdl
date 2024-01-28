@@ -56,6 +56,7 @@
 
   \amu_define groups_level1
   (
+    Utility_Pipe
   )
 
   /+ remove newlines from identifiers +/

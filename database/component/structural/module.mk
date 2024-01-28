@@ -6,7 +6,12 @@ $(eval $(call clear-local-module))
 
 local_path        :=  database/component/structural
 
-local_library     :=  docs_module
+local_library     :=  docs_module \
+                      \
+                      utility_pipe_emt \
+                      utility_pipe_rsc \
+                      utility_pipe_pvc \
+                      utility_pipe_ip
 
 local_release_add :=
 
