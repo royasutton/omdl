@@ -341,10 +341,13 @@ function polygon_elliptical_sector_p
 
   \details
 
-    When both \p h and \p l are specified, \p h has precedence. See
-    [Wikipedia] for more general information.
+    When both \p h and \p l are specified, \p h has precedence. The
+    function generates a [parallelogram] when a single decimal value is
+    assigned to \p b. See [Wikipedia] for more general information on
+    trapezoids.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Trapezoid
+  [parallelogram]: https://en.wikipedia.org/wiki/Parallelogram
 *******************************************************************************/
 function polygon_trapezoid_p
 (
