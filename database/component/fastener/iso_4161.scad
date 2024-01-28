@@ -1,4 +1,4 @@
-//! [metric/nuts] Hexagon flange nut, style 1; ISO 4161; .
+//! [metric/nuts] Hexagon flange nut, style 1; ISO 4161.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (ISO 4161)
-    \amu_define group_brief ([metric/nuts] Hexagon flange nut, style 1; ISO 4161; .)
+    \amu_define group_brief ([metric/nuts] Hexagon flange nut, style 1; ISO 4161.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
   \amu_if parent (true) {${parent}_Metric_Nuts} endif
@@ -58,7 +58,6 @@
     | References:     |
     |:----------------|
     | ISO 4161        |
-    |                 |
     | [ISO 4161]      |
     | [fasterner.eu]  |
 
