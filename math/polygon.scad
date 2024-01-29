@@ -1194,14 +1194,18 @@ function polygon_round_eve_all_p
     \amu_define title         (Motor mount plate design example)
     \amu_define image_views   (top diag)
     \amu_define image_size    (sxga)
-    \amu_define scope_id      (polygon_steps_p)
+    \amu_define scope_id      (polygon_turtle_p)
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 
     The corners of this example 2d design plate have been rounded with
-    the library function polygon_round_eve_all_p().
+    the library function polygon_round_eve_all_p(). This functions is
+    inspired by the implementation of the [Turtle graphics] geometric
+    drawing language.
+
+    [Turtle graphics]: https://en.wikipedia.org/wiki/Turtle_(robot)
 *******************************************************************************/
-function polygon_steps_p
+function polygon_turtle_p
 (
   s,
   i = origin2d,
@@ -1236,7 +1240,7 @@ function polygon_steps_p
     // check if have reached last move
     //  yes : terminate recursion
     //   no : pop current step and process remaining
-    ( len( s ) == 1 ) ? [p] : concat( [p], polygon_steps_p( tailn(s), p ) );
+    ( len( s ) == 1 ) ? [p] : concat( [p], polygon_turtle_p( tailn(s), p ) );
 
 //! @}
 
@@ -1248,7 +1252,7 @@ function polygon_steps_p
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE polygon_steps_p;
+BEGIN_SCOPE polygon_turtle_p;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
 
@@ -1271,7 +1275,7 @@ BEGIN_SCOPE polygon_steps_p;
     ];
 
     // convert the step moves into coordinates
-    pp = polygon_steps_p( sm );
+    pp = polygon_turtle_p( sm );
 
     // round all of the vertices
     rp = polygon_round_eve_all_p( pp, rr );
