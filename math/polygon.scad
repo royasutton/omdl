@@ -1145,8 +1145,163 @@ function polygon_round_eve_all_p
 
 //! @}
 
+//----------------------------------------------------------------------------//
+// interpreter
+//----------------------------------------------------------------------------//
+
+//! \name Interpreter
+//! @{
+
+//! Generate list of coordinate points from simple step move notation.
+/***************************************************************************//**
+  \param    s <datastruct-list> The list of step moves.
+  \param    i <point-2d> The initial coordinate [x, y].
+
+  \returns  <point-2d-list> The list of coordinate point list.
+
+  \details
+
+    This function is a simple interpreter that converts a list of move
+    commands into coordinate points for the construction of polygons.
+    Each move command produces a single new output point and may be
+    specified as an absolute coordinate or may be relative to the
+    previous coordinate point. The steps are specified by a list which
+    include the command along with one or two command arguments.
+
+     Move step definition:
+
+      datastruct types                  | syntax
+    :-----------------------------------|:----------------------------
+     [ <string>, <number>, (<number>)]  | [ command, arg1, (arg2) ]
+
+    The following table summarized the commands and their semantics.
+
+     command    | short | argc | arg1 | arg1 | output coordinate point
+    :-----------|:-----:|:----:|:----:|:----:|:-----------------------
+     move_xy    | mxy   | 2    | x    | y    | [x, y]
+     move_x     | mx    | 1    | x    | -    | [x, i.y]
+     move_y     | my    | 1    | y    | -    | [i.x, y]
+     delta_xy   | dxy   | 2    | x    | y    | i + [x, y]
+     delta_x    | dx    | 1    | x    | -    | i + [x, 0]
+     delta_y    | dy    | 1    | y    | -    | i + [0, y]
+     delta_xv   | dxv   | 2    | x    | a    | i + [ x, x * tan(a) ]
+     delta_yv   | dyv   | 2    | y    | a    | i + l y / tan(a), y ]
+     delta_mv   | dmv   | 2    | m    | a    | i + line(m, a)
+
+    This functions provides a convenient way to construct polygons
+    using a simple notation based on incremental steps.
+
+    \amu_define title         (Motor mount plate design example)
+    \amu_define image_views   (top diag)
+    \amu_define image_size    (sxga)
+    \amu_define scope_id      (polygon_steps_p)
+
+    \amu_include (include/amu/scope_diagrams_3d.amu)
+
+    The corners of this example 2d design plate have been rounded with
+    the library function polygon_round_eve_all_p().
+*******************************************************************************/
+function polygon_steps_p
+(
+  s,
+  i = origin2d,
+) = ! is_list( s ) ? empty_lst
+  : let
+    ( // get next step definition
+       m = first( s ),
+
+      // get move operation and arguments
+       o =  first( m ),
+      a1 = second( m ),
+      a2 =  third( m ),
+
+      // compute coordinate point for step operation
+       p = (o == "mxy" || o == "move_xy"  ) ? [a1, a2]
+
+         : (o == "mx"  || o == "move_x"   ) ? [a1, i.y]
+         : (o == "my"  || o == "move_y"   ) ? [i.x, a1]
+
+         : (o == "dxy" || o == "delta_xy" ) ? i + [a1, a2]
+
+         : (o == "dx"  || o == "delta_x"  ) ? i + [a1, 0]
+         : (o == "dy"  || o == "delta_y"  ) ? i + [0, a1]
+
+         : (o == "dxv" || o == "delta_xv" ) ? i + [a1, a1 * tan(a2)]
+         : (o == "dyv" || o == "delta_yv" ) ? i + [a1 / tan(a2), a1]
+
+         : (o == "dmv" || o == "delta_mv" ) ? line_tp( line2d_new(m=a1, a=a2, p1=i) )
+
+         : [str("ERROR at step: ", o)]
+    )
+    // check if have reached last move
+    //  yes : terminate recursion
+    //   no : pop current step and process remaining
+    ( len( s ) == 1 ) ? [p] : concat( [p], polygon_steps_p( tailn(s), p ) );
+
+//! @}
+
 //! @}
 //! @}
+
+//----------------------------------------------------------------------------//
+// openscad-amu auxiliary scripts
+//----------------------------------------------------------------------------//
+
+/*
+BEGIN_SCOPE polygon_steps_p;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+
+    $fn=36;
+
+    h1 = 7.5;   h2 = 5;     h3 = 7.5;
+    w1 = 5;     w2 = 20;    w3 = 5;
+    r1 = 5;     r2 = 1/2;   rr = 1;
+
+    sm =
+    [
+      ["delta_y",  h1],
+      ["delta_x",  w1],
+      ["delta_y",  h2],
+      ["delta_xy", w3, h3],
+      ["delta_x",  w1+w2-w3*2],
+      ["delta_xy", w3, -h3],
+      ["move_y",   0],
+      ["move_x",   0],
+    ];
+
+    // convert the step moves into coordinates
+    pp = polygon_steps_p( sm );
+
+    // round all of the vertices
+    rp = polygon_round_eve_all_p( pp, rr );
+
+    difference()
+    {
+      polygon( rp );
+
+      c = [w1+w2/2+r1/2, h1+h2/2];
+      translate(c) circle(r=r1);
+      for(x=[-1,1], y=[-1,1]) translate(c+[x,y]*r1) circle(r=r2);
+    }
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "top diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
 
 //----------------------------------------------------------------------------//
 // end of file
