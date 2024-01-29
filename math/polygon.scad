@@ -1021,6 +1021,20 @@ function polygon_round_eve_p
        9  | n-chamfer           | next edge pass return bevel
       10  | p-chamfer           | previous edge pass return bevel
 
+    The following diagrams demonstrate each rounding mode by on the
+    upper right vertex of a rectangular polygon.
+
+    \amu_define  title          (Rounding modes)
+    \amu_combine image_views    (prefix="top" "1 2 3 4 5 6 7 8 9 10")
+    \amu_define  image_size     (vga)
+    \amu_define  scope_id       (polygon_round_eve_all_p_modes)
+    \amu_define  output_scad    (false)
+    \amu_define  html_image_w   (128)
+    \amu_define  image_columns  (5)
+
+    \amu_include (include/amu/scope_diagrams_3d.amu)
+    \amu_define  html_image_w   (256)
+
     Vertex arc fragments can be specified using \p vfn. When any \p
     vnfn is \b undef, the special variables \p $fa, \p $fs, and \p $fn
     control facet generation. Each vertex is processed using 3-point
@@ -1030,17 +1044,13 @@ function polygon_round_eve_p
     polygon_arc_p "arc" segments. All arcs and chamfers use constant
     radius.
 
-    \b Example:
-    \code{.C}
-    c = [[1,1], [1,10], [10,12], [18,2]];
-    r = [1,1,5,8];
-    m = [2,3,4,3];
-    n = [3, 8, undef, undef];
+    \amu_define title           (Rounding example)
+    \amu_define image_views     (top)
+    \amu_define image_size      (sxga)
+    \amu_define scope_id        (polygon_round_eve_all_p_example)
+    \amu_define output_scad     (true)
 
-    p = polygon_round_eve_all_p(c=c, vr=r, vrm=m, vfn=n);
-
-    polygon( p );
-    \endcode
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
 function polygon_round_eve_all_p
 (
@@ -1191,10 +1201,11 @@ function polygon_round_eve_all_p
     This functions provides a convenient way to construct polygons
     using a simple notation based on incremental steps.
 
-    \amu_define title         (Motor mount plate design example)
-    \amu_define image_views   (top diag)
-    \amu_define image_size    (sxga)
-    \amu_define scope_id      (polygon_turtle_p)
+    \amu_define title           (Motor mount plate design example)
+    \amu_define image_views     (top diag)
+    \amu_define image_size      (sxga)
+    \amu_define scope_id        (polygon_turtle_p)
+    \amu_define output_scad     (true)
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 
@@ -1298,6 +1309,71 @@ BEGIN_SCOPE polygon_turtle_p;
 
     images    name "sizes" types "sxga";
     views     name "views" views "top diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
+
+/*
+BEGIN_SCOPE polygon_round_eve_all_p_modes;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+
+    $fn=36;
+
+    mode = 0;
+
+    pp = polygon_trapezoid_p(10, 7);
+    rp = polygon_round_eve_all_p( pp, 2.5, [0, 0, mode, 0] );
+
+    polygon( rp );
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "vga";
+    views     name "views" views "top";
+    defines   name "modes" define "mode" integers "0 1 2 3 4 5 6 7 8 9 10";
+
+    variables set_opts_combine "sizes views modes";
+    variables add_opts "--viewall --autocenter";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE polygon_round_eve_all_p_example;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+
+    $fn=36;
+
+    c = [[1,1], [1,10], [10,12], [18,2]];
+    r = [1, 1, 5, 8];
+    m = [2, 3, 4, 3];
+    n = [3, 8, undef, undef];
+
+    p = polygon_round_eve_all_p(c=c, vr=r, vrm=m, vfn=n);
+
+    polygon( p );
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "top";
 
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter";
