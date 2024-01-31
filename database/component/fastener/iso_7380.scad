@@ -31,7 +31,7 @@
     \amu_define group_brief ([metric/screws] Button head socket cap screws; ISO 7380; DIN EN ISO 7380-1.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
-  \amu_if parent (true) {${parent}_Metric_Screws} endif
+  \amu_text parent (${parent}_Metric_Screws)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

@@ -31,7 +31,7 @@
     \amu_define group_brief ([metric/nuts] Hexagon flange nut, style 1; ISO 4161.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
-  \amu_if parent (true) {${parent}_Metric_Nuts} endif
+  \amu_text parent (${parent}_Metric_Nuts)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

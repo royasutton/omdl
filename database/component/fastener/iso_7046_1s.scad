@@ -31,7 +31,7 @@
     \amu_define group_brief ([metric/screws] Slotted flat head machine screws; ISO 7046-1s; DIN 965.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
-  \amu_if parent (true) {${parent}_Metric_Screws} endif
+  \amu_text parent (${parent}_Metric_Screws)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

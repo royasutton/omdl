@@ -90,8 +90,8 @@
 /***************************************************************************//**
   /+ instantiate level2 groups +/
 
-  \amu_if (true)
-  {
+  \amu_text
+  (
     \defgroup ${group}_Imperial   Imperial
     @{
     ${defgroup_imperial}
@@ -101,8 +101,7 @@
     @{
     ${defgroup_metric}
     @}
-  }
-  endif
+  )
 *******************************************************************************/
 
 //! @}

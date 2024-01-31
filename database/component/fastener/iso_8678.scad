@@ -31,7 +31,7 @@
     \amu_define group_brief ([metric/bolts] Carriage bolts, short neck; ISO 8678; DIN 603.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
-  \amu_if parent (true) {${parent}_Metric_Bolts} endif
+  \amu_text parent (${parent}_Metric_Bolts)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

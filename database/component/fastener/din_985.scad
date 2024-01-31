@@ -31,7 +31,7 @@
     \amu_define group_brief ([metric/nuts] Hexagon nylon insert stop nuts, regular pattern; DIN 985; ISO 10511.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
-  \amu_if parent (true) {${parent}_Metric_Nuts} endif
+  \amu_text parent (${parent}_Metric_Nuts)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

@@ -31,7 +31,7 @@
     \amu_define group_brief ([utility_pipe] Electrical metalic conduit; emt; thin wall.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
-  \amu_if parent (true) {${parent}_Utility_Pipe} endif
+  \amu_text parent (${parent}_Utility_Pipe)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

@@ -31,7 +31,7 @@
     \amu_define group_brief ([metric/washers] Standard flat washer, small outer diameter; ISO 7092; DIN 433.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
-  \amu_if parent (true) {${parent}_Metric_Washers} endif
+  \amu_text parent (${parent}_Metric_Washers)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

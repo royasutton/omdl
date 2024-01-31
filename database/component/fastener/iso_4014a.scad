@@ -31,7 +31,7 @@
     \amu_define group_brief ([metric/bolts] Hexagon head bolt a; ISO 4014a; DIN 931.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
-  \amu_if parent (true) {${parent}_Metric_Bolts} endif
+  \amu_text parent (${parent}_Metric_Bolts)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

@@ -31,7 +31,7 @@
     \amu_define group_brief ([metric/screws] Socket cap screws; ISO 4762; DIN 912.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
-  \amu_if parent (true) {${parent}_Metric_Screws} endif
+  \amu_text parent (${parent}_Metric_Screws)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

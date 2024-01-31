@@ -31,7 +31,7 @@
     \amu_define group_brief ([metric/nuts] Hexagon jam nut; ISO 4035; DIN 439 B, CSN 021403, UNI 5589, EU 24035.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
-  \amu_if parent (true) {${parent}_Metric_Nuts} endif
+  \amu_text parent (${parent}_Metric_Nuts)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
