@@ -1033,7 +1033,8 @@ function polygon_round_eve_p
     \amu_define  image_columns  (5)
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
-    \amu_define  html_image_w   (256)
+
+    \amu_undefine               (html_image_w image_columns)
 
     Vertex arc fragments can be specified using \p vfn. When any \p
     vnfn is \b undef, the special variables \p $fa, \p $fs, and \p $fn
