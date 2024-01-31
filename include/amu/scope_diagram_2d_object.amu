@@ -45,7 +45,7 @@
   \amu_define object_ex_diagram_2d
   (
     <b>${title}</b>
-    \dontinclude ${scope_root}_${scope_id}.scad \skipline ${object}(
+    \dontinclude ${scope_root}_${scope_id}.scad \skipline ${object}\(
     \image html  ${object_stem_2d}.svg "${object}" width=${html_image_w}
     \image latex ${object_stem_2d}.svg "${object}" width=${latex_image_w}
   )
@@ -61,7 +61,7 @@
     <b>${title}</b>
     \image html  ${object_stem_2d}.svg "${object}" width=${html_image_w}
     \image latex ${object_stem_2d}.svg "${object}" width=${latex_image_w}
-    \dontinclude ${scope_root}_${scope_id}.scad \skipline ${object}(
+    \dontinclude ${scope_root}_${scope_id}.scad \skipline ${object}\(
   )
 
   /+
