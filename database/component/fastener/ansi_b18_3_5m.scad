@@ -68,7 +68,7 @@
 //! \hideinitializer
 dtc_fastener_metric_screws_ansi_b18_3_5m =
 [
-  ["id", "identifier"],
+  ["ns", "nominal size"],
   ["tp", "thread pitch"],
   ["b_max", "body diameter"],
   ["b_min", "body diameter"],

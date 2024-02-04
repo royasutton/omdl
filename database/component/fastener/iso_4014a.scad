@@ -70,7 +70,7 @@
 //! \hideinitializer
 dtc_fastener_metric_bolts_iso_4014a =
 [
-  ["id", "identifier"],
+  ["ns", "nominal size"],
   ["tp", "thread pitch"],
   ["r_1", "thread length"],
   ["r_2", "thread length"],

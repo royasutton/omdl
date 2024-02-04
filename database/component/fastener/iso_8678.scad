@@ -68,7 +68,7 @@
 //! \hideinitializer
 dtc_fastener_metric_bolts_iso_8678 =
 [
-  ["id", "identifier"],
+  ["ns", "nominal size"],
   ["tp", "thread pitch"],
   ["o_max", "square width across flats"],
   ["o_min", "square width across flats"],

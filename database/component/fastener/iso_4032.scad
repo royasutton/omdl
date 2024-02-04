@@ -68,7 +68,7 @@
 //! \hideinitializer
 dtc_fastener_metric_nuts_iso_4032 =
 [
-  ["id", "identifier"],
+  ["ns", "nominal size"],
   ["tp", "thread pitch"],
   ["f_max", "width across flats"],
   ["f_min", "width across flats"],

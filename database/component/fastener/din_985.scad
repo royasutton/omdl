@@ -68,7 +68,7 @@
 //! \hideinitializer
 dtc_fastener_metric_nuts_din_985 =
 [
-  ["id", "identifier"],
+  ["ns", "nominal size"],
   ["f_max", "width across flats"],
   ["f_min", "width across flats"],
   ["g_min", "width across corners"],

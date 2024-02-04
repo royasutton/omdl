@@ -70,7 +70,7 @@
 //! \hideinitializer
 dtc_fastener_metric_screws_iso_4762 =
 [
-  ["id", "identifier"],
+  ["ns", "nominal size"],
   ["tp", "thread pitch"],
   ["d_max", "body diameter"],
   ["d_min", "body diameter"],

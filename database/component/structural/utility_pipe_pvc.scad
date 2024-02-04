@@ -66,8 +66,8 @@
 //! \hideinitializer
 dtc_structural_utility_pipe_pvc =
 [
-  ["id", "identifier in"],
-  ["id_mm", "identifier mm"],
+  ["ns", "nominal size"],
+  ["ns_mm", "nominal size"],
   ["od_in", "outside diameter"],
   ["od_mm", "outside diameter"],
   ["t_40", "wall thickness in"],

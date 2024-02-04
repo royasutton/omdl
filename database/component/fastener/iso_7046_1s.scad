@@ -70,7 +70,7 @@
 //! \hideinitializer
 dtc_fastener_metric_screws_iso_7046_1s =
 [
-  ["id", "identifier"],
+  ["ns", "nominal size"],
   ["tp", "thread pitch"],
   ["a_max", "head diameter"],
   ["a_min", "head diameter"],
