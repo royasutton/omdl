@@ -42,11 +42,11 @@
 
   \details
 
-    \amu_copy (files="diagrams/flat_washer.svg" types="html,latex")
+    \amu_copy (files="diagrams/washer_flat.svg" types="html,latex")
     \amu_text
     (
-    \image html ${PATH_NAME}/diagrams/flat_washer.svg "parameters"
-    \image latex ${PATH_NAME}/diagrams/flat_washer.svg "parameters"
+    \image html ${PATH_NAME}/diagrams/washer_flat.svg "parameters"
+    \image latex ${PATH_NAME}/diagrams/washer_flat.svg "parameters"
     )
 
     \amu_define output_scad     (false)
