@@ -32,7 +32,7 @@ local_library     :=  docs_module \
 
 local_release_add :=
 
-local_backup_add  :=
+local_backup_add  :=  diagrams/flat_washer.svg
 
 local_submodules  :=
 

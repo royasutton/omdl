@@ -42,6 +42,13 @@
 
   \details
 
+    \amu_copy (files="diagrams/flat_washer.svg" types="html,latex")
+    \amu_text
+    (
+    \image html ${PATH_NAME}/diagrams/flat_washer.svg "parameters"
+    \image latex ${PATH_NAME}/diagrams/flat_washer.svg "parameters"
+    )
+
     \amu_define output_scad     (false)
     \amu_define output_console  (false)
 
