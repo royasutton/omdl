@@ -11,6 +11,8 @@ local_library     :=  docs_module \
                       ansi_b18_3_5m \
                       \
                       din_125a \
+                      din_982_hp \
+                      din_982_rp \
                       din_985 \
                       \
                       iso_4014a \

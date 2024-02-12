@@ -154,7 +154,7 @@
        transform="matrix(1.3333333,0,0,-1.3333333,539.16933,209.68133)" /><path
        id="path199"
        d="m 0,0 c -12.655,0 -22.914,-10.257 -22.914,-22.908 0,-12.651 10.259,-22.908 22.914,-22.908 12.655,0 22.915,10.257 22.915,22.908 C 22.915,-10.257 12.655,0 0,0 Z"
-       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:1.5;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#000000;stroke-width:0.21543307;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:1.5;stroke-dasharray:2.59118112,1.72745415;stroke-opacity:1;stroke-dashoffset:0"
        transform="matrix(1.3333333,0,0,-1.3333333,539.16933,204.94133)" /><path
        id="path201"
        d="M 0,0 V -27.538 M 0,-38.131 V -65.827"
