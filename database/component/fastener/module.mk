@@ -32,7 +32,11 @@ local_library     :=  docs_module \
 
 local_release_add :=
 
-local_backup_add  :=  diagrams/washer_flat.svg
+local_backup_add  :=  diagrams/washer_flat.svg \
+                      diagrams/nut_hex.svg \
+                      diagrams/nut_hex_flange.svg \
+                      diagrams/nut_hex_jam.svg \
+                      diagrams/nut_hex_nylon_insert_stop.svg
 
 local_submodules  :=
 
