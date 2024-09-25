@@ -16,6 +16,12 @@
       intro="Library components and modules:"
     />
 
+    <!-- type=modules changed to type=topics in doxygen 1.9.8 -->
+    <tab type="topics" visible="yes"
+      title="Library Modules"
+      intro="Library components and modules:"
+    />
+
     <tab type="files" visible="yes" title="Files">
       <tab type="filelist" visible="yes"
         title="File List"
