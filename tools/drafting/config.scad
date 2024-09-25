@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2019-2023
+  \date   2019-2024
 
   \copyright
 
@@ -42,6 +42,11 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+// global configuration variables
+//----------------------------------------------------------------------------//
+
+//! \name Globals
+//! @{
 
 //! <boolean> Extrude 2D drafted constructions to 3D.
 $draft_make_3d = false;
@@ -60,25 +65,20 @@ draft_sheet_scale = 1;
 
 //! <string> Drafting sheet size identifier.
 /***************************************************************************//**
-  \amu_scope scope_in (index=2)
-  \amu_file th_in (file="${scope_in}.log" first=1 last=1 ++rmecho ++rmnl ++read)
-  \amu_file td_in (file="${scope_in}.log" first=2 last=6 ++rmecho ++rmnl ++read)
-
-  \amu_scope scope_mm (index=3)
-  \amu_file th_mm  (file="${scope_mm}.log" first=1  last=1 ++rmecho ++rmnl ++read)
-  \amu_file td_mma (file="${scope_mm}.log" first=7  last=12 ++rmecho ++rmnl ++read)
-  \amu_file td_mmb (file="${scope_mm}.log" first=13 last=0 ++rmecho ++rmnl ++read)
-
   \details
 
-    \b ANSI sheet sizes (inches):
-    \amu_table (columns=3 column_headings=${th_in} cell_texts=${td_in})
+    <b>Sheet sizes</b>
 
-    \b ISO-A sheet sizes (millimeters):
-    \amu_table (columns=3 column_headings=${th_mm} cell_texts=${td_mma})
+    \amu_define output_scad (false)
+    \amu_define output_console (false)
 
-    \b ISO-B sheet sizes (millimeters):
-    \amu_table (columns=3 column_headings=${th_mm} cell_texts=${td_mmb})
+    \amu_define title (Available sizes in inches)
+    \amu_define scope_id (sheet_sizes_in)
+    \amu_include (include/amu/scope_table.amu)
+
+    \amu_define title (Available sizes in mm)
+    \amu_define scope_id (sheet_sizes_mm)
+    \amu_include (include/amu/scope_table.amu)
 *******************************************************************************/
 draft_sheet_size = "A";
 
@@ -88,10 +88,19 @@ draft_sheet_size = "A";
 
     Available configurations:
 
-      name        | description
-    :-------------|:--------------------------------------------------------
-      \b L84TS    | Small sheet landscape layout with 8x4 traditional zones
-      \b P48TS    | Small sheet Portrait layout with 4x8 traditional zones
+    \amu_define title (Sheet configurations)
+    \amu_define scope_id (sheet_config)
+    \amu_define output_scad (false)
+    \amu_define output_console (false)
+
+    \amu_include (include/amu/scope_table.amu)
+
+    \amu_define title (Configuration keys)
+    \amu_define scope_id (sheet_config_keys)
+    \amu_define output_scad (false)
+    \amu_define output_console (false)
+
+    \amu_include (include/amu/scope_table.amu)
 *******************************************************************************/
 draft_sheet_config = "L84TS";
 
@@ -111,39 +120,67 @@ draft_sheet_config = "L84TS";
 *******************************************************************************/
 draft_layers_show = ["all"];
 
+//! @}
+
+//! \name Getters
+//! @{
+
+//----------------------------------------------------------------------------//
+// drafting style defaults:
+//
+//  (1) configuration getter function
+//  (2) configuration map "style1"
+//  (3) user assignable style map variable
+//----------------------------------------------------------------------------//
+
 //! Get drafting configuration default helper function.
 /***************************************************************************//**
   \param    k <string> A map key.
 
-  \returns  \<value> The default value from the configuration map if it
-            exists.
-
-  \sa draft_defaults_map.
-*******************************************************************************/
-function draft_get_default
-(
-  k
-) = map_get_value(draft_defaults_map, k);
-
-//! <map> A drafting configuration defaults map (style1).
-/***************************************************************************//**
-  \amu_scope scope (index=1)
-  \amu_file mh (file="${scope}.log" first=1 last=1 ++rmecho ++rmnl ++read)
-  \amu_file md (file="${scope}.log" first=2 last=0 ++rmecho ++rmnl ++read)
+  \returns  \<value> The value associated with key \p k in the
+            configuration map assigned to \ref draft_config_map.
 
   \details
 
+    \b Example:
+
+    \verbatim
+      layers = draft_get_config("layers-dim");
+      dimll1 = draft_get_config("dim-leader-length");
+    \endverbatim
+
+  \sa draft_config_map.
+*******************************************************************************/
+function draft_get_config
+(
+  k
+) = map_get_value(draft_config_map, k);
+
+//! @}
+
+//! \name Maps
+//! @{
+
+//! <map> A drafting configuration map; style1.
+/***************************************************************************//**
+  \details
+
     Configuration values for drafting primitives and tools. Specific
-    values can be overridden as shown in \ref draft_defaults_map or
+    values can be overridden as shown in \ref draft_config_map or
     completely new maps may assembled to implement new styles as
     desired.
 
-    All lengths are in millimeters:
-    \amu_table (columns=2 column_headings=${mh} cell_texts=${md})
+    \amu_define title (style1)
+    \amu_define scope_id (dfraft_style1)
+    \amu_define output_scad (false)
+    \amu_define output_console (false)
+    \amu_define notes_table (All dimensions are in millimeters.)
+
+    \amu_include (include/amu/scope_table.amu)
 
   \hideinitializer
 *******************************************************************************/
-draft_defaults_style1_map =
+draft_config_map_style1 =
 [
   //
   // fonts
@@ -258,6 +295,11 @@ draft_defaults_style1_map =
   ["layers-dim",                        ["all", "dim"]]
 ];
 
+//! @}
+
+//! \name Globals
+//! @{
+
 //! <map> Drafting configuration defaults map.
 /***************************************************************************//**
   \details
@@ -268,22 +310,34 @@ draft_defaults_style1_map =
     \b Example:
 
     \code{.C}
-    draft_defaults_map =
+    draft_config_map =
       map_merge
       (
-        [ // define overrides first
+        [ // define value overrides first
           ["line-use-hull", false],
           ["dim-offset", length(2/64)],
           ["dim-leader-length", length(3/8)],
           ["dim-line-distance", length(3/8)],
           ["dim-line-extension-length", length(2/8)]
         ],
-          // merge with existing style
-          draft_defaults_style1_map
+          // start with existing style map
+          draft_config_map_style1
       );
     \endcode
 *******************************************************************************/
-draft_defaults_map = draft_defaults_style1_map;
+draft_config_map = draft_config_map_style1;
+
+//! @}
+
+//! \name Getters
+//! @{
+
+//----------------------------------------------------------------------------//
+// sheet size:
+//
+//  (1) configuration getter function
+//  (2) internal table definitions
+//----------------------------------------------------------------------------//
 
 //! Get sheet size value helper function.
 /***************************************************************************//**
@@ -291,8 +345,21 @@ draft_defaults_map = draft_defaults_style1_map;
 
   \returns  \<value> The value of the identified column for the
             configured sheet size set by \ref draft_sheet_size.
+
+  \details
+
+    \b Example:
+
+    \verbatim
+      std = draft_get_sheet_size(ci="std");
+
+      sdx = draft_get_sheet_size(ci="sdx") * draft_sheet_scale;
+      sdy = draft_get_sheet_size(ci="sdy") * draft_sheet_scale;
+    \endverbatim
+
+  \sa draft_sheet_size.
 *******************************************************************************/
-function draft_sheet_get_size
+function draft_get_sheet_size
 (
   ci
 ) = table_get_value
@@ -310,7 +377,10 @@ function draft_sheet_get_size
 *******************************************************************************/
 draft_sheet_size_tc =
 [
-  ["id", "sheet size"], ["sdx", "sheet x-dimension"], ["sdy", "sheet y-dimension"]
+  ["id", "sheet size"],
+  ["std", "standard"],
+  ["sdx", "sheet x-dimension"],
+  ["sdy", "sheet y-dimension"]
 ];
 
 //! \<table> sheet sizes data table rows.
@@ -321,28 +391,46 @@ draft_sheet_size_tc =
 draft_sheet_size_tr =
 [
   // ANSI
-  [ "A", length( 8.5, "in"), length(  11, "in")],
-  [ "B", length(  11, "in"), length(  17, "in")],
-  [ "C", length(  17, "in"), length(  22, "in")],
-  [ "D", length(  22, "in"), length(  34, "in")],
-  [ "E", length(  34, "in"), length(  44, "in")],
+  [ "A", "ANSI", length( 8.5, "in"), length(  11, "in")],
+  [ "B", "ANSI", length(  11, "in"), length(  17, "in")],
+  [ "C", "ANSI", length(  17, "in"), length(  22, "in")],
+  [ "D", "ANSI", length(  22, "in"), length(  34, "in")],
+  [ "E", "ANSI", length(  34, "in"), length(  44, "in")],
 
   // ISO A
-  ["A5", length( 149, "mm"), length( 210, "mm")],
-  ["A4", length( 210, "mm"), length( 297, "mm")],
-  ["A3", length( 297, "mm"), length( 420, "mm")],
-  ["A2", length( 420, "mm"), length( 594, "mm")],
-  ["A1", length( 594, "mm"), length( 841, "mm")],
-  ["A0", length( 841, "mm"), length(1189, "mm")],
+  ["A5", "ISO A", length( 149, "mm"), length( 210, "mm")],
+  ["A4", "ISO A", length( 210, "mm"), length( 297, "mm")],
+  ["A3", "ISO A", length( 297, "mm"), length( 420, "mm")],
+  ["A2", "ISO A", length( 420, "mm"), length( 594, "mm")],
+  ["A1", "ISO A", length( 594, "mm"), length( 841, "mm")],
+  ["A0", "ISO A", length( 841, "mm"), length(1189, "mm")],
 
   // ISO B
-  ["B5", length( 177, "mm"), length( 250, "mm")],
-  ["B4", length( 250, "mm"), length( 354, "mm")],
-  ["B3", length( 354, "mm"), length( 500, "mm")],
-  ["B2", length( 500, "mm"), length( 707, "mm")],
-  ["B1", length( 707, "mm"), length(1000, "mm")],
-  ["B0", length(1000, "mm"), length(1414, "mm")]
+  ["B5", "ISO B", length( 177, "mm"), length( 250, "mm")],
+  ["B4", "ISO B", length( 250, "mm"), length( 354, "mm")],
+  ["B3", "ISO B", length( 354, "mm"), length( 500, "mm")],
+  ["B2", "ISO B", length( 500, "mm"), length( 707, "mm")],
+  ["B1", "ISO B", length( 707, "mm"), length(1000, "mm")],
+  ["B0", "ISO B", length(1000, "mm"), length(1414, "mm")],
+
+  // Others
+  ["Letter",    "Other", length( 215.9, "mm"), length( 279.4, "mm")],
+  ["Legal",     "Other", length( 215.9, "mm"), length( 355.6, "mm")],
+  ["Executive", "Other", length( 190.5, "mm"), length( 254.0, "mm")],
+  ["C5E",       "Other", length( 163.0, "mm"), length( 229.0, "mm")],
+  ["Comm10",    "Other", length( 105.0, "mm"), length( 241.0, "mm")],
+  ["DLE",       "Other", length( 110.0, "mm"), length( 220.0, "mm")],
+  ["Folio",     "Other", length( 210.0, "mm"), length( 330.0, "mm")],
+  ["Ledger",    "Other", length( 432.0, "mm"), length( 279.0, "mm")],
+  ["Tabloid",   "Other", length( 279.0, "mm"), length( 432.0, "mm")]
 ];
+
+//----------------------------------------------------------------------------//
+// sheet layout configuration:
+//
+//  (1) configuration getter function
+//  (2) internal table definitions
+//----------------------------------------------------------------------------//
 
 //! Get sheet configuration value helper function.
 /***************************************************************************//**
@@ -350,8 +438,21 @@ draft_sheet_size_tr =
 
   \returns  \<value> The value of the identified column for the
             current sheet configured by \ref draft_sheet_config.
+
+  \details
+
+    \b Example:
+
+    \verbatim
+      zoy = draft_get_sheet_config(ci="zoy")
+
+      smx = draft_get_sheet_config(ci="smx") * draft_sheet_scale;
+      smy = draft_get_sheet_config(ci="smy") * draft_sheet_scale;
+    \endverbatim
+
+  \sa draft_sheet_config.
 *******************************************************************************/
-function draft_sheet_get_config
+function draft_get_sheet_config
 (
   ci
 ) = table_get_value
@@ -370,6 +471,7 @@ function draft_sheet_get_config
 draft_sheet_config_tc =
 [
   ["id",  "configuration name"],
+  ["info", "configuration description"],
 
   // sheet layout
   ["sll", "sheet landscape layout"],
@@ -402,6 +504,7 @@ draft_sheet_config_tr =
 [
   [
     "L84TS",
+    "Small sheet landscape layout with 8x4 traditional zones",
 
     true,
     length(3/4, "in"),
@@ -412,7 +515,7 @@ draft_sheet_config_tr =
     +1,
     ["A", "B", "C", "D", "E", "F", "G", "H"],
     ["1", "2", "3", "4"],
-    draft_get_default("font-sheet-zone-reference"),
+    draft_get_config("font-sheet-zone-reference"),
     5/8,
 
     [1,[4,3,2,5]],
@@ -424,6 +527,7 @@ draft_sheet_config_tr =
 
   [
     "P48TS",
+    "Small sheet Portrait layout with 4x8 traditional zones",
 
     false,
     length(1/2, "in"),
@@ -434,7 +538,7 @@ draft_sheet_config_tr =
     +1,
     ["A", "B", "C", "D"],
     ["1", "2", "3", "4", "5", "6", "7", "8"],
-    draft_get_default("font-sheet-zone-reference"),
+    draft_get_config("font-sheet-zone-reference"),
     5/8,
 
     [1,[4,3,2,5]],
@@ -445,18 +549,30 @@ draft_sheet_config_tr =
   ]
 ];
 
-//! <map> The default title block definition map.
+//! @}
+
+//----------------------------------------------------------------------------//
+// layout, style and formatting maps:
+//----------------------------------------------------------------------------//
+
+//! \name Maps
+//! @{
+
+//! <map> A title block map; style 1.
 /***************************************************************************//**
   \details
 
-    Title blocks are constructed using zoned tables. A new title block
-    layout can be constructed by defining a new zoned table map. This
-    default map may be used as a starting point example.
+    A title block is constructed using \ref draft_ztable "zoned tables".
+    A new layout can be designed by defining a new map or by merging
+    overrides to this style map. The map keys and structure depends on
+    the implementation of the \ref draft_title_block "title block"
+    rendering  operation.
 
+  \sa draft_title_block().
   \sa draft_ztable().
   \hideinitializer
 *******************************************************************************/
-draft_title_block_map =
+draft_title_block_map_style1 =
 [
   // table cell horizontal width minimum
   [ "cmh",    length(3/8, "in") ],
@@ -523,7 +639,7 @@ draft_title_block_map =
   [ "hdefs",
       [
         empty_str, [ 0, +1], [ 0, -1], [0, -1-4/10],  0,   1,
-        ["center", "center"], draft_get_default("font-title-block-heading")
+        ["center", "center"], draft_get_config("font-title-block-heading")
       ]
   ],
 
@@ -531,7 +647,7 @@ draft_title_block_map =
   [ "edefs",
       [
         empty_str, [ 0, +1], [ 0, -2-1/2], [0, -1-4/10],  0, 3/2,
-        ["center", "center"], draft_get_default("font-title-block-entry")
+        ["center", "center"], draft_get_config("font-title-block-entry")
       ]
   ],
 
@@ -566,12 +682,12 @@ draft_title_block_map =
   ]
 ];
 
-//! <map> Table format map definitions; common.
+//! <map> Table format map; common.
 /***************************************************************************//**
   \hideinitializer
   \private
 *******************************************************************************/
-draft_table_format_common_map =
+draft_table_format_map_common =
 [
   [ "cmh",  length(1/4, "in") ],
   [ "cmv",  length(1/4, "in") ],
@@ -598,82 +714,84 @@ draft_table_format_common_map =
   [ "tdefs",
       [
         empty_str, [ 0, -1], [ 0, -1/2-4/10], [0, -1-2/10], 0, 1,
-        ["center", "center"], draft_get_default("font-table-title")
+        ["center", "center"], draft_get_config("font-table-title")
       ]
   ]
 ];
 
-//! <map> Table format map definitions; centered-centered-centered justified.
+//! <map> Table format map; centered, centered, centered --justified.
 /***************************************************************************//**
   \hideinitializer
 *******************************************************************************/
-draft_table_format_ccc_map =
+draft_table_format_map_ccc =
 concat
 (
-  draft_table_format_common_map,
+  draft_table_format_map_common,
   [
     [ "hdefs",
         [
           empty_str, [ 0, -1], [ 0, -1/2-3/10], [0, -1-2/10], 0, 1,
-          ["center", "center"], draft_get_default("font-table-heading")
+          ["center", "center"], draft_get_config("font-table-heading")
         ]
     ],
     [ "edefs",
         [
           empty_str, [ 0, -1], [ 0, -1/2-4/10], [0, -1-2/10], 0, 1,
-          ["center", "center"], draft_get_default("font-table-entry")
+          ["center", "center"], draft_get_config("font-table-entry")
         ]
     ]
   ]
 );
 
-//! <map> Table format map definitions; centered-left-left justified.
+//! <map> Table format map; centered, left, left --justified.
 /***************************************************************************//**
   \hideinitializer
 *******************************************************************************/
-draft_table_format_cll_map =
+draft_table_format_map_cll =
 concat
 (
-  draft_table_format_common_map,
+  draft_table_format_map_common,
   [
     [ "hdefs",
         [
           empty_str, [-1, -1], [2/5,  -4/5], [0, -1-1/5], 0, 1,
-          ["left", "center"], draft_get_default("font-table-heading")
+          ["left", "center"], draft_get_config("font-table-heading")
         ]
     ],
     [ "edefs",
         [
           empty_str, [-1, -1], [2/5, -9/10], [0, -1-1/5], 0, 1,
-          ["left", "center"], draft_get_default("font-table-entry")
+          ["left", "center"], draft_get_config("font-table-entry")
         ]
     ]
   ]
 );
 
-//! <map> Table format map definitions; centered-right-right justified.
+//! <map> Table format map; centered, right, right --justified.
 /***************************************************************************//**
   \hideinitializer
 *******************************************************************************/
-draft_table_format_crr_map =
+draft_table_format_map_crr =
 concat
 (
-  draft_table_format_common_map,
+  draft_table_format_map_common,
   [
     [ "hdefs",
         [
           empty_str, [+1, -1], [-2/5,  -4/5], [0, -1-1/5], 0, 1,
-          ["right", "center"], draft_get_default("font-table-heading")
+          ["right", "center"], draft_get_config("font-table-heading")
         ]
     ],
     [ "edefs",
         [
           empty_str, [+1, -1], [-2/5, -9/10], [0, -1-1/5], 0, 1,
-          ["right", "center"], draft_get_default("font-table-entry")
+          ["right", "center"], draft_get_config("font-table-entry")
         ]
     ]
   ]
 );
+
+//! @}
 
 //! @}
 //! @}
@@ -683,59 +801,69 @@ concat
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE config;
-  BEGIN_SCOPE defaults;
-    BEGIN_OPENSCAD;
-      include <units/angle.scad>;
-      include <units/length.scad>;
-      include <omdl-base.scad>;
-      include <tools/drafting/draft-base.scad>;
-      length_unit_base = "mm";
+BEGIN_SCOPE dfraft_style1;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/drafting/draft-base.scad>;
+    length_unit_base = "mm";
 
-      map_write( draft_defaults_style1_map );
-    END_OPENSCAD;
+    map_write( draft_config_map_style1 );
+  END_OPENSCAD;
 
-    BEGIN_MFSCRIPT;
-      include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
-      include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
-    END_MFSCRIPT;
-  END_SCOPE;
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
 
-  BEGIN_SCOPE sheet;
-    BEGIN_SCOPE in;
-      BEGIN_OPENSCAD;
-        include <units/angle.scad>;
-        include <units/length.scad>;
-        include <omdl-base.scad>;
-        include <tools/drafting/draft-base.scad>;
-        length_unit_base = "in";
+BEGIN_SCOPE sheet_sizes;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/drafting/draft-base.scad>;
+    length_unit_base = "in";
 
-        table_write( draft_sheet_size_tr, draft_sheet_size_tc );
-      END_OPENSCAD;
+    table_write( draft_sheet_size_tr, draft_sheet_size_tc, heading_text=true );
+  END_OPENSCAD;
 
-      BEGIN_MFSCRIPT;
-        include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
-        include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
-      END_MFSCRIPT;
-    END_SCOPE;
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
 
-    BEGIN_SCOPE mm;
-      BEGIN_OPENSCAD;
-        include <units/angle.scad>;
-        include <units/length.scad>;
-        include <omdl-base.scad>;
-        include <tools/drafting/draft-base.scad>;
-        length_unit_base = "mm";
+    defines name "units" define "length_unit_base" strings "in mm";
+    variables add_opts_combine "units";
 
-        table_write( draft_sheet_size_tr, draft_sheet_size_tc );
-      END_OPENSCAD;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
 
-      BEGIN_MFSCRIPT;
-        include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
-        include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
-      END_MFSCRIPT;
-    END_SCOPE;
-  END_SCOPE;
+BEGIN_SCOPE sheet_config;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/drafting/draft-base.scad>;
+    length_unit_base = "mm";
+
+    table_write ( r=draft_sheet_config_tr, c=draft_sheet_config_tc,
+                  cs=["id", "info"], heading_text=true );
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE sheet_config_keys;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/drafting/draft-base.scad>;
+    length_unit_base = "mm";
+
+    map_write( draft_sheet_config_tc );
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
 END_SCOPE;
 */
 

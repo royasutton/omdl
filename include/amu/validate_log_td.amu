@@ -3,7 +3,9 @@
   define the validation result table data.
 
   requires:
-    definitions from one of pgid_*.
+                ${group}                (from pgid_*.)
+
+                ${tv_*}                 (from validate_log_th.amu)
 
  +/
 

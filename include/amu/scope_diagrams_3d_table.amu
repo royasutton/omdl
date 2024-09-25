@@ -1,0 +1,133 @@
+/+
+
+  output: scope scad script table of 3d diagrams and data table.
+
+  requirements:
+    scope:
+      ${scope_id_diagram}
+      ${scope_id_table}
+
+    defines:
+      ${title}
+
+      ${image_views}
+
+    optional:
+      ${scope_id_diagram}     (default = diagram)
+      ${scope_id_table}       (default = table)
+
+      ${image_size}           (default = qvga)
+
+      ${html_image_w}         (default = 256)
+      ${latex_image_w}        (default = 1.5in)
+
+      ${image_columns}        (default = 3)
+
+      $(th_line)              (default = 1)
+      $(td_line_begin)        (default = 2)
+      $(td_line_end)          (default = 0, 0=eof)
+
+      ${notes_diagrams}
+      ${notes_table}
+
+ +/
+
+  \amu_if scope_id_diagram (-d ${scope_id_diagram}) {${scope_id_diagram}} else {diagram} endif
+  \amu_if scope_id_table (-d ${scope_id_table}) {${scope_id_table}} else {table} endif
+
+  \amu_if image_size (-d ${image_size}) {${image_size}} else {qvga} endif
+
+  \amu_if html_image_w (-d ${html_image_w}) {${html_image_w}} else {256} endif
+  \amu_if latex_image_w (-d ${latex_image_w}) {${latex_image_w}} else {1.5in} endif
+
+  \amu_if image_columns (-d ${image_columns}) {${image_columns}} else {3} endif
+
+  \amu_if th_line (-d ${th_line}) {${th_line}} else {1} endif
+  \amu_if td_line_begin (-d ${td_line_begin}) {${td_line_begin}} else {2} endif
+  \amu_if td_line_end (-d ${td_line_end}) {${td_line_end}} else {0} endif
+
+  \amu_scope scope_root (++root)
+
+
+  /+
+
+    diagram table
+
+   +/
+
+  \amu_foreach files_png
+  (
+    words="${image_views}"
+    text="${OUTPUT_PREFIX}/png/${scope_root}_${scope_id_diagram}_${image_size}_\${x}.png"
+    separator=" "
+  )
+
+  \amu_foreach files_eps
+  (
+    words="${image_views}"
+    text="${OUTPUT_PREFIX}/png2eps/${scope_root}_${scope_id_diagram}_${image_size}_\${x}.eps"
+    separator=" "
+  )
+
+  \amu_foreach cell_captions
+  (
+    words="${image_views}"
+    text="\${x}"
+    separator="^"
+  )
+
+  \amu_foreach cell_titles
+  (
+    words="${image_views}"
+    text="expand \${x}"
+    separator="^"
+  )
+
+  \htmlonly
+    \amu_image_table
+      (
+        type=html
+        columns=${image_columns}
+        image_width="${html_image_w}"
+        table_caption="${title} parameters"
+        cell_files="${files_png}"
+        cell_captions="${cell_captions}"
+        cell_titles="${cell_titles}"
+        cell_urls="${files_png}"
+      )
+  \endhtmlonly
+
+  \latexonly
+    \amu_image_table
+      (
+        type=latex
+        columns=${image_columns}
+        image_width="${latex_image_w}"
+        table_caption="${title} parameters"
+        cell_files="${files_eps}"
+        cell_captions="${cell_captions}"
+      )
+  \endlatexonly
+
+  \amu_if (-d ${notes_diagrams}) {${notes_diagrams}} endif
+
+  /+
+
+    data table
+
+    assumes:  (1) first line is table headings.
+              (2) remaining lines are table data.
+
+   +/
+
+  \amu_file th (file="${scope_root}_${scope_id_table}.log" first="${th_line}" last="${th_line}" ++rmecho ++rmnl ++read)
+  \amu_file td (file="${scope_root}_${scope_id_table}.log" first="${td_line_begin}" last="${td_line_end}" ++rmecho ++rmnl ++read)
+  \amu_word tc (tokenizer="^" words="${th}" ++count)
+
+  <b>\amu_eval(${title}) table</b>
+
+  \amu_table (columns=${tc} column_headings=${th} cell_texts=${td})
+
+  \amu_if (-d ${notes_table}) {${notes_table}} endif
+
+/+ end of file  +/

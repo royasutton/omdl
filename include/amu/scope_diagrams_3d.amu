@@ -1,0 +1,148 @@
+/+
+
+  output: scope scad script table of 3d diagrams
+
+  requirements:
+    scope:
+      ${scope_id}
+
+    defines:
+      ${title}
+
+      ${image_views}
+
+    optional:
+      ${scope_id}             (default = example)
+
+      ${output_scad}          (default = true)
+      ${output_scad_last}     (default = false)
+      ${scad_begin}           (default = include)
+      ${scad_end}             (default = end_include)
+
+      ${image_size}           (default = qvga)
+
+      ${html_image_w}         (default = 256)
+      ${latex_image_w}        (default = 1.5in)
+
+      ${image_columns}        (default = 3)
+
+      ${notes_scad}
+      ${notes_diagrams}
+
+ +/
+
+  \amu_if scope_id (-d ${scope_id}) {${scope_id}} else {example} endif
+
+  \amu_if output_scad (-d ${output_scad}) {${output_scad}} else {true} endif
+  \amu_if output_scad_last (-d ${output_scad_last}) {${output_scad_last}} else {false} endif
+  \amu_if scad_begin (-d ${scad_begin}) {${scad_begin}} else {include} endif
+  \amu_if scad_end (-d ${scad_end}) {${scad_end}} else {end_include} endif
+
+  \amu_if image_size (-d ${image_size}) {${image_size}} else {qvga} endif
+
+  \amu_if html_image_w (-d ${html_image_w}) {${html_image_w}} else {256} endif
+  \amu_if latex_image_w (-d ${latex_image_w}) {${latex_image_w}} else {1.5in} endif
+
+  \amu_if image_columns (-d ${image_columns}) {${image_columns}} else {3} endif
+
+  \amu_scope scope_root (++root)
+
+
+  /+
+
+    scad script
+
+   +/
+
+  \amu_if ( "${output_scad}" == "true" && "${output_scad_last}" == "false" )
+  {
+    <b>${title} script</b>
+
+    \dontinclude ${scope_root}_${scope_id}.scad
+    \skip ${scad_begin}
+    \until ${scad_end}
+  }
+  endif
+
+  \amu_if (-d ${notes_scad} && "${output_scad_last}" == "false") {${notes_scad}} endif
+
+  /+
+
+    diagram table
+
+   +/
+
+  \amu_foreach files_png
+  (
+    words="${image_views}"
+    text="${OUTPUT_PREFIX}/png/${scope_root}_${scope_id}_${image_size}_\${x}.png"
+    separator=" "
+  )
+
+  \amu_foreach files_eps
+  (
+    words="${image_views}"
+    text="${OUTPUT_PREFIX}/png2eps/${scope_root}_${scope_id}_${image_size}_\${x}.eps"
+    separator=" "
+  )
+
+  \amu_foreach cell_captions
+  (
+    words="${image_views}"
+    text="\${x}"
+    separator="^"
+  )
+
+  \amu_foreach cell_titles
+  (
+    words="${image_views}"
+    text="expand \${x}"
+    separator="^"
+  )
+
+  \htmlonly
+    \amu_image_table
+      (
+        type=html
+        columns=${image_columns}
+        image_width="${html_image_w}"
+        table_caption="${title} diagram"
+        cell_files="${files_png}"
+        cell_captions="${cell_captions}"
+        cell_titles="${cell_titles}"
+        cell_urls="${files_png}"
+      )
+  \endhtmlonly
+  \latexonly
+    \amu_image_table
+      (
+        type=latex
+        columns=${image_columns}
+        image_width="${latex_image_w}"
+        table_caption="${title} diagram"
+        cell_files="${files_eps}"
+        cell_captions="${cell_captions}"
+      )
+  \endlatexonly
+
+  \amu_if (-d ${notes_diagrams}) {${notes_diagrams}} endif
+
+  /+
+
+    scad script (last)
+
+   +/
+
+  \amu_if ( "${output_scad}" == "true" && "${output_scad_last}" == "true" )
+  {
+    <b>${title} script</b>
+
+    \dontinclude ${scope_root}_${scope_id}.scad
+    \skip ${scad_begin}
+    \until ${scad_end}
+  }
+  endif
+
+  \amu_if (-d ${notes_scad} && "${output_scad_last}" == "true") {${notes_scad}} endif
+
+/+ end of file  +/

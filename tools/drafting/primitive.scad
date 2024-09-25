@@ -40,16 +40,34 @@
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
 
-  \amu_define auto_file_debug (false)
-  \amu_define auto_file_extensions (svg)
-  \amu_include (include/amu/auto_file_html.amu)
+  \amu_include (include/amu/scope_diagram_2d_object.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
 
+//! \name Layers
+//! @{
+
+//! Check if any identified layers are active.
+/***************************************************************************//**
+  \param    layers <string-list> The list of layer names.
+
+  \returns  <boolean> \b true if any identified layer is active as
+            indicated by \ref draft_layers_show.
+*******************************************************************************/
+function draft_layers_any_active
+(
+  layers = draft_get_config("layers-default")
+) = exists( is_list(layers) ? layers : [layers], draft_layers_show, true );
+
+//! @}
+
 //----------------------------------------------------------------------------//
-// base primitives
-//----------------------------------------------------------------------------//
+
+//! \name Placement
+//! @{
+
+//! \cond DOXYGEN_SHOULD_SKIP_THIS
 
 //! Get sheet, sheet-frame, or sheet-zone reference window or limits.
 /***************************************************************************//**
@@ -94,22 +112,22 @@ function draft_sheet_get_window
     //
 
     // sheet size
-    sdx = draft_sheet_get_size(ci="sdx") * draft_sheet_scale,
-    sdy = draft_sheet_get_size(ci="sdy") * draft_sheet_scale,
+    sdx = draft_get_sheet_size(ci="sdx") * draft_sheet_scale,
+    sdy = draft_get_sheet_size(ci="sdy") * draft_sheet_scale,
 
     // sheet layout
-    sll = draft_sheet_get_config(ci="sll"),
+    sll = draft_get_sheet_config(ci="sll"),
 
     // sheet frame and zone margins
-    smx = draft_sheet_get_config(ci="smx") * draft_sheet_scale,
-    smy = draft_sheet_get_config(ci="smy") * draft_sheet_scale,
-    szm = draft_sheet_get_config(ci="szm") * draft_sheet_scale,
+    smx = draft_get_sheet_config(ci="smx") * draft_sheet_scale,
+    smy = draft_get_sheet_config(ci="smy") * draft_sheet_scale,
+    szm = draft_get_sheet_config(ci="szm") * draft_sheet_scale,
 
     // reference zone labels
-    zox = draft_sheet_get_config(ci="zox"),
-    zoy = draft_sheet_get_config(ci="zoy"),
-    zlx = draft_sheet_get_config(ci="zlx"),
-    zly = draft_sheet_get_config(ci="zly"),
+    zox = draft_get_sheet_config(ci="zox"),
+    zoy = draft_get_sheet_config(ci="zoy"),
+    zlx = draft_get_sheet_config(ci="zlx"),
+    zly = draft_get_sheet_config(ci="zly"),
 
     // sheet layout dimensions
     ldx = sll ? sdy : sdx,
@@ -170,6 +188,8 @@ function draft_sheet_get_window
     [wx, wy]
     // window points in cw order from [xmin, ymin]
   : [[wx[0],wy[0]], [wx[0],wy[1]], [wx[1],wy[1]], [wx[1],wy[0]]];
+
+//! \endcond
 
 //! Get sheet, sheet-frame, or sheet-zone reference coordinates.
 /***************************************************************************//**
@@ -285,6 +305,13 @@ function draft_sheet_get_zone
     // point
     [cx, cy];
 
+//! @}
+
+//----------------------------------------------------------------------------//
+
+//! \name Tables
+//! @{
+
 //! Get a coordinate point for a defined draft table column and row.
 /***************************************************************************//**
   \param    ix <integer> A table column vertical line index.
@@ -300,19 +327,19 @@ function draft_sheet_get_zone
 *******************************************************************************/
 function draft_table_get_point
 (
-  ix = 0,
-  iy = 0,
+  ix,
+  iy,
   map,
   fmap
 ) =
   let
   (
     // get table format
-    cmh = map_get_firstof2_or(map, fmap, "cmh", draft_get_default("table-cmh")) * $draft_scale,
-    cmv = map_get_firstof2_or(map, fmap, "cmv", draft_get_default("table-cmv")) * $draft_scale,
+    cmh = map_get_firstof2_or(map, fmap, "cmh", draft_get_config("table-cmh")) * $draft_scale,
+    cmv = map_get_firstof2_or(map, fmap, "cmv", draft_get_config("table-cmv")) * $draft_scale,
 
-    coh = map_get_firstof2_or(map, fmap, "coh", draft_get_default("table-coh")),
-    cov = map_get_firstof2_or(map, fmap, "cov", draft_get_default("table-cov")),
+    coh = map_get_firstof2_or(map, fmap, "coh", draft_get_config("table-coh")),
+    cov = map_get_firstof2_or(map, fmap, "cov", draft_get_config("table-cov")),
 
     // get table data
     title = map_get_value(map, "title"),
@@ -321,14 +348,16 @@ function draft_table_get_point
     rows  = map_get_value(map, "rows"),
 
     // vertical line index
-    xu  = (ix <= 0) ? 0                     // left
+    xu  = is_undef(ix) ? 0                  // not specified
+        : (ix <= 0) ? 0                     // left
         : sum([for( i=[1:ix] ) cols[i-1]]), // sum column units widths
 
     yt  = defined_e_or(title, 1, 0),        // title: '0' unit default height
     yh  = defined_e_or(heads, 1, 0),        // heads: '0' unit default height
 
     // horizontal line index
-    yu  = (iy <= 0) ? 0                     // top
+    yu  = is_undef(iy) ? 0                  // not specified
+        : (iy <= 0) ? 0                     // top
         : (iy == 1) ? yt                    // title
         : (iy == 2) ? sum( [yt, yh] )       // title + heads
         : sum
@@ -374,8 +403,8 @@ function draft_table_get_point
 *******************************************************************************/
 function draft_table_get_cell
 (
-  ix = 0,
-  iy = 0,
+  ix,
+  iy,
   zp = 0,
   limits = false,
   window = false,
@@ -389,13 +418,13 @@ function draft_table_get_cell
     rows = map_get_value(map, "rows"),
 
     // vertical lines
-    lv  = (iy <= 0) ?       [0, len(cols)]      // title cell
-        : is_defined(ix) ?  [ix, ix+1]          // heading or row
-        :                   [0, len(cols)],     // table width
+    lv  = is_undef(ix) ?    [0, len(cols)]      // table width
+        : (iy <= 0) ?       [0, len(cols)]      // title cell
+        :                   [ix, ix+1],         // heading or row
 
     // horizontal lines
-    lh  = is_defined(iy) ?  [iy, iy+1]          // any row
-        :                   [0, len(rows)+2],   // table height
+    lh  = is_undef(iy) ?    [0, len(rows)+2]    // table height
+        :                   [iy, iy+1],         // any row
 
     // get cell window xy-limits [min, max]
     wl =
@@ -480,8 +509,8 @@ function draft_table_get_cell
 *******************************************************************************/
 module draft_table_text
 (
-  ix = 0,
-  iy = 0,
+  ix,
+  iy,
   text,
   size,
   dfmt,
@@ -554,8 +583,8 @@ module draft_table_text
 *******************************************************************************/
 function draft_ztable_get_point
 (
-  ix = 0,
-  iy = 0,
+  ix,
+  iy,
   map
 ) =
   let
@@ -570,8 +599,8 @@ function draft_ztable_get_point
     vlines = map_get_value(map, "vlines"),
     hlines = map_get_value(map, "hlines"),
 
-    x = sum([for( i=[0:ix] ) vlines[i][0]]) * cmh * coh,
-    y = sum([for( i=[0:iy] ) hlines[i][0]]) * cmv * cov
+    x = is_undef(ix) ? 0 : sum([for( i=[0:ix] ) vlines[i][0]]) * cmh * coh,
+    y = is_undef(iy) ? 0 : sum([for( i=[0:iy] ) hlines[i][0]]) * cmv * cov
   )
   [x, y];
 
@@ -617,14 +646,11 @@ function draft_ztable_get_zone
     // get table configuration
     zones  = map_get_value(map, "zones"),
 
-    zx  = is_defined(i) ?
-          zones[i][0]
-          // [min vline, max vline]
-        : [0, len(map_get_value(map, "vlines"))-1],
-    zy  = is_defined(i) ?
-          zones[i][1]
-          // [min hline, max hline]
-        : [0, len(map_get_value(map, "hlines"))-1],
+                        // [min vline, max vline]
+    zx  = is_undef(i) ? [0, len(map_get_value(map, "vlines"))-1] : zones[i][0],
+
+                        // [min hline, max hline]
+    zy  = is_undef(i) ? [0, len(map_get_value(map, "hlines"))-1] : zones[i][1],
 
     // get zone window xy-limits [min, max]
     wl =
@@ -749,46 +775,12 @@ module draft_ztable_text
   );
 }
 
-//! Check if any identified layers are active.
-/***************************************************************************//**
-  \param    layers <string-list> The list of layer names.
-
-  \returns  <boolean> \b true if any identified layer is active as
-            indicated by \ref draft_layers_show.
-*******************************************************************************/
-function draft_layers_any_active
-(
-  layers = draft_get_default("layers-default")
-) = exists( is_list(layers) ? layers : [layers], draft_layers_show, true );
-
-//! Extrude 2D drafted constructions to 3D if configured.
-/***************************************************************************//**
-  \details
-
-    When \ref $draft_make_3d is \b true, all children objects are
-    extruded to 3D.
-
-    | see: \ref draft_defaults_map  |
-    |:-----------------------------:|
-    | make-3d-height                |
-*******************************************************************************/
-module draft_make_3d_if_configured
-(
-)
-{
-  if ( $draft_make_3d )
-    linear_extrude
-    (
-      height=draft_get_default("make-3d-height") * $draft_scale, center=true
-    )
-    children();
-  else
-    children();
-}
+//! @}
 
 //----------------------------------------------------------------------------//
-// basic shapes
-//----------------------------------------------------------------------------//
+
+//! \name Shapes
+//! @{
 
 //! Draft a simple line from an initial to a terminal point.
 /***************************************************************************//**
@@ -800,10 +792,10 @@ module draft_make_3d_if_configured
 
     \ref $draft_line_fn sets arc fragment number for line construction.
 
-    | see: \ref draft_defaults_map  |
-    |:-----------------------------:|
-    | line-width-min                |
-    | line-use-hull                 |
+    | see: \ref draft_config_map  |
+    |:---------------------------:|
+    | line-width-min              |
+    | line-use-hull               |
 *******************************************************************************/
 module draft_line_pp
 (
@@ -813,9 +805,9 @@ module draft_line_pp
 )
 {
   $fn = $draft_line_fn;
-  p = draft_get_default("line-width-min") * w * $draft_scale;
+  p = draft_get_config("line-width-min") * w * $draft_scale;
 
-  if ( draft_get_default("line-use-hull")  )
+  if ( draft_get_config("line-use-hull")  )
   {
     // hulled end-circles
     hull() { translate(i) circle(d=p); translate(t) circle(d=p); }
@@ -862,35 +854,15 @@ module draft_line_pp
       4     | slash / cross arrowhead
       5     | circle arrowhead
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      grid = [1, 3/4] * 10;
-
-      for ( s=[1:5], f=[0:1], p=[0:2] )
-        translate( [(p+1)*first(grid) + f*3*first(grid), s*second(grid)] )
-        draft_arrow( l=x_axis2d_ul, s=[s, f, p] );
-    }
-
-    \b Result
-
-    \amu_image (caption="Arrowhead Styles" file=${auto_file_name} width=320)
+    \amu_eval ( object=draft_arrow ${object_diagram_2d} )
 
     \ref $draft_arrow_fn sets arc fragment number for arrowhead
     construction. The line segments are constructed by \ref draft_line_pp().
 
-    | see: \ref draft_defaults_map  |
-    |:-----------------------------:|
-    | arrow-line-length-min         |
-    | arrow-angle-min               |
+    | see: \ref draft_config_map  |
+    |:---------------------------:|
+    | arrow-line-length-min       |
+    | arrow-angle-min             |
 *******************************************************************************/
 module draft_arrow
 (
@@ -910,10 +882,10 @@ module draft_arrow
     s5  = defined_e_or(s, 4, 1);              // angle multiplier
 
 
-    al  = draft_get_default("arrow-line-length-min") * s4 * $draft_scale;
+    al  = draft_get_config("arrow-line-length-min") * s4 * $draft_scale;
                                               // length
 
-    ca  = draft_get_default("arrow-angle-min") * s5;
+    ca  = draft_get_config("arrow-angle-min") * s5;
                                               // cut angle
 
     alx = angle_ll(x_axis2d_uv, l, true);     // line angle
@@ -1054,32 +1026,13 @@ module draft_arrow
       3     | break width multiplier          | <decimal>           | 2
       4     | break angle                     | <decimal>           | 67.5
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      line = [[0,0], [50,0]];
-      for ( s=[1:5] )
-        translate( [0, s*5] )
-        draft_line(l=line, s=s);
-    }
-
-    \b Result
-
-    \amu_image (caption="Line Styles" file=${auto_file_name} width=320)
+    \amu_eval ( object=draft_line ${object_diagram_2d} )
 
     The line segments are constructed by \ref draft_line_pp().
 
-    | see: \ref draft_defaults_map  |
-    |:-----------------------------:|
-    | line-segment-min              |
+    | see: \ref draft_config_map  |
+    |:---------------------------:|
+    | line-segment-min            |
 *******************************************************************************/
 module draft_line
 (
@@ -1094,7 +1047,7 @@ module draft_line
 
   if ( !all_equal([s1, a1, a2], 0) )
   {
-    lsm = draft_get_default("line-segment-min") * $draft_scale;
+    lsm = draft_get_config("line-segment-min") * $draft_scale;
 
     i  = line_ip(l);
     t  = line_tp(l);
@@ -1215,24 +1168,7 @@ module draft_line
     :------:|:--------------------------------|:--------------------|:-------:
       1     | stride                          | <decimal>           | 2
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      for ( s=[1:2] )
-        draft_arc (r=50-5*s, v1=[-1,1], v2=45, cw=true, s=s);
-    }
-
-    \b Result
-
-    \amu_image (caption="Arc Styles" file=${auto_file_name} width=320)
+    \amu_eval ( object=draft_arc ${object_diagram_2d} )
 
     The line segments are constructed by \ref draft_line_pp().
 *******************************************************************************/
@@ -1286,23 +1222,7 @@ module draft_arc
 
   \details
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      draft_rectangle ([50, 30], s=[4, 3, 2, 5]);
-    }
-
-    \b Result
-
-    \amu_image (caption="Example" file=${auto_file_name} width=320)
+    \amu_eval ( object=draft_rectangle ${object_diagram_2d} )
 
     The line segments are constructed by \ref draft_line().
 *******************************************************************************/
@@ -1354,33 +1274,7 @@ module draft_rectangle
     polytope_faces2edges(). Parameter \p i allows coordinate indexes to
     be selected using several selection [schemes][specification].
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      pp = length
-      (
-        [ [+1.5 + 1/3, -1.25], [+1.5/4, 0], [+1.5 - 1/3, +1.25],
-          [-1.5 + 1/3, +1.25], [-1.5/4, 0], [-1.5 - 1/3, -1.25]
-        ], "in"
-      );
-
-      polytope_number(pp, ei=false, fi=false);
-
-      rp = polygon_vertices_round3_p(c=pp, vr=length(1/4, "in"), vrm=1, cw=false);
-      draft_polygon(rp, s=2);
-    }
-
-    \b Result
-
-    \amu_image (caption="Example" file=${auto_file_name} width=320)
+    \amu_eval ( object=draft_polygon ${object_diagram_2d} )
 
     The line segments are constructed by \ref draft_line().
 
@@ -1410,7 +1304,119 @@ module draft_polygon
 }
 
 //! @}
+
+//----------------------------------------------------------------------------//
+
+//! \name Miscellaneous
+//! @{
+
+//! Extrude 2D drafted constructions to 3D if configured.
+/***************************************************************************//**
+  \details
+
+    When \ref $draft_make_3d is \b true, all children objects are
+    extruded to 3D.
+
+    | see: \ref draft_config_map  |
+    |:---------------------------:|
+    | make-3d-height              |
+*******************************************************************************/
+module draft_make_3d_if_configured
+(
+)
+{
+  if ( $draft_make_3d )
+    linear_extrude
+    (
+      height=draft_get_config("make-3d-height") * $draft_scale, center=true
+    )
+    children();
+  else
+    children();
+}
+
 //! @}
+
+//! @}
+//! @}
+
+//----------------------------------------------------------------------------//
+// openscad-amu auxiliary scripts
+//----------------------------------------------------------------------------//
+
+/*
+BEGIN_SCOPE diagram;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/align.scad>;
+    include <tools/operation_cs.scad>;
+    include <tools/polytope.scad>;
+    include <tools/drafting/draft-base.scad>;
+
+    object = "draft_arrow";
+
+    if (object == "draft_arrow")
+    {
+      grid = [20, 10];
+
+      for ( s=[1:5], f=[0:1], p=[0:2] )
+        translate( [(p+1)*first(grid) + f*3*first(grid), s*second(grid)] )
+        draft_arrow( l=x_axis2d_ul, s=[s, f, p] );
+    }
+
+    if (object == "draft_line")
+    {
+      line = [[0,0], [100,0]];
+      for ( s=[1:5] )
+        translate( [0, s*5] )
+        draft_line(l=line, s=s);
+    }
+
+    if (object == "draft_arc")
+    {
+      for ( s=[1:2] )
+        draft_arc (r=50-5*s, v1=[-1,1], v2=45, cw=true, s=s);
+    }
+
+    if (object == "draft_rectangle")
+    {
+      draft_rectangle ([100, 30], s=[4, 3, 2, 5]);
+    }
+
+    if (object == "draft_polygon")
+    {
+      pp = length
+      (
+        [ [+1.5 + 1/3, -1.25], [+1.5/4, 0], [+1.5 - 1/3, +1.25],
+          [-1.5 + 1/3, +1.25], [-1.5/4, 0], [-1.5 - 1/3, -1.25]
+        ], "in"
+      );
+
+      polytope_number(pp, vi=true, ei=false, fi=false);
+
+      rp = polygon_round_eve_all_p(c=pp, vr=length(1/4, "in"), vrm=1, cw=false);
+      draft_polygon(rp, s=2);
+    }
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_svg}.mfs;
+
+    defines   name "objects" define "object"
+              strings "
+                draft_arrow
+                draft_line
+                draft_arc
+                draft_rectangle
+                draft_polygon
+              ";
+    variables add_opts_combine "objects";
+    variables add_opts "--viewall --autocenter";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
 
 //----------------------------------------------------------------------------//
 // end of file

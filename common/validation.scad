@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2023
+  \date   2015-2024
 
   \copyright
 
@@ -80,13 +80,9 @@ validation_skip = [number_min, number_max, number_inf];
             \p ev to the number of decimal digits specified by \p p. The
             comparison is performed by the function almost_eq().
 
-    \b Example \b 1
-
-      \dontinclude \amu_scope(index=1).scad
-      \skip include
-      \until end_include
-
-    \b Result \b 1 \include \amu_scope(index=1).log
+    \amu_define title (Validate function)
+    \amu_define scope_id (example_validate)
+    \amu_include (include/amu/scope.amu)
 *******************************************************************************/
 function validate
 (
@@ -282,13 +278,9 @@ module table_validate_start( db, verbose=false )
     See function validate() for more information on possible values for
     parameters \p t and \p p.
 
-    \b Example \b 2
-
-      \dontinclude \amu_scope(index=2).scad
-      \skip include
-      \until end_include
-
-    \b Result \b 2 \include \amu_scope(index=2).log
+    \amu_define title (Table-based validation)
+    \amu_define scope_id (example_table)
+    \amu_include (include/amu/scope.amu)
 *******************************************************************************/
 module table_validate
 (
@@ -463,13 +455,9 @@ module map_validate_start( db, verbose=false )
     See function validate() for more information on possible values for
     parameters \p t and \p p.
 
-    \b Example \b 3
-
-      \dontinclude \amu_scope(index=3).scad
-      \skip include
-      \until end_include
-
-    \b Result \b 3 \include \amu_scope(index=3).log
+    \amu_define title (Map-based validation)
+    \amu_define scope_id (example_map)
+    \amu_include (include/amu/scope.amu)
 *******************************************************************************/
 module map_validate
 (
@@ -515,7 +503,7 @@ module map_validate
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE example1;
+BEGIN_SCOPE example_validate;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <common/validation.scad>;
@@ -572,7 +560,7 @@ BEGIN_SCOPE example1;
 
   BEGIN_MFSCRIPT;
     include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 
@@ -622,7 +610,7 @@ BEGIN_SCOPE example_table;
 
   BEGIN_MFSCRIPT;
     include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 
@@ -658,7 +646,7 @@ BEGIN_SCOPE example_map;
 
   BEGIN_MFSCRIPT;
     include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

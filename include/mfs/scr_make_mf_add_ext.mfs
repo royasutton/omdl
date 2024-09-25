@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# script: Append makefile + menu(ext, src, all)
+# mf script: append existing makefile with summary, tables, targets for 'ext'
 #
 ###############################################################################
 
@@ -11,11 +11,7 @@ script \
     tables \
     targets \
     \
-    menu_ext \
-    menu_src \
-    menu_all \
-    \
-  end_makefile
+    menu_ext
 
 ###############################################################################
 # eof

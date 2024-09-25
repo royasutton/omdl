@@ -76,11 +76,11 @@
     specified, it is computed from \p f using polytope_faces2edges().
 
     \amu_define scope_id      (example_number)
-    \amu_define example_name  (Numbering)
+    \amu_define title         (Numbering example)
     \amu_define image_views   (top front diag)
     \amu_define image_size    (sxga)
 
-    \amu_include (include/amu/table_scad_diagram.amu)
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 
   [specification]: \ref dt_index
 *******************************************************************************/
@@ -102,8 +102,8 @@ module polytope_number
   fm = defined_or(f, [consts(len(c))]);
   el = is_defined(e) ? e : polytope_faces2edges(fm);
 
-  bb = polytope_limits(c, fm, d=[0:2], s=true);
-  pd = all_defined(bb) ? 3 : 2;
+  bb = polytope_limits(c=c, f=fm, s=true);
+  pd = len(bb);
 
   fs = defined_or(ts, ceil(max(bb)/50));
   fh = defined_or(th, ceil(min(bb)/100));
@@ -202,18 +202,18 @@ module polytope_number
     using polytope_faces2edges().
 
     \amu_define scope_id      (example_frame_a)
-    \amu_define example_name  (A. Framing)
+    \amu_define title         (A. Framing example)
     \amu_define image_views   (top right diag)
     \amu_define image_size    (sxga)
 
-    \amu_include (include/amu/table_scad_diagram.amu)
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 
     \amu_define scope_id      (example_frame_b)
-    \amu_define example_name  (B. Framing)
+    \amu_define title         (B. Framing example)
     \amu_define image_views   (diag)
     \amu_define image_size    (sxga)
 
-    \amu_include (include/amu/table_scad_diagram.amu)
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 
   [specification]: \ref dt_index
 *******************************************************************************/
@@ -295,11 +295,11 @@ module polytope_frame
     coordinates \p c establishes the path.
 
     \amu_define scope_id      (example_bbox)
-    \amu_define example_name  (Bounding box)
+    \amu_define title         (Bounding box example)
     \amu_define image_views   (top front diag)
     \amu_define image_size    (sxga)
 
-    \amu_include (include/amu/table_scad_diagram.amu)
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 
     \sa polytope_limits for warning about secondary shapes.
 *******************************************************************************/
@@ -310,8 +310,8 @@ module polytope_bounding_box
   a
 )
 {
-  b = polytope_limits(c=c, f=f, a=a, d=[0:2], s=false);
-  d = len([for (i=b) if (i != [undef, undef]) i]);
+  b = polytope_limits(c=c, f=f, a=a, s=false);
+  d = len(b);
 
   if (d == 3)
     translate([b[0][0], b[1][0], b[2][0]])
@@ -360,7 +360,7 @@ BEGIN_SCOPE example_number;
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 
@@ -401,7 +401,7 @@ BEGIN_SCOPE example_frame_a;
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 
@@ -446,7 +446,7 @@ BEGIN_SCOPE example_frame_b;
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 
@@ -479,7 +479,7 @@ BEGIN_SCOPE example_bbox;
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 

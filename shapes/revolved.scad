@@ -1,8 +1,8 @@
-//! Polygon shapes generated in 2D space.
+//! Select 2D shapes revolved about the z-axis.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2019
+  \date   2015-2019
 
   \copyright
 
@@ -27,9 +27,8 @@
 
   \details
 
-    \amu_define group_name  (2d Polygons)
-    \amu_define group_brief (Polygon shapes generated in 2D space.)
-    \amu_define view        (top)
+    \amu_define group_name  (Revolutions)
+    \amu_define group_brief (Select 2D shapes revolved about the z-axis.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -42,105 +41,146 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_include (include/amu/includes_required.amu)
 
-  \amu_include (include/amu/table_example_dim.amu)
+  \amu_define image_view (diag)
+
+  \amu_define group_id (${parent})
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
+
+  \amu_define group_id (${group})
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
+
+  \amu_include (include/amu/scope_diagram_3d_object.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
 
-//! An edge round with constant radius between two vectors.
+//! A rectangular cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
-  \copydetails polygon_round_p()
+  \copydoc extrude_rotate_trl()
 
-    The coordinate points are rendered using polygon(). Parameter \p cw
-    = \b true preset.
+  \copydoc rectangle_c()
 
   \details
 
-    \b Example
-    \amu_eval ( function=polygon_round ${example_dim} )
+    \amu_eval ( object=torus_rectangle_c ${object_ex_diagram_3d} )
 *******************************************************************************/
-
-module polygon_round
+module torus_rectangle_c
 (
-  m  = 1,
-  r  = 1,
-  c  = origin2d,
-  v1 = x_axis2d_uv,
-  v2 = y_axis2d_uv,
-  fn
+  r,
+  pa = 0,
+  ra = 360,
+  profile = false,
+  l,
+  m = 255,
+
+  size,
+  core,
+  t,
+  co,
+  cr = 0,
+  vr,
+  vr1,
+  vr2,
+  vrm = 0,
+  vrm1,
+  vrm2,
+  center = false
 )
 {
-  cw = true;
-
-  pp = concat
-  ( [c],
-    polygon_round_p(m=m, r=r, c=c, v1=v1, v2=v2, fn=fn, cw=cw)
+  extrude_rotate_trl( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
+  rectangle_c
+  (
+    size=size, core=core, t=t,
+    co=co, cr=cr,
+    vr=vr, vr1=vr1, vr2=vr2,
+    vrm=vrm, vrm1=vrm1, vrm2=vrm2,
+    center=center
   );
-
-  polygon( pp );
 }
 
-//! An elliptical sector.
+//! An elliptical cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
-  \copydetails polygon_elliptical_sector_p()
+  \copydoc extrude_rotate_trl()
 
-    The coordinate points are rendered using polygon(). Parameter \p cw
-    = \b true preset.
+  \copydoc ellipse_cs()
 
   \details
 
-    \b Example
-    \amu_eval ( function=polygon_elliptical_sector ${example_dim} )
+    \amu_eval ( object=torus_ellipse_cs ${object_ex_diagram_3d} )
 *******************************************************************************/
-module polygon_elliptical_sector
+module torus_ellipse_cs
 (
-  r = 1,
-  c = origin2d,
-  v1 = x_axis2d_uv,
-  v2 = x_axis2d_uv,
-  s = true,
-  fn
+  r,
+  pa = 0,
+  ra = 360,
+  profile = false,
+  l,
+  m = 255,
+
+  size,
+  core,
+  t,
+  a1 = 0,
+  a2 = 0,
+  co,
+  cr = 0
 )
 {
-  cw = true;
-
-  c = polygon_elliptical_sector_p(r=r, c=c, v1=v1, v2=v2, s=s, fn=fn, cw=cw);
-
-  polygon( c );
+  extrude_rotate_trl( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
+  ellipse_cs
+  (
+    size=size, core=core, t=t,
+    a1=a1, a2=a2,
+    co=co, cr=cr
+  );
 }
 
-//! A trapezoid with vertex rounding.
+//! A trapezoidal cross-sectional profile revolved about the z-axis.
 /***************************************************************************//**
-  \copydetails polygon_trapezoid_p()
+  \copydoc extrude_rotate_trl()
 
-    The coordinate points are rendered using polygon(). Parameter \p cw
-    = \b true preset.
+  \copydoc pg_trapezoid()
 
-  \param    centroid <boolean> Center polygon centroid at origin.
+  \param    sl <decimal> The left side leg length of the trapezoid
+            polygon \p l.
 
   \details
 
-    \b Example
-    \amu_eval ( function=polygon_trapezoid ${example_dim} )
+    \amu_eval ( object=torus_pg_trapezoid ${object_ex_diagram_3d} )
+
+  \todo Use generic rounded trapezoid function for profile.
 *******************************************************************************/
-module polygon_trapezoid
+module torus_pg_trapezoid
 (
+  r,
+  pa = 0,
+  ra = 360,
+  profile = false,
+  l,
+  m = 255,
+
   b = 1,
   h,
-  l = 1,
+  sl = 1,
   a = 90,
-  vr = 0,
+  vr,
   vrm = 1,
   vfn,
-  centroid = false
+  center = false
 )
 {
-  cw = true;
-
-  c = polygon_trapezoid_p(b=b, h=h, l=l, a=a, vr=vr, vrm=vrm, vfn=vfn, cw=cw);
-
-  translate ( (centroid==true) ? -polygon_centroid(c) : origin2d )
-  polygon( c );
+  extrude_rotate_trl( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
+  pg_trapezoid
+  (
+    b=b,
+    h=h,
+    l=sl,
+    a=a,
+    vr=vr,
+    vrm=vrm,
+    vfn=vfn,
+    center=center
+  );
 }
 
 //! @}
@@ -151,55 +191,36 @@ module polygon_trapezoid
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE dim;
+BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <shapes/revolved.scad>;
 
-    shape = "polygon_round";
+    shape = "torus_rectangle_c";
     $fn = 36;
 
-    if (shape == "polygon_round")
-      polygon_round( r=20, v1=[1,1], v2=135 );
-    else if (shape == "polygon_elliptical_sector")
-      polygon_elliptical_sector( r=[20, 15], v1=115, v2=-115 );
-    else if (shape == "polygon_trapezoid")
-      polygon_trapezoid( b=[20,20], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
+    if (shape == "torus_rectangle_c")
+      torus_rectangle_c( size=[40,20], core=[35,20], r=40, l=[90,60], co=[0,2.5], vr=4, vrm=15, m=63, center=true );
+    else if (shape == "torus_ellipse_cs")
+      torus_ellipse_cs( size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
+    else if (shape == "torus_pg_trapezoid")
+      torus_pg_trapezoid( b=[20,30], sl=30, a=45, vr=[5,5,5,5], vrm=[3,2,1,4], r=40, l=[90,60], m=63, center=true );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
     include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
 
-    views     name "views" views "top";
+    views     name "views" views "diag";
     defines   name "shapes" define "shape"
               strings "
-                polygon_round
-                polygon_elliptical_sector
-                polygon_trapezoid
+                torus_rectangle_c
+                torus_ellipse_cs
+                torus_pg_trapezoid
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
-  END_MFSCRIPT;
-END_SCOPE;
-
-BEGIN_SCOPE manifest;
-  BEGIN_OPENSCAD;
-    include <omdl-base.scad>;
-
-    $fn = 36;
-
-    repeat_grid( g=5, i=60, center=true )
-    {
-      polygon_round( r=20, v1=[1,1], v2=135 );
-      polygon_elliptical_sector( r=[20, 15], v1=115, v2=-115 );
-      polygon_trapezoid( b=[20,20], l=25, a=45, vr=[25,10,3,5], vrm=[4,1,1,4] );
-    }
-  END_OPENSCAD;
-
-  BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {var_init,var_gen_svg}.mfs;
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

@@ -41,13 +41,14 @@
 
   \details
 
-    \amu_define data_name     (Button cell batteries)
-    \amu_define image_views   (top right diag)
-    \amu_define image_size    (sxga)
-    \amu_define diagram_notes (See Wikipedia battery [sizes] for information.)
-    \amu_define data_notes    (Identifier names are based on [IEC] standards.)
+    \amu_define title           (Button cell batteries)
+    \amu_define image_views     (top right diag)
+    \amu_define image_size      (sxga)
+    \amu_define notes_diagrams  (See Wikipedia battery [sizes] for information.)
+    \amu_define notes_table     (Identifier names are based on [IEC] standards.
+                                 Measurements in millimeters.)
 
-    \amu_include (include/amu/table_diagram_data.amu)
+    \amu_include (include/amu/scope_diagrams_3d_table.amu)
 
   [sizes]: https://en.wikipedia.org/wiki/List_of_battery_sizes
   [IEC]: https://en.wikipedia.org/wiki/International_Electrotechnical_Commission
@@ -64,37 +65,37 @@ dtc_battery_button =
   ["h", "battery height"]
 ];
 
-//! \<table> Button cell batteries data table (all values in millimeters).
+//! \<table> Button cell batteries data table rows.
 //! \hideinitializer
 dtr_battery_button =
 [
-  ["CR927", 9.5, 2.7],
-  ["CR1025", 10, 2.5],
-  ["CR1130", 11.5, 3.0],
-  ["CR1216", 12.5, 1.6],
-  ["CR1220", 12.5, 2.0],
-  ["CR1225", 12.5, 2.5],
-  ["CR1616", 16, 1.6],
-  ["CR1620", 16, 2.0],
-  ["CR1632", 16, 3.2],
-  ["CR2012", 20, 1.2],
-  ["CR2016", 20, 1.6],
-  ["CR2020", 20, 2],
-  ["CR2025", 20, 2.5],
-  ["CR2032", 20, 3.2],
-  ["CR2040", 20, 4.0],
-  ["CR2050", 20, 5.0],
-  ["CR2320", 23, 2],
-  ["CR2325", 23, 2.5],
-  ["CR2330", 23, 3.0],
-  ["BR2335", 23, 3.5],
-  ["CR2354", 23, 5.4],
-  ["CR2412", 24.5, 1.2],
-  ["CR2430", 24.5, 3.0],
-  ["CR2450", 24.5, 5.0],
-  ["CR2477", 24.5, 7.7],
-  ["CR3032", 30.0, 3.2],
-  ["CR11108", 11.6, 10.8]
+  ["CR927",   l_mm( 9.5), l_mm( 2.7)],
+  ["CR1025",  l_mm(10  ), l_mm( 2.5)],
+  ["CR1130",  l_mm(11.5), l_mm( 3.0)],
+  ["CR1216",  l_mm(12.5), l_mm( 1.6)],
+  ["CR1220",  l_mm(12.5), l_mm( 2.0)],
+  ["CR1225",  l_mm(12.5), l_mm( 2.5)],
+  ["CR1616",  l_mm(16  ), l_mm( 1.6)],
+  ["CR1620",  l_mm(16  ), l_mm( 2.0)],
+  ["CR1632",  l_mm(16  ), l_mm( 3.2)],
+  ["CR2012",  l_mm(20  ), l_mm( 1.2)],
+  ["CR2016",  l_mm(20  ), l_mm( 1.6)],
+  ["CR2020",  l_mm(20  ), l_mm( 2  )],
+  ["CR2025",  l_mm(20  ), l_mm( 2.5)],
+  ["CR2032",  l_mm(20  ), l_mm( 3.2)],
+  ["CR2040",  l_mm(20  ), l_mm( 4.0)],
+  ["CR2050",  l_mm(20  ), l_mm( 5.0)],
+  ["CR2320",  l_mm(23  ), l_mm( 2  )],
+  ["CR2325",  l_mm(23  ), l_mm( 2.5)],
+  ["CR2330",  l_mm(23  ), l_mm( 3.0)],
+  ["BR2335",  l_mm(23  ), l_mm( 3.5)],
+  ["CR2354",  l_mm(23  ), l_mm( 5.4)],
+  ["CR2412",  l_mm(24.5), l_mm( 1.2)],
+  ["CR2430",  l_mm(24.5), l_mm( 3.0)],
+  ["CR2450",  l_mm(24.5), l_mm( 5.0)],
+  ["CR2477",  l_mm(24.5), l_mm( 7.7)],
+  ["CR3032",  l_mm(30.0), l_mm( 3.2)],
+  ["CR11108", l_mm(11.6), l_mm(10.8)]
 ];
 
 //! @}
@@ -108,13 +109,9 @@ dtr_battery_button =
 BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-
-    include <units/length.scad>;
-    include <units/angle.scad>;
     include <tools/align.scad>;
     include <tools/operation_cs.scad>;
     include <tools/drafting/draft-base.scad>;
-
     include <database/component/battery/cylindrical.scad>;
 
     $fn=36;
@@ -127,14 +124,11 @@ BEGIN_SCOPE diagram;
     translate([0,0,h-ht])
     cylinder(d=dt, h=ht);
 
-    __mfs__top = false;
-    __mfs__right = false;
-
-    if ( __mfs__top )
+    if ( !is_undef(__mfs__top) )
       color("black")
       draft_dim_line(p1=[-d/2,0], p2=[+d/2,0], d=d*6/10, e=d*4/10, es=2, t="d");
 
-    if ( __mfs__right )
+    if ( !is_undef(__mfs__right) )
       color("black")
       translate([0, d/2, h/2]) rotate([0,90])
       draft_dim_line(p1=[-h/2,0], p2=[+h/2,0], d=d*3/10, e=h*4/10, es=2, t="h");
@@ -150,7 +144,7 @@ BEGIN_SCOPE diagram;
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 
@@ -171,7 +165,7 @@ BEGIN_SCOPE table;
 
   BEGIN_MFSCRIPT;
     include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2023
+  \date   2015-2024
 
   \copyright
 
@@ -56,15 +56,27 @@
      d         | degree                 | decimal         |
      dms       | degree, minute, second | decimal-list-3  |
 
-    \b Example
 
-      \dontinclude \amu_scope(index=1).scad
-      \skip include
-      \until to="dms");
+    \amu_define title (Angle base unit example)
+    \amu_define scope_id (example)
+    \amu_define output_scad (true)
+    \amu_define output_console (false)
+    \amu_include (include/amu/scope.amu)
 
-    \b Result (angle_unit_base = \b r):   \include \amu_scope(index=1)_r.log
-    \b Result (angle_unit_base = \b d):   \include \amu_scope(index=1)_d.log
-    \b Result (angle_unit_base = \b dms): \include \amu_scope(index=1)_dms.log
+    \amu_define output_scad (false)
+    \amu_define output_console (true)
+
+    \amu_define title (angle_unit_base=r)
+    \amu_define scope_id (example_r)
+    \amu_include (include/amu/scope.amu)
+
+    \amu_define title (angle_unit_base=d)
+    \amu_define scope_id (example_d)
+    \amu_include (include/amu/scope.amu)
+
+    \amu_define title (angle_unit_base=dms)
+    \amu_define scope_id (example_dms)
+    \amu_include (include/amu/scope.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -165,6 +177,31 @@ function angle_inv
 ) = (from == to) ? a
   : angle_unit_d2( angle_unit_2d( a, from ), to );
 
+//----------------------------------------------------------------------------//
+// shorthand conversions
+//----------------------------------------------------------------------------//
+
+//! \name Shorts
+//! @{
+
+//! Shorthand angle conversion for degrees.
+/***************************************************************************//**
+  \param    a <decimal> The angle to convert.
+
+  \returns  <decimal> The conversion result.
+*******************************************************************************/
+function a_deg(a) = angle(a=a, from="d");
+
+//! Shorthand angle conversion for radians.
+/***************************************************************************//**
+  \param    a <decimal> The angle to convert.
+
+  \returns  <decimal> The conversion result.
+*******************************************************************************/
+function a_rad(a) = angle(a=a, from="r");
+
+//! @}
+
 //! @}
 //! @}
 
@@ -176,7 +213,6 @@ function angle_inv
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <units/angle.scad>;
 
     angle_unit_base = "d";
     angle_unit_default = "r";
@@ -195,8 +231,11 @@ BEGIN_SCOPE example;
     c5 = angle([30, 15, 50], from="dms", to="r");
     c6 = angle(0.528205, to="dms");
 
+    // end_include
+
     echo( bu=bu );
     echo( du=du );
+    echo( );
     echo( c1=c1 );
     echo( c2=c2 );
     echo( c3=c3 );
@@ -211,7 +250,7 @@ BEGIN_SCOPE example;
     defines   name "units" define "angle_unit_base" strings "r d dms";
     variables add_opts_combine "units";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

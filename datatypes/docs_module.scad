@@ -51,8 +51,9 @@
 /***************************************************************************//**
   \amu_include (include/amu/group_start.amu)
 
-    See \ref dt for nomenclature, assumptions, and conventions used to
-    specify values and data types throughout the library.
+    See \ref dt_base, \ref dt_index, and \ref dt_euclidean for
+    nomenclature, assumptions, and conventions used to specify values
+    and data types throughout the library.
 
   @}
 *******************************************************************************/

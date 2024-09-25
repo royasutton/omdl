@@ -3,7 +3,7 @@
   define a group.
 
   requires:
-    definitions from one of pgid_*.
+                ${group*}               (from pgid_*.)
 
  +/
 

@@ -464,7 +464,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page bv Build versions
+  \page bi Build information
 
   \amu_file bi_general (file="${DOXYGEN_OUTPUT}buildinfo/general.amu" ++read)
   \amu_table
@@ -501,7 +501,7 @@
 *******************************************************************************/
 
 /***************************************************************************//**
-  \page Copyright Copyright Notice
+  \page Copyright Copyright notice
 
   \verbatim
   \amu_include (gnu-lgpl-v2.1.txt)

@@ -6,7 +6,7 @@
 #
 ################################################################################
 
-AMU_TOOL_VERSION                  := v3.2
+AMU_TOOL_VERSION                  := v3.4
 
 AMU_TOOL_PREFIX                   := /usr/local/bin/
 AMU_LIB_PATH                      := /usr/local/share/openscad-amu/$(AMU_TOOL_VERSION)
@@ -130,9 +130,6 @@ modules_exclude                   := database/material
 # Excluded Scopes:
 # to exclude nothing from the command line, use: $ make scopes_exclude="" all
 # or set 'ignore_scopes_exclude := $(true)' above
-
-# exclude shape manifests; required only when doing a library "release."
-scopes_exclude                    := manifest
 
 # exclude database tests and statitics
 scopes_exclude                    += db_autotest \

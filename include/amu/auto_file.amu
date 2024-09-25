@@ -3,6 +3,9 @@
   generate an incrementing file name for the current input. the auto
   file global variable should be incremented before use.
 
+  requires:
+    none.
+
     example use:
 
     \amu_define auto_file_debug (true)
@@ -16,9 +19,6 @@
     \verbatim
       file name = [\amu_eval(${auto_file_name})]
     \endverbatim
-
-  requires:
-    none.
 
  +/
 

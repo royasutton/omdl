@@ -10,7 +10,8 @@ local_library     :=  docs_module \
                       \
                       linear_algebra \
                       \
-                      polygon_shapes \
+                      polygon \
+                      polyhedron \
                       polytope \
                       \
                       triangle \

@@ -60,7 +60,8 @@ include <datatypes/table.scad>;
 include <math/triangle.scad>;
 include <math/linear_algebra.scad>;
 
-include <math/polygon_shapes.scad>;
+include <math/polygon.scad>;
+include <math/polyhedron.scad>;
 include <math/polytope.scad>;
 
 include <math/utility.scad>;
@@ -69,9 +70,8 @@ include <math/utility.scad>;
 // shapes
 //----------------------------------------------------------------------------//
 include <shapes/basic_2d.scad>;
-include <shapes/polygon_2d.scad>;
-
 include <shapes/basic_3d.scad>;
+include <shapes/polygon.scad>;
 
 //----------------------------------------------------------------------------//
 // tools
@@ -82,6 +82,8 @@ include <tools/repeat.scad>;
 //----------------------------------------------------------------------------//
 // units
 //----------------------------------------------------------------------------//
+include <units/angle.scad>;
+include <units/length.scad>;
 
 //----------------------------------------------------------------------------//
 // end of file

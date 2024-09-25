@@ -1,4 +1,4 @@
-//! Basic 3D derivative shapes.
+//! Basic 3D shapes.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,9 +27,8 @@
 
   \details
 
-    \amu_define group_name  (3d Shapes)
-    \amu_define group_brief (Basic 3D derivative shapes.)
-    \amu_define view        (diag)
+    \amu_define group_name  (Basic 3d)
+    \amu_define group_brief (Basic 3D shapes.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -42,7 +41,15 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_include (include/amu/includes_required.amu)
 
-  \amu_include (include/amu/table_example_dim.amu)
+  \amu_define image_view (diag)
+
+  \amu_define group_id (${parent})
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
+
+  \amu_define group_id (${group})
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
+
+  \amu_include (include/amu/scope_diagram_3d_object.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -60,8 +67,7 @@
 
   \details
 
-    \b Example
-    \amu_eval ( function=cone ${example_dim} )
+    \amu_eval ( object=cone ${object_ex_diagram_3d} )
 *******************************************************************************/
 module cone
 (
@@ -92,7 +98,7 @@ module cone
     translate([-cr, 0])
     difference()
     {
-      triangle_ls_c( vs=[cr*2, hl, hl], vr=[br, br, pr] );
+      polygon (polygon_round_eve_all_p(triangle2d_sss2ppp([hl, cr*2, hl]), vr=[br, br, pr]));
       square( size=[cr,h], center=false );
     }
   }
@@ -113,8 +119,7 @@ module cone
 
   \details
 
-    \b Example
-    \amu_eval ( function=cuboid ${example_dim} )
+    \amu_eval ( object=cuboid ${object_ex_diagram_3d} )
 
     | vrm | B1  | B0  | Description                                 |
     |:---:|:---:|:---:|:--------------------------------------------|
@@ -212,8 +217,7 @@ module cuboid
 
   \details
 
-    \b Example
-    \amu_eval ( function=ellipsoid ${example_dim} )
+    \amu_eval ( object=ellipsoid ${object_ex_diagram_3d} )
 *******************************************************************************/
 module ellipsoid
 (
@@ -244,8 +248,7 @@ module ellipsoid
 
   \details
 
-    \b Example
-    \amu_eval ( function=ellipsoid_s ${example_dim} )
+    \amu_eval ( object=ellipsoid_s ${object_ex_diagram_3d} )
 *******************************************************************************/
 module ellipsoid_s
 (
@@ -300,8 +303,7 @@ module ellipsoid_s
 
   \details
 
-    \b Example
-    \amu_eval ( function=pyramid_t ${example_dim} )
+    \amu_eval ( object=pyramid_t ${object_ex_diagram_3d} )
 *******************************************************************************/
 module pyramid_t
 (
@@ -341,8 +343,7 @@ module pyramid_t
 
   \details
 
-    \b Example
-    \amu_eval ( function=pyramid_q ${example_dim} )
+    \amu_eval ( object=pyramid_q ${object_ex_diagram_3d} )
 *******************************************************************************/
 module pyramid_q
 (
@@ -387,8 +388,7 @@ module pyramid_q
 
   \details
 
-    \b Example
-    \amu_eval ( function=star3d ${example_dim} )
+    \amu_eval ( object=star3d ${object_ex_diagram_3d} )
 *******************************************************************************/
 module star3d
 (
@@ -433,7 +433,7 @@ module star3d
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE dim;
+BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
 
@@ -473,31 +473,7 @@ BEGIN_SCOPE dim;
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
-  END_MFSCRIPT;
-END_SCOPE;
-
-BEGIN_SCOPE manifest;
-  BEGIN_OPENSCAD;
-    include <omdl-base.scad>;
-
-    $fn = 36;
-
-    repeat_grid( g=4, i=60, center=true )
-    {
-      translate([0,0,-12.5]) cone( h=25, r=15, vr=2 );
-      cuboid( size=[25,40,20], vr=5, center=true );
-      ellipsoid( size=[40,25] );
-      ellipsoid_s( size=[60,15], a1=0, a2=270 );
-      pyramid_t( size=15, center=true );
-      pyramid_q( size=[35,40,25], center=true );
-      star3d( size=40, n=5, half=false );
-    }
-  END_OPENSCAD;
-
-  BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {var_init,var_gen_stl}.mfs;
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

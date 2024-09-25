@@ -1,6 +1,6 @@
 ###############################################################################
 #
-# script: New makefile + menu(ext)
+# mf script: create complete makefile targets for 'ext'
 #
 ###############################################################################
 
@@ -13,7 +13,7 @@ script \
     tables \
     targets \
     \
-    menu_ext \
+    menu \
     \
   end_makefile
 

@@ -1,0 +1,99 @@
+/+
+
+  output: scope scad script data table.
+
+  requirements:
+    scope:
+      ${scope_id}
+
+    defines:
+      ${title}
+
+    optional:
+      ${scope_id}             (default = table)
+
+      ${output_scad}          (default = true)
+      ${scad_begin}           (default = include)
+      ${scad_end}             (default = end_include)
+
+      ${output_console}       (default = true)
+
+      $(th_line)              (default = 1)
+      $(td_line_begin)        (default = 2)
+      $(td_line_end)          (default = 0, 0=eof)
+
+      ${notes_scad}
+      ${notes_console}
+      ${notes_table}
+
+ +/
+
+  \amu_if scope_id (-d ${scope_id}) {${scope_id}} else {table} endif
+
+  \amu_if output_scad (-d ${output_scad}) {${output_scad}} else {true} endif
+  \amu_if scad_begin (-d ${scad_begin}) {${scad_begin}} else {include} endif
+  \amu_if scad_end (-d ${scad_end}) {${scad_end}} else {end_include} endif
+
+  \amu_if output_console (-d ${output_console}) {${output_console}} else {true} endif
+
+  \amu_if th_line (-d ${th_line}) {${th_line}} else {1} endif
+  \amu_if td_line_begin (-d ${td_line_begin}) {${td_line_begin}} else {2} endif
+  \amu_if td_line_end (-d ${td_line_end}) {${td_line_end}} else {0} endif
+
+  \amu_scope scope_root (++root)
+
+
+  /+
+
+    scad script
+
+   +/
+
+  \amu_if ( "${output_scad}" == "true" )
+  {
+    <b>${title} script</b>
+
+    \dontinclude ${scope_root}_${scope_id}.scad
+    \skip ${scad_begin}
+    \until ${scad_end}
+  }
+  endif
+
+  \amu_if (-d ${notes_scad}) {${notes_scad}} endif
+
+  /+
+
+    scad script console output
+
+   +/
+
+  \amu_if ( "${output_console}" == "true" )
+  {
+    <b>${title} script output</b>
+
+    \include ${scope_root}_${scope_id}.log
+  }
+  endif
+
+  \amu_if (-d ${notes_console}) {${notes_console}} endif
+
+  /+
+
+    data table
+
+    assumes:  (1) first line is table headings.
+              (2) remaining lines are table data.
+
+   +/
+
+  \amu_file th (file="${scope_root}_${scope_id}.log" first="${th_line}" last="${th_line}" ++rmecho ++rmnl ++read)
+  \amu_file td (file="${scope_root}_${scope_id}.log" first="${td_line_begin}" last="${td_line_end}" ++rmecho ++rmnl ++read)
+  \amu_word tc (tokenizer="^" words="${th}" ++count)
+
+  <b>\amu_eval(${title}) table</b>
+
+  \amu_table (columns=${tc} column_headings=${th} cell_texts=${td})
+
+  \amu_if (-d ${notes_table}) {${notes_table}} endif
+
+/+ end of file  +/

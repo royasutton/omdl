@@ -29,7 +29,6 @@
 
     \amu_define group_name  (Repeat)
     \amu_define group_brief (Shape repetition tools.)
-    \amu_define view        (diag)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -42,7 +41,15 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_include (include/amu/includes_required.amu)
 
-  \amu_include (include/amu/table_example_dim.amu)
+  \amu_define image_view (diag)
+
+  \amu_define group_id (${parent})
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
+
+  \amu_define group_id (${group})
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
+
+  \amu_include (include/amu/scope_diagram_3d_object.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -57,8 +64,7 @@
 
   \details
 
-    \b Example
-    \amu_eval ( function=repeat_radial ${example_dim} )
+    \amu_eval ( object=repeat_radial ${object_ex_diagram_3d} )
 *******************************************************************************/
 module repeat_radial
 (
@@ -89,8 +95,7 @@ module repeat_radial
 
   \details
 
-    \b Example
-    \amu_eval ( function=repeat_grid ${example_dim} )
+    \amu_eval ( object=repeat_grid ${object_ex_diagram_3d} )
 *******************************************************************************/
 module repeat_grid
 (
@@ -175,7 +180,7 @@ module repeat_grid
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE dim;
+BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
 
@@ -200,7 +205,7 @@ BEGIN_SCOPE dim;
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

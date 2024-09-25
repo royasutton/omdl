@@ -14,7 +14,7 @@ local_library     :=  docs_module \
                       polytope \
                       repeat
 
-local_release_add :=  stl/edge_manifest.stl
+local_release_add :=
 
 local_backup_add  :=
 

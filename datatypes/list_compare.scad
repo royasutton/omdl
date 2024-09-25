@@ -388,7 +388,7 @@ BEGIN_SCOPE validate;
 
   BEGIN_MFSCRIPT;
     include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

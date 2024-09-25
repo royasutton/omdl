@@ -70,25 +70,25 @@
         stem=archimedean scope=db_dim size=qvga view=diag
       )
 
-    \amu_define  image_stem (${stem}_${scope}_${size}_${view}_${shape})
-    \amu_make     png_files (append=db_dim extension=png)
-    \amu_make     stl_files (append=db_dim extension=stl)
-    \amu_word      file_cnt (words="${png_files}" ++count)
-    \amu_seq       cell_num (prefix="(" suffix=")" last="${file_cnt}" ++number)
-    \amu_eval       iprefix (shape="" ${image_stem})
-    \amu_filename  cell_txt (files="${png_files}" separator="^" ++stem)
-    \amu_replace    cell_id (text="${cell_txt}" search="${iprefix}" replace="id: ")
-    \amu_replace   cell_end (text="${cell_txt}" search="${iprefix}")
+    \amu_define object_stem (${stem}_${scope}_${size}_${view}_${shape})
+    \amu_make     files_png (append=db_dim extension=png)
+    \amu_make     files_stl (append=db_dim extension=stl)
+    \amu_word     files_cnt (words="${files_png}" ++count)
+    \amu_seq       cell_num (prefix="(" suffix=")" last="${files_cnt}" ++number)
+    \amu_eval object_prefix (shape="" ${object_stem})
+    \amu_filename  cell_txt (files="${files_png}" separator="^" ++stem)
+    \amu_replace    cell_id (text="${cell_txt}" search="${object_prefix}" replace="id: ")
+    \amu_replace   cell_end (text="${cell_txt}" search="${object_prefix}")
     \amu_replace   cell_end (text="${cell_end}" search="_" replace="<br>")
     \amu_combine   cell_end (p="<center>" s="</center>" j="" f="^" t="^" ${cell_end})
 
     \htmlonly
       \amu_image_table
         (
-          type=html columns=4 image_width="200" cell_files="${png_files}"
+          type=html columns=4 image_width="200" cell_files="${files_png}"
           table_caption="${title}" cell_captions="${cell_num}"
           cell_titles="${cell_id}" cell_end="${cell_end}"
-          cell_urls="${stl_files}"
+          cell_urls="${files_stl}"
         )
     \endhtmlonly
 
@@ -2962,7 +2962,7 @@ BEGIN_SCOPE autostat;
 
   BEGIN_MFSCRIPT;
     include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 END_SCOPE;
@@ -3036,13 +3036,15 @@ BEGIN_SCOPE dim;
     variables add_opts_combine "views ids";
     variables add_opts "-D config=0 --viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" scr_new_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf_begin.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf_add_ext.mfs;
 
     include --path "${INCLUDE_PATH}" var_gen_stl.mfs;
     variables add_opts_combine "ids";
     variables add_opts "-D config=1";
 
-    include --path "${INCLUDE_PATH}" scr_app_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf_add_ext.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf_end.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 END_SCOPE;

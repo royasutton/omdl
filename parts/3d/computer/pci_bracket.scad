@@ -132,12 +132,12 @@
     |           | 6         | connectors window center
     |           | 7         | connectors window top
 
-    \amu_define example_name  (PCI bracket)
+    \amu_define title         (PCI bracket example)
     \amu_define image_views   (left right back diag)
     \amu_define image_size    (sxga)
     \amu_define image_columns (4)
 
-    \amu_include (include/amu/table_scad_diagram.amu)
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
 module pci_bracket
 (
@@ -292,7 +292,7 @@ module pci_bracket
       mirror([0,1,1])
       rotate([0,90,0])
       extrude_linear_uls(h=tbfl)
-      triangle_ppp(v1=[tbf,tbf],v2=[tbf,0],v3=[0,0]);
+      polygon([[tbf,tbf], [tbf,0], [0,0]]);
 
       // bracket
       vrf  = select_ci( [[4.00,4.00,0,2.5], [4.00,4.00,1.5,0]], bff);
@@ -378,7 +378,7 @@ module pci_bracket
             rotate([270,180,0])
             mirror([0,0,0])
             extrude_linear_uls(h=tw)
-            triangle_ppp(v1=[tbf,tbf],v2=[tbf,0],v3=[0,0]);
+            polygon([[tbf,tbf], [tbf,0], [0,0]]);
           }
           translate([tx, tw/2, -tt/2])
           cylinder(d=hd, h=tt*2);
@@ -423,7 +423,6 @@ BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <tools/operation_cs.scad>;
-    include <units/length.scad>;
     include <parts/3d/computer/pci_bracket.scad>;
 
     pci_bracket
@@ -450,7 +449,7 @@ BEGIN_SCOPE example;
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

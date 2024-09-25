@@ -139,15 +139,15 @@
     option is disabled. The bearing feed can also be disabled by
     assigning \p load = 0.
 
-    \amu_define example_name  (Bearing)
+    \amu_define title         (Bearing example)
     \amu_define image_views   (top right diag)
     \amu_define image_size    (sxga)
 
-    \amu_define diagram_notes
+    \amu_define notes_diagrams
     ( This example uses the \p view options to see the bearing internals.
       Click image above to expand. )
 
-    \amu_include (include/amu/table_scad_diagram.amu)
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
 module make_bearing_linear_rod
 (
@@ -282,7 +282,7 @@ module make_bearing_linear_rod
       align_ball_tunnel()
       union_cs()
       { // tunnel
-        extrude_rotate_tre(r=ball_tunnel_r, l=[ball_tunnel_w, ball_tunnel_l])
+        extrude_rotate_trl(r=ball_tunnel_r, l=[ball_tunnel_w, ball_tunnel_l])
         circle(d=ball_tunnel_d);
 
         // feed
@@ -298,7 +298,7 @@ module make_bearing_linear_rod
     // add solid slide bearing
     if ( type == 1 )
     align_ball_tunnel()
-    extrude_rotate_tre(r=ball_tunnel_r, l=[ball_tunnel_w, ball_tunnel_l], m=(8+16+32))
+    extrude_rotate_trl(r=ball_tunnel_r, l=[ball_tunnel_w, ball_tunnel_l], m=(8+16+32))
     circle(d=ball_tunnel_d + eps);
 
     // internal view assist
@@ -328,7 +328,6 @@ BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <tools/operation_cs.scad>;
-    include <units/length.scad>;
     include <parts/3d/bearing/bearing_linear_rod.scad>;
 
     emt  = [length(0.706, "in"), length(0.622, "in")];
@@ -366,7 +365,7 @@ BEGIN_SCOPE example;
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

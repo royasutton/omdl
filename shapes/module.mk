@@ -9,19 +9,12 @@ local_path        :=  shapes
 local_library     :=  docs_module \
                       \
                       basic_2d \
-                      polygon_2d \
-                      revolved_2d \
-                      \
-                      basic_3d
+                      basic_3d \
+                      polygon \
+                      revolved \
+                      polyhedron_db
 
-local_release_add :=  svg/basic_2d_manifest.svg \
-                      \
-                      stl/basic_2de_manifest.stl \
-                      stl/basic_2dr_manifest.stl \
-                      stl/basic_3d_manifest.stl \
-                      \
-                      stl/polygon_2d_manifest.stl
-
+local_release_add :=
 
 local_backup_add  :=
 

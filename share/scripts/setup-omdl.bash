@@ -4,7 +4,7 @@
 #   \file   setup-omdl.bash
 #
 #   \author Roy Allen Sutton <royasutton@hotmail.com>.
-#   \date   2016-2023
+#   \date   2016-2024
 #
 #   \copyright
 #
@@ -67,7 +67,7 @@ declare setup_amu_url="https://git.io/setup-amu.bash"
 declare cache_install="no"
 declare repo_cache_root="cache"
 
-declare scopes_exclude="manifest db_autotest"
+declare scopes_exclude="db_autotest"
 declare make_opts_add="generate_latex="
 
 declare commands
@@ -1393,7 +1393,7 @@ possible, including the openscad-amu toolchain.
   * Setup options can be stored in configuration file. Use --write-conf
     to generate a template with configuration parameters.
   * The --no-excludes option builds optional library scopes such as some
-    tests, documentation statistics, and release manifests.
+    tests, documentation statistics, etc.
 
 EOF
 }

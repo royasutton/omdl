@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2019-2023
+  \date   2019-2024
 
   \copyright
 
@@ -46,8 +46,6 @@
   \amu_define FILE_NAME ()
   \amu_define includes_required_add
   (
-    units/length.scad
-    units/angle.scad
     tools/align.scad
     tools/operation_cs.scad
     tools/polytope.scad
@@ -71,12 +69,13 @@
     scale as needed for the sheet size and target output page. (5)
     Finally print or save a PDF file.
 
-    \amu_define example_name  (Drafting)
-    \amu_define image_views   (top)
-    \amu_define image_size    (uxga)
-    \amu_define html_image_w  (768)
+    \amu_define title             (Drafting example)
+    \amu_define image_views       (top)
+    \amu_define image_size        (uxga)
+    \amu_define html_image_w      (768)
+    \amu_define output_scad_last  (true)
 
-    \amu_include (include/amu/table_scad_diagram.amu)
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 
   [LibreCAD]: https://librecad.org
 *******************************************************************************/
@@ -89,8 +88,6 @@
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <units/length.scad>;
-    include <units/angle.scad>;
     include <tools/align.scad>;
     include <tools/operation_cs.scad>;
     include <tools/drafting/draft-base.scad>;
@@ -105,7 +102,7 @@ BEGIN_SCOPE example;
     //draft_layers_show = ["default", "dim"];
     //draft_layers_show = ["default"];
 
-    draft_defaults_map =
+    draft_config_map =
       map_merge
       (
         [ // override defaults
@@ -115,7 +112,7 @@ BEGIN_SCOPE example;
           ["dim-line-distance", length(3)],
           ["dim-line-extension-length", length(5)]
         ],
-        draft_defaults_style1_map
+        draft_config_map_style1
       );
 
     draft_sheet(grid=0);
@@ -159,7 +156,7 @@ BEGIN_SCOPE example;
                     ]
           ]
         ],
-        fmap=draft_table_format_ccc_map,
+        fmap=draft_table_format_map_ccc,
         zp=[-1,-1]
       );
 
@@ -254,7 +251,7 @@ BEGIN_SCOPE example;
     variables set_opts_combine "sizes views";
     variables add_opts "--autocenter";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

@@ -1,4 +1,4 @@
-//! Basic 2D derivative shapes.
+//! Basic 2D shapes.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,9 +27,8 @@
 
   \details
 
-    \amu_define group_name  (2d Shapes)
-    \amu_define group_brief (Basic 2D derivative shapes.)
-    \amu_define view        (top)
+    \amu_define group_name  (Basic 2d)
+    \amu_define group_brief (Basic 2D shape.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -42,12 +41,20 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_include (include/amu/includes_required.amu)
 
-  \amu_include (include/amu/table_example_dim.amu)
+  \amu_define image_view (top)
+
+  \amu_define group_id (${parent})
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
+
+  \amu_define group_id (${group})
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
+
+  \amu_include (include/amu/scope_diagram_3d_object.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
 
-//! A rectangle with edge, round, or chamfer corners.
+//! A rectangle with corner rounds or chamfers.
 /***************************************************************************//**
   \param    size <decimal-list-2|decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
@@ -64,15 +71,12 @@
 
   \details
 
-    \b Example
-    \amu_eval ( function=rectangle ${example_dim} )
+    \amu_eval ( object=rectangle ${object_ex_diagram_3d} )
 
-  \note     A corner \em round replaces an edge with a quarter circle of
-            radius \p vr, inset <tt>[vr, vr]</tt> from the corner vertex.
-  \note     A corner \em chamfer replaces an edge with an isosceles right
-            triangle with side lengths equal to the corresponding corner
-            rounding radius \p vr. Therefore the chamfer length will be
-            <tt>vr*sqrt(2)</tt> at 45 degree angles.
+    Corner \em round is of constant radius \p vr. A corner \em chamfer
+    replaces the last \p vr length of the corners edge with an
+    isosceles right triangle with a chamfer length of (vr * sqrt(2))
+    cut at 45 degrees.
 *******************************************************************************/
 module rectangle
 (
@@ -87,7 +91,7 @@ module rectangle
 
   translate(center==true ? [-rx/2, -ry/2] : origin2d)
   {
-    if ( is_undef(vr) )              // no rounding
+    if ( is_undef(vr) )                 // no rounding
     {
       square([rx, ry]);
     }
@@ -191,8 +195,7 @@ module rectangle
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
     \li <tt>size = core + t</tt>; when \p t and \p core are given.
 
-    \b Example
-    \amu_eval ( function=rectangle_c ${example_dim} )
+    \amu_eval ( object=rectangle_c ${object_ex_diagram_3d} )
 *******************************************************************************/
 module rectangle_c
 (
@@ -253,8 +256,7 @@ module rectangle_c
 
   \details
 
-    \b Example
-    \amu_eval ( function=rhombus ${example_dim} )
+    \amu_eval ( object=rhombus ${object_ex_diagram_3d} )
 
     See [Wikipedia] for more information.
 
@@ -335,254 +337,6 @@ module rhombus
   }
 }
 
-//! A general triangle specified by three vertices.
-/***************************************************************************//**
-  \param    v1 <point-2d> A point [x, y] for vertex 1.
-  \param    v2 <point-2d> A point [x, y] for vertex 2.
-  \param    v3 <point-2d> A point [x, y] for vertex 3.
-
-  \param    vr <decimal> The default vertex rounding radius.
-  \param    v1r <decimal> Vertex 1 rounding radius.
-  \param    v2r <decimal> Vertex 2 rounding radius.
-  \param    v3r <decimal> Vertex 3 rounding radius.
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-
-  \details
-
-    \b Example
-    \amu_eval ( function=triangle_ppp ${example_dim} )
-
-  \warning  Currently, in order to round any vertex, all must be given
-            a rounding radius, either via \p vr or individually.
-
-  \todo     Replace the hull() operation with calculated tangential
-            intersection of the rounded vertexes.
-  \todo     Remove the all or nothing requirement for vertex rounding.
-*******************************************************************************/
-module triangle_ppp
-(
-  v1,
-  v2,
-  v3,
-  vr,
-  v1r,
-  v2r,
-  v3r,
-  centroid = false,
-  incenter = false
-)
-{
-  cr1 = defined_or(v1r, vr);
-  cr2 = defined_or(v2r, vr);
-  cr3 = defined_or(v3r, vr);
-
-  translate
-  (
-    ( centroid==false ) && ( incenter==true )
-      ? -triangle2d_incenter( [v1, v2, v3] )
-      : origin2d
-  )
-  translate
-  (
-    ( centroid==true ) && ( incenter==false )
-      ? -triangle_centroid( [v1, v2, v3] )
-      : origin2d
-  )
-  if ( any_undefined([cr1, cr2, cr3]) )
-  {
-    polygon( points=[v1, v2, v3], paths=[[0,1,2]] );
-  }
-  else
-  {
-    ic = triangle2d_incenter( [v1, v2, v3] );
-
-    a1 = angle_ll([v1, v2], [v1, ic]);
-    a2 = angle_ll([v2, v3], [v2, ic]);
-    a3 = angle_ll([v3, v1], [v3, ic]);
-
-    c1 = v1 + cr1/sin(a1) * unit_l([v1, ic]);
-    c2 = v2 + cr2/sin(a2) * unit_l([v2, ic]);
-    c3 = v3 + cr3/sin(a3) * unit_l([v3, ic]);
-
-    hull()
-    {
-      translate( c1 )
-      circle( r=cr1 );
-      translate( c2 )
-      circle( r=cr2 );
-      translate( c3 )
-      circle( r=cr3 );
-    }
-  }
-}
-
-//! A general triangle specified by its sides with a removed triangular core.
-/***************************************************************************//**
-  \param    vs <decimal-list-3|decimal> The size. A list [s1, s2, s3] of
-            decimals or a single decimal for (s1=s2=s3).
-  \param    vc <decimal-list-3|decimal> The core. A list [s1, s2, s3] of
-            decimals or a single decimal for (s1=s2=s3).
-
-  \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
-  \param    cr <decimal> Core z-rotation.
-
-  \param    vr <decimal-list-3|decimal> The default vertex rounding radius.
-            A list [v1r, v2r, v3r] of decimals or a single decimal for
-            (v1r=v2r=v3r).
-  \param    vr1 <decimal-list-3|decimal> The outer vertex rounding radius.
-  \param    vr2 <decimal-list-3|decimal> The core vertex rounding radius.
-
-  \param    centroid <boolean> Center centroid at origin.
-  \param    incenter <boolean> Center incenter at origin.
-
-  \details
-
-    \b Example
-    \amu_eval ( function=triangle_ls_c ${example_dim} )
-
-  \note     The outer and inner triangles centroids are aligned prior to
-            the core removal.
-*******************************************************************************/
-module triangle_ls_c
-(
-  vs,
-  vc,
-  co,
-  cr = 0,
-  vr,
-  vr1,
-  vr2,
-  centroid = false,
-  incenter = false
-)
-{
-  module triangle_sss
-  (
-    s1,
-    s2,
-    s3,
-    vr,
-    v1r,
-    v2r,
-    v3r,
-    centroid = false,
-    incenter = false
-  )
-  {
-    a1 = acos( (s2*s2 + s3*s3 - s1*s1) / (2 * s2 * s3) );
-    a2 = acos( (s1*s1 + s3*s3 - s2*s2) / (2 * s1 * s3) );
-    a3 = 180 - a1 - a2;
-
-    p3 = [s2*cos(a3), s2*sin(a3)];
-
-    if ( is_nan( p3[0] ) || is_nan( p3[1] ) )
-    {
-      log_warn
-      (
-        str( "can not render triangle with sides (", s1, ", ", s2, ", ", s3, ")" )
-      );
-    }
-    else
-    {
-      v1 = origin2d;
-      v2 = [s1, 0];
-      v3 = [s1 - p3[0], p3[1]];
-
-      triangle_ppp
-      (
-        v1=v1, v2=v2, v3=v3,
-        vr=vr, v1r=v1r, v2r=v2r, v3r=v3r,
-        centroid=centroid, incenter=incenter
-      );
-    }
-  }
-
-  module triangle_ls
-  (
-    v,
-    vr,
-    centroid = false,
-    incenter = false
-  )
-  {
-
-    if ( is_scalar(vr) )
-    {
-      triangle_sss
-      (
-        s1=v[0], s2=v[1], s3=v[2],
-        vr=vr,
-        centroid=centroid, incenter=incenter
-      );
-    }
-    else
-    {
-      triangle_sss
-      (
-        s1=v[0], s2=v[1], s3=v[2],
-        v1r=vr[0], v2r=vr[1], v3r=vr[2],
-        centroid=centroid, incenter=incenter
-      );
-    }
-  }
-
-  ts1 = defined_e_or(vs, 0, vs);
-  ts2 = defined_e_or(vs, 1, ts1);
-  ts3 = defined_e_or(vs, 2, ts2);
-
-  tc1 = defined_e_or(vc, 0, vc);
-  tc2 = defined_e_or(vc, 1, tc1);
-  tc3 = defined_e_or(vc, 2, tc2);
-
-  vrs = defined_or(vr1, vr);
-  vrc = defined_or(vr2, vr);
-
-  if ( is_defined(vc) )
-  {
-    translate
-    (
-      ( centroid==false ) && ( incenter==true )
-        ? -triangle2d_incenter( triangle2d_sss2ppp([ts1, ts2, ts3]) )
-        : origin2d
-    )
-    translate
-    (
-      ( centroid==true ) && ( incenter==false )
-        ? origin2d
-        : triangle_centroid( triangle2d_sss2ppp([ts1, ts2, ts3]) )
-    )
-    difference()
-    {
-      triangle_ls
-      (
-        v=[ts1, ts2, ts3],
-        vr=vrs,
-        centroid=true, incenter=false
-      );
-
-      translate(is_defined(co) ? co : origin2d)
-      rotate([0, 0, cr])
-      triangle_ls
-      (
-        v=[tc1, tc2, tc3],
-        vr=vrc,
-        centroid=true, incenter=false
-      );
-    }
-  }
-  else
-  {
-    triangle_ls
-    (
-      v=[ts1, ts2, ts3],
-      vr=vrs,
-      centroid=centroid, incenter=incenter
-    );
-  }
-}
-
 //! An n-sided equiangular/equilateral regular polygon.
 /***************************************************************************//**
   \param    n <integer> The number of sides.
@@ -592,8 +346,7 @@ module triangle_ls_c
 
   \details
 
-    \b Example
-    \amu_eval ( function=ngon ${example_dim} )
+    \amu_eval ( object=ngon ${object_ex_diagram_3d} )
 
     See [Wikipedia] for more information.
 
@@ -630,8 +383,7 @@ module ngon
 
   \details
 
-    \b Example
-    \amu_eval ( function=ellipse ${example_dim} )
+    \amu_eval ( object=ellipse ${object_ex_diagram_3d} )
 *******************************************************************************/
 module ellipse
 (
@@ -671,8 +423,7 @@ module ellipse
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
     \li <tt>size = core + t</tt>; when \p t and \p core are given.
 
-    \b Example
-    \amu_eval ( function=ellipse_c ${example_dim} )
+    \amu_eval ( object=ellipse_c ${object_ex_diagram_3d} )
 *******************************************************************************/
 module ellipse_c
 (
@@ -713,8 +464,7 @@ module ellipse_c
 
   \details
 
-    \b Example
-    \amu_eval ( function=ellipse_s ${example_dim} )
+    \amu_eval ( object=ellipse_s ${object_ex_diagram_3d} )
 *******************************************************************************/
 module ellipse_s
 (
@@ -781,8 +531,7 @@ module ellipse_s
     \li <tt>core = size - t</tt>; when \p t and \p size are given.
     \li <tt>size = core + t</tt>; when \p t and \p core are given.
 
-    \b Example
-    \amu_eval ( function=ellipse_cs ${example_dim} )
+    \amu_eval ( object=ellipse_cs ${object_ex_diagram_3d} )
 *******************************************************************************/
 module ellipse_cs
 (
@@ -828,8 +577,7 @@ module ellipse_cs
 
   \details
 
-    \b Example
-    \amu_eval ( function=star2d ${example_dim} )
+    \amu_eval ( object=star2d ${object_ex_diagram_3d} )
 *******************************************************************************/
 module star2d
 (
@@ -841,10 +589,13 @@ module star2d
   l = defined_e_or(size, 0, size);
   w = defined_e_or(size, 1, l/2);
 
+  t = triangle2d_sss2ppp([l, w, l]);
+  p = is_undef(vr) ? t : polygon_round_eve_all_p(c=t, vr=vr);
+
   repeat_radial(n=n, angle=true, move=false)
   rotate([0, 0, -90])
   translate([-w/2, 0])
-  triangle_ls_c(vs=[w, l, l], vr=vr);
+  polygon(p);
 }
 
 //! @}
@@ -855,7 +606,7 @@ module star2d
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE dim;
+BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
 
@@ -868,10 +619,6 @@ BEGIN_SCOPE dim;
       rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, vrm2=3, co=[0,5], center=true );
     else if (shape == "rhombus")
       rhombus( size=[40,25], vr=[2,4,2,4], center=true );
-    else if (shape == "triangle_ppp")
-      triangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], vr=2, centroid=true );
-    else if (shape == "triangle_ls_c")
-      triangle_ls_c( vs=[30,50,50], vc=[20,40,40], co=[0,-4], vr1=[1,1,6], vr2=4, centroid=true );
     else if (shape == "ngon")
       ngon( n=6, r=25, vr=6 );
     else if (shape == "ellipse")
@@ -895,8 +642,6 @@ BEGIN_SCOPE dim;
                 rectangle
                 rectangle_c
                 rhombus
-                triangle_ppp
-                triangle_ls_c
                 ngon
                 ellipse
                 ellipse_c
@@ -907,35 +652,7 @@ BEGIN_SCOPE dim;
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
-  END_MFSCRIPT;
-END_SCOPE;
-
-BEGIN_SCOPE manifest;
-  BEGIN_OPENSCAD;
-    include <omdl-base.scad>;
-
-    $fn = 36;
-
-    repeat_grid( g=5, i=60, center=true )
-    {
-      rectangle( size=[25,40], vr=[0,10,10,5], vrm=4, center=true );
-      rectangle_c( size=[40,25], t=[15,5], vr1=[0,0,10,10], vr2=2.5, vrm2=3, co=[0,5], center=true );
-      rhombus( size=[40,25], vr=[2,4,2,4], center=true );
-      triangle_ppp( v1=[0,0], v2=[5,25], v3=[40,5], vr=2, centroid=true );
-      triangle_ls_c( vs=[30,50,50], vc=[20,40,40], co=[0,-4], vr1=[1,1,6], vr2=4, centroid=true );
-      ngon( n=6, r=25, vr=6 );
-      ellipse( size=[25, 40] );
-      ellipse_c( size=[25,40], core=[16,10], co=[0,10], cr=45 );
-      ellipse_s( size=[25,40], a1=90, a2=180 );
-      ellipse_cs( size=[25,40], t=[10,5], a1=90, a2=180, co=[10,0], cr=45);
-      star2d( size=[40, 15], n=5, vr=2 );
-    }
-  END_OPENSCAD;
-
-  BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {var_init,var_gen_svg}.mfs;
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

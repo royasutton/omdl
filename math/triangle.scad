@@ -1,4 +1,4 @@
-//! Triangle solutions mathematical functions.
+//! Triangle shapes, conversions, properties, and tests functions.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Triangle Math)
-    \amu_define group_brief (Triangle related mathematical functions.)
+    \amu_define group_name  (Triangles)
+    \amu_define group_brief (Triangle mathematical functions.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -41,9 +41,9 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_include (include/amu/includes_required.amu)
 
-  \amu_define auto_file_debug (false)
-  \amu_define auto_file_extensions (svg)
-  \amu_include (include/amu/auto_file_html.amu)
+  \amu_define html_image_w  (512)
+  \amu_define latex_image_w (2.25in)
+  \amu_include (include/amu/scope_diagram_2d_object.amu)
 
   \details
 
@@ -52,6 +52,11 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+// shape generation
+//----------------------------------------------------------------------------//
+
+//! \name Shapes
+//! @{
 
 //! Compute the side lengths of a triangle given its vertex coordinates.
 /***************************************************************************//**
@@ -64,44 +69,7 @@
 
     Each side length is opposite the corresponding vertex.
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}")
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      s = 10;
-      t = [6, 8, 7];
-
-      r = min(t)/len(t)*s;
-      c = translate_p(rotate_p(triangle2d_sss2ppp(t), 15), [0, 0])*s;
-
-      draft_polygon(c, w=s*2/3);
-
-      for (i = [0 : len(c)-1])
-      {
-        cv = c[i];
-        os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
-
-        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s, cmv=s);
-
-        if ( false )
-        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
-
-        if ( false )
-        draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
-
-      }
-    }
-
-    \b Result
-
-    \amu_image (file=${auto_file_name} height=240)
+    \amu_eval ( object=triangle_ppp2sss ${object_diagram_2d} )
 
     No verification is performed to ensure that the given sides specify
     a valid triangle. See [Wikipedia] for more information.
@@ -135,43 +103,7 @@ function triangle_ppp2sss
 
     Each side length is opposite the corresponding vertex.
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}")
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      s = 10;
-      t = [6, 8, 7];
-
-      r = min(t)/len(t)*s;
-      c = translate_p(rotate_p(triangle2d_sss2ppp(t), 15), [0, 0])*s;
-
-      draft_polygon(c, w=s*2/3);
-
-      for (i = [0 : len(c)-1])
-      {
-        cv = c[i];
-        os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
-
-        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s, cmv=s);
-
-        if ( i == 2 )
-        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
-
-        if ( i < 2 )
-        draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
-      }
-    }
-
-    \b Result
-
-    \amu_image (file=${auto_file_name} height=240)
+    \amu_eval ( object=triangle_sas2sss ${object_diagram_2d} )
 
     No verification is performed to ensure that the given sides specify
     a valid triangle. See [Wikipedia] for more information.
@@ -203,43 +135,7 @@ function triangle_sas2sss
 
     Each side length is opposite the corresponding vertex.
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}")
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      s = 10;
-      t = [6, 8, 7];
-
-      r = min(t)/len(t)*s;
-      c = translate_p(rotate_p(triangle2d_sss2ppp(t), 15), [0, 0])*s;
-
-      draft_polygon(c, w=s*2/3);
-
-      for (i = [0 : len(c)-1])
-      {
-        cv = c[i];
-        os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
-
-        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s, cmv=s);
-
-        if ( i < 2 )
-        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
-
-        if ( i == 2 )
-        draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
-      }
-    }
-
-    \b Result
-
-    \amu_image (file=${auto_file_name} height=240)
+    \amu_eval ( object=triangle_asa2sss ${object_diagram_2d} )
 
     No verification is performed to ensure that the given sides specify
     a valid triangle. See [Wikipedia] for more information.
@@ -274,43 +170,7 @@ function triangle_asa2sss
 
     Each side length is opposite the corresponding vertex.
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}")
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      s = 10;
-      t = [6, 8, 7];
-
-      r = min(t)/len(t)*s;
-      c = translate_p(rotate_p(triangle2d_sss2ppp(t), 15), [0, 0])*s;
-
-      draft_polygon(c, w=s*2/3);
-
-      for (i = [0 : len(c)-1])
-      {
-        cv = c[i];
-        os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
-
-        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s, cmv=s);
-
-        if ( i < 2 )
-        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
-
-        if ( i == 0 )
-        draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
-      }
-    }
-
-    \b Result
-
-    \amu_image (file=${auto_file_name} height=240)
+    \amu_eval ( object=triangle_aas2sss ${object_diagram_2d} )
 
     No verification is performed to ensure that the given sides specify
     a valid triangle. See [Wikipedia] for more information.
@@ -351,44 +211,7 @@ function triangle_aas2sss
     on the 'x' axis or side \em s3 will be on the 'y' axis as
     determined by parameter \p a.
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}")
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      s = 10;
-      t = [6, 8, 7];
-
-      r = min(t)/len(t)*s;
-      c = translate_p(rotate_p(triangle2d_sss2ppp(t), 0), [0, 0])*s;
-
-      draft_polygon(c, w=s*2/3);
-      draft_axes([[0,12], [0,7]]*s, ts=s/2);
-
-      for (i = [0 : len(c)-1])
-      {
-        cv = c[i];
-        os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
-
-        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s, cmv=s);
-
-        if ( false )
-        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
-
-        if ( true )
-        draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
-      }
-    }
-
-    \b Result
-
-    \amu_image (file=${auto_file_name} height=240)
+    \amu_eval ( object=triangle2d_sss2ppp ${object_diagram_2d} )
 
     No verification is performed to ensure that the given sides specify
     a valid triangle. See [Wikipedia] for more information.
@@ -422,6 +245,15 @@ function triangle2d_sss2ppp
           [sqrt(s2*s2 - y*y), y]
   )
     (cw == true) ? [v1, v2, v3] : [v1, v3, v2];
+
+//! @}
+
+//----------------------------------------------------------------------------//
+// shape properties
+//----------------------------------------------------------------------------//
+
+//! \name Properties
+//! @{
 
 //! Compute the area of a triangle given its vertex coordinates in 2D.
 /***************************************************************************//**
@@ -643,39 +475,14 @@ function triangle_circumcenter
   )
     [ for (i=[0:e-1]) (v1[i]*s2a + v2[i]*s2b + v3[i]*s2c) / (s2a+s2b+s2c) ];
 
-//! Compute the rounding center coordinate for a given radius of a triangle vertex in 2D.
-/***************************************************************************//**
-  \param    c <coords-2d> A list of vertex coordinates [v1, v2, v3].
-  \param    r <decimal> The vertex rounding radius.
+//! @}
 
-  \returns  <decimal> The rounding center coordinate.
-*******************************************************************************/
-function triangle2d_vround3_center
-(
-  c,
-  r
-) = let( ir = triangle2d_inradius(c) )
-    (c[1]-r/(r-ir) * triangle2d_incenter(c)) * (ir-r)/ir;
+//----------------------------------------------------------------------------//
+// shape property tests
+//----------------------------------------------------------------------------//
 
-//! Compute the rounding tangent coordinates for a given radius of a triangle vertex in 2D.
-/***************************************************************************//**
-  \param    c <coords-2d> A list of vertex coordinates [v1, v2, v3].
-  \param    r <decimal> The vertex rounding radius.
-
-  \returns  <decimal> The rounding tangent coordinates [t1, t2].
-*******************************************************************************/
-function triangle2d_vround3_tangents
-(
-  c,
-  r
-) = let
-    (
-      rc = triangle2d_vround3_center(c, r),
-      im = sqrt( pow(distance_pp(c[1], rc),2) - pow(r,2) ),
-      t1 = c[1] + im * unit_l([c[1], c[0]]),
-      t2 = c[1] + im * unit_l([c[1], c[2]])
-    )
-    [t1, t2];
+//! \name Tests
+//! @{
 
 //! Test the vertex ordering, or orientation, of a triangle in 2D.
 /***************************************************************************//**
@@ -738,7 +545,118 @@ function triangle2d_is_pit
   : ((a + b) < 1);
 
 //! @}
+
+//----------------------------------------------------------------------------//
+// shape rounding
+//----------------------------------------------------------------------------//
+
+//! \name Rounding
+//! @{
+
+//! Compute the rounding center coordinate for a given radius of a triangle vertex in 2D.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of vertex coordinates [v1, v2, v3].
+  \param    r <decimal> The vertex rounding radius.
+
+  \returns  <decimal> The rounding center coordinate.
+*******************************************************************************/
+function triangle2d_vround3_center
+(
+  c,
+  r
+) = let( ir = triangle2d_inradius(c) )
+    (c[1]-r/(r-ir) * triangle2d_incenter(c)) * (ir-r)/ir;
+
+//! Compute the rounding tangent coordinates for a given radius of a triangle vertex in 2D.
+/***************************************************************************//**
+  \param    c <coords-2d> A list of vertex coordinates [v1, v2, v3].
+  \param    r <decimal> The vertex rounding radius.
+
+  \returns  <decimal> The rounding tangent coordinates [t1, t2].
+*******************************************************************************/
+function triangle2d_vround3_tangents
+(
+  c,
+  r
+) = let
+    (
+      rc = triangle2d_vround3_center(c, r),
+      im = sqrt( pow(distance_pp(c[1], rc),2) - pow(r,2) ),
+      t1 = c[1] + im * unit_l([c[1], c[0]]),
+      t2 = c[1] + im * unit_l([c[1], c[2]])
+    )
+    [t1, t2];
+
 //! @}
+
+//! @}
+//! @}
+
+//----------------------------------------------------------------------------//
+// openscad-amu auxiliary scripts
+//----------------------------------------------------------------------------//
+
+/*
+BEGIN_SCOPE diagram;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/operation_cs.scad>;
+    include <tools/drafting/draft-base.scad>;
+
+    module dt (vl, al, sl)
+    {
+      s = 10;
+      t = [6, 8, 7];
+      r = min(t)/len(t)*s;
+
+      c = triangle2d_sss2ppp(t)*s;
+
+      draft_polygon(c, w=s*2/3);
+      draft_axes([[0,12], [0,7]]*s, ts=s/2);
+
+      for (i = [0 : len(c)-1])
+      {
+        cv = c[i];
+        os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
+
+        if ( !is_empty( find( mv=i, v=vl )) )
+        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s*1, cmv=s);
+
+        if ( !is_empty( find( mv=i, v=al )) )
+        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
+
+        if ( !is_empty( find( mv=i, v=sl )) )
+        draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
+      }
+    }
+
+    object = "triangle_sas2sss";
+
+    if (object == "triangle_ppp2sss") dt( vl = [0,1,2], al = [], sl = []);
+    if (object == "triangle_sas2sss") dt( vl = [0,1,2], al = [2], sl = [0,1]);
+    if (object == "triangle_asa2sss") dt( vl = [0,1,2], al = [0,1], sl = [2]);
+    if (object == "triangle_aas2sss") dt( vl = [0,1,2], al = [0,1], sl = [0]);
+    if (object == "triangle2d_sss2ppp") dt( vl = [], al = [], sl = [0,1,2]);
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_svg}.mfs;
+
+    defines   name "objects" define "object"
+              strings "
+                triangle_ppp2sss
+                triangle_sas2sss
+                triangle_asa2sss
+                triangle_aas2sss
+                triangle2d_sss2ppp
+              ";
+    variables add_opts_combine "objects";
+    variables add_opts "--viewall --autocenter";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
 
 //----------------------------------------------------------------------------//
 // end of file

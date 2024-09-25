@@ -40,16 +40,15 @@
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
 
-  \amu_define auto_file_debug (false)
-  \amu_define auto_file_extensions (svg)
-  \amu_include (include/amu/auto_file_html.amu)
+  \amu_include (include/amu/scope_diagram_2d_object.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
-// general operations
-//----------------------------------------------------------------------------//
+
+//! \name Layers
+//! @{
 
 //! Assign one or more layers to child objects.
 /***************************************************************************//**
@@ -63,12 +62,19 @@
 *******************************************************************************/
 module draft_in_layers
 (
-  layers = draft_get_default("layers-default")
+  layers = draft_get_config("layers-default")
 )
 {
   if (draft_layers_any_active(layers))
     children();
 }
+
+//! @}
+
+//----------------------------------------------------------------------------//
+
+//! \name Placement
+//! @{
 
 //! Move one or more child objects to sheet a reference zone.
 /***************************************************************************//**
@@ -90,28 +96,7 @@ module draft_in_layers
       1     | [rx, ry] or [ix, iy]  | <string-list-2\|decimal-list-2>
       2     | index                 | <integer>
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      draft_sheet();
-      draft_move ( [for (x=[0:7], y=[0:3]) [[0,0], [x,y], is_even(x)?0:1]] )
-      {
-        square(10, center=true);
-        circle(d=10);
-      }
-    }
-
-    \b Result
-
-    \amu_image (caption="Example" file=${auto_file_name} width=320)
+    \amu_eval ( html_image_w=512 latex_image_w="3.00in" object=draft_move ${object_diagram_2d} )
 
   \sa draft_sheet_get_zone()
 *******************************************************************************/
@@ -150,6 +135,13 @@ module draft_move
   }
 }
 
+//! @}
+
+//----------------------------------------------------------------------------//
+
+//! \name Sheet
+//! @{
+
 //! Construct a drafting sheet with frame, zone, grid, and origin.
 /***************************************************************************//**
   \param    sheet <value-list-2> A sheet line configuration that
@@ -182,23 +174,7 @@ module draft_move
     style may be any of those available in draft_line() and the arrow
     may be any available in draft_arrow().
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      draft_sheet( sheet=[5, [5, 4, 5, 5, 25]] );
-    }
-
-    \b Result
-
-    \amu_image (caption="Example" file=${auto_file_name} width=320)
+    \amu_eval ( html_image_w=512 latex_image_w="3.00in" object=draft_sheet ${object_diagram_2d} )
 
   [style]: \ref draft_line()
   [arrow]: \ref draft_arrow()
@@ -211,7 +187,7 @@ module draft_sheet
   grid,
   origin,
   check = false,
-  layers = draft_get_default("layers-sheet")
+  layers = draft_get_config("layers-sheet")
 )
 {
   if ( !table_exists( r=draft_sheet_config_tr, ri=draft_sheet_config ) )
@@ -231,31 +207,31 @@ module draft_sheet
     //
 
     // sheet size
-    sdx = draft_sheet_get_size(ci="sdx") * draft_sheet_scale;
-    sdy = draft_sheet_get_size(ci="sdy") * draft_sheet_scale;
+    sdx = draft_get_sheet_size(ci="sdx") * draft_sheet_scale;
+    sdy = draft_get_sheet_size(ci="sdy") * draft_sheet_scale;
 
     // sheet layout
-    sll = draft_sheet_get_config(ci="sll");
+    sll = draft_get_sheet_config(ci="sll");
 
     // sheet frame and zone margins
-    smx = draft_sheet_get_config(ci="smx") * draft_sheet_scale;
-    smy = draft_sheet_get_config(ci="smy") * draft_sheet_scale;
-    szm = draft_sheet_get_config(ci="szm") * draft_sheet_scale;
+    smx = draft_get_sheet_config(ci="smx") * draft_sheet_scale;
+    smy = draft_get_sheet_config(ci="smy") * draft_sheet_scale;
+    szm = draft_get_sheet_config(ci="szm") * draft_sheet_scale;
 
     // reference zone labels
-    zox = draft_sheet_get_config(ci="zox");
-    zoy = draft_sheet_get_config(ci="zoy");
-    zlx = draft_sheet_get_config(ci="zlx");
-    zly = draft_sheet_get_config(ci="zly");
-    zrf = draft_sheet_get_config(ci="zrf");
-    zfs = draft_sheet_get_config(ci="zfs");
+    zox = draft_get_sheet_config(ci="zox");
+    zoy = draft_get_sheet_config(ci="zoy");
+    zlx = draft_get_sheet_config(ci="zlx");
+    zly = draft_get_sheet_config(ci="zly");
+    zrf = draft_get_sheet_config(ci="zrf");
+    zfs = draft_get_sheet_config(ci="zfs");
 
     // sheet, frame, zone, grid, and origin line configuration
-    slc = draft_sheet_get_config(ci="slc");
-    flc = draft_sheet_get_config(ci="flc");
-    zlc = draft_sheet_get_config(ci="zlc");
-    glc = draft_sheet_get_config(ci="glc");
-    olc = draft_sheet_get_config(ci="olc");
+    slc = draft_get_sheet_config(ci="slc");
+    flc = draft_get_sheet_config(ci="flc");
+    zlc = draft_get_sheet_config(ci="zlc");
+    glc = draft_get_sheet_config(ci="glc");
+    olc = draft_get_sheet_config(ci="olc");
 
     // set draft scale for sheet
     $draft_scale = draft_sheet_scale;
@@ -410,23 +386,7 @@ module draft_sheet
 
   \details
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      draft_axes([[-10,100], [-10,60]], w=[1/2, 3], s=[2, 1], a=[0, [1,1,2,2]], ts=5);
-    }
-
-    \b Result
-
-    \amu_image (caption="Example" file=${auto_file_name} height=240)
+    \amu_eval ( html_image_w=384 latex_image_w="2.25in" object=draft_axes ${object_diagram_2d} )
 
     When \p size is not specified, the axes will span the entire sheet
     frame.
@@ -444,7 +404,7 @@ module draft_axes
 
   ts = 0,
 
-  layers = draft_get_default("layers-sheet")
+  layers = draft_get_config("layers-sheet")
 )
 {
   if (draft_layers_any_active(layers))
@@ -458,16 +418,16 @@ module draft_axes
             //
 
             // sheet size
-            sdx = draft_sheet_get_size(ci="sdx") * draft_sheet_scale,
-            sdy = draft_sheet_get_size(ci="sdy") * draft_sheet_scale,
+            sdx = draft_get_sheet_size(ci="sdx") * draft_sheet_scale,
+            sdy = draft_get_sheet_size(ci="sdy") * draft_sheet_scale,
 
             // sheet layout
-            sll = draft_sheet_get_config(ci="sll"),
+            sll = draft_get_sheet_config(ci="sll"),
 
             // sheet frame and zone margins
-            smx = draft_sheet_get_config(ci="smx") * draft_sheet_scale,
-            smy = draft_sheet_get_config(ci="smy") * draft_sheet_scale,
-            szm = draft_sheet_get_config(ci="szm") * draft_sheet_scale,
+            smx = draft_get_sheet_config(ci="smx") * draft_sheet_scale,
+            smy = draft_get_sheet_config(ci="smy") * draft_sheet_scale,
+            szm = draft_get_sheet_config(ci="szm") * draft_sheet_scale,
 
             //
             // derived values
@@ -545,26 +505,7 @@ module draft_axes
 
   \details
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      draft_ruler();
-
-      translate([75,0])
-      draft_ruler(units="in", marks=16, groups=2, mark_size=length(1/16/25.4, "in"));
-    }
-
-    \b Result
-
-    \amu_image (caption="Example" file=${auto_file_name} height=240)
+    \amu_eval ( html_image_w=512 latex_image_w="3.00in" object=draft_ruler ${object_diagram_2d} )
 *******************************************************************************/
 module draft_ruler
 (
@@ -577,7 +518,7 @@ module draft_ruler
   label_hide = false,
   order = 1,
   w = 1,
-  layers = draft_get_default("layers-sheet")
+  layers = draft_get_config("layers-sheet")
 )
 {
 
@@ -640,6 +581,13 @@ module draft_ruler
   }
 }
 
+//! @}
+
+//----------------------------------------------------------------------------//
+
+//! \name Tables
+//! @{
+
 //! Construct a text table that is populated by rows and columns.
 /***************************************************************************//**
   \param    map <map> A table definition map.
@@ -654,43 +602,11 @@ module draft_ruler
 
   \details
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
+    \amu_eval ( html_image_w=256 latex_image_w="1.50in" object=draft_table ${object_diagram_2d} )
 
-      map=
-      [
-        [ "title",  [ "TABLE", 3/2 ] ],
-        [ "heads",  [ ["col1", "col2", "col3"], 3/4 ] ],
-        [ "cols",   [ 2, 2, 2 ] ],
-        [
-          "rows",
-                  [
-                    [ ["d00", "d01", "d02"], 1 ],
-                    [ ["d10", "d11", "d12"], 1 ],
-                    [ ["d20", "d21", "d22"], 1 ],
-                    [ ["d30", "d31", "d32"], 1 ]
-                  ]
-        ]
-      ];
-
-      draft_table( map=map, fmap=draft_table_format_ccc_map );
-    }
-
-    \b Result
-
-    \amu_image (caption="Example" file=${auto_file_name} height=240)
-
-    | see: \ref draft_defaults_map  |
-    |:-----------------------------:|
-    | table-text-format             |
+    | see: \ref draft_config_map  |
+    |:---------------------------:|
+    | table-text-format           |
 *******************************************************************************/
 module draft_table
 (
@@ -698,7 +614,7 @@ module draft_table
   fmap,
   zp = 0,
   window = false,
-  layers = draft_get_default("layers-table")
+  layers = draft_get_config("layers-table")
 )
 {
   if (draft_layers_any_active(layers))
@@ -706,7 +622,7 @@ module draft_table
   {
     translate( -draft_table_get_cell(zp=zp, map=map, fmap=fmap) )
     if (window)
-    { // solid retangular window
+    { // solid rectangular window
       polygon(draft_table_get_cell(window=true, map=map, fmap=fmap));
     }
     else
@@ -714,25 +630,25 @@ module draft_table
       //
       // get table format
       //
-      cmh = map_get_firstof2_or(map, fmap, "cmh", draft_get_default("table-cmh")) * $draft_scale;
-      cmv = map_get_firstof2_or(map, fmap, "cmv", draft_get_default("table-cmv")) * $draft_scale;
+      cmh = map_get_firstof2_or(map, fmap, "cmh", draft_get_config("table-cmh")) * $draft_scale;
+      cmv = map_get_firstof2_or(map, fmap, "cmv", draft_get_config("table-cmv")) * $draft_scale;
 
-      coh = map_get_firstof2_or(map, fmap, "coh", draft_get_default("table-coh"));
-      cov = map_get_firstof2_or(map, fmap, "cov", draft_get_default("table-cov"));
+      coh = map_get_firstof2_or(map, fmap, "coh", draft_get_config("table-coh"));
+      cov = map_get_firstof2_or(map, fmap, "cov", draft_get_config("table-cov"));
 
       //
       // default lines when not in map nor fmap:
       //  no horizontal or vertical lines.
       //
-      hlines  = map_get_firstof2_or(map, fmap, "hlines", draft_get_default("table-hlines"));
-      vlines  = map_get_firstof2_or(map, fmap, "vlines", draft_get_default("table-vlines"));
+      hlines  = map_get_firstof2_or(map, fmap, "hlines", draft_get_config("table-hlines"));
+      vlines  = map_get_firstof2_or(map, fmap, "vlines", draft_get_config("table-vlines"));
 
       //
       // cell default text format when not in map nor fmap:
       //
-      tdefs = map_get_firstof2_or(map, fmap, "tdefs", draft_get_default("table-text-format"));
-      hdefs = map_get_firstof2_or(map, fmap, "hdefs", draft_get_default("table-text-format"));
-      edefs = map_get_firstof2_or(map, fmap, "edefs", draft_get_default("table-text-format"));
+      tdefs = map_get_firstof2_or(map, fmap, "tdefs", draft_get_config("table-text-format"));
+      hdefs = map_get_firstof2_or(map, fmap, "hdefs", draft_get_config("table-text-format"));
+      edefs = map_get_firstof2_or(map, fmap, "edefs", draft_get_config("table-text-format"));
 
       //
       // get table contents
@@ -823,31 +739,7 @@ module draft_table
 
   \details
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      text=
-      [
-        ["data0.0", "data0.1"],
-        "data1", "data2", "data3", "data4", "data5", "data6",
-        "data7", "data8", "data9", "data10", "data11",
-        ["data12.0", "data12.1", "data12.2", "data12.3"]
-      ];
-
-      draft_ztable( text=text, map=draft_title_block_map );
-    }
-
-    \b Result
-
-    \amu_image (caption="Example" file=${auto_file_name} height=240)
+    \amu_eval ( html_image_w=768 latex_image_w="4.50in" object=draft_ztable ${object_diagram_2d} )
 *******************************************************************************/
 module draft_ztable
 (
@@ -856,7 +748,7 @@ module draft_ztable
   zp = 0,
   number = false,
   window = false,
-  layers = draft_get_default("layers-table")
+  layers = draft_get_config("layers-table")
 )
 {
   if (draft_layers_any_active(layers))
@@ -864,7 +756,7 @@ module draft_ztable
   {
     translate( -draft_ztable_get_zone(zp=zp, map=map) )
     if (window)
-    { // solid retangular window
+    { // solid rectangular window
       polygon(draft_ztable_get_zone(window=true, map=map));
     }
     else
@@ -995,32 +887,7 @@ module draft_ztable
     The boarder line style value may be configure as as documented in
     draft_line().
 
-    \amu_eval auto_file_name (extension=svg auto_file_index++ ${auto_file_html})
-    \amu_openscad (args="--render --o ${auto_file_name}" ++script)
-    {
-      include <omdl-base.scad>;
-      include <units/length.scad>;
-      include <units/angle.scad>;
-      include <tools/align.scad>;
-      include <tools/operation_cs.scad>;
-      include <tools/polytope.scad>;
-      include <tools/drafting/draft-base.scad>;
-
-      for (i = [[-40, "left", [1,0]], [0, "center", [4,0]], [40, "right", 3]] )
-      translate([first(i), 0])
-      draft_note
-      (
-        head="Note",
-        note=["Line 1", "Line 2", "Line 3"],
-        size=[3, 2, 3/4],
-        halign = second(i),
-        line = [1, third(i)]
-      );
-    }
-
-    \b Result
-
-    \amu_image (caption="Example" file=${auto_file_name} height=120)
+    \amu_eval ( html_image_w=768 latex_image_w="4.50in" object=draft_note ${object_diagram_2d} )
 
   [style]: \ref draft_line()
 *******************************************************************************/
@@ -1031,11 +898,11 @@ module draft_note
   size,
   line,
   halign = "left",
-  cmh = draft_get_default("note-cmh"),
-  cmv = draft_get_default("note-cmv"),
+  cmh = draft_get_config("note-cmh"),
+  cmv = draft_get_config("note-cmv"),
   zp = 0,
   window = false,
-  layers = draft_get_default("layers-note")
+  layers = draft_get_config("layers-note")
 )
 {
   if (draft_layers_any_active(layers))
@@ -1054,10 +921,10 @@ module draft_note
       ["cmh",     cmh],
       ["cmv",     cmv],
 
-      is_undef(htd) ? empty_lst :
+      is_undef(head) ? empty_lst :
       ["heads",   [[htd], defined_e_or(size, 2, 1)]],
 
-      ["cols",    [defined_e_or(size, 0, defined_or(size,1))]],
+      ["cols",    [defined_e_or(size, 0, defined_or(size, 1))]],
       ["rows",    [[[note], defined_e_or(size, 1, 1)]]],
 
       ["hlines",  concat(consts(3,lnc[0]), consts(2,lnc[1]))],
@@ -1065,9 +932,9 @@ module draft_note
     ];
 
     // local table format map
-    fmap  = (halign == "center") ? draft_table_format_ccc_map
-          : (halign == "left")   ? draft_table_format_cll_map
-          : (halign == "right")  ? draft_table_format_crr_map
+    fmap  = (halign == "center") ? draft_table_format_map_ccc
+          : (halign == "left")   ? draft_table_format_map_cll
+          : (halign == "right")  ? draft_table_format_map_crr
           : undef;
 
     draft_table
@@ -1080,15 +947,23 @@ module draft_note
 //! Construct a sheet title block.
 /***************************************************************************//**
   \copydetails draft_ztable()
+
+  \details
+
+    A title block is a ztable with a predetermined layout specified by
+    a style map. See the \ref tools_drafting_config "configuration"
+    section for the available title block style maps.
+
+  \sa draft_title_block_map_style1.
 *******************************************************************************/
 module draft_title_block
 (
   text,
-  map = draft_title_block_map,
+  map = draft_title_block_map_style1,
   zp = 0,
   number = false,
   window = false,
-  layers = draft_get_default("layers-titleblock")
+  layers = draft_get_config("layers-titleblock")
 )
 {
   draft_ztable
@@ -1098,7 +973,106 @@ module draft_title_block
 }
 
 //! @}
+
 //! @}
+//! @}
+
+//----------------------------------------------------------------------------//
+// openscad-amu auxiliary scripts
+//----------------------------------------------------------------------------//
+
+/*
+BEGIN_SCOPE diagram;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/align.scad>;
+    include <tools/operation_cs.scad>;
+    include <tools/polytope.scad>;
+    include <tools/drafting/draft-base.scad>;
+
+    object = "draft_move";
+
+    if (object == "draft_move") {
+      draft_sheet();
+      draft_move ( [for (x=[0:7], y=[0:3]) [[0,0], [x,y], is_even(x)?0:1]] )
+      {
+        square(10, center=true);
+        circle(d=10);
+      }
+    }
+
+    if (object == "draft_sheet") {
+      draft_sheet( sheet=[5, [5, 4, 5, 5, 25]] );
+    }
+
+    if (object == "draft_axes") {
+      draft_axes([[-10,100], [-10,60]], w=[1/2, 3], s=[2, 1], a=[0, [1,1,2,2]], ts=5);
+    }
+
+    if (object == "draft_ruler") {
+      draft_ruler();
+
+      translate([75,0])
+      draft_ruler(units="in", marks=16, groups=2, mark_size=length(1/16/25.4, "in"));
+    }
+
+    if (object == "draft_table") {
+      map= [  [ "title",  [ "TABLE", 3/2 ] ],
+              [ "heads",  [ ["col1", "col2", "col3"], 3/4 ] ],
+              [ "cols",   [ 2, 2, 2 ] ],
+              [ "rows",   [ [ ["d00", "d01", "d02"], 1 ],
+                            [ ["d10", "d11", "d12"], 1 ],
+                            [ ["d20", "d21", "d22"], 1 ],
+                            [ ["d30", "d31", "d32"], 1 ] ] ] ];
+
+      draft_table( map=map, fmap=draft_table_format_map_ccc );
+    }
+
+    if (object == "draft_ztable")
+    {
+      text= [ [ "data0.0", "data0.1"  ],
+                "data1", "data2", "data3", "data4", "data5", "data6",
+                "data7", "data8", "data9", "data10", "data11",
+              [ "data12.0", "data12.1", "data12.2", "data12.3"  ] ];
+
+      draft_ztable( text=text, map=draft_title_block_map_style1 );
+    }
+
+    if (object == "draft_note")
+    {
+      for (i = [[-40, "left", [1,0]], [0, "center", [4,0]], [40, "right", 3]] )
+      translate([first(i), 0])
+      draft_note
+      (
+        head="NOTE",
+        note=["note 1", "note 2", "note 3"],
+        size=[3, 2, 3/4],
+        halign = second(i),
+        line = [1, third(i)]
+      );
+    }
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_svg}.mfs;
+
+    defines   name "objects" define "object"
+              strings "
+                draft_move
+                draft_sheet
+                draft_axes
+                draft_ruler
+                draft_table
+                draft_ztable
+                draft_note
+              ";
+    variables add_opts_combine "objects";
+    variables add_opts "--viewall --autocenter";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
 
 //----------------------------------------------------------------------------//
 // end of file

@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2018-2023
+  \date   2024
 
   \copyright
 
@@ -38,8 +38,75 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent.amu)
+  \amu_include (include/amu/group_in_parent_start.amu)
 *******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// subgroups.
+//----------------------------------------------------------------------------//
+
+/***************************************************************************//**
+  /+
+
+    NOTE: each word group identifier should be capitalized.
+
+  +/
+
+  /+ define level2 groups +/
+
+  \amu_define groups_level2
+  (
+    Bolts
+    Screws
+    Nuts
+    Washers
+  )
+
+  /+ remove newlines from identifiers +/
+
+  \amu_replace groups_level2 (text="${groups_level2}" search="\n" replace=", ")
+
+  /+ expand level2 groups +/
+
+  \amu_define new_line
+  (
+  )
+
+  \amu_define groups_level1 (Imperial)
+  \amu_foreach defgroup_imperial
+  (
+    words=${groups_level2} separator="${new_line}"
+    text="\defgroup ${group}_${groups_level1}_\${x} \${x}"
+  )
+
+  \amu_define groups_level1 (Metric)
+  \amu_foreach defgroup_metric
+  (
+    words=${groups_level2} separator="${new_line}"
+    text="\defgroup ${group}_${groups_level1}_\${x} \${x}"
+  )
+*******************************************************************************/
+
+/***************************************************************************//**
+  /+ instantiate level2 groups +/
+
+  \amu_text
+  (
+    \defgroup ${group}_Imperial   Imperial
+    @{
+    ${defgroup_imperial}
+    @}
+
+    \defgroup ${group}_Metric     Metric
+    @{
+    ${defgroup_metric}
+    @}
+  )
+*******************************************************************************/
+
+//! @}
+//! @}
+
 
 //----------------------------------------------------------------------------//
 // end of file

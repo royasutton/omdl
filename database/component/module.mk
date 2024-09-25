@@ -13,7 +13,8 @@ local_release_add :=
 local_backup_add  :=
 
 local_submodules  :=  battery \
-                      fastener
+                      fastener \
+                      structural
 
 #------------------------------------------------------------------------------#
 # add local module

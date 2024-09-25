@@ -29,7 +29,6 @@
 
     \amu_define group_name  (Extrude)
     \amu_define group_brief (Shape extrusion tools.)
-    \amu_define view        (diag)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -42,7 +41,15 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_include (include/amu/includes_required.amu)
 
-  \amu_include (include/amu/table_example_dim.amu)
+  \amu_define image_view (diag)
+
+  \amu_define group_id (${parent})
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
+
+  \amu_define group_id (${group})
+  \amu_include (include/amu/scope_diagrams_3d_in_group.amu)
+
+  \amu_include (include/amu/scope_diagram_3d_object.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -56,8 +63,7 @@
 
   \details
 
-    \b Example
-    \amu_eval ( function=extrude_rotate_tr ${example_dim} )
+    \amu_eval ( object=extrude_rotate_tr ${object_ex_diagram_3d} )
 *******************************************************************************/
 module extrude_rotate_tr
 (
@@ -87,13 +93,12 @@ module extrude_rotate_tr
 
   \details
 
-    \b Example
-    \amu_eval ( function=extrude_rotate_tre ${example_dim} )
+    \amu_eval ( object=extrude_rotate_trl ${object_ex_diagram_3d} )
 
   \note When elongating <tt>(l > 0)</tt>, \p ra is ignored. However, \p m
         may be used to control which complete revolution section to render.
 *******************************************************************************/
-module extrude_rotate_tre
+module extrude_rotate_trl
 (
   r,
   pa = 0,
@@ -186,8 +191,7 @@ module extrude_rotate_tre
 
   \details
 
-    \b Example
-    \amu_eval ( function=extrude_linear_uls ${example_dim} )
+    \amu_eval ( object=extrude_linear_uls ${object_ex_diagram_3d} )
 
   \todo This function should be rewritten to use the built-in scaling
         provided by linear_extrude() in the upper and lower scaling zones.
@@ -267,7 +271,7 @@ module extrude_linear_uls
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE dim;
+BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
 
@@ -276,8 +280,8 @@ BEGIN_SCOPE dim;
 
     if (shape == "extrude_rotate_tr")
       extrude_rotate_tr( r=50, pa=45, ra=270 ) square( [10,5], center=true );
-    else if (shape == "extrude_rotate_tre")
-      extrude_rotate_tre( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
+    else if (shape == "extrude_rotate_trl")
+      extrude_rotate_trl( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
     else if (shape == "extrude_linear_uls")
       extrude_linear_uls( [5,10,15,-5], center=true ) square( [20,15], center=true );
   END_OPENSCAD;
@@ -289,13 +293,13 @@ BEGIN_SCOPE dim;
     defines   name "shapes" define "shape"
               strings "
                 extrude_rotate_tr
-                extrude_rotate_tre
+                extrude_rotate_trl
                 extrude_linear_uls
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter --view=axes";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

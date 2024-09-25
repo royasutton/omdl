@@ -41,12 +41,13 @@
 
   \details
 
-    \amu_define data_name     (Cylindrical batteries)
-    \amu_define image_views   (top right diag)
-    \amu_define image_size    (sxga)
-    \amu_define diagram_notes (See Wikipedia battery [sizes] for information.)
+    \amu_define title           (Cylindrical batteries)
+    \amu_define image_views     (top right diag)
+    \amu_define image_size      (sxga)
+    \amu_define notes_diagrams  (See Wikipedia battery [sizes] for information.)
+    \amu_define notes_table     (Measurements in millimeters.)
 
-    \amu_include (include/amu/table_diagram_data.amu)
+    \amu_include (include/amu/scope_diagrams_3d_table.amu)
 
   [sizes]: https://en.wikipedia.org/wiki/List_of_battery_sizes
 *******************************************************************************/
@@ -62,38 +63,38 @@ dtc_battery_cylindrical =
   ["h", "battery height"]
 ];
 
-//! \<table> Cylindrical batteries data table (all values in millimeters).
+//! \<table> Cylindrical batteries data table rows.
 //! \hideinitializer
 dtr_battery_cylindrical =
 [
-  ["aaaa", 8.3, 42.5],
-  ["aaa", 10.5, 44.5],
-  ["aa", 14.5, 50.5],
-  ["h-aa", 14.5, 25.0],
-  ["a", 17, 50],
-  ["b", 21.5, 60],
-  ["c", 26.2, 50],
-  ["s-c", 22.2, 42.9],
-  ["d", 34.2, 61.5],
-  ["f", 33, 91],
-  ["n", 12, 30.2],
-  ["a21", 10.3, 16],
-  ["a23", 10.5, 28.5],
-  ["a27", 8, 28.2],
-  ["ba5800", 35.5, 128.5],
-  ["duplex", 21.8, 74.6],
-  ["4sr44", 13, 25.2],
+  ["aaaa",    l_mm( 8.3), l_mm( 42.5)],
+  ["aaa",     l_mm(10.5), l_mm( 44.5)],
+  ["aa",      l_mm(14.5), l_mm( 50.5)],
+  ["h-aa",    l_mm(14.5), l_mm( 25.0)],
+  ["a",       l_mm(17  ), l_mm( 50  )],
+  ["b",       l_mm(21.5), l_mm( 60  )],
+  ["c",       l_mm(26.2), l_mm( 50  )],
+  ["s-c",     l_mm(22.2), l_mm( 42.9)],
+  ["d",       l_mm(34.2), l_mm( 61.5)],
+  ["f",       l_mm(33  ), l_mm( 91  )],
+  ["n",       l_mm(12  ), l_mm( 30.2)],
+  ["a21",     l_mm(10.3), l_mm( 16  )],
+  ["a23",     l_mm(10.5), l_mm( 28.5)],
+  ["a27",     l_mm( 8  ), l_mm( 28.2)],
+  ["ba5800",  l_mm(35.5), l_mm(128.5)],
+  ["duplex",  l_mm(21.8), l_mm( 74.6)],
+  ["4sr44",   l_mm(13  ), l_mm( 25.2)],
 
   // lithium-ion
-  ["10180", 10, 18],
-  ["10280", 10, 28],
-  ["10440", 10, 44],
-  ["14650", 14, 65],
-  ["16650", 16, 65],
-  ["18650", 18, 65],
-  ["21700", 21, 70],
-  ["26500", 26, 50],
-  ["32600", 32, 60]
+  ["10180",   l_mm(10  ), l_mm( 18  )],
+  ["10280",   l_mm(10  ), l_mm( 28  )],
+  ["10440",   l_mm(10  ), l_mm( 44  )],
+  ["14650",   l_mm(14  ), l_mm( 65  )],
+  ["16650",   l_mm(16  ), l_mm( 65  )],
+  ["18650",   l_mm(18  ), l_mm( 65  )],
+  ["21700",   l_mm(21  ), l_mm( 70  )],
+  ["26500",   l_mm(26  ), l_mm( 50  )],
+  ["32600",   l_mm(32  ), l_mm( 60  )]
 ];
 
 //! @}
@@ -107,13 +108,9 @@ dtr_battery_cylindrical =
 BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-
-    include <units/length.scad>;
-    include <units/angle.scad>;
     include <tools/align.scad>;
     include <tools/operation_cs.scad>;
     include <tools/drafting/draft-base.scad>;
-
     include <database/component/battery/cylindrical.scad>;
 
     $fn=36;
@@ -126,14 +123,11 @@ BEGIN_SCOPE diagram;
     translate([0,0,h-ht])
     cylinder(d=dt, h=ht);
 
-    __mfs__top = false;
-    __mfs__right = false;
-
-    if ( __mfs__top )
+    if ( !is_undef(__mfs__top) )
       color("black")
       draft_dim_line(p1=[-d/2,0], p2=[+d/2,0], d=d*6/10, e=d*4/10, es=2, t="d");
 
-    if ( __mfs__right )
+    if ( !is_undef(__mfs__right) )
       color("black")
       translate([0, d/2, h/2]) rotate([0,90])
       draft_dim_line(p1=[-h/2,0], p2=[+h/2,0], d=d*3/10, e=h*4/10, es=2, t="h");
@@ -149,7 +143,7 @@ BEGIN_SCOPE diagram;
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter";
 
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 
@@ -170,7 +164,7 @@ BEGIN_SCOPE table;
 
   BEGIN_MFSCRIPT;
     include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
-    include --path "${INCLUDE_PATH}" scr_std_mf.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
 */

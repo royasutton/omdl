@@ -1,0 +1,86 @@
+/+
+
+  defines: define macro for named object 3d diagram.
+
+  requirements:
+    scope:
+      ${scope_id}
+
+    defines:
+      ${object}
+
+      ${image_view}
+
+    optional:
+      ${scope_id}             (default = diagram)
+
+      ${title}                (default = Object example)
+
+      ${image_size}           (default = qvga)
+
+      ${html_image_w}         (default = 256)
+      ${latex_image_w}        (default = 1.5in)
+
+  examples:
+    (1) \amu_eval ( image_view=<VIEW> object=<NAME> ${object_ex_diagram_3d} )
+    (2) \amu_eval ( image_view=<VIEW> object=<NAME> ${object_diagram_3d_ex} )
+    (3) \amu_eval ( image_view=<VIEW> object=<NAME> ${object_diagram_3d} )
+
+ +/
+
+  \amu_if scope_id (-d ${scope_id}) {${scope_id}} else {diagram} endif
+
+  \amu_if title (-d ${title}) {${title}} else {Object example} endif
+
+  \amu_if image_size (-d ${image_size}) {${image_size}} else {qvga} endif
+
+  \amu_if html_image_w (-d ${html_image_w}) {${html_image_w}} else {256} endif
+  \amu_if latex_image_w (-d ${latex_image_w}) {${latex_image_w}} else {1.5in} endif
+
+  \amu_scope scope_root (++root)
+
+  \amu_define object_stem_3d (${scope_root}_${scope_id}_${image_size}_${image_view}_${object})
+
+
+  /+
+
+    object example script then diagram
+
+   +/
+
+  \amu_define object_ex_diagram_3d
+  (
+    <b>${title}</b>
+    \dontinclude ${scope_root}_${scope_id}.scad \skipline ${object}\(
+    \image html  ${object_stem_3d}.png "${object}" width=${html_image_w}
+    \image latex ${object_stem_3d}.eps "${object}" width=${latex_image_w}
+  )
+
+  /+
+
+    object diagram then example script
+
+   +/
+
+  \amu_define object_diagram_3d_ex
+  (
+    <b>${title}</b>
+    \image html  ${object_stem_3d}.png "${object}" width=${html_image_w}
+    \image latex ${object_stem_3d}.eps "${object}" width=${latex_image_w}
+    \dontinclude ${scope_root}_${scope_id}.scad \skipline ${object}\(
+  )
+
+  /+
+
+    object diagram only
+
+   +/
+
+  \amu_define object_diagram_3d
+  (
+    <b>${title}</b>
+    \image html  ${object_stem_3d}.png "${object}" width=${html_image_w}
+    \image latex ${object_stem_3d}.eps "${object}" width=${latex_image_w}
+  )
+
+/+ end of file  +/

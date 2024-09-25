@@ -3,8 +3,10 @@
   output validation results details.
 
   requires:
-    definitions from one of pgid_*.
-    definitions from validate_log_{th,td}.amu.
+                ${group}                (from pgid_*.)
+                ${parent}
+
+                ${tv_*}                 (from validate_log_{th,td}.amu)
 
  +/
 
