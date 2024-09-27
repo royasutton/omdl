@@ -59,7 +59,6 @@
   \param    r <decimal> The rotation radius.
   \param    pa <decimal> The profile pitch angle in degrees.
   \param    ra <decimal> The rotation sweep angle in degrees.
-  \param    profile <boolean> Show profile only (do not extrude).
 
   \details
 
@@ -69,11 +68,10 @@ module extrude_rotate_tr
 (
   r,
   pa = 0,
-  ra = 360,
-  profile = false
+  ra = 360
 )
 {
-  rotate_extrude(angle = (profile==true ? 1 : ra) )
+  rotate_extrude(angle = ra )
   translate([r, 0])
   rotate([0, 0, pa])
   children();
@@ -103,15 +101,14 @@ module extrude_rotate_trl
   r,
   pa = 0,
   ra = 360,
-  profile = false,
 
   l,
   m = 255
 )
 {
-  if ( is_undef(l) || (profile==true) )
+  if ( is_undef(l) )
   {
-    extrude_rotate_tr(r=r, pa=pa, ra=ra, profile=profile)
+    extrude_rotate_tr(r=r, pa=pa, ra=ra)
     children();
   }
   else
@@ -134,7 +131,7 @@ module extrude_rotate_trl
     {
       translate([i[0], i[1], 0])
       rotate([0, 0, i[2]])
-      extrude_rotate_tr(r=r, pa=pa, ra=90, profile=profile)
+      extrude_rotate_tr(r=r, pa=pa, ra=90)
       children();
     }
 
