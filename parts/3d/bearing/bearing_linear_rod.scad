@@ -81,6 +81,8 @@
   \param    align <integer> bearing block zero alignment location.
             (0=+block_h/2, 1=+tunnel_h/2, 2=center, 3=-tunnel_h/2, 4=-block_h/2)
 
+  \param    verb <integer> verbosity (0=quiet).
+
   \param    view <integer-list-3> bearing block internal view
             (0=block, 1=pipe-tunnel, 2=ball-tunnel). Use, for example,
             [1, 2] to view multiple.
@@ -165,6 +167,7 @@ module make_bearing_linear_rod
   reveal = 50,
   type = 0,
   align = 2,
+  verb = 0,
   view
 )
 {
@@ -292,6 +295,13 @@ module make_bearing_linear_rod
         translate( ball_feed_alignment[load-1][2] )
         extrude_linear_uls(bearing_feed_l + ball_tunnel_d/2, center=true)
         circle(d=bearing_feed_r * ball_d);
+
+        // report ball bearing count
+        if ( verb > 0 )
+        {
+          ball_path = 2 * pi * ball_tunnel_r + (ball_tunnel_w+ball_tunnel_l)*2;
+          echo(ball_path=ball_path, ball_count=ball_path/ball_d);
+        }
       }
     }
 
