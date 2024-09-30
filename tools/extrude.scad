@@ -77,6 +77,57 @@ module extrude_rotate_tr
   children();
 }
 
+//! Translate, rotate, scale, and revolve a 2d shape about the z-axis.
+/***************************************************************************//**
+  \copydetails extrude_rotate_tr()
+
+  \param    s <decimal-list-2|decimal> The start and end scale factor.
+            A list [s1, s2] of decimals or a single decimal for (s1=s2)
+
+  \details
+
+    When the parameter \p s is not specified, the shape profile is
+    revolved using extrude_rotate_tr(). When the parameter \p s is
+    specified, the shape profile is scaled from \p s1 to \p s2 along
+    the revolution path.
+
+    \amu_eval ( object=extrude_rotate_trs ${object_ex_diagram_3d} )
+*******************************************************************************/
+module extrude_rotate_trs
+(
+  r,
+  pa = 0,
+  ra = 360,
+
+  s
+)
+{
+  if ( is_undef(s) )
+  {
+    extrude_rotate_tr(r=r, pa=pa, ra=ra)
+    children();
+  }
+  else
+  {
+    sd = is_scalar(s) ? s : 1;
+    s1 = defined_e_or(s, 0, sd);
+    s2 = defined_e_or(s, 1, sd);
+
+    facets = ceil(sqrt(openscad_fn(r)));
+
+    facet_sa = ra/facets;
+    facet_ss = (s2-s1)/facets;
+
+    for (f=[0:facets-1])
+    rotate(facet_sa * f - 180*eps)                // prior facet overlap
+    rotate_extrude(angle = facet_sa + 380*eps)    // prior + next overlap
+    translate([r, 0])
+    scale(s1 + facet_ss * f)
+    rotate([0, 0, pa])
+    children();
+  }
+}
+
 //! Translate, rotate, and revolve a 2d shape about the z-axis with linear elongation.
 /***************************************************************************//**
   \copydetails extrude_rotate_tr()
@@ -277,6 +328,8 @@ BEGIN_SCOPE diagram;
 
     if (shape == "extrude_rotate_tr")
       extrude_rotate_tr( r=50, pa=45, ra=270 ) square( [10,5], center=true );
+    if (shape == "extrude_rotate_trs")
+      extrude_rotate_trs( r=50, pa=45, ra=180, s=[1, 3] ) circle( 5, center=true );
     else if (shape == "extrude_rotate_trl")
       extrude_rotate_trl( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
     else if (shape == "extrude_linear_uls")
@@ -290,6 +343,7 @@ BEGIN_SCOPE diagram;
     defines   name "shapes" define "shape"
               strings "
                 extrude_rotate_tr
+                extrude_rotate_trs
                 extrude_rotate_trl
                 extrude_linear_uls
               ";
