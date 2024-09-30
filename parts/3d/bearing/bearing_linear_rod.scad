@@ -76,6 +76,9 @@
 
   \param    reveal <decimal> ball bearing reveal percentage.
 
+  \param    dilate <decimal> ball bearing circulation tunnel-return
+            enlargement percentage.
+
   \param    type <integer> bearing type (0=ball, 1=slide).
 
   \param    align <integer> bearing block zero alignment location.
@@ -165,6 +168,7 @@ module make_bearing_linear_rod
   delta = 0,
   gap = 10,
   reveal = 50,
+  dilate = 15,
   type = 0,
   align = 2,
   verb = 0,
@@ -256,6 +260,55 @@ module make_bearing_linear_rod
     children();
   }
 
+  // build ball bearing tunnel
+  module build_tunnel_path(r, l, s=1, m=255)
+  {
+    lx = l[0];
+    ly = l[1];
+
+    // return path scale factor
+    sr = 1 + s/100;
+
+    // corner rotation
+    for
+    (
+      i = [
+             [+lx/2, +ly/2,   0, 1, [sr, sr]],
+             [-lx/2, +ly/2,  90, 3, [sr,  1]],
+             [-lx/2, -ly/2, 180, 5, [ 1, sr]],
+             [+lx/2, -ly/2, 270, 7, [sr, sr]]
+          ]
+    )
+    if ( binary_bit_is(m, i[3], 1) )
+    {
+      translate([i[0], i[1], 0])
+      rotate([0, 0, i[2]])
+      extrude_rotate_trs(r=r, ra=90, s=i[4])
+      children();
+    }
+
+    // linear extrusion
+    for
+    (
+      i = [
+            [ +r +lx/2,    +ly/2,   0, ly, 0, sr],
+            [    -lx/2, +r +ly/2,  90, lx, 2, sr],
+            [ -r -lx/2,    -ly/2, 180, ly, 4,  1],
+            [     lx/2, -r -ly/2, 270, lx, 6, sr]
+          ]
+    )
+    if ( binary_bit_is(m, i[4], 1) )
+    {
+      translate([i[0], i[1], 0])
+      rotate([90, 0, i[2]])
+      translate([0, 0, -eps])
+      linear_extrude(height=i[3] + eps*2)
+      scale(i[5])
+      rotate([0, 0, 0])
+      children();
+    }
+  }
+
   // bearing block zero alignment
   translate
   ( select_ci
@@ -285,7 +338,7 @@ module make_bearing_linear_rod
       align_ball_tunnel()
       union_cs()
       { // tunnel
-        extrude_rotate_trl(r=ball_tunnel_r, l=[ball_tunnel_w, ball_tunnel_l])
+        build_tunnel_path(r=ball_tunnel_r, l=[ball_tunnel_w, ball_tunnel_l], s=dilate)
         circle(d=ball_tunnel_d);
 
         // feed
@@ -308,7 +361,7 @@ module make_bearing_linear_rod
     // add solid slide bearing
     if ( type == 1 )
     align_ball_tunnel()
-    extrude_rotate_trl(r=ball_tunnel_r, l=[ball_tunnel_w, ball_tunnel_l], m=(8+16+32))
+    build_tunnel_path(r=ball_tunnel_r, l=[ball_tunnel_w, ball_tunnel_l], m=(8+16+32))
     circle(d=ball_tunnel_d + eps);
 
     // internal view assist
