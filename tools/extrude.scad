@@ -71,7 +71,7 @@ module extrude_rotate_tr
   ra = 360
 )
 {
-  rotate_extrude(angle = ra )
+  rotate_extrude(angle = ra)
   translate([r, 0])
   rotate([0, 0, pa])
   children();
@@ -142,10 +142,16 @@ module extrude_rotate_trs
 
   \details
 
-    \amu_eval ( object=extrude_rotate_trl ${object_ex_diagram_3d} )
+    When the parameter \p l is not specified, the shape profile is
+    revolved using extrude_rotate_tr(). When the parameter \p l is
+    specified, the shape profile may be linearly extruded along the the
+    \em x-axis and \em y-axis, with the linear extrusion lengths
+    specified by \p l, and is revolved 90 degrees to transition between
+    the axes. In this mode, the parameter \p ra is defined to be 90 for
+    all corners and the parameter \p m controls which of the eight path
+    sections to render during the 360 degree revolution.
 
-  \note When elongating <tt>(l > 0)</tt>, \p ra is ignored. However, \p m
-        may be used to control which complete revolution section to render.
+    \amu_eval ( object=extrude_rotate_trl ${object_ex_diagram_3d} )
 *******************************************************************************/
 module extrude_rotate_trl
 (
