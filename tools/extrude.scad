@@ -229,17 +229,15 @@ module extrude_rotate_trl
 
   \details
 
+    When \p c is \b true, apply the transformation to the children
+    objects, otherwise return the children unmodified.
+
     <b>Data structure syntax</b>
 
      h[n] | type              | description
     :----:|:-----------------:|:---------------------------------------
       0   | <decimal>         | total extrusion height
       1   | <decimal-list-n>  | list of one or more scale factors
-
-  \details
-
-    When \p c is \b true, apply the transformation to the children
-    objects, otherwise return the children unmodified.
 
     When \p h is a decimal, or a list with a single decimal, the shape
     is linearly extruded to the height specified by the decimal value
@@ -296,41 +294,27 @@ module extrude_linear_uss
   }
 }
 
-//! Linearly extrude a 2d shape with upper and lower scaling.
+//! Linearly extrude a 2d shape with multi-segment uniformly-spaced profile scaling.
 /***************************************************************************//**
-  \param    h <decimal-list-3:9|decimal> A list of decimals or a single
-            decimal.
+  \param    h <datastruct-list-n|decimal> A data structure or a single decimal.
   \param    center <boolean> Center extrusion about origin.
   \param    c <boolean> conditional.
 
   \details
 
     When \p c is \b true, apply the transformation to the children
-    objects, otherwise return the children unmodified. When \p h is a
-    decimal, the shape is extruded linearly as normal. To scale the
-    upper and lower slices of the extrusion, \p h must be a list with a
-    minimum of three decimal values as described in the following
-    table. For symmetrical scaling, shape must be centered about
-    origin.
+    objects, otherwise return the children unmodified.
 
-     h[n] | default | description
-    :----:|:-------:|:---------------------------------------
-      0   |         | total extrusion height
-      1   |         | (+z) number of scaled extrusion slices
-      2   |         | (+z) extrusion scale percentage
-      3   | -h[2]   | (+z) x-dimension scale percentage
-      4   |  h[3]   | (+z) y-dimension scale percentage
-      5   |  h[1]   | (-z) number of scaled extrusion slices
-      6   |  h[2]   | (-z) extrusion scale percentage
-      7   |  h[3]   | (-z) x-dimension scale percentage
-      8   |  h[4]   | (-z) y-dimension scale percentage
+    <b>Data structure syntax</b>
 
-  \details
+    The scaled extrusion can be divided across as many segments \em (n)
+    as desired with each being specified by a data structure using the
+    syntax of the function extrude_linear_uss(). Scaling for multiple
+    segments are placed in a list and each segment is processed
+    sequentially, in the listed order, until all \em n-segments have
+    been linearly extruded and stacked.
 
     \amu_eval ( object=extrude_linear_mss ${object_ex_diagram_3d} )
-
-  \todo This function should be rewritten to use the built-in scaling
-        provided by linear_extrude() in the upper and lower scaling zones.
 *******************************************************************************/
 module extrude_linear_mss
 (
