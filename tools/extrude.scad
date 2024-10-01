@@ -220,6 +220,82 @@ module extrude_rotate_trl
   }
 }
 
+//! Linearly extrude a 2d shape with uniformly-spaced profile scaling.
+/***************************************************************************//**
+  \param    h <datastruct|decimal> A data structure or a single decimal.
+  \param    center <boolean> Center extrusion about origin.
+  \param    c <boolean> conditional.
+  \param    ha <decimal> An extrusion height adjustment value.
+
+  \details
+
+    <b>Data structure syntax</b>
+
+     h[n] | type              | description
+    :----:|:-----------------:|:---------------------------------------
+      0   | <decimal>         | total extrusion height
+      1   | <decimal-list-n>  | list of one or more scale factors
+
+  \details
+
+    When \p c is \b true, apply the transformation to the children
+    objects, otherwise return the children unmodified.
+
+    When \p h is a decimal, or a list with a single decimal, the shape
+    is linearly extruded to the height specified by the decimal value
+    without scaling. When \p h is a list, the first element of \p h
+    specifies the extrusion height and the second element of \p h
+    specifies the scale factor, or scale factors in the case that the
+    second element is a list, When s list of scaling factors is
+    specified, the scale factors are applied sequentially with uniform
+    spacing along the linear extrusion height.
+
+    The parameter \p ha may be used to add (small) values to the
+    extrusion height to construct overlapping shapes when multiple
+    extrusions are stacked.
+
+    \amu_eval ( object=extrude_linear_uss ${object_ex_diagram_3d} )
+*******************************************************************************/
+module extrude_linear_uss
+(
+  h,
+  center = false,
+  c = true,
+  ha = 0
+)
+{
+  if ( is_undef(h) || (c == false) )
+  {
+    children();
+  }
+  else if ( is_scalar(h) )
+  {
+    linear_extrude(height=h + ha, center=center)
+    children();
+  }
+  else
+  {
+    ht = defined_e_or(h, 0, 1) + ha;  // section height
+    ss = defined_e_or(h, 1, 1);       // section scale steps
+
+    su = is_list(ss) ? ss : [ss];     // make sure 'ss' is a list
+
+    // handle single scale section case
+    sv = (len(su) == 1) ? concat(su, su) : su;
+
+    sn = len(sv);       // section count
+    sz = ht/(sn-1);     // uniform section size
+    so = eps;           // section overlap
+
+    translate(center==true ? [0, 0, -ht/2] : origin3d)
+    for (f=[0:sn-2])
+    translate([0, 0, sz * f - so/2])
+    linear_extrude(height=sz + so, scale=sv[f+1]/sv[f])
+    scale(sv[f])
+    children();
+  }
+}
+
 //! Linearly extrude a 2d shape with upper and lower scaling.
 /***************************************************************************//**
   \param    h <decimal-list-3:9|decimal> A list of decimals or a single
@@ -344,6 +420,8 @@ BEGIN_SCOPE diagram;
       extrude_rotate_trs( r=50, pa=45, ra=180, s=[1, 3] ) circle( 5, center=true );
     else if (shape == "extrude_rotate_trl")
       extrude_rotate_trl( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
+    else if (shape == "extrude_linear_uss")
+      extrude_linear_uss( [10, [1,1/2,1,1/4]], center=true) circle( d=10 );
     else if (shape == "extrude_linear_uls")
       extrude_linear_uls( [5,10,15,-5], center=true ) square( [20,15], center=true );
   END_OPENSCAD;
@@ -357,6 +435,7 @@ BEGIN_SCOPE diagram;
                 extrude_rotate_tr
                 extrude_rotate_trs
                 extrude_rotate_trl
+                extrude_linear_uss
                 extrude_linear_uls
               ";
     variables add_opts_combine "views shapes";
