@@ -327,12 +327,12 @@ module extrude_linear_uss
 
   \details
 
-    \amu_eval ( object=extrude_linear_uls ${object_ex_diagram_3d} )
+    \amu_eval ( object=extrude_linear_mss ${object_ex_diagram_3d} )
 
   \todo This function should be rewritten to use the built-in scaling
         provided by linear_extrude() in the upper and lower scaling zones.
 *******************************************************************************/
-module extrude_linear_uls
+module extrude_linear_mss
 (
   h,
   center = false,
@@ -395,8 +395,8 @@ BEGIN_SCOPE diagram;
       extrude_rotate_trl( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
     else if (shape == "extrude_linear_uss")
       extrude_linear_uss( [10, [1,1/2,1,1/4]], center=true) circle( d=10 );
-    else if (shape == "extrude_linear_uls")
-      extrude_linear_uls( h=[[10, [1.25, 1]], 20, [35, [for (i=[90:-1:10]) sin(i)]]], center=true) circle(15);
+    else if (shape == "extrude_linear_mss")
+      extrude_linear_mss( h=[[10, [1.25, 1]], 20, [35, [for (i=[90:-1:10]) sin(i)]]], center=true) circle(15);
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -409,7 +409,7 @@ BEGIN_SCOPE diagram;
                 extrude_rotate_trs
                 extrude_rotate_trl
                 extrude_linear_uss
-                extrude_linear_uls
+                extrude_linear_mss
               ";
     variables add_opts_combine "views shapes";
     variables add_opts "--viewall --autocenter --view=axes";

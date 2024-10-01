@@ -141,7 +141,7 @@ BEGIN_SCOPE logo;
     cone( h=s*2, r=s, vr=2/10*s );
     rotate([0, 0, 360/20])
     repeat_radial( n=5, angle=true )
-    extrude_linear_uls( h=s )
+    extrude_linear_mss( h=s )
     translate(triangle_centroid(ft) + [-15,2]/s)
     difference()
     {

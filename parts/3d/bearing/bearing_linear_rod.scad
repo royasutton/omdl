@@ -326,11 +326,11 @@ module make_bearing_linear_rod
     difference_cs( c=true, s=view )
     {
       // bearing block
-      extrude_linear_uls(bearing_block_h, center=true, c=extrude_profile)
+      extrude_linear_mss(bearing_block_h, center=true, c=extrude_profile)
       children();
 
       // pipe tunnel
-      extrude_linear_uls(bearing_block_h + eps*2, center=true)
+      extrude_linear_mss(bearing_block_h + eps*2, center=true)
       circle(d=pipe_tunnel_d);
 
       // ball tunnels
@@ -346,7 +346,7 @@ module make_bearing_linear_rod
         translate( ball_feed_alignment[load-1][0] )
         rotate( ball_feed_alignment[load-1][1] )
         translate( ball_feed_alignment[load-1][2] )
-        extrude_linear_uls(bearing_feed_l + ball_tunnel_d/2, center=true)
+        extrude_linear_mss(bearing_feed_l + ball_tunnel_d/2, center=true)
         circle(d=bearing_feed_r * ball_d);
 
         // report ball bearing count
@@ -368,12 +368,12 @@ module make_bearing_linear_rod
     if ( is_defined(view) )
     {
       // bearing block
-      %extrude_linear_uls(bearing_block_h, center=true, c=extrude_profile)
+      %extrude_linear_mss(bearing_block_h, center=true, c=extrude_profile)
       children();
 
       // pipe
       %color("black")
-      extrude_linear_uls(bearing_block_h + eps*2, center=true)
+      extrude_linear_mss(bearing_block_h + eps*2, center=true)
       difference_cs(pipe_id>0){circle(d=pipe_od); circle(d=pipe_id);}
     }
   }

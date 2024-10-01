@@ -254,7 +254,7 @@ module pci_bracket
       {
         vrf = select_ci( [[0,0,1.5,1.5], [1.5,0,1.5,1.5]], bff);
         translate([sv18,0,0])
-        extrude_linear_uls(h=mth)
+        extrude_linear_mss(h=mth)
         rectangle(size=[sv03-abs(sv02), sv04], vr=vrf, center=false);
 
         if ( bff == 0 )
@@ -282,7 +282,7 @@ module pci_bracket
       // tab to bracket offset
       toh  = sv10;
       translate([sv02,sv01-toh+mth,0])
-      extrude_linear_uls(h=mth)
+      extrude_linear_mss(h=mth)
       rectangle(size=[sv03-abs(sv02), toh], vr=[0,toh/1.75,0,0], vrm=2, center=false);
 
       // tab fillet
@@ -291,13 +291,13 @@ module pci_bracket
       translate([tbfo,sv01-tbf,0])
       mirror([0,1,1])
       rotate([0,90,0])
-      extrude_linear_uls(h=tbfl)
+      extrude_linear_mss(h=tbfl)
       polygon([[tbf,tbf], [tbf,0], [0,0]]);
 
       // bracket
       vrf  = select_ci( [[4.00,4.00,0,2.5], [4.00,4.00,1.5,0]], bff);
       vrmf = select_ci( [15, 3], bff);
-      extrude_linear_uls(h=mth)
+      extrude_linear_mss(h=mth)
       rectangle(size=[sv05, sv01-toh+mth+eps*4], vr=vrf, vrm=vrmf, center=false);
 
       // bottom tab with bend
@@ -306,14 +306,14 @@ module pci_bracket
       bty2 = sv20;
 
       translate([sv11,-bty1-eps*2,0])
-      extrude_linear_uls(h=mth)
+      extrude_linear_mss(h=mth)
       rectangle(size=[btx, bty1 + eps*4], center=false);
 
       translate([sv11,-bty1-bty2-mth*sin(sv19),-bty2*sin(sv19)])
       rotate([sv19, 0, 0])
       union()
       {
-        extrude_linear_uls(h=mth)
+        extrude_linear_mss(h=mth)
         rectangle(size=[btx, bty2], vr=[1.5,1.5,0,0], vrm=0, center=false);
         translate([0,bty2,mth/2]) rotate([0,90,0]) cylinder(d=mth, h=btx);
       }
@@ -339,7 +339,7 @@ module pci_bracket
           {
             union()
             {
-              extrude_linear_uls(h=col-brd)
+              extrude_linear_mss(h=col-brd)
               ellipse(size=[1,1/2]*brd);
               rotate([0,90,0])
               ellipsoid([1,2]*brd);
@@ -372,12 +372,12 @@ module pci_bracket
         {
           union()
           {
-            extrude_linear_uls(h=tt)
+            extrude_linear_mss(h=tt)
             rectangle(size=[tl, tw], vr=[0,hd/2,hd/2,0], center=false);
             translate([tbf+mth,0,tt])
             rotate([270,180,0])
             mirror([0,0,0])
-            extrude_linear_uls(h=tw)
+            extrude_linear_mss(h=tw)
             polygon([[tbf,tbf], [tbf,0], [0,0]]);
           }
           translate([tx, tw/2, -tt/2])
@@ -391,7 +391,7 @@ module pci_bracket
         if ( binary_bit_is(fins, first(x), 1) )
         translate([second(x),coo-mth,mth*3-eps])
         rotate([0,90,0])
-        extrude_linear_uls(h=mth)
+        extrude_linear_mss(h=mth)
         rectangle(size=[mth*2, sv08], vr=[1,0,0,1]*mth*1.5, center=false);
       }
     }
@@ -403,7 +403,7 @@ module pci_bracket
       for (y=[1:vhc])
       {
         translate([sv05/2, vho + (y-1)*vhs, -mth/2-mth])
-        extrude_linear_uls(h=mth*4)
+        extrude_linear_mss(h=mth*4)
         ngon(n=6, r=vhr, vr=vhr/2);
       }
     }
