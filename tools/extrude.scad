@@ -83,6 +83,9 @@ module extrude_rotate_tr
 
   \param    s <decimal-list-2|decimal> The start and end scale factor.
             A list [s1, s2] of decimals or a single decimal for (s1=s2)
+  \param    m <integer> The facet number mode (either \b 0 or \b 1).
+            With \p m = \b 1, fewer scaled-steps are generated during
+            the revolution.
 
   \details
 
@@ -99,7 +102,8 @@ module extrude_rotate_trs
   pa = 0,
   ra = 360,
 
-  s
+  s,
+  m = 0
 )
 {
   if ( is_undef(s) )
@@ -113,14 +117,16 @@ module extrude_rotate_trs
     s1 = defined_e_or(s, 0, sd);
     s2 = defined_e_or(s, 1, sd);
 
-    facets = ceil(sqrt(openscad_fn(r)));
+    facets = (m == 0) ? ceil(openscad_fn(r) * ra/360)
+                      : ceil(sqrt(openscad_fn(r) * ra/360));
 
-    facet_sa = ra/facets;
-    facet_ss = (s2-s1)/facets;
+    facet_sa = ra/facets;         // step angle
+    facet_ss = (s2-s1)/facets;    // step scale
+    facet_so = 360*eps;           // step overlap
 
     for (f=[0:facets-1])
-    rotate(facet_sa * f - 180*eps)                // prior facet overlap
-    rotate_extrude(angle = facet_sa + 380*eps)    // prior + next overlap
+    rotate(facet_sa * f - facet_so/2)
+    rotate_extrude(angle = facet_sa + facet_so)
     translate([r, 0])
     scale(s1 + facet_ss * f)
     rotate([0, 0, pa])
