@@ -345,56 +345,29 @@ module extrude_linear_uls
   }
   else if ( is_scalar(h) )
   {
-    translate(center==true ? [0, 0, -h/2] : origin3d)
-    linear_extrude(height=h)
+    linear_extrude(height=h, center=center)
     children();
   }
   else
   {
-    z = h[0];                                   // total height
+    // calculate total height of all sections
+    hv = [for (e=h) is_list(e) ? first(e) : e];
+    ht = sum( hv );
 
-    n1 = (len(h) >= 3) ? max(h[1], 0)  : 0;     // number of scaled-slices
-    z1 = (len(h) >= 3) ? abs(h[2])/100 : 0;     // z scale fraction
-    x1 = (len(h) >= 4) ?     h[3] /100 : -z1;   // x scale fraction
-    y1 = (len(h) >= 5) ?     h[4] /100 : x1;    // y scale fraction
+    sn = len(hv);       // section count
+    so = eps;           // section overlap
 
-    n2 = (len(h) >= 6) ? max(h[5], 0)  : n1;
-    z2 = (len(h) >= 7) ? abs(h[6])/100 : z1;
-    x2 = (len(h) >= 8) ?     h[7] /100 : x1;
-    y2 = (len(h) >= 9) ?     h[8] /100 : y1;
-
-    h1 = (n1>0) ? z1 * z : 0;
-    h2 = (n2>0) ? z2 * z : 0;
-    h0 = z - h1 - h2;
-
-    translate(center==true ? [0, 0, -z/2] : origin3d)
+    translate(center==true ? [0, 0, -ht/2] : origin3d)
+    for (f=[0:sn-1])
     {
-      if (h1 > 0)
-      {
-        translate([0, 0, h0+h2])
-        for( s = [0 : n1-1] )
-        {
-          translate([0, 0, h1/n1*s])
-          scale([1+x1/n1*(s+1), 1+y1/n1*(s+1), 1])
-          linear_extrude(height=h1/n1)
-          children();
-        }
-      }
+      // calculate total height of prior sections
+      tv = (f == 0) ? [0] : [ for (g=[0:f-1]) is_list(h[g]) ? first(h[g]) : h[g] ];
+      tt = sum( tv );
 
-      translate([0, 0, h2])
-      linear_extrude(height=h0)
+      // extrude current section
+      translate([0, 0, tt - so/2])
+      extrude_linear_uss(h=h[f], ha=so, center=false)
       children();
-
-      if (h2 > 0)
-      {
-        for( s = [0 : n2-1] )
-        {
-          translate([0, 0, h2/n2*s])
-          scale([1+x2/n2*(n2-s), 1+y2/n2*(n2-s), 1])
-          linear_extrude(height=h2/n2)
-          children();
-        }
-      }
     }
   }
 }
@@ -423,7 +396,7 @@ BEGIN_SCOPE diagram;
     else if (shape == "extrude_linear_uss")
       extrude_linear_uss( [10, [1,1/2,1,1/4]], center=true) circle( d=10 );
     else if (shape == "extrude_linear_uls")
-      extrude_linear_uls( [5,10,15,-5], center=true ) square( [20,15], center=true );
+      extrude_linear_uls( h=[[10, [1.25, 1]], 20, [35, [for (i=[90:-1:10]) sin(i)]]], center=true) circle(15);
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
