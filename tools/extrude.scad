@@ -117,18 +117,18 @@ module extrude_rotate_trs
     s1 = defined_e_or(s, 0, sd);
     s2 = defined_e_or(s, 1, sd);
 
-    facets = (m == 0) ? ceil(openscad_fn(r) * ra/360)
-                      : ceil(sqrt(openscad_fn(r) * ra/360));
+    sn = (m == 0) ? ceil(openscad_fn(r) * ra/360)
+                  : ceil(sqrt(openscad_fn(r) * ra/360));
 
-    facet_sa = ra/facets;         // step angle
-    facet_ss = (s2-s1)/facets;    // step scale
-    facet_so = 360*eps;           // step overlap
+    sa = ra/sn;         // section angle
+    ss = (s2-s1)/sn;    // uniform section scale
+    so = 360*eps;       // section overlap
 
-    for (f=[0:facets-1])
-    rotate(facet_sa * f - facet_so/2)
-    rotate_extrude(angle = facet_sa + facet_so)
+    for (f=[0:sn-1])
+    rotate(sa * f - so/2)
+    rotate_extrude(angle = sa + so)
     translate([r, 0])
-    scale(s1 + facet_ss * f)
+    scale(s1 + ss * f)
     rotate([0, 0, pa])
     children();
   }
