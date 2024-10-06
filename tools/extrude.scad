@@ -239,6 +239,10 @@ module extrude_rotate_trl
       0   | <decimal>         | total extrusion height
       1   | <decimal-list-n>  | list of one or more scale factors
 
+    Each scale factor can be either a single decimal or a list of two
+    decimals to scale \b x and \b y independently. When the scale
+    factor is a single decimal, both dimensions are scaled equally.
+
     When \p h is a decimal, or a list with a single decimal, the shape
     is linearly extruded to the height specified by the decimal value
     without scaling. When \p h is a list, the first element of \p h
@@ -248,7 +252,7 @@ module extrude_rotate_trl
     specified, the scale factors are applied sequentially with uniform
     spacing along the linear extrusion height.
 
-    The parameter \p ha may be used to add (small) values to the
+    \note The parameter \p ha may be used to add (small) values to the
     extrusion height to construct overlapping shapes when multiple
     extrusions are stacked.
 
@@ -324,6 +328,11 @@ module extrude_linear_uss
     sequentially, in the listed order, until all \em n-segments have
     been linearly extruded and stacked.
 
+    \note As with extrude_linear_uss(), each scale factor can be either
+    a single decimal or a list of two decimals to scale \b x and \b y
+    independently. When the scale factor is a single decimal, both
+    dimensions are scaled equally.
+
     \amu_eval ( object=extrude_linear_mss ${object_ex_diagram_3d} )
 *******************************************************************************/
 module extrude_linear_mss
@@ -388,7 +397,7 @@ BEGIN_SCOPE diagram;
     else if (shape == "extrude_rotate_trl")
       extrude_rotate_trl( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
     else if (shape == "extrude_linear_uss")
-      extrude_linear_uss( [10, [1,1/2,1,1/4]], center=true) circle( d=10 );
+      extrude_linear_uss( [10, [1,1/2,[1,1/2],[1/4,1/2]]], center=true) circle( d=10 );
     else if (shape == "extrude_linear_mss")
       extrude_linear_mss( h=[[10, [1.25, 1]], 20, [35, [for (i=[90:-1:10]) sin(i)]]], center=true) circle(15);
   END_OPENSCAD;
