@@ -287,10 +287,20 @@ module extrude_linear_uss
 
     translate(center==true ? [0, 0, -ht/2] : origin3d)
     for (f=[0:sn-2])
-    translate([0, 0, sz * f - so/2])
-    linear_extrude(height=sz + so, scale=sv[f+1]/sv[f])
-    scale(sv[f])
-    children();
+    {
+      cl = is_list(sv[f]);
+      nl = is_list(sv[f+1]);
+
+      // handle one, two, and mixed-dimensional scaling
+      es =  cl &&  nl ? [first(sv[f+1])/first(sv[f]), second(sv[f+1])/second(sv[f])]
+         : !cl &&  nl ? [first(sv[f+1])/      sv[f] , second(sv[f+1])/       sv[f] ]
+         :              sv[f+1]/sv[f];
+
+      translate([0, 0, sz * f - so/2])
+      linear_extrude(height=sz + so, scale=es)
+      scale(sv[f])
+      children();
+    }
   }
 }
 
