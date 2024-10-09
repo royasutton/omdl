@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Computer)
-    \amu_define group_brief (Computer.)
+    \amu_define group_brief (Mechanical computer parts.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
