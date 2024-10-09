@@ -13,7 +13,8 @@ local_release_add :=
 local_backup_add  :=
 
 local_submodules  := computer \
-                     bearing
+                     bearing \
+                     enclosure
 
 #------------------------------------------------------------------------------#
 # add local module
