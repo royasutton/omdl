@@ -65,7 +65,7 @@ module project_box_rectangle
   vr,       // wall corner rounding radius
   vrm,      // {0, 1, 2]} : wall corner rounding mode
 
-  offset,   // wall offset [x, y]
+  inset,    // wall inset [x, y]
 
   lip,      // lip = [ mode, height, base pct, taper pct, alignment ]
   lid,      // lid height extrusion, see: extrude_linear_mss()
@@ -108,10 +108,10 @@ module project_box_rectangle
   // wall height
   wall_h = size_h - lip_h - lid_h;
 
-  // wall x and y offsets (always negative)
-  wall_od = ( is_defined(offset) && is_scalar(offset) ) ? offset : 0;
-  wall_ox = -abs(defined_e_or(offset, 0, wall_od));
-  wall_oy = -abs(defined_e_or(offset, 1, wall_od));
+  // wall x and y insets (usually negative, but allow positive)
+  wall_od = ( is_defined(inset) && is_scalar(inset) ) ? inset : 0;
+  wall_ox = defined_e_or(inset, 0, wall_od) * -1;
+  wall_oy = defined_e_or(inset, 1, wall_od) * -1;
 
   // wall size x and y
   wall_xy = [size_x + wall_ox, size_y + wall_oy];
@@ -576,7 +576,7 @@ BEGIN_SCOPE example;
       vr = 2,
       vrm = 1,
 
-      offset = 2,
+      inset = 2,
 
       lip = 1,
       lid = lid_profile,
