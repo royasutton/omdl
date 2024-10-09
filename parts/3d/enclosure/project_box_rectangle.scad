@@ -80,60 +80,12 @@ module project_box_rectangle
 {
   //
   //
-  // parameter calculation
+  // helper modules and functions
   //
   //
 
-
-  // enclosure envelope [size_x, size_y, size_z] for this section
-  size_x = defined_e_or(size, 0, size);
-  size_y = defined_e_or(size, 1, size_x);
-
-  // enclosure extrusion height (calculate total height of all sections)
-  hv     = is_defined(h) ? [for (e=h) is_list(e) ? first(e) : e] : [0];
-  size_h = sum(hv);
-
-  // limit rounding mode to those options that make sense; set={0, 1, 5}
-  // convert each element when vrm is a list
-  vrm_ci = is_list(vrm)
-         ? [for (e=vrm) select_ci(v=[0, 1, 5], i=e, l=false)]
-         : select_ci(v=[0, 1, 5], i=vrm, l=false);
-
-  // wall lip: mode, height, base pct, taper pct, alignment
-  lip_m   = defined_e_or(lip, 0, lip);
-  lip_h   = defined_e_or(lip, 1, wth/2);
-  lip_bw  = defined_e_or(lip, 2, 45);
-  lip_tw  = defined_e_or(lip, 3, 10);
-  lip_ai  = defined_e_or(lip, 4, 0);
-
-  // lid extrusion height (calculate total height of all sections)
-  lid_hv = is_defined(lid) ? [for (e=lid) is_list(e) ? first(e) : e] : [0];
-  lid_h  = sum(lid_hv);
-
-  // wall height
-  wall_h = size_h - lip_h - lid_h;
-
-  // wall x and y insets (usually negative, but allow positive)
-  wall_od = ( is_defined(inset) && is_scalar(inset) ) ? inset : 0;
-  wall_ox = defined_e_or(inset, 0, wall_od) * -1;
-  wall_oy = defined_e_or(inset, 1, wall_od) * -1;
-
-  // wall size x and y
-  wall_xy = [size_x + wall_ox, size_y + wall_oy];
-
-  if (verb > 0)
-    echo(strl(["box: interior dimensions [x, y] = ", wall_xy]));
-
-  //
-  //
-  //  box construction
-  //
-  //
-
-  //
   // exterior walls
-  //
-  if ( wall_h > 0 )
+  module construct_exterior_walls()
   {
     // re-scale total extrusion height of 'h' equally to 'wall_h'
     hs  = !is_list(h) ? wall_h
@@ -152,10 +104,8 @@ module project_box_rectangle
       echo(strl(["wall: interior height (ignoring ribs) = ", wall_h + lip_h]));
   }
 
-  //
   // wall lips
-  //
-  if ( is_defined(lip) )
+  module construct_lips()
   {
     // calculate lip bevel scaling factor
     //  scale control parameter is percentage of wall thickness
@@ -221,10 +171,8 @@ module project_box_rectangle
     }
   }
 
-  //
   // lid extrusion
-  //
-  if ( lid_h > 0 )
+  module construct_lid();
   {
     mirror([0, 0, 1])
     translate([0, 0, -eps])
@@ -235,10 +183,8 @@ module project_box_rectangle
       echo(strl(["lid: extrusion = ", lid]));
   }
 
-  //
   // ribs
-  //
-  if ( is_defined(rib) )
+  module construct_ribs()
   {
     /*
       +----------------+
@@ -369,10 +315,8 @@ module project_box_rectangle
     }
   }
 
-  //
   // interior walls
-  //
-  if ( is_defined(wall) )
+  module construct_interior_walls()
   {
     /*
       +----------------+
@@ -536,10 +480,8 @@ module project_box_rectangle
     }
   }
 
-  //
   // posts
-  //
-  if ( is_defined(post) )
+  module construct_posts()
   {
     /*
       +----------------+
@@ -557,6 +499,87 @@ module project_box_rectangle
       type: { 0: male, 1: female }
     */
 
+  }
+
+  //
+  //
+  // global parameter calculation
+  //
+  //
+
+  // enclosure envelope [size_x, size_y, size_z] for this section
+  size_x = defined_e_or(size, 0, size);
+  size_y = defined_e_or(size, 1, size_x);
+
+  // enclosure extrusion height (calculate total height of all sections)
+  hv     = is_defined(h) ? [for (e=h) is_list(e) ? first(e) : e] : [0];
+  size_h = sum(hv);
+
+  // limit rounding mode to those options that make sense; set={0, 1, 5}
+  // convert each element when vrm is a list
+  vrm_ci = is_list(vrm)
+         ? [for (e=vrm) select_ci(v=[0, 1, 5], i=e, l=false)]
+         : select_ci(v=[0, 1, 5], i=vrm, l=false);
+
+  // wall lip: mode, height, base pct, taper pct, alignment
+  lip_m   = defined_e_or(lip, 0, lip);
+  lip_h   = defined_e_or(lip, 1, wth/2);
+  lip_bw  = defined_e_or(lip, 2, 45);
+  lip_tw  = defined_e_or(lip, 3, 10);
+  lip_ai  = defined_e_or(lip, 4, 0);
+
+  // lid extrusion height (calculate total height of all sections)
+  lid_hv = is_defined(lid) ? [for (e=lid) is_list(e) ? first(e) : e] : [0];
+  lid_h  = sum(lid_hv);
+
+  // wall height
+  wall_h = size_h - lip_h - lid_h;
+
+  // wall x and y insets (usually negative, but allow positive)
+  wall_od = ( is_defined(inset) && is_scalar(inset) ) ? inset : 0;
+  wall_ox = defined_e_or(inset, 0, wall_od) * -1;
+  wall_oy = defined_e_or(inset, 1, wall_od) * -1;
+
+  // wall size x and y
+  wall_xy = [size_x + wall_ox, size_y + wall_oy];
+
+  if (verb > 0)
+    echo(strl(["box: interior dimensions [x, y] = ", wall_xy]));
+
+  //
+  //
+  //  box construction
+  //
+  //
+
+  if ( wall_h > 0 )
+  {
+    construct_exterior_walls();
+  }
+
+  if ( is_defined(lip) )
+  {
+    construct_lips();
+  }
+
+  if ( lid_h > 0 )
+  {
+    construct_lid();
+  }
+
+  if ( is_defined(rib) )
+  {
+    construct_ribs();
+  }
+
+  if ( is_defined(wall) )
+  {
+    construct_interior_walls();
+  }
+
+  if ( is_defined(post) )
+  {
+    construct_posts();
   }
 
 }
