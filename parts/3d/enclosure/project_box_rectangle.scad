@@ -109,7 +109,7 @@ module project_box_rectangle
   {
     // calculate lip bevel scaling factor
     //  scale control parameter is percentage of wall thickness
-    sfact = 2*wth / max(wall_xy) * lip_tw/100;
+    sf = 2*wth / max(wall_xy) * lip_tw/100;
 
     // inner lip alignment method selection
     lip_a = select_ci( [1,2,3], lip_ai );
@@ -119,10 +119,10 @@ module project_box_rectangle
     (
       z =
       [ // [mode, r-offset, z-offset, hc]
-        [3,     0, -1, [1 + sfact, 1]],   // outer, lower
-        [2, lip_a, -1, [1 - sfact, 1]],   // inner, lower
-        [1,     0, +1, [1, 1 + sfact]],   // outer, upper
-        [0, lip_a, +1, [1, 1 - sfact]]    // inner, upper
+        [3,     0, -1, [1 + sf, 1]],      // outer, lower
+        [2, lip_a, -1, [1 - sf, 1]],      // inner, lower
+        [1,     0, +1, [1, 1 + sf]],      // outer, upper
+        [0, lip_a, +1, [1, 1 - sf]]       // inner, upper
       ]
     )
     {
