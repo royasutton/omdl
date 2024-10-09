@@ -78,6 +78,7 @@ module project_box_rectangle
   wall,     // walls = [ config, inst-list ], config = [], inst-list = []
   post,     //
 
+  limit = false,
   align = 0,
   verb = 0
 )
@@ -505,6 +506,28 @@ module project_box_rectangle
 
   }
 
+  // limit child to shape envelop
+  module envelop_assembly( envelop=false )
+  {
+    if ( envelop == true )
+    {
+      intersection()
+      {
+        union()
+        {
+          construct_exterior_walls( true );
+          construct_lips( true );
+        }
+
+        children();
+      }
+    }
+    else
+    {
+      children();
+    }
+  }
+
   //
   //
   // global parameter calculation
@@ -552,7 +575,7 @@ module project_box_rectangle
 
   //
   //
-  //  box construction
+  //  box and feature construction
   //
   //
 
@@ -561,7 +584,7 @@ module project_box_rectangle
     construct_exterior_walls();
   }
 
-  if ( is_defined(lip) )
+  if ( is_defined( lip ) )
   {
     construct_lips();
   }
@@ -571,17 +594,19 @@ module project_box_rectangle
     construct_lid();
   }
 
-  if ( is_defined(rib) )
+  if ( is_defined( rib ) )
   {
+    envelop_assembly( limit == true )
     construct_ribs();
   }
 
-  if ( is_defined(wall) )
+  if ( is_defined( wall ) )
   {
+    envelop_assembly( limit == true )
     construct_interior_walls();
   }
 
-  if ( is_defined(post) )
+  if ( is_defined( post ) )
   {
     construct_posts();
   }
@@ -600,6 +625,7 @@ module project_box_rectangle
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <tools/operation_cs.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
 
     wth = 2;
