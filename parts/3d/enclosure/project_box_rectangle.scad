@@ -77,11 +77,11 @@ module project_box_rectangle
   verb = 0
 )
 {
-  /*
-   *
-   * parameter calculation
-   *
-   */
+  //
+  //
+  // parameter calculation
+  //
+  //
 
   // limit rounding mode to those options that make sense; set={0, 1, 5}
   // convert each element when vrm is a list
@@ -119,11 +119,11 @@ module project_box_rectangle
   if (verb > 0)
     echo(strl(["box: interior dimensions [x, y] = ", wall_xy]));
 
-  /*
-   *
-   *  box construction
-   *
-   */
+  //
+  //
+  //  box construction
+  //
+  //
 
   //
   // exterior walls
@@ -230,7 +230,9 @@ module project_box_rectangle
   if ( is_defined(rib) )
   {
     /*
-      ### data structure ###
+      +----------------+
+      | Data Structure |
+      +----------------+
 
       ribs = [ mode, rib:[w, hx, hy], pct:[x, y, z], number:[x, y, z] ]
 
@@ -282,12 +284,11 @@ module project_box_rectangle
     cnt_y   = defined_e_or(cnt_d, 1, cnt_x);
     cnt_z   = defined_e_or(cnt_d, 2, cnt_y);
 
-
-    /*
-     *
-     * construct ribs
-     *
-     */
+    //
+    //
+    // construct ribs
+    //
+    //
 
     translate(rib_lo)
     for
@@ -363,7 +364,9 @@ module project_box_rectangle
   if ( is_defined(wall) )
   {
     /*
-      ### data structure ###
+      +----------------+
+      | Data Structure |
+      +----------------+
 
       wall = [ config, inst-list ]
 
@@ -418,11 +421,11 @@ module project_box_rectangle
     def_vr  = defined_e_or(defs_l, 2, def_dw);
     def_vrm = defined_e_or(defs_l, 3, cfg_vrm);
 
-    /*
-     *
-     * construct walls
-     *
-     */
+    //
+    //
+    // construct walls
+    //
+    //
 
     // process wall instance list
     translate(wall_lo)
@@ -487,7 +490,7 @@ module project_box_rectangle
       vrm = defined_or(inst_vrm, tdef_vrm);
 
       //
-      // construct wall
+      // construct wall instance
       //
 
       translate(type_m)
@@ -528,7 +531,9 @@ module project_box_rectangle
   if ( is_defined(post) )
   {
     /*
-      ### data structure ###
+      +----------------+
+      | Data Structure |
+      +----------------+
 
       post = [ config, inst-list ]
 
