@@ -60,7 +60,8 @@
 module project_box_rectangle
 (
   wth,      // wall thickness
-  size,     // enclosed size [x, y, z]
+  size,     // enclosed base size [x, y]
+  h,        // enclosure height extrusion
 
   vr,       // wall corner rounding radius
   vrm,      // {0, 1, 2]} : wall corner rounding mode
@@ -83,16 +84,20 @@ module project_box_rectangle
   //
   //
 
+
+  // enclosure envelope [size_x, size_y, size_z] for this section
+  size_x = defined_e_or(size, 0, size);
+  size_y = defined_e_or(size, 1, size_x);
+
+  // enclosure extrusion height (calculate total height of all sections)
+  hv     = is_defined(h) ? [for (e=h) is_list(e) ? first(e) : e] : [0];
+  size_h = sum(hv);
+
   // limit rounding mode to those options that make sense; set={0, 1, 5}
   // convert each element when vrm is a list
   vrm_ci = is_list(vrm)
          ? [for (e=vrm) select_ci(v=[0, 1, 5], i=e, l=false)]
          : select_ci(v=[0, 1, 5], i=vrm, l=false);
-
-  // enclosure section envelope
-  size_x = defined_e_or(size, 0, size);
-  size_y = defined_e_or(size, 1, size_x);
-  size_h = defined_e_or(size, 2, size_y);
 
   // wall lip: mode, height, base pct, taper pct, alignment
   lip_m   = defined_e_or(lip, 0, lip);
@@ -130,7 +135,13 @@ module project_box_rectangle
   //
   if ( wall_h > 0 )
   {
-    extrude_linear_mss(wall_h)
+    // re-scale total extrusion height of 'h' equally to 'wall_h'
+    hs  = !is_list(h) ? wall_h
+        : let( sf=wall_h/size_h )
+          [ for (e=h) !is_list(e) ? e * sf : [ first(e) * sf, second(e) ] ];
+
+    // extrude scaled version 'hs' to maintain proper wall height
+    extrude_linear_mss(hs)
     difference()
     {
       pg_rectangle(wall_xy + 0*[wth, wth], vr=vr, vrm=vrm_ci, center=true);
@@ -138,7 +149,7 @@ module project_box_rectangle
     }
 
     if (verb > 0)
-      echo(strl(["wall: interior height = ", wall_h + lip_h]));
+      echo(strl(["wall: interior height (ignoring ribs) = ", wall_h + lip_h]));
   }
 
   //
@@ -572,11 +583,12 @@ BEGIN_SCOPE example;
     project_box_rectangle
     (
       wth = wth,
-      size = [100, 60, 25],
+      size = [100, 60],
+      h = [[1, [1.05,1]], 7, [5, [1,.99,1]], 6, [6, [1,1.05,1]]],
       vr = 2,
       vrm = 1,
 
-      inset = 2,
+      inset = 5,
 
       lip = 1,
       lid = lid_profile,
