@@ -407,7 +407,7 @@ module project_box_rectangle
     max_z   = binary_iw2i(wall_m, 2, 4) * lip_h + wall_h;
 
     // B6: global lower-lip offset
-    wall_lo = binary_bit_is(wall_m, 2, 6) ? [0, 0, -lip_h] : zero3d;
+    wall_lo = binary_bit_is(wall_m, 6, 1) ? [0, 0, -lip_h] : zero3d;
 
     // B0-1: default wall end rounding
     cfg_vrm = let( i = binary_iw2i(wall_m, 2, 0) )
