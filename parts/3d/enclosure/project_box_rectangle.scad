@@ -39,6 +39,10 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_define includes_required_add
+  (
+    tools/operation_cs.scad
+  )
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
@@ -85,7 +89,7 @@ module project_box_rectangle
   //
 
   // exterior walls
-  module construct_exterior_walls()
+  module construct_exterior_walls( envelop=false )
   {
     // re-scale total extrusion height of 'h' equally to 'wall_h'
     hs  = !is_list(h) ? wall_h
@@ -94,7 +98,7 @@ module project_box_rectangle
 
     // extrude scaled version 'hs' to maintain proper wall height
     extrude_linear_mss(hs)
-    difference()
+    difference_cs( envelop == false )
     {
       pg_rectangle(wall_xy + 0*[wth, wth], vr=vr, vrm=vrm_ci, center=true);
       pg_rectangle(wall_xy - 2*[wth, wth], vr=vr, vrm=vrm_ci, center=true);
@@ -105,7 +109,7 @@ module project_box_rectangle
   }
 
   // wall lips
-  module construct_lips()
+  module construct_lips( envelop=false )
   {
     // calculate lip bevel scaling factor
     //  scale control parameter is percentage of wall thickness
@@ -150,7 +154,7 @@ module project_box_rectangle
             :             wall_xy - 4 * [wth, wth] * lip_bw/100;
 
         translate([0, 0, (wall_h + lip_h - eps)/2 * third(z)])
-        difference()
+        difference_cs( envelop == false )
         {
           extrude_linear_uss(h1, center=true)
           pg_rectangle(s1, vr=vr, vrm=vrm_ci, center=true);
