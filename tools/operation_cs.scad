@@ -181,9 +181,12 @@ module intersection_cs
 {
   if ( is_defined(s) )
     children(s);
-  else if ( c )
+  else if ( c && $children > 1 )
     intersection()
-      children();
+    {
+      children(0);
+      children([1:$children-1]);
+    }
   else
     children();
 }
