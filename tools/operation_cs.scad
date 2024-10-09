@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2019
+  \date   2019-2024
 
   \copyright
 
@@ -66,7 +66,9 @@ module hull_cs
     children(s);
   else if ( c )
     hull()
-    children();
+    {
+      children();
+    }
   else
     children();
 }
@@ -126,7 +128,9 @@ module union_cs
     children(s);
   else if ( c )
     union()
+    {
       children();
+    }
   else
     children();
 }
