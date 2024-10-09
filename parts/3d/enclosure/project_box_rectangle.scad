@@ -172,7 +172,7 @@ module project_box_rectangle
   }
 
   // lid extrusion
-  module construct_lid();
+  module construct_lid()
   {
     mirror([0, 0, 1])
     translate([0, 0, -eps])
