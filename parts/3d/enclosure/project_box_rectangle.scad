@@ -304,7 +304,11 @@ module project_box_rectangle
       rib_hxd = sum( [for (e=rib_hx) is_list(e) ? first(e) : e] );
       rib_hyd = sum( [for (e=rib_hy) is_list(e) ? first(e) : e] );
 
-      rib_rwh = wall_h + lip_h - max([rib_hxd, rib_hyd]) - third(rib_lo);
+      // only when there are ribs on the lid (mode-bit '0' is for the lid)
+      // can not be greater than max xy height less negative lower offset
+      rib_rwh = wall_h + lip_h
+              - max( 0, max([rib_hxd, rib_hyd]) + third(rib_lo) )
+              * ( (binary_bit_is(rib_m, 0, 0) == true) ? 1 : 0 );
 
       echo(strl(["rib: mode = ", rib_m]));
       echo(strl(["rib: width = ", rib_w]));
