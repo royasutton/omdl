@@ -93,7 +93,8 @@ module project_box_rectangle
   module construct_exterior_walls( envelop=false )
   {
     // re-scale total extrusion height of 'h' equally to 'wall_h'
-    hs  = !is_list(h) ? wall_h
+    hs  = !is_list(h) ?
+          wall_h
         : let( sf=wall_h/h_h )
           [ for (e=h) !is_list(e) ? e * sf : [ first(e) * sf, second(e) ] ];
 
@@ -106,28 +107,38 @@ module project_box_rectangle
     }
 
     if (verb > 0)
-      echo(strl(["wall: interior height (ignoring ribs) = ", wall_h + lip_h]));
+    {
+      echo(strl(["wall: height (ignoring ribs) = ", wall_h]));
+      echo(strl(["wall: total interior height (ignoring ribs) = ", wall_h + lip_h]));
+    }
   }
 
   // wall lips
   module construct_lips( envelop=false )
   {
+    // 'lip_h', bit '1', is set globally (ensure coherency with bits of 'lip')
+    // wall lip: mode, height, base pct, taper pct, alignment
+    lip_m         = defined_e_or(lip, 0, lip);
+    lip_bw        = defined_e_or(lip, 2, 45);
+    lip_tw        = defined_e_or(lip, 3, 10);
+    lip_a         = defined_e_or(lip, 4, 0);
+
     // calculate lip bevel scaling factor
     //  scale control parameter is percentage of wall thickness
     sf = 2*wth / max(wall_xy) * lip_tw/100;
 
     // inner lip alignment method selection
-    lip_a = select_ci( [1,2,3], lip_ai );
+    lip_ro = select_ci( [1,2,3], lip_a );
 
     translate( [0, 0, wall_h/2] )
     for
     (
       z =
       [ // [mode, r-offset, z-offset, hc]
-        [3,     0, -1, [1 + sf, 1]],      // outer, lower
-        [2, lip_a, -1, [1 - sf, 1]],      // inner, lower
-        [1,     0, +1, [1, 1 + sf]],      // outer, upper
-        [0, lip_a, +1, [1, 1 - sf]]       // inner, upper
+        [3,      0, -1, [1 + sf, 1]],     // outer, lower
+        [2, lip_ro, -1, [1 - sf, 1]],     // inner, lower
+        [1,      0, +1, [1, 1 + sf]],     // outer, upper
+        [0, lip_ro, +1, [1, 1 - sf]]      // inner, upper
       ]
     )
     {
@@ -172,7 +183,7 @@ module project_box_rectangle
       echo(strl(["lip: height = ", lip_h]));
       echo(strl(["lip: base width percentage = ", lip_bw]));
       echo(strl(["lip: top reduction percentage = ", lip_tw]));
-      echo(strl(["lip: alignment method index = ", lip_ai]));
+      echo(strl(["lip: inner lip alignment index = ", lip_a]));
     }
   }
 
@@ -185,7 +196,10 @@ module project_box_rectangle
     pg_rectangle([encl_x, encl_y] + 0*[wth, wth], vr=vr, vrm=vrm_ci, center=true);
 
     if (verb > 0)
+    {
       echo(strl(["lid: extrusion = ", lid]));
+      echo(strl(["lid: height = ", lid_h]));
+    }
   }
 
   // ribs
@@ -413,40 +427,40 @@ module project_box_rectangle
       //
 
       // move vector
-      type_m    = is_list(inst_m)
-                ? inst_m
-                : (inst_t == 0)
-                  ? [0, inst_m]
+      type_m    = is_list(inst_m) ?
+                  inst_m
+                : (inst_t == 0) ?
+                    [0, inst_m]
                   : [inst_m, 0];
 
       // max length horizontal or vertical base shape
-      tdef_s    = (inst_t == 0)
-                ? [max_x, def_dw]
+      tdef_s    = (inst_t == 0) ?
+                  [max_x, def_dw]
                 : [def_dw, max_y];
 
       // wall base extrusion (adjusted for vertical walls)
-      tdef_he   = !is_list(def_he)
-                ? def_he                    // use specified scalar value
-                : (inst_t == 0)
-                  ? def_he                  // horizontal: use list as defined
+      tdef_he   = !is_list(def_he) ?
+                  def_he                    // use specified scalar value
+                : (inst_t == 0) ?
+                    def_he                  // horizontal: use list as defined
                   : [ for (he=def_he)       // vertical: reverse [x, y] scale factors
-                        !is_list(he)
-                        ? he
+                        !is_list(he) ?
+                          he
                         : [ first(he), [ for (s=second(he)) reverse(s) ] ]
                     ];
 
       // wall-end rounding radii (adjusted for vertical walls)
-      tdef_vr   = !is_list(def_vr)
-                ? def_vr
-                : (inst_t == 0)
-                  ? def_vr
+      tdef_vr   = !is_list(def_vr) ?
+                  def_vr
+                : (inst_t == 0) ?
+                    def_vr
                   : shift(def_vr, n=-1, r=false, c=true);
 
       // wall-end rounding modes (adjusted for vertical walls)
-      tdef_vrm  = !is_list(def_vrm)
-                ? def_vrm
-                : (inst_t == 0)
-                  ? def_vrm
+      tdef_vrm  = !is_list(def_vrm) ?
+                  def_vrm
+                : (inst_t == 0) ?
+                    def_vrm
                   : shift(def_vrm, n=+1, r=false, c=true);
 
       // assign defaults when not specified with wall instance
@@ -541,55 +555,50 @@ module project_box_rectangle
   //
 
   // decode mode configurations
-  mode_limit = binary_bit_is(mode, 0, 1);
-  mode_szint  = binary_bit_is(mode, 1, 1);
+  mode_limit    = binary_bit_is(mode, 0, 1);
+  mode_szint    = binary_bit_is(mode, 1, 1);
 
-  // given size specification
-  size_x = defined_e_or(size, 0, size);
-  size_y = defined_e_or(size, 1, size_x);
+  // specified base size
+  size_x        = defined_e_or(size, 0, size);
+  size_y        = defined_e_or(size, 1, size_x);
 
-  // given wall extrusion height
+  // specified wall extrusion height
   // calculate total extrusion 'h_h' height of all sections
-  hv     = is_defined(h) ? [for (e=h) is_list(e) ? first(e) : e] : [0];
-  h_h    = sum(hv);
+  hv            = is_defined(h) ? [for (e=h) is_list(e) ? first(e) : e] : [0];
+  h_h           = sum(hv);
 
   // limit rounding mode to those options that make sense; set={0, 1, 5}
-  // convert each element when vrm is a list
-  vrm_ci = is_list(vrm)
-         ? [for (e=vrm) select_ci(v=[0, 1, 5], i=e, l=false)]
-         : select_ci(v=[0, 1, 5], i=vrm, l=false);
+  // limit each element when 'vrm' is a list
+  vrm_ci        = is_list(vrm) ?
+                  [for (e=vrm) select_ci(v=[0, 1, 5], i=e, l=false)]
+                : select_ci(v=[0, 1, 5], i=vrm, l=false);
 
   // wall lip default height (set to zero when there is no lip)
-  lip_hd  = is_defined(lip) ? wth/2 : 0;
-
-  // wall lip: mode, height, base pct, taper pct, alignment
-  lip_m   = defined_e_or(lip, 0, lip);
-  lip_h   = defined_e_or(lip, 1, lip_hd);
-  lip_bw  = defined_e_or(lip, 2, 45);
-  lip_tw  = defined_e_or(lip, 3, 10);
-  lip_ai  = defined_e_or(lip, 4, 0);
+  // 'lip_h', bit '1', is set globally (ensure coherency with bits of 'lip')
+  lip_hd        = is_defined(lip) ? wth/2 : 0;
+  lip_h         = defined_e_or(lip, 1, lip_hd);
 
   // lid extrusion height (calculate total height of all sections)
-  lid_hv = is_defined(lid) ? [for (e=lid) is_list(e) ? first(e) : e] : [0];
-  lid_h  = sum(lid_hv);
+  lid_hv        = is_defined(lid) ? [for (e=lid) is_list(e) ? first(e) : e] : [0];
+  lid_h         = sum(lid_hv);
 
   // wall height
-  wall_h  = (mode_szint == true) ? h_h - lip_h : h_h - lip_h - lid_h;
+  wall_h        = (mode_szint == true) ? h_h - lip_h : h_h - lip_h - lid_h;
 
   // wall x and y insets (usually negative, but allow positive)
-  wall_od = ( is_defined(inset) && is_scalar(inset) ) ? inset : 0;
-  wall_ox = defined_e_or(inset, 0, wall_od) * -1;
-  wall_oy = defined_e_or(inset, 1, wall_od) * -1;
+  wall_od       = ( is_defined(inset) && is_scalar(inset) ) ? inset : 0;
+  wall_ox       = defined_e_or(inset, 0, wall_od) * -1;
+  wall_oy       = defined_e_or(inset, 1, wall_od) * -1;
 
   // exterior envelope of enclosure [encl_x, encl_y, encl_z]
-  encl_x  = (mode_szint == true) ? size_x + 2*wth - wall_ox : size_x;
-  encl_y  = (mode_szint == true) ? size_y + 2*wth - wall_oy : size_y;
-  encl_z  = (mode_szint == true) ? wall_h + lip_h +lid_h : h_h;
+  encl_x        = (mode_szint == true) ? size_x + 2*wth - wall_ox : size_x;
+  encl_y        = (mode_szint == true) ? size_y + 2*wth - wall_oy : size_y;
+  encl_z        = (mode_szint == true) ? wall_h + lip_h +lid_h : h_h;
 
   // exterior size of wall x and y
-  wall_xy = [encl_x + wall_ox, encl_y + wall_oy];
+  wall_xy       = [encl_x + wall_ox, encl_y + wall_oy];
 
-  if (verb == 0)
+  if (verb > 0)
   {
     szint_x = first (wall_xy) - 2*wth;
     szint_y = second(wall_xy) - 2*wth;
