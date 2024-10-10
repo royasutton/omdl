@@ -551,9 +551,12 @@ module project_box_rectangle
          ? [for (e=vrm) select_ci(v=[0, 1, 5], i=e, l=false)]
          : select_ci(v=[0, 1, 5], i=vrm, l=false);
 
+  // wall lip default height (set to zero when there is no lip)
+  lip_hd  = is_defined(lip) ? wth/2 : 0;
+
   // wall lip: mode, height, base pct, taper pct, alignment
   lip_m   = defined_e_or(lip, 0, lip);
-  lip_h   = defined_e_or(lip, 1, wth/2);
+  lip_h   = defined_e_or(lip, 1, lip_hd);
   lip_bw  = defined_e_or(lip, 2, 45);
   lip_tw  = defined_e_or(lip, 3, 10);
   lip_ai  = defined_e_or(lip, 4, 0);
