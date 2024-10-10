@@ -78,7 +78,7 @@ module project_box_rectangle
   wall,     // walls = [ config, inst-list ], config = [], inst-list = []
   post,     //
 
-  mode = 0,
+  mode = 0, // mode = [limit, internal]
   align = 0,
   verb = 0
 )
@@ -94,7 +94,7 @@ module project_box_rectangle
   {
     // re-scale total extrusion height of 'h' equally to 'wall_h'
     hs  = !is_list(h) ? wall_h
-        : let( sf=wall_h/size_h )
+        : let( sf=wall_h/h_h )
           [ for (e=h) !is_list(e) ? e * sf : [ first(e) * sf, second(e) ] ];
 
     // extrude scaled version 'hs' to maintain proper wall height
@@ -182,7 +182,7 @@ module project_box_rectangle
     mirror([0, 0, 1])
     translate([0, 0, -eps])
     extrude_linear_mss(lid)
-    pg_rectangle([size_x, size_y] + 0*[wth, wth], vr=vr, vrm=vrm_ci, center=true);
+    pg_rectangle([encl_x, encl_y] + 0*[wth, wth], vr=vr, vrm=vrm_ci, center=true);
 
     if (verb > 0)
       echo(strl(["lid: extrusion = ", lid]));
@@ -536,14 +536,16 @@ module project_box_rectangle
 
   // decode mode configurations
   mode_limit = binary_bit_is(mode, 0, 1);
+  mode_szint  = binary_bit_is(mode, 1, 1);
 
-  // enclosure envelope [size_x, size_y, size_z] for this section
+  // given size specification
   size_x = defined_e_or(size, 0, size);
   size_y = defined_e_or(size, 1, size_x);
 
-  // enclosure extrusion height (calculate total height of all sections)
+  // given wall extrusion height
+  // calculate total extrusion 'h_h' height of all sections
   hv     = is_defined(h) ? [for (e=h) is_list(e) ? first(e) : e] : [0];
-  size_h = sum(hv);
+  h_h    = sum(hv);
 
   // limit rounding mode to those options that make sense; set={0, 1, 5}
   // convert each element when vrm is a list
@@ -566,18 +568,30 @@ module project_box_rectangle
   lid_h  = sum(lid_hv);
 
   // wall height
-  wall_h = size_h - lip_h - lid_h;
+  wall_h  = (mode_szint == true) ? h_h - lip_h : h_h - lip_h - lid_h;
 
   // wall x and y insets (usually negative, but allow positive)
   wall_od = ( is_defined(inset) && is_scalar(inset) ) ? inset : 0;
   wall_ox = defined_e_or(inset, 0, wall_od) * -1;
   wall_oy = defined_e_or(inset, 1, wall_od) * -1;
 
-  // wall size x and y
-  wall_xy = [size_x + wall_ox, size_y + wall_oy];
+  // exterior envelope of enclosure [encl_x, encl_y, encl_z]
+  encl_x  = (mode_szint == true) ? size_x + 2*wth - wall_ox : size_x;
+  encl_y  = (mode_szint == true) ? size_y + 2*wth - wall_oy : size_y;
+  encl_z  = (mode_szint == true) ? wall_h + lip_h +lid_h : h_h;
 
-  if (verb > 0)
-    echo(strl(["box: interior dimensions [x, y] = ", wall_xy]));
+  // exterior size of wall x and y
+  wall_xy = [encl_x + wall_ox, encl_y + wall_oy];
+
+  if (verb == 0)
+  {
+    szint_x = first (wall_xy) - 2*wth;
+    szint_y = second(wall_xy) - 2*wth;
+    szint_z = wall_h + lip_h;
+
+    echo(strl(["box: exterior dimensions [x, y, z] = ", [encl_x, encl_y, encl_z]]));
+    echo(strl(["box: interior dimensions [x, y, z] = ", [szint_x, szint_y, szint_z]]));
+  }
 
   //
   //
