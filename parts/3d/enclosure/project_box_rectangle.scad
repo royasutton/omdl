@@ -78,7 +78,7 @@ module project_box_rectangle
   wall,     // walls = [ config, inst-list ], config = [], inst-list = []
   post,     //
 
-  mode = 0, // mode = [limit, internal]
+  mode = 0, // mode = [limit, internal, scale-both]
   align = 0,
   verb = 0
 )
@@ -93,17 +93,32 @@ module project_box_rectangle
   module construct_exterior_walls( envelop=false )
   {
     // re-scale total extrusion height of 'h' equally to 'wall_h'
+    // and extrude scaled version 'hs' to maintain proper wall height
     hs  = !is_list(h) ?
           wall_h
         : let( sf=wall_h/h_h )
           [ for (e=h) !is_list(e) ? e * sf : [ first(e) * sf, second(e) ] ];
 
-    // extrude scaled version 'hs' to maintain proper wall height
-    extrude_linear_mss(hs)
-    difference_cs( envelop == false )
-    {
-      pg_rectangle(wall_xy + 0*[wth, wth], vr=vr, vrm=vrm_ci, center=true);
-      pg_rectangle(wall_xy - 2*[wth, wth], vr=vr, vrm=vrm_ci, center=true);
+    if ( mode_scale_io == true )
+    { // scale inner and outer wall together
+      extrude_linear_mss(hs)
+      difference_cs( envelop == false )
+      {
+        pg_rectangle(wall_xy + 0*[wth, wth], vr=vr, vrm=vrm_ci, center=true);
+        pg_rectangle(wall_xy - 2*[wth, wth], vr=vr, vrm=vrm_ci, center=true);
+      }
+    }
+    else
+    { // scale outer wall only
+      difference_cs( envelop == false )
+      {
+        extrude_linear_mss(hs)
+        pg_rectangle(wall_xy + 0*[wth, wth], vr=vr, vrm=vrm_ci, center=true);
+
+        translate([0, 0, -10*eps/2])
+        extrude_linear_mss(wall_h + 10*eps)
+        pg_rectangle(wall_xy - 2*[wth, wth], vr=vr, vrm=vrm_ci, center=true);
+      }
     }
 
     if (verb > 0)
@@ -570,6 +585,7 @@ module project_box_rectangle
   // decode mode configurations
   mode_limit    = binary_bit_is(mode, 0, 1);
   mode_szint    = binary_bit_is(mode, 1, 1);
+  mode_scale_io = binary_bit_is(mode, 2, 1);
 
   // specified base size
   size_x        = defined_e_or(size, 0, size);
