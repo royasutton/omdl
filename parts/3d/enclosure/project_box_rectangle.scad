@@ -78,7 +78,7 @@ module project_box_rectangle
   wall,     // walls = [ config, inst-list ], config = [], inst-list = []
   post,     //
 
-  limit = false,
+  mode = 0,
   align = 0,
   verb = 0
 )
@@ -534,6 +534,9 @@ module project_box_rectangle
   //
   //
 
+  // decode mode configurations
+  mode_limit = binary_bit_is(mode, 0, 1);
+
   // enclosure envelope [size_x, size_y, size_z] for this section
   size_x = defined_e_or(size, 0, size);
   size_y = defined_e_or(size, 1, size_x);
@@ -596,13 +599,13 @@ module project_box_rectangle
 
   if ( is_defined( rib ) )
   {
-    envelop_assembly( limit == true )
+    envelop_assembly( mode_limit == true )
     construct_ribs();
   }
 
   if ( is_defined( wall ) )
   {
-    envelop_assembly( limit == true )
+    envelop_assembly( mode_limit == true )
     construct_interior_walls();
   }
 
