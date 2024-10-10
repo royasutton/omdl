@@ -44,6 +44,10 @@
 
 //----------------------------------------------------------------------------//
 
+//
+// Transformations
+//
+
 //! Conditionally apply the convex hull transformation.
 /***************************************************************************//**
   \param    c <boolean> conditional.
@@ -105,6 +109,10 @@ module minkowski_cs
   else
     children();
 }
+
+//
+// Boolean operations
+//
 
 //! Conditionally apply the union boolean operation.
 /***************************************************************************//**
