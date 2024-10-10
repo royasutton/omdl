@@ -357,7 +357,9 @@ module project_box_rectangle
     // B4-5: wall limits (mx, my, mz)
     max_x   = first( wall_xy) - 2*(wth - eps);
     max_y   = second(wall_xy) - 2*(wth - eps);
-    max_z   = binary_iw2i(wall_m, 2, 4) * lip_h + wall_h;
+
+    // 'max_z' may include 0 to 2 'lip_h' (ie: one at top and bottom)
+    max_z   = wall_h + min(2, binary_iw2i(wall_m, 2, 4)) * lip_h;
 
     // B6: global lower-lip offset
     wall_lo = binary_bit_is(wall_m, 6, 1) ? [0, 0, -lip_h] : zero3d;
