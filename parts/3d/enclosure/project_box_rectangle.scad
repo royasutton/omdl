@@ -108,6 +108,19 @@ module project_box_rectangle
 
     if (verb > 0)
     {
+      // generate list of all scale factors in extrusion [x, y]
+      sf_x  = !is_list(h) ?
+              1
+            : let( sf = [ for (e=h) !is_list(e) ? 1 : [ for (f=second(e)) !is_list(f) ? f : first(f) ] ] )
+              merge_s( sf );
+
+      sf_y   = !is_list(h) ?
+              1
+            : let( sf = [ for (e=h) !is_list(e) ? 1 : [ for (f=second(e)) !is_list(f) ? f : second(f) ] ] )
+              merge_s( sf );
+
+      echo(strl(["wall: extrusion scale factors [x-min, x-max] = ", [min(sf_x), max(sf_x)]]));
+      echo(strl(["wall: extrusion scale factors [y-min,y- max] = ", [min(sf_y), max(sf_y)]]));
       echo(strl(["wall: height (ignoring ribs) = ", wall_h]));
       echo(strl(["wall: total interior height (ignoring ribs) = ", wall_h + lip_h]));
     }
