@@ -533,8 +533,8 @@ module project_box_rectangle
     }
   }
 
-  // posts
-  module construct_posts()
+  // posts and screw holes
+  module construct_posts( add=false, remove=false )
   {
     /*
       +----------------+
@@ -573,6 +573,51 @@ module project_box_rectangle
     else
     {
       children();
+    }
+  }
+
+  // assembly feature additions
+  module assembly_add()
+  {
+    if ( wall_h > 0 )
+    {
+      construct_exterior_walls();
+    }
+
+    if ( is_defined( lip ) )
+    {
+      construct_lips();
+    }
+
+    if ( lid_h > 0 )
+    {
+      construct_lid();
+    }
+
+    if ( is_defined( rib ) )
+    {
+      envelop_assembly( mode_int_mask == true )
+      construct_ribs();
+    }
+
+    if ( is_defined( wall ) )
+    {
+      envelop_assembly( mode_int_mask == true )
+      construct_interior_walls();
+    }
+
+    if ( is_defined( post ) )
+    {
+      construct_posts( add=true);
+    }
+  }
+
+  // assembly feature removals
+  module assembly_remove()
+  {
+    if ( is_defined( post ) )
+    {
+      construct_posts( remove=true);
     }
   }
 
@@ -643,36 +688,10 @@ module project_box_rectangle
   //
   //
 
-  if ( wall_h > 0 )
+  difference()
   {
-    construct_exterior_walls();
-  }
-
-  if ( is_defined( lip ) )
-  {
-    construct_lips();
-  }
-
-  if ( lid_h > 0 )
-  {
-    construct_lid();
-  }
-
-  if ( is_defined( rib ) )
-  {
-    envelop_assembly( mode_int_mask == true )
-    construct_ribs();
-  }
-
-  if ( is_defined( wall ) )
-  {
-    envelop_assembly( mode_int_mask == true )
-    construct_interior_walls();
-  }
-
-  if ( is_defined( post ) )
-  {
-    construct_posts();
+    assembly_add();
+    assembly_remove();
   }
 
 }
