@@ -78,7 +78,7 @@ module project_box_rectangle
   wall,     // walls = [ config, inst-list ], config = [], inst-list = []
   post,     //
 
-  mode = 0, // mode = [limit, internal, scale-both]
+  mode = 0, // mode = [size-inside, int-mask, scale-both]
   align = 0,
   verb = 0
 )
@@ -583,8 +583,8 @@ module project_box_rectangle
   //
 
   // decode mode configurations
-  mode_limit    = binary_bit_is(mode, 0, 1);
-  mode_szint    = binary_bit_is(mode, 1, 1);
+  mode_size_in  = binary_bit_is(mode, 0, 1);
+  mode_int_mask = binary_bit_is(mode, 1, 1);
   mode_scale_io = binary_bit_is(mode, 2, 1);
 
   // specified base size
@@ -612,7 +612,7 @@ module project_box_rectangle
   lid_h         = sum(lid_hv);
 
   // wall height
-  wall_h        = (mode_szint == true) ? h_h - lip_h : h_h - lip_h - lid_h;
+  wall_h        = (mode_size_in == true) ? h_h - lip_h : h_h - lip_h - lid_h;
 
   // wall x and y insets (usually negative, but allow positive)
   wall_od       = ( is_defined(inset) && is_scalar(inset) ) ? inset : 0;
@@ -620,9 +620,9 @@ module project_box_rectangle
   wall_oy       = defined_e_or(inset, 1, wall_od) * -1;
 
   // exterior envelope of enclosure [encl_x, encl_y, encl_z]
-  encl_x        = (mode_szint == true) ? size_x + 2*wth - wall_ox : size_x;
-  encl_y        = (mode_szint == true) ? size_y + 2*wth - wall_oy : size_y;
-  encl_z        = (mode_szint == true) ? wall_h + lip_h +lid_h : h_h;
+  encl_x        = (mode_size_in == true) ? size_x + 2*wth - wall_ox : size_x;
+  encl_y        = (mode_size_in == true) ? size_y + 2*wth - wall_oy : size_y;
+  encl_z        = (mode_size_in == true) ? wall_h + lip_h +lid_h : h_h;
 
   // exterior size of wall x and y
   wall_xy       = [encl_x + wall_ox, encl_y + wall_oy];
@@ -660,13 +660,13 @@ module project_box_rectangle
 
   if ( is_defined( rib ) )
   {
-    envelop_assembly( mode_limit == true )
+    envelop_assembly( mode_int_mask == true )
     construct_ribs();
   }
 
   if ( is_defined( wall ) )
   {
-    envelop_assembly( mode_limit == true )
+    envelop_assembly( mode_int_mask == true )
     construct_interior_walls();
   }
 
