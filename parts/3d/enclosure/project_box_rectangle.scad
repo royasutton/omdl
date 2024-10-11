@@ -248,7 +248,7 @@ module project_box_rectangle
     // B5: wall limits (mode dependent)
     max_x   = first( wall_xy) - 2*(wth - eps);
     max_y   = second(wall_xy) - 2*(wth - eps);
-    max_z   = binary_bit_is(rib_m, 5, 1) ? (wall_h + lip_h) : wall_h;
+    max_h   = binary_bit_is(rib_m, 5, 1) ? (wall_h + lip_h) : wall_h;
 
     // B6: configurable global offset (to align with lower lip)
     rib_lo  = binary_bit_is(rib_m, 6, 1) ? [0, 0, -lip_h] : zero3d;
@@ -279,7 +279,7 @@ module project_box_rectangle
     // calculated rib counts based on coverage percentage
     crc_x   = max([0, floor(max_x/rib_w * rcp_x / 100)]);
     crc_y   = max([0, floor(max_y/rib_w * rcp_y / 100)]);
-    crc_z   = max([0, floor(max_z/rib_w * rcp_z / 100)]);
+    crc_z   = max([0, floor(max_h/rib_w * rcp_z / 100)]);
 
     // rib count assignment
     cnt_d   = defined_e_or(rib, 3, [crc_x, crc_y, crc_z]);
@@ -300,10 +300,10 @@ module project_box_rectangle
       i =
       [ // [ B0-4: mode-bit, size:[x, y], count:[x, y], xform:[r, t] ]
         [ 0, [max_x, max_y], [cnt_x, cnt_y], [[0, 0, 0], [0, 0, 0]] ],
-        [ 1, [max_y, max_z], [cnt_y, cnt_z], [[90, 0, -90], [max_x/2, 0, max_z/2]] ],
-        [ 2, [max_x, max_z], [cnt_x, cnt_z], [[90, 0, 0], [0, max_y/2, max_z/2]] ],
-        [ 3, [max_y, max_z], [cnt_y, cnt_z], [[90, 0, 90], [-max_x/2, 0, max_z/2]] ],
-        [ 4, [max_x, max_z], [cnt_x, cnt_z], [[-90, 0, 0], [0, -max_y/2, max_z/2]] ],
+        [ 1, [max_y, max_h], [cnt_y, cnt_z], [[90, 0, -90], [max_x/2, 0, max_h/2]] ],
+        [ 2, [max_x, max_h], [cnt_x, cnt_z], [[90, 0, 0], [0, max_y/2, max_h/2]] ],
+        [ 3, [max_y, max_h], [cnt_y, cnt_z], [[90, 0, 90], [-max_x/2, 0, max_h/2]] ],
+        [ 4, [max_x, max_h], [cnt_x, cnt_z], [[-90, 0, 0], [0, -max_y/2, max_h/2]] ],
       ]
     )
     {
@@ -400,8 +400,8 @@ module project_box_rectangle
     max_x   = first( wall_xy) - 2*(wth - eps);
     max_y   = second(wall_xy) - 2*(wth - eps);
 
-    // 'max_z' may include 0 to 2 'lip_h' (ie: one at top and bottom)
-    max_z   = wall_h + min(2, binary_iw2i(wall_m, 2, 4)) * lip_h;
+    // 'max_h' may include 0 to 2 'lip_h' (ie: one at top and bottom)
+    max_h   = wall_h + min(2, binary_iw2i(wall_m, 2, 4)) * lip_h;
 
     // B6: global lower-lip offset
     wall_lo = binary_bit_is(wall_m, 6, 1) ? [0, 0, -lip_h] : zero3d;
@@ -419,10 +419,10 @@ module project_box_rectangle
 
     // B2-3: default wall extrusion rounding
     cfg_he = let( i = binary_iw2i(wall_m, 2, 2) )
-                (i == 1) ? [max_z - def_dw/2, cfg_rt]       // top
-              : (i == 2) ? [cfg_rb, max_z - def_dw/2]       // base
-              : (i == 3) ? [cfg_rb, max_z - def_dw, cfg_rt] // top & base
-              :  max_z;                                     // none
+                (i == 1) ? [max_h - def_dw/2, cfg_rt]       // top
+              : (i == 2) ? [cfg_rb, max_h - def_dw/2]       // base
+              : (i == 3) ? [cfg_rb, max_h - def_dw, cfg_rt] // top & base
+              :  max_h;                                     // none
 
     // configured configuration defaults
     def_he  = defined_e_or(defs_l, 1, cfg_he);
@@ -520,7 +520,7 @@ module project_box_rectangle
       echo(strl(["wall: configuration = ", config]));
       echo(strl(["wall: mode = ", wall_m]));
 
-      echo(strl(["wall: max [x, y, z] = ", [max_x, max_y, max_z]]));
+      echo(strl(["wall: max [x, y, h] = ", [max_x, max_y, max_h]]));
 
       echo(strl(["wall: default width = ", def_dw]));
       echo(strl(["wall: default extrusion = ", def_he]));
