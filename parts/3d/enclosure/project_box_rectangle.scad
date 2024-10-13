@@ -64,8 +64,8 @@
 module project_box_rectangle
 (
   wth,      // wall thickness
+  h,        // enclosure extrusion height
   size,     // enclosed base size [x, y]
-  h,        // enclosure height extrusion
 
   vr,       // wall corner rounding radius
   vrm,      // {0, 1, 2]} : wall corner rounding mode
@@ -554,7 +554,7 @@ module project_box_rectangle
 
   }
 
-  // limit child to shape envelop
+  // limit child to wall interior volume
   module envelop_assembly( envelop=false )
   {
     if ( envelop == true )
@@ -632,14 +632,14 @@ module project_box_rectangle
   mode_int_mask = binary_bit_is(mode, 1, 1);
   mode_scale_io = binary_bit_is(mode, 2, 1);
 
-  // specified base size
-  size_x        = defined_e_or(size, 0, size);
-  size_y        = defined_e_or(size, 1, size_x);
-
   // specified wall extrusion height
   // calculate total extrusion 'h_h' height of all sections
   hv            = is_defined(h) ? [for (e=h) is_list(e) ? first(e) : e] : [0];
   h_h           = sum(hv);
+
+  // specified base size
+  size_x        = defined_e_or(size, 0, size);
+  size_y        = defined_e_or(size, 1, size_x);
 
   // limit rounding mode to those options that make sense; set={0, 1, 5}
   // limit each element when 'vrm' is a list
