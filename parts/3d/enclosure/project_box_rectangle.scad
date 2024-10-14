@@ -568,7 +568,7 @@ module project_box_rectangle
     // rounding configuration constants
     cfg_p_vrm_filet = [0, 1, 4, 0];
     cfg_p_vrm_bevel = [0, 5, 10, 0];
-    cfg_p_vr_sf     = [0, 1/2, 2, 0];
+    cfg_p_vr_sf     = [0, 1/2, 3/2, 0];
 
     cfg_f_vrm_filet = [4, 0, 3];
     cfg_f_vrm_bevel = [10, 0, 9];
@@ -640,8 +640,8 @@ module project_box_rectangle
     def_f_c     = defined_e_or(def_f, 0, 4);
     def_f_da    = defined_e_or(def_f, 1, 360);
     def_f_w     = defined_e_or(def_f, 2, wth);
-    def_f_d_sf  = defined_e_or(def_f, 3, 1/2);
-    def_f_h_sf  = defined_e_or(def_f, 4, 3/4);
+    def_f_d_sf  = defined_e_or(def_f, 3, 1/5);
+    def_f_h_sf  = defined_e_or(def_f, 4, 5/8);
     def_f_vr    = defined_e_or(def_f, 5, cfg_f_vr_sf * wth);
     def_f_vrm   = defined_e_or(def_f, 6, cfg_f_vrm);
 
