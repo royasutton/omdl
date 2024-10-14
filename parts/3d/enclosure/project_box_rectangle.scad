@@ -989,10 +989,23 @@ BEGIN_SCOPE example;
     include <tools/operation_cs.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
 
+    $fn = 18;
+
     wth = 2;
 
     lid_rounding = [for (s=[0:1/32:1/8]) 1-pow(s,2)/2];
     lid_profile  = [[wth/3, reverse(lid_rounding)], wth/3, [wth/3, lid_rounding]];
+
+    // set default post support fin count to '0' and assign 'undef'
+    //   to other parameters to  use their default values.
+    function post(x, o) =
+      [
+        [0, [undef, undef, undef, undef, undef, [0]]],
+        [
+          [x, [0,0], [+1,+1]*o], [x, [0,1], [+1,-1]*o],
+          [x, [1,0], [-1,+1]*o], [x, [1,1], [-1,-1]*o],
+        ]
+      ];
 
     project_box_rectangle
     (
@@ -1007,7 +1020,8 @@ BEGIN_SCOPE example;
       lip = 1,
       lid = lid_profile,
       rib = 0,
-      wall = [13, [[1, -11.5], [1, +11.5] ]]
+      wall = [13, [[1, -11.5], [1, +11.5] ]],
+      post = post(0, wth*2)
     );
 
     // end_include
