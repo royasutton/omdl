@@ -491,7 +491,10 @@ module project_box_rectangle
                     def_vrm
                   : shift(def_vrm, n=+1, r=false, c=true);
 
+      //
       // assign defaults when not specified with wall instance
+      //
+
       s   = defined_or(inst_s, tdef_s);
       he  = defined_or(inst_he, tdef_he);
       vr  = defined_or(inst_vr, tdef_vr);
@@ -544,14 +547,290 @@ module project_box_rectangle
       post = [ config, inst-list ]
 
       config = [ mode, defaults-list ]
-      defaults-list = [ size:[p, h], he ]
+      mode = [ b0:post-rnd, b1:fin-rnd, b2:h0-thru-lid, b3:lip_h-posts ]
+      defaults-list = [ hole0, hole1, post1, hole2, post2, fins, hp-dd ]
+      hole | post = [ d, h, ho, vr, vrm ]
+      fins = [ c, da, w, d-sf, h-sf, vr, vrm ]
+      hp-dd = [c-d, h1-dd, p1-dd, h2-dd, p2-dd ]
 
       inst-list = [ inst, inst, ..., inst ]
-
-      inst = [ type, move:[x,y,z], size:[p, h], he ]
-      type: { 0: male, 1: female }
+      inst = [  type:{0, 1}, align:[x,y,z], move:[x,y,z], rotate:[x,y,z],
+                hole0, hole1, post, fins ]
+      type: { 0: normal, 1: recessed }
     */
 
+    // post
+    config  = defined_e_or(post, 0, post);
+    inst_l  = defined_e_or(post, 1, empty_lst);
+
+    // configuration
+    post_m  = defined_e_or(config, 0, config);
+    defs_l  = defined_e_or(config, 1, empty_lst);
+
+    max_x   = first( wall_xy) - 2*(wth - eps);
+    max_y   = second(wall_xy) - 2*(wth - eps);
+    max_h   = wall_h;
+
+    // rounding configuration constants
+    cfg_p_vrm_filet = [0, 1, 4, 0];
+    cfg_p_vrm_bevel = [0, 5, 10, 0];
+    cfg_p_vr_sf     = [0, 1/2, 2, 0];
+
+    cfg_f_vrm_filet = [4, 0, 3];
+    cfg_f_vrm_bevel = [10, 0, 9];
+    cfg_f_vr_sf     = [2, 0, 1];
+
+    // mode dependent configuration
+    cfg_p_vrm       = binary_bit_is(post_m, 0, 1) ? cfg_p_vrm_bevel : cfg_p_vrm_filet;
+    cfg_f_vrm       = binary_bit_is(post_m, 1, 1) ? cfg_f_vrm_bevel : cfg_f_vrm_filet;
+    cfg_h0          = binary_bit_is(post_m, 2, 1) ? lid_h : 0;
+
+    cfg_p1_lip_h    = binary_bit_is(post_m, 3, 1) ? lip_h : 0;  // maintain inverse
+    cfg_p2_lip_h    = binary_bit_is(post_m, 3, 0) ? lip_h : 0;
+
+    //
+    // configured configuration defaults
+    //
+
+    def_h0      = defined_e_or(defs_l, 0, empty_lst);
+    def_h1      = defined_e_or(defs_l, 1, empty_lst);
+    def_p1      = defined_e_or(defs_l, 2, empty_lst);
+    def_h2      = defined_e_or(defs_l, 3, empty_lst);
+    def_p2      = defined_e_or(defs_l, 4, empty_lst);
+    def_f       = defined_e_or(defs_l, 5, empty_lst);
+
+    def_hp_dd   = defined_e_or(defs_l, 6, empty_lst);
+
+    // late-bound diameters dependent hole size; relative to 'def_h0_d'
+    def_hp_cd   = defined_e_or(def_hp_dd, 0, wth/2);    // add to all
+
+    def_h1_dd   = defined_e_or(def_hp_dd, 1, 0) * wth + def_hp_cd;
+    def_p1_dd   = defined_e_or(def_hp_dd, 2, 3) * wth + def_hp_cd;
+    def_h2_dd   = defined_e_or(def_hp_dd, 3, 2) * wth + def_hp_cd;
+    def_p2_dd   = defined_e_or(def_hp_dd, 4, 4) * wth + def_hp_cd;
+
+    // hole0: normal & recessed screw common hole
+    def_h0_d    = defined_e_or(def_h0, 0, 3.25);
+    def_h0_h    = defined_e_or(def_h0, 1, max_h + lip_h - wth*2);
+    def_h0_ho   = defined_e_or(def_h0, 2, wth*2);
+    def_h0_vr   = defined_e_or(def_h0, 3, 0);
+    def_h0_vrm  = defined_e_or(def_h0, 4, 0);
+
+    // hole1: normal thru lid hole
+    //def_h1_d  = defined_e_or(def_h1, 0, def_h0_d + def_h1_dd);
+    def_h1_h    = defined_e_or(def_h1, 1, cfg_h0);
+    def_h1_ho   = defined_e_or(def_h1, 2, -cfg_h0);
+    def_h1_vr   = defined_e_or(def_h1, 3, 0);
+    def_h1_vrm  = defined_e_or(def_h1, 4, 0);
+    // post1: normal mount post
+    //def_p1_d  = defined_e_or(def_p1, 0, def_h0_d  + def_p1_dd);
+    def_p1_h    = defined_e_or(def_p1, 1, max_h + cfg_p1_lip_h);
+    def_p1_ho   = defined_e_or(def_p1, 2, 0);
+    def_p1_vr   = defined_e_or(def_p1, 3, cfg_p_vr_sf * wth);
+    def_p1_vrm  = defined_e_or(def_p1, 4, cfg_p_vrm);
+
+    // hole2: recessed access hole thru lid
+    //def_h2_d  = defined_e_or(def_h2, 0, def_h0_d  + def_h2_dd);
+    def_h2_h    = defined_e_or(def_h2, 1, max_h + cfg_p2_lip_h + lid_h - wth*2);
+    def_h2_ho   = defined_e_or(def_h2, 2, -lid_h);
+    def_h2_vr   = defined_e_or(def_h2, 3, cfg_p_vr_sf * wth/2);
+    def_h2_vrm  = defined_e_or(def_h2, 4, cfg_p_vrm);
+    // post2: recessed access post
+    //def_p2_d  = defined_e_or(def_p2, 0, def_h0_d  + def_p2_dd);
+    def_p2_h    = defined_e_or(def_p2, 1, max_h + cfg_p2_lip_h);
+    def_p2_ho   = defined_e_or(def_p2, 2, 0);
+    def_p2_vr   = defined_e_or(def_p2, 3, cfg_p_vr_sf * wth);
+    def_p2_vrm  = defined_e_or(def_p2, 4, cfg_p_vrm);
+
+    // post fins
+    def_f_c     = defined_e_or(def_f, 0, 4);
+    def_f_da    = defined_e_or(def_f, 1, 360);
+    def_f_w     = defined_e_or(def_f, 2, wth);
+    def_f_d_sf  = defined_e_or(def_f, 3, 1/2);
+    def_f_h_sf  = defined_e_or(def_f, 4, 3/4);
+    def_f_vr    = defined_e_or(def_f, 5, cfg_f_vr_sf * wth);
+    def_f_vrm   = defined_e_or(def_f, 6, cfg_f_vrm);
+
+    //
+    //
+    // construct posts
+    //
+    //
+
+    // construct a cylinder with optional fins
+    module cylinder_fins
+    (
+      en,
+      d, h, vr, vrm, ho,
+      fc=0, fda, fw, fdsf=1, fhsf=1, fvr, fvrm,
+      eps=0
+    )
+    {
+      module post_fins(d, c, da, w, b, h, vr, vrm)
+      {
+        if (verb > 2)
+          echo(strl(["post-inst-fins: [d, c, da, w, b, h, vr, vrm] = ",
+                      [d, c, da, w, b, h, vr, vrm]]));
+
+        for (i = [0:c-1])
+        {
+          rotate([90, 0, da/c * i + 180])
+          translate([-d/2 - b, 0, 0])
+          extrude_linear_mss(w, center=true)
+          pg_triangle_sas([h, 90, b], vr=vr, vrm=vrm);
+        }
+      }
+
+      if (en == true)
+      {
+        if (verb > 2)
+          echo(strl(["post-inst-cylinder: [d, h, vr, vrm, ho, fc, eps] = ",
+                      [d, h, vr, vrm, ho, fc, eps]]));
+
+        translate([0, 0, ho - eps/2])
+        {
+          rotate_extrude()
+          pg_rectangle([d/2, h + eps], vr=vr, vrm=vrm);
+
+          if ( fc > 0 )
+          {
+            fb    = d * fdsf;
+            fh    = h * fhsf;
+
+            post_fins(d, fc, fda, fw, fb, fh, fvr, fvrm);
+          }
+        }
+      }
+
+    }
+
+    // pre-processing message
+    if (verb > 0)
+    {
+      post_cfm  = ( add == true  && remove == false ) ? "add"
+                : ( add == false && remove == true  ) ? "remove"
+                : ( add == true  && remove == true  ) ? "add & remove"
+                : "do nothing";
+
+      echo(strl(["post: construction phase = ", post_cfm]));
+    }
+
+    // process 'post' instance list
+    for (inst=inst_l)
+    {
+      inst_t    = defined_e_or(inst, 0, inst);        // type {0, 1}
+      inst_a    = defined_e_or(inst, 1, undef);       // align [x, y, z]
+      inst_m    = defined_e_or(inst, 2, zero3d);      // move [x, y, z]
+      inst_r    = defined_e_or(inst, 3, zero3d);      // rotate [x, y, z]
+
+      inst_h0   = defined_e_or(inst, 4, undef);       // hole0
+      inst_h1   = defined_e_or(inst, 5, undef);       // hole1
+      inst_p    = defined_e_or(inst, 6, undef);       // post
+      inst_f    = defined_e_or(inst, 7, undef);       // fins
+
+      // alignment
+      inst_ax   = defined_e_or(inst_a, 0, undef);
+      inst_ay   = defined_e_or(inst_a, 1, undef);
+      inst_az   = defined_e_or(inst_a, 2, 0);
+
+      inst_zx   = is_undef( inst_ax ) ? 0
+                : ( binary_bit_is(inst_ax, 0, 0) ? -1 : +1 ) * (max_x + wth)/2;
+
+      inst_zy   = is_undef( inst_ay ) ? 0
+                : ( binary_bit_is(inst_ay, 0, 0) ? -1 : +1 ) * (max_y + wth)/2;
+
+      inst_zz   = ( binary_bit_is(inst_az, 0, 0) ? 0 : -lid_h );
+
+      //
+      // default value updates based on post type: (0=normal, 1=recessed)
+      //
+
+      // hole1:
+      tdef_h_dd   = (inst_t == 0) ? def_h1_dd : def_h2_dd;
+      //tdef_h1_d = (inst_t == 0) ? def_h1_d : def_h2_d;
+      tdef_h1_h   = (inst_t == 0) ? def_h1_h : def_h2_h;
+      tdef_h1_ho  = (inst_t == 0) ? def_h1_ho : def_h2_ho;
+      tdef_h1_vr  = (inst_t == 0) ? def_h1_vr : def_h2_vr;
+      tdef_h1_vrm = (inst_t == 0) ? def_h1_vrm : def_h2_vrm;
+
+      // post:
+      tdef_p_dd   = (inst_t == 0) ? def_p1_dd : def_p2_dd;
+      //tdef_p_d  = (inst_t == 0) ? def_p1_d : def_p2_d;
+      tdef_p_h    = (inst_t == 0) ? def_p1_h : def_p2_h;
+      tdef_p_ho   = (inst_t == 0) ? def_p1_ho : def_p2_ho;
+      tdef_p_vr   = (inst_t == 0) ? def_p1_vr : def_p2_vr;
+      tdef_p_vrm  = (inst_t == 0) ? def_p1_vrm : def_p2_vrm;
+
+      //
+      // assign defaults when not specified with post instance
+      //
+
+      // hole0: screw hole
+      h0_en  = (remove == true);
+
+      h0_d    = defined_e_or(inst_h0, 0, def_h0_d);
+      h0_h    = defined_e_or(inst_h0, 1, def_h0_h);
+      h0_ho   = defined_e_or(inst_h0, 2, def_h0_ho);
+      h0_vr   = defined_e_or(inst_h0, 3, def_h0_vr);
+      h0_vrm  = defined_e_or(inst_h0, 4, def_h0_vrm);
+
+      // hole1: thru lid hole
+      h1_en  = (remove == true);
+
+      h1_d    = defined_e_or(inst_h1, 0, h0_d + tdef_h_dd);
+      h1_h    = defined_e_or(inst_h1, 1, tdef_h1_h);
+      h1_ho   = defined_e_or(inst_h1, 2, tdef_h1_ho);
+      h1_vr   = defined_e_or(inst_h1, 3, tdef_h1_vr);
+      h1_vrm  = defined_e_or(inst_h1, 4, tdef_h1_vrm);
+
+      // post: post and fins
+      p_en   = (add == true);
+
+      p_d     = defined_e_or(inst_p, 0, h0_d + tdef_p_dd);
+      p_h     = defined_e_or(inst_p, 0, tdef_p_h);
+      p_ho    = defined_e_or(inst_p, 0, tdef_p_ho);
+      p_vr    = defined_e_or(inst_p, 0, tdef_p_vr);
+      p_vrm   = defined_e_or(inst_p, 0, tdef_p_vrm);
+
+      f_c     = defined_e_or(inst_f, 0, def_f_c);
+      f_da    = defined_e_or(inst_f, 1, def_f_da);
+      f_w     = defined_e_or(inst_f, 2, def_f_w);
+      f_d_sf  = defined_e_or(inst_f, 3, def_f_d_sf);
+      f_h_sf  = defined_e_or(inst_f, 4, def_f_h_sf);
+      f_vr    = defined_e_or(inst_f, 5, def_f_vr);
+      f_vrm   = defined_e_or(inst_f, 6, def_f_vrm);
+
+      //
+      // construct post instance
+      //
+
+      translate(inst_m)                       // do separately to allow for 2d
+      translate([inst_zx, inst_zy, inst_zz])  //  moves in 'inst_m' of form [x, y]
+      rotate(inst_r)
+      union()
+      {
+        cylinder_fins(p_en, p_d, p_h, p_vr, p_vrm, p_ho, f_c, f_da, f_w, f_d_sf, f_h_sf, f_vr, f_vrm);
+
+        cylinder_fins(h0_en, h0_d, h0_h, h0_vr, h0_vrm, h0_ho, eps=10*eps);
+        cylinder_fins(h1_en, h1_d, h1_h, h1_vr, h1_vrm, h1_ho, eps=10*eps);
+      }
+
+      if (verb > 1)
+        echo(strl(["post-inst: [type, align, move, rotation, hole0, hole1, post, fins] = ",
+                  [inst_t, inst_a, inst_m, inst_r, inst_h0, inst_h1, inst_p, inst_f]]));
+    }
+
+    // post-processing message
+    if (verb > 0)
+    {
+      // handle special case: a single post
+      post_cnt  = is_list(inst_l) ? len(inst_l) : 1;
+
+      echo(strl(["post: configuration = ", config]));
+      echo(strl(["post: mode = ", post_m]));
+
+      echo(strl(["post: count = ", post_cnt]));
+    }
   }
 
   // limit child to wall interior volume
@@ -594,6 +873,10 @@ module project_box_rectangle
       construct_lid();
     }
 
+    //
+    // better to apply envelop_assembly() to union of all?
+    //
+
     if ( is_defined( rib ) )
     {
       envelop_assembly( mode_int_mask == true )
@@ -608,6 +891,7 @@ module project_box_rectangle
 
     if ( is_defined( post ) )
     {
+      envelop_assembly( mode_int_mask == true )
       construct_posts( add=true);
     }
   }
