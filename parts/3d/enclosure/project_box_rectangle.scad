@@ -257,17 +257,11 @@ module project_box_rectangle
     rib_edx = [[1, 1], [9/10, 1], [8/10, 1], [6/10, 1], [2/10, 1]]; // defaults
     rib_edy = [for (e=rib_edx) reverse(e)];
 
-    rib_sd  = defined_e_or(rib, 1,
-      [
-        wth*2,
-        [[wth, rib_edx]],
-        [[wth, rib_edy]]
-      ]
-    );
+    rib_sd  = defined_e_or(rib, 1, [ wth, [[wth, rib_edx]], [[wth, rib_edy]] ] );
 
     rib_w   = defined_e_or(rib_sd, 0, rib_sd);
-    rib_hx  = defined_e_or(rib_sd, 1, [[rib_w/2, rib_edx]]);
-    rib_hy  = defined_e_or(rib_sd, 2, [[rib_w/2, rib_edy]]);
+    rib_hx  = defined_e_or(rib_sd, 1, [[rib_w, rib_edx]]);
+    rib_hy  = defined_e_or(rib_sd, 2, [[rib_w, rib_edy]]);
 
     // rib coverage percentages
     rcp_d   = defined_e_or(rib, 2, 20);
