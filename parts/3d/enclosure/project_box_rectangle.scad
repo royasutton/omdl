@@ -150,17 +150,77 @@
     The box wall height and box lid height are linear extrusions
     created using the function extrude_linear_mss(). This allows for
     flexible scaling along the extrusion as described in that functions
-    description. The box bottom section below shows an example of how
-    this scaling can be used to create features, such as corner
-    rounding and face protrusion, along the lid and box height.
+    description. The box bottom section example below shows how this
+    scaling can be used to create features, such as corner rounding and
+    face protrusion, along the lid and box height.
 
     ### lip
 
-    [ mode, height, base pct, taper pct, alignment ]
+    The box walls can have a lip which interfaces with adjacent
+    sections. The adjacent section should constructed with an opposite
+    overhang.
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | integer           | required          | mode
+      1 | decimal           | wth/2             | height
+      2 | decimal           | 45                | base width percentage of wall
+      3 | decimal           | 10                | top taper width percentage of wall
+      4 | integer           | 0                 | alignment
+
+    #### lip[0]: mode
+
+      v | description
+    ---:|:---------------------------------------
+      0 | upper and inside edge of wall
+      1 | upper and outer edge of wall
+      2 | lower and inside edge of wall
+      3 | lower and outer edge of wall
+
+    #### lip[4]: alignment
+
+      v | description
+    ---:|:---------------------------------------
+      0 | maximum lips gap
+      1 | minimum lips gap with backfield
+      2 | minimum lips gap
 
     ### rib
 
-    [ mode, rib:[w, hx, hy], pct:[x, y, z], number:[x, y, z] ]
+    The exterior box wall and lid rigidity can be reinforced using a
+    configurable grid of rib-like structures.
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | integer           | required          | mode
+      1 | datastruct        | (see below)       | base and height extrusions
+      2 | decimal-list-3    | 10                | [x, y, h] coverage percentage
+      3 | integer-list-3    | (calculated)      | [x, y, h] grid count override
+
+    #### rib[0]: mode (bit-encoded)
+
+      e | description
+    ---:|:---------------------------------------
+      0 | no ribs on lid
+      1 | no ribs on wall x+
+      2 | no ribs on wall y+
+      3 | no ribs on wall x-
+      4 | no ribs on wall y-
+    5-6 | lip coverage count (2-bit encoded integer)
+      7 | align ribs to bottom of lower lips
+
+    #### rib[1]: base and height extrusion
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | decimal           | wth               | rib base width
+      1 | decimal-list-2    | [[wth, rib_edx]]  | x-axis oriented rib height extrusion
+      2 | decimal-list-2    | [[wth, rib_edy]]  | y-axis oriented rib height extrusion
+
+    The constants \p rib_edx and \p rib_edy are defaults that
+    approximates a half-ellipse rib shape. The extrusion is performed
+    using the function extrude_linear_mss(). See its documentation for
+    a description to defining values to replace these defaults.
 
     ### wall
 
