@@ -956,17 +956,18 @@ module project_box_rectangle
   // exterior envelope of enclosure [encl_x, encl_y, encl_z]
   encl_x        = (mode_size_in == true) ? size_x + 2*wth - wall_ox : size_x;
   encl_y        = (mode_size_in == true) ? size_y + 2*wth - wall_oy : size_y;
-  encl_z        = (mode_size_in == true) ? wall_h + lip_h +lid_h : h_h;
+  encl_z        = (mode_size_in == true) ? wall_h + lip_h + lid_h : h_h;
 
   // exterior size of wall x and y
   wall_xy       = [encl_x + wall_ox, encl_y + wall_oy];
 
+  // interior size of enclosure
+  szint_x = first (wall_xy) - 2*wth;
+  szint_y = second(wall_xy) - 2*wth;
+  szint_z = wall_h + lip_h;
+
   if (verb > 0)
   {
-    szint_x = first (wall_xy) - 2*wth;
-    szint_y = second(wall_xy) - 2*wth;
-    szint_z = wall_h + lip_h;
-
     echo(strl(["box: exterior dimensions [x, y, z] = ", [encl_x, encl_y, encl_z]]));
     echo(strl(["box: interior dimensions [x, y, z] = ", [szint_x, szint_y, szint_z]]));
   }
