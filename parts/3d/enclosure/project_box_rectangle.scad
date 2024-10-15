@@ -545,7 +545,7 @@ module project_box_rectangle
       defaults-list = [ hole0, hole1, post1, hole2, post2, fins, hp-dd ]
       hole | post = [ d, h, ho, vr, vrm ]
       fins = [ c, da, w, d-sf, h-sf, vr, vrm ]
-      hp-dd = [c-d, h1-dd, p1-dd, h2-dd, p2-dd ]
+      hp-dd = [g-t0, g-t1, c-d, h1-dd, p1-dd, h2-dd, p2-dd ]
 
       inst-list = [ inst, inst, ..., inst ]
       inst = [  type:{0, 1}, align:[x,y,z], move:[x,y,z], rotate:[x,y,z],
@@ -596,12 +596,18 @@ module project_box_rectangle
     def_hp_dd   = defined_e_or(defs_l, 6, empty_lst);
 
     // late-bound diameters dependent hole size; relative to 'def_h0_d'
-    def_hp_cd   = defined_e_or(def_hp_dd, 0, wth/2);    // add to all
 
-    def_h1_dd   = defined_e_or(def_hp_dd, 1, 0) * wth + def_hp_cd;
-    def_p1_dd   = defined_e_or(def_hp_dd, 2, 3) * wth + def_hp_cd;
-    def_h2_dd   = defined_e_or(def_hp_dd, 3, 2) * wth + def_hp_cd;
-    def_p2_dd   = defined_e_or(def_hp_dd, 4, 4) * wth + def_hp_cd;
+    // screw hole gaps: size augmentation for normal and recess holes
+    def_h0_0_gd = defined_e_or(def_hp_dd, 0, 0);
+    def_h0_1_gd = defined_e_or(def_hp_dd, 1, 0);
+
+    // common addition to all posts and secondary holes
+    def_hp_cd   = defined_e_or(def_hp_dd, 2, wth/2);
+
+    def_h1_dd   = defined_e_or(def_hp_dd, 3, 0.0) * wth + def_hp_cd;
+    def_p1_dd   = defined_e_or(def_hp_dd, 4, 3.0) * wth + def_hp_cd;
+    def_h2_dd   = defined_e_or(def_hp_dd, 5, 2.0) * wth + def_hp_cd;
+    def_p2_dd   = defined_e_or(def_hp_dd, 6, 4.0) * wth + def_hp_cd;
 
     // hole0: normal & recessed screw common hole
     def_h0_d    = defined_e_or(def_h0, 0, 3.25);
@@ -739,6 +745,9 @@ module project_box_rectangle
       // default value updates based on post type: (0=normal, 1=recessed)
       //
 
+      // hole0:
+      tdef_h0_gd  = (inst_t == 0) ? def_h0_0_gd : def_h0_1_gd;
+
       // hole1:
       tdef_h_dd   = (inst_t == 0) ? def_h1_dd : def_h2_dd;
       //tdef_h1_d = (inst_t == 0) ? def_h1_d : def_h2_d;
@@ -767,6 +776,8 @@ module project_box_rectangle
       h0_ho   = defined_e_or(inst_h0, 2, def_h0_ho);
       h0_vr   = defined_e_or(inst_h0, 3, def_h0_vr);
       h0_vrm  = defined_e_or(inst_h0, 4, def_h0_vrm);
+
+      h0_dwg  = h0_d + tdef_h0_gd;    // screw hole with gap
 
       // hole1: thru lid hole
       h1_en  = (remove == true);
@@ -805,8 +816,8 @@ module project_box_rectangle
       {
         cylinder_fins(p_en, p_d, p_h, p_vr, p_vrm, p_ho, f_c, f_da, f_w, f_d_sf, f_h_sf, f_vr, f_vrm);
 
-        cylinder_fins(h0_en, h0_d, h0_h, h0_vr, h0_vrm, h0_ho, eps=10*eps);
-        cylinder_fins(h1_en, h1_d, h1_h, h1_vr, h1_vrm, h1_ho, eps=10*eps);
+        cylinder_fins(h0_en, h0_dwg, h0_h, h0_vr, h0_vrm, h0_ho, eps=10*eps);
+        cylinder_fins(h1_en, h1_d,   h1_h, h1_vr, h1_vrm, h1_ho, eps=10*eps);
       }
 
       if (verb > 1)
