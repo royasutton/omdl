@@ -197,9 +197,9 @@
       2 | decimal-list-3    | 10                | [x, y, h] coverage percentage
       3 | integer-list-3    | (calculated)      | [x, y, h] grid count override
 
-    #### rib[0]: mode (bit-encoded)
+    #### rib[0]: mode (bit-encoded integer)
 
-      e | description
+      b | description
     ---:|:---------------------------------------
       0 | no ribs on lid
       1 | no ribs on wall x+
@@ -232,7 +232,42 @@
 
     ### align
 
-    ### mode
+    The x, y, and z axis of the box can be aligned independently.
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | integer           | 0                 | x-axis alignment
+      1 | integer           | 0                 | y-axis alignment
+      2 | integer           | 0                 | z-axis alignment
+
+    #### align[0-1]: x/y axis alignment
+
+      v | description
+    ---:|:---------------------------------------
+      0 | center
+      1 | exterior enclosure negative x/y edge
+      2 | interior enclosure negative x/y edge
+      3 | interior enclosure positive x/y edge
+      4 | exterior enclosure positive x/y edge
+
+    #### align[2]: z-axis alignment
+
+      v | description
+    ---:|:---------------------------------------
+      0 | bottom enclosure
+      1 | bottom of wall
+      2 | middle of enclosure
+      3 | middle of wall
+      4 | top of wall
+      5 | top of enclosure
+
+    ### mode (bit-encoded integer)
+
+      b | description
+    ---:|:---------------------------------------
+      0 | size is specified for enclosure interior
+      1 | remove features outside of enclosure envelope
+      2 | scale interior with exterior wall during extrusion
 
     \amu_define scope_id      (example_bottom)
     \amu_define title         (Project box bottom section example)
