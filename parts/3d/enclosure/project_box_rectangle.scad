@@ -50,9 +50,82 @@
 
 //! A rectangular box maker for project boxes, enclosures and housings.
 /***************************************************************************//**
-  \param  wth  <integer> wall thickness
+  \param  wth   <decimal> wall thickness.
+
+  \param  h     <datastruct | decimal> box extrusion height;
+                structured data or a single decimal to set the box
+                height (see detail below).
+
+  \param  size  <decimal-list-2 | decimal> box base size; a list [x, y]
+                or a single decimal for (x=y).
+
+  \param  vr    <decimal-list-4 | decimal> wall corner rounding radius;
+                a list [v1r, v2r, v3r, v4r] or a single decimal for
+                (v1r=v2r=v3r=v4r).
+
+  \param  vrm   <integer-list-4 | integer> wall corner rounding mode =
+                {0:none, 1:round, 2:bevel}; a list [v1rm, v2rm, v3rm,
+                v4rm] or a single decimal for (v1rm=v2rm=v3rm=v4rm).
+
+  \param  inset <decimal-list-2 | decimal> wall-to-lid negative offset;
+                a list [x, y] or a single decimal for (x=y).
+
+  \param  lid   <datastruct | decimal> lid extrusion height;
+                structured data or a single decimal to set the lid
+                height (see detail below).
+
+  \param  lip   <datastruct | integer> wall lip; structured data or a
+                single integer to set the lip mode (see detail below).
+
+  \param  rib   <datastruct | integer> wall ribs; structured data or a
+                single integer to set the rib mode (see detail below).
+
+  \param  wall  <datastruct> interior walls; structured data
+                (see detail below).
+
+  \param  post  <datastruct> posts; structured data
+                (see detail below).
+
+  \param  align <integer-list-3> box alignment; a list [x, y, z]
+                (see detail below).
+
+  \param  mode  <integer> mode of operation configuration
+                (see detail below).
+
+  \param  verb  <integer> console output verbosity
+                {0=quiet, 1=info, 2=details}.
 
   \details
+
+    ## Multi-value parameters
+
+    ### h
+
+    see: extrude_linear_mss()
+
+    ### lip
+
+    [ mode, height, base pct, taper pct, alignment ]
+
+    ### lid
+
+    see: extrude_linear_mss()
+
+    ### rib
+
+    [ mode, rib:[w, hx, hy], pct:[x, y, z], number:[x, y, z] ]
+
+    ### wall
+
+    [ config, inst-list ]
+
+    ### post
+
+    [ config, inst-list ]
+
+    ### align
+
+    ### mode
 
     \amu_define title         (Project box bottom section example)
     \amu_define image_views   (top front right diag)
@@ -63,23 +136,23 @@
 *******************************************************************************/
 module project_box_rectangle
 (
-  wth,      // wall thickness
-  h,        // enclosure extrusion height
-  size,     // enclosed base size [x, y]
+  wth,
+  h,
+  size,
 
-  vr,       // wall corner rounding radius
-  vrm,      // {0, 1, 2]} : wall corner rounding mode
+  vr,
+  vrm,
 
-  inset,    // wall inset [x, y]
+  inset,
 
-  lip,      // lip = [ mode, height, base pct, taper pct, alignment ]
-  lid,      // lid height extrusion, see: extrude_linear_mss()
-  rib,      // ribs = [ mode, rib:[w, hx, hy], pct:[x, y, z], number:[x, y, z] ]
-  wall,     // walls = [ config, inst-list ], config = [], inst-list = []
-  post,     //
+  lid,
+  lip,
+  rib,
+  wall,
+  post,
 
   align,
-  mode = 0, // mode = [size-inside, internal-mask, scale-both-walls]
+  mode = 0,
   verb = 0
 )
 {
