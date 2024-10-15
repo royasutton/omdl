@@ -1002,7 +1002,7 @@ BEGIN_SCOPE example;
 
     $fn = 18;
 
-    wth = 2;
+    wth = 1;
 
     lid_rounding = [for (s=[0:1/32:1/8]) 1-pow(s,2)/2];
     lid_profile  = [[wth/3, reverse(lid_rounding)], wth/3, [wth/3, lid_rounding]];
@@ -1032,7 +1032,9 @@ BEGIN_SCOPE example;
       lid = lid_profile,
       rib = 0,
       wall = [13, [[1, -11.5], [1, +11.5] ]],
-      post = post(0, wth*2)
+      post = post(0, wth*3.25),
+
+      mode = 1
     );
 
     // end_include
