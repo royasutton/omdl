@@ -366,13 +366,15 @@ module project_box_rectangle
     // mode
     rib_m   = defined_e_or(rib, 0, rib);
 
-    // B5: wall limits (mode dependent)
+    // B5-6: wall limits (mode dependent)
     max_x   = first( wall_xy) - 2*(wth - eps);
     max_y   = second(wall_xy) - 2*(wth - eps);
-    max_h   = binary_bit_is(rib_m, 5, 1) ? (wall_h + lip_h) : wall_h;
 
-    // B6: configurable global offset (to align with lower lip)
-    rib_lo  = binary_bit_is(rib_m, 6, 1) ? [0, 0, -lip_h] : zero3d;
+    // 'max_h' may include 0 to 2 'lip_h' (ie: one at top and bottom)
+    max_h   = wall_h + min(2, binary_iw2i(rib_m, 2, 5)) * lip_h;
+
+    // B7: configurable global offset (to align with lower lip)
+    rib_lo  = binary_bit_is(rib_m, 7, 1) ? [0, 0, -lip_h] : zero3d;
 
     // rib width and extrusion configuration
     rib_edx = [[1, 1], [9/10, 1], [8/10, 1], [6/10, 1], [2/10, 1]]; // defaults
