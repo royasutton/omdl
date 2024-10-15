@@ -97,19 +97,66 @@
 
   \details
 
-    ## Multi-value parameters
+    Construct a rectangular enclosure for electronic and or other
+    project boxes of the like. This module is structured to construct
+    no more than one exterior top or bottom cover and four exterior
+    walls for each invocation. Therefore, a minimum of two invocations
+    are required to construct a complete enclosure with six side (top,
+    walls, and bottom). Only the parameters \p wth and \p size are
+    require. All others are optional.
 
-    ### h
+    In a simple case, a box would consist of a (1) cover with attached
+    walls and (2) a separate opposite cover to close the box. This
+    would require exactly two invocations. More than two invocations
+    can be used to construct boxes with multiple mid-sections and/or
+    removable covers on one or both sides as shown in the following
+    example.
 
-    see: extrude_linear_mss()
+    \amu_define scope_id      (example_multiple)
+    \amu_define title         (Muilti-section project box example)
+    \amu_define image_views   (front diag)
+    \amu_define image_size    (sxga)
+
+    \amu_include (include/amu/scope_diagrams_3d.amu)
+
+    Notice that the middle sections omit the \p lid parameter to skip
+    lid construction in this example. The edge rounding during shape
+    construction is performed using the function polygon_round_eve_all_p().
+    Refer to its documentation for more information on the rounding
+    mode options and descriptions.
+
+    ## Parameter defaults
+
+    Default values are calculated for all parameters. In some cases,
+    the defaults are calculated based on supplied user values. For
+    example, screw post diameters are calculated based on the supplied
+    screw size for the post instance. Whenever a configuration consists
+    of a list of values, there is no requirement to supply values for
+    the entire list. Generally speaking, the list may be terminated at
+    the parameter of interest. The caveat is for parameters of interest
+    that comes after those which are not of interest. In this case, the
+    prior values may be assigned a custom value or may be assigned the
+    value \b undef to use the calculated default as shown below.
+
+    \code{.C}
+    partial_config = [ 12.42, [1,2], [2,1], 0, [1,2], 31, [1,2,3], 0 ];
+       full_config = [ undef, undef, undef, 2, undef, 31 ];
+    \endcode
+
+    ## Multi-value and structured parameters
+
+    ### h, lid
+
+    The box wall height and box lid height are linear extrusions
+    created using the function extrude_linear_mss(). This allows for
+    flexible scaling along the extrusion as described in that functions
+    description. The box bottom section below shows an example of how
+    this scaling can be used to create features, such as corner
+    rounding and face protrusion, along the lid and box height.
 
     ### lip
 
     [ mode, height, base pct, taper pct, alignment ]
-
-    ### lid
-
-    see: extrude_linear_mss()
 
     ### rib
 
@@ -127,6 +174,7 @@
 
     ### mode
 
+    \amu_define scope_id      (example_bottom)
     \amu_define title         (Project box bottom section example)
     \amu_define image_views   (top front right diag)
     \amu_define image_size    (sxga)
@@ -1077,7 +1125,41 @@ module project_box_rectangle
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE example;
+BEGIN_SCOPE example_multiple;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/operation_cs.scad>;
+    include <parts/3d/enclosure/project_box_rectangle.scad>;
+
+    wth = 2; h = 8; sx = 75; sy = 50; vr = 5; vrm = 2;
+
+    translate([0,0,0])                              // bottom
+    project_box_rectangle( wth=wth, h=h, size=[sx,sy], vr=vr, vrm=vrm, lip=1, lid=wth );
+
+    for (z = [1,3]) translate([0,0, (h+4)*z])       // mid-sections
+    project_box_rectangle( wth=wth, h=h, size=[sx,sy], vr=vr, vrm=vrm, lip=1 );
+
+    translate([0,0,(h+4)*4 + h]) mirror([0,0,1])    // top
+    project_box_rectangle( wth=wth, h=h, size=[sx,sy], vr=vr, vrm=vrm, lip=2, lid=wth );
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "front diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE example_bottom;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <tools/operation_cs.scad>;
