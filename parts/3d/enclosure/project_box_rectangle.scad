@@ -78,8 +78,8 @@ module project_box_rectangle
   wall,     // walls = [ config, inst-list ], config = [], inst-list = []
   post,     //
 
-  mode = 0, // mode = [size-inside, int-mask, scale-both]
-  align = 0,
+  align,
+  mode = 0, // mode = [size-inside, internal-mask, scale-both-walls]
   verb = 0
 )
 {
@@ -978,12 +978,21 @@ module project_box_rectangle
   //
   //
 
+  align_x = select_ci ( [0, -encl_x, -szint_x, +szint_x, +encl_x ]/2,
+                        defined_e_or(align, 0, 0), false );
+
+  align_y = select_ci ( [0, -encl_y, -szint_y, +szint_y, +encl_y ]/2,
+                        defined_e_or(align, 1, 0), false );
+
+  align_z = select_ci ( [lid_h, 0, lid_h -encl_z/2, -wall_h/2, -wall_h, -wall_h -lip_h],
+                        defined_e_or(align, 2, 0), false );
+
+  translate([align_x, align_y, align_z])
   difference()
   {
     assembly_add();
     assembly_remove();
   }
-
 }
 
 //! @}
