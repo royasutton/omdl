@@ -170,7 +170,9 @@
 
     #### lip[0]: mode
 
-      v | description
+    Value is a bit-encoded integer.
+
+      b | description
     ---:|:---------------------------------------
       0 | upper and inside edge of wall
       1 | upper and outer edge of wall
@@ -197,7 +199,9 @@
       2 | decimal-list-3    | 10                | [x, y, h] coverage percentage
       3 | integer-list-3    | (calculated)      | [x, y, h] grid count override
 
-    #### rib[0]: mode (bit-encoded integer)
+    #### rib[0]: mode
+
+    Value is a bit-encoded integer.
 
       b | description
     ---:|:---------------------------------------
@@ -261,7 +265,9 @@
       4 | top of wall
       5 | top of enclosure
 
-    ### mode (bit-encoded integer)
+    ### mode
+
+    Value is a bit-encoded integer.
 
       b | description
     ---:|:---------------------------------------
@@ -1234,7 +1240,7 @@ BEGIN_SCOPE example_multiple;
     project_box_rectangle( wth=wth, h=h, size=[sx,sy], vr=vr, vrm=vrm, lip=1, lid=wth );
 
     for (z = [1,3]) translate([0,0, (h+4)*z])       // mid-sections
-    project_box_rectangle( wth=wth, h=h, size=[sx,sy], vr=vr, vrm=vrm, lip=1 );
+    project_box_rectangle( wth=wth, h=h, size=[sx,sy], vr=vr, vrm=vrm, lip=9 );
 
     translate([0,0,(h+4)*4 + h]) mirror([0,0,1])    // top
     project_box_rectangle( wth=wth, h=h, size=[sx,sy], vr=vr, vrm=vrm, lip=2, lid=wth );
