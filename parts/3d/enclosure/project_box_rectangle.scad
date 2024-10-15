@@ -264,7 +264,7 @@ module project_box_rectangle
     rib_hy  = defined_e_or(rib_sd, 2, [[rib_w, rib_edy]]);
 
     // rib coverage percentages
-    rcp_d   = defined_e_or(rib, 2, 20);
+    rcp_d   = defined_e_or(rib, 2, 10);
 
     rcp_x   = defined_e_or(rcp_d, 0, rcp_d);
     rcp_y   = defined_e_or(rcp_d, 1, rcp_x);
