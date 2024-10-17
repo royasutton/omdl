@@ -54,7 +54,7 @@
 
   \param  h     <datastruct | decimal> box extrusion height;
                 structured data or a single decimal to set the box
-                height (see detail below).
+                height.
 
   \param  size  <decimal-list-2 | decimal> box base size; a list [x, y]
                 or a single decimal for (x=y).
@@ -72,25 +72,21 @@
 
   \param  lid   <datastruct | decimal> lid extrusion height;
                 structured data or a single decimal to set the lid
-                height (see detail below).
+                height.
 
   \param  lip   <datastruct | integer> wall lip; structured data or a
-                single integer to set the lip mode (see detail below).
+                single integer to set the lip mode.
 
   \param  rib   <datastruct | integer> wall ribs; structured data or a
-                single integer to set the rib mode (see detail below).
+                single integer to set the rib mode.
 
-  \param  wall  <datastruct> interior walls; structured data
-                (see detail below).
+  \param  wall  <datastruct> interior walls; structured data.
 
-  \param  post  <datastruct> posts; structured data
-                (see detail below).
+  \param  post  <datastruct> posts; structured data.
 
-  \param  align <integer-list-3> box alignment; a list [x, y, z]
-                (see detail below).
+  \param  align <integer-list-3> box alignment; a list [x, y, z].
 
-  \param  mode  <integer> mode of operation configuration
-                (see detail below).
+  \param  mode  <integer> module mode of operation.
 
   \param  verb  <integer> console output verbosity
                 {0=quiet, 1=info, 2=details}.
@@ -126,11 +122,11 @@
 
     Default values are calculated for all parameters. In some cases,
     the defaults are calculated based on prior user supplied values.
-    For example, screw post diameters are calculated based on the
-    supplied screw size for a post instance. Whenever a configuration
-    consists of a list of values, there is no requirement to supply
-    values for all elements of the list. Generally speaking, the list
-    may be terminated at the parameter of interest. The caveat is for
+    For example, post diameters are calculated based on the supplied
+    screw size for a post instance. Whenever a configuration consists
+    of a list of values, there is no requirement to supply values for
+    all elements of the list. Generally speaking, the list may be
+    terminated at the parameter of interest. The caveat is for
     parameters of interest that comes after those which are not of
     interest. In this case, the prior values may be assigned a suitable
     value or may be assigned the value \b undef to use the calculated
@@ -145,32 +141,33 @@
 
     The edge rounding during shape construction is performed using the
     function polygon_round_eve_all_p(). Refer to its documentation for
-    more information on the rounding mode descriptions and other
-    options.
+    more information on the rounding modes and their descriptions.
 
     All height extrusions for walls, ribs, posts, etc, are performed by
     the function extrude_linear_mss(). This facilitates flexible
-    scaling along the extrusion as described in that functions
-    documentation. The <em>box bottom section example</em> below shows
-    how this scaling can be used to create features, such as corner
-    rounding and face protrusion, along the lid and box height.
+    scaling along the extrusion height as described in that functions
+    documentation. The <em>box bottom section example</em> at the end
+    of this page shows how this scaling can be used to create features,
+    such as corner rounding and face protrusion, along the lid and box
+    height.
 
     ## Multi-value and structured parameters
 
     ### h, lid
 
-    The height of the exterior walls and the box lid are produced using
-    the function extrude_linear_mss(). The height can be specified as a
-    single decimal value or may be specified as list of scaled sections
-    along the height. For a description on specifying scaled extrusions
-    see the documentation for the extrusion function.
+    The height of the exterior walls and the box lid are the result of
+    extrusions produced using the function extrude_linear_mss(). The
+    height can be specified as a single decimal value or may be
+    specified as list of scaled sections along the height. For a
+    description on specifying scaled extrusions see the documentation
+    for this extrusion function.
 
     ### lip
 
-    By way of the parameter \p lip, the box walls can have a overhang
-    that interfaces with adjacent sections. The adjacent section should
-    be constructed with an opposite orientation using the mode
-    configuration.
+    By way of the parameter \p lip, the box walls can have an overhang
+    that interfaces with adjacent wall or lid sections. The adjacent
+    section should be constructed with an opposite lip orientation
+    using the mode configuration.
 
     #### Data structure schema:
 
@@ -178,12 +175,12 @@
     ---------------:|:----------------------------------------------
     lip             | [ mode, height, width, taper, alignment ]
 
-    #### Data structure fields:
+    #### Data structure fields: lip
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | integer           | required          | mode
-      1 | decimal           | wth/2             | height
+      1 | decimal           | wth               | height
       2 | decimal           | 45                | base width percentage of wall
       3 | decimal           | 10                | top taper width percentage of wall
       4 | integer           | 0                 | alignment
@@ -199,6 +196,11 @@
       2 | lower and inside edge of wall
       3 | lower and outer edge of wall
 
+    A lip pocket can be generated by using an appropriately sized
+    inside and outer lip together. A corresponding lip pocket-insert
+    can be approximated by using an inside lip with an alignment in the
+    wall center (minimum lip gap).
+
     #### lip[4]: alignment
 
       v | description
@@ -206,6 +208,9 @@
       0 | maximum lips gap
       1 | minimum lips gap with backfield
       2 | minimum lips gap
+
+    Only inside edge lips may be aligned. Outer edge lips are always
+    aligned with the outer edge of the box wall exterior.
 
     ### rib
 
@@ -221,14 +226,14 @@
     rib             | [ mode, extrusions, coverage, counts ]
     extrusions      | [ base, x-extrusion, y-extrusion ]
 
-    #### Data structure fields:
+    #### Data structure fields: rib
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | integer           | required          | mode
       1 | datastruct        | (see below)       | base and height extrusions
-      2 | decimal-list-3    | 10                | [x, y, h] coverage percentage
-      3 | integer-list-3    | (calculated)      | [x, y, h] grid count override
+      2 | decimal-list3 \| decimal-list2 \| decimal-list1  \| decimal | 10            | [x, y, h] coverage percentage
+      3 | integer-list3 \| integer-list2 \| integer-list1  \| integer | (calculated)  | [x, y, h] count override
 
     #### rib[0]: mode
 
@@ -260,9 +265,9 @@
     ### wall
 
     The parameter \p wall may be used to define one or more interior
-    walls to be constructed. There are two wall types which correspond
-    to walls constructions along the x-axis (type 0) or y-axis (type
-    1). Each wall instance may be moved, scaled, or rotated.
+    walls to be constructed. There are two types which correspond to
+    walls parallel to the x-axis (type 0) or y-axis (type 1). Each wall
+    instance may be moved, scaled, or rotated.
 
     #### Data structure schema:
 
@@ -274,7 +279,7 @@
     instances       | [ instance, instance, ..., instance ]
     instance        | [ type, move, scale, rotate, size, h, vr, vrm ]
 
-    #### Data structure fields:
+    #### Data structure fields: wall
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -294,9 +299,9 @@
 
       b | description
     ---:|:---------------------------------------
-    0-1 | wall end rounding (0:none, 1:fillet, 2:bevel, 3:round)
-    2-3 | wall extrusion rounding (0:none, 1:top, 2:base, 3:both)
-    4-5 | wall on lips (0:none, 1:one, 2:both)
+    0-1 | wall end rounding {0:none, 1:fillet, 2:bevel, 3:round}
+    2-3 | wall extrusion rounding {0:none, 1:top, 2:base, 3:both}
+    4-5 | wall on lips {0:none, 1:one, 2:both}
       6 | wall offset to bottom of lower lip
 
     ##### wall[0]: configuration[1]: defaults
@@ -318,7 +323,7 @@
       0 | integer                                     | required  | type
       1 | decimal-list-3 \| decimal-list-2 \| decimal | [0, 0, 0] | move
       2 | decimal-list-3 \| decimal-list-2 \| decimal | [1, 1, 1] | scale
-      3 | decimal-list-3 \| decimal-list-2 \| decimal | [0, 0, 0] | rotate
+      3 | decimal-list-3 \| decimal-list-2 \| decimal-list-1 \| decimal | [0, 0, 0] | rotate
       4 | decimal-list-2            | \em tdef_s    | size
       5 | decimal-list-2            | \em tdef_he   | extrusion
       6 | decimal-list-4 \| decimal | \em tdef_vr   | rounding radius
@@ -339,8 +344,8 @@
     posts. Recessed posts have a widened access tunnel where screws can
     be inserted through and below the surface where the post is
     attached. All posts (and holes) may be rounded at the bottom, to
-    widen the contact withe the adjacent surface, or at the top, to
-    enhance contact or smooth its edges. A post instance consists of
+    widen the contact with the the adjacent surface, or at the top, to
+    enhance contact or smooth its edges. Each post instance consists of
     two holes, a post with optional fins, and can be aligned, moved,
     and rotated.
 
@@ -359,7 +364,7 @@
 
     (1) All numbered and unnumbered holes and posts utilize this form.
 
-    #### Data structure fields:
+    #### Data structure fields: post
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -379,22 +384,22 @@
 
       b | description
     ---:|:---------------------------------------
-    0-1 | post rounding (0:none, 1:bevel, 2:filet)
-    2-3 | fin rounding (0:none, 1:bevel, 2:filet)
-      4 | auxiliary screw hole on opposite side of lid
-      5 | select post type that intends into lid height
+    0-1 | post rounding {0:none, 1:bevel, 2:filet}
+    2-3 | fin rounding {0:none, 1:bevel, 2:filet}
+      4 | set auxiliary screw hole on opposite side of lid
+      5 | set post type that extends into lid height
 
     ##### post[0]: configuration[1]: defaults
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | datastruct        | (see note)        | hole0; the screw hole
-      1 | datastruct        | (see note)        | hole1; post 1 aux hole
-      2 | datastruct        | (see note)        | post1; normal post
-      3 | datastruct        | (see note)        | hole2; post 2 access hole
-      4 | datastruct        | (see note)        | post2; recessed post
-      5 | datastruct        | (see note)        | fins
-      6 | datastruct        | (see note)        | adjustments
+      0 | datastruct        | (see below)       | hole0; the screw hole
+      1 | datastruct        | (see below)       | hole1; post 1 aux hole
+      2 | datastruct        | (see below)       | post1; normal-post
+      3 | datastruct        | (see below)       | hole2; post 2 access hole
+      4 | datastruct        | (see below)       | post2; recessed-post
+      5 | datastruct        | (see below)       | fins
+      6 | datastruct        | (see below)       | adjustments
 
     ##### post[0]: configuration[1]: defaults[0-4]: hole*, post*
 
@@ -403,18 +408,18 @@
       0 | decimal           | (see note)        | diameter
       1 | decimal           | (see note)        | height
       2 | decimal           | (see note)        | height offset
-      3 | decimal-list-4 \| decimal | \em tdef_h1_vr  | rounding radius
-      4 | integer-list-4 \| integer | \em tdef_h1_vrm | rounding mode
+      3 | decimal-list-4 \| decimal| (see note) | rounding radius
+      4 | integer-list-4 \| integer| (see note) | rounding mode
 
-    \note Attempts have be made to use reasonable defaults for all hole
-    and post configurations. The default values are of the form
-    outlined in the schema above. These defaults values and/or their
+    \note Attempts have been made to use reasonable defaults and
+    configurations for all holes and posts. The default values are of
+    the form outlined in the schema above. These defaults and/or their
     calculations may be found in the source code and have variable
     names that begin with \em def_. For example the default value for
-    hole0 has the variable name \em def_h0_d. Given the quantity of
-    post-related defaults, these defaults will be be documented here.
-    These default values may also be observed by using the module and
-    may be overridden as necessary during use.
+    hole0 diameter has the variable name \em def_h0_d. Given the
+    quantity of post-related defaults, they will not be be documented
+    here. These default values may also be observed by using the module
+    and may be overridden as necessary during use.
 
     ##### post[0]: configuration[1]: defaults[5]: fins
 
@@ -436,26 +441,26 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | decimal           | 0                 | normal post screw hole gap
-      1 | decimal           | 0                 | recessed post screw hole gap
-      2 | decimal           | wth/2             | common; all post and secondary holes size addition
+      0 | decimal           | 0                 | normal-post screw hole gap
+      1 | decimal           | 0                 | recessed-post screw hole gap
+      2 | decimal           | wth/2             | common; added to all post and secondary holes
       3 | decimal           | 0                 | hole1 wall-multiplier
       4 | decimal           | 3.0               | post1 wall-multiplier
       5 | decimal           | 2.0               | hole2 wall-multiplier
       6 | decimal           | 4.0               | post2 wall-multiplier
 
     The screw hole gap parameters allow for a fixed increase in size
-    for all instantiated screw holes without affecting the calculations
-    for other design features that depend on screw hole size. This may
-    be used to provide a common tolerance gap for all screw holes or
-    for a common hole size increase for use with brass metal screw
-    inserts.
+    for all screw holes instances without affecting the calculations or
+    other design features that depend on screw hole size. This may be
+    used to provide a common tolerance gap for all screw holes or for a
+    common hole size increase for use with brass metal screw inserts,
+    for example.
 
     The wall-multiplier defaults allow for a convenient way to generate
-    posts and hole sizes that are scale-dependent on screw hole size of
-    an post instance. For examples, using the default values, the post2
-    diameter would be (4.0 * \em wth), with \em wth is the configured
-    minimum wall thickness.
+    posts and hole sizes that are scale-dependent on post screw hole
+    size. For examples, using the default values, the post2 diameter
+    would be (4.0 * \em wth), where \em wth is the configured minimum
+    wall thickness.
 
     #### post[1]: instances
 
@@ -471,12 +476,13 @@
       7 | datastruct | (see note) | fins
 
     \note The default values for the holes and post are set based on
-    the post type and when, not specified with an instances are
+    the post type and, when not specified with an instances, are
     obtained from the configured default values as described above.
 
     ### align
 
-    The x, y, and z axis of the box can be aligned independently.
+    The x, y, and z axis of the box can be aligned independently using
+    this parameter.
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -484,15 +490,15 @@
       1 | integer           | 0                 | y-axis alignment
       2 | integer           | 0                 | z-axis alignment
 
-    #### align[0-1]: x/y axis alignment
+    #### align[0-1]: x or y axis alignment
 
       v | description
     ---:|:---------------------------------------
       0 | center
-      1 | exterior enclosure negative x/y edge
-      2 | interior enclosure negative x/y edge
-      3 | interior enclosure positive x/y edge
-      4 | exterior enclosure positive x/y edge
+      1 | exterior enclosure negative x or y edge
+      2 | interior enclosure negative x or y edge
+      3 | interior enclosure positive x or y edge
+      4 | exterior enclosure positive x or y edge
 
     #### align[2]: z-axis alignment
 
