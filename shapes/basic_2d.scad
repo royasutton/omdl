@@ -56,10 +56,10 @@
 
 //! A rectangle with corner rounds or chamfers.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> A list [x, y] of decimals
+  \param    size <decimal-list-2 | decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
 
-  \param    vr <decimal-list-4|decimal> The corner rounding radius.
+  \param    vr <decimal-list-4 | decimal> The corner rounding radius.
             A list [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
@@ -164,22 +164,22 @@ module rectangle
 
 //! A rectangle with a removed rectangular core.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> A list [x, y] of decimals
+  \param    size <decimal-list-2 | decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
-  \param    core <decimal-list-2|decimal> A list [x, y] of decimals
+  \param    core <decimal-list-2 | decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
 
-  \param    t <decimal-list-2|decimal> A list [x, y] of decimals
+  \param    t <decimal-list-2 | decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
 
   \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
   \param    cr <decimal> Core z-rotation.
 
-  \param    vr <decimal-list-4|decimal> The default corner rounding radius.
+  \param    vr <decimal-list-4 | decimal> The default corner rounding radius.
             A list [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
-  \param    vr1 <decimal-list-4|decimal> The outer corner rounding radius.
-  \param    vr2 <decimal-list-4|decimal> The core corner rounding radius.
+  \param    vr1 <decimal-list-4 | decimal> The outer corner rounding radius.
+  \param    vr2 <decimal-list-4 | decimal> The core corner rounding radius.
 
   \param    vrm <integer> The default corner radius mode.
             A 4-bit encoded integer that indicates each corner finish.
@@ -245,10 +245,10 @@ module rectangle_c
 
 //! A rhombus.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> A list [w, h] of decimals
+  \param    size <decimal-list-2 | decimal> A list [w, h] of decimals
             or a single decimal for (w=h).
 
-  \param    vr <decimal-list-4|decimal> The corner rounding radius.
+  \param    vr <decimal-list-4 | decimal> The corner rounding radius.
             A list [v1r, v2r, v3r, v4r] of decimals or a single decimal
             for (v1r=v2r=v3r=v4r). Unspecified corners are not rounded.
 
@@ -378,7 +378,7 @@ module ngon
 
 //! An ellipse.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
+  \param    size <decimal-list-2 | decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
 
   \details
@@ -406,12 +406,12 @@ module ellipse
 
 //! An ellipse with a removed elliptical core.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
+  \param    size <decimal-list-2 | decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
-  \param    core <decimal-list-2|decimal> A list [rx, ry] of decimals
+  \param    core <decimal-list-2 | decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
 
-  \param    t <decimal-list-2|decimal> A list [x, y] of decimals
+  \param    t <decimal-list-2 | decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
 
   \param    co <decimal-list-2> Core offset. A list [x, y] of decimals.
@@ -456,7 +456,7 @@ module ellipse_c
 
 //! An ellipse sector.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
+  \param    size <decimal-list-2 | decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
 
   \param    a1 <decimal> The start angle in degrees.
@@ -511,12 +511,12 @@ module ellipse_s
 
 //! A sector of an ellipse with a removed elliptical core.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> A list [rx, ry] of decimals
+  \param    size <decimal-list-2 | decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
-  \param    core <decimal-list-2|decimal> A list [rx, ry] of decimals
+  \param    core <decimal-list-2 | decimal> A list [rx, ry] of decimals
             or a single decimal for (rx=ry).
 
-  \param    t <decimal-list-2|decimal> A list [x, y] of decimals
+  \param    t <decimal-list-2 | decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
 
   \param    a1 <decimal> The start angle in degrees.
@@ -566,12 +566,12 @@ module ellipse_cs
 
 //! A two-dimensional star.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> A list [l, w] of decimals
+  \param    size <decimal-list-2 | decimal> A list [l, w] of decimals
             or a single decimal for (size=l=2*w).
 
   \param    n <decimal> The number of points.
 
-  \param    vr <decimal-list-3|decimal> The vertex rounding radius.
+  \param    vr <decimal-list-3 | decimal> The vertex rounding radius.
             A list [v1r, v2r, v3r] of decimals or a single decimal for
             (v1r=v2r=v3r).
 

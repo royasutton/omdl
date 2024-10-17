@@ -104,10 +104,10 @@ function angle_unit_name
 
 //! Convert an angle from degrees to other units.
 /***************************************************************************//**
-  \param    a <decimal|decimal-list-3> An angle to convert.
+  \param    a <decimal | decimal-list-3> An angle to convert.
   \param    to <string> The units to which the angle should be converted.
 
-  \returns  <decimal|decimal-list-3> The conversion result.
+  \returns  <decimal | decimal-list-3> The conversion result.
             Returns \b undef for identifiers that are not defined.
 
   \private
@@ -127,10 +127,10 @@ function angle_unit_d2
 
 //! Convert an angle from some units to degrees.
 /***************************************************************************//**
-  \param    a <decimal|decimal-list-3> An angle to convert.
+  \param    a <decimal | decimal-list-3> An angle to convert.
   \param    from <string> The units of the angle to be converted.
 
-  \returns  <decimal|decimal-list-3> The conversion result.
+  \returns  <decimal | decimal-list-3> The conversion result.
             Returns \b undef for identifiers that are not defined.
   \private
 *******************************************************************************/
@@ -145,11 +145,11 @@ function angle_unit_2d
 
 //! Convert an angle from some units to another.
 /***************************************************************************//**
-  \param    a <decimal|decimal-list-3> An angle to convert.
+  \param    a <decimal | decimal-list-3> An angle to convert.
   \param    from <string> The units of the angle to be converted.
   \param    to <string> A units to which the angle should be converted.
 
-  \returns  <decimal|decimal-list-3> The conversion result.
+  \returns  <decimal | decimal-list-3> The conversion result.
             Returns \b undef for identifiers that are not defined.
 *******************************************************************************/
 function angle
@@ -162,11 +162,11 @@ function angle
 
 //! Convert an angle from some units to another.
 /***************************************************************************//**
-  \param    a <decimal|decimal-list-3> An angle to convert.
+  \param    a <decimal | decimal-list-3> An angle to convert.
   \param    from <string> The units of the angle to be converted.
   \param    to <string> A units to which the angle should be converted.
 
-  \returns  <decimal|decimal-list-3> The conversion result.
+  \returns  <decimal | decimal-list-3> The conversion result.
             Returns \b undef for identifiers that are not defined.
 *******************************************************************************/
 function angle_inv

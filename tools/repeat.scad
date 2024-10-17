@@ -85,9 +85,9 @@ module repeat_radial
 
 //! Distribute copies of 2d or 3d shapes about Cartesian grid.
 /***************************************************************************//**
-  \param    g <integer-list-3|integer> The grid division count. A list
+  \param    g <integer-list-3 | integer> The grid division count. A list
             [x, y, z] of integers or a single integer for (x=y=z).
-  \param    i <decimal-list-3|decimal> The grid increment size. A list
+  \param    i <decimal-list-3 | decimal> The grid increment size. A list
             [x, y, z] of decimals or a single decimal for (x=y=z).
   \param    c <integer> The number of copies. Number of times to iterate
             over children.

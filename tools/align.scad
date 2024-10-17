@@ -46,8 +46,8 @@
 
 //! Orient a line or vector to a reference line or vector.
 /***************************************************************************//**
-  \param    l <line-3d|line-2d> The line or vector to align.
-  \param    r <line-3d|line-2d> The reference line or vector.
+  \param    l <line-3d | line-2d> The line or vector to align.
+  \param    r <line-3d | line-2d> The reference line or vector.
 
   \param    ar <decimal> Axial roll about \p r (in degrees).
 
@@ -72,16 +72,16 @@ module orient_ll
 
 //! Align a line or vector to a reference line or vector.
 /***************************************************************************//**
-  \param    l <line-3d|line-2d> The line or vector to align.
-  \param    r <line-3d|line-2d> The reference line or vector.
+  \param    l <line-3d | line-2d> The line or vector to align.
+  \param    r <line-3d | line-2d> The reference line or vector.
 
   \param    lp <integer> The line alignment point (see table).
   \param    rp <integer> The reference-line alignment point (see table).
 
   \param    ar <decimal> Axial roll about \p r (in degrees).
 
-  \param    to <vector-3d|vector-2d> Translation offset about \p r.
-  \param    ro <decimal-list-1:3|decimal> Rotation offset about \p r
+  \param    to <vector-3d | vector-2d> Translation offset about \p r.
+  \param    ro <decimal-list-1:3 | decimal> Rotation offset about \p r
             (in degrees).
 
   \details
@@ -142,14 +142,14 @@ module align_ll
 /***************************************************************************//**
   \param    a <integer> The Cartesian axis index to align
             (\b x_axis_ci, \b y_axis_ci, or \b z_axis_ci).
-  \param    r <line-3d|line-2d> The reference line or vector.
+  \param    r <line-3d | line-2d> The reference line or vector.
 
   \param    rp <integer> The reference-line alignment point (see table).
 
   \param    ar <decimal> Axial roll about \p r (in degrees).
 
-  \param    to <vector-3d|vector-2d> Translation offset about \p r.
-  \param    ro <decimal-list-1:3|decimal> Rotation offset about \p r
+  \param    to <vector-3d | vector-2d> Translation offset about \p r.
+  \param    ro <decimal-list-1:3 | decimal> Rotation offset about \p r
             (in degrees).
 
   \details

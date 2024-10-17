@@ -53,14 +53,14 @@ validation_skip = [number_min, number_max, number_inf];
 /***************************************************************************//**
   \param    d <string> A description.
   \param    cv \<value> A computed value to validate.
-  \param    t <string|boolean> The validation type.
+  \param    t <string | boolean> The validation type.
   \param    ev \<value> The expected good value.
 
   \param    p <number> A numerical precision for approximate comparisons.
 
   \param    pf <boolean> Report result as pass or fail boolean value.
 
-  \returns  <string|boolean> Validation result indicating if the test
+  \returns  <string | boolean> Validation result indicating if the test
             passed or failed.
 
   \details
@@ -270,7 +270,7 @@ module table_validate_start( db, verbose=false )
   \param    fn <string> The function name.
   \param    argc <integer> The number of arguments to retrieve from \p db.
   \param    fr <value> The value returned from the tested function.
-  \param    t <string|boolean> The validation type.
+  \param    t <string | boolean> The validation type.
   \param    p <number> A numerical precision for approximate comparisons.
 
   \details
@@ -447,7 +447,7 @@ module map_validate_start( db, verbose=false )
   \param    id <string> The test identifier.
   \param    argc <integer> The number of arguments to retrieve from \p db.
   \param    fr <value> The value returned from the tested function.
-  \param    t <string|boolean> The validation type.
+  \param    t <string | boolean> The validation type.
   \param    p <number> A numerical precision for approximate comparisons.
 
   \details

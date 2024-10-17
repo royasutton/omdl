@@ -112,14 +112,14 @@ function polygon_regular_p
   \param    p2 <point-2d> The line terminal coordinate [x, y].
   \param    l <line-2d> The line or vector.
 
-  \param    x <decimal-list|decimal> A list of \p x coordinates
+  \param    x <decimal-list | decimal> A list of \p x coordinates
             [\p x1, \p x2, ...] or a single \p x coordinate at which to
             interpolate along the line.
-  \param    y <decimal-list|decimal> A list of \p y coordinates
+  \param    y <decimal-list | decimal> A list of \p y coordinates
             [\p y1, \p y2, ...] or a single \p y coordinate at which to
             interpolate along the line.
 
-  \param    r <decimal-list|decimal> A list of ratios
+  \param    r <decimal-list | decimal> A list of ratios
             [\p r1, \p r2, ...] or a single ratio \p r. The position
             ratio along line \p p1 (\p r=\b 0) to \p p2 (\p r=\b 1).
 
@@ -210,9 +210,9 @@ function polygon_line_p
 /***************************************************************************//**
   \param    r <decimal> The arc radius.
   \param    c <point-2d> The arc center coordinate [x, y].
-  \param    v1 <line-2d|decimal> The arc start angle.
+  \param    v1 <line-2d | decimal> The arc start angle.
             A 2d line, vector, or decimal angle 1.
-  \param    v2 <line-2d|decimal> The arc end angle.
+  \param    v2 <line-2d | decimal> The arc end angle.
             A 2d line, vector, or decimal angle 2.
   \param    fn <integer> The number of [facets].
   \param    cw <boolean> Sweep clockwise along arc from the head of
@@ -267,12 +267,12 @@ function polygon_arc_p
 
 //! Compute coordinates for an elliptical sector in 2D.
 /***************************************************************************//**
-  \param    r <decimal-list-2|decimal> The elliptical radius. A list
+  \param    r <decimal-list-2 | decimal> The elliptical radius. A list
             [rx, ry] of decimals or a single decimal for (rx=ry).
   \param    c <point-2d> The center coordinate [x, y].
-  \param    v1 <line-2d|decimal> The sector angle 1.
+  \param    v1 <line-2d | decimal> The sector angle 1.
             A 2d line, vector, or decimal.
-  \param    v2 <line-2d|decimal> The sector angle 2.
+  \param    v2 <line-2d | decimal> The sector angle 2.
             A 2d line, vector, or decimal.
   \param    s <boolean> Use signed vector angle conversions. When
             \b false, positive angle conversion will be used.
@@ -329,7 +329,7 @@ function polygon_elliptical_sector_p
 
 //! Compute the coordinates for a rounded trapezoid in 2D space.
 /***************************************************************************//**
-  \param    b <decimal-list-2|decimal> The base lengths. A list [b1, b2]
+  \param    b <decimal-list-2 | decimal> The base lengths. A list [b1, b2]
             of 2 decimals or a single decimal for (b1=b2).
   \param    h <decimal> The perpendicular height between bases.
   \param    l <decimal> The left side leg length.
@@ -906,9 +906,9 @@ function polygon_linear_extrude_pf
   \param    r <decimal> The round radius.
   \param    m <integer> The round mode.
   \param    c <point-2d> The round center coordinate [x, y].
-  \param    v1 <line-2d|decimal> The round start angle.
+  \param    v1 <line-2d | decimal> The round start angle.
             A 2d line, vector, or decimal angle 1.
-  \param    v2 <line-2d|decimal> The round end angle.
+  \param    v2 <line-2d | decimal> The round end angle.
             A 2d line, vector, or decimal angle 2.
   \param    fn <integer> The number of [facets].
   \param    cw <boolean> The coordinate point ordering.
@@ -979,11 +979,11 @@ function polygon_round_eve_p
 /***************************************************************************//**
   \param    c <coords-2d> A list of \em n 2d cartesian coordinates
             [[x1, y1], [x2, y2], ..., [xn, yn]].
-  \param    vr <decimal-list-n|decimal> The vertices rounding radius.
+  \param    vr <decimal-list-n | decimal> The vertices rounding radius.
             A list [v1r, v2r, v3r, ... vnr] of \em n decimals or a
             single decimal for (v1r=v2r=v3r= ... =vnr). Undefined
             vertices are not rounded.
-  \param    vrm <integer-list-n|integer> The vertices rounding mode.
+  \param    vrm <integer-list-n | integer> The vertices rounding mode.
             A list [v1rm, v2rm, v3rm, ... vnrm] of \em n integers or a
             single integer for (v1rm=v2rm=v3rm= ... =vnrm). Undefined
             vertices are not rounded.

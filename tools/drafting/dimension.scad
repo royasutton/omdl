@@ -56,15 +56,15 @@
 /***************************************************************************//**
   \param    p <point-2d> The leader line point.
 
-  \param    v1 <line-2d|decimal> The leader line 1 angle.
+  \param    v1 <line-2d | decimal> The leader line 1 angle.
             A 2d line, vector, or decimal angle.
   \param    l1 <decimal> The leader line 1 length.
-  \param    v2 <line-2d|decimal> The leader line 2 angle.
+  \param    v2 <line-2d | decimal> The leader line 2 angle.
             A 2d line, vector, or decimal angle.
   \param    l2 <decimal> The leader line 2 length.
 
   \param    h <string> An optional text heading.
-  \param    t <string|string-list> A single or multi-line text string.
+  \param    t <string | string-list> A single or multi-line text string.
   \param    ts <decimal-list-3> A list of decimals that define the
             <width, line-height, heading-height> of the text.
   \param    tp <integer-list-2> The text alignment point.
@@ -74,11 +74,11 @@
             < \b "left" | \b "center" | \b "right" >.
 
   \param    bw <decimal> The boarder line weight.
-  \param    bs <integer|integer-list> The boarder line [style].
+  \param    bs <integer | integer-list> The boarder line [style].
 
   \param    w <decimal> The line weight.
-  \param    s <integer|integer-list> The line [style].
-  \param    a <integer|integer-list-5> The arrowhead [style][arrow].
+  \param    s <integer | integer-list> The line [style].
+  \param    a <integer | integer-list-5> The arrowhead [style][arrow].
 
   \param    o <decimal> The leader point offset.
 
@@ -189,30 +189,30 @@ module draft_dim_leader
   \param    p1 <point-2d> The dimension point 1.
   \param    p2 <point-2d> The dimension point 2.
 
-  \param    v1 <line-2d|decimal> The point 1 extension line vector.
+  \param    v1 <line-2d | decimal> The point 1 extension line vector.
             A 2d line, vector, or decimal angle.
-  \param    v2 <line-2d|decimal> The point 2 extension line vector.
+  \param    v2 <line-2d | decimal> The point 2 extension line vector.
             A 2d line, vector, or decimal angle.
 
-  \param    t <string|string-list> A single or multi-line text string
+  \param    t <string | string-list> A single or multi-line text string
             that overrides the measured distance.
   \param    u <string> The units for the measured distance.
             One of the predefined in \ref units_length.
 
-  \param    d <decimal|decimal-list-2> The minimum distance between the
+  \param    d <decimal | decimal-list-2> The minimum distance between the
             reference point and the start of the extension line.
             A list [d1, d2] of decimals or a single decimal for (d1=d2).
-  \param    e <decimal|decimal-list-2> The length of the extension line.
+  \param    e <decimal | decimal-list-2> The length of the extension line.
             A list [e1, e2] of decimals or a single decimal for (e1=e2).
-  \param    es <integer|integer-list> The extension line [style].
+  \param    es <integer | integer-list> The extension line [style].
 
   \param    w <decimal> The line weight.
-  \param    s <integer|integer-list> The line [style].
-  \param    a <integer|integer-list-5> The arrowheads [style][arrow].
+  \param    s <integer | integer-list> The line [style].
+  \param    a <integer | integer-list-5> The arrowheads [style][arrow].
 
-  \param    a1 <integer|integer-list-5> The arrowhead 1 [style][arrow]
+  \param    a1 <integer | integer-list-5> The arrowhead 1 [style][arrow]
             override.
-  \param    a2 <integer|integer-list-5> The arrowhead 2 [style][arrow]
+  \param    a2 <integer | integer-list-5> The arrowhead 2 [style][arrow]
             override.
 
   \param    o <decimal> The dimension line offset.
@@ -399,10 +399,10 @@ module draft_dim_line
 
   \param    p <point-2d> A point on the radius.
   \param    r <decimal> The radius length.
-  \param    v <line-2d|decimal> The dimension line angle for radius \p r.
+  \param    v <line-2d | decimal> The dimension line angle for radius \p r.
             A 2d line, vector, or decimal angle.
 
-  \param    t <string|string-list> A single or multi-line text string
+  \param    t <string | string-list> A single or multi-line text string
             that overrides the measured length.
   \param    u <string> The units for the measured length.
             One of the predefined in \ref units_length.
@@ -410,15 +410,15 @@ module draft_dim_line
   \param    d <boolean> Construct a diameter dimension line.
 
   \param    w <decimal> The line weight.
-  \param    s <integer|integer-list> The line [style].
-  \param    a <integer|integer-list-5> The arrowheads [style][arrow].
+  \param    s <integer | integer-list> The line [style].
+  \param    a <integer | integer-list-5> The arrowheads [style][arrow].
 
-  \param    a1 <integer|integer-list-5> The arrowhead 1 [style][arrow]
+  \param    a1 <integer | integer-list-5> The arrowhead 1 [style][arrow]
             override.
-  \param    a2 <integer|integer-list-5> The arrowhead 2 [style][arrow]
+  \param    a2 <integer | integer-list-5> The arrowhead 2 [style][arrow]
             override.
 
-  \param    o <decimal|decimal-list-2> The dimension line offset. A list
+  \param    o <decimal | decimal-list-2> The dimension line offset. A list
             [o1, o2] of decimals or a single decimal for (o1=o2).
 
   \param    ts <decimal-list-3> A list of decimals that define the
@@ -586,9 +586,9 @@ module draft_dim_radius
   \param    c <point-2d> The arc center point.
   \param    r <decimal> The arc radius length.
 
-  \param    v1 <line-2d|decimal> The arc initial angle.
+  \param    v1 <line-2d | decimal> The arc initial angle.
             A 2d line, vector, or decimal angle.
-  \param    v2 <line-2d|decimal> The arc terminal angle.
+  \param    v2 <line-2d | decimal> The arc terminal angle.
             A 2d line, vector, or decimal angle.
 
   \param    fn <integer> The number of [facets].
@@ -596,22 +596,22 @@ module draft_dim_radius
             vector \p v1 to the head of vector \p v2 when \p cw =
             \b true, and counter clockwise when \p cw = \b false.
 
-  \param    t <string|string-list> A single or multi-line text string
+  \param    t <string | string-list> A single or multi-line text string
             that overrides the measured angle.
   \param    u <string> The units for the measured angle.
             One of the predefined in \ref units_angle.
 
-  \param    e <decimal|decimal-list-2> The extension line to radius ratio.
+  \param    e <decimal | decimal-list-2> The extension line to radius ratio.
             A list [e1, e2] of decimals or a single decimal for (e1=e2).
-  \param    es <integer|integer-list> The extension line [style].
+  \param    es <integer | integer-list> The extension line [style].
 
   \param    w <decimal> The arc weight.
-  \param    s <integer|integer-list> The arc [style].
-  \param    a <integer|integer-list-5> The arrowheads [style][arrow].
+  \param    s <integer | integer-list> The arc [style].
+  \param    a <integer | integer-list-5> The arrowheads [style][arrow].
 
-  \param    a1 <integer|integer-list-5> The arrowhead 1 [style][arrow]
+  \param    a1 <integer | integer-list-5> The arrowhead 1 [style][arrow]
             override.
-  \param    a2 <integer|integer-list-5> The arrowhead 2 [style][arrow]
+  \param    a2 <integer | integer-list-5> The arrowhead 2 [style][arrow]
             override.
 
   \param    o <decimal> The dimension arc offset.
@@ -788,17 +788,17 @@ module draft_dim_angle
 
   \param    r <decimal> A circular arc radius.
 
-  \param    v <line-2d|decimal> The cross rotation angle.
+  \param    v <line-2d | decimal> The cross rotation angle.
             A 2d line, vector, or decimal angle.
   \param    l <decimal> The cross line length.
 
-  \param    e <decimal|decimal-list-4> The length of the extension lines.
+  \param    e <decimal | decimal-list-4> The length of the extension lines.
             A list [e1, e2, e3, e4] of decimals or a single decimal for
             (e1=e2=e3=e4).
-  \param    es <integer|integer-list> The extension line [style].
+  \param    es <integer | integer-list> The extension line [style].
 
   \param    w <decimal> The line weight.
-  \param    s <integer|integer-list> The line [style].
+  \param    s <integer | integer-list> The line [style].
 
   \param    layers <string-list> The List of drafting layer names.
 

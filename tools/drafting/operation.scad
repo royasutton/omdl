@@ -93,7 +93,7 @@ module draft_in_layers
      field  | description           | data type
     :------:|-----------------------|:--------------------------
       0     | [px, py]              | <decimal-list-2>
-      1     | [rx, ry] or [ix, iy]  | <string-list-2\|decimal-list-2>
+      1     | [rx, ry] or [ix, iy]  | <string-list-2 \| decimal-list-2>
       2     | index                 | <integer>
 
     \amu_eval ( html_image_w=512 latex_image_w="3.00in" object=draft_move ${object_diagram_2d} )
@@ -370,7 +370,7 @@ module draft_sheet
             decimals or a single decimal for (-+x=-+y). The x and y
             negative and positive axes lengths.
 
-  \param    w <decimal-list-2|decimal> A list [-w, +w] or a single
+  \param    w <decimal-list-2 | decimal> A list [-w, +w] or a single
             decimal for (-w=+w). The negative and positive axes segment
             weights.
   \param    s <integer-list-2-list|integer-list-2|integer> A list
@@ -495,7 +495,7 @@ module draft_axes
   \param    label_scale <decimal> The text label size scaler.
   \param    label_hide <boolean> Hide ruler text label.
 
-  \param    order <integer-list-2|integer> The ruler marks horizontal
+  \param    order <integer-list-2 | integer> The ruler marks horizontal
             and vertical direction. A list [x, y] of decimals or a
             single decimal for (x=y).
 
@@ -593,7 +593,7 @@ module draft_ruler
   \param    map <map> A table definition map.
   \param    fmap <map> A table format map.
 
-  \param    zp <integer-list-2|integer> The center coordinate scaler. A
+  \param    zp <integer-list-2 | integer> The center coordinate scaler. A
             list [zpx, zpy] of decimals or a single decimal for (zpx=zpy).
 
   \param    window <boolean> Return table window rectangle.
@@ -724,12 +724,12 @@ module draft_table
 //! Construct a text table that is populated by predefined zones.
 /***************************************************************************//**
   \param    text <value-list> The list of zone values, where each value
-            is <string|string-list>, a single or multi-line string for
+            is <string | string-list>, a single or multi-line string for
             the corresponding zone.
 
   \param    map <map> A zone table definition map.
 
-  \param    zp <integer-list-2|integer> The center coordinate scaler. A
+  \param    zp <integer-list-2 | integer> The center coordinate scaler. A
             list [zpx, zpy] of decimals or a single decimal for (zpx=zpy).
 
   \param    number <boolean> Number the defined table zones.
@@ -860,7 +860,7 @@ module draft_ztable
 //! Construct a text note with optional heading and boarder.
 /***************************************************************************//**
   \param    head <string> The optional note heading.
-  \param    note <string|string-list> A single or multi-line note
+  \param    note <string | string-list> A single or multi-line note
             text string.
 
   \param    size <decimal-list-3> A list of decimals that define the
@@ -875,7 +875,7 @@ module draft_ztable
   \param    cmh <decimal> The horizontal width minimum unit cell size.
   \param    cmv <decimal> The vertical height minimum unit cell size.
 
-  \param    zp <integer-list-2|integer> The center coordinate scaler. A
+  \param    zp <integer-list-2 | integer> The center coordinate scaler. A
             list [zpx, zpy] of decimals or a single decimal for (zpx=zpy).
 
   \param    window <boolean> Return table window rectangle.

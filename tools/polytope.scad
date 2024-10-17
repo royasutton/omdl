@@ -50,7 +50,7 @@
 
 //! Label the vertices, paths, and edges of a polytope.
 /***************************************************************************//**
-  \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
+  \param    c <coords-3d | coords-2d> A list of 3d or 2d coordinate points.
   \param    f <<integer-list>-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
   \param    e <<integer-list-2>-list> A list of edges where each edge is
@@ -65,8 +65,8 @@
   \param    ts <decimal> The text size override.
   \param    th <decimal> The text extrusion height override.
 
-  \param    to <vector-3d|vector-2d> The text offset override.
-  \param    tr <decimal-list-[1:3]|decimal> The text rotation (in degrees).
+  \param    to <vector-3d | vector-2d> The text offset override.
+  \param    tr <decimal-list-1:3 | decimal> The text rotation (in degrees).
 
   \details
 
@@ -173,7 +173,7 @@ module polytope_number
 
 //! Assemble a polytope skeletal frame using child objects.
 /***************************************************************************//**
-  \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
+  \param    c <coords-3d | coords-2d> A list of 3d or 2d coordinate points.
   \param    f <<integer-list>-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
   \param    e <<integer-list-2>-list> A list of edges where each edge is
@@ -279,10 +279,10 @@ module polytope_frame
 
 //! The 3d or 2d bounding box shape for a polytope.
 /***************************************************************************//**
-  \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
+  \param    c <coords-3d | coords-2d> A list of 3d or 2d coordinate points.
   \param    f <<integer-list>-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
-  \param    a <decimal-list-1:3|decimal> The box padding. A list of
+  \param    a <decimal-list-1:3 | decimal> The box padding. A list of
             lengths to equally pad the box dimensions.
 
   \details

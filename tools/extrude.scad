@@ -81,7 +81,7 @@ module extrude_rotate_tr
 /***************************************************************************//**
   \copydetails extrude_rotate_tr()
 
-  \param    s <decimal-list-2|decimal> The start and end scale factor.
+  \param    s <decimal-list-2 | decimal> The start and end scale factor.
             A list [s1, s2] of decimals or a single decimal for (s1=s2)
   \param    m <integer> The facet number mode (either \b 0 or \b 1).
             With \p m = \b 1, fewer scaled-steps are generated during
@@ -138,7 +138,7 @@ module extrude_rotate_trs
 /***************************************************************************//**
   \copydetails extrude_rotate_tr()
 
-  \param    l <decimal-list-2|decimal> The elongation length.
+  \param    l <decimal-list-2 | decimal> The elongation length.
             A list [x, y] of decimals or a single decimal for (x=y)
   \param    m <integer> The section render mode. An 8-bit encoded integer
             that indicates the revolution sections to render.
@@ -222,7 +222,7 @@ module extrude_rotate_trl
 
 //! Linearly extrude a 2d shape with uniformly-spaced profile scaling.
 /***************************************************************************//**
-  \param    h <datastruct|decimal> A data structure or a single decimal.
+  \param    h <datastruct | decimal> A data structure or a single decimal.
   \param    center <boolean> Center extrusion about origin.
   \param    c <boolean> conditional.
   \param    ha <decimal> An extrusion height adjustment value.
@@ -310,7 +310,7 @@ module extrude_linear_uss
 
 //! Linearly extrude a 2d shape with multi-segment uniformly-spaced profile scaling.
 /***************************************************************************//**
-  \param    h <datastruct-list-n|decimal> A data structure or a single decimal.
+  \param    h <datastruct-list-n | decimal> A data structure or a single decimal.
   \param    center <boolean> Center extrusion about origin.
   \param    c <boolean> conditional.
 

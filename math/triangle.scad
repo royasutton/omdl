@@ -60,7 +60,7 @@
 
 //! Compute the side lengths of a triangle given its vertex coordinates.
 /***************************************************************************//**
-  \param    c <coords-3d|coords-2d>  A list, [v1, v2, v3], the 3d or 2d
+  \param    c <coords-3d | coords-2d>  A list, [v1, v2, v3], the 3d or 2d
             vertex coordinates.
 
   \returns  <decimal-list-3> A list of side lengths [s1, s2, s3].
@@ -275,11 +275,11 @@ function triangle2d_area
 
 //! Compute the centroid of a triangle.
 /***************************************************************************//**
-  \param    c <coords-3d|coords-2d>  A list of 3d or 2d vertex
+  \param    c <coords-3d | coords-2d>  A list of 3d or 2d vertex
             coordinates [v1, v2, v3].
   \param    d <integer> The number of dimensions [2:3].
 
-  \returns  <point-3d|point-2d> The centroid coordinate.
+  \returns  <point-3d | point-2d> The centroid coordinate.
 
   \details
 
@@ -440,11 +440,11 @@ function triangle2d_exradius
 
 //! Compute the coordinate of a triangle's circumcenter.
 /***************************************************************************//**
-  \param    c <coords-3d|coords-2d>  A list of 3d or 2d vertex
+  \param    c <coords-3d | coords-2d>  A list of 3d or 2d vertex
             coordinates [v1, v2, v3].
   \param    d <integer> The number of dimensions [2:3].
 
-  \returns  <point-3d|point-2d> The circumcenter coordinate.
+  \returns  <point-3d | point-2d> The circumcenter coordinate.
 
   \details
 

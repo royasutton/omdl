@@ -72,7 +72,7 @@ function openscad_fn
   \param    cs <string-list-4> A list of strings [s1, s2, s3, fs]
             (for custom field formatting).
 
-  \returns  <list|string> with the occurrence frequency of the elements
+  \returns  <list | string> with the occurrence frequency of the elements
             of \p v.
 
   \details
