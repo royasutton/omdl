@@ -106,7 +106,7 @@ module cone
 
 //! A cuboid with edge, round, or chamfer corners.
 /***************************************************************************//**
-  \param    size <decimal-list-3|decimal> A list [x, y, z] of decimals
+  \param    size <decimal-list-3 | decimal> A list [x, y, z] of decimals
             or a single decimal for (x=y=z).
 
   \param    vr <decimal> The corner rounding radius.
@@ -212,7 +212,7 @@ module cuboid
 
 //! An ellipsoid.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> A list [w, h] of decimals or a
+  \param    size <decimal-list-2 | decimal> A list [w, h] of decimals or a
             single decimal for (w=h).
 
   \details
@@ -240,7 +240,7 @@ module ellipsoid
 
 //! A sector of an ellipsoid.
 /***************************************************************************//**
-  \param    size <decimal-list-2|decimal> A list [w, h] of decimals or a
+  \param    size <decimal-list-2 | decimal> A list [w, h] of decimals or a
             single decimal for (w=h).
 
   \param    a1 <decimal> The start angle in degrees.
@@ -336,7 +336,7 @@ module pyramid_t
 
 //! A pyramid with quadrilateral base.
 /***************************************************************************//**
-  \param    size <decimal-list-3|decimal> A list [x, y, z] of decimals
+  \param    size <decimal-list-3 | decimal> A list [x, y, z] of decimals
             or a single decimal for (x=y=z).
 
   \param    center <boolean> Center about origin.
@@ -379,7 +379,7 @@ module pyramid_q
 
 //! A three-dimensional star.
 /***************************************************************************//**
-  \param    size <decimal-list-3|decimal> A list [l, w, h] of decimals
+  \param    size <decimal-list-3 | decimal> A list [l, w, h] of decimals
             or a single decimal for (size=l=2*w=4*h).
 
   \param    n <decimal> The number of points.

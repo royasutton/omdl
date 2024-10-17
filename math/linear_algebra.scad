@@ -107,8 +107,8 @@ function translate_p
 
 //! Rotate all coordinates about one or more axes in 2D or 3D.
 /***************************************************************************//**
-  \param    c <coords-3d|coords-2d> A list of 3d or 2d coordinate points.
-  \param    a <decimal-list-3|decimal> The axis rotation angle.
+  \param    c <coords-3d | coords-2d> A list of 3d or 2d coordinate points.
+  \param    a <decimal-list-3 | decimal> The axis rotation angle.
             A list [ax, ay, az] or a single decimal to specify az only.
   \param    v <vector-3d> An arbitrary axis for the rotation. When
             specified, the rotation angle will be \p a or az about the
@@ -116,7 +116,7 @@ function translate_p
   \param    o <point-3d> A 3d point origin for the rotation.
             Ignored when \p v is not specified.
 
-  \returns  <coords-3d|coords-2d> A list of 3d or 2d rotated coordinates.
+  \returns  <coords-3d | coords-2d> A list of 3d or 2d rotated coordinates.
             Rotation order is rz, ry, rx.
 
   \details

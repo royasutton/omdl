@@ -69,7 +69,6 @@ module torus_rectangle_c
   r,
   pa = 0,
   ra = 360,
-  profile = false,
   l,
   m = 255,
 
@@ -87,7 +86,7 @@ module torus_rectangle_c
   center = false
 )
 {
-  extrude_rotate_trl( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
+  extrude_rotate_trl( r=r, l=l, pa=pa, ra=ra, m=m )
   rectangle_c
   (
     size=size, core=core, t=t,
@@ -113,7 +112,6 @@ module torus_ellipse_cs
   r,
   pa = 0,
   ra = 360,
-  profile = false,
   l,
   m = 255,
 
@@ -126,7 +124,7 @@ module torus_ellipse_cs
   cr = 0
 )
 {
-  extrude_rotate_trl( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
+  extrude_rotate_trl( r=r, l=l, pa=pa, ra=ra, m=m )
   ellipse_cs
   (
     size=size, core=core, t=t,
@@ -155,7 +153,6 @@ module torus_pg_trapezoid
   r,
   pa = 0,
   ra = 360,
-  profile = false,
   l,
   m = 255,
 
@@ -169,7 +166,7 @@ module torus_pg_trapezoid
   center = false
 )
 {
-  extrude_rotate_trl( r=r, l=l, pa=pa, ra=ra, m=m, profile=profile )
+  extrude_rotate_trl( r=r, l=l, pa=pa, ra=ra, m=m )
   pg_trapezoid
   (
     b=b,

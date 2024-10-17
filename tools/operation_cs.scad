@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2019
+  \date   2019-2024
 
   \copyright
 
@@ -44,6 +44,10 @@
 
 //----------------------------------------------------------------------------//
 
+//
+// Transformations
+//
+
 //! Conditionally apply the convex hull transformation.
 /***************************************************************************//**
   \param    c <boolean> conditional.
@@ -66,7 +70,9 @@ module hull_cs
     children(s);
   else if ( c )
     hull()
-    children();
+    {
+      children();
+    }
   else
     children();
 }
@@ -104,6 +110,10 @@ module minkowski_cs
     children();
 }
 
+//
+// Boolean operations
+//
+
 //! Conditionally apply the union boolean operation.
 /***************************************************************************//**
   \param    c <boolean> conditional.
@@ -126,7 +136,9 @@ module union_cs
     children(s);
   else if ( c )
     union()
+    {
       children();
+    }
   else
     children();
 }
@@ -181,9 +193,12 @@ module intersection_cs
 {
   if ( is_defined(s) )
     children(s);
-  else if ( c )
+  else if ( c && $children > 1 )
     intersection()
-      children();
+    {
+      children(0);
+      children([1:$children-1]);
+    }
   else
     children();
 }

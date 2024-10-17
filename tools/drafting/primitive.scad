@@ -193,13 +193,13 @@ function draft_sheet_get_window
 
 //! Get sheet, sheet-frame, or sheet-zone reference coordinates.
 /***************************************************************************//**
-  \param    rx <string-list|string> Sheet x-axis zone reference identifier(s).
-  \param    ry <string-list|string> Sheet y-axis zone reference identifier(s).
+  \param    rx <string-list | string> Sheet x-axis zone reference identifier(s).
+  \param    ry <string-list | string> Sheet y-axis zone reference identifier(s).
 
-  \param    ix <integer-list|integer> Sheet x-axis zone reference index(es).
-  \param    iy <integer-list|integer> Sheet x-axis zone reference index(es).
+  \param    ix <integer-list | integer> Sheet x-axis zone reference index(es).
+  \param    iy <integer-list | integer> Sheet x-axis zone reference index(es).
 
-  \param    zp <integer-list-2|integer> The window coordinate scaler. A
+  \param    zp <integer-list-2 | integer> The window coordinate scaler. A
             list [zpx, zpy] of decimals or a single decimal for (zpx=zpy).
 
   \param    window <boolean> Return window rather than point.
@@ -375,7 +375,7 @@ function draft_table_get_point
   \param    ix <integer> A table column vertical line index.
   \param    iy <integer> A table row horizontal line index.
 
-  \param    zp <integer-list-2|integer> The cell coordinate scaler. A
+  \param    zp <integer-list-2 | integer> The cell coordinate scaler. A
             list [zpx, zpy] of decimals or a single decimal for (zpx=zpy).
 
   \param    limits <boolean> Return cell limits rather than coordinates.
@@ -462,7 +462,7 @@ function draft_table_get_cell
   \param    ix <integer> A table column vertical line index.
   \param    iy <integer> A table row horizontal line index.
 
-  \param    text <string|string-list> The text to add. A single string
+  \param    text <string | string-list> The text to add. A single string
             or a list of strings for multiple line text.
   \param    size <decimal> The text size.
 
@@ -608,7 +608,7 @@ function draft_ztable_get_point
 /***************************************************************************//**
   \param    i <integer> A ztable zone index.
 
-  \param    zp <integer-list-2|integer> The zone coordinate scaler. A
+  \param    zp <integer-list-2 | integer> The zone coordinate scaler. A
             list [zpx, zpy] of decimals or a single decimal for (zpx=zpy).
 
   \param    limits <boolean> Return zone limits rather than coordinates.
@@ -687,7 +687,7 @@ function draft_ztable_get_zone
 /***************************************************************************//**
   \param    i <integer> A ztable zone index.
 
-  \param    text <string|string-list> The text to add. A single string
+  \param    text <string | string-list> The text to add. A single string
             or a list of strings for multiple line text.
   \param    size <decimal> The text size.
 
@@ -827,7 +827,7 @@ module draft_line_pp
 /***************************************************************************//**
   \param    l <line> A line or vector.
   \param    w <decimal> The line segment weight.
-  \param    s <integer|integer-list-5> The arrowhead style.
+  \param    s <integer | integer-list-5> The arrowhead style.
 
   \details
 
@@ -837,7 +837,7 @@ module draft_line_pp
      field  | description                     | data type           | default
     :------:|:--------------------------------|:--------------------|:-------:
       0     | style                           | <integer>           | 0
-      1     | fill: 0,1 or true,false         | <integer\|boolean>  | 0
+      1     | fill: 0,1 or true,false         | <integer \| boolean>| 0
       2     | side: 0=both, 1=left, 2=right   | <integer>           | 0
       3     | length multiplier               | <decimal>           | 1
       4     | angle multiplier                | <decimal>           | 1
@@ -971,9 +971,9 @@ module draft_arrow
 /***************************************************************************//**
   \param    l <line> A line or vector.
   \param    w <decimal> The line weight.
-  \param    s <integer|integer-list> The line style.
-  \param    a1 <integer|integer-list-5> The arrowhead style at initial point.
-  \param    a2 <integer|integer-list-5> The arrowhead style at terminal point.
+  \param    s <integer | integer-list> The line style.
+  \param    a1 <integer | integer-list-5> The arrowhead style at initial point.
+  \param    a2 <integer | integer-list-5> The arrowhead style at terminal point.
 
   \details
 
@@ -1144,9 +1144,9 @@ module draft_line
     following additional parameters.
 
   \param    w <decimal> The line weight.
-  \param    s <integer|integer-list> The line style.
-  \param    a1 <integer|integer-list-5> The arrowhead style at initial point.
-  \param    a2 <integer|integer-list-5> The arrowhead style at terminal point.
+  \param    s <integer | integer-list> The line style.
+  \param    a1 <integer | integer-list-5> The arrowhead style at initial point.
+  \param    a2 <integer | integer-list-5> The arrowhead style at terminal point.
 
   \details
 
@@ -1214,11 +1214,11 @@ module draft_arc
 
 //! Draft a rectangle with configurable style.
 /***************************************************************************//**
-  \param    d <decimal-list-2|decimal> A list [x, y] of decimals
+  \param    d <decimal-list-2 | decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
   \param    c <point-2d> The center coordinate [x, y].
   \param    w <decimal> The line weight.
-  \param    s <integer|integer-list> The line style.
+  \param    s <integer | integer-list> The line style.
 
   \details
 
@@ -1264,7 +1264,7 @@ module draft_rectangle
   \param    i <index> An index sequence [specification].
 
   \param    w <decimal> The line weight.
-  \param    s <integer|integer-list> The line style.
+  \param    s <integer | integer-list> The line style.
 
   \details
 

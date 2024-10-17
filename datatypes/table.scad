@@ -499,8 +499,8 @@ module table_dump
   \param    c <map> The table column matrix (2 x C-columns).
   \param    tr <string> The table data matrix variable name.
   \param    tc <string> The table column matrix variable name.
-  \param    ri <string|value> The row identifier variable name or value.
-  \param    ci <string|value> The column identifier variable name or value.
+  \param    ri <string | value> The row identifier variable name or value.
+  \param    ci <string | value> The column identifier variable name or value.
   \param    vri <boolean> The row identifier \p ri is a value.
   \param    vci <boolean> The column identifier \p ci is a value.
   \param    name <string> The getter function name.

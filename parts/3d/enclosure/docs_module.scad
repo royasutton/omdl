@@ -1,4 +1,4 @@
-//! 3d Computer Parts Module documentation.
+//! 3d Enclosures Module documentation.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Computer)
-    \amu_define group_brief (Mechanical computer parts.)
+    \amu_define group_name  (Enclosure)
+    \amu_define group_brief (Project boxes, housings and enclosures.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

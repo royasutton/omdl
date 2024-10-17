@@ -389,13 +389,13 @@ function limit
 
 //! Compute the sum of a list of numbers.
 /***************************************************************************//**
-  \param    v <number-list|range> A list of numerical values or a range.
+  \param    v <number-list | range> A list of numerical values or a range.
   \param    i1 <integer> The list element index at which to begin
               summation (first when not specified).
   \param    i2 <integer> The list element index at which to end
               summation (last when not specified).
 
-  \returns  (1) <number|number-list> The sum or list of sums over the
+  \returns  (1) <number | number-list> The sum or list of sums over the
                 index range.
             (2) Returns \b undef when list is empty, non-numeric, when
                  an index is specified and does not exists in the list
@@ -423,9 +423,9 @@ function sum
 
 //! Compute the mean/average of a list of numbers.
 /***************************************************************************//**
-  \param    v <number-list|range> A list of numerical values or a range.
+  \param    v <number-list | range> A list of numerical values or a range.
 
-  \returns  (1) <number|number-list> The sum divided by the number of
+  \returns  (1) <number | number-list> The sum divided by the number of
                 elements.
             (2) Returns \b undef when list is empty or is non-numeric.
 

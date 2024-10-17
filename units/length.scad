@@ -170,10 +170,10 @@ function length_unit_name
 
 //! Convert a value from millimeters to other units.
 /***************************************************************************//**
-  \param    v <decimal-list|decimal> The value to convert.
+  \param    v <decimal-list | decimal> The value to convert.
   \param    to <string> The units to which the value should be converted.
 
-  \returns  <decimal-list|decimal> The conversion result.
+  \returns  <decimal-list | decimal> The conversion result.
             Returns \b undef for identifiers that are not defined.
 
   \private
@@ -200,10 +200,10 @@ function length_unit_mm2
 
 //! Convert a value from some units to millimeters.
 /***************************************************************************//**
-  \param    v <decimal-list|decimal> The value to convert.
+  \param    v <decimal-list | decimal> The value to convert.
   \param    from <string> The units of the value to be converted.
 
-  \returns  <decimal-list|decimal> The conversion result.
+  \returns  <decimal-list | decimal> The conversion result.
             Returns \b undef for identifiers that are not defined.
 
   \private
@@ -216,11 +216,11 @@ function length_unit_2mm
 
 //! Convert a value from from one units to another.
 /***************************************************************************//**
-  \param    v <decimal-list|decimal> The value to convert.
+  \param    v <decimal-list | decimal> The value to convert.
   \param    from <string> The units of the value to be converted.
   \param    to <string> A units to which the value should be converted.
 
-  \returns  <decimal-list|decimal> The conversion result.
+  \returns  <decimal-list | decimal> The conversion result.
             Returns \b undef for identifiers that are not defined.
 
   \private

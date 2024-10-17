@@ -64,7 +64,7 @@
 
 //! Test if a value defines a point.
 /***************************************************************************//**
-  \param    v <list-2d|list-3d> A 2d or 3d list of numbers.
+  \param    v <list-2d | list-3d> A 2d or 3d list of numbers.
 
   \returns  (1) <boolean> \b true when the \p v can be interpreted as a
                 point and \b false otherwise.
@@ -83,7 +83,7 @@ function is_point
 
 //! Test if a value defines a Euclidean vector.
 /***************************************************************************//**
-  \param    v <list-2d|list-3d> A 2d or 3d list of numbers.
+  \param    v <list-2d | list-3d> A 2d or 3d list of numbers.
 
   \returns  (1) <boolean> \b true when the \p v can be interpreted as a
                 Euclidean vector and \b false otherwise.
@@ -102,7 +102,7 @@ function is_vector
 
 //! Test if a value defines a line.
 /***************************************************************************//**
-  \param    v <list-2d|list-3d> A 2d or 3d list of numbers.
+  \param    v <list-2d | list-3d> A 2d or 3d list of numbers.
 
   \returns  (1) <boolean> \b true when the \p v can be interpreted as a
                 line and \b false otherwise.
@@ -123,7 +123,7 @@ function is_line
 
 //! Test if a value defines a vector or a line.
 /***************************************************************************//**
-  \param    v <list-2d|list-3d> A 2d or 3d list of numbers.
+  \param    v <list-2d | list-3d> A 2d or 3d list of numbers.
 
   \returns  (1) <boolean> \b true when the \p v can be interpreted as a
                 vector or a line and \b false otherwise.
@@ -141,7 +141,7 @@ function is_vol
 
 //! Test if a value defines a plane.
 /***************************************************************************//**
-  \param    v <list-2d|list-3d> A 2d or 3d list of numbers.
+  \param    v <list-2d | list-3d> A 2d or 3d list of numbers.
 
   \returns  (1) <boolean> \b true when the \p v can be interpreted as a
                 plane and \b false otherwise.
@@ -333,7 +333,7 @@ function point_closest_pn
 
 //! Return 3d point unchanged or add a zeroed third dimension to 2d point.
 /***************************************************************************//**
-  \param    p <point-3d|point-2d> A point.
+  \param    p <point-3d | point-2d> A point.
 
   \returns  (1) <point-3d> The 3d point or the 2d point converted to 3d
                 with its third dimension assigned zero.
@@ -665,8 +665,8 @@ function vol_to_point
 
 //! Compute the dot product of two lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
-  \param    l1 <line-3d|line-2d> A 3d or 2d line or vector 1.
-  \param    l2 <line-3d|line-2d> A 3d or 2d line or vector 2.
+  \param    l1 <line-3d | line-2d> A 3d or 2d line or vector 1.
+  \param    l2 <line-3d | line-2d> A 3d or 2d line or vector 2.
 
   \returns  (1) <decimal> The dot product of \p l1 with \p l2.
             (2) Returns \b undef when \p l1 or \p l2 is not a line or
@@ -694,10 +694,10 @@ function dot_ll
 
 //! Compute the cross product of two lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
-  \param    l1 <line-3d|line-2d> A 3d or 2d line or vector 1.
-  \param    l2 <line-3d|line-2d> A 3d or 2d line or vector 2.
+  \param    l1 <line-3d | line-2d> A 3d or 2d line or vector 1.
+  \param    l2 <line-3d | line-2d> A 3d or 2d line or vector 2.
 
-  \returns  (1) <decimal|vector-2d> The cross product of \p l1 with
+  \returns  (1) <decimal | vector-2d> The cross product of \p l1 with
                 \p l2.
             (2) Returns \b undef when \p l1 or \p l2 is not a line or
                 vector or have different dimensions.
@@ -727,11 +727,11 @@ function cross_ll
 
 //! Compute the scalar triple product of three lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
-  \param    l1 <line-3d|line-2d> A 3d or 2d line or vector 1.
-  \param    l2 <line-3d|line-2d> A 3d or 2d line or vector 2.
-  \param    l3 <line-3d|line-2d> A 3d or 2d line or vector 3.
+  \param    l1 <line-3d | line-2d> A 3d or 2d line or vector 1.
+  \param    l2 <line-3d | line-2d> A 3d or 2d line or vector 2.
+  \param    l3 <line-3d | line-2d> A 3d or 2d line or vector 3.
 
-  \returns  (1) <decimal|vector-2d> The scalar triple product.
+  \returns  (1) <decimal | vector-2d> The scalar triple product.
             (2) Returns \b undef when \p l1, \p l2, or \p l3 is not a
                 line or vector or have different dimensions,
 
@@ -764,8 +764,8 @@ function striple_lll
 
 //! Compute the angle between two lines or vectors in a 3d or 2d-space.
 /***************************************************************************//**
-  \param    l1 <line-3d|line-2d> A 3d or 2d line or vector 1.
-  \param    l2 <line-3d|line-2d> A 3d or 2d line or vector 2.
+  \param    l1 <line-3d | line-2d> A 3d or 2d line or vector 1.
+  \param    l2 <line-3d | line-2d> A 3d or 2d line or vector 2.
   \param    s <boolean> Return the 2d signed angle.
 
   \returns  (1) <decimal> The angle between the two lines or vectors in
