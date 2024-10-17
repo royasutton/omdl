@@ -1414,7 +1414,7 @@ module project_box_rectangle
 
   // wall lip default height (set to zero when there is no lip)
   // 'lip_h', bit '1', is set globally (ensure coherency with bits of 'lip')
-  lip_hd        = is_defined(lip) ? wth/2 : 0;
+  lip_hd        = is_defined(lip) ? wth : 0;
   lip_h         = defined_e_or(lip, 1, lip_hd);
 
   // lid extrusion height (calculate total height of all sections)
