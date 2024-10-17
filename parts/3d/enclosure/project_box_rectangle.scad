@@ -799,12 +799,24 @@ module project_box_rectangle
     cfg_f_vr_sf     = [2, 0, 1];
 
     // mode dependent configuration
-    cfg_p_vrm       = binary_bit_is(post_m, 0, 1) ? cfg_p_vrm_bevel : cfg_p_vrm_filet;
-    cfg_f_vrm       = binary_bit_is(post_m, 1, 1) ? cfg_f_vrm_bevel : cfg_f_vrm_filet;
-    cfg_h0          = binary_bit_is(post_m, 2, 1) ? lid_h : 0;
+    // B0-1: post rounding mode
+    cfg_p_vrm       = let( i = binary_iw2i(post_m, 2, 0) )
+                      (i == 1) ? cfg_p_vrm_bevel
+                    : (i == 2) ? cfg_p_vrm_filet
+                    : 0;
 
-    cfg_p1_lip_h    = binary_bit_is(post_m, 3, 1) ? lip_h : 0;  // maintain inverse
-    cfg_p2_lip_h    = binary_bit_is(post_m, 3, 0) ? lip_h : 0;
+    // B2-3: fin rounding mode
+    cfg_f_vrm       = let( i = binary_iw2i(post_m, 2, 2) )
+                      (i == 1) ? cfg_f_vrm_bevel
+                    : (i == 2) ? cfg_f_vrm_filet
+                    : 0;
+
+    // B4: auxiliary screw hole through lid
+    cfg_h0          = binary_bit_is(post_m, 4, 1) ? lid_h : 0;
+
+    // b5: which post type intends into lid (maintain inverse bit value)
+    cfg_p1_lip_h    = binary_bit_is(post_m, 5, 1) ? lip_h : 0;
+    cfg_p2_lip_h    = binary_bit_is(post_m, 5, 0) ? lip_h : 0;
 
     //
     // configured configuration defaults
