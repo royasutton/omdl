@@ -232,8 +232,8 @@
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | integer           | required          | mode
       1 | datastruct        | (see below)       | base and height extrusions
-      2 | decimal-list3 \| decimal-list2 \| decimal-list1  \| decimal | 10            | [x, y, h] coverage percentage
-      3 | integer-list3 \| integer-list2 \| integer-list1  \| integer | (calculated)  | [x, y, h] count override
+      2 | decimal-list-3:1 \| decimal | 10            | [x, y, h] coverage percentage
+      3 | integer-list-3:1 \| integer | (calculated)  | [x, y, h] count override
 
     #### rib[0]: mode
 
@@ -320,14 +320,14 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | integer                                     | required  | type
-      1 | decimal-list-3 \| decimal-list-2 \| decimal | [0, 0, 0] | move
-      2 | decimal-list-3 \| decimal-list-2 \| decimal | [1, 1, 1] | scale
-      3 | decimal-list-3 \| decimal-list-2 \| decimal-list-1 \| decimal | [0, 0, 0] | rotate
-      4 | decimal-list-2            | \em tdef_s    | size
-      5 | decimal-list-2            | \em tdef_he   | extrusion
-      6 | decimal-list-4 \| decimal | \em tdef_vr   | rounding radius
-      7 | integer-list-4 \| integer | \em tdef_vrm  | rounding mode
+      0 | integer                     | required      | type
+      1 | decimal-list-3:2 \| decimal | [0, 0, 0]     | move
+      2 | decimal-list-3:2 \| decimal | [1, 1, 1]     | scale
+      3 | decimal-list-3:1 \| decimal | [0, 0, 0]     | rotate
+      4 | decimal-list-2              | \em tdef_s    | size
+      5 | decimal-list-2              | \em tdef_he   | extrusion
+      6 | decimal-list-4   \| decimal | \em tdef_vr   | rounding radius
+      7 | integer-list-4   \| integer | \em tdef_vrm  | rounding mode
 
     The constants \em tdef_s, \em tdef_he, \em tdef_vr, and \em
     tdef_vrm are default values that depend on the wall type being
@@ -466,14 +466,14 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | integer                                                     | required  | type
-      1 | integer-list3 \| integer-list2 \| integer-list1             | undef     | align
-      2 | decimal-list3 \| decimal-list2                              | [0, 0, 0] | move
-      3 | decimal-list3 \| decimal-list2 \| decimal-list1  \| decimal | [0, 0, 0] | rotate
-      4 | datastruct | (see note) | hole0; screw hole
-      5 | datastruct | (see note) | hole1; aux hole
-      6 | datastruct | (see note) | post
-      7 | datastruct | (see note) | fins
+      0 | integer           | required          | type
+      1 | integer-list-3:1  | undef             | align
+      2 | decimal-list-3:2  | [0, 0, 0]         | move
+      3 | decimal-list-3:1 \| decimal | [0, 0, 0] | rotate
+      4 | datastruct        | (see note)        | hole0; screw hole
+      5 | datastruct        | (see note)        | hole1; aux hole
+      6 | datastruct        | (see note)        | post
+      7 | datastruct        | (see note)        | fins
 
     \note The default values for the holes and post are set based on
     the post type and, when not specified with an instances, are
