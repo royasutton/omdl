@@ -1093,8 +1093,8 @@ module project_box_rectangle
 
     // hole0: normal & recessed screw common hole
     def_h0_d    = defined_e_or(def_h0, 0, 3.25);
-    def_h0_h    = defined_e_or(def_h0, 1, max_h + lip_h - wth*2);
-    def_h0_ho   = defined_e_or(def_h0, 2, wth*2);
+    def_h0_h    = defined_e_or(def_h0, 1, max_h + lip_h);
+    def_h0_ho   = defined_e_or(def_h0, 2, 0);
     def_h0_vr   = defined_e_or(def_h0, 3, 0);
     def_h0_vrm  = defined_e_or(def_h0, 4, 0);
 
