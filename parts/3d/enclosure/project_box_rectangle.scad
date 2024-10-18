@@ -1058,7 +1058,7 @@ module project_box_rectangle
                     : 0;
 
     // B4: auxiliary screw hole through lid
-    cfg_h0          = binary_bit_is(post_m, 4, 1) ? lid_h : 0;
+    cfg_h1          = binary_bit_is(post_m, 4, 1) ? lid_h : 0;
 
     // b5: which post type intends into lid (maintain inverse bit value)
     cfg_p1_lip_h    = binary_bit_is(post_m, 5, 1) ? lip_h : 0;
@@ -1100,8 +1100,8 @@ module project_box_rectangle
 
     // hole1: normal thru lid hole
     //def_h1_d  = defined_e_or(def_h1, 0, def_h0_d + def_h1_dd);
-    def_h1_h    = defined_e_or(def_h1, 1, cfg_h0);
-    def_h1_ho   = defined_e_or(def_h1, 2, -cfg_h0);
+    def_h1_h    = defined_e_or(def_h1, 1, cfg_h1);
+    def_h1_ho   = defined_e_or(def_h1, 2, -cfg_h1);
     def_h1_vr   = defined_e_or(def_h1, 3, 0);
     def_h1_vrm  = defined_e_or(def_h1, 4, 0);
     // post1: normal mount post
