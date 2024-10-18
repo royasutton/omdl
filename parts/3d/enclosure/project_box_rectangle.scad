@@ -320,7 +320,7 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | integer                     | required      | type
+      0 | integer                     | required      | type {0: x-axis, 1:y-axis}
       1 | decimal-list-3:2 \| decimal | [0, 0, 0]     | move
       2 | decimal-list-3:2 \| decimal | [1, 1, 1]     | scale
       3 | decimal-list-3:1 \| decimal | [0, 0, 0]     | rotate
@@ -466,7 +466,7 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | integer           | required          | type
+      0 | integer           | required          | type {0:normal, 1:recessed}
       1 | integer-list-3:1  | undef             | align
       2 | decimal-list-3:2  | [0, 0, 0]         | move
       3 | decimal-list-3:1 \| decimal | [0, 0, 0] | rotate
