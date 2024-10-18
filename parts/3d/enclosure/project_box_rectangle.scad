@@ -1274,10 +1274,10 @@ module project_box_rectangle
       p_en   = (add == true);
 
       p_d     = defined_e_or(inst_p, 0, h0_d + tdef_p_dd);
-      p_h     = defined_e_or(inst_p, 0, tdef_p_h);
-      p_ho    = defined_e_or(inst_p, 0, tdef_p_ho);
-      p_vr    = defined_e_or(inst_p, 0, tdef_p_vr);
-      p_vrm   = defined_e_or(inst_p, 0, tdef_p_vrm);
+      p_h     = defined_e_or(inst_p, 1, tdef_p_h);
+      p_ho    = defined_e_or(inst_p, 2, tdef_p_ho);
+      p_vr    = defined_e_or(inst_p, 3, tdef_p_vr);
+      p_vrm   = defined_e_or(inst_p, 4, tdef_p_vrm);
 
       f_c     = defined_e_or(inst_f, 0, def_f_c);
       f_da    = defined_e_or(inst_f, 1, def_f_da);
