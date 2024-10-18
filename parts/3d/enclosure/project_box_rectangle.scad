@@ -1139,20 +1139,25 @@ module project_box_rectangle
     //
     //
 
-    // construct a cylinder with optional fins
-    module cylinder_fins
-    (
-      en,
-      d, h, vr, vrm, ho,
-      fc=0, fda, fw, fdsf=1, fhsf=1, fvr, fvrm,
-      eps=0
-    )
+    // construct fins around a cylinder
+    module cylinder_fins(d, h, f)
     {
-      module post_fins(d, c, da, w, b, h, vr, vrm)
+      c = defined_e_or(f, 0, 0);
+
+      if ( c > 0 )
       {
+        da  = f[1];
+        w   = f[2];
+        df  = f[3];
+        hf  = f[4];
+        vr  = f[5];
+        vrm = f[6];
+
+        b   = d * df;
+        h   = h * hf;
+
         if (verb > 2)
-          echo(strl(["post-inst-fins: [d, c, da, w, b, h, vr, vrm] = ",
-                      [d, c, da, w, b, h, vr, vrm]]));
+          echo(strl(["post-inst-fins: [d, h, f] = ", [d, h, f]]));
 
         for (i = [0:c-1])
         {
@@ -1162,28 +1167,30 @@ module project_box_rectangle
           pg_triangle_sas([h, 90, b], vr=vr, vrm=vrm);
         }
       }
+    }
 
+    // construct a cylinder with optional fins
+    module cylinder_and_fins ( en, c, f, eps=0 )
+    {
       if (en == true)
       {
+        d     = c[0];
+        h     = c[1];
+        ho    = c[2];
+        vr    = c[3];
+        vrm   = c[4];
+
         if (verb > 2)
-          echo(strl(["post-inst-cylinder: [d, h, vr, vrm, ho, fc, eps] = ",
-                      [d, h, vr, vrm, ho, fc, eps]]));
+          echo(strl(["post-inst-cylinder: [c, eps] = ", [c, eps]]));
 
         translate([0, 0, ho - eps/2])
         {
           rotate_extrude()
           pg_rectangle([d/2, h + eps], vr=vr, vrm=vrm);
 
-          if ( fc > 0 )
-          {
-            fb    = d * fdsf;
-            fh    = h * fhsf;
-
-            post_fins(d, fc, fda, fw, fb, fh, fvr, fvrm);
-          }
+          cylinder_fins(d, h, f);
         }
       }
-
     }
 
     // pre-processing message
@@ -1261,7 +1268,9 @@ module project_box_rectangle
 
       h0_dwg  = h0_d + tdef_h0_gd;    // screw hole with gap
 
-      // hole1: thru lid hole
+      h0      = [h0_dwg, h0_h, h0_ho, h0_vr, h0_vrm];
+
+      // hole1: aux screw hole or thru lid access hole
       h1_en  = (remove == true);
 
       h1_d    = defined_e_or(inst_h1, 0, h0_d + tdef_h_dd);
@@ -1269,6 +1278,8 @@ module project_box_rectangle
       h1_ho   = defined_e_or(inst_h1, 2, tdef_h1_ho);
       h1_vr   = defined_e_or(inst_h1, 3, tdef_h1_vr);
       h1_vrm  = defined_e_or(inst_h1, 4, tdef_h1_vrm);
+
+      h1      = [h1_d, h1_h, h1_ho, h1_vr, h1_vrm];
 
       // post: post and fins
       p_en   = (add == true);
@@ -1279,6 +1290,8 @@ module project_box_rectangle
       p_vr    = defined_e_or(inst_p, 3, tdef_p_vr);
       p_vrm   = defined_e_or(inst_p, 4, tdef_p_vrm);
 
+      p       = [p_d, p_h, p_ho, p_vr, p_vrm];
+
       f_c     = defined_e_or(inst_f, 0, def_f_c);
       f_da    = defined_e_or(inst_f, 1, def_f_da);
       f_w     = defined_e_or(inst_f, 2, def_f_w);
@@ -1286,6 +1299,8 @@ module project_box_rectangle
       f_h_sf  = defined_e_or(inst_f, 4, def_f_h_sf);
       f_vr    = defined_e_or(inst_f, 5, def_f_vr);
       f_vrm   = defined_e_or(inst_f, 6, def_f_vrm);
+
+      f       = [f_c, f_da, f_w, f_d_sf, f_h_sf, f_vr, f_vrm];
 
       //
       // construct post instance
@@ -1296,10 +1311,10 @@ module project_box_rectangle
       rotate(inst_r)
       union()
       {
-        cylinder_fins(p_en, p_d, p_h, p_vr, p_vrm, p_ho, f_c, f_da, f_w, f_d_sf, f_h_sf, f_vr, f_vrm);
+        cylinder_and_fins(p_en, p, f);
 
-        cylinder_fins(h0_en, h0_dwg, h0_h, h0_vr, h0_vrm, h0_ho, eps=10*eps);
-        cylinder_fins(h1_en, h1_d,   h1_h, h1_vr, h1_vrm, h1_ho, eps=10*eps);
+        cylinder_and_fins(h0_en, h0, eps=10*eps);
+        cylinder_and_fins(h1_en, h1, eps=10*eps);
       }
 
       if (verb > 1)
