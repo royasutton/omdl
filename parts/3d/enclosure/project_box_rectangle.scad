@@ -1272,7 +1272,7 @@ module project_box_rectangle
       tdef_h0_gd  = (inst_pt == 0) ? def_h0_0_gd : def_h0_1_gd;
 
       // hole1:
-      tdef_h_dd   = (inst_pt == 0) ? def_h1_dd : def_h2_dd;
+      tdef_h1_dd  = (inst_pt == 0) ? def_h1_dd : def_h2_dd;
       //tdef_h1_d = (inst_pt == 0) ? def_h1_d : def_h2_d;
       tdef_h1_h   = (inst_pt == 0) ? def_h1_h : def_h2_h;
       tdef_h1_ho  = (inst_pt == 0) ? def_h1_ho : def_h2_ho;
@@ -1319,7 +1319,7 @@ module project_box_rectangle
       // hole1: aux screw hole or thru lid access hole
       h1_en  = (remove == true);
 
-      h1_d    = defined_e_or(inst_h1, 0, h0_d + tdef_h_dd);
+      h1_d    = defined_e_or(inst_h1, 0, h0_d + tdef_h1_dd);
       h1_h    = defined_e_or(inst_h1, 1, tdef_h1_h);
       h1_ho   = defined_e_or(inst_h1, 2, tdef_h1_ho);
       h1_vr   = defined_e_or(inst_h1, 3, tdef_h1_vr);
