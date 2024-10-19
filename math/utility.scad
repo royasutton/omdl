@@ -52,12 +52,12 @@
 
   \details
 
-    This function impliments the \c get_fragments_from_r() code that is
-    used by OpenSCAD to calculates the number of fragments in a circle
-    or arc. The arc facets are controlled by the special variables \p
-    $fa, \p $fs, and \p $fn.
+    This function approximates the \c get_fragments_from_r() code that
+    is used by OpenSCAD to calculates the number of fragments in a
+    circle or arc. The arc facets are controlled by the special
+    variables \p $fa, \p $fs, and \p $fn.
 *******************************************************************************/
-function openscad_fn
+function get_fn
 (
   r
 ) = (r < grid_fine) ? 3

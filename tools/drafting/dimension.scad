@@ -633,7 +633,7 @@ module draft_dim_radius
 
     \amu_eval ( html_image_w=256 latex_image_w="1.50in" object=draft_dim_angle ${object_diagram_2d} )
 
-  [facets]: \ref openscad_fn()
+  [facets]: \ref get_fn()
   [style]: \ref draft_line()
   [arrow]: \ref draft_arrow()
   [round_d]: \ref round_d()
