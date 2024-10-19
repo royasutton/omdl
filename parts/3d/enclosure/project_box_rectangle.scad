@@ -347,7 +347,8 @@
     widen the contact with the the adjacent surface, or at the top, to
     enhance contact or smooth its edges. Each post instance consists of
     two holes, a post with optional fins, and can be aligned, moved,
-    and rotated.
+    and rotated. The optional post fins can be either triangular or
+    rectangular in shape.
 
     #### Data structure schema:
 
@@ -355,14 +356,15 @@
     ---------------:|:----------------------------------------------
     post            | [ configuration, instances ]
     configuration   | [ mode, defaults ]
-    defaults        | [ hole0, hole1, post1, hole2, post2, fins, adjustments ]
-    (1) hole, post  | [ d, h, ho, vr, vrm ]
-    fins            | [ c, sweep-angle, w, d-scale, h-scale, vr, vrm ]
+    defaults        | [ hole0, hole1, post1, hole2, post2, fins0, fins1, adjustments ]
+    hole, post (1)  | [ d, h, ho, vr, vrm ]
+    fins (2)        | [ c, sweep-angle, w, d-scale, h-scale, vr, vrm ]
     adjustments     | [ hole0-gap, hole1-gap, common, hole1-scale, post1-scale, hole2-scale, post2-scale ]
     instances       | [ instance, instance, ..., instance ]
     instance        | [ type, align. move, rotate, hole0, hole1, post, fins ]
 
     (1) All numbered and unnumbered holes and posts utilize this form.
+    (2) All fins defaults and instances are of this form.
 
     #### Data structure fields: post
 
@@ -398,8 +400,9 @@
       2 | datastruct        | (see below)       | post1; normal-post
       3 | datastruct        | (see below)       | hole2; post 2 access hole
       4 | datastruct        | (see below)       | post2; recessed-post
-      5 | datastruct        | (see below)       | fins
-      6 | datastruct        | (see below)       | adjustments
+      5 | datastruct        | (see below)       | fins0: triangular-fins
+      6 | datastruct        | (see below)       | fins1: rectangular-fins
+      7 | datastruct        | (see below)       | adjustments
 
     ##### post[0]: configuration[1]: defaults[0-4]: hole*, post*
 
@@ -421,23 +424,39 @@
     here. These default values may also be observed by using the module
     and may be overridden as necessary during use.
 
-    ##### post[0]: configuration[1]: defaults[5]: fins
+    ##### post[0]: configuration[1]: defaults[5]: fins0: triangular-fins
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | integer           | 4                 | count
       1 | decimal           | 360               | distribution angle
       2 | decimal           | wth               | width
-      3 | decimal           | 1/5               | post diameter faction
-      4 | decimal           | 5/8               | post height faction
-      5 | decimal-list-3 \| decimal | \em def_f_vr  | rounding radius
-      6 | integer-list-3 \| integer | \em def_f_vrm | rounding mode
+      3 | decimal           | 1/5               | post diameter fraction
+      4 | decimal           | 5/8               | post height fraction
+      5 | decimal-list-3 \| decimal | \em def_f0_vr  | rounding radius
+      6 | integer-list-3 \| integer | \em def_f0_vrm | rounding mode
 
-    The constants \em def_f_vr and \em def_f_vrm define defaults for
+    The constants \em def_f0_vr and \em def_f0_vrm define defaults for
     fin rounding and may be overridden if needed. See the source code
     for more details.
 
-    ##### post[0]: configuration[1]: defaults[6]: adjustments
+    ##### post[0]: configuration[1]: defaults[6]: fins1: rectangular-fins
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | integer           | 4                 | count
+      1 | decimal           | 360               | distribution angle
+      2 | decimal           | wth               | width
+      3 | decimal           | 1/2               | post diameter fraction
+      4 | decimal           | 1                 | post height fraction
+      5 | decimal-list-4 \| decimal | \em def_f1_vr  | rounding radius
+      6 | integer-list-4 \| integer | \em def_f1_vrm | rounding mode
+
+    The constants \em def_f1_vr and \em def_f1_vrm define defaults for
+    fin rounding and may be overridden if needed. See the source code
+    for more details.
+
+    ##### post[0]: configuration[1]: defaults[7]: adjustments
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -466,7 +485,7 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | integer           | required          | type {0:normal, 1:recessed}
+      0 | integer           | required          | type
       1 | integer-list-3:1  | undef             | align
       2 | decimal-list-3:2  | [0, 0, 0]         | move
       3 | decimal-list-3:1 \| decimal | [0, 0, 0] | rotate
@@ -475,9 +494,18 @@
       6 | datastruct        | (see note)        | post
       7 | datastruct        | (see note)        | fins
 
-    \note The default values for the holes and post are set based on
-    the post type and, when not specified with an instances, are
+    \note The default values for the holes, post, and fins are set
+    based on the type and, when not specified with an instances, are
     obtained from the configured default values as described above.
+
+    ##### post[1]: instances[0]: type
+
+    Value is a bit-encoded integer.
+
+      b | description
+    ---:|:---------------------------------------
+      0 | post type  {0:normal, 1:recessed}
+      1 | fin type {0:triangular, 1:rectangular}
 
     ### align
 
@@ -1012,15 +1040,13 @@ module project_box_rectangle
 
       config = [ mode, defaults-list ]
       mode = [ b0:post-rnd, b1:fin-rnd, b2:h0-thru-lid, b3:lip_h-posts ]
-      defaults-list = [ hole0, hole1, post1, hole2, post2, fins, hp-dd ]
+      defaults-list = [ hole0, hole1, post1, hole2, post2, fins0, fins1, hp-dd ]
       hole | post = [ d, h, ho, vr, vrm ]
       fins = [ c, da, w, d-sf, h-sf, vr, vrm ]
       hp-dd = [g-t0, g-t1, c-d, h1-dd, p1-dd, h2-dd, p2-dd ]
 
       inst-list = [ inst, inst, ..., inst ]
-      inst = [  type:{0, 1}, align:[x,y,z], move:[x,y,z], rotate:[x,y,z],
-                hole0, hole1, post, fins ]
-      type: { 0: normal, 1: recessed }
+      inst = [  type, align, move, rotate, hole0, hole1, post, fins ]
     */
 
     // post
@@ -1035,14 +1061,18 @@ module project_box_rectangle
     max_y   = second(wall_xy) - 2*(wth - eps);
     max_h   = wall_h;
 
-    // rounding configuration constants
+    // rounding constant configurations
+    cfg_p_vr_sf     = [0, 1/2, 3/2, 0];
     cfg_p_vrm_filet = [0, 1, 4, 0];
     cfg_p_vrm_bevel = [0, 5, 10, 0];
-    cfg_p_vr_sf     = [0, 1/2, 3/2, 0];
 
-    cfg_f_vrm_filet = [4, 0, 3];
-    cfg_f_vrm_bevel = [10, 0, 9];
-    cfg_f_vr_sf     = [2, 0, 1];
+    cfg_f0_vr_sf     = [2, 0, 1];
+    cfg_f0_vrm_filet = [4, 0, 3];
+    cfg_f0_vrm_bevel = [10, 0, 9];
+
+    cfg_f1_vr_sf     = [0, 1, 1, 0];
+    cfg_f1_vrm_filet = [0, 4, 3, 0];
+    cfg_f1_vrm_bevel = [0, 10, 9, 0];
 
     // mode dependent configuration
     // B0-1: post rounding mode
@@ -1052,15 +1082,20 @@ module project_box_rectangle
                     : 0;
 
     // B2-3: fin rounding mode
-    cfg_f_vrm       = let( i = binary_iw2i(post_m, 2, 2) )
-                      (i == 1) ? cfg_f_vrm_bevel
-                    : (i == 2) ? cfg_f_vrm_filet
+    cfg_f0_vrm      = let( i = binary_iw2i(post_m, 2, 2) )
+                      (i == 1) ? cfg_f0_vrm_bevel
+                    : (i == 2) ? cfg_f0_vrm_filet
+                    : 0;
+
+    cfg_f1_vrm      = let( i = binary_iw2i(post_m, 2, 2) )
+                      (i == 1) ? cfg_f1_vrm_bevel
+                    : (i == 2) ? cfg_f1_vrm_filet
                     : 0;
 
     // B4: auxiliary screw hole through lid
     cfg_h1          = binary_bit_is(post_m, 4, 1) ? lid_h : 0;
 
-    // b5: which post type intends into lid (maintain inverse bit value)
+    // B5: which post type extends into lid (maintain inverse bit value)
     cfg_p1_lip_h    = binary_bit_is(post_m, 5, 1) ? lip_h : 0;
     cfg_p2_lip_h    = binary_bit_is(post_m, 5, 0) ? lip_h : 0;
 
@@ -1073,13 +1108,11 @@ module project_box_rectangle
     def_p1      = defined_e_or(defs_l, 2, empty_lst);
     def_h2      = defined_e_or(defs_l, 3, empty_lst);
     def_p2      = defined_e_or(defs_l, 4, empty_lst);
-    def_f       = defined_e_or(defs_l, 5, empty_lst);
+    def_f0      = defined_e_or(defs_l, 5, empty_lst);
+    def_f1      = defined_e_or(defs_l, 6, empty_lst);
+    def_hp_dd   = defined_e_or(defs_l, 7, empty_lst);
 
-    def_hp_dd   = defined_e_or(defs_l, 6, empty_lst);
-
-    // late-bound diameters dependent hole size; relative to 'def_h0_d'
-
-    // screw hole gaps: size augmentation for normal and recess holes
+    // normal and recess screw hole gaps size adjustment
     def_h0_0_gd = defined_e_or(def_hp_dd, 0, 0);
     def_h0_1_gd = defined_e_or(def_hp_dd, 1, 0);
 
@@ -1104,6 +1137,7 @@ module project_box_rectangle
     def_h1_ho   = defined_e_or(def_h1, 2, -cfg_h1);
     def_h1_vr   = defined_e_or(def_h1, 3, 0);
     def_h1_vrm  = defined_e_or(def_h1, 4, 0);
+
     // post1: normal mount post
     //def_p1_d  = defined_e_or(def_p1, 0, def_h0_d  + def_p1_dd);
     def_p1_h    = defined_e_or(def_p1, 1, max_h + cfg_p1_lip_h);
@@ -1117,6 +1151,7 @@ module project_box_rectangle
     def_h2_ho   = defined_e_or(def_h2, 2, -lid_h);
     def_h2_vr   = defined_e_or(def_h2, 3, cfg_p_vr_sf * wth/2);
     def_h2_vrm  = defined_e_or(def_h2, 4, cfg_p_vrm);
+
     // post2: recessed access post
     //def_p2_d  = defined_e_or(def_p2, 0, def_h0_d  + def_p2_dd);
     def_p2_h    = defined_e_or(def_p2, 1, max_h + cfg_p2_lip_h);
@@ -1124,14 +1159,23 @@ module project_box_rectangle
     def_p2_vr   = defined_e_or(def_p2, 3, cfg_p_vr_sf * wth);
     def_p2_vrm  = defined_e_or(def_p2, 4, cfg_p_vrm);
 
-    // post fins
-    def_f_c     = defined_e_or(def_f, 0, 4);
-    def_f_da    = defined_e_or(def_f, 1, 360);
-    def_f_w     = defined_e_or(def_f, 2, wth);
-    def_f_d_sf  = defined_e_or(def_f, 3, 1/5);
-    def_f_h_sf  = defined_e_or(def_f, 4, 5/8);
-    def_f_vr    = defined_e_or(def_f, 5, cfg_f_vr_sf * wth);
-    def_f_vrm   = defined_e_or(def_f, 6, cfg_f_vrm);
+    // fins0: triangular fins
+    def_f0_c    = defined_e_or(def_f0, 0, 4);
+    def_f0_da   = defined_e_or(def_f0, 1, 360);
+    def_f0_w    = defined_e_or(def_f0, 2, wth);
+    def_f0_d_sf = defined_e_or(def_f0, 3, 1/5);
+    def_f0_h_sf = defined_e_or(def_f0, 4, 5/8);
+    def_f0_vr   = defined_e_or(def_f0, 5, cfg_f0_vr_sf * wth);
+    def_f0_vrm  = defined_e_or(def_f0, 6, cfg_f0_vrm);
+
+    // fins1: rectangular fins
+    def_f1_c    = defined_e_or(def_f1, 0, 4);
+    def_f1_da   = defined_e_or(def_f1, 1, 360);
+    def_f1_w    = defined_e_or(def_f1, 2, wth);
+    def_f1_d_sf = defined_e_or(def_f1, 3, 1/2);
+    def_f1_h_sf = defined_e_or(def_f1, 4, 1);
+    def_f1_vr   = defined_e_or(def_f1, 5, cfg_f1_vr_sf * wth);
+    def_f1_vrm  = defined_e_or(def_f1, 6, cfg_f1_vrm);
 
     //
     //
@@ -1140,9 +1184,18 @@ module project_box_rectangle
     //
 
     // construct fins around a cylinder
-    module cylinder_fins(d, h, f)
+    module cylinder_fins(d, h, t, f)
     {
       c = defined_e_or(f, 0, 0);
+
+      // move distance for fin to always contact polygon cylinder
+      function fin_embed(r, w) =
+        let
+        (
+          n = get_fn(r),
+          d = polygon_regular_perimeter(n, r) / n
+        )
+        r - sqrt( pow(r,2) - pow(w/2, 2) - pow(d/2, 2) );
 
       if ( c > 0 )
       {
@@ -1154,23 +1207,42 @@ module project_box_rectangle
         vrm = f[6];
 
         b   = d * df;
-        h   = h * hf;
+        l   = h * hf;
 
         if (verb > 2)
-          echo(strl(["post-inst-fins: [d, h, f] = ", [d, h, f]]));
+          echo(strl(["post-inst-fins: [d, h, t, f] = ", [d, h, t, f]]));
 
-        for (i = [0:c-1])
+        f_in = fin_embed(d/2, w);
+
+        // triangular fins
+        if ( t == 0 )
         {
-          rotate([90, 0, da/c * i + 180])
-          translate([-d/2 - b, 0, 0])
-          extrude_linear_mss(w, center=true)
-          pg_triangle_sas([h, 90, b], vr=vr, vrm=vrm);
+          for (i = [0:c-1])
+          {
+            rotate([90, 0, da/c * i + 180])
+            translate([-d/2 - b + f_in, 0, 0])
+            extrude_linear_mss(w, center=true)
+            pg_triangle_sas([l, 90, b], vr=vr, vrm=vrm);
+          }
         }
+
+        // rectangular fins
+        if ( t == 1 )
+        {
+          for (i = [0:c-1])
+          {
+            rotate([0, 0, da/c * i + 180])
+            translate([b/2 + d/2 - f_in, 0, 0])
+            extrude_linear_mss(l)
+            pg_rectangle( [b, w], vr=vr, vrm=vrm, center=true);
+          }
+        }
+
       }
     }
 
     // construct a cylinder with optional fins
-    module cylinder_and_fins ( en, c, f, eps=0 )
+    module cylinder_and_fins ( en, c, ft, f, eps=0 )
     {
       if (en == true)
       {
@@ -1188,7 +1260,7 @@ module project_box_rectangle
           rotate_extrude()
           pg_rectangle([d/2, h + eps], vr=vr, vrm=vrm);
 
-          cylinder_fins(d, h, f);
+          cylinder_fins(d, h, ft, f);
         }
       }
     }
@@ -1207,7 +1279,8 @@ module project_box_rectangle
     // process 'post' instance list
     for (inst=inst_l)
     {
-      inst_t    = defined_e_or(inst, 0, inst);        // type {0, 1}
+      inst_t    = defined_e_or(inst, 0, inst);        // type
+
       inst_a    = defined_e_or(inst, 1, undef);       // align [x, y, z]
       inst_m    = defined_e_or(inst, 2, zero3d);      // move [x, y, z]
       inst_r    = defined_e_or(inst, 3, zero3d);      // rotate [x, y, z]
@@ -1215,6 +1288,7 @@ module project_box_rectangle
       inst_h0   = defined_e_or(inst, 4, undef);       // hole0
       inst_h1   = defined_e_or(inst, 5, undef);       // hole1
       inst_p    = defined_e_or(inst, 6, undef);       // post
+
       inst_f    = defined_e_or(inst, 7, undef);       // fins
 
       // alignment
@@ -1231,27 +1305,42 @@ module project_box_rectangle
       inst_zz   = ( binary_bit_is(inst_az, 0, 0) ? 0 : -lid_h );
 
       //
-      // default value updates based on post type: (0=normal, 1=recessed)
+      // default value updates based on types
       //
 
+      // B0: post-type
+      inst_pt     = binary_iw2i(inst_t, 1, 0);
+
       // hole0:
-      tdef_h0_gd  = (inst_t == 0) ? def_h0_0_gd : def_h0_1_gd;
+      tdef_h0_gd  = (inst_pt == 0) ? def_h0_0_gd : def_h0_1_gd;
 
       // hole1:
-      tdef_h_dd   = (inst_t == 0) ? def_h1_dd : def_h2_dd;
-      //tdef_h1_d = (inst_t == 0) ? def_h1_d : def_h2_d;
-      tdef_h1_h   = (inst_t == 0) ? def_h1_h : def_h2_h;
-      tdef_h1_ho  = (inst_t == 0) ? def_h1_ho : def_h2_ho;
-      tdef_h1_vr  = (inst_t == 0) ? def_h1_vr : def_h2_vr;
-      tdef_h1_vrm = (inst_t == 0) ? def_h1_vrm : def_h2_vrm;
+      tdef_h_dd   = (inst_pt == 0) ? def_h1_dd : def_h2_dd;
+      //tdef_h1_d = (inst_pt == 0) ? def_h1_d : def_h2_d;
+      tdef_h1_h   = (inst_pt == 0) ? def_h1_h : def_h2_h;
+      tdef_h1_ho  = (inst_pt == 0) ? def_h1_ho : def_h2_ho;
+      tdef_h1_vr  = (inst_pt == 0) ? def_h1_vr : def_h2_vr;
+      tdef_h1_vrm = (inst_pt == 0) ? def_h1_vrm : def_h2_vrm;
 
       // post:
-      tdef_p_dd   = (inst_t == 0) ? def_p1_dd : def_p2_dd;
-      //tdef_p_d  = (inst_t == 0) ? def_p1_d : def_p2_d;
-      tdef_p_h    = (inst_t == 0) ? def_p1_h : def_p2_h;
-      tdef_p_ho   = (inst_t == 0) ? def_p1_ho : def_p2_ho;
-      tdef_p_vr   = (inst_t == 0) ? def_p1_vr : def_p2_vr;
-      tdef_p_vrm  = (inst_t == 0) ? def_p1_vrm : def_p2_vrm;
+      tdef_p_dd   = (inst_pt == 0) ? def_p1_dd : def_p2_dd;
+      //tdef_p_d  = (inst_pt == 0) ? def_p1_d : def_p2_d;
+      tdef_p_h    = (inst_pt == 0) ? def_p1_h : def_p2_h;
+      tdef_p_ho   = (inst_pt == 0) ? def_p1_ho : def_p2_ho;
+      tdef_p_vr   = (inst_pt == 0) ? def_p1_vr : def_p2_vr;
+      tdef_p_vrm  = (inst_pt == 0) ? def_p1_vrm : def_p2_vrm;
+
+      // B1: fins-type
+      inst_ft     = binary_iw2i(inst_t, 1, 1);
+
+      // fins:
+      tdef_f_c    = (inst_ft == 0) ? def_f0_c : def_f1_c;
+      tdef_f_da   = (inst_ft == 0) ? def_f0_da : def_f1_da;
+      tdef_f_w    = (inst_ft == 0) ? def_f0_w : def_f1_w;
+      tdef_f_d_sf = (inst_ft == 0) ? def_f0_d_sf : def_f1_d_sf;
+      tdef_f_h_sf = (inst_ft == 0) ? def_f0_h_sf : def_f1_h_sf;
+      tdef_f_vr   = (inst_ft == 0) ? def_f0_vr : def_f1_vr;
+      tdef_f_vrm  = (inst_ft == 0) ? def_f0_vrm : def_f1_vrm;
 
       //
       // assign defaults when not specified with post instance
@@ -1266,9 +1355,9 @@ module project_box_rectangle
       h0_vr   = defined_e_or(inst_h0, 3, def_h0_vr);
       h0_vrm  = defined_e_or(inst_h0, 4, def_h0_vrm);
 
-      h0_dwg  = h0_d + tdef_h0_gd;    // screw hole with gap
+      h0_dg  = h0_d + tdef_h0_gd;     // screw hole with gap
 
-      h0      = [h0_dwg, h0_h, h0_ho, h0_vr, h0_vrm];
+      h0      = [h0_dg, h0_h, h0_ho, h0_vr, h0_vrm];
 
       // hole1: aux screw hole or thru lid access hole
       h1_en  = (remove == true);
@@ -1292,13 +1381,13 @@ module project_box_rectangle
 
       p       = [p_d, p_h, p_ho, p_vr, p_vrm];
 
-      f_c     = defined_e_or(inst_f, 0, def_f_c);
-      f_da    = defined_e_or(inst_f, 1, def_f_da);
-      f_w     = defined_e_or(inst_f, 2, def_f_w);
-      f_d_sf  = defined_e_or(inst_f, 3, def_f_d_sf);
-      f_h_sf  = defined_e_or(inst_f, 4, def_f_h_sf);
-      f_vr    = defined_e_or(inst_f, 5, def_f_vr);
-      f_vrm   = defined_e_or(inst_f, 6, def_f_vrm);
+      f_c     = defined_e_or(inst_f, 0, tdef_f_c);
+      f_da    = defined_e_or(inst_f, 1, tdef_f_da);
+      f_w     = defined_e_or(inst_f, 2, tdef_f_w);
+      f_d_sf  = defined_e_or(inst_f, 3, tdef_f_d_sf);
+      f_h_sf  = defined_e_or(inst_f, 4, tdef_f_h_sf);
+      f_vr    = defined_e_or(inst_f, 5, tdef_f_vr);
+      f_vrm   = defined_e_or(inst_f, 6, tdef_f_vrm);
 
       f       = [f_c, f_da, f_w, f_d_sf, f_h_sf, f_vr, f_vrm];
 
@@ -1311,7 +1400,7 @@ module project_box_rectangle
       rotate(inst_r)
       union()
       {
-        cylinder_and_fins(p_en, p, f);
+        cylinder_and_fins(p_en, p, inst_ft, f);
 
         cylinder_and_fins(h0_en, h0, eps=10*eps);
         cylinder_and_fins(h1_en, h1, eps=10*eps);
