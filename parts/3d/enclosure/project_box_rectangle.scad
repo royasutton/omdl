@@ -1067,19 +1067,19 @@ module project_box_rectangle
     def_p2      = defined_e_or(defs_l, 4, empty_lst);
     def_f0      = defined_e_or(defs_l, 5, empty_lst);
     def_f1      = defined_e_or(defs_l, 6, empty_lst);
-    def_hp_dd   = defined_e_or(defs_l, 7, empty_lst);
+    def_adj     = defined_e_or(defs_l, 7, empty_lst);
 
     // normal and recess screw hole gaps size adjustment
-    def_h0_0_gd = defined_e_or(def_hp_dd, 0, 0);
-    def_h0_1_gd = defined_e_or(def_hp_dd, 1, 0);
+    def_h0_0_gd = defined_e_or(def_adj, 0, 0);
+    def_h0_1_gd = defined_e_or(def_adj, 1, 0);
 
     // common addition to all posts and secondary holes
-    def_hp_cd   = defined_e_or(def_hp_dd, 2, wth/2);
+    def_hp_cd   = defined_e_or(def_adj, 2, wth/2);
 
-    def_h1_dd   = defined_e_or(def_hp_dd, 3, 0.0) * wth + def_hp_cd;
-    def_p1_dd   = defined_e_or(def_hp_dd, 4, 3.0) * wth + def_hp_cd;
-    def_h2_dd   = defined_e_or(def_hp_dd, 5, 2.0) * wth + def_hp_cd;
-    def_p2_dd   = defined_e_or(def_hp_dd, 6, 4.0) * wth + def_hp_cd;
+    def_h1_dd   = defined_e_or(def_adj, 3, 0.0) * wth + def_hp_cd;
+    def_p1_dd   = defined_e_or(def_adj, 4, 3.0) * wth + def_hp_cd;
+    def_h2_dd   = defined_e_or(def_adj, 5, 2.0) * wth + def_hp_cd;
+    def_p2_dd   = defined_e_or(def_adj, 6, 4.0) * wth + def_hp_cd;
 
     // hole0: normal & recessed screw common hole
     def_h0_d    = defined_e_or(def_h0, 0, 3.25);
