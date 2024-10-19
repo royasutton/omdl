@@ -729,15 +729,6 @@ module project_box_rectangle
   // ribs
   module construct_ribs()
   {
-    /*
-      +----------------+
-      | Data Structure |
-      +----------------+
-
-      ribs = [ mode, rib:[w, hx, hy], pct:[x, y, z], number:[x, y, z] ]
-
-    */
-
     // mode
     rib_m   = defined_e_or(rib, 0, rib);
 
@@ -861,22 +852,6 @@ module project_box_rectangle
   // interior walls
   module construct_interior_walls()
   {
-    /*
-      +----------------+
-      | Data Structure |
-      +----------------+
-
-      wall = [ config, inst-list ]
-
-      config = [ mode, defaults-list ]
-      defaults-list = [ dw, he, vr, vrm ]
-
-      inst-list = [ inst, inst, ..., inst ]
-
-      inst = [ type, move:[x,y,z], scale:[x,y,z], rotate:[x,y,z], size:[x,y], he, vr, vrm ]
-      type: { 0: horizontal, 1: vertical }
-    */
-
     // wall
     config  = defined_e_or(wall, 0, wall);
     inst_l  = defined_e_or(wall, 1, empty_lst);
@@ -1031,24 +1006,6 @@ module project_box_rectangle
   // posts and screw holes
   module construct_posts( add=false, remove=false )
   {
-    /*
-      +----------------+
-      | Data Structure |
-      +----------------+
-
-      post = [ config, inst-list ]
-
-      config = [ mode, defaults-list ]
-      mode = [ b0:post-rnd, b1:fin-rnd, b2:h0-thru-lid, b3:lip_h-posts ]
-      defaults-list = [ hole0, hole1, post1, hole2, post2, fins0, fins1, hp-dd ]
-      hole | post = [ d, h, ho, vr, vrm ]
-      fins = [ c, da, w, d-sf, h-sf, vr, vrm ]
-      hp-dd = [g-t0, g-t1, c-d, h1-dd, p1-dd, h2-dd, p2-dd ]
-
-      inst-list = [ inst, inst, ..., inst ]
-      inst = [  type, align, move, rotate, hole0, hole1, post, fins ]
-    */
-
     // post
     config  = defined_e_or(post, 0, post);
     inst_l  = defined_e_or(post, 1, empty_lst);
