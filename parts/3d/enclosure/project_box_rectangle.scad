@@ -410,25 +410,22 @@
       6 | datastruct        | (see below)       | fins1: rectangular-fins
       7 | datastruct        | (see below)       | calculation
 
-    ##### post[0]: configuration[1]: defaults[0-4]: hole*, post*
+    ##### post[0]: configuration[1]: defaults[0]: hole0
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | decimal           | (see note)        | diameter
-      1 | decimal           | (see note)        | height
-      2 | decimal           | (see note)        | height offset
-      3 | decimal-list-4 \| decimal| (see note) | rounding radius
-      4 | integer-list-4 \| integer| (see note) | rounding mode
+      0 | decimal           | 3.25              | diameter
+      1 | decimal           | (maximum)         | height
+      2 | decimal           | 0                 | height offset
+      3 | decimal-list-4 \| decimal| 0          | rounding radius
+      4 | integer-list-4 \| integer| 0          | rounding mode
 
-    \note Attempts have been made to use reasonable defaults and
-    configurations for all holes and posts. The default values are of
-    the form outlined in the schema above. These defaults and/or their
-    calculations may be found in the source code and have variable
-    names that begin with \em def_. For example the default value for
-    hole0 diameter has the variable name \em def_h0_d. Given the
-    quantity of post-related defaults, they will not be be documented
-    here. These default values may also be observed by using the module
-    and may be overridden as necessary during use.
+    ##### post[0]: configuration[1]: defaults[1-4]: hole1-2, post1-2
+
+    The default values for hole1, hole2, post1, and post2 are computed
+    according to that outlined in the defaults calculation section
+    below. The height and offsets are set based on the post height and
+    other configured requirements.
 
     ##### post[0]: configuration[1]: defaults[5]: fins0: triangular-fins
 
