@@ -132,9 +132,9 @@
     value or may be assigned the value \b undef to use the calculated
     default as demonstrated below.
 
-    \code{.C}
-    partial_config = [ 12.42, [1,2], [2,1], 0, [1,2], 31, [1,2,3], 0 ];
-       full_config = [ undef, undef, undef, 2, undef, 31 ];
+    \code
+      partial_config = [ 12.42, [1,2], [2,1], 0, [1,2], 31, [1,2,3], 0 ];
+         full_config = [ undef, undef, undef, 2, undef, 31 ];
     \endcode
 
     ## Rounding and extrusions
@@ -390,15 +390,12 @@
     2-3 | fin rounding {0:none, 1:bevel, 2:filet}
       4 | set auxiliary screw hole on opposite side of lid
       5 | set post type that extends into lid height
-      6 | resize based on screw-hole multipliers with each instance (1).
+      6 | re-calculate defaults with each instance (1)
 
-    (1) The post and secondary hole defaults are calculated using the
-    screw-hole (hole0) multipliers values as configured under the
-    calculation in post configuration defaults described below. This
-    bit controls when the calculation is performed; either when
-    defaults are configured (b=0), or when a post instance is created
-    (b=1).
-
+    (1) The post and secondary hole diameter defaults are calculated as
+    shown under calculation described below. This mode bit controls
+    when the calculation is performed; either when defaults are
+    configured (b=0), or when a post instance is created (b=1).
 
     ##### post[0]: configuration[1]: defaults
 
