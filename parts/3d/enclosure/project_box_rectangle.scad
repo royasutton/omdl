@@ -390,6 +390,15 @@
     2-3 | fin rounding {0:none, 1:bevel, 2:filet}
       4 | set auxiliary screw hole on opposite side of lid
       5 | set post type that extends into lid height
+      6 | resize based on screw-hole multipliers with each instance (1).
+
+    (1) The post and secondary hole defaults are calculated using the
+    screw-hole (hole0) multipliers values as configured under the
+    adjustments in post configuration defaults described below. This
+    bit controls when the calculation is performed; either when
+    defaults are configured (b=0), or when a post instance is created
+    (b=1).
+
 
     ##### post[0]: configuration[1]: defaults
 
@@ -1056,6 +1065,9 @@ module project_box_rectangle
     cfg_p1_lip_h    = binary_bit_is(post_m, 5, 1) ? lip_h : 0;
     cfg_p2_lip_h    = binary_bit_is(post_m, 5, 0) ? lip_h : 0;
 
+    // B6: apply screw-hole multiplier sizing with each instance.
+    cfg_hp_ims      = binary_bit_is(post_m, 6, 1);
+
     //
     // configured configuration defaults
     //
@@ -1089,28 +1101,28 @@ module project_box_rectangle
     def_h0_vrm  = defined_e_or(def_h0, 4, 0);
 
     // hole1: normal thru lid hole
-    //def_h1_d  = defined_e_or(def_h1, 0, def_h0_d + def_h1_dd);
+    def_h1_d    = defined_e_or(def_h1, 0, def_h0_d + def_h1_dd);
     def_h1_h    = defined_e_or(def_h1, 1, cfg_h1);
     def_h1_ho   = defined_e_or(def_h1, 2, -cfg_h1);
     def_h1_vr   = defined_e_or(def_h1, 3, 0);
     def_h1_vrm  = defined_e_or(def_h1, 4, 0);
 
     // post1: normal mount post
-    //def_p1_d  = defined_e_or(def_p1, 0, def_h0_d  + def_p1_dd);
+    def_p1_d    = defined_e_or(def_p1, 0, def_h0_d + def_p1_dd);
     def_p1_h    = defined_e_or(def_p1, 1, max_h + cfg_p1_lip_h);
     def_p1_ho   = defined_e_or(def_p1, 2, 0);
     def_p1_vr   = defined_e_or(def_p1, 3, cfg_p_vr_sf * wth);
     def_p1_vrm  = defined_e_or(def_p1, 4, cfg_p_vrm);
 
     // hole2: recessed access hole thru lid
-    //def_h2_d  = defined_e_or(def_h2, 0, def_h0_d  + def_h2_dd);
+    def_h2_d    = defined_e_or(def_h2, 0, def_h0_d + def_h2_dd);
     def_h2_h    = defined_e_or(def_h2, 1, max_h + cfg_p2_lip_h + lid_h - wth*2);
     def_h2_ho   = defined_e_or(def_h2, 2, -lid_h);
     def_h2_vr   = defined_e_or(def_h2, 3, cfg_p_vr_sf * wth/2);
     def_h2_vrm  = defined_e_or(def_h2, 4, cfg_p_vrm);
 
     // post2: recessed access post
-    //def_p2_d  = defined_e_or(def_p2, 0, def_h0_d  + def_p2_dd);
+    def_p2_d    = defined_e_or(def_p2, 0, def_h0_d + def_p2_dd);
     def_p2_h    = defined_e_or(def_p2, 1, max_h + cfg_p2_lip_h);
     def_p2_ho   = defined_e_or(def_p2, 2, 0);
     def_p2_vr   = defined_e_or(def_p2, 3, cfg_p_vr_sf * wth);
@@ -1273,7 +1285,7 @@ module project_box_rectangle
 
       // hole1:
       tdef_h1_dd  = (inst_pt == 0) ? def_h1_dd : def_h2_dd;
-      //tdef_h1_d = (inst_pt == 0) ? def_h1_d : def_h2_d;
+      tdef_h1_d   = (inst_pt == 0) ? def_h1_d : def_h2_d;
       tdef_h1_h   = (inst_pt == 0) ? def_h1_h : def_h2_h;
       tdef_h1_ho  = (inst_pt == 0) ? def_h1_ho : def_h2_ho;
       tdef_h1_vr  = (inst_pt == 0) ? def_h1_vr : def_h2_vr;
@@ -1281,7 +1293,7 @@ module project_box_rectangle
 
       // post:
       tdef_p_dd   = (inst_pt == 0) ? def_p1_dd : def_p2_dd;
-      //tdef_p_d  = (inst_pt == 0) ? def_p1_d : def_p2_d;
+      tdef_p_d    = (inst_pt == 0) ? def_p1_d : def_p2_d;
       tdef_p_h    = (inst_pt == 0) ? def_p1_h : def_p2_h;
       tdef_p_ho   = (inst_pt == 0) ? def_p1_ho : def_p2_ho;
       tdef_p_vr   = (inst_pt == 0) ? def_p1_vr : def_p2_vr;
@@ -1316,10 +1328,16 @@ module project_box_rectangle
 
       h0      = [h0_dg, h0_h, h0_ho, h0_vr, h0_vrm];
 
+      //
+      // assign hole and post defaults based on selected mode 'cfg_hp_ims'
+      //
+      tdef_h1_ims = (cfg_hp_ims == true) ? h0_d + tdef_h1_dd : tdef_h1_d;
+      tdef_p_ims  = (cfg_hp_ims == true) ? h0_d + tdef_p_dd : tdef_p_d;
+
       // hole1: aux screw hole or thru lid access hole
       h1_en  = (remove == true);
 
-      h1_d    = defined_e_or(inst_h1, 0, h0_d + tdef_h1_dd);
+      h1_d    = defined_e_or(inst_h1, 0, tdef_h1_ims);
       h1_h    = defined_e_or(inst_h1, 1, tdef_h1_h);
       h1_ho   = defined_e_or(inst_h1, 2, tdef_h1_ho);
       h1_vr   = defined_e_or(inst_h1, 3, tdef_h1_vr);
@@ -1330,7 +1348,7 @@ module project_box_rectangle
       // post: post and fins
       p_en   = (add == true);
 
-      p_d     = defined_e_or(inst_p, 0, h0_d + tdef_p_dd);
+      p_d     = defined_e_or(inst_p, 0, tdef_p_ims);
       p_h     = defined_e_or(inst_p, 1, tdef_p_h);
       p_ho    = defined_e_or(inst_p, 2, tdef_p_ho);
       p_vr    = defined_e_or(inst_p, 3, tdef_p_vr);
