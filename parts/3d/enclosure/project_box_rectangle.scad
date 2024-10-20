@@ -1248,7 +1248,7 @@ module project_box_rectangle
         vr    = c[5];
         vrm   = c[6];
 
-        //if (verb > 2)
+        if (verb > 2)
           echo(strl(["post-inst-cylinder: [c, eps] = ", [c, eps]]));
 
         translate([0, 0, ho - eps/2])
