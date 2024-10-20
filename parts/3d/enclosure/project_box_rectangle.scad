@@ -357,7 +357,7 @@
     post            | [ configuration, instances ]
     configuration   | [ mode, defaults ]
     defaults        | [ hole0, hole1, post1, hole2, post2, fins0, fins1, calculation ]
-    hole, post (1)  | [ d, h, ho, vr, vrm ]
+    hole, post (1)  | [ d, h, ho, da, ha, vr, vrm ]
     fins (2)        | [ c, sweep-angle, w, d-scale, h-scale, vr, vrm ]
     calculation     | [ hole1-mul, hole1-add, post1-mul, post1-add, hole2-mul, hole2-add, post2-mul, post2-add ]
     instances       | [ instance, instance, ..., instance ]
@@ -417,8 +417,18 @@
       0 | decimal           | 3.25              | diameter
       1 | decimal           | (maximum)         | height
       2 | decimal           | 0                 | height offset
-      3 | decimal-list-4 \| decimal| 0          | rounding radius
-      4 | integer-list-4 \| integer| 0          | rounding mode
+      3 | decimal           | 0                 | diameter adjust (1)
+      4 | decimal           | 0                 | height adjust (1)
+      5 | decimal-list-4 \| decimal| 0          | rounding radius
+      6 | integer-list-4 \| integer| 0          | rounding mode
+
+    (1) The elements 3 and 4 are used for \em late adjustments to
+    diameters and heights for posts and holes. By \em late, it is meant
+    that they allow for dimension changes without affecting dependent
+    value calculations. This is useful to construct screw holes gaps or
+    for a diameter increase required for brass metal screw inserts, for
+    example. Another example is for use in post height adjustment that
+    allow clearance for circuit board mounting.
 
     ##### post[0]: configuration[1]: defaults[1-4]: hole1-2, post1-2
 
@@ -1083,8 +1093,10 @@ module project_box_rectangle
     def_h0_d    = defined_e_or(def_h0, 0, 3.25);
     def_h0_h    = defined_e_or(def_h0, 1, max_h);
     def_h0_ho   = defined_e_or(def_h0, 2, 0);
-    def_h0_vr   = defined_e_or(def_h0, 3, 0);
-    def_h0_vrm  = defined_e_or(def_h0, 4, 0);
+    def_h0_da   = defined_e_or(def_h0, 3, 0);
+    def_h0_ha   = defined_e_or(def_h0, 4, 0);
+    def_h0_vr   = defined_e_or(def_h0, 5, 0);
+    def_h0_vrm  = defined_e_or(def_h0, 6, 0);
 
     //
     // default diameter calculations based on hole0
@@ -1109,29 +1121,37 @@ module project_box_rectangle
     def_h1_d    = defined_e_or(def_h1, 0, def_h1_d_c);
     def_h1_h    = defined_e_or(def_h1, 1, cfg_h1_h);
     def_h1_ho   = defined_e_or(def_h1, 2, -cfg_h1_h);
-    def_h1_vr   = defined_e_or(def_h1, 3, 0);
-    def_h1_vrm  = defined_e_or(def_h1, 4, 0);
+    def_h1_da   = defined_e_or(def_h1, 3, 0);
+    def_h1_ha   = defined_e_or(def_h1, 4, 0);
+    def_h1_vr   = defined_e_or(def_h1, 5, 0);
+    def_h1_vrm  = defined_e_or(def_h1, 6, 0);
 
     // post1: normal mount post
     def_p1_d    = defined_e_or(def_p1, 0, def_p1_d_c);
     def_p1_h    = defined_e_or(def_p1, 1, cfg_p1_h);
     def_p1_ho   = defined_e_or(def_p1, 2, 0);
-    def_p1_vr   = defined_e_or(def_p1, 3, cfg_p_vr_sf * wth);
-    def_p1_vrm  = defined_e_or(def_p1, 4, cfg_p_vrm);
+    def_p1_da   = defined_e_or(def_p1, 3, 0);
+    def_p1_ha   = defined_e_or(def_p1, 4, 0);
+    def_p1_vr   = defined_e_or(def_p1, 5, cfg_p_vr_sf * wth);
+    def_p1_vrm  = defined_e_or(def_p1, 6, cfg_p_vrm);
 
     // hole2: recessed access hole thru lid
     def_h2_d    = defined_e_or(def_h2, 0, def_h2_d_c);
     def_h2_h    = defined_e_or(def_h2, 1, cfg_p2_h);
     def_h2_ho   = defined_e_or(def_h2, 2, -lid_h);
-    def_h2_vr   = defined_e_or(def_h2, 3, cfg_p_vr_sf * wth/2);
-    def_h2_vrm  = defined_e_or(def_h2, 4, cfg_p_vrm);
+    def_h2_da   = defined_e_or(def_h2, 3, 0);
+    def_h2_ha   = defined_e_or(def_h2, 4, 0);
+    def_h2_vr   = defined_e_or(def_h2, 5, cfg_p_vr_sf * wth/2);
+    def_h2_vrm  = defined_e_or(def_h2, 6, cfg_p_vrm);
 
     // post2: recessed access post
     def_p2_d    = defined_e_or(def_p2, 0, def_p2_d_c);
     def_p2_h    = defined_e_or(def_p2, 1, cfg_p2_h);
     def_p2_ho   = defined_e_or(def_p2, 2, 0);
-    def_p2_vr   = defined_e_or(def_p2, 3, cfg_p_vr_sf * wth);
-    def_p2_vrm  = defined_e_or(def_p2, 4, cfg_p_vrm);
+    def_p2_da   = defined_e_or(def_p2, 3, 0);
+    def_p2_ha   = defined_e_or(def_p2, 4, 0);
+    def_p2_vr   = defined_e_or(def_p2, 5, cfg_p_vr_sf * wth);
+    def_p2_vrm  = defined_e_or(def_p2, 6, cfg_p_vrm);
 
     // fins0: triangular fins
     def_f0_c    = defined_e_or(def_f0, 0, 4);
@@ -1223,18 +1243,24 @@ module project_box_rectangle
         d     = c[0];
         h     = c[1];
         ho    = c[2];
-        vr    = c[3];
-        vrm   = c[4];
+        da    = c[3];
+        ha    = c[4];
+        vr    = c[5];
+        vrm   = c[6];
 
-        if (verb > 2)
+        //if (verb > 2)
           echo(strl(["post-inst-cylinder: [c, eps] = ", [c, eps]]));
 
         translate([0, 0, ho - eps/2])
         {
-          rotate_extrude()
-          pg_rectangle([d/2, h + eps], vr=vr, vrm=vrm);
+          // late adjustments
+          d_adj = d + da;
+          h_adj = h + ha;
 
-          construct_fins(d, h, ft, f);
+          rotate_extrude()
+          pg_rectangle([d_adj/2, h_adj + eps], vr=vr, vrm=vrm);
+
+          construct_fins(d_adj, h_adj, ft, f);
         }
       }
     }
@@ -1292,6 +1318,8 @@ module project_box_rectangle
       tdef_h1_d   = (inst_pt == 0) ? def_h1_d : def_h2_d;
       tdef_h1_h   = (inst_pt == 0) ? def_h1_h : def_h2_h;
       tdef_h1_ho  = (inst_pt == 0) ? def_h1_ho : def_h2_ho;
+      tdef_h1_da  = (inst_pt == 0) ? def_h1_da : def_h2_da;
+      tdef_h1_ha  = (inst_pt == 0) ? def_h1_ha : def_h2_ha;
       tdef_h1_vr  = (inst_pt == 0) ? def_h1_vr : def_h2_vr;
       tdef_h1_vrm = (inst_pt == 0) ? def_h1_vrm : def_h2_vrm;
 
@@ -1300,6 +1328,8 @@ module project_box_rectangle
       tdef_p_d    = (inst_pt == 0) ? def_p1_d : def_p2_d;
       tdef_p_h    = (inst_pt == 0) ? def_p1_h : def_p2_h;
       tdef_p_ho   = (inst_pt == 0) ? def_p1_ho : def_p2_ho;
+      tdef_p_da   = (inst_pt == 0) ? def_p1_da : def_p2_da;
+      tdef_p_ha   = (inst_pt == 0) ? def_p1_ha : def_p2_ha;
       tdef_p_vr   = (inst_pt == 0) ? def_p1_vr : def_p2_vr;
       tdef_p_vrm  = (inst_pt == 0) ? def_p1_vrm : def_p2_vrm;
 
@@ -1325,10 +1355,12 @@ module project_box_rectangle
       h0_d    = defined_e_or(inst_h0, 0, def_h0_d);
       h0_h    = defined_e_or(inst_h0, 1, def_h0_h);
       h0_ho   = defined_e_or(inst_h0, 2, def_h0_ho);
-      h0_vr   = defined_e_or(inst_h0, 3, def_h0_vr);
-      h0_vrm  = defined_e_or(inst_h0, 4, def_h0_vrm);
+      h0_da   = defined_e_or(inst_h0, 3, def_h0_da);
+      h0_ha   = defined_e_or(inst_h0, 4, def_h0_ha);
+      h0_vr   = defined_e_or(inst_h0, 5, def_h0_vr);
+      h0_vrm  = defined_e_or(inst_h0, 6, def_h0_vrm);
 
-      h0      = [h0_d, h0_h, h0_ho, h0_vr, h0_vrm];
+      h0      = [h0_d, h0_h, h0_ho, h0_da, h0_ha, h0_vr, h0_vrm];
 
       //
       // assign hole and post defaults based on selected mode 'cfg_hp_ims'
@@ -1342,10 +1374,12 @@ module project_box_rectangle
       h1_d    = defined_e_or(inst_h1, 0, tdef_h1_ims);
       h1_h    = defined_e_or(inst_h1, 1, tdef_h1_h);
       h1_ho   = defined_e_or(inst_h1, 2, tdef_h1_ho);
-      h1_vr   = defined_e_or(inst_h1, 3, tdef_h1_vr);
-      h1_vrm  = defined_e_or(inst_h1, 4, tdef_h1_vrm);
+      h1_da   = defined_e_or(inst_h1, 3, tdef_h1_da);
+      h1_ha   = defined_e_or(inst_h1, 4, tdef_h1_ha);
+      h1_vr   = defined_e_or(inst_h1, 5, tdef_h1_vr);
+      h1_vrm  = defined_e_or(inst_h1, 6, tdef_h1_vrm);
 
-      h1      = [h1_d, h1_h, h1_ho, h1_vr, h1_vrm];
+      h1      = [h1_d, h1_h, h1_ho, h1_da, h1_ha, h1_vr, h1_vrm];
 
       // post: post and fins
       p_en   = (add == true);
@@ -1353,10 +1387,12 @@ module project_box_rectangle
       p_d     = defined_e_or(inst_p, 0, tdef_p_ims);
       p_h     = defined_e_or(inst_p, 1, tdef_p_h);
       p_ho    = defined_e_or(inst_p, 2, tdef_p_ho);
-      p_vr    = defined_e_or(inst_p, 3, tdef_p_vr);
-      p_vrm   = defined_e_or(inst_p, 4, tdef_p_vrm);
+      p_da    = defined_e_or(inst_p, 3, tdef_p_da);
+      p_ha    = defined_e_or(inst_p, 4, tdef_p_ha);
+      p_vr    = defined_e_or(inst_p, 5, tdef_p_vr);
+      p_vrm   = defined_e_or(inst_p, 6, tdef_p_vrm);
 
-      p       = [p_d, p_h, p_ho, p_vr, p_vrm];
+      p       = [p_d, p_h, p_ho, p_da, p_ha, p_vr, p_vrm];
 
       f_c     = defined_e_or(inst_f, 0, tdef_f_c);
       f_da    = defined_e_or(inst_f, 1, tdef_f_da);
