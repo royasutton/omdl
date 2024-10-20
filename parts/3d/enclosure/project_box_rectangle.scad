@@ -527,22 +527,24 @@
 
       v | description
     ---:|:---------------------------------------
-      0 | center
-      1 | exterior enclosure negative x or y edge
-      2 | interior enclosure negative x or y edge
-      3 | interior enclosure positive x or y edge
-      4 | exterior enclosure positive x or y edge
+      0 | center of enclosure
+      1 | positive exterior edge of lid
+      2 | positive exterior edge of wall
+      3 | positive interior edge of wall
+      4 | negative interior edge of wall
+      5 | negative exterior edge of wall
+      6 | negative exterior edge of lid
 
     #### align[2]: z-axis alignment
 
       v | description
     ---:|:---------------------------------------
-      0 | bottom enclosure
-      1 | bottom of wall
+      0 | bottom edge of lid
+      1 | bottom edge of wall
       2 | middle of enclosure
       3 | middle of wall
-      4 | top of wall
-      5 | top of enclosure
+      4 | top edge of wall
+      5 | top edge of lip
 
     ### mode
 
@@ -1539,14 +1541,16 @@ module project_box_rectangle
   //
   //
 
-  align_x = select_ci ( [0, -encl_x, -szint_x, +szint_x, +encl_x ]/2,
-                        defined_e_or(align, 0, 0), false );
+  alignments =
+  [
+    [0, -encl_x, -szint_x -wth*2, -szint_x, +szint_x, +szint_x +wth*2, +encl_x ]/2,
+    [0, -encl_y, -szint_y -wth*2, -szint_y, +szint_y, +szint_y +wth*2, +encl_y ]/2,
+    [lid_h, 0, lid_h -encl_z/2, -wall_h/2, -wall_h, -wall_h -lip_h]
+  ];
 
-  align_y = select_ci ( [0, -encl_y, -szint_y, +szint_y, +encl_y ]/2,
-                        defined_e_or(align, 1, 0), false );
-
-  align_z = select_ci ( [lid_h, 0, lid_h -encl_z/2, -wall_h/2, -wall_h, -wall_h -lip_h],
-                        defined_e_or(align, 2, 0), false );
+  align_x = select_ci ( alignments.x, defined_e_or(align, 0, 0), false );
+  align_y = select_ci ( alignments.y, defined_e_or(align, 1, 0), false );
+  align_z = select_ci ( alignments.z, defined_e_or(align, 2, 0), false );
 
   translate([align_x, align_y, align_z])
   difference()
