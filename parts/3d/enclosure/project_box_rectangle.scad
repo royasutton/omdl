@@ -356,10 +356,10 @@
     ---------------:|:----------------------------------------------
     post            | [ configuration, instances ]
     configuration   | [ mode, defaults ]
-    defaults        | [ hole0, hole1, post1, hole2, post2, fins0, fins1, adjustments ]
+    defaults        | [ hole0, hole1, post1, hole2, post2, fins0, fins1, calculation ]
     hole, post (1)  | [ d, h, ho, vr, vrm ]
     fins (2)        | [ c, sweep-angle, w, d-scale, h-scale, vr, vrm ]
-    adjustments     | [ hole0-gap, hole1-gap, common, hole1-scale, post1-scale, hole2-scale, post2-scale ]
+    calculation     | [ hole0-gap, hole1-gap, common, hole1-scale, post1-scale, hole2-scale, post2-scale ]
     instances       | [ instance, instance, ..., instance ]
     instance        | [ type, align. move, rotate, hole0, hole1, post, fins ]
 
@@ -394,7 +394,7 @@
 
     (1) The post and secondary hole defaults are calculated using the
     screw-hole (hole0) multipliers values as configured under the
-    adjustments in post configuration defaults described below. This
+    calculation in post configuration defaults described below. This
     bit controls when the calculation is performed; either when
     defaults are configured (b=0), or when a post instance is created
     (b=1).
@@ -411,7 +411,7 @@
       4 | datastruct        | (see below)       | post2; recessed-post
       5 | datastruct        | (see below)       | fins0: triangular-fins
       6 | datastruct        | (see below)       | fins1: rectangular-fins
-      7 | datastruct        | (see below)       | adjustments
+      7 | datastruct        | (see below)       | calculation
 
     ##### post[0]: configuration[1]: defaults[0-4]: hole*, post*
 
@@ -465,7 +465,7 @@
     fin rounding and may be overridden if needed. See the source code
     for more details.
 
-    ##### post[0]: configuration[1]: defaults[7]: adjustments
+    ##### post[0]: configuration[1]: defaults[7]: calculation
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -1059,7 +1059,7 @@ module project_box_rectangle
                     : 0;
 
     // B4: auxiliary screw hole through lid
-    cfg_h1          = binary_bit_is(post_m, 4, 1) ? lid_h : 0;
+    cfg_h1_h        = binary_bit_is(post_m, 4, 1) ? lid_h : 0;
 
     // B5: which post type extends into lid (maintain inverse bit value)
     cfg_p1_lip_h    = binary_bit_is(post_m, 5, 1) ? lip_h : 0;
@@ -1079,19 +1079,19 @@ module project_box_rectangle
     def_p2      = defined_e_or(defs_l, 4, empty_lst);
     def_f0      = defined_e_or(defs_l, 5, empty_lst);
     def_f1      = defined_e_or(defs_l, 6, empty_lst);
-    def_adj     = defined_e_or(defs_l, 7, empty_lst);
+    def_calc    = defined_e_or(defs_l, 7, empty_lst);
 
     // normal and recess screw hole gaps size adjustment
-    def_h0_0_gd = defined_e_or(def_adj, 0, 0);
-    def_h0_1_gd = defined_e_or(def_adj, 1, 0);
+    def_p0_h0_d_a = defined_e_or(def_calc, 0, 0);
+    def_p1_h0_d_a = defined_e_or(def_calc, 1, 0);
 
     // common addition to all posts and secondary holes
-    def_hp_cd   = defined_e_or(def_adj, 2, wth/2);
+    def_hp_d_ac = defined_e_or(def_calc, 2, wth/2);
 
-    def_h1_dd   = defined_e_or(def_adj, 3, 0.0) * wth + def_hp_cd;
-    def_p1_dd   = defined_e_or(def_adj, 4, 3.0) * wth + def_hp_cd;
-    def_h2_dd   = defined_e_or(def_adj, 5, 2.0) * wth + def_hp_cd;
-    def_p2_dd   = defined_e_or(def_adj, 6, 4.0) * wth + def_hp_cd;
+    def_h1_d_c  = defined_e_or(def_calc, 3, 0.0) * wth + def_hp_d_ac;
+    def_p1_d_c  = defined_e_or(def_calc, 4, 3.0) * wth + def_hp_d_ac;
+    def_h2_d_c  = defined_e_or(def_calc, 5, 2.0) * wth + def_hp_d_ac;
+    def_p2_d_c  = defined_e_or(def_calc, 6, 4.0) * wth + def_hp_d_ac;
 
     // hole0: normal & recessed screw common hole
     def_h0_d    = defined_e_or(def_h0, 0, 3.25);
@@ -1101,28 +1101,28 @@ module project_box_rectangle
     def_h0_vrm  = defined_e_or(def_h0, 4, 0);
 
     // hole1: normal thru lid hole
-    def_h1_d    = defined_e_or(def_h1, 0, def_h0_d + def_h1_dd);
-    def_h1_h    = defined_e_or(def_h1, 1, cfg_h1);
-    def_h1_ho   = defined_e_or(def_h1, 2, -cfg_h1);
+    def_h1_d    = defined_e_or(def_h1, 0, def_h0_d + def_h1_d_c);
+    def_h1_h    = defined_e_or(def_h1, 1, cfg_h1_h);
+    def_h1_ho   = defined_e_or(def_h1, 2, -cfg_h1_h);
     def_h1_vr   = defined_e_or(def_h1, 3, 0);
     def_h1_vrm  = defined_e_or(def_h1, 4, 0);
 
     // post1: normal mount post
-    def_p1_d    = defined_e_or(def_p1, 0, def_h0_d + def_p1_dd);
+    def_p1_d    = defined_e_or(def_p1, 0, def_h0_d + def_p1_d_c);
     def_p1_h    = defined_e_or(def_p1, 1, max_h + cfg_p1_lip_h);
     def_p1_ho   = defined_e_or(def_p1, 2, 0);
     def_p1_vr   = defined_e_or(def_p1, 3, cfg_p_vr_sf * wth);
     def_p1_vrm  = defined_e_or(def_p1, 4, cfg_p_vrm);
 
     // hole2: recessed access hole thru lid
-    def_h2_d    = defined_e_or(def_h2, 0, def_h0_d + def_h2_dd);
+    def_h2_d    = defined_e_or(def_h2, 0, def_h0_d + def_h2_d_c);
     def_h2_h    = defined_e_or(def_h2, 1, max_h + cfg_p2_lip_h + lid_h - wth*2);
     def_h2_ho   = defined_e_or(def_h2, 2, -lid_h);
     def_h2_vr   = defined_e_or(def_h2, 3, cfg_p_vr_sf * wth/2);
     def_h2_vrm  = defined_e_or(def_h2, 4, cfg_p_vrm);
 
     // post2: recessed access post
-    def_p2_d    = defined_e_or(def_p2, 0, def_h0_d + def_p2_dd);
+    def_p2_d    = defined_e_or(def_p2, 0, def_h0_d + def_p2_d_c);
     def_p2_h    = defined_e_or(def_p2, 1, max_h + cfg_p2_lip_h);
     def_p2_ho   = defined_e_or(def_p2, 2, 0);
     def_p2_vr   = defined_e_or(def_p2, 3, cfg_p_vr_sf * wth);
@@ -1153,7 +1153,7 @@ module project_box_rectangle
     //
 
     // construct fins around a cylinder
-    module cylinder_fins(d, h, t, f)
+    module construct_fins(d, h, t, f)
     {
       c = defined_e_or(f, 0, 0);
 
@@ -1211,7 +1211,7 @@ module project_box_rectangle
     }
 
     // construct a cylinder with optional fins
-    module cylinder_and_fins ( en, c, ft, f, eps=0 )
+    module construct_cylinder ( en, c, ft, f, eps=0 )
     {
       if (en == true)
       {
@@ -1229,7 +1229,7 @@ module project_box_rectangle
           rotate_extrude()
           pg_rectangle([d/2, h + eps], vr=vr, vrm=vrm);
 
-          cylinder_fins(d, h, ft, f);
+          construct_fins(d, h, ft, f);
         }
       }
     }
@@ -1281,10 +1281,10 @@ module project_box_rectangle
       inst_pt     = binary_iw2i(inst_t, 1, 0);
 
       // hole0:
-      tdef_h0_gd  = (inst_pt == 0) ? def_h0_0_gd : def_h0_1_gd;
+      tdef_h0_d_a = (inst_pt == 0) ? def_p0_h0_d_a : def_p1_h0_d_a;
 
       // hole1:
-      tdef_h1_dd  = (inst_pt == 0) ? def_h1_dd : def_h2_dd;
+      tdef_h1_d_c = (inst_pt == 0) ? def_h1_d_c : def_h2_d_c;
       tdef_h1_d   = (inst_pt == 0) ? def_h1_d : def_h2_d;
       tdef_h1_h   = (inst_pt == 0) ? def_h1_h : def_h2_h;
       tdef_h1_ho  = (inst_pt == 0) ? def_h1_ho : def_h2_ho;
@@ -1292,7 +1292,7 @@ module project_box_rectangle
       tdef_h1_vrm = (inst_pt == 0) ? def_h1_vrm : def_h2_vrm;
 
       // post:
-      tdef_p_dd   = (inst_pt == 0) ? def_p1_dd : def_p2_dd;
+      tdef_p_d_c  = (inst_pt == 0) ? def_p1_d_c : def_p2_d_c;
       tdef_p_d    = (inst_pt == 0) ? def_p1_d : def_p2_d;
       tdef_p_h    = (inst_pt == 0) ? def_p1_h : def_p2_h;
       tdef_p_ho   = (inst_pt == 0) ? def_p1_ho : def_p2_ho;
@@ -1324,15 +1324,15 @@ module project_box_rectangle
       h0_vr   = defined_e_or(inst_h0, 3, def_h0_vr);
       h0_vrm  = defined_e_or(inst_h0, 4, def_h0_vrm);
 
-      h0_dg  = h0_d + tdef_h0_gd;     // screw hole with gap
+      h0_dg  = h0_d + tdef_h0_d_a;    // screw hole with gap
 
       h0      = [h0_dg, h0_h, h0_ho, h0_vr, h0_vrm];
 
       //
       // assign hole and post defaults based on selected mode 'cfg_hp_ims'
       //
-      tdef_h1_ims = (cfg_hp_ims == true) ? h0_d + tdef_h1_dd : tdef_h1_d;
-      tdef_p_ims  = (cfg_hp_ims == true) ? h0_d + tdef_p_dd : tdef_p_d;
+      tdef_h1_ims = (cfg_hp_ims == true) ? h0_d + tdef_h1_d_c : tdef_h1_d;
+      tdef_p_ims  = (cfg_hp_ims == true) ? h0_d + tdef_p_d_c : tdef_p_d;
 
       // hole1: aux screw hole or thru lid access hole
       h1_en  = (remove == true);
@@ -1375,10 +1375,10 @@ module project_box_rectangle
       rotate(inst_r)
       union()
       {
-        cylinder_and_fins(p_en, p, inst_ft, f);
+        construct_cylinder(p_en, p, inst_ft, f);
 
-        cylinder_and_fins(h0_en, h0, eps=10*eps);
-        cylinder_and_fins(h1_en, h1, eps=10*eps);
+        construct_cylinder(h0_en, h0, eps=10*eps);
+        construct_cylinder(h1_en, h1, eps=10*eps);
       }
 
       if (verb > 1)
