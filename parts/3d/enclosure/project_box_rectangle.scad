@@ -359,7 +359,7 @@
     defaults        | [ hole0, hole1, post1, hole2, post2, fins0, fins1, calculation ]
     hole, post (1)  | [ d, h, ho, vr, vrm ]
     fins (2)        | [ c, sweep-angle, w, d-scale, h-scale, vr, vrm ]
-    calculation     | [ hole0-gap, hole1-gap, common, hole1-scale, post1-scale, hole2-scale, post2-scale ]
+    calculation     | [ hole1-mul, hole1-add, post1-mul, post1-add, hole2-mul, hole2-add, post2-mul, post2-add ]
     instances       | [ instance, instance, ..., instance ]
     instance        | [ type, align. move, rotate, hole0, hole1, post, fins ]
 
@@ -466,26 +466,28 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | decimal           | 0                 | normal-post screw hole gap
-      1 | decimal           | 0                 | recessed-post screw hole gap
-      2 | decimal           | wth/2             | common; added to all post and secondary holes
-      3 | decimal           | 0                 | hole1 wall-multiplier
-      4 | decimal           | 3.0               | post1 wall-multiplier
-      5 | decimal           | 2.0               | hole2 wall-multiplier
-      6 | decimal           | 4.0               | post2 wall-multiplier
+      0 | decimal           | 0                 | hole1 multiplier
+      1 | decimal           | 0                 | hole1 addition
+      2 | decimal           | 3.0               | post1 multiplier
+      3 | decimal           | wth/2             | post1 addition
+      4 | decimal           | 2.0               | hole2 multiplier
+      5 | decimal           | wth/2             | hole2 addition
+      6 | decimal           | 4.0               | post2 multiplier
+      7 | decimal           | wth/2             | post2 addition
 
-    The screw hole gap parameters allow for a fixed increase in size
-    for all screw holes instances without affecting the calculations or
-    other design features that depend on screw hole size. This may be
-    used to provide a common tolerance gap for all screw holes or for a
-    common hole size increase for use with brass metal screw inserts,
-    for example.
+    For hole1, hole2, post1, and post2, the diameters are calculated
+    based on the following model:
 
-    The wall-multiplier defaults allow for a convenient way to generate
-    posts and hole sizes that are scale-dependent on post screw hole
-    size. For examples, using the default values, the post2 diameter
-    would be (4.0 * \em wth), where \em wth is the configured minimum
-    wall thickness.
+    \code
+      diameter = hole0 + wth * multiplier + addition
+    \endcode
+
+    where \c hole0 is the screw-hole diameter and \c wth is the
+    configured wall thickness parameter value. This allow for a simple
+    way to generate posts and holes that are dependent on the screw
+    hole diameter. The multiplier and fixed additions for each hole and
+    post may be configured to replace the values shown in the above
+    table.
 
     #### post[1]: instances
 
@@ -1076,19 +1078,7 @@ module project_box_rectangle
     def_p2      = defined_e_or(defs_l, 4, empty_lst);
     def_f0      = defined_e_or(defs_l, 5, empty_lst);
     def_f1      = defined_e_or(defs_l, 6, empty_lst);
-    def_calc    = defined_e_or(defs_l, 7, empty_lst);
-
-    // normal and recess screw hole gaps size adjustment
-    def_p0_h0_d_a = defined_e_or(def_calc, 0, 0);
-    def_p1_h0_d_a = defined_e_or(def_calc, 1, 0);
-
-    // common addition to all posts and secondary holes
-    def_hp_d_ac = defined_e_or(def_calc, 2, wth/2);
-
-    def_h1_d_c  = defined_e_or(def_calc, 3, 0.0) * wth + def_hp_d_ac;
-    def_p1_d_c  = defined_e_or(def_calc, 4, 3.0) * wth + def_hp_d_ac;
-    def_h2_d_c  = defined_e_or(def_calc, 5, 2.0) * wth + def_hp_d_ac;
-    def_p2_d_c  = defined_e_or(def_calc, 6, 4.0) * wth + def_hp_d_ac;
+    def_dc      = defined_e_or(defs_l, 7, empty_lst);
 
     // hole0: normal & recessed screw common hole
     def_h0_d    = defined_e_or(def_h0, 0, 3.25);
@@ -1097,29 +1087,48 @@ module project_box_rectangle
     def_h0_vr   = defined_e_or(def_h0, 3, 0);
     def_h0_vrm  = defined_e_or(def_h0, 4, 0);
 
+    //
+    // default diameter calculations based on hole0
+    //
+    def_h1_d_c  = def_h0_d
+                + defined_e_or(def_dc, 0, 0.0) * wth
+                + defined_e_or(def_dc, 1, 0);
+
+    def_p1_d_c  = def_h0_d
+                + defined_e_or(def_dc, 2, 3.0) * wth
+                + defined_e_or(def_dc, 3, wth/2);
+
+    def_h2_d_c  = def_h0_d
+                + defined_e_or(def_dc, 4, 2.0) * wth
+                + defined_e_or(def_dc, 5, wth/2);
+
+    def_p2_d_c  = def_h0_d
+                + defined_e_or(def_dc, 6, 4.0) * wth
+                + defined_e_or(def_dc, 7, wth/2);
+
     // hole1: normal thru lid hole
-    def_h1_d    = defined_e_or(def_h1, 0, def_h0_d + def_h1_d_c);
+    def_h1_d    = defined_e_or(def_h1, 0, def_h1_d_c);
     def_h1_h    = defined_e_or(def_h1, 1, cfg_h1_h);
     def_h1_ho   = defined_e_or(def_h1, 2, -cfg_h1_h);
     def_h1_vr   = defined_e_or(def_h1, 3, 0);
     def_h1_vrm  = defined_e_or(def_h1, 4, 0);
 
     // post1: normal mount post
-    def_p1_d    = defined_e_or(def_p1, 0, def_h0_d + def_p1_d_c);
+    def_p1_d    = defined_e_or(def_p1, 0, def_p1_d_c);
     def_p1_h    = defined_e_or(def_p1, 1, cfg_p1_h);
     def_p1_ho   = defined_e_or(def_p1, 2, 0);
     def_p1_vr   = defined_e_or(def_p1, 3, cfg_p_vr_sf * wth);
     def_p1_vrm  = defined_e_or(def_p1, 4, cfg_p_vrm);
 
     // hole2: recessed access hole thru lid
-    def_h2_d    = defined_e_or(def_h2, 0, def_h0_d + def_h2_d_c);
+    def_h2_d    = defined_e_or(def_h2, 0, def_h2_d_c);
     def_h2_h    = defined_e_or(def_h2, 1, cfg_p2_h);
     def_h2_ho   = defined_e_or(def_h2, 2, -lid_h);
     def_h2_vr   = defined_e_or(def_h2, 3, cfg_p_vr_sf * wth/2);
     def_h2_vrm  = defined_e_or(def_h2, 4, cfg_p_vrm);
 
     // post2: recessed access post
-    def_p2_d    = defined_e_or(def_p2, 0, def_h0_d + def_p2_d_c);
+    def_p2_d    = defined_e_or(def_p2, 0, def_p2_d_c);
     def_p2_h    = defined_e_or(def_p2, 1, cfg_p2_h);
     def_p2_ho   = defined_e_or(def_p2, 2, 0);
     def_p2_vr   = defined_e_or(def_p2, 3, cfg_p_vr_sf * wth);
@@ -1278,7 +1287,6 @@ module project_box_rectangle
       inst_pt     = binary_iw2i(inst_t, 1, 0);
 
       // hole0:
-      tdef_h0_d_a = (inst_pt == 0) ? def_p0_h0_d_a : def_p1_h0_d_a;
 
       // hole1:
       tdef_h1_d_c = (inst_pt == 0) ? def_h1_d_c : def_h2_d_c;
@@ -1321,9 +1329,7 @@ module project_box_rectangle
       h0_vr   = defined_e_or(inst_h0, 3, def_h0_vr);
       h0_vrm  = defined_e_or(inst_h0, 4, def_h0_vrm);
 
-      h0_dg  = h0_d + tdef_h0_d_a;    // screw hole with gap
-
-      h0      = [h0_dg, h0_h, h0_ho, h0_vr, h0_vrm];
+      h0      = [h0_d, h0_h, h0_ho, h0_vr, h0_vrm];
 
       //
       // assign hole and post defaults based on selected mode 'cfg_hp_ims'
