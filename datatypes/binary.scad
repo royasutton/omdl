@@ -164,8 +164,8 @@ function binary_s2i
 //! Decode the binary bits of a bit window to an integer value.
 /***************************************************************************//**
   \param    v <integer> An integer value.
+  \param    s <integer> The bit window start offset.
   \param    w <integer> The bit window width.
-  \param    s <integer> The bit window shift offset.
 
   \returns  (1) <integer> value of the \p w bits of \p v starting at bit
                 position \p s up to bit <tt>(w+s-1)</tt>.
@@ -175,8 +175,8 @@ function binary_s2i
 function binary_iw2i
 (
   v,
-  w,
-  s
+  s,
+  w
 ) = !is_integer(v) ? undef
   : !is_integer(w) ? undef
   : !is_integer(s) ? undef
@@ -594,7 +594,7 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("binary_i2v_v2i",vid) test( "binary_i2v_v2i", binary_v2i(binary_i2v(gv(vid,0))), vid );
     for (vid=run_ids) run("binary_i2s",vid) test( "binary_i2s", binary_i2s(gv(vid,0)), vid );
     for (vid=run_ids) run("binary_i2s_s2i",vid) test( "binary_i2s_s2i", binary_s2i(binary_i2s(gv(vid,0))), vid );
-    for (vid=run_ids) run("binary_iw2i_32",vid) test( "binary_iw2i_32", binary_iw2i(gv(vid,0),3,2), vid );
+    for (vid=run_ids) run("binary_iw2i_32",vid) test( "binary_iw2i_32", binary_iw2i(gv(vid,0),2,3), vid );
     for (vid=run_ids) run("binary_and",vid) test( "binary_and", binary_and(gv(vid,0),gv(vid,1)), vid );
     for (vid=run_ids) run("binary_or",vid) test( "binary_or", binary_or(gv(vid,0),gv(vid,1)), vid );
     for (vid=run_ids) run("binary_xor",vid) test( "binary_xor", binary_xor(gv(vid,0),gv(vid,1)), vid );

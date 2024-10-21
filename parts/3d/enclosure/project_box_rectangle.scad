@@ -772,7 +772,7 @@ module project_box_rectangle
     max_y   = second(wall_xy) - 2*(wth - eps);
 
     // 'max_h' may include 0 to 2 'lip_h' (ie: one at top and bottom)
-    max_h   = wall_h + min(2, binary_iw2i(rib_m, 2, 5)) * lip_h;
+    max_h   = wall_h + min(2, binary_iw2i(rib_m, 5, 2)) * lip_h;
 
     // B7: configurable global offset (to align with lower lip)
     rib_lo  = binary_bit_is(rib_m, 7, 1) ? [0, 0, -lip_h] : zero3d;
@@ -904,13 +904,13 @@ module project_box_rectangle
     max_y   = second(wall_xy) - 2*(wth - eps);
 
     // B8-9: 'max_h' may include 0 to 2 'lip_h' (ie: one at top and bottom)
-    max_h   = wall_h + min(2, binary_iw2i(wall_m, 2, 8)) * lip_h;
+    max_h   = wall_h + min(2, binary_iw2i(wall_m, 8, 2)) * lip_h;
 
     // B10: global lower-lip offset
     wall_lo = binary_bit_is(wall_m, 10, 1) ? [0, 0, -lip_h] : zero3d;
 
     // B0-1: default wall end rounding
-    cfg_vrm = let( i = binary_iw2i(wall_m, 2, 0) )
+    cfg_vrm = let( i = binary_iw2i(wall_m, 0, 2) )
                 (i == 1) ? [ 9, 10, 9, 10]                  // bevel
               : (i == 2) ? [ 3,  4, 3,  4]                  // fillet
               : (i == 3) ? [ 7,  8, 7,  8]                  // round-out
@@ -931,12 +931,12 @@ module project_box_rectangle
     ];
 
     // B2-4: wall top rounding
-    wt_rm_i = binary_iw2i(wall_m, 3, 2);
+    wt_rm_i = binary_iw2i(wall_m, 2, 3);
     s_wt_rm = select_ci( cfg_wt_rm, wt_rm_i, true );
     cfg_rt  = [def_dw/2, s_wt_rm];
 
     // B5-7: wall base rounding
-    wb_rm_i = binary_iw2i(wall_m, 3, 5);
+    wb_rm_i = binary_iw2i(wall_m, 5, 3);
     s_wb_rm = select_ci( cfg_wt_rm, wb_rm_i, true );
     cfg_rb  = [def_dw/2, reverse(s_wb_rm)];
 
@@ -1089,7 +1089,7 @@ module project_box_rectangle
 
     // mode dependent configuration
     // B0-1: post rounding mode
-    cfg_p_vrm       = let( i = binary_iw2i(post_m, 2, 0) )
+    cfg_p_vrm       = let( i = binary_iw2i(post_m, 0, 2) )
                       (i == 1) ? cfg_p_vrm_bevel
                     : (i == 2) ? cfg_p_vrm_filet
                     : 0;
@@ -1348,7 +1348,7 @@ module project_box_rectangle
       //
 
       // B0: post-type
-      inst_pt     = binary_iw2i(inst_t, 1, 0);
+      inst_pt     = binary_iw2i(inst_t, 0, 1);
 
       // hole0:
 
