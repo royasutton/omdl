@@ -299,10 +299,28 @@
 
       b | description
     ---:|:---------------------------------------
-    0-1 | wall end rounding {0:none, 1:fillet, 2:bevel, 3:round}
-    2-3 | wall extrusion rounding {0:none, 1:top, 2:base, 3:both}
-    4-5 | wall on lips {0:none, 1:one, 2:both}
-      6 | wall offset to bottom of lower lip
+    0-1 | wall end rounding {0:none, 1:bevel, 2:fillet, 3:round-out}
+    2-4 | wall top rounding (1)
+    5-7 | wall base rounding (1)
+    8-9 | wall on lips {0:none, 1:one, 2:both}
+     10 | wall offset to bottom of lower lip
+
+    (1) The bits 2-4 and bits 5-7, configure the rounding mode for the
+    wall top and wall base, respectively. The 3-bits integer values are
+    indexed to the rounding options as summarized in the following
+    table:
+
+    Value is a 3-bit-encoded integer.
+
+      v | wall top rounding | wall base rounding
+    ---:|:-----------------:|:-----------------:
+      0 | none              | none
+      1 | bevel-in          | bevel-in
+      2 | round-in          | round-in
+      3 | fillet-in         | fillet-in
+      4 | bevel-out         | bevel-out
+      5 | fillet-out        | fillet-out
+      6 | round-out         | round-out
 
     ##### wall[0]: configuration[1]: defaults
 
@@ -881,33 +899,53 @@ module project_box_rectangle
     // set a few values early for dependent defaults
     def_dw  = defined_e_or(defs_l, 0, wth);
 
-    // B4-5: wall limits (mx, my, mz)
+    // wall limits (mx, my, mz)
     max_x   = first( wall_xy) - 2*(wth - eps);
     max_y   = second(wall_xy) - 2*(wth - eps);
 
-    // 'max_h' may include 0 to 2 'lip_h' (ie: one at top and bottom)
-    max_h   = wall_h + min(2, binary_iw2i(wall_m, 2, 4)) * lip_h;
+    // B8-9: 'max_h' may include 0 to 2 'lip_h' (ie: one at top and bottom)
+    max_h   = wall_h + min(2, binary_iw2i(wall_m, 2, 8)) * lip_h;
 
-    // B6: global lower-lip offset
-    wall_lo = binary_bit_is(wall_m, 6, 1) ? [0, 0, -lip_h] : zero3d;
+    // B10: global lower-lip offset
+    wall_lo = binary_bit_is(wall_m, 10, 1) ? [0, 0, -lip_h] : zero3d;
 
     // B0-1: default wall end rounding
     cfg_vrm = let( i = binary_iw2i(wall_m, 2, 0) )
-                (i == 1) ? [ 3,  4, 3,  4]                  // fillet
-              : (i == 2) ? [ 9, 10, 9, 10]                  // bevel
-              : (i == 3) ? [ 7,  8, 7,  8]                  // round
+                (i == 1) ? [ 9, 10, 9, 10]                  // bevel
+              : (i == 2) ? [ 3,  4, 3,  4]                  // fillet
+              : (i == 3) ? [ 7,  8, 7,  8]                  // round-out
               :  0;                                         // none
 
-    // top & base wall extrusion rounding factors (for horizontal wall)
-    cfg_rt  = [ def_dw/2, [[1, 1], [1, 90/100], [1, 50/100]] ];
-    cfg_rb  = [ def_dw/2, [[1, 1 + 25/100], [1, 1 + 7/100], [1, 1]] ];
+    // configurations for top wall extrusion rounding factors for horizontal
+    // wall using approximated semicircles with $fn segments for rounding
+    // (must reverse for bottom and reorder x/y for vertical wall).
+    cfg_wt_rm =
+    [
+      0,                                                        // none
+      [[1,1],[1,1/2]],                                          // bevel-in
+      [for (x=[0:1/get_fn(1)/2:1]) [1,sqrt(1+eps-pow(x,2))]],   // round-in
+      [for (x=[1:-1/get_fn(1)/2:1/2]) [1,1-sqrt(1-pow(x,2))]],  // fillet-in
+      [[1,1],[1,1+1/2]],                                        // bevel-out
+      [for (x=[0:1/get_fn(1)/2:1]) [1,sqrt(1+eps+pow(x,2))]],   // fillet-out
+      [for (x=[1:-1/get_fn(1)/2:1/2]) [1,1+sqrt(1-pow(x,2))]],  // round-out
+    ];
 
-    // B2-3: default wall extrusion rounding
-    cfg_he = let( i = binary_iw2i(wall_m, 2, 2) )
-                (i == 1) ? [max_h - def_dw/2, cfg_rt]       // top
-              : (i == 2) ? [cfg_rb, max_h - def_dw/2]       // base
-              : (i == 3) ? [cfg_rb, max_h - def_dw, cfg_rt] // top & base
-              :  max_h;                                     // none
+    // B2-4: wall top rounding
+    wt_rm_i = binary_iw2i(wall_m, 3, 2);
+    s_wt_rm = select_ci( cfg_wt_rm, wt_rm_i, true );
+    cfg_rt  = [def_dw/2, s_wt_rm];
+
+    // B5-7: wall base rounding
+    wb_rm_i = binary_iw2i(wall_m, 3, 5);
+    s_wb_rm = select_ci( cfg_wt_rm, wb_rm_i, true );
+    cfg_rb  = [def_dw/2, reverse(s_wb_rm)];
+
+    // default height extrusion configuration
+    cfg_he =
+      (wt_rm_i  > 0 && wb_rm_i == 0) ? [max_h - def_dw/2, cfg_rt]       // top only
+    : (wt_rm_i == 0 && wb_rm_i  > 0) ? [cfg_rb, max_h - def_dw/2]       // base only
+    : (wt_rm_i  > 0 && wb_rm_i  > 0) ? [cfg_rb, max_h - def_dw, cfg_rt] // both
+    :  max_h;                                                           // neither
 
     // configured configuration defaults
     def_he  = defined_e_or(defs_l, 1, cfg_he);
