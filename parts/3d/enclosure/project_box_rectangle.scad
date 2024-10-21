@@ -759,8 +759,9 @@ module project_box_rectangle
     // B7: configurable global offset (to align with lower lip)
     rib_lo  = binary_bit_is(rib_m, 7, 1) ? [0, 0, -lip_h] : zero3d;
 
-    // rib width and extrusion configuration
-    rib_edx = [[1, 1], [9/10, 1], [8/10, 1], [6/10, 1], [2/10, 1]]; // defaults
+    // rib width and extrusion configuration (semicircle)
+    rib_edx = [for (x=[0:1/get_fn(1)/2:1]) [2*sqrt(1-pow(x,2)), 1]];
+
     rib_edy = [for (e=rib_edx) reverse(e)];
 
     rib_sd  = defined_e_or(rib, 1, [ wth, [[wth, rib_edx]], [[wth, rib_edy]] ] );
