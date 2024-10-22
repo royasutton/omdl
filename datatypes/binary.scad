@@ -180,7 +180,7 @@ function binary_iw2i
 ) = !is_integer(v) ? undef
   : !is_integer(w) ? undef
   : !is_integer(s) ? undef
-  : binary_rsh(binary_and(v, binary_lsh(pow(2,w)-1, s)), s);
+  : binary_ishr(binary_and(v, binary_ishl(pow(2,w)-1, s)), s);
 
 //! Base-2 binary AND operation for integers.
 /***************************************************************************//**
@@ -277,7 +277,7 @@ function binary_not
                 by \p s bits.
             (2) Returns \b undef when \p v or \p s is not an integer.
 *******************************************************************************/
-function binary_lsh
+function binary_ishl
 (
   v,
   s = 1,
@@ -286,13 +286,13 @@ function binary_lsh
 ) = !is_integer(v) ? undef
   : !is_integer(s) ? undef
     // max bit position
-  : (bm < v) ? binary_lsh(v, s, bm*2, bv)
+  : (bm < v) ? binary_ishl(v, s, bm*2, bv)
     // shift value
-  : (s  > 0) ? binary_lsh(v*2, s-1, bm, bv)
+  : (s  > 0) ? binary_ishl(v*2, s-1, bm, bv)
   : (bv > bm) ? 0
     // encoded result
-  : ((v % 2) > 0) ? binary_lsh(floor(v/2), s, bm, bv*2) + bv
-                  : binary_lsh(floor(v/2), s, bm, bv*2);
+  : ((v % 2) > 0) ? binary_ishl(floor(v/2), s, bm, bv*2) + bv
+                  : binary_ishl(floor(v/2), s, bm, bv*2);
 
 //! Base-2 binary right-shift operation for an integer.
 /***************************************************************************//**
@@ -303,14 +303,14 @@ function binary_lsh
                 by \p s bits.
             (2) Returns \b undef when \p v or \p s is not an integer.
 *******************************************************************************/
-function binary_rsh
+function binary_ishr
 (
   v,
   s = 1
 ) = !is_integer(v) ? undef
   : !is_integer(s) ? undef
   : (s <= 0) ? v
-  : binary_rsh(floor(v/2), s-1);
+  : binary_ishr(floor(v/2), s-1);
 
 //! @}
 //! @}
@@ -517,7 +517,7 @@ BEGIN_SCOPE validate;
         188,                            // t11
         167                             // t12
       ],
-      ["binary_lsh", 1,
+      ["binary_ishl", 1,
         undef,                          // t01
         undef,                          // t02
         508,                            // t03
@@ -531,7 +531,7 @@ BEGIN_SCOPE validate;
         1670,                           // t11
         1712                            // t12
       ],
-      ["binary_rsh", 1,
+      ["binary_ishr", 1,
         undef,                          // t01
         undef,                          // t02
         127,                            // t03
@@ -599,8 +599,8 @@ BEGIN_SCOPE validate;
     for (vid=run_ids) run("binary_or",vid) test( "binary_or", binary_or(gv(vid,0),gv(vid,1)), vid );
     for (vid=run_ids) run("binary_xor",vid) test( "binary_xor", binary_xor(gv(vid,0),gv(vid,1)), vid );
     for (vid=run_ids) run("binary_not",vid) test( "binary_not", binary_not(gv(vid,0)), vid );
-    for (vid=run_ids) run("binary_lsh",vid) test( "binary_lsh", binary_lsh(gv(vid,0)), vid );
-    for (vid=run_ids) run("binary_rsh",vid) test( "binary_rsh", binary_rsh(gv(vid,0)), vid );
+    for (vid=run_ids) run("binary_ishl",vid) test( "binary_ishl", binary_ishl(gv(vid,0)), vid );
+    for (vid=run_ids) run("binary_ishr",vid) test( "binary_ishr", binary_ishr(gv(vid,0)), vid );
 
     // end_include
   END_OPENSCAD;
