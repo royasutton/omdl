@@ -1118,7 +1118,7 @@ module project_box_rectangle
     cfg_h1_h        = binary_bit_is(post_m, 5, 1) ? lid_h : 0;
 
     // B6: re-calculate defaults with each instance.
-    cfg_hp_ims      = binary_bit_is(post_m, 6, 1);
+    cfg_hp_idr      = binary_bit_is(post_m, 6, 1);
 
     // B8: total lip_h extension height (0: one, 1: both)
     lip_h_t         = ((binary_bit_is(post_m, 8, 1) ? 1 : 0) + 1) * lip_h;
@@ -1422,10 +1422,10 @@ module project_box_rectangle
       h0      = [h0_d, h0_h, h0_ho, h0_da, h0_ha, h0_vr, h0_vrm];
 
       //
-      // assign hole and post defaults based on selected mode 'cfg_hp_ims'
+      // assign hole and post defaults based on selected mode 'cfg_hp_idr'
       //
-      tdef_h1_ims = (cfg_hp_ims == true) ? h0_d + tdef_h1_d_c : tdef_h1_d;
-      tdef_p_ims  = (cfg_hp_ims == true) ? h0_d + tdef_p_d_c : tdef_p_d;
+      tdef_h1_ims = (cfg_hp_idr == true) ? h0_d + tdef_h1_d_c : tdef_h1_d;
+      tdef_p_ims  = (cfg_hp_idr == true) ? h0_d + tdef_p_d_c : tdef_p_d;
 
       // hole1: aux screw hole or thru lid access hole
       h1_en  = (remove == true);
