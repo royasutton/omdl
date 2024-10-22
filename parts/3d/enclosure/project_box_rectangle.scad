@@ -64,7 +64,7 @@
                 (v1r=v2r=v3r=v4r).
 
   \param  vrm   <integer-list-4 | integer> wall corner rounding mode =
-                {0:none, 1:round, 2:bevel}; a list [v1rm, v2rm, v3rm,
+                {0:none, 1:bevel, 2:round}; a list [v1rm, v2rm, v3rm,
                 v4rm] or a single decimal for (v1rm=v2rm=v3rm=v4rm).
 
   \param  inset <decimal-list-2 | decimal> wall-to-lid negative offset;
@@ -1568,11 +1568,11 @@ module project_box_rectangle
   size_x        = defined_e_or(size, 0, size);
   size_y        = defined_e_or(size, 1, size_x);
 
-  // limit rounding mode to those options that make sense; set={0, 1, 5}
+  // limit rounding mode to those options that make sense; set={0, 5, 1}
   // limit each element when 'vrm' is a list
   vrm_ci        = is_list(vrm) ?
-                  [for (e=vrm) select_ci(v=[0, 1, 5], i=e, l=false)]
-                : select_ci(v=[0, 1, 5], i=vrm, l=false);
+                  [for (e=vrm) select_ci(v=[0, 5, 1], i=e, l=false)]
+                : select_ci(v=[0, 5, 1], i=vrm, l=false);
 
   // wall lip default height (set to zero when there is no lip)
   // 'lip_h', bit '1', is set globally (ensure coherency with bits of 'lip')
