@@ -1637,7 +1637,11 @@ module project_box_rectangle
   }
 
   if (verb > 0)
+  {
+    echo(strl(["box: alignment [x, y, z] = ", [align_x, align_y, align_z]]));
+
     echo(strl(["box: construction end"]));
+  }
 }
 
 //! @}
