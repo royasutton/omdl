@@ -587,7 +587,8 @@
 
     (1) When rounding mode limiting is disabled, the rounding mode
     value, \p vrm, is no longer mapped to \em bevel or \em rounded and
-    any mode of the function polygon_round_eve_all_p() may be used.
+    any mode of the function polygon_round_eve_all_p() may be used to
+    round the box exterior walls and lid.
 
     \amu_define scope_id      (example_bottom)
     \amu_define title         (Project box bottom section example)
