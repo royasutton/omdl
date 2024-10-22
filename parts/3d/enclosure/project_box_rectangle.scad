@@ -406,9 +406,13 @@
     ---:|:---------------------------------------
     0-1 | post rounding {0:none, 1:bevel, 2:filet}
     2-3 | fin rounding {0:none, 1:bevel, 2:filet}
-      4 | set auxiliary screw hole on opposite side of lid
-      5 | set post type that extends into lid height
+      4 | post base rounded same as top {0:opposite, 1:same}
+      5 | set auxiliary screw hole on opposite side of lid
       6 | re-calculate defaults with each instance (1)
+      7 | set post type that extends into lip height
+    8-9 | set lip extension count (0:one, 1:both)
+     10 | offset posts to bottom of lower lip
+
 
     (1) The post and secondary hole diameter defaults are calculated as
     shown under calculation described below. This mode bit controls
@@ -1111,15 +1115,22 @@ module project_box_rectangle
                     : (i == 2) ? cfg_f1_vrm_filet
                     : 0;
 
-    // B4: auxiliary screw hole height (through lid)
-    cfg_h1_h        = binary_bit_is(post_m, 4, 1) ? lid_h : 0;
+    // B4: post base rounded same as post top
 
-    // B5: post1 and post2 heights (only one extends by lip height)
-    cfg_p1_h        = (binary_bit_is(post_m, 5, 1) ? lip_h : 0) + wall_h;
-    cfg_p2_h        = (binary_bit_is(post_m, 5, 0) ? lip_h : 0) + wall_h;
 
-    // B6: apply screw-hole multiplier sizing with each instance.
+    // B5: auxiliary screw hole height (through lid)
+    cfg_h1_h        = binary_bit_is(post_m, 5, 1) ? lid_h : 0;
+
+    // B6: re-calculate defaults with each instance.
     cfg_hp_ims      = binary_bit_is(post_m, 6, 1);
+
+    // B7: post1 and post2 heights (only one extends by lip height)
+    cfg_p1_h        = (binary_bit_is(post_m, 7, 1) ? lip_h : 0) + wall_h;
+    cfg_p2_h        = (binary_bit_is(post_m, 7, 0) ? lip_h : 0) + wall_h;
+
+    // B8-9:
+
+    // B10:
 
     //
     // configured configuration defaults
