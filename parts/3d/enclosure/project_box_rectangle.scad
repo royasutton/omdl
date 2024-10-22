@@ -247,7 +247,7 @@
       3 | no ribs on the x-negative wall
       4 | no ribs on the y-negative wall
     5-6 | lip coverage count (2-bit encoded integer)
-      7 | align ribs to bottom of lower lips
+      7 | offset all ribs to bottom of lower lip
 
     #### rib[1]: base and height extrusion
 
@@ -303,7 +303,7 @@
     2-4 | wall top rounding (1)
     5-7 | wall base rounding (1)
     8-9 | wall on lips {0:none, 1:one, 2:both}
-     10 | wall offset to bottom of lower lip
+     10 | offset all walls to bottom of lower lip
 
     (1) The bits 2-4 and bits 5-7, configure the rounding mode for the
     wall top and wall base, respectively. The 3-bits integer values are
@@ -409,9 +409,9 @@
       4 | post base rounded same as top {0:opposite, 1:same}
       5 | set auxiliary screw hole on opposite side of lid
       6 | re-calculate defaults with each instance (1)
-      7 | set post type that extends into lip height
-    8-9 | set lip extension count (0:one, 1:both)
-     10 | offset posts to bottom of lower lip
+      7 | post type that extends into lip height {0:normal, 1:recessed}
+      8 | lip height extension count {0:one, 1:both}
+      9 | offset all posts to bottom of lower lip
 
 
     (1) The post and secondary hole diameter defaults are calculated as
@@ -1080,14 +1080,13 @@ module project_box_rectangle
     post_m  = defined_e_or(config, 0, config);
     defs_l  = defined_e_or(config, 1, empty_lst);
 
-    max_x   = first( wall_xy) - 2*(wth - eps);
-    max_y   = second(wall_xy) - 2*(wth - eps);
-    max_h   = wall_h + lip_h;
+    // B4: post base rounded same as post top
+    cfg_rbst        = binary_bit_is(post_m, 4, 1);
 
     // rounding constant configurations
-    cfg_p_vr_sf     = [0, 1/2, 3/2, 0];
-    cfg_p_vrm_filet = [0, 1, 4, 0];
-    cfg_p_vrm_bevel = [0, 5, 10, 0];
+    cfg_p_vr_sf     = (cfg_rbst == true) ? [0, 1/2, 1/2, 0] : [0, 1/2, 3/2, 0];
+    cfg_p_vrm_filet = (cfg_rbst == true) ? [0, 1, 1, 0] : [0, 1, 4, 0];
+    cfg_p_vrm_bevel = (cfg_rbst == true) ? [0, 5, 5, 0] : [0, 5, 10, 0];
 
     cfg_f0_vr_sf     = [2, 0, 1];
     cfg_f0_vrm_filet = [4, 0, 3];
@@ -1115,22 +1114,25 @@ module project_box_rectangle
                     : (i == 2) ? cfg_f1_vrm_filet
                     : 0;
 
-    // B4: post base rounded same as post top
-
-
     // B5: auxiliary screw hole height (through lid)
     cfg_h1_h        = binary_bit_is(post_m, 5, 1) ? lid_h : 0;
 
     // B6: re-calculate defaults with each instance.
     cfg_hp_ims      = binary_bit_is(post_m, 6, 1);
 
+    // B8: total lip_h extension height (0: one, 1: both)
+    lip_h_t         = ((binary_bit_is(post_m, 8, 1) ? 1 : 0) + 1) * lip_h;
+
     // B7: post1 and post2 heights (only one extends by lip height)
-    cfg_p1_h        = (binary_bit_is(post_m, 7, 1) ? lip_h : 0) + wall_h;
-    cfg_p2_h        = (binary_bit_is(post_m, 7, 0) ? lip_h : 0) + wall_h;
+    cfg_p1_h        = (binary_bit_is(post_m, 7, 1) ? lip_h_t : 0) + wall_h;
+    cfg_p2_h        = (binary_bit_is(post_m, 7, 0) ? lip_h_t : 0) + wall_h;
 
-    // B8-9:
+    // B9: global lower-lip offset
+    post_lo = binary_bit_is(post_m, 9, 1) ? [0, 0, -lip_h] : zero3d;
 
-    // B10:
+    max_x   = first( wall_xy) - 2*(wth - eps);
+    max_y   = second(wall_xy) - 2*(wth - eps);
+    max_h   = wall_h + lip_h_t;
 
     //
     // configured configuration defaults
@@ -1333,6 +1335,7 @@ module project_box_rectangle
     }
 
     // process 'post' instance list
+    translate(post_lo)
     for (inst=inst_l)
     {
       inst_t    = defined_e_or(inst, 0, inst);        // type
