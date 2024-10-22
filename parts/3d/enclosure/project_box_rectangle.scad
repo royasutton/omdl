@@ -64,7 +64,7 @@
                 (v1r=v2r=v3r=v4r).
 
   \param  vrm   <integer-list-4 | integer> wall corner rounding mode =
-                {0:none, 1:round, 2:bevel}; a list [v1rm, v2rm, v3rm,
+                {0:none, 1:bevel, 2:round}; a list [v1rm, v2rm, v3rm,
                 v4rm] or a single decimal for (v1rm=v2rm=v3rm=v4rm).
 
   \param  inset <decimal-list-2 | decimal> wall-to-lid negative offset;
@@ -132,9 +132,9 @@
     value or may be assigned the value \b undef to use the calculated
     default as demonstrated below.
 
-    \code{.C}
-    partial_config = [ 12.42, [1,2], [2,1], 0, [1,2], 31, [1,2,3], 0 ];
-       full_config = [ undef, undef, undef, 2, undef, 31 ];
+    \code
+      partial_config = [ 12.42, [1,2], [2,1], 0, [1,2], 31, [1,2,3], 0 ];
+         full_config = [ undef, undef, undef, 2, undef, 31 ];
     \endcode
 
     ## Rounding and extrusions
@@ -187,7 +187,7 @@
 
     #### lip[0]: mode
 
-    Value is a bit-encoded integer.
+    Integer value is binary encoded.
 
       b | description
     ---:|:---------------------------------------
@@ -237,7 +237,7 @@
 
     #### rib[0]: mode
 
-    Value is a bit-encoded integer.
+    Integer value is binary encoded.
 
       b | description
     ---:|:---------------------------------------
@@ -247,7 +247,7 @@
       3 | no ribs on the x-negative wall
       4 | no ribs on the y-negative wall
     5-6 | lip coverage count (2-bit encoded integer)
-      7 | align ribs to bottom of lower lips
+      7 | offset all ribs to bottom of lower lip
 
     #### rib[1]: base and height extrusion
 
@@ -295,14 +295,32 @@
 
     ##### wall[0]: configuration[0]: mode
 
-    Value is a bit-encoded integer.
+    Integer value is binary encoded.
 
       b | description
     ---:|:---------------------------------------
-    0-1 | wall end rounding {0:none, 1:fillet, 2:bevel, 3:round}
-    2-3 | wall extrusion rounding {0:none, 1:top, 2:base, 3:both}
-    4-5 | wall on lips {0:none, 1:one, 2:both}
-      6 | wall offset to bottom of lower lip
+    0-1 | wall end rounding {0:none, 1:bevel, 2:fillet, 3:round-out}
+    2-4 | wall top rounding (1)
+    5-7 | wall base rounding (1)
+    8-9 | wall on lips {0:none, 1:one, 2:both}
+     10 | offset all walls to bottom of lower lip
+
+    (1) The bits 2-4 and bits 5-7, configure the rounding mode for the
+    wall top and wall base, respectively. The 3-bits integer values are
+    indexed to the rounding options as summarized in the following
+    table:
+
+    Integer value is binary encoded.
+
+      v | wall top rounding | wall base rounding
+    ---:|:-----------------:|:-----------------:
+      0 | none              | none
+      1 | bevel-in          | bevel-in
+      2 | round-in          | round-in
+      3 | fillet-in         | fillet-in
+      4 | bevel-out         | bevel-out
+      5 | fillet-out        | fillet-out
+      6 | round-out         | round-out
 
     ##### wall[0]: configuration[1]: defaults
 
@@ -320,7 +338,7 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | integer                     | required      | type
+      0 | integer                     | required      | type {0: x-axis, 1:y-axis}
       1 | decimal-list-3:2 \| decimal | [0, 0, 0]     | move
       2 | decimal-list-3:2 \| decimal | [1, 1, 1]     | scale
       3 | decimal-list-3:1 \| decimal | [0, 0, 0]     | rotate
@@ -347,7 +365,8 @@
     widen the contact with the the adjacent surface, or at the top, to
     enhance contact or smooth its edges. Each post instance consists of
     two holes, a post with optional fins, and can be aligned, moved,
-    and rotated.
+    and rotated. The optional post fins can be either triangular or
+    rectangular in shape.
 
     #### Data structure schema:
 
@@ -355,14 +374,15 @@
     ---------------:|:----------------------------------------------
     post            | [ configuration, instances ]
     configuration   | [ mode, defaults ]
-    defaults        | [ hole0, hole1, post1, hole2, post2, fins, adjustments ]
-    (1) hole, post  | [ d, h, ho, vr, vrm ]
-    fins            | [ c, sweep-angle, w, d-scale, h-scale, vr, vrm ]
-    adjustments     | [ hole0-gap, hole1-gap, common, hole1-scale, post1-scale, hole2-scale, post2-scale ]
+    defaults        | [ hole0, hole1, post1, hole2, post2, fins0, fins1, calculation ]
+    hole, post (1)  | [ d, h, ho, da, ha, vr, vrm ]
+    fins (2)        | [ c, sweep-angle, w, d-scale, h-scale, vr, vrm ]
+    calculation     | [ hole1-mul, hole1-add, post1-mul, post1-add, hole2-mul, hole2-add, post2-mul, post2-add ]
     instances       | [ instance, instance, ..., instance ]
     instance        | [ type, align. move, rotate, hole0, hole1, post, fins ]
 
     (1) All numbered and unnumbered holes and posts utilize this form.
+    (2) All fins defaults and instances are of this form.
 
     #### Data structure fields: post
 
@@ -380,14 +400,24 @@
 
     ##### post[0]: configuration[0]: mode
 
-    Value is a bit-encoded integer.
+    Integer value is binary encoded.
 
       b | description
     ---:|:---------------------------------------
     0-1 | post rounding {0:none, 1:bevel, 2:filet}
     2-3 | fin rounding {0:none, 1:bevel, 2:filet}
-      4 | set auxiliary screw hole on opposite side of lid
-      5 | set post type that extends into lid height
+      4 | post base rounded same as top {0:opposite, 1:same}
+      5 | set auxiliary screw hole on opposite side of lid
+      6 | re-calculate defaults with each instance (1)
+      7 | post type that extends into lip height {0:normal, 1:recessed}
+      8 | lip height extension count {0:one, 1:both}
+      9 | offset all posts to bottom of lower lip
+
+
+    (1) The post and secondary hole diameter defaults are calculated as
+    shown under calculation described below. This mode bit controls
+    when the calculation is performed; either when defaults are
+    configured (b=0), or when a post instance is created (b=1).
 
     ##### post[0]: configuration[1]: defaults
 
@@ -398,69 +428,95 @@
       2 | datastruct        | (see below)       | post1; normal-post
       3 | datastruct        | (see below)       | hole2; post 2 access hole
       4 | datastruct        | (see below)       | post2; recessed-post
-      5 | datastruct        | (see below)       | fins
-      6 | datastruct        | (see below)       | adjustments
+      5 | datastruct        | (see below)       | fins0: triangular-fins
+      6 | datastruct        | (see below)       | fins1: rectangular-fins
+      7 | datastruct        | (see below)       | calculation
 
-    ##### post[0]: configuration[1]: defaults[0-4]: hole*, post*
+    ##### post[0]: configuration[1]: defaults[0]: hole0
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | decimal           | (see note)        | diameter
-      1 | decimal           | (see note)        | height
-      2 | decimal           | (see note)        | height offset
-      3 | decimal-list-4 \| decimal| (see note) | rounding radius
-      4 | integer-list-4 \| integer| (see note) | rounding mode
+      0 | decimal           | 3.25              | diameter
+      1 | decimal           | (maximum)         | height
+      2 | decimal           | 0                 | height offset
+      3 | decimal           | 0                 | diameter adjust (1)
+      4 | decimal           | 0                 | height adjust (1)
+      5 | decimal-list-4 \| decimal| 0          | rounding radius
+      6 | integer-list-4 \| integer| 0          | rounding mode
 
-    \note Attempts have been made to use reasonable defaults and
-    configurations for all holes and posts. The default values are of
-    the form outlined in the schema above. These defaults and/or their
-    calculations may be found in the source code and have variable
-    names that begin with \em def_. For example the default value for
-    hole0 diameter has the variable name \em def_h0_d. Given the
-    quantity of post-related defaults, they will not be be documented
-    here. These default values may also be observed by using the module
-    and may be overridden as necessary during use.
+    (1) The elements 3 and 4 are used for \em late adjustments to
+    diameters and heights for posts and holes. By \em late, it is meant
+    that they allow for dimension changes without affecting dependent
+    value calculations. This is useful to construct screw holes gaps or
+    for a diameter increase required for brass metal screw inserts, for
+    example. Another example is for use in post height adjustment that
+    allow clearance for circuit board mounting.
 
-    ##### post[0]: configuration[1]: defaults[5]: fins
+    ##### post[0]: configuration[1]: defaults[1-4]: hole1-2, post1-2
+
+    The default values for hole1, hole2, post1, and post2 are computed
+    according to that outlined in the defaults calculation section
+    below. The height and offsets are set based on the post height and
+    other configured requirements.
+
+    ##### post[0]: configuration[1]: defaults[5]: fins0: triangular-fins
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | integer           | 4                 | count
       1 | decimal           | 360               | distribution angle
       2 | decimal           | wth               | width
-      3 | decimal           | 1/5               | post diameter faction
-      4 | decimal           | 5/8               | post height faction
-      5 | decimal-list-3 \| decimal | \em def_f_vr  | rounding radius
-      6 | integer-list-3 \| integer | \em def_f_vrm | rounding mode
+      3 | decimal           | 1/5               | post diameter fraction
+      4 | decimal           | 5/8               | post height fraction
+      5 | decimal-list-3 \| decimal | \em def_f0_vr  | rounding radius
+      6 | integer-list-3 \| integer | \em def_f0_vrm | rounding mode
 
-    The constants \em def_f_vr and \em def_f_vrm define defaults for
+    The constants \em def_f0_vr and \em def_f0_vrm define defaults for
     fin rounding and may be overridden if needed. See the source code
     for more details.
 
-    ##### post[0]: configuration[1]: defaults[6]: adjustments
+    ##### post[0]: configuration[1]: defaults[6]: fins1: rectangular-fins
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | decimal           | 0                 | normal-post screw hole gap
-      1 | decimal           | 0                 | recessed-post screw hole gap
-      2 | decimal           | wth/2             | common; added to all post and secondary holes
-      3 | decimal           | 0                 | hole1 wall-multiplier
-      4 | decimal           | 3.0               | post1 wall-multiplier
-      5 | decimal           | 2.0               | hole2 wall-multiplier
-      6 | decimal           | 4.0               | post2 wall-multiplier
+      0 | integer           | 4                 | count
+      1 | decimal           | 360               | distribution angle
+      2 | decimal           | wth               | width
+      3 | decimal           | 1/2               | post diameter fraction
+      4 | decimal           | 1                 | post height fraction
+      5 | decimal-list-4 \| decimal | \em def_f1_vr  | rounding radius
+      6 | integer-list-4 \| integer | \em def_f1_vrm | rounding mode
 
-    The screw hole gap parameters allow for a fixed increase in size
-    for all screw holes instances without affecting the calculations or
-    other design features that depend on screw hole size. This may be
-    used to provide a common tolerance gap for all screw holes or for a
-    common hole size increase for use with brass metal screw inserts,
-    for example.
+    The constants \em def_f1_vr and \em def_f1_vrm define defaults for
+    fin rounding and may be overridden if needed. See the source code
+    for more details.
 
-    The wall-multiplier defaults allow for a convenient way to generate
-    posts and hole sizes that are scale-dependent on post screw hole
-    size. For examples, using the default values, the post2 diameter
-    would be (4.0 * \em wth), where \em wth is the configured minimum
-    wall thickness.
+    ##### post[0]: configuration[1]: defaults[7]: calculation
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | decimal           | 0                 | hole1 multiplier
+      1 | decimal           | 0                 | hole1 addition
+      2 | decimal           | 3.0               | post1 multiplier
+      3 | decimal           | wth/2             | post1 addition
+      4 | decimal           | 2.0               | hole2 multiplier
+      5 | decimal           | wth/2             | hole2 addition
+      6 | decimal           | 4.0               | post2 multiplier
+      7 | decimal           | wth/2             | post2 addition
+
+    For hole1, hole2, post1, and post2, the diameters are calculated
+    based on the following model:
+
+    \code
+      diameter = hole0 + wth * multiplier + addition
+    \endcode
+
+    where \c hole0 is the screw-hole diameter and \c wth is the
+    configured wall thickness parameter value. This allow for a simple
+    way to generate posts and holes that are dependent on the screw
+    hole diameter. The multiplier and fixed additions for each hole and
+    post may be configured to replace the values shown in the above
+    table.
 
     #### post[1]: instances
 
@@ -475,9 +531,18 @@
       6 | datastruct        | (see note)        | post
       7 | datastruct        | (see note)        | fins
 
-    \note The default values for the holes and post are set based on
-    the post type and, when not specified with an instances, are
+    \note The default values for the holes, post, and fins are set
+    based on the type and, when not specified with an instances, are
     obtained from the configured default values as described above.
+
+    ##### post[1]: instances[0]: type
+
+    Integer value is binary encoded.
+
+      b | description
+    ---:|:---------------------------------------
+      0 | post type  {0:normal, 1:recessed}
+      1 | fin type {0:triangular, 1:rectangular}
 
     ### align
 
@@ -494,32 +559,40 @@
 
       v | description
     ---:|:---------------------------------------
-      0 | center
-      1 | exterior enclosure negative x or y edge
-      2 | interior enclosure negative x or y edge
-      3 | interior enclosure positive x or y edge
-      4 | exterior enclosure positive x or y edge
+      0 | center of enclosure
+      1 | positive exterior edge of lid
+      2 | positive exterior edge of wall
+      3 | positive interior edge of wall
+      4 | negative interior edge of wall
+      5 | negative exterior edge of wall
+      6 | negative exterior edge of lid
 
     #### align[2]: z-axis alignment
 
       v | description
     ---:|:---------------------------------------
-      0 | bottom enclosure
-      1 | bottom of wall
+      0 | bottom edge of lid
+      1 | bottom edge of wall
       2 | middle of enclosure
       3 | middle of wall
-      4 | top of wall
-      5 | top of enclosure
+      4 | top edge of wall
+      5 | top edge of lip
 
     ### mode
 
-    Value is a bit-encoded integer.
+    Integer value is binary encoded.
 
       b | description
     ---:|:---------------------------------------
       0 | size is specified for enclosure interior
       1 | remove features outside of enclosure envelope
       2 | scale interior with exterior wall during extrusion
+      3 | do not limit wall rounding modes to bevel and rounded (1)
+
+    (1) When rounding mode limiting is disabled, the rounding mode
+    value, \p vrm, is no longer mapped to \em bevel or \em rounded and
+    any mode of the function polygon_round_eve_all_p() may be used to
+    round the box exterior walls and lid.
 
     \amu_define scope_id      (example_bottom)
     \amu_define title         (Project box bottom section example)
@@ -701,15 +774,6 @@ module project_box_rectangle
   // ribs
   module construct_ribs()
   {
-    /*
-      +----------------+
-      | Data Structure |
-      +----------------+
-
-      ribs = [ mode, rib:[w, hx, hy], pct:[x, y, z], number:[x, y, z] ]
-
-    */
-
     // mode
     rib_m   = defined_e_or(rib, 0, rib);
 
@@ -718,13 +782,14 @@ module project_box_rectangle
     max_y   = second(wall_xy) - 2*(wth - eps);
 
     // 'max_h' may include 0 to 2 'lip_h' (ie: one at top and bottom)
-    max_h   = wall_h + min(2, binary_iw2i(rib_m, 2, 5)) * lip_h;
+    max_h   = wall_h + min(2, binary_iw2i(rib_m, 5, 2)) * lip_h;
 
     // B7: configurable global offset (to align with lower lip)
     rib_lo  = binary_bit_is(rib_m, 7, 1) ? [0, 0, -lip_h] : zero3d;
 
-    // rib width and extrusion configuration
-    rib_edx = [[1, 1], [9/10, 1], [8/10, 1], [6/10, 1], [2/10, 1]]; // defaults
+    // rib width and extrusion configuration (semicircle)
+    rib_edx = [for (x=[0:1/get_fn(1)/2:1]) [2*sqrt(1-pow(x,2)), 1]];
+
     rib_edy = [for (e=rib_edx) reverse(e)];
 
     rib_sd  = defined_e_or(rib, 1, [ wth, [[wth, rib_edx]], [[wth, rib_edy]] ] );
@@ -833,22 +898,6 @@ module project_box_rectangle
   // interior walls
   module construct_interior_walls()
   {
-    /*
-      +----------------+
-      | Data Structure |
-      +----------------+
-
-      wall = [ config, inst-list ]
-
-      config = [ mode, defaults-list ]
-      defaults-list = [ dw, he, vr, vrm ]
-
-      inst-list = [ inst, inst, ..., inst ]
-
-      inst = [ type, move:[x,y,z], scale:[x,y,z], rotate:[x,y,z], size:[x,y], he, vr, vrm ]
-      type: { 0: horizontal, 1: vertical }
-    */
-
     // wall
     config  = defined_e_or(wall, 0, wall);
     inst_l  = defined_e_or(wall, 1, empty_lst);
@@ -860,33 +909,53 @@ module project_box_rectangle
     // set a few values early for dependent defaults
     def_dw  = defined_e_or(defs_l, 0, wth);
 
-    // B4-5: wall limits (mx, my, mz)
+    // wall limits (mx, my, mz)
     max_x   = first( wall_xy) - 2*(wth - eps);
     max_y   = second(wall_xy) - 2*(wth - eps);
 
-    // 'max_h' may include 0 to 2 'lip_h' (ie: one at top and bottom)
-    max_h   = wall_h + min(2, binary_iw2i(wall_m, 2, 4)) * lip_h;
+    // B8-9: 'max_h' may include 0 to 2 'lip_h' (ie: one at top and bottom)
+    max_h   = wall_h + min(2, binary_iw2i(wall_m, 8, 2)) * lip_h;
 
-    // B6: global lower-lip offset
-    wall_lo = binary_bit_is(wall_m, 6, 1) ? [0, 0, -lip_h] : zero3d;
+    // B10: global lower-lip offset
+    wall_lo = binary_bit_is(wall_m, 10, 1) ? [0, 0, -lip_h] : zero3d;
 
     // B0-1: default wall end rounding
-    cfg_vrm = let( i = binary_iw2i(wall_m, 2, 0) )
-                (i == 1) ? [ 3,  4, 3,  4]                  // fillet
-              : (i == 2) ? [ 9, 10, 9, 10]                  // bevel
-              : (i == 3) ? [ 7,  8, 7,  8]                  // round
+    cfg_vrm = let( i = binary_iw2i(wall_m, 0, 2) )
+                (i == 1) ? [ 9, 10, 9, 10]                  // bevel
+              : (i == 2) ? [ 3,  4, 3,  4]                  // fillet
+              : (i == 3) ? [ 7,  8, 7,  8]                  // round-out
               :  0;                                         // none
 
-    // top & base wall extrusion rounding factors (for horizontal wall)
-    cfg_rt  = [ def_dw/2, [[1, 1], [1, 90/100], [1, 50/100]] ];
-    cfg_rb  = [ def_dw/2, [[1, 1 + 25/100], [1, 1 + 7/100], [1, 1]] ];
+    // configurations for top wall extrusion rounding factors for horizontal
+    // wall using approximated semicircles with $fn segments for rounding
+    // (must reverse for bottom and reorder x/y for vertical wall).
+    cfg_wt_rm =
+    [
+      0,                                                        // none
+      [[1,1],[1,1/2]],                                          // bevel-in
+      [for (x=[0:1/get_fn(1)/2:1]) [1,sqrt(1+eps-pow(x,2))]],   // round-in
+      [for (x=[1:-1/get_fn(1)/2:1/2]) [1,1-sqrt(1-pow(x,2))]],  // fillet-in
+      [[1,1],[1,1+1/2]],                                        // bevel-out
+      [for (x=[0:1/get_fn(1)/2:1]) [1,sqrt(1+eps+pow(x,2))]],   // fillet-out
+      [for (x=[1:-1/get_fn(1)/2:1/2]) [1,1+sqrt(1-pow(x,2))]],  // round-out
+    ];
 
-    // B2-3: default wall extrusion rounding
-    cfg_he = let( i = binary_iw2i(wall_m, 2, 2) )
-                (i == 1) ? [max_h - def_dw/2, cfg_rt]       // top
-              : (i == 2) ? [cfg_rb, max_h - def_dw/2]       // base
-              : (i == 3) ? [cfg_rb, max_h - def_dw, cfg_rt] // top & base
-              :  max_h;                                     // none
+    // B2-4: wall top rounding
+    wt_rm_i = binary_iw2i(wall_m, 2, 3);
+    s_wt_rm = select_ci( cfg_wt_rm, wt_rm_i, true );
+    cfg_rt  = [def_dw/2, s_wt_rm];
+
+    // B5-7: wall base rounding
+    wb_rm_i = binary_iw2i(wall_m, 5, 3);
+    s_wb_rm = select_ci( cfg_wt_rm, wb_rm_i, true );
+    cfg_rb  = [def_dw/2, reverse(s_wb_rm)];
+
+    // default height extrusion configuration
+    cfg_he =
+      (wt_rm_i  > 0 && wb_rm_i == 0) ? [max_h - def_dw/2, cfg_rt]       // top only
+    : (wt_rm_i == 0 && wb_rm_i  > 0) ? [cfg_rb, max_h - def_dw/2]       // base only
+    : (wt_rm_i  > 0 && wb_rm_i  > 0) ? [cfg_rb, max_h - def_dw, cfg_rt] // both
+    :  max_h;                                                           // neither
 
     // configured configuration defaults
     def_he  = defined_e_or(defs_l, 1, cfg_he);
@@ -1003,26 +1072,6 @@ module project_box_rectangle
   // posts and screw holes
   module construct_posts( add=false, remove=false )
   {
-    /*
-      +----------------+
-      | Data Structure |
-      +----------------+
-
-      post = [ config, inst-list ]
-
-      config = [ mode, defaults-list ]
-      mode = [ b0:post-rnd, b1:fin-rnd, b2:h0-thru-lid, b3:lip_h-posts ]
-      defaults-list = [ hole0, hole1, post1, hole2, post2, fins, hp-dd ]
-      hole | post = [ d, h, ho, vr, vrm ]
-      fins = [ c, da, w, d-sf, h-sf, vr, vrm ]
-      hp-dd = [g-t0, g-t1, c-d, h1-dd, p1-dd, h2-dd, p2-dd ]
-
-      inst-list = [ inst, inst, ..., inst ]
-      inst = [  type:{0, 1}, align:[x,y,z], move:[x,y,z], rotate:[x,y,z],
-                hole0, hole1, post, fins ]
-      type: { 0: normal, 1: recessed }
-    */
-
     // post
     config  = defined_e_or(post, 0, post);
     inst_l  = defined_e_or(post, 1, empty_lst);
@@ -1031,38 +1080,59 @@ module project_box_rectangle
     post_m  = defined_e_or(config, 0, config);
     defs_l  = defined_e_or(config, 1, empty_lst);
 
-    max_x   = first( wall_xy) - 2*(wth - eps);
-    max_y   = second(wall_xy) - 2*(wth - eps);
-    max_h   = wall_h;
+    // B4: post base rounded same as post top
+    cfg_rbst        = binary_bit_is(post_m, 4, 1);
 
-    // rounding configuration constants
-    cfg_p_vrm_filet = [0, 1, 4, 0];
-    cfg_p_vrm_bevel = [0, 5, 10, 0];
-    cfg_p_vr_sf     = [0, 1/2, 3/2, 0];
+    // rounding constant configurations
+    cfg_p_vr_sf     = (cfg_rbst == true) ? [0, 1/2, 1/2, 0] : [0, 1/2, 3/2, 0];
+    cfg_p_vrm_filet = (cfg_rbst == true) ? [0, 1, 1, 0] : [0, 1, 4, 0];
+    cfg_p_vrm_bevel = (cfg_rbst == true) ? [0, 5, 5, 0] : [0, 5, 10, 0];
 
-    cfg_f_vrm_filet = [4, 0, 3];
-    cfg_f_vrm_bevel = [10, 0, 9];
-    cfg_f_vr_sf     = [2, 0, 1];
+    cfg_f0_vr_sf     = [2, 0, 1];
+    cfg_f0_vrm_filet = [4, 0, 3];
+    cfg_f0_vrm_bevel = [10, 0, 9];
+
+    cfg_f1_vr_sf     = [0, 1, 1, 0];
+    cfg_f1_vrm_filet = [0, 4, 3, 0];
+    cfg_f1_vrm_bevel = [0, 10, 9, 0];
 
     // mode dependent configuration
     // B0-1: post rounding mode
-    cfg_p_vrm       = let( i = binary_iw2i(post_m, 2, 0) )
+    cfg_p_vrm       = let( i = binary_iw2i(post_m, 0, 2) )
                       (i == 1) ? cfg_p_vrm_bevel
                     : (i == 2) ? cfg_p_vrm_filet
                     : 0;
 
     // B2-3: fin rounding mode
-    cfg_f_vrm       = let( i = binary_iw2i(post_m, 2, 2) )
-                      (i == 1) ? cfg_f_vrm_bevel
-                    : (i == 2) ? cfg_f_vrm_filet
+    cfg_f0_vrm      = let( i = binary_iw2i(post_m, 2, 2) )
+                      (i == 1) ? cfg_f0_vrm_bevel
+                    : (i == 2) ? cfg_f0_vrm_filet
                     : 0;
 
-    // B4: auxiliary screw hole through lid
-    cfg_h0          = binary_bit_is(post_m, 4, 1) ? lid_h : 0;
+    cfg_f1_vrm      = let( i = binary_iw2i(post_m, 2, 2) )
+                      (i == 1) ? cfg_f1_vrm_bevel
+                    : (i == 2) ? cfg_f1_vrm_filet
+                    : 0;
 
-    // b5: which post type intends into lid (maintain inverse bit value)
-    cfg_p1_lip_h    = binary_bit_is(post_m, 5, 1) ? lip_h : 0;
-    cfg_p2_lip_h    = binary_bit_is(post_m, 5, 0) ? lip_h : 0;
+    // B5: auxiliary screw hole height (through lid)
+    cfg_h1_h        = binary_bit_is(post_m, 5, 1) ? lid_h : 0;
+
+    // B6: re-calculate defaults with each instance.
+    cfg_hp_idr      = binary_bit_is(post_m, 6, 1);
+
+    // B8: total lip_h extension height (0: one, 1: both)
+    lip_h_t         = ((binary_bit_is(post_m, 8, 1) ? 1 : 0) + 1) * lip_h;
+
+    // B7: post1 and post2 heights (only one extends by lip height)
+    cfg_p1_h        = (binary_bit_is(post_m, 7, 1) ? lip_h_t : 0) + wall_h;
+    cfg_p2_h        = (binary_bit_is(post_m, 7, 0) ? lip_h_t : 0) + wall_h;
+
+    // B9: global lower-lip offset
+    post_lo = binary_bit_is(post_m, 9, 1) ? [0, 0, -lip_h] : zero3d;
+
+    max_x   = first( wall_xy) - 2*(wth - eps);
+    max_y   = second(wall_xy) - 2*(wth - eps);
+    max_h   = wall_h + lip_h_t;
 
     //
     // configured configuration defaults
@@ -1073,65 +1143,91 @@ module project_box_rectangle
     def_p1      = defined_e_or(defs_l, 2, empty_lst);
     def_h2      = defined_e_or(defs_l, 3, empty_lst);
     def_p2      = defined_e_or(defs_l, 4, empty_lst);
-    def_f       = defined_e_or(defs_l, 5, empty_lst);
-
-    def_hp_dd   = defined_e_or(defs_l, 6, empty_lst);
-
-    // late-bound diameters dependent hole size; relative to 'def_h0_d'
-
-    // screw hole gaps: size augmentation for normal and recess holes
-    def_h0_0_gd = defined_e_or(def_hp_dd, 0, 0);
-    def_h0_1_gd = defined_e_or(def_hp_dd, 1, 0);
-
-    // common addition to all posts and secondary holes
-    def_hp_cd   = defined_e_or(def_hp_dd, 2, wth/2);
-
-    def_h1_dd   = defined_e_or(def_hp_dd, 3, 0.0) * wth + def_hp_cd;
-    def_p1_dd   = defined_e_or(def_hp_dd, 4, 3.0) * wth + def_hp_cd;
-    def_h2_dd   = defined_e_or(def_hp_dd, 5, 2.0) * wth + def_hp_cd;
-    def_p2_dd   = defined_e_or(def_hp_dd, 6, 4.0) * wth + def_hp_cd;
+    def_f0      = defined_e_or(defs_l, 5, empty_lst);
+    def_f1      = defined_e_or(defs_l, 6, empty_lst);
+    def_dc      = defined_e_or(defs_l, 7, empty_lst);
 
     // hole0: normal & recessed screw common hole
     def_h0_d    = defined_e_or(def_h0, 0, 3.25);
-    def_h0_h    = defined_e_or(def_h0, 1, max_h + lip_h - wth*2);
-    def_h0_ho   = defined_e_or(def_h0, 2, wth*2);
-    def_h0_vr   = defined_e_or(def_h0, 3, 0);
-    def_h0_vrm  = defined_e_or(def_h0, 4, 0);
+    def_h0_h    = defined_e_or(def_h0, 1, max_h);
+    def_h0_ho   = defined_e_or(def_h0, 2, 0);
+    def_h0_da   = defined_e_or(def_h0, 3, 0);
+    def_h0_ha   = defined_e_or(def_h0, 4, 0);
+    def_h0_vr   = defined_e_or(def_h0, 5, 0);
+    def_h0_vrm  = defined_e_or(def_h0, 6, 0);
+
+    //
+    // default diameter calculations based on hole0
+    //
+    def_h1_d_c  = def_h0_d
+                + defined_e_or(def_dc, 0, 0.0) * wth
+                + defined_e_or(def_dc, 1, 0);
+
+    def_p1_d_c  = def_h0_d
+                + defined_e_or(def_dc, 2, 3.0) * wth
+                + defined_e_or(def_dc, 3, wth/2);
+
+    def_h2_d_c  = def_h0_d
+                + defined_e_or(def_dc, 4, 2.0) * wth
+                + defined_e_or(def_dc, 5, wth/2);
+
+    def_p2_d_c  = def_h0_d
+                + defined_e_or(def_dc, 6, 4.0) * wth
+                + defined_e_or(def_dc, 7, wth/2);
 
     // hole1: normal thru lid hole
-    //def_h1_d  = defined_e_or(def_h1, 0, def_h0_d + def_h1_dd);
-    def_h1_h    = defined_e_or(def_h1, 1, cfg_h0);
-    def_h1_ho   = defined_e_or(def_h1, 2, -cfg_h0);
-    def_h1_vr   = defined_e_or(def_h1, 3, 0);
-    def_h1_vrm  = defined_e_or(def_h1, 4, 0);
+    def_h1_d    = defined_e_or(def_h1, 0, def_h1_d_c);
+    def_h1_h    = defined_e_or(def_h1, 1, cfg_h1_h);
+    def_h1_ho   = defined_e_or(def_h1, 2, -cfg_h1_h);
+    def_h1_da   = defined_e_or(def_h1, 3, 0);
+    def_h1_ha   = defined_e_or(def_h1, 4, 0);
+    def_h1_vr   = defined_e_or(def_h1, 5, 0);
+    def_h1_vrm  = defined_e_or(def_h1, 6, 0);
+
     // post1: normal mount post
-    //def_p1_d  = defined_e_or(def_p1, 0, def_h0_d  + def_p1_dd);
-    def_p1_h    = defined_e_or(def_p1, 1, max_h + cfg_p1_lip_h);
+    def_p1_d    = defined_e_or(def_p1, 0, def_p1_d_c);
+    def_p1_h    = defined_e_or(def_p1, 1, cfg_p1_h);
     def_p1_ho   = defined_e_or(def_p1, 2, 0);
-    def_p1_vr   = defined_e_or(def_p1, 3, cfg_p_vr_sf * wth);
-    def_p1_vrm  = defined_e_or(def_p1, 4, cfg_p_vrm);
+    def_p1_da   = defined_e_or(def_p1, 3, 0);
+    def_p1_ha   = defined_e_or(def_p1, 4, 0);
+    def_p1_vr   = defined_e_or(def_p1, 5, cfg_p_vr_sf * wth);
+    def_p1_vrm  = defined_e_or(def_p1, 6, cfg_p_vrm);
 
     // hole2: recessed access hole thru lid
-    //def_h2_d  = defined_e_or(def_h2, 0, def_h0_d  + def_h2_dd);
-    def_h2_h    = defined_e_or(def_h2, 1, max_h + cfg_p2_lip_h + lid_h - wth*2);
+    def_h2_d    = defined_e_or(def_h2, 0, def_h2_d_c);
+    def_h2_h    = defined_e_or(def_h2, 1, cfg_p2_h);
     def_h2_ho   = defined_e_or(def_h2, 2, -lid_h);
-    def_h2_vr   = defined_e_or(def_h2, 3, cfg_p_vr_sf * wth/2);
-    def_h2_vrm  = defined_e_or(def_h2, 4, cfg_p_vrm);
-    // post2: recessed access post
-    //def_p2_d  = defined_e_or(def_p2, 0, def_h0_d  + def_p2_dd);
-    def_p2_h    = defined_e_or(def_p2, 1, max_h + cfg_p2_lip_h);
-    def_p2_ho   = defined_e_or(def_p2, 2, 0);
-    def_p2_vr   = defined_e_or(def_p2, 3, cfg_p_vr_sf * wth);
-    def_p2_vrm  = defined_e_or(def_p2, 4, cfg_p_vrm);
+    def_h2_da   = defined_e_or(def_h2, 3, 0);
+    def_h2_ha   = defined_e_or(def_h2, 4, 0);
+    def_h2_vr   = defined_e_or(def_h2, 5, cfg_p_vr_sf * wth/2);
+    def_h2_vrm  = defined_e_or(def_h2, 6, cfg_p_vrm);
 
-    // post fins
-    def_f_c     = defined_e_or(def_f, 0, 4);
-    def_f_da    = defined_e_or(def_f, 1, 360);
-    def_f_w     = defined_e_or(def_f, 2, wth);
-    def_f_d_sf  = defined_e_or(def_f, 3, 1/5);
-    def_f_h_sf  = defined_e_or(def_f, 4, 5/8);
-    def_f_vr    = defined_e_or(def_f, 5, cfg_f_vr_sf * wth);
-    def_f_vrm   = defined_e_or(def_f, 6, cfg_f_vrm);
+    // post2: recessed access post
+    def_p2_d    = defined_e_or(def_p2, 0, def_p2_d_c);
+    def_p2_h    = defined_e_or(def_p2, 1, cfg_p2_h);
+    def_p2_ho   = defined_e_or(def_p2, 2, 0);
+    def_p2_da   = defined_e_or(def_p2, 3, 0);
+    def_p2_ha   = defined_e_or(def_p2, 4, 0);
+    def_p2_vr   = defined_e_or(def_p2, 5, cfg_p_vr_sf * wth);
+    def_p2_vrm  = defined_e_or(def_p2, 6, cfg_p_vrm);
+
+    // fins0: triangular fins
+    def_f0_c    = defined_e_or(def_f0, 0, 4);
+    def_f0_da   = defined_e_or(def_f0, 1, 360);
+    def_f0_w    = defined_e_or(def_f0, 2, wth);
+    def_f0_d_sf = defined_e_or(def_f0, 3, 1/5);
+    def_f0_h_sf = defined_e_or(def_f0, 4, 5/8);
+    def_f0_vr   = defined_e_or(def_f0, 5, cfg_f0_vr_sf * wth);
+    def_f0_vrm  = defined_e_or(def_f0, 6, cfg_f0_vrm);
+
+    // fins1: rectangular fins
+    def_f1_c    = defined_e_or(def_f1, 0, 4);
+    def_f1_da   = defined_e_or(def_f1, 1, 360);
+    def_f1_w    = defined_e_or(def_f1, 2, wth);
+    def_f1_d_sf = defined_e_or(def_f1, 3, 1/2);
+    def_f1_h_sf = defined_e_or(def_f1, 4, 1);
+    def_f1_vr   = defined_e_or(def_f1, 5, cfg_f1_vr_sf * wth);
+    def_f1_vrm  = defined_e_or(def_f1, 6, cfg_f1_vrm);
 
     //
     //
@@ -1139,51 +1235,92 @@ module project_box_rectangle
     //
     //
 
-    // construct a cylinder with optional fins
-    module cylinder_fins
-    (
-      en,
-      d, h, vr, vrm, ho,
-      fc=0, fda, fw, fdsf=1, fhsf=1, fvr, fvrm,
-      eps=0
-    )
+    // construct fins around a cylinder
+    module construct_fins(d, h, t, f)
     {
-      module post_fins(d, c, da, w, b, h, vr, vrm)
+      c = defined_e_or(f, 0, 0);
+
+      // move distance for fin to always contact polygon cylinder
+      function fin_embed(r, w) =
+        let
+        (
+          n = get_fn(r),
+          d = polygon_regular_perimeter(n, r) / n
+        )
+        r - sqrt( pow(r,2) - pow(w/2, 2) - pow(d/2, 2) );
+
+      if ( c > 0 )
       {
+        da  = f[1];
+        w   = f[2];
+        df  = f[3];
+        hf  = f[4];
+        vr  = f[5];
+        vrm = f[6];
+
+        b   = d * df;
+        l   = h * hf;
+
         if (verb > 2)
-          echo(strl(["post-inst-fins: [d, c, da, w, b, h, vr, vrm] = ",
-                      [d, c, da, w, b, h, vr, vrm]]));
+          echo(strl(["post-inst-fins: [d, h, t, f] = ", [d, h, t, f]]));
 
-        for (i = [0:c-1])
+        f_in = fin_embed(d/2, w);
+
+        // triangular fins
+        if ( t == 0 )
         {
-          rotate([90, 0, da/c * i + 180])
-          translate([-d/2 - b, 0, 0])
-          extrude_linear_mss(w, center=true)
-          pg_triangle_sas([h, 90, b], vr=vr, vrm=vrm);
+          for (i = [0:c-1])
+          {
+            rotate([90, 0, da/c * i + 180])
+            translate([-d/2 - b + f_in, 0, 0])
+            extrude_linear_mss(w, center=true)
+            pg_triangle_sas([l, 90, b], vr=vr, vrm=vrm);
+          }
         }
-      }
 
+        // rectangular fins
+        if ( t == 1 )
+        {
+          for (i = [0:c-1])
+          {
+            rotate([0, 0, da/c * i + 180])
+            translate([b/2 + d/2 - f_in, 0, 0])
+            extrude_linear_mss(l)
+            pg_rectangle( [b, w], vr=vr, vrm=vrm, center=true);
+          }
+        }
+
+      }
+    }
+
+    // construct a cylinder with optional fins
+    module construct_cylinder ( en, c, ft, f, eps=0 )
+    {
       if (en == true)
       {
+        d     = c[0];
+        h     = c[1];
+        ho    = c[2];
+        da    = c[3];
+        ha    = c[4];
+        vr    = c[5];
+        vrm   = c[6];
+
         if (verb > 2)
-          echo(strl(["post-inst-cylinder: [d, h, vr, vrm, ho, fc, eps] = ",
-                      [d, h, vr, vrm, ho, fc, eps]]));
+          echo(strl(["post-inst-cylinder: [c, eps] = ", [c, eps]]));
 
         translate([0, 0, ho - eps/2])
         {
+          // late adjustments
+          d_adj = d + da;
+          h_adj = h + ha;
+
           rotate_extrude()
-          pg_rectangle([d/2, h + eps], vr=vr, vrm=vrm);
+          pg_rectangle([d_adj/2, h_adj + eps], vr=vr, vrm=vrm);
 
-          if ( fc > 0 )
-          {
-            fb    = d * fdsf;
-            fh    = h * fhsf;
-
-            post_fins(d, fc, fda, fw, fb, fh, fvr, fvrm);
-          }
+          construct_fins(d_adj, h_adj, ft, f);
         }
       }
-
     }
 
     // pre-processing message
@@ -1198,9 +1335,11 @@ module project_box_rectangle
     }
 
     // process 'post' instance list
+    translate(post_lo)
     for (inst=inst_l)
     {
-      inst_t    = defined_e_or(inst, 0, inst);        // type {0, 1}
+      inst_t    = defined_e_or(inst, 0, inst);        // type
+
       inst_a    = defined_e_or(inst, 1, undef);       // align [x, y, z]
       inst_m    = defined_e_or(inst, 2, zero3d);      // move [x, y, z]
       inst_r    = defined_e_or(inst, 3, zero3d);      // rotate [x, y, z]
@@ -1208,6 +1347,7 @@ module project_box_rectangle
       inst_h0   = defined_e_or(inst, 4, undef);       // hole0
       inst_h1   = defined_e_or(inst, 5, undef);       // hole1
       inst_p    = defined_e_or(inst, 6, undef);       // post
+
       inst_f    = defined_e_or(inst, 7, undef);       // fins
 
       // alignment
@@ -1224,27 +1364,45 @@ module project_box_rectangle
       inst_zz   = ( binary_bit_is(inst_az, 0, 0) ? 0 : -lid_h );
 
       //
-      // default value updates based on post type: (0=normal, 1=recessed)
+      // default value updates based on types
       //
 
+      // B0: post-type
+      inst_pt     = binary_iw2i(inst_t, 0, 1);
+
       // hole0:
-      tdef_h0_gd  = (inst_t == 0) ? def_h0_0_gd : def_h0_1_gd;
 
       // hole1:
-      tdef_h_dd   = (inst_t == 0) ? def_h1_dd : def_h2_dd;
-      //tdef_h1_d = (inst_t == 0) ? def_h1_d : def_h2_d;
-      tdef_h1_h   = (inst_t == 0) ? def_h1_h : def_h2_h;
-      tdef_h1_ho  = (inst_t == 0) ? def_h1_ho : def_h2_ho;
-      tdef_h1_vr  = (inst_t == 0) ? def_h1_vr : def_h2_vr;
-      tdef_h1_vrm = (inst_t == 0) ? def_h1_vrm : def_h2_vrm;
+      tdef_h1_d_c = (inst_pt == 0) ? def_h1_d_c : def_h2_d_c;
+      tdef_h1_d   = (inst_pt == 0) ? def_h1_d : def_h2_d;
+      tdef_h1_h   = (inst_pt == 0) ? def_h1_h : def_h2_h;
+      tdef_h1_ho  = (inst_pt == 0) ? def_h1_ho : def_h2_ho;
+      tdef_h1_da  = (inst_pt == 0) ? def_h1_da : def_h2_da;
+      tdef_h1_ha  = (inst_pt == 0) ? def_h1_ha : def_h2_ha;
+      tdef_h1_vr  = (inst_pt == 0) ? def_h1_vr : def_h2_vr;
+      tdef_h1_vrm = (inst_pt == 0) ? def_h1_vrm : def_h2_vrm;
 
       // post:
-      tdef_p_dd   = (inst_t == 0) ? def_p1_dd : def_p2_dd;
-      //tdef_p_d  = (inst_t == 0) ? def_p1_d : def_p2_d;
-      tdef_p_h    = (inst_t == 0) ? def_p1_h : def_p2_h;
-      tdef_p_ho   = (inst_t == 0) ? def_p1_ho : def_p2_ho;
-      tdef_p_vr   = (inst_t == 0) ? def_p1_vr : def_p2_vr;
-      tdef_p_vrm  = (inst_t == 0) ? def_p1_vrm : def_p2_vrm;
+      tdef_p_d_c  = (inst_pt == 0) ? def_p1_d_c : def_p2_d_c;
+      tdef_p_d    = (inst_pt == 0) ? def_p1_d : def_p2_d;
+      tdef_p_h    = (inst_pt == 0) ? def_p1_h : def_p2_h;
+      tdef_p_ho   = (inst_pt == 0) ? def_p1_ho : def_p2_ho;
+      tdef_p_da   = (inst_pt == 0) ? def_p1_da : def_p2_da;
+      tdef_p_ha   = (inst_pt == 0) ? def_p1_ha : def_p2_ha;
+      tdef_p_vr   = (inst_pt == 0) ? def_p1_vr : def_p2_vr;
+      tdef_p_vrm  = (inst_pt == 0) ? def_p1_vrm : def_p2_vrm;
+
+      // B1: fins-type
+      inst_ft     = binary_iw2i(inst_t, 1, 1);
+
+      // fins:
+      tdef_f_c    = (inst_ft == 0) ? def_f0_c : def_f1_c;
+      tdef_f_da   = (inst_ft == 0) ? def_f0_da : def_f1_da;
+      tdef_f_w    = (inst_ft == 0) ? def_f0_w : def_f1_w;
+      tdef_f_d_sf = (inst_ft == 0) ? def_f0_d_sf : def_f1_d_sf;
+      tdef_f_h_sf = (inst_ft == 0) ? def_f0_h_sf : def_f1_h_sf;
+      tdef_f_vr   = (inst_ft == 0) ? def_f0_vr : def_f1_vr;
+      tdef_f_vrm  = (inst_ft == 0) ? def_f0_vrm : def_f1_vrm;
 
       //
       // assign defaults when not specified with post instance
@@ -1256,36 +1414,54 @@ module project_box_rectangle
       h0_d    = defined_e_or(inst_h0, 0, def_h0_d);
       h0_h    = defined_e_or(inst_h0, 1, def_h0_h);
       h0_ho   = defined_e_or(inst_h0, 2, def_h0_ho);
-      h0_vr   = defined_e_or(inst_h0, 3, def_h0_vr);
-      h0_vrm  = defined_e_or(inst_h0, 4, def_h0_vrm);
+      h0_da   = defined_e_or(inst_h0, 3, def_h0_da);
+      h0_ha   = defined_e_or(inst_h0, 4, def_h0_ha);
+      h0_vr   = defined_e_or(inst_h0, 5, def_h0_vr);
+      h0_vrm  = defined_e_or(inst_h0, 6, def_h0_vrm);
 
-      h0_dwg  = h0_d + tdef_h0_gd;    // screw hole with gap
+      h0      = [h0_d, h0_h, h0_ho, h0_da, h0_ha, h0_vr, h0_vrm];
 
-      // hole1: thru lid hole
+      //
+      // assign hole and post defaults based on selected mode 'cfg_hp_idr'
+      //
+      tdef_h1_ims = (cfg_hp_idr == true) ? h0_d + tdef_h1_d_c : tdef_h1_d;
+      tdef_p_ims  = (cfg_hp_idr == true) ? h0_d + tdef_p_d_c : tdef_p_d;
+
+      // hole1: aux screw hole or thru lid access hole
       h1_en  = (remove == true);
 
-      h1_d    = defined_e_or(inst_h1, 0, h0_d + tdef_h_dd);
+      h1_d    = defined_e_or(inst_h1, 0, tdef_h1_ims);
       h1_h    = defined_e_or(inst_h1, 1, tdef_h1_h);
       h1_ho   = defined_e_or(inst_h1, 2, tdef_h1_ho);
-      h1_vr   = defined_e_or(inst_h1, 3, tdef_h1_vr);
-      h1_vrm  = defined_e_or(inst_h1, 4, tdef_h1_vrm);
+      h1_da   = defined_e_or(inst_h1, 3, tdef_h1_da);
+      h1_ha   = defined_e_or(inst_h1, 4, tdef_h1_ha);
+      h1_vr   = defined_e_or(inst_h1, 5, tdef_h1_vr);
+      h1_vrm  = defined_e_or(inst_h1, 6, tdef_h1_vrm);
+
+      h1      = [h1_d, h1_h, h1_ho, h1_da, h1_ha, h1_vr, h1_vrm];
 
       // post: post and fins
       p_en   = (add == true);
 
-      p_d     = defined_e_or(inst_p, 0, h0_d + tdef_p_dd);
-      p_h     = defined_e_or(inst_p, 0, tdef_p_h);
-      p_ho    = defined_e_or(inst_p, 0, tdef_p_ho);
-      p_vr    = defined_e_or(inst_p, 0, tdef_p_vr);
-      p_vrm   = defined_e_or(inst_p, 0, tdef_p_vrm);
+      p_d     = defined_e_or(inst_p, 0, tdef_p_ims);
+      p_h     = defined_e_or(inst_p, 1, tdef_p_h);
+      p_ho    = defined_e_or(inst_p, 2, tdef_p_ho);
+      p_da    = defined_e_or(inst_p, 3, tdef_p_da);
+      p_ha    = defined_e_or(inst_p, 4, tdef_p_ha);
+      p_vr    = defined_e_or(inst_p, 5, tdef_p_vr);
+      p_vrm   = defined_e_or(inst_p, 6, tdef_p_vrm);
 
-      f_c     = defined_e_or(inst_f, 0, def_f_c);
-      f_da    = defined_e_or(inst_f, 1, def_f_da);
-      f_w     = defined_e_or(inst_f, 2, def_f_w);
-      f_d_sf  = defined_e_or(inst_f, 3, def_f_d_sf);
-      f_h_sf  = defined_e_or(inst_f, 4, def_f_h_sf);
-      f_vr    = defined_e_or(inst_f, 5, def_f_vr);
-      f_vrm   = defined_e_or(inst_f, 6, def_f_vrm);
+      p       = [p_d, p_h, p_ho, p_da, p_ha, p_vr, p_vrm];
+
+      f_c     = defined_e_or(inst_f, 0, tdef_f_c);
+      f_da    = defined_e_or(inst_f, 1, tdef_f_da);
+      f_w     = defined_e_or(inst_f, 2, tdef_f_w);
+      f_d_sf  = defined_e_or(inst_f, 3, tdef_f_d_sf);
+      f_h_sf  = defined_e_or(inst_f, 4, tdef_f_h_sf);
+      f_vr    = defined_e_or(inst_f, 5, tdef_f_vr);
+      f_vrm   = defined_e_or(inst_f, 6, tdef_f_vrm);
+
+      f       = [f_c, f_da, f_w, f_d_sf, f_h_sf, f_vr, f_vrm];
 
       //
       // construct post instance
@@ -1296,10 +1472,10 @@ module project_box_rectangle
       rotate(inst_r)
       union()
       {
-        cylinder_fins(p_en, p_d, p_h, p_vr, p_vrm, p_ho, f_c, f_da, f_w, f_d_sf, f_h_sf, f_vr, f_vrm);
+        construct_cylinder(p_en, p, inst_ft, f);
 
-        cylinder_fins(h0_en, h0_dwg, h0_h, h0_vr, h0_vrm, h0_ho, eps=10*eps);
-        cylinder_fins(h1_en, h1_d,   h1_h, h1_vr, h1_vrm, h1_ho, eps=10*eps);
+        construct_cylinder(h0_en, h0, eps=10*eps);
+        construct_cylinder(h1_en, h1, eps=10*eps);
       }
 
       if (verb > 1)
@@ -1402,6 +1578,7 @@ module project_box_rectangle
   mode_size_in  = binary_bit_is(mode, 0, 1);
   mode_int_mask = binary_bit_is(mode, 1, 1);
   mode_scale_io = binary_bit_is(mode, 2, 1);
+  mode_lmt_vrm  = binary_bit_is(mode, 3, 0);
 
   // specified wall extrusion height
   // calculate total extrusion 'h_h' height of all sections
@@ -1412,11 +1589,12 @@ module project_box_rectangle
   size_x        = defined_e_or(size, 0, size);
   size_y        = defined_e_or(size, 1, size_x);
 
-  // limit rounding mode to those options that make sense; set={0, 1, 5}
+  // limit rounding mode to those options that make sense; set={0, 5, 1}
   // limit each element when 'vrm' is a list
-  vrm_ci        = is_list(vrm) ?
-                  [for (e=vrm) select_ci(v=[0, 1, 5], i=e, l=false)]
-                : select_ci(v=[0, 1, 5], i=vrm, l=false);
+  vrm_ci        = (mode_lmt_vrm == false) ? vrm
+                : is_list(vrm) ?
+                  [for (e=vrm) select_ci(v=[0, 5, 1], i=e, l=false)]
+                : select_ci(v=[0, 5, 1], i=vrm, l=false);
 
   // wall lip default height (set to zero when there is no lip)
   // 'lip_h', bit '1', is set globally (ensure coherency with bits of 'lip')
@@ -1450,6 +1628,8 @@ module project_box_rectangle
 
   if (verb > 0)
   {
+    echo(strl(["box: construction begin"]));
+
     echo(strl(["box: exterior dimensions [x, y, z] = ", [encl_x, encl_y, encl_z]]));
     echo(strl(["box: interior dimensions [x, y, z] = ", [szint_x, szint_y, szint_z]]));
   }
@@ -1460,20 +1640,29 @@ module project_box_rectangle
   //
   //
 
-  align_x = select_ci ( [0, -encl_x, -szint_x, +szint_x, +encl_x ]/2,
-                        defined_e_or(align, 0, 0), false );
+  alignments =
+  [
+    [0, -encl_x, -szint_x -wth*2, -szint_x, +szint_x, +szint_x +wth*2, +encl_x ]/2,
+    [0, -encl_y, -szint_y -wth*2, -szint_y, +szint_y, +szint_y +wth*2, +encl_y ]/2,
+    [lid_h, 0, lid_h -encl_z/2, -wall_h/2, -wall_h, -wall_h -lip_h]
+  ];
 
-  align_y = select_ci ( [0, -encl_y, -szint_y, +szint_y, +encl_y ]/2,
-                        defined_e_or(align, 1, 0), false );
-
-  align_z = select_ci ( [lid_h, 0, lid_h -encl_z/2, -wall_h/2, -wall_h, -wall_h -lip_h],
-                        defined_e_or(align, 2, 0), false );
+  align_x = select_ci ( alignments.x, defined_e_or(align, 0, 0), false );
+  align_y = select_ci ( alignments.y, defined_e_or(align, 1, 0), false );
+  align_z = select_ci ( alignments.z, defined_e_or(align, 2, 0), false );
 
   translate([align_x, align_y, align_z])
   difference()
   {
     assembly_add();
     assembly_remove();
+  }
+
+  if (verb > 0)
+  {
+    echo(strl(["box: alignment [x, y, z] = ", [align_x, align_y, align_z]]));
+
+    echo(strl(["box: construction end"]));
   }
 }
 

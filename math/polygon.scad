@@ -229,7 +229,7 @@ function polygon_line_p
     coincident to \p v2. When vectors \p v1 and \p v2 are parallel, the
     arc will be a complete circle.
 
-  [facets]: \ref openscad_fn()
+  [facets]: \ref get_fn()
 *******************************************************************************/
 function polygon_arc_p
 (
@@ -243,7 +243,7 @@ function polygon_arc_p
   let
   (
     // number of arc facets
-    naf = defined_or(fn, openscad_fn(r)),
+    naf = defined_or(fn, get_fn(r)),
 
     // create vectors if numerical angles have been specified.
     va1 = is_number(v1) ? [cos(v1), sin(v1)] : v1,
@@ -287,7 +287,7 @@ function polygon_arc_p
     ordered clockwise. The sector sweep direction can be controlled by
     the sign of the angles.
 
-  [facets]: \ref openscad_fn()
+  [facets]: \ref get_fn()
 *******************************************************************************/
 function polygon_elliptical_sector_p
 (
@@ -311,7 +311,7 @@ function polygon_elliptical_sector_p
     va3 = (va1 == va2) ? va2+360 : va2,
 
     // number of arc facets
-    af  = defined_or(fn, openscad_fn((rx+ry)/2)),
+    af  = defined_or(fn, get_fn((rx+ry)/2)),
 
     // point generation ordering
     as  = (va3 > va1) ? [af:-1:0] : [0:af],
@@ -931,7 +931,7 @@ function polygon_linear_extrude_pf
        2  | round       | round from one edge to the next
        3  | chamfer     | bevel from one edge to the next
 
-  [facets]: \ref openscad_fn()
+  [facets]: \ref get_fn()
 *******************************************************************************/
 function polygon_round_eve_p
 (

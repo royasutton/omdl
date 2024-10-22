@@ -117,8 +117,8 @@ module extrude_rotate_trs
     s1 = defined_e_or(s, 0, sd);
     s2 = defined_e_or(s, 1, sd);
 
-    sn = (m == 0) ? ceil(openscad_fn(r) * ra/360)
-                  : ceil(sqrt(openscad_fn(r) * ra/360));
+    sn = (m == 0) ? ceil(get_fn(r) * ra/360)
+                  : ceil(sqrt(get_fn(r) * ra/360));
 
     sa = ra/sn;         // section angle
     ss = (s2-s1)/sn;    // uniform section scale

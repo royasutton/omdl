@@ -52,12 +52,12 @@
 
   \details
 
-    This function impliments the \c get_fragments_from_r() code that is
-    used by OpenSCAD to calculates the number of fragments in a circle
-    or arc. The arc facets are controlled by the special variables \p
-    $fa, \p $fs, and \p $fn.
+    This function approximates the \c get_fragments_from_r() code that
+    is used by OpenSCAD to calculates the number of fragments in a
+    circle or arc. The arc facets are controlled by the special
+    variables \p $fa, \p $fs, and \p $fn.
 *******************************************************************************/
-function openscad_fn
+function get_fn
 (
   r
 ) = (r < grid_fine) ? 3
@@ -122,7 +122,7 @@ function histogram
     binary_bit_is(m, 0, 0) ? hv
   : let
     (
-      sm = binary_iw2i(m, 3, 1),
+      sm = binary_iw2i(m, 1, 3),
       fm = binary_bit_is(m, 4, 1) ? true : false
     )
     (sm == 0) ? [for (i=hv) str(first(i), "x", second(i))]
