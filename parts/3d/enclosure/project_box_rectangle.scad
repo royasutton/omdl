@@ -583,6 +583,11 @@
       0 | size is specified for enclosure interior
       1 | remove features outside of enclosure envelope
       2 | scale interior with exterior wall during extrusion
+      3 | do not limit wall rounding modes to bevel and rounded (1)
+
+    (1) When rounding mode limiting is disabled, the rounding mode
+    value, \p vrm, is no longer mapped to \em bevel or \em rounded and
+    any mode of the function polygon_round_eve_all_p() may be used.
 
     \amu_define scope_id      (example_bottom)
     \amu_define title         (Project box bottom section example)
@@ -1558,6 +1563,7 @@ module project_box_rectangle
   mode_size_in  = binary_bit_is(mode, 0, 1);
   mode_int_mask = binary_bit_is(mode, 1, 1);
   mode_scale_io = binary_bit_is(mode, 2, 1);
+  mode_lmt_vrm  = binary_bit_is(mode, 3, 0);
 
   // specified wall extrusion height
   // calculate total extrusion 'h_h' height of all sections
@@ -1570,7 +1576,8 @@ module project_box_rectangle
 
   // limit rounding mode to those options that make sense; set={0, 5, 1}
   // limit each element when 'vrm' is a list
-  vrm_ci        = is_list(vrm) ?
+  vrm_ci        = (mode_lmt_vrm == false) ? vrm
+                : is_list(vrm) ?
                   [for (e=vrm) select_ci(v=[0, 5, 1], i=e, l=false)]
                 : select_ci(v=[0, 5, 1], i=vrm, l=false);
 
