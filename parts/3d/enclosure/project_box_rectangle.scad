@@ -1606,6 +1606,8 @@ module project_box_rectangle
 
   if (verb > 0)
   {
+    echo(strl(["box: construction begin"]));
+
     echo(strl(["box: exterior dimensions [x, y, z] = ", [encl_x, encl_y, encl_z]]));
     echo(strl(["box: interior dimensions [x, y, z] = ", [szint_x, szint_y, szint_z]]));
   }
@@ -1633,6 +1635,9 @@ module project_box_rectangle
     assembly_add();
     assembly_remove();
   }
+
+  if (verb > 0)
+    echo(strl(["box: construction end"]));
 }
 
 //! @}
