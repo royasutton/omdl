@@ -187,7 +187,7 @@
 
     #### lip[0]: mode
 
-    Integer values is binary encoded..
+    Integer value is binary encoded.
 
       b | description
     ---:|:---------------------------------------
@@ -237,7 +237,7 @@
 
     #### rib[0]: mode
 
-    Integer values is binary encoded..
+    Integer value is binary encoded.
 
       b | description
     ---:|:---------------------------------------
@@ -295,7 +295,7 @@
 
     ##### wall[0]: configuration[0]: mode
 
-    Integer values is binary encoded..
+    Integer value is binary encoded.
 
       b | description
     ---:|:---------------------------------------
@@ -310,7 +310,7 @@
     indexed to the rounding options as summarized in the following
     table:
 
-    Integer values is binary encoded..
+    Integer value is binary encoded.
 
       v | wall top rounding | wall base rounding
     ---:|:-----------------:|:-----------------:
@@ -400,7 +400,7 @@
 
     ##### post[0]: configuration[0]: mode
 
-    Integer values is binary encoded..
+    Integer value is binary encoded.
 
       b | description
     ---:|:---------------------------------------
@@ -533,7 +533,7 @@
 
     ##### post[1]: instances[0]: type
 
-    Integer values is binary encoded..
+    Integer value is binary encoded.
 
       b | description
     ---:|:---------------------------------------
@@ -576,7 +576,7 @@
 
     ### mode
 
-    Integer values is binary encoded..
+    Integer value is binary encoded.
 
       b | description
     ---:|:---------------------------------------
