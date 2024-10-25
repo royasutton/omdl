@@ -9,14 +9,13 @@ omdl
 Setup
 -----
 
-In order to use [omdl], it should be be installed to the OpenSCAD
-[library location]. It can be copied manually, as described in the
-OpenSCAD documentation, or can be installed via [openscad-amu] (the
-framework used to develop omdl). If latter is used, the library will be
-tested and the documentation will be generated.
+To use [omdl], it should be installed to the OpenSCAD [library
+location]. This can be done manually, as described in the OpenSCAD
+documentation, or can be done via [openscad-amu] (the design-flow
+automation framework used to develop omdl). If latter is used, the
+library will be tested and the documentation will be generated.
 
-A setup script is available to download, build, and install the
-dependencies.
+The provided setup script is the recommended install method.
 
 
 Evaluation
@@ -42,11 +41,11 @@ installation of the required packages (see: `setup-omdl.bash --help`
 for more details). If you don't like shortened URLs, here is the full
 URL to [setup-omdl.bash] at the source repository.
 
-Once setup successfully completes, the library documentation can be
-viewed from the temporary 'cache' directory:
+Once setup completes, the library documentation can be viewed from the
+temporary 'cache' directory:
 
 ```bash
-firefox cache/local/share/OpenSCAD/docs/html/index.html
+google-chrome cache/local/share/OpenSCAD/docs/html/index.html
 ```
 
 To setup the development branch, use:
@@ -71,6 +70,14 @@ To install a specific version, ie v0.6.1, use:
 ```bash
 ./setup-omdl.bash --branch v0.6.1 --no-excludes --yes --install
 ```
+
+Once setup completes, the library documentation can be viewed from the
+standard install location:
+
+```bash
+google-chrome ${HOME}/.local/share/OpenSCAD/docs/html/index.html
+```
+
 
 
 Contributing
