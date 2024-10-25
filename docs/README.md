@@ -3,16 +3,13 @@
 [![LGPL licensed](https://img.shields.io/badge/license-LGPL-blue.svg?style=flat)](https://raw.githubusercontent.com/royasutton/omdl/master/gnu-lgpl-v2.1.txt)
 
 
-NOTICE
-------
+Getting started
+---------------
 
-<i>The library has been updated to work with the latest release version
-of OpenSCAD {{ site.vopenscad }}. It also is working with the latest
-development snapshots, as of this writing. Please note that there has
-been major changes in the API names from the prior version.</i>
+To get started using [omdl], please see the GitHub source [repository].
 
-Introduction
-------------
+What is it?
+-----------
 
 [omdl] is an [OpenSCAD] mechanical design library that provides
 open-source high-level design primitives with coherent documentation
@@ -22,18 +19,16 @@ With Doxygen, the code documentation is written within the code itself,
 and is thus easy to keep current. Moreover, it provides a standard way
 to both write and present OpenSCAD design documentation, compilable to
 common output formats (html, pdf, etc). With [omdl], all library
-primitives are \em parametric with minimal, mostly zero, global
-variable dependencies and all library API's include [markups] that
-describe its parameters, behavior, and use.
+primitives and components are *parametric* with minimal, mostly zero,
+global variable dependencies and all library API's include [markups]
+that describe its parameters, behavior, and use.
 
 [Validation] scripts are used to verify that the core operations work
 as expected across evolving [OpenSCAD] versions. This validation is
 performed when building and [installing] the library documentation).
-The library uses a common set of conventions for specifying [data
-types] and is divided into individual component modules of
+The library attempts to uses a common set of conventions for specifying
+[data types] and is divided into individual component modules of
 functionality, organized into groups, that may be included as desired.
-
-To get started using [omdl], please see the GitHub source [repository].
 
 Design Examples
 ---------------
@@ -121,4 +116,3 @@ Webcam tripod mount
 [openscad-amu]: https://royasutton.github.io/openscad-amu
 [Doxygen]: http://www.doxygen.nl
 [OpenSCAD]: http://www.openscad.org
-
