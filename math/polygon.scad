@@ -1169,6 +1169,7 @@ function polygon_round_eve_all_p
 /***************************************************************************//**
   \param    s <datastruct-list> The list of step moves.
   \param    i <point-2d> The initial coordinate [x, y].
+  \param    c <integer> (an internal recursion step count)
 
   \returns  <point-2d-list> The list of coordinate point list.
 
@@ -1223,6 +1224,7 @@ function polygon_turtle_p
 (
   s,
   i = origin2d,
+  c = 0
 ) = ! is_list( s ) ? empty_lst
   : let
     ( // get next step definition
@@ -1249,7 +1251,9 @@ function polygon_turtle_p
 
          : (o == "dmv" || o == "delta_mv" ) ? line_tp( line2d_new(m=a1, a=a2, p1=i) )
 
-         : [str("ERROR at step: ", o)],
+         : [ str ( "ERROR at [", m, "], step=[", c, "], command=[", o
+                   , "], arg1=[", a1, "], arg2=[", a2,"]" )
+           ],
 
       ls = len( s ),                // current step count
       lp = len( p ),                // new points count in current step
@@ -1259,7 +1263,7 @@ function polygon_turtle_p
     // check if have reached last move (ls == 1)?
     //  yes : terminate recursion
     //   no : pop current and process remaining steps
-    ( ls == 1 ) ? cp : concat( cp, polygon_turtle_p( tailn(s), ni ) );
+    ( ls == 1 ) ? cp : concat( cp, polygon_turtle_p( tailn(s), ni, c+1 ) );
 
 //! @}
 
