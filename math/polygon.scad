@@ -214,7 +214,7 @@ function polygon_line_p
             A 2d line, vector, or decimal angle 1.
   \param    v2 <line-2d | decimal> The arc end angle.
             A 2d line, vector, or decimal angle 2.
-  \param    fn <integer> The number of [facets].
+  \param    fn <integer> The number of [facets] (optional).
   \param    cw <boolean> Sweep clockwise along arc from the head of
             vector \p v1 to the head of vector \p v2 when \p cw =
             \b true, and counter clockwise when \p cw = \b false.
@@ -227,7 +227,8 @@ function polygon_line_p
     contained within the heads of vectors \p v1 and \p v2. The arc will
     start at the point coincident to \p v1 and will end at the point
     coincident to \p v2. When vectors \p v1 and \p v2 are parallel, the
-    arc will be a complete circle.
+    arc will be a complete circle. When \p fn is undefined, its value
+    is determined by get_fn().
 
   [facets]: \ref get_fn()
 *******************************************************************************/
@@ -276,7 +277,7 @@ function polygon_arc_p
             A 2d line, vector, or decimal.
   \param    s <boolean> Use signed vector angle conversions. When
             \b false, positive angle conversion will be used.
-  \param    fn <integer> The number of [facets].
+  \param    fn <integer> The number of [facets] (optional).
   \param    cw <boolean> The coordinate point ordering.
 
   \returns  <coords-2d> A list of coordinates points [[x, y], ...].
@@ -285,7 +286,8 @@ function polygon_arc_p
 
     The coordinates will be between angle 1 and angle 2 and will be
     ordered clockwise. The sector sweep direction can be controlled by
-    the sign of the angles.
+    the sign of the angles. When \p fn is undefined, its value is
+    determined by get_fn().
 
   [facets]: \ref get_fn()
 *******************************************************************************/
