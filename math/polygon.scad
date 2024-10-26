@@ -1203,7 +1203,7 @@ function polygon_round_eve_all_p
      delta_y    | dy    | y                 | i + [0, y]
      delta_xa   | dxa   | [x, a]            | i + [ x, x * tan(a) ]
      delta_ya   | dya   | [y, a]            | i + l y / tan(a), y ]
-     delta_ma   | dma   | [m, a]            | i + line(m, a)
+     delta_v    | dv    | [m, a]            | i + line(m, a)
      arc_pv     | apv   | [c, v, cw]        | (see below)
      arc_vv     | avv   | [v, v, cw]        | (see below)
 
@@ -1291,7 +1291,7 @@ function polygon_turtle_p
         : (opr == "dxa" || opr == "delta_xa" ) && (arc == 2) ? i + [a1, a1 * tan(a2)]
         : (opr == "dya" || opr == "delta_ya" ) && (arc == 2) ? i + [a1 / tan(a2), a1]
 
-        : (opr == "dma" || opr == "delta_ma" ) && (arc == 2) ? line_tp( line2d_new(m=a1, a=a2, p1=i) )
+        : (opr == "dv"  || opr == "delta_v"  ) && (arc == 2) ? line_tp( line2d_new(m=a1, a=a2, p1=i) )
 
         : (opr == "apv" || opr == "arc_pv"   ) && (arc == 3) ?
           let
