@@ -1165,45 +1165,48 @@ function polygon_round_eve_all_p
 //! \name Interpreter
 //! @{
 
-//! Generate list of coordinate points from simple step move notation.
+//! Generate list of coordinate points from simple operation step notation.
 /***************************************************************************//**
-  \param    s <datastruct-list> The list of step moves.
+  \param    s <datastruct> The list of steps.
   \param    i <point-2d> The initial coordinate [x, y].
   \param    c <integer> (an internal recursion step count)
 
-  \returns  <point-2d-list> The list of coordinate point list.
+  \returns  <point-2d-list> The list of coordinate points.
 
   \details
 
-    This function is a simple interpreter that converts a list of move
-    commands into coordinate points for the construction of polygons.
-    Each move command produces a single new output point and may be
-    specified as an absolute coordinate or may be relative to the
-    previous coordinate point. The steps are specified by a list which
-    include the command along with one or two command arguments.
+    This function is a simple interpreter that converts a list of
+    operation steps into coordinate points for the construction of
+    polygons. It provides a convenient way to construct polygons using
+    a simple notation. It is inspired by the implementation of the
+    [Turtle graphics] geometric drawing language. Each step produces a
+    new output point or points and follow the following schema:
 
-     Move step definition:
+    Data structure schema:
 
-      datastruct types                  | syntax
-    :-----------------------------------|:----------------------------
-     [ <string>, <number>, (<number>)]  | [ command, arg1, (arg2) ]
+    name            | schema
+    ---------------:|:----------------------------------------------
+    s               | [ step, step, ..., step ]
+    step            | [ operation, arguments ]
+    arguments       | [ arg, arg, ..., arg ]
 
-    The following table summarized the commands and their semantics.
+    The following table summarized the available operations and their
+    semantics.
 
-     command    | short | argc | arg1 | arg2 | output coordinate point
-    :-----------|:-----:|:----:|:----:|:----:|:-----------------------
-     move_xy    | mxy   | 2    | x    | y    | [x, y]
-     move_x     | mx    | 1    | x    | -    | [x, i.y]
-     move_y     | my    | 1    | y    | -    | [i.x, y]
-     delta_xy   | dxy   | 2    | x    | y    | i + [x, y]
-     delta_x    | dx    | 1    | x    | -    | i + [x, 0]
-     delta_y    | dy    | 1    | y    | -    | i + [0, y]
-     delta_xv   | dxv   | 2    | x    | a    | i + [ x, x * tan(a) ]
-     delta_yv   | dyv   | 2    | y    | a    | i + l y / tan(a), y ]
-     delta_mv   | dmv   | 2    | m    | a    | i + line(m, a)
+     operation  | short | arguments         | output coordinate point
+    :-----------|:-----:|:-----------------:|:-----------------------
+     move_xy    | mxy   | [x, y]            | [x, y]
+     move_x     | mx    | x                 | [x, i.y]
+     move_y     | my    | y                 | [i.x, y]
+     delta_xy   | dxy   | [x, y]            | i + [x, y]
+     delta_x    | dx    | x                 | i + [x, 0]
+     delta_y    | dy    | y                 | i + [0, y]
+     delta_xv   | dxv   | [x, a]            | i + [ x, x * tan(a) ]
+     delta_yv   | dyv   | [y, a]            | i + l y / tan(a), y ]
+     delta_mv   | dmv   | [m, a]            | i + line(m, a)
 
-    This functions provides a convenient way to construct polygons
-    using a simple notation based on incremental steps.
+    When an operation requires only one argument, the argument can be
+    specified as a scalar-value or a single-element list.
 
     \amu_define title           (Motor mount plate design example)
     \amu_define image_views     (top diag)
@@ -1214,9 +1217,7 @@ function polygon_round_eve_all_p
     \amu_include (include/amu/scope_diagrams_3d.amu)
 
     The corners of this example 2d design plate have been rounded with
-    the library function polygon_round_eve_all_p(). This functions is
-    inspired by the implementation of the [Turtle graphics] geometric
-    drawing language.
+    the library function polygon_round_eve_all_p().
 
     [Turtle graphics]: https://en.wikipedia.org/wiki/Turtle_(robot)
 *******************************************************************************/
@@ -1227,42 +1228,45 @@ function polygon_turtle_p
   c = 0
 ) = ! is_list( s ) ? empty_lst
   : let
-    ( // get next step definition
-       m = first( s ),
+    ( // get current step
+      stp = first( s ),
 
-      // get move operation and arguments
-       o =  first( m ),
-      a1 = second( m ),
-      a2 =  third( m ),
+      // get operation and argument vector
+      opr = first( stp ),
+      arv = second( stp ),
 
-      // compute coordinate point for step operation
-       p = (o == "mxy" || o == "move_xy"  ) ? [a1, a2]
+      // assign arguments
+      a1  = defined_e_or( arv, 0, arv ),
+      a2  = defined_e_or( arv, 1, undef ),
 
-         : (o == "mx"  || o == "move_x"   ) ? [a1, i.y]
-         : (o == "my"  || o == "move_y"   ) ? [i.x, a1]
+      // compute coordinate point(s) for current operation
+      p = (opr == "mxy" || opr == "move_xy"  ) ? [a1, a2]
 
-         : (o == "dxy" || o == "delta_xy" ) ? i + [a1, a2]
+        : (opr == "mx"  || opr == "move_x"   ) ? [a1, i.y]
+        : (opr == "my"  || opr == "move_y"   ) ? [i.x, a1]
 
-         : (o == "dx"  || o == "delta_x"  ) ? i + [a1, 0]
-         : (o == "dy"  || o == "delta_y"  ) ? i + [0, a1]
+        : (opr == "dxy" || opr == "delta_xy" ) ? i + [a1, a2]
 
-         : (o == "dxv" || o == "delta_xv" ) ? i + [a1, a1 * tan(a2)]
-         : (o == "dyv" || o == "delta_yv" ) ? i + [a1 / tan(a2), a1]
+        : (opr == "dx"  || opr == "delta_x"  ) ? i + [a1, 0]
+        : (opr == "dy"  || opr == "delta_y"  ) ? i + [0, a1]
 
-         : (o == "dmv" || o == "delta_mv" ) ? line_tp( line2d_new(m=a1, a=a2, p1=i) )
+        : (opr == "dxv" || opr == "delta_xv" ) ? i + [a1, a1 * tan(a2)]
+        : (opr == "dyv" || opr == "delta_yv" ) ? i + [a1 / tan(a2), a1]
 
-         : [ str ( "ERROR at [", m, "], step=[", c, "], command=[", o
-                   , "], arg1=[", a1, "], arg2=[", a2,"]" )
-           ],
+        : (opr == "dmv" || opr == "delta_mv" ) ? line_tp( line2d_new(m=a1, a=a2, p1=i) )
 
-      ls = len( s ),                // current step count
-      lp = len( p ),                // new points count in current step
-      cp = (lp > 2) ? p : [p],      // point list for current step
-      ni = (lp > 2) ? last(p) : p   // next step initial point
+        : [ str ( "ERROR at [", stp, "], num=[", c, "], operation=[", opr
+                  , "], arg1=[", a1, "], arg2=[", a2,"]" )
+          ],
+
+      ls  = len( s ),               // current step count
+      lp  = len( p ),               // points count in current step
+      cp  = (lp > 2) ? p : [p],     // point-list for current step
+      ni  = (lp > 2) ? last(p) : p  // initial point for next step
     )
-    // check if have reached last move (ls == 1)?
+    // check if have reached last step (ls == 1)?
     //  yes : terminate recursion
-    //   no : pop current and process remaining steps
+    //   no : pop current step and process remaining
     ( ls == 1 ) ? cp : concat( cp, polygon_turtle_p( tailn(s), ni, c+1 ) );
 
 //! @}
@@ -1290,9 +1294,9 @@ BEGIN_SCOPE polygon_turtle_p;
       ["delta_y",  h1],
       ["delta_x",  w1],
       ["delta_y",  h2],
-      ["delta_xy", w3, h3],
+      ["delta_xy", [w3, h3]],
       ["delta_x",  w1+w2-w3*2],
-      ["delta_xy", w3, -h3],
+      ["delta_xy", [w3, -h3]],
       ["move_y",   0],
       ["move_x",   0],
     ];
