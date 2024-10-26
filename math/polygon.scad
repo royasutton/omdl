@@ -1187,7 +1187,7 @@ function polygon_round_eve_all_p
 
     The following table summarized the commands and their semantics.
 
-     command    | short | argc | arg1 | arg1 | output coordinate point
+     command    | short | argc | arg1 | arg2 | output coordinate point
     :-----------|:-----:|:----:|:----:|:----:|:-----------------------
      move_xy    | mxy   | 2    | x    | y    | [x, y]
      move_x     | mx    | 1    | x    | -    | [x, i.y]
