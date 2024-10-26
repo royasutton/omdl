@@ -282,10 +282,10 @@ function index_gen
   \details
 
     When the list has greater than \p w elements, the list is returned
-    unchanged. When \p l is a string, characters are counted as
+    unchanged. When \p v is a string, characters are counted as
     individual elements. The function strl() can be used to join padded
     values back into a single string. When the value is a multi-dimensional
-    list, the list element count is considered the value widdth.
+    list, the list element count is considered the value width.
 
     \b Example
     \code{.C}
@@ -309,7 +309,7 @@ function pad_e
       // get element size for the value and padding
       lv = len(iv),
       lp = len(ip),
-      // calculate the full and partial paddings
+      // calculate the full and partial padding
       cf = floor((w-lv)/lp),
       cp = w - lv - lp * cf,
       // construct the full and partial padding lists
