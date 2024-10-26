@@ -1201,9 +1201,9 @@ function polygon_round_eve_all_p
      delta_xy   | dxy   | [x, y]            | i + [x, y]
      delta_x    | dx    | x                 | i + [x, 0]
      delta_y    | dy    | y                 | i + [0, y]
-     delta_xv   | dxv   | [x, a]            | i + [ x, x * tan(a) ]
-     delta_yv   | dyv   | [y, a]            | i + l y / tan(a), y ]
-     delta_mv   | dmv   | [m, a]            | i + line(m, a)
+     delta_xa   | dxa   | [x, a]            | i + [ x, x * tan(a) ]
+     delta_ya   | dya   | [y, a]            | i + l y / tan(a), y ]
+     delta_ma   | dma   | [m, a]            | i + line(m, a)
 
     When an operation requires only one argument, the argument can be
     specified as a scalar-value or a single-element list.
@@ -1251,10 +1251,10 @@ function polygon_turtle_p
         : (opr == "dx"  || opr == "delta_x"  ) && (arc == 1) ? i + [a1, 0]
         : (opr == "dy"  || opr == "delta_y"  ) && (arc == 1) ? i + [0, a1]
 
-        : (opr == "dxv" || opr == "delta_xv" ) && (arc == 2) ? i + [a1, a1 * tan(a2)]
-        : (opr == "dyv" || opr == "delta_yv" ) && (arc == 2) ? i + [a1 / tan(a2), a1]
+        : (opr == "dxa" || opr == "delta_xa" ) && (arc == 2) ? i + [a1, a1 * tan(a2)]
+        : (opr == "dya" || opr == "delta_ya" ) && (arc == 2) ? i + [a1 / tan(a2), a1]
 
-        : (opr == "dmv" || opr == "delta_mv" ) && (arc == 2) ? line_tp( line2d_new(m=a1, a=a2, p1=i) )
+        : (opr == "dma" || opr == "delta_ma" ) && (arc == 2) ? line_tp( line2d_new(m=a1, a=a2, p1=i) )
 
         : [ str ( "ERROR at '", stp, "', num='", c, "', operation='", opr
                   , "', argc='", arc, "', argv='", arv,"'" )
