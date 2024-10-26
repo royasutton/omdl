@@ -1249,12 +1249,17 @@ function polygon_turtle_p
 
          : (o == "dmv" || o == "delta_mv" ) ? line_tp( line2d_new(m=a1, a=a2, p1=i) )
 
-         : [str("ERROR at step: ", o)]
+         : [str("ERROR at step: ", o)],
+
+      ls = len( s ),                // current step count
+      lp = len( p ),                // new points count in current step
+      cp = (lp > 2) ? p : [p],      // point list for current step
+      ni = (lp > 2) ? last(p) : p   // next step initial point
     )
-    // check if have reached last move
+    // check if have reached last move (ls == 1)?
     //  yes : terminate recursion
-    //   no : pop current step and process remaining
-    ( len( s ) == 1 ) ? [p] : concat( [p], polygon_turtle_p( tailn(s), p ) );
+    //   no : pop current and process remaining steps
+    ( ls == 1 ) ? cp : concat( cp, polygon_turtle_p( tailn(s), ni ) );
 
 //! @}
 
