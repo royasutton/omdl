@@ -1234,29 +1234,30 @@ function polygon_turtle_p
       // get operation and argument vector
       opr = first( stp ),
       arv = second( stp ),
+      arc = is_undef( arv ) ? 0 : is_list( arv ) ? len( arv ) : 1,
 
       // assign arguments
       a1  = defined_e_or( arv, 0, arv ),
       a2  = defined_e_or( arv, 1, undef ),
 
       // compute coordinate point(s) for current operation
-      p = (opr == "mxy" || opr == "move_xy"  ) ? [a1, a2]
+      p = (opr == "mxy" || opr == "move_xy"  ) && (arc == 2) ? [a1, a2]
 
-        : (opr == "mx"  || opr == "move_x"   ) ? [a1, i.y]
-        : (opr == "my"  || opr == "move_y"   ) ? [i.x, a1]
+        : (opr == "mx"  || opr == "move_x"   ) && (arc == 1) ? [a1, i.y]
+        : (opr == "my"  || opr == "move_y"   ) && (arc == 1) ? [i.x, a1]
 
-        : (opr == "dxy" || opr == "delta_xy" ) ? i + [a1, a2]
+        : (opr == "dxy" || opr == "delta_xy" ) && (arc == 2) ? i + [a1, a2]
 
-        : (opr == "dx"  || opr == "delta_x"  ) ? i + [a1, 0]
-        : (opr == "dy"  || opr == "delta_y"  ) ? i + [0, a1]
+        : (opr == "dx"  || opr == "delta_x"  ) && (arc == 1) ? i + [a1, 0]
+        : (opr == "dy"  || opr == "delta_y"  ) && (arc == 1) ? i + [0, a1]
 
-        : (opr == "dxv" || opr == "delta_xv" ) ? i + [a1, a1 * tan(a2)]
-        : (opr == "dyv" || opr == "delta_yv" ) ? i + [a1 / tan(a2), a1]
+        : (opr == "dxv" || opr == "delta_xv" ) && (arc == 2) ? i + [a1, a1 * tan(a2)]
+        : (opr == "dyv" || opr == "delta_yv" ) && (arc == 2) ? i + [a1 / tan(a2), a1]
 
-        : (opr == "dmv" || opr == "delta_mv" ) ? line_tp( line2d_new(m=a1, a=a2, p1=i) )
+        : (opr == "dmv" || opr == "delta_mv" ) && (arc == 2) ? line_tp( line2d_new(m=a1, a=a2, p1=i) )
 
-        : [ str ( "ERROR at [", stp, "], num=[", c, "], operation=[", opr
-                  , "], arg1=[", a1, "], arg2=[", a2,"]" )
+        : [ str ( "ERROR at '", stp, "', num='", c, "', operation='", opr
+                  , "', argc='", arc, "', argv='", arv,"'" )
           ],
 
       ls  = len( s ),               // current step count
