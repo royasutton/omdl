@@ -190,9 +190,13 @@ module draft_sheet
   layers = draft_get_config("layers-sheet")
 )
 {
-  if ( !table_exists( r=draft_sheet_config_tr, ri=draft_sheet_config ) )
-    log_error( str("unknown sheet configuration [", draft_sheet_config, "]") );
-  else if (draft_layers_any_active(layers))
+  assert
+  (
+    table_exists( r=draft_sheet_config_tr, ri=draft_sheet_config ),
+    str("unknown sheet configuration [", draft_sheet_config, "]")
+  );
+
+  if (draft_layers_any_active(layers))
   draft_make_3d_if_configured()
   {
     // check tables

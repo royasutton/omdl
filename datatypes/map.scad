@@ -260,32 +260,28 @@ module map_check
     key = first(entry);
 
     // (1) each entry has key-value 2-tuple.
-    if ( 2 != len(entry) )
-    {
-      log_error
+    assert
+    (
+      len(entry) == 2,
+      str
       (
-        str
-        (
-          "map index ", i,
-          ", entry=", entry,
-          ", has incorrect count=[", len(entry),"]"
-        )
-      );
-    }
+        "map index ", i,
+        ", entry=", entry,
+        ", has incorrect count=[", len(entry),"]"
+      )
+    );
 
     // (2) each key must be a string.
-    if ( is_string(key) == false )
-    {
-      log_error
+    assert
+    (
+      is_string(key),
+      str
       (
-        str
-        (
-          "map index ", i,
-          ", entry=", entry,
-          ", key=[", key,"] is not a string."
-        )
-      );
-    }
+        "map index ", i,
+        ", entry=", entry,
+        ", key=[", key,"] is not a string."
+      )
+    );
 
     // (3) no repeat key identifiers.
     if ( len(first(search([key], m, 0, 0))) > 1 )

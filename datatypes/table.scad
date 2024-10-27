@@ -373,18 +373,17 @@ module table_check
   col_cnt = table_get_size(c=c);
   for ( r_iter = r )
   {
-    if ( col_cnt !=  len ( r_iter ) )
-    {
-      log_error
+    assert
+    (
+      col_cnt ==  len ( r_iter ),
+      str
       (
-        str
-        (
-          "row ", table_get_row_index(r, r_iter),
-          ", id=[", first(r_iter), "]",
-          ", has incorrect column count=[", len ( r_iter ),"]"
-        )
-      );
-    }
+        "row ", table_get_row_index(r, r_iter),
+        ", id=[", first(r_iter), "]",
+        ", has incorrect column count=[", len ( r_iter ),"]",
+        ", expecting=[", col_cnt, "]"
+      )
+    );
   }
 
   // (3) no repeat column identifiers
