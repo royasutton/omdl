@@ -1308,9 +1308,11 @@ function polygon_turtle_p
           )
           polygon_arc_p( r=distance_pp(i, b1), c=b1, v1=[b1, i], v2=v2, cw=a3 )
 
-        : [ str ( "ERROR at '", stp, "', num='", c, "', operation='", opr
+        : assert
+          ( false,
+            str ( "ERROR at '", stp, "', num='", c, "', operation='", opr
                   , "', argc='", arc, "', argv='", arv,"'" )
-          ],
+          ),
 
       ls  = len( s ),               // current step count
       lp  = len( p ),               // points count in current step
