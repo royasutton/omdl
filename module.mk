@@ -18,6 +18,7 @@ local_backup_add  :=
 local_submodules  :=  common \
                       datatypes \
                       math \
+                      models \
                       parts \
                       shapes \
                       tools \

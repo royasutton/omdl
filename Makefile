@@ -125,7 +125,9 @@ library_info                      := README.md \
 # to exclude nothing from the command line, use: $ make modules_exclude="" all
 # or set 'ignore_modules_exclude := $(true)' above
 
-modules_exclude                   := database/material
+modules_exclude                   := database/material \
+                                     database/component/bearing \
+                                     models
 
 # Excluded Scopes:
 # to exclude nothing from the command line, use: $ make scopes_exclude="" all

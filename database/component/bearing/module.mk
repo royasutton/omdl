@@ -4,18 +4,16 @@
 $(eval $(call clear-local-module))
 #------------------------------------------------------------------------------#
 
-local_path        :=  database/component
+local_path        :=  database/component/bearing
 
 local_library     :=  docs_module
+#                      \
 
 local_release_add :=
 
 local_backup_add  :=
 
-local_submodules  :=  battery \
-                      bearing \
-                      fastener \
-                      structural
+local_submodules  :=
 
 #------------------------------------------------------------------------------#
 # add local module
