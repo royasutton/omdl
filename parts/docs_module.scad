@@ -1,4 +1,4 @@
-//! Module: Parts, part generators, and small assemblies.
+//! Module: Design parts, generators, and small assemblies.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Parts)
-    \amu_define group_brief (Parts, part generators, and small assemblies.)
+    \amu_define group_brief (Design parts, generators, and small assemblies.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
