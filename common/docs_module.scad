@@ -1,4 +1,4 @@
-//! Common Module documentation.
+//! Module: Rudimentary library components.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

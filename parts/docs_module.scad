@@ -1,4 +1,4 @@
-//! Parts Module documentation.
+//! Module: Parts, part generators, and small assemblies.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

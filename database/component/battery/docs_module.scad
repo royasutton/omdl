@@ -1,4 +1,4 @@
-//! Electric battery documentation.
+//! Module: Electric battery specifications.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

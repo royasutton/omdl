@@ -1,4 +1,4 @@
-//! Units Module documentation.
+//! Module: Unit definitions and unit conversions.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

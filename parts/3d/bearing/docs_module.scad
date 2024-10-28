@@ -1,4 +1,4 @@
-//! 3d Bearing Parts Module documentation.
+//! Module: Mechanical motion bearings.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

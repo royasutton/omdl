@@ -1,4 +1,4 @@
-//! Geometry Module documentation.
+//! Module: Geometry shape specifications.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Geometry)
-    \amu_define group_brief (Geometric specifications.)
+    \amu_define group_brief (Geometric shape specifications.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

@@ -1,4 +1,4 @@
-//! Component Module documentation.
+//! Module: Design component specifications.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Component)
-    \amu_define group_brief (Component specifications.)
+    \amu_define group_brief (Design component specifications.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

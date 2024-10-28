@@ -1,4 +1,4 @@
-//! Database Module documentation.
+//! Module: Design data and specifications.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

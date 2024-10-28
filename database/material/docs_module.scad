@@ -1,4 +1,4 @@
-//! Material Module documentation.
+//! Module: Material specifications.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

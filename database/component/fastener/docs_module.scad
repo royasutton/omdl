@@ -1,4 +1,4 @@
-//! Mechanical fastener specifications.
+//! Module: Mechanical fastener specifications.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

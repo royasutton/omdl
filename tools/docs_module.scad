@@ -1,4 +1,4 @@
-//! Tools Module documentation.
+//! Module: Tools and design components.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

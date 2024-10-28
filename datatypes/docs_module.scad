@@ -1,4 +1,4 @@
-//! Data Types Module documentation.
+//! Module: Data type identification and operations.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Data Types)
-    \amu_define group_brief (Type identification and operations.)
+    \amu_define group_brief (Data type identification and operations.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
