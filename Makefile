@@ -126,7 +126,6 @@ library_info                      := README.md \
 # or set 'ignore_modules_exclude := $(true)' above
 
 modules_exclude                   := database/material \
-                                     database/component/bearing \
                                      models
 
 # Excluded Scopes:

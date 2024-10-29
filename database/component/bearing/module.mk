@@ -6,8 +6,9 @@ $(eval $(call clear-local-module))
 
 local_path        :=  database/component/bearing
 
-local_library     :=  docs_module
-#                      \
+local_library     :=  docs_module \
+                      \
+                      linear_lmxuu
 
 local_release_add :=
 
