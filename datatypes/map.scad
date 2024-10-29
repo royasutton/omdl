@@ -451,17 +451,21 @@ BEGIN_SCOPE example_use;
       ["runid",       10]
     ];
 
+    echo( "### map_check ###" );
     map_check(map, true);
 
+    echo( "### map_exists ###" );
     echo( str("is part0 = ", map_exists(map, "part0")) );
     echo( str("is part1 = ", map_exists(map, "part1")) );
 
+    echo( "### map_get_value ###" );
     p1 = map_get_value(map, "part1");
     echo( c=second(p1) );
 
     keys = map_get_keys(map);
     parts = delete(keys, mv=["config", "version", "runid"]);
 
+    echo( "### map_delete ###" );
     for ( p = parts )
       echo
       (
@@ -470,6 +474,7 @@ BEGIN_SCOPE example_use;
         l=second(map_get_value(map, p))
       );
 
+    echo( "### map_dump ###" );
     map_dump(map);
 
     // end_include

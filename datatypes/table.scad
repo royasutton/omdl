@@ -830,27 +830,39 @@ BEGIN_SCOPE example_use;
       ["m3r20r", "r",  3.000,  20.00, 5.50, 3.000,  5.50, length(1.75, "in")]
     ];
 
+    echo( "### table_check ###" );
     table_check( table_rows, table_cols, true );
+
+    echo( "### table_dump ###" );
     table_dump( table_rows, table_cols );
 
+    echo( "### table_get_value ###" );
     m3r16r_tl = table_get_value( table_rows, table_cols, "m3r16r", "tl" );
+    echo ( m3r16r_tl=m3r16r_tl );
 
+    echo( "### table_exists ###" );
     if ( table_exists( c=table_cols, ci="nl" ) )
       echo ( "metric 'nl' available" );
+    else
+      echo ( "metric 'nl' not available" );
 
+    echo( "### table_get_row_ids ###" );
     table_ids = table_get_row_ids( table_rows );
-    table_cols_tl = table_get_columns( table_rows, table_cols, "tl" );
-
     echo ( table_ids=table_ids );
+
+    echo( "### table_get_columns 'tl' ###" );
+    table_cols_tl = table_get_columns( table_rows, table_cols, "tl" );
     echo ( table_cols_tl=table_cols_tl );
 
+    echo( "### table_get_copy  ['tl, 'nl'] ###" );
     tnew = table_get_copy( table_rows, table_cols, cs=["tl", "nl"] );
-    tsum = table_get_sum( table_rows, table_cols, cs=["tl", "nl"] );
-
-    echo ( m3r16r_tl=m3r16r_tl );
     echo ( tnew=tnew );
+
+    echo( "### table_get_sum ['tl, 'nl'] ###" );
+    tsum = table_get_sum( table_rows, table_cols, cs=["tl", "nl"] );
     echo ( tsum=tsum );
 
+    echo( "### table_dump_getters ###" );
     table_dump_getters( r=table_rows, c=table_cols,
       tr="table_rows", tc="table_cols",
       ri="my_config", vri=true, name="get_my_value", comment=2 );
