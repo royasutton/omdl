@@ -57,6 +57,7 @@
   \amu_define groups_level1
   (
     Linear
+    Radial
   )
 
   /+ remove newlines from identifiers +/

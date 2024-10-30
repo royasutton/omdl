@@ -8,7 +8,8 @@ local_path        :=  database/component/bearing
 
 local_library     :=  docs_module \
                       \
-                      linear_lmxuu
+                      linear_lmxuu \
+                      radial_ball
 
 local_release_add :=
 
