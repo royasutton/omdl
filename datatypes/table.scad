@@ -200,9 +200,10 @@ function table_exists
   c,
   ri,
   ci
-) = ( is_defined(ri) && is_defined(ci) ) ? is_defined(table_get_value(r, c, ri, ci))
-  : is_defined(ri) ? is_number(table_get_row_index(r,ri))
-  : is_defined(ci) ? is_number(table_get_column_index(c,ci))
+) = let ( dr = is_defined(ri), dc = is_defined(ci) )
+    ( dr && dc ) ? is_defined(table_get_value(r, c, ri, ci))
+  : dr ? is_number(table_get_row_index(r,ri))
+  : dc ? is_number(table_get_column_index(c,ci))
   : false;
 
 //! Get the size of a table.
