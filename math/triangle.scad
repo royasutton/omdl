@@ -603,7 +603,7 @@ BEGIN_SCOPE diagram;
     include <tools/operation_cs.scad>;
     include <tools/drafting/draft-base.scad>;
 
-    module dt (vl, al, sl)
+    module dt (vl = empty_lst, al = empty_lst, sl = empty_lst)
     {
       s = 10;
       t = [6, 8, 7];
@@ -632,11 +632,11 @@ BEGIN_SCOPE diagram;
 
     object = "triangle_sas2sss";
 
-    if (object == "triangle_ppp2sss") dt( vl = [0,1,2], al = [], sl = []);
+    if (object == "triangle_ppp2sss") dt( vl = [0,1,2]);
     if (object == "triangle_sas2sss") dt( vl = [0,1,2], al = [2], sl = [0,1]);
     if (object == "triangle_asa2sss") dt( vl = [0,1,2], al = [0,1], sl = [2]);
     if (object == "triangle_aas2sss") dt( vl = [0,1,2], al = [0,1], sl = [0]);
-    if (object == "triangle2d_sss2ppp") dt( vl = [], al = [], sl = [0,1,2]);
+    if (object == "triangle2d_sss2ppp") dt( sl = [0,1,2]);
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;

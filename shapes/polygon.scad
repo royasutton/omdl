@@ -548,7 +548,7 @@ BEGIN_SCOPE diagram_label;
     include <tools/operation_cs.scad>;
     include <tools/drafting/draft-base.scad>;
 
-    module dt (vl, al, sl)
+    module dt (vl = empty_lst, al = empty_lst, sl = empty_lst)
     {
       s = 10;
       t = [6, 8, 7];
@@ -577,11 +577,11 @@ BEGIN_SCOPE diagram_label;
 
     object = "triangle_sas2sss";
 
-    if (object == "ppp") dt( vl = [0,1,2], al = [], sl = []);
+    if (object == "ppp") dt( vl = [0,1,2]);
     if (object == "sas") dt( vl = [0,1,2], al = [2], sl = [0,1]);
     if (object == "asa") dt( vl = [0,1,2], al = [0,1], sl = [2]);
     if (object == "aas") dt( vl = [0,1,2], al = [0,1], sl = [0]);
-    if (object == "sss") dt( vl = [], al = [], sl = [0,1,2]);
+    if (object == "sss") dt( sl = [0,1,2]);
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
