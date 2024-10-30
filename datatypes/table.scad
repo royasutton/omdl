@@ -150,11 +150,10 @@ function table_get_columns
 
   \details
 
-  \note     This functions assumes the first element of each table row
-            to be the row identifier, as enforced by the table_check().
-            As an alternative, the function table_get_columns(), of
-            the form table_get_columns(r, c, "id"), may be used
-            without this assumption.
+    This functions assumes the first element of each table row to be
+    the row identifier, as enforced by the table_check(). As an
+    alternative, the function table_get_columns(), of the form
+    table_get_columns(r, c, id), may be used without this assumption.
 *******************************************************************************/
 function table_get_row_ids
 (
@@ -169,23 +168,29 @@ function table_get_row_ids
 
   \details
 
-  \note     This functions assumes the first element of each table column
-            to be the column identifier.
+    This functions assumes the first element of each table column to be
+    the column identifier.
 *******************************************************************************/
 function table_get_column_ids
 (
   c
 ) = select_e(c,f=true);
 
-//! Test the existence of a table row and column identifier.
+//! Test the existence of a table row identifier, table column identifier, or both.
 /***************************************************************************//**
   \param    r \<table> The table data matrix (C-columns x R-rows).
   \param    c <map> The table column matrix (2 x C-columns).
   \param    ri <string> The row identifier.
   \param    ci <string> The column identifier.
 
-  \returns  \b true if the row and column identifier exists, and
-            \b false otherwise.
+  \returns  \b true if the specified row and/or column identifier
+            exists, and \b false otherwise.
+
+  \details
+
+    The functions can be used to check for a row or a column identifier
+    alone, or can be use to check for the existence of a specific row
+    and column combination.
 *******************************************************************************/
 function table_exists
 (
