@@ -52,7 +52,7 @@
 
 //! Get the table row index that matches a table row identifier.
 /***************************************************************************//**
-  \param    r \<table> The table data matrix (C-columns x R-rows).
+  \param    r \<table> The table row data matrix (C-columns x R-rows).
   \param    ri <string> The row identifier.
 
   \returns  <integer> The row index where the identifier exists.
@@ -67,7 +67,7 @@ function table_get_row_index
 
 //! Get the table row that matches a table row identifier.
 /***************************************************************************//**
-  \param    r \<table> The table data matrix (C-columns x R-rows).
+  \param    r \<table> The table row data matrix (C-columns x R-rows).
   \param    ri <string> The row identifier.
 
   \returns  <list-C> The table row where the row identifier exists.
@@ -81,7 +81,7 @@ function table_get_row
 
 //! Get the table column index that matches a table column identifier.
 /***************************************************************************//**
-  \param    c <map> The table column matrix (2 x C-columns).
+  \param    c <map> The table column identifier matrix (2 x C-columns).
   \param    ci <string> The column identifier.
 
   \returns  <integer> The column index where the identifier exists.
@@ -96,7 +96,7 @@ function table_get_column_index
 
 //! Get the table column that matches a table column identifier.
 /***************************************************************************//**
-  \param    c <map> The table column matrix (2 x C-columns).
+  \param    c <map> The table column identifier matrix (2 x C-columns).
   \param    ci <string> The column identifier.
 
   \returns  <list-2> The table column where the column identifier exists.
@@ -110,8 +110,8 @@ function table_get_column
 
 //! Get the table cell value for a specified row and column identifier.
 /***************************************************************************//**
-  \param    r \<table> The table data matrix (C-columns x R-rows).
-  \param    c <map> The table column matrix (2 x C-columns).
+  \param    r \<table> The table row data matrix (C-columns x R-rows).
+  \param    c <map> The table column identifier matrix (2 x C-columns).
   \param    ri <string> The row identifier.
   \param    ci <string> The column identifier.
 
@@ -128,8 +128,8 @@ function table_get_value
 
 //! Form a list of a select column across all table rows.
 /***************************************************************************//**
-  \param    r \<table> The table data matrix (C-columns x R-rows).
-  \param    c <map> The table column matrix (2 x C-columns).
+  \param    r \<table> The table row data matrix (C-columns x R-rows).
+  \param    c <map> The table column identifier matrix (2 x C-columns).
   \param    ci <string> The column identifier.
 
   \returns  \<list> The list of a select column across all rows.
@@ -146,7 +146,7 @@ function table_get_columns
 
 //! Form a list of all table row identifiers.
 /***************************************************************************//**
-  \param    r \<table> The table data matrix (C-columns x R-rows).
+  \param    r \<table> The table row data matrix (C-columns x R-rows).
 
   \returns  \<list> The list of all row identifiers.
 
@@ -164,7 +164,7 @@ function table_get_row_ids
 
 //! Form a list of all table column identifiers.
 /***************************************************************************//**
-  \param    c <map> The table column matrix (2 x C-columns).
+  \param    c <map> The table column identifier matrix (2 x C-columns).
 
   \returns  \<list> The list of all column identifiers.
 
@@ -180,8 +180,8 @@ function table_get_column_ids
 
 //! Test the existence of a table row identifier, table column identifier, or both.
 /***************************************************************************//**
-  \param    r \<table> The table data matrix (C-columns x R-rows).
-  \param    c <map> The table column matrix (2 x C-columns).
+  \param    r \<table> The table row data matrix (C-columns x R-rows).
+  \param    c <map> The table column identifier matrix (2 x C-columns).
   \param    ri <string> The row identifier.
   \param    ci <string> The column identifier.
 
@@ -207,8 +207,8 @@ function table_exists
 
 //! Get the size of a table.
 /***************************************************************************//**
-  \param    r \<table> The table data matrix (C-columns x R-rows).
-  \param    c <map> The table column matrix (2 x C-columns).
+  \param    r \<table> The table row data matrix (C-columns x R-rows).
+  \param    c <map> The table column identifier matrix (2 x C-columns).
 
   \returns  <integer> The table size.
 
@@ -229,8 +229,8 @@ function table_get_size
 
 //! Create a new matrix from select rows and columns of a table.
 /***************************************************************************//**
-  \param    r \<table> The table data matrix (C-columns x R-rows).
-  \param    c <map> The table column matrix (2 x C-columns).
+  \param    r \<table> The table row data matrix (C-columns x R-rows).
+  \param    c <map> The table column identifier matrix (2 x C-columns).
   \param    rs <string-list> A list of selected row identifiers.
   \param    cs <string-list> A list of selected column identifiers.
 
@@ -264,8 +264,8 @@ function table_get_copy
 
 //! Sum select rows and columns of a table.
 /***************************************************************************//**
-  \param    r \<table> The table data matrix (C-columns x R-rows).
-  \param    c <map> The table column matrix (2 x C-columns).
+  \param    r \<table> The table row data matrix (C-columns x R-rows).
+  \param    c <map> The table column identifier matrix (2 x C-columns).
   \param    rs <string-list> A list of selected row identifiers.
   \param    cs <string-list> A list of selected column identifiers.
 
@@ -281,8 +281,8 @@ function table_get_sum
 
 //! Perform basic format checks on a table and return errors.
 /***************************************************************************//**
-  \param    r \<table> The table data matrix (C-columns x R-rows).
-  \param    c <map> The table column matrix (2 x C-columns).
+  \param    r \<table> The table row data matrix (C-columns x R-rows).
+  \param    c <map> The table column identifier matrix (2 x C-columns).
 
   \returns  <list-N> A list of table format errors.
 
@@ -344,8 +344,8 @@ function table_errors
 
 //! Perform basic format checks on a table and output errors to console.
 /***************************************************************************//**
-  \param    r \<table> The table data matrix (C-columns x R-rows).
-  \param    c <map> The table column matrix (2 x C-columns).
+  \param    r \<table> The table row data matrix (C-columns x R-rows).
+  \param    c <map> The table column identifier matrix (2 x C-columns).
   \param    verbose <boolean> Be verbose during check.
 
   \details
@@ -422,8 +422,8 @@ module table_check
 
 //! Dump a table to the console.
 /***************************************************************************//**
-  \param    r \<table> The table data matrix (C-columns x R-rows).
-  \param    c <map> The table column matrix (2 x C-columns).
+  \param    r \<table> The table row data matrix (C-columns x R-rows).
+  \param    c <map> The table column identifier matrix (2 x C-columns).
   \param    rs <string-list> A list of selected row identifiers.
   \param    cs <string-list> A list of selected column identifiers.
   \param    number <boolean> Number the rows.
@@ -501,10 +501,10 @@ module table_dump
 
 //! Dump table getter functions to the console.
 /***************************************************************************//**
-  \param    r \<table> The table data matrix (C-columns x R-rows).
-  \param    c <map> The table column matrix (2 x C-columns).
-  \param    tr <string> The table data matrix variable name.
-  \param    tc <string> The table column matrix variable name.
+  \param    r \<table> The table row data matrix (C-columns x R-rows).
+  \param    c <map> The table column identifier matrix (2 x C-columns).
+  \param    tr <string> The table row data matrix variable name.
+  \param    tc <string> The table column identifier matrix variable name.
   \param    ri <string | value> The row identifier variable name or value.
   \param    ci <string | value> The column identifier variable name or value.
   \param    vri <boolean> The row identifier \p ri is a value.
@@ -700,8 +700,8 @@ verbose = false
 
 //! Write formatted map entries to the console.
 /***************************************************************************//**
-  \param    r \<table> The table data matrix (C-columns x R-rows).
-  \param    c <map> The table column matrix (2 x C-columns).
+  \param    r \<table> The table row data matrix (C-columns x R-rows).
+  \param    c <map> The table column identifier matrix (2 x C-columns).
   \param    rs <string-list> A list of selected row identifiers.
   \param    cs <string-list> A list of selected column identifiers.
   \param    number <boolean> Number the rows.
