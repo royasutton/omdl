@@ -56,13 +56,14 @@
   \param    ri <string> The row identifier.
 
   \returns  <integer> The row index where the identifier exists.
-            If the identifier does not exists, returns \b empty_lst.
+            Returns \b undef if the identifier does not exists.
 *******************************************************************************/
 function table_get_row_index
 (
   r,
   ri
-) = first( search( [ri], r, 1, 0 ) );
+) = let(i = first( search( [ri], r, 1, 0 ) ) )
+    (i == empty_lst) ? undef : i;
 
 //! Get the table row that matches a table row identifier.
 /***************************************************************************//**
@@ -84,13 +85,14 @@ function table_get_row
   \param    ci <string> The column identifier.
 
   \returns  <integer> The column index where the identifier exists.
-            If the identifier does not exists, returns \b empty_lst.
+            Returns \b undef if the identifier does not exists.
 *******************************************************************************/
 function table_get_column_index
 (
   c,
   ci
-) = first( search( [ci], c, 1, 0 ) );
+) = let(i = first( search( [ci], c, 1, 0 ) ) )
+    (i == empty_lst) ? undef : i;
 
 //! Get the table column that matches a table column identifier.
 /***************************************************************************//**
