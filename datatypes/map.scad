@@ -64,8 +64,7 @@ function map_get_index
   k
 ) = !is_string(k) ? undef
   : let(i = first(search([k], m, 1, 0 )))
-    (i != empty_lst) ? i
-  : undef;
+    (i == empty_lst) ? undef : i;
 
 //! Test if a key exists.
 /***************************************************************************//**
