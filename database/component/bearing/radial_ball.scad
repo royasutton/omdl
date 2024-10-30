@@ -80,7 +80,7 @@ dtc_bearing_radial_ball =
   ["n", "model number"],
   ["id", "inscribed circle"],
   ["od", "outer diameter"],
-  ["l", "length"]
+  ["b", "outer width"]
 ];
 
 //! \<table> ball bearing data table rows.
