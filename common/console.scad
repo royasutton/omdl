@@ -169,10 +169,13 @@ module log_warn( m )
 
   \details
 
-    Output an error message to the console. Ideally, rendering should halt
-    and the script should exit. However, no suitable abort function exists.
-    To alert of the critical error, the error message is also rendered
-    graphically.
+    Output an error message to the console.
+
+  \note
+    Starting with version 2019.05, the [assert] functions which can be
+    used to generate an error condition and halt script processing.
+
+  [assert]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Other_Language_Features#assert
 *******************************************************************************/
 module log_error( m )
 {
