@@ -43,12 +43,23 @@
 
   \details
 
+    The table functions were originally coded with the row and column
+    data as separate parameters. Some equivalent functions are provided
+    that accept the row and column data as a single combined parameter,
+    where <tt>t = [r, c];</tt> for convenience and are prefaced with
+    the letter 'c'.
+
     \amu_define title (Table use)
     \amu_define scope_id (example_use)
     \amu_include (include/amu/scope.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+// Separate
+//----------------------------------------------------------------------------//
+
+//! \name Separate table data
+//! @{
 
 //! Get the table row index that matches a table row identifier.
 /***************************************************************************//**
@@ -841,6 +852,53 @@ module table_write
     }
   }
 }
+
+//! @}
+
+//----------------------------------------------------------------------------//
+// Combined
+//----------------------------------------------------------------------------//
+
+//! \name Combined table data
+//! @{
+
+/***************************************************************************//**
+  \param    t <datastruct-list-2> A list [\<table>, <map>], [r, c], of
+            the row data matrix (C-columns x R-rows) and column
+            identifier matrix (2 x C-columns).
+
+  \copydoc table_get()
+*******************************************************************************/
+function ctable_get( t, ri, ci ) = table_get( first(t), second(t), ri, ci );
+
+/***************************************************************************//**
+  \param    t <datastruct-list-2> A list [\<table>, <map>], [r, c], of
+            the row data matrix (C-columns x R-rows) and column
+            identifier matrix (2 x C-columns).
+
+  \copydoc table_exists()
+*******************************************************************************/
+function ctable_exists( t, ri, ci ) = table_exists( first(t), second(t), ri, ci );
+
+/***************************************************************************//**
+  \param    t <datastruct-list-2> A list [\<table>, <map>], [r, c], of
+            the row data matrix (C-columns x R-rows) and column
+            identifier matrix (2 x C-columns).
+
+  \copydoc table_get_size()
+*******************************************************************************/
+function ctable_get_size( t ) = table_get_size( first(t), second(t) );
+
+/***************************************************************************//**
+  \param    t <datastruct-list-2> A list [\<table>, <map>], [r, c], of
+            the row data matrix (C-columns x R-rows) and column
+            identifier matrix (2 x C-columns).
+
+  \copydoc table_errors()
+*******************************************************************************/
+function ctable_errors( t ) = table_errors( first(t), second(t) );
+
+//! @}
 
 //! @}
 //! @}
