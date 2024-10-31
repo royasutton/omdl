@@ -115,7 +115,7 @@ function table_get_column
   \param    ri <string> The row identifier.
   \param    ci <string> The column identifier.
 
-  \returns  \<value> The value of the matrix cell [ri, ci].
+  \returns  \<value> The value of the data cell <tt>[ri, ci]</tt>.
             If either identifier does not exists, returns \b undef.
 *******************************************************************************/
 function table_get_value
