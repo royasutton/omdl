@@ -42,5 +42,20 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+
+  \details
+
+    This library considers a model to be any design element that is
+    fabricated elsewhere, such as commodity screws, linear rails,
+    motors, lights, circuit boards, etc. A model is typically either a
+    component that is a not a mechanical part or is an exterior
+    "black-box" descriptions of a mechanical part with internal detail
+    insufficient for manufacturing.
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
 // end of file
 //----------------------------------------------------------------------------//
