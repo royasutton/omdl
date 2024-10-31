@@ -115,7 +115,7 @@ function table_get_column
   \param    ri <string> The row identifier.
   \param    ci <string> The column identifier.
 
-  \returns  \<value> The value of the data cell <tt>[ri, ci]</tt>.
+  \returns  \<value> The value of the table cell <tt>[ri, ci]</tt>.
             If either identifier does not exists, returns \b undef.
 *******************************************************************************/
 function table_get_value
@@ -142,6 +142,48 @@ function table_get_columns
   ci
 ) = table_exists(r,c,ci=ci) ?
     select_e(table_get_copy(r,c,cs=[ci]),f=true)
+  : undef;
+
+//! Get a row, a column, or a specific cell value from a table.
+/***************************************************************************//**
+  \param    t <datastruct-list-2> A list [\<table>, <map>], [r, c], of
+            the row data matrix (C-columns x R-rows) and column
+            identifier matrix (2 x C-columns).
+  \param    ri <string> The row identifier.
+  \param    ci <string> The column identifier.
+
+  \returns  (1) \<value> The value of the table cell <tt>[ri, ci]</tt>
+            when both \p ri and \p ci are defined. (2) The row <list-R>
+            when only \p ri is defined. (3) The column <list-C> when
+            only \p ci is defined. (4) Returns \b undef when the
+            specified row or column identifier is not present in the
+            table or when both are undefined.
+
+  \details
+
+    This function provides a somewhat simpler user interface and
+    combines the behavior of several other table access functions
+    depending on the number of supplied parameters. The row and column
+    data is supplied as a single parameter list, namely [r, c].
+
+    \b Example
+    \code
+    t = [my_config_tr, my_config_tc];
+
+    rows = table_rc_get( t, ri );
+    cols = table_rc_get( t, ci=ci );
+    cval = table_rc_get( t, ri, ci );
+    \endcode
+*******************************************************************************/
+function table_rc_get
+(
+  t,
+  ri,
+  ci
+) = let ( r = first(t), c = second(t), dr = is_defined(ri), dc = is_defined(ci) )
+    ( dr && dc ) ? table_get_value(r, c, ri, ci)
+  : dr ? table_get_row(r, ri)
+  : dc ? table_get_columns(r, c, ci)
   : undef;
 
 //! Form a list of all table row identifiers.
