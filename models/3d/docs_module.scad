@@ -1,4 +1,4 @@
-//! Module: Black-box models of commodity components.
+//! Module: 3d black-box models of commodity components.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Models)
-    \amu_define group_brief (Black-box models of commodity components.)
+    \amu_define group_name  (3d Models)
+    \amu_define group_brief (3d black-box models of commodity components.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
@@ -38,22 +38,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group.amu)
-*******************************************************************************/
-
-//----------------------------------------------------------------------------//
-
-/***************************************************************************//**
-  \addtogroup \amu_eval(${group})
-
-  \details
-
-    This library considers a model to be any design element that is
-    fabricated elsewhere, such as commodity screws, linear rails,
-    motors, lights, circuit boards, etc. A model is typically either a
-    component that is a not a mechanical part or is an exterior
-    "black-box" descriptions of a mechanical part with internal detail
-    insufficient for manufacturing.
+  \amu_include (include/amu/group_in_parent.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

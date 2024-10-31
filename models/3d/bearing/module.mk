@@ -4,15 +4,18 @@
 $(eval $(call clear-local-module))
 #------------------------------------------------------------------------------#
 
-local_path        :=  models
+local_path        :=  models/3d/bearing
 
-local_library     :=  docs_module
+local_library     :=  docs_module \
+                      \
+                      lmxuu \
+                      radial_ball
 
 local_release_add :=
 
 local_backup_add  :=
 
-local_submodules  := 3d
+local_submodules  :=
 
 #------------------------------------------------------------------------------#
 # add local module
