@@ -146,9 +146,8 @@ function table_get_columns
 
 //! Get a row, a column, or a specific cell value from a table.
 /***************************************************************************//**
-  \param    t <datastruct-list-2> A list [\<table>, <map>], [r, c], of
-            the row data matrix (C-columns x R-rows) and column
-            identifier matrix (2 x C-columns).
+  \param    r \<table> The table row data matrix (C-columns x R-rows).
+  \param    c <map> The table column identifier matrix (2 x C-columns).
   \param    ri <string> The row identifier.
   \param    ci <string> The column identifier.
 
@@ -161,26 +160,23 @@ function table_get_columns
 
   \details
 
-    This function provides a somewhat simpler user interface and
-    combines the behavior of several other table access functions
-    depending on the number of supplied parameters. The row and column
-    data is supplied as a single parameter list, namely [r, c].
+    This function combines the behavior of several other table access
+    functions dependent on the supplied parameters.
 
     \b Example
     \code
-    t = [my_config_tr, my_config_tc];
-
-    rows = table_rc_get( t, ri );
-    cols = table_rc_get( t, ci=ci );
-    cval = table_rc_get( t, ri, ci );
+    rows = table_get( r, c, ri );
+    cols = table_get( r, c, ci=ci );
+    cell = table_get( r, c, ri, ci );
     \endcode
 *******************************************************************************/
-function table_rc_get
+function table_get
 (
-  t,
+  r,
+  c,
   ri,
   ci
-) = let ( r = first(t), c = second(t), dr = is_defined(ri), dc = is_defined(ci) )
+) = let ( dr = is_defined(ri), dc = is_defined(ci) )
     ( dr && dc ) ? table_get_value(r, c, ri, ci)
   : dr ? table_get_row(r, ri)
   : dc ? table_get_columns(r, c, ci)
