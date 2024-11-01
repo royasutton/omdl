@@ -1,7 +1,0 @@
-<map id="star3d" name="star3d">
-<area shape="rect" id="node2" href="$group__datatypes__operate__iterable.html#ga3d679b4617986e31d5e2803971b37af8" title="Return an iterable element when it exists or a default value when it does not. " alt="" coords="256,5,345,32"/>
-<area shape="rect" id="node3" href="$group__tools__repeat.html#gaa2529fb73f5660932dd812b457188e32" title="Distribute copies of a 2d or 3d shape equally about a z&#45;axis radius. " alt="" coords="112,93,208,120"/>
-<area shape="rect" id="node6" href="$group__shapes__3d.html#gaaf63049f5c83cbb3b1f349b0a7a350e9" title="A pyramid with quadrilateral base. " alt="" coords="119,43,201,69"/>
-<area shape="rect" id="node4" href="$group__math__oshapes.html#ga0e1975ceeaf1701764e7041470e3db71" title="Compute the coordinates for an n&#45;sided regular polygon. " alt="" coords="257,68,345,95"/>
-<area shape="rect" id="node5" href="$group__math__vector__algebra.html#ga3a0c4c75047b8003ab09286a77a58c86" title="Compute the angle between two lines (or vectors) in a Euclidean 3d or 2d&#45;space. " alt="" coords="267,119,334,145"/>
-</map>

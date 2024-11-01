@@ -1,7 +1,0 @@
-<map id="rotate_extrude_tre" name="rotate_extrude_tre">
-<area shape="rect" id="node2" href="$group__datatypes__identify__scalar.html#ga62dbd35f498bfc2a090812b1cf8a37c4" title="Test if a value is not defined. " alt="" coords="195,5,285,32"/>
-<area shape="rect" id="node3" href="$group__tools__extrude.html#ga485bf7d4456a1599bd170a40d6123d79" title="Translate, rotate, and revolve the 2d shape about the z&#45;axis. " alt="" coords="180,56,300,83"/>
-<area shape="rect" id="node4" href="$group__datatypes__identify__scalar.html#ga258e8911375d30ff85a6e52df01dc1c5" title="Test if a value is a single non&#45;iterable value. " alt="" coords="203,107,277,133"/>
-<area shape="rect" id="node5" href="$group__datatypes__operate__iterable.html#ga3d679b4617986e31d5e2803971b37af8" title="Return an iterable element when it exists or a default value when it does not. " alt="" coords="195,157,285,184"/>
-<area shape="rect" id="node6" href="$group__math__bitwise.html#ga31b8c7bc875d9fadd86b49a1ba39d1a4" title="Test if a base&#45;two bit position of an integer value equals a test bit. " alt="" coords="181,208,299,235"/>
-</map>

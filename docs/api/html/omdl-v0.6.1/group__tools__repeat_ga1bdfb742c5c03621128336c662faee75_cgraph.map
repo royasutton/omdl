@@ -1,7 +1,0 @@
-<map id="grid_repeat" name="grid_repeat">
-<area shape="rect" id="node2" href="$group__datatypes__identify__scalar.html#ga258e8911375d30ff85a6e52df01dc1c5" title="Test if a value is a single non&#45;iterable value. " alt="" coords="147,5,222,32"/>
-<area shape="rect" id="node3" href="$group__datatypes__operate__iterable.html#ga3d679b4617986e31d5e2803971b37af8" title="Return an iterable element when it exists or a default value when it does not. " alt="" coords="140,56,229,83"/>
-<area shape="rect" id="node4" href="$group__utilities__console.html#ga1ece4e2cff9ae45c85429c226eb8362c" title="Output warning message to console. " alt="" coords="147,107,222,133"/>
-<area shape="rect" id="node6" href="$group__utilities__console.html#gacb9540a228d2c15623784ff0b0653722" title="Output information message to console. " alt="" coords="151,157,218,184"/>
-<area shape="rect" id="node5" href="$group__utilities__console.html#ga4fb6c985031c9b551777b2e9ebd2fc34" title="Format the function call stack as a string. " alt="" coords="277,132,332,159"/>
-</map>

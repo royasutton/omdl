@@ -1,9 +1,0 @@
-<map id="math/math_bitwise.scad" name="math/math_bitwise.scad">
-<area shape="rect" id="node2" href="$math__utility_8scad.html" title="Miscellaneous mathematical utilities. " alt="" coords="5,155,160,181"/>
-<area shape="rect" id="node4" href="$tools__utility_8scad.html" title="Shape transformation utility tools. " alt="" coords="169,80,321,107"/>
-<area shape="rect" id="node3" href="$omdl-base_8scad.html" title="Include file wrapper of omdl base primitives. " alt="" coords="205,304,320,331"/>
-<area shape="rect" id="node5" href="$shapes2d_8scad.html" title="Two&#45;dimensional basic shapes. " alt="" coords="246,155,402,181"/>
-<area shape="rect" id="node6" href="$shapes2de_8scad.html" title="Linearly extruded two&#45;dimensional basic shapes. " alt="" coords="89,229,252,256"/>
-<area shape="rect" id="node7" href="$shapes3d_8scad.html" title="Three&#45;dimensional basic shapes. " alt="" coords="277,229,433,256"/>
-<area shape="rect" id="node8" href="$tools__edge_8scad.html" title="Shape edge finishing tools. " alt="" coords="457,229,607,256"/>
-</map>
