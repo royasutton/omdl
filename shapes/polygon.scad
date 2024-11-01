@@ -61,7 +61,7 @@
 //! @{
 
 /***************************************************************************//**
-  \amu_define rounding_common_api
+  \amu_define round_vr_common_api
   (
     Each vertex may be assigned an individual rounding radius, rounding
     mode, and facet number as described in \ref polygon_round_eve_all_p
@@ -144,7 +144,7 @@ module pg_elliptical_sector
 
   \details
 
-    \amu_eval ( ${rounding_common_api} )
+    \amu_eval ( ${round_vr_common_api} )
     \amu_eval ( object=pg_trapezoid ${object_ex_diagram_3d} )
 *******************************************************************************/
 module pg_trapezoid
@@ -183,7 +183,7 @@ module pg_trapezoid
 
   \details
 
-    \amu_eval ( ${rounding_common_api} )
+    \amu_eval ( ${round_vr_common_api} )
     \amu_eval ( object=pg_rectangle ${object_ex_diagram_3d} )
 *******************************************************************************/
 module pg_rectangle
@@ -224,7 +224,7 @@ module pg_rectangle
 
   \details
 
-    \amu_eval ( ${rounding_common_api} )
+    \amu_eval ( ${round_vr_common_api} )
     \amu_eval ( object=pg_rhombus ${object_ex_diagram_3d} )
 *******************************************************************************/
 module pg_rhombus
@@ -264,7 +264,7 @@ module pg_rhombus
 
   \details
 
-    \amu_eval ( ${rounding_common_api} )
+    \amu_eval ( ${round_vr_common_api} )
     \amu_eval ( object=pg_ngon ${object_ex_diagram_3d} )
 *******************************************************************************/
 module pg_ngon
@@ -317,7 +317,7 @@ module pg_ngon
        2              | origin at triangle incenter
        3              | origin at triangle circumcenter
 
-    ${rounding_common_api}
+    ${round_vr_common_api}
   )
 *******************************************************************************/
 
