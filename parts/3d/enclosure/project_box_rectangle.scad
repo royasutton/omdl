@@ -544,6 +544,16 @@
       0 | post type  {0:normal, 1:recessed}
       1 | fin type {0:triangular, 1:rectangular}
 
+    ##### post[1]: instances[1]: align
+
+    The post x, y, and z zero-alignment is controlled independently.
+    When x, y, or z is undefined, the post is aligned at the x-y center
+    and the top of the lid, respectively. Each can be assigned either 0
+    or 1 to move the alignment to the negative or positive edge of the
+    enclosure (or lid). To set the post zero alignment at the center of
+    the lower edge of the enclosure use <tt>[\b undef, 0]</tt>, for
+    example.
+
     ### align
 
     The x, y, and z axis of the box can be aligned independently using
