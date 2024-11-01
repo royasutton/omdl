@@ -1,8 +1,0 @@
-<map id="triangle_ls" name="triangle_ls">
-<area shape="rect" id="node2" href="$group__shapes__2d.html#ga7eefb280ad124a8d35eb4218e5f0bdad" title="A general triangle specified by its sides with a removed triangular core. " alt="" coords="135,56,229,83"/>
-<area shape="rect" id="node5" href="$group__shapes__2d.html#ga7452bf5414a3677ec806a31aed6b61dd" title="A two&#45;dimensional star. " alt="" coords="153,107,211,133"/>
-<area shape="rect" id="node7" href="$group__shapes__2de.html#gace35f9581cef6d5c20c3fd1d922284d1" title="An extruded general triangle specified by a list of its three side lengths. " alt="" coords="138,157,226,184"/>
-<area shape="rect" id="node3" href="$group__shapes__2de.html#ga0c99582ccf3d5b1425c99001b228c202" title="A general triangle specified by its sides with a removed triangular core. " alt="" coords="277,5,380,32"/>
-<area shape="rect" id="node4" href="$group__shapes__3d.html#gaa3137155089f4d50c13ebea05402edd0" title="A triangular cross&#45;sectional profile revolved about the z&#45;axis. " alt="" coords="294,56,363,83"/>
-<area shape="rect" id="node6" href="$group__shapes__2de.html#ga69ece32102ccb27e9985975fa4590251" title="An extruded two&#45;dimensional star. " alt="" coords="296,107,361,133"/>
-</map>

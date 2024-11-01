@@ -276,16 +276,18 @@ function index_gen
   \param    p \<value> The pad value.
   \param    rj <boolean> Use right or left justification.
 
-  \returns  (1) \<list> The value as a list padded to \p w elements.
-            (2) Returns \b undef when either \p v or \p w is undefined.
+  \returns  (1) \<list> The value as a list of elements padded to the
+                left or right to \p w total elements.
+            (2) When the value has greater than \p w elements, the it is
+                returned without padding.
 
   \details
 
-    When the list has greater than \p w elements, the list is returned
-    unchanged. When \p l is a string, characters are counted as
-    individual elements. The function strl() can be used to join padded
-    values back into a single string. When the value is a multi-dimensional
-    list, the list element count is considered the value widdth.
+    The elements of the input value \p v and pad value \p p are
+    considered to be characters. When either is not a list of
+    characters or a string, it is converted to one prior to the
+    padding. When \p v is a multi-dimensional, the first-dimension is
+    considered the element count.
 
     \b Example
     \code{.C}
@@ -309,16 +311,18 @@ function pad_e
       // get element size for the value and padding
       lv = len(iv),
       lp = len(ip),
-      // calculate the full and partial paddings
+      // calculate the full and partial padding counts
       cf = floor((w-lv)/lp),
       cp = w - lv - lp * cf,
-      // construct the full and partial padding lists
-      fp = (lv < w) ? [for (i=[1:cf]) ip]
+      // construct the value, full and partial padding lists
+      vl = (lv > 0) ? [for (i=[1:lv]) iv[ (i-1) ]]
+                    : empty_lst,
+      fp = (cf > 0) ? [for (i=[1:cf], j=[1:lp]) ip[ (j-1) ]]
                     : empty_lst,
       pp = (cp > 0) ? [for (i=[1:cp]) ip[(rj == false) ? (i-1) : (lp-cp+i-1) ]]
                     : empty_lst
     )
-    (rj == false) ? concat(iv, fp, pp) : concat(pp, fp, iv);
+    (rj == false) ? concat(vl, fp, pp) : concat(pp, fp, vl);
 
 //! Round a list of numbers to a fixed number of decimal point digits.
 /***************************************************************************//**
@@ -863,8 +867,8 @@ BEGIN_SCOPE validate;
       ["pad_e_9",
         undef,                                              // t01
         ["0","0","0","0","0","0","0","0","0"],              // t02
-        ["[0 : 0.5 : 9]"],                                  // t03
-        ["0","A string"],                                   // t04
+        ["[","0"," ",":"," ","0",".","5"," ",":"," ","9","]"],
+        ["0","A"," ","s","t","r","i","n","g"],              // t04
         ["0","0","0","0","0","orange","apple","grape","banana"],
         ["0","0","b","a","n","a","n","a","s"],              // t06
         ["0","0","0","0","0","0","0","0",undef],            // t07

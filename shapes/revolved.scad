@@ -145,8 +145,6 @@ module torus_ellipse_cs
   \details
 
     \amu_eval ( object=torus_pg_trapezoid ${object_ex_diagram_3d} )
-
-  \todo Use generic rounded trapezoid function for profile.
 *******************************************************************************/
 module torus_pg_trapezoid
 (

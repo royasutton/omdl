@@ -1,4 +1,4 @@
-//! Shapes Module documentation.
+//! Module: Geometric shapes and basic constructs.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

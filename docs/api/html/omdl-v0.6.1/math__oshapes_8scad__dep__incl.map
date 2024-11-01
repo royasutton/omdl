@@ -1,8 +1,0 @@
-<map id="math/math_oshapes.scad" name="math/math_oshapes.scad">
-<area shape="rect" id="node2" href="$tools__utility_8scad.html" title="Shape transformation utility tools. " alt="" coords="195,80,347,107"/>
-<area shape="rect" id="node3" href="$shapes2d_8scad.html" title="Two&#45;dimensional basic shapes. " alt="" coords="193,155,349,181"/>
-<area shape="rect" id="node4" href="$shapes2de_8scad.html" title="Linearly extruded two&#45;dimensional basic shapes. " alt="" coords="5,229,168,256"/>
-<area shape="rect" id="node6" href="$shapes3d_8scad.html" title="Three&#45;dimensional basic shapes. " alt="" coords="193,229,349,256"/>
-<area shape="rect" id="node7" href="$tools__edge_8scad.html" title="Shape edge finishing tools. " alt="" coords="373,229,523,256"/>
-<area shape="rect" id="node5" href="$omdl-base_8scad.html" title="Include file wrapper of omdl base primitives. " alt="" coords="213,304,328,331"/>
-</map>

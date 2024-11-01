@@ -146,7 +146,7 @@ function any_equal
 
   \details
 
-    When \p v is a srting, \p cv must also be a string.
+    When \p v is a string, \p cv must also be a string.
 *******************************************************************************/
 function all_oneof
 (
@@ -232,7 +232,7 @@ function all_iterables
 //! Test if all elements of an iterable value are lists.
 /***************************************************************************//**
   \param    v <iterable> An iterable data type value.
-  \param    c \<integer> (\em internal) Count of passing comparasions.
+  \param    c <integer> (\em internal) Count of passing comparisons.
 
   \returns  <boolean> \b true when all elements of \p v are lists
             and \b false otherwise. Returns \b true when \p v is a
@@ -241,7 +241,7 @@ function all_iterables
   \details
 
   \note     The parameter \p c is an internal variable used to count
-            the number of successful comparasion performed while
+            the number of successful comparisons performed while
             traversing \p v. This parameter should not be initialized
             under normal circumstances.
 *******************************************************************************/
@@ -257,7 +257,7 @@ function all_lists
 //! Test if all elements of an iterable value are strings.
 /***************************************************************************//**
   \param    v <iterable> An iterable data type value.
-  \param    c \<integer> (\em internal) Count of passing comparasions.
+  \param    c <integer> (\em internal) Count of passing comparisons.
 
   \returns  <boolean> \b true when all elements of \p v are strings
             and \b false otherwise. Returns \b true when \p v is a
@@ -266,7 +266,7 @@ function all_lists
   \details
 
   \note     The parameter \p c is an internal variable used to count
-            the number of successful comparasion performed while
+            the number of successful comparisons performed while
             traversing \p v. This parameter should not be initialized
             under normal circumstances.
 *******************************************************************************/
@@ -282,7 +282,7 @@ function all_strings
 //! Test if all elements of an iterable value are numbers.
 /***************************************************************************//**
   \param    v <iterable> An iterable data type value.
-  \param    c \<integer> (\em internal) Count of passing comparasions.
+  \param    c <integer> (\em internal) Count of passing comparisons.
 
   \returns  <boolean> \b true when all elements of \p v are numerical
             values and \b false otherwise. Returns \b true when \p v is
@@ -291,7 +291,7 @@ function all_strings
   \details
 
   \note     The parameter \p c is an internal variable used to count
-            the number of successful comparasion performed while
+            the number of successful comparisons performed while
             traversing \p v. This parameter should not be initialized
             under normal circumstances.
 *******************************************************************************/

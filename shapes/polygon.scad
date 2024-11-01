@@ -61,7 +61,17 @@
 //! @{
 
 /***************************************************************************//**
-  \amu_define rounding_common_api
+  \amu_define round_sr_common_api
+  (
+    The side rounding radius may be zero, positive, or negative. When
+    positive, the rounding arc is swept clockwise. When negative, the
+    arc is swept counter clockwise. A positive radius much be greater
+    than the side length.
+  )
+*******************************************************************************/
+
+/***************************************************************************//**
+  \amu_define round_vr_common_api
   (
     Each vertex may be assigned an individual rounding radius, rounding
     mode, and facet number as described in \ref polygon_round_eve_all_p
@@ -95,10 +105,74 @@ module pg_corner_round
 //! @}
 
 //----------------------------------------------------------------------------//
-// general
+// round side general
 //----------------------------------------------------------------------------//
 
-//! \name General
+//! \name Round side general
+//! @{
+
+//! A polygon rectangle with side rounding.
+/***************************************************************************//**
+  \param    size <decimal-list-2 | decimal> A list [x, y] of decimals
+            or a single decimal for (x=y).
+
+  \param    o <point-2d> The origin offset coordinate [x, y].
+
+  \param    sr  <decimal-list-2 | decimal> The side rounding radius.
+
+  \param    center <boolean> Center about origin.
+
+  \details
+
+    \amu_eval ( ${round_sr_common_api} )
+    \amu_eval ( object=pg_rectangle_rs ${object_ex_diagram_3d} )
+*******************************************************************************/
+module pg_rectangle_rs
+(
+  size = 1,
+  o,
+  sr,
+  center = false
+)
+{
+  sx = defined_e_or(size, 0, size);
+  sy = defined_e_or(size, 1, sx);
+
+  rd = defined_or(sr, 1/grid_fine);
+  rx = defined_e_or(sr, 0, rd);
+  ry = defined_e_or(sr, 1, rx);
+
+  assert( (rx <= 0) || (rx > 0) && (rx >= sx), "(+) x-radius less than x-side" );
+  assert( (ry <= 0) || (ry > 0) && (ry >= sy), "(+) y-radius less than y-side" );
+
+  cwx = (ry > 0) ? true : false;
+  cwy = (rx > 0) ? true : false;
+
+  ts =
+  [ // centered around origin
+    ["arc_pv", [[  0, +ry], [-sx, +sy]/2, cwx]],
+    ["arc_pv", [[-rx,   0], [-sx, -sy]/2, cwy]],
+    ["arc_pv", [[  0, -ry], [+sx, -sy]/2, cwx]],
+    ["arc_pv", [[+rx,   0], [+sx, +sy]/2, cwy]]
+  ];
+
+  c = polygon_turtle_p( ts, i=[sx,sy]/2 );
+
+  p = (center == true)  &&  is_undef( o ) ? c
+    : (center == true)  && !is_undef( o ) ? translate_p(c, o)
+    : (center == false) &&  is_undef( o ) ? translate_p(c, [sx, sy]/2)
+    : translate_p(c, o + [sx, sy]/2);
+
+  polygon(p);
+}
+
+//! @}
+
+//----------------------------------------------------------------------------//
+// round vertex general
+//----------------------------------------------------------------------------//
+
+//! \name Round vertex general
 //! @{
 
 //! A polygon elliptical sector.
@@ -135,7 +209,7 @@ module pg_elliptical_sector
 
   \details
 
-    \amu_eval ( ${rounding_common_api} )
+    \amu_eval ( ${round_vr_common_api} )
     \amu_eval ( object=pg_trapezoid ${object_ex_diagram_3d} )
 *******************************************************************************/
 module pg_trapezoid
@@ -174,7 +248,7 @@ module pg_trapezoid
 
   \details
 
-    \amu_eval ( ${rounding_common_api} )
+    \amu_eval ( ${round_vr_common_api} )
     \amu_eval ( object=pg_rectangle ${object_ex_diagram_3d} )
 *******************************************************************************/
 module pg_rectangle
@@ -215,7 +289,7 @@ module pg_rectangle
 
   \details
 
-    \amu_eval ( ${rounding_common_api} )
+    \amu_eval ( ${round_vr_common_api} )
     \amu_eval ( object=pg_rhombus ${object_ex_diagram_3d} )
 *******************************************************************************/
 module pg_rhombus
@@ -255,7 +329,7 @@ module pg_rhombus
 
   \details
 
-    \amu_eval ( ${rounding_common_api} )
+    \amu_eval ( ${round_vr_common_api} )
     \amu_eval ( object=pg_ngon ${object_ex_diagram_3d} )
 *******************************************************************************/
 module pg_ngon
@@ -282,10 +356,10 @@ module pg_ngon
 //! @}
 
 //----------------------------------------------------------------------------//
-// triangles
+// round vertex triangles
 //----------------------------------------------------------------------------//
 
-//! \name Triangles
+//! \name Round vertex triangles
 //! @{
 
 /***************************************************************************//**
@@ -308,7 +382,7 @@ module pg_ngon
        2              | origin at triangle incenter
        3              | origin at triangle circumcenter
 
-    ${rounding_common_api}
+    ${round_vr_common_api}
   )
 *******************************************************************************/
 
@@ -495,6 +569,8 @@ BEGIN_SCOPE diagram;
 
     if (shape == "pg_corner_round")
       pg_corner_round( r=20, v1=[1,1], v2=135 );
+    else if (shape == "pg_rectangle_rs")
+      pg_rectangle_rs( [60,30], sr=[60,-100], center=true );
     else if (shape == "pg_elliptical_sector")
       pg_elliptical_sector( r=[20, 15], v1=115, v2=-115 );
     else if (shape == "pg_trapezoid")
@@ -524,6 +600,7 @@ BEGIN_SCOPE diagram;
     defines   name "shapes" define "shape"
               strings "
                 pg_corner_round
+                pg_rectangle_rs
                 pg_elliptical_sector
                 pg_trapezoid
                 pg_rectangle
@@ -548,7 +625,7 @@ BEGIN_SCOPE diagram_label;
     include <tools/operation_cs.scad>;
     include <tools/drafting/draft-base.scad>;
 
-    module dt (vl, al, sl)
+    module dt (vl = empty_lst, al = empty_lst, sl = empty_lst)
     {
       s = 10;
       t = [6, 8, 7];
@@ -577,11 +654,11 @@ BEGIN_SCOPE diagram_label;
 
     object = "triangle_sas2sss";
 
-    if (object == "ppp") dt( vl = [0,1,2], al = [], sl = []);
+    if (object == "ppp") dt( vl = [0,1,2]);
     if (object == "sas") dt( vl = [0,1,2], al = [2], sl = [0,1]);
     if (object == "asa") dt( vl = [0,1,2], al = [0,1], sl = [2]);
     if (object == "aas") dt( vl = [0,1,2], al = [0,1], sl = [0]);
-    if (object == "sss") dt( vl = [], al = [], sl = [0,1,2]);
+    if (object == "sss") dt( sl = [0,1,2]);
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;

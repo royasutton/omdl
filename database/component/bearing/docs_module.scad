@@ -1,8 +1,8 @@
-//! Module: Electric battery specifications.
+//! Module: Mechanical bearing specifications.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2018-2023
+  \date   2024
 
   \copyright
 
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Battery)
-    \amu_define group_brief (Electric battery specifications.)
+    \amu_define group_name  (Bearing)
+    \amu_define group_brief (Mechanical bearing specifications.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
@@ -38,7 +38,52 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent.amu)
+  \amu_include (include/amu/group_in_parent_start.amu)
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// subgroups (1 level).
+//----------------------------------------------------------------------------//
+
+/***************************************************************************//**
+  /+
+
+    NOTE: each word group identifier should be capitalized.
+
+  +/
+
+  /+ define level1 groups +/
+
+  \amu_define groups_level1
+  (
+    Linear
+    Radial
+  )
+
+  /+ remove newlines from identifiers +/
+
+  \amu_replace groups_level1 (text="${groups_level1}" search="\n" replace=", ")
+
+  /+ expand level1 groups +/
+
+  \amu_define new_line
+  (
+  )
+
+  \amu_foreach defgroup_level1
+  (
+    words=${groups_level1} separator="${new_line}"
+    text="\defgroup ${group}_\${x} \${x}"
+  )
+*******************************************************************************/
+
+/***************************************************************************//**
+  /+ instantiate level1 groups +/
+
+  \amu_text
+  (
+  ${defgroup_level1}
+  )
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -48,10 +93,14 @@
 
   \details
 
-    General information on electric batteries is available at [wikipedia].
+    General information on mechanical bearings is available at [wikipedia].
 
-  [wikipedia]: https://en.wikipedia.org/wiki/Electric_battery
+  [wikipedia]: https://en.wikipedia.org/wiki/Bearing_(mechanical)
 *******************************************************************************/
+
+//! @}
+//! @}
+
 
 //----------------------------------------------------------------------------//
 // end of file

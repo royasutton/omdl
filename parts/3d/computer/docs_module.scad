@@ -1,4 +1,4 @@
-//! 3d Computer Parts Module documentation.
+//! Module: Mechanical computer parts.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

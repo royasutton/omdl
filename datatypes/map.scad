@@ -64,8 +64,7 @@ function map_get_index
   k
 ) = !is_string(k) ? undef
   : let(i = first(search([k], m, 1, 0 )))
-    (i != empty_lst) ? i
-  : undef;
+    (i == empty_lst) ? undef : i;
 
 //! Test if a key exists.
 /***************************************************************************//**
@@ -260,32 +259,28 @@ module map_check
     key = first(entry);
 
     // (1) each entry has key-value 2-tuple.
-    if ( 2 != len(entry) )
-    {
-      log_error
+    assert
+    (
+      len(entry) == 2,
+      str
       (
-        str
-        (
-          "map index ", i,
-          ", entry=", entry,
-          ", has incorrect count=[", len(entry),"]"
-        )
-      );
-    }
+        "map index ", i,
+        ", entry=", entry,
+        ", has incorrect count=[", len(entry),"]"
+      )
+    );
 
     // (2) each key must be a string.
-    if ( is_string(key) == false )
-    {
-      log_error
+    assert
+    (
+      is_string(key),
+      str
       (
-        str
-        (
-          "map index ", i,
-          ", entry=", entry,
-          ", key=[", key,"] is not a string."
-        )
-      );
-    }
+        "map index ", i,
+        ", entry=", entry,
+        ", key=[", key,"] is not a string."
+      )
+    );
 
     // (3) no repeat key identifiers.
     if ( len(first(search([key], m, 0, 0))) > 1 )
@@ -455,17 +450,21 @@ BEGIN_SCOPE example_use;
       ["runid",       10]
     ];
 
+    echo( "### map_check ###" );
     map_check(map, true);
 
+    echo( "### map_exists ###" );
     echo( str("is part0 = ", map_exists(map, "part0")) );
     echo( str("is part1 = ", map_exists(map, "part1")) );
 
+    echo( "### map_get_value ###" );
     p1 = map_get_value(map, "part1");
     echo( c=second(p1) );
 
     keys = map_get_keys(map);
     parts = delete(keys, mv=["config", "version", "runid"]);
 
+    echo( "### map_delete ###" );
     for ( p = parts )
       echo
       (
@@ -474,6 +473,7 @@ BEGIN_SCOPE example_use;
         l=second(map_get_value(map, p))
       );
 
+    echo( "### map_dump ###" );
     map_dump(map);
 
     // end_include

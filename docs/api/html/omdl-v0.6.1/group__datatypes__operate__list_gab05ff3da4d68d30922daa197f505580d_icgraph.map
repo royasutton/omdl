@@ -1,6 +1,0 @@
-<map id="consts" name="consts">
-<area shape="rect" id="node2" href="$group__datatypes__map.html#gab86352ba6da2d2072f747e95b04d0435" title="Dump each map entry to the console. " alt="" coords="132,5,219,32"/>
-<area shape="rect" id="node3" href="$group__datatypes__table.html#ga717ca569831188092358ee04f7211700" title="Dump a table to the console. " alt="" coords="131,56,220,83"/>
-<area shape="rect" id="node4" href="$group__tools__polytope.html#ga00b574079f19251be7281151d11db8fa" title="Label the vertices, paths, and edges of a polytope. " alt="" coords="115,107,236,133"/>
-<area shape="rect" id="node5" href="$group__tools__polytope.html#ga530c86f9c90ce074aa7adc29834f0539" title="Assemble a polytope skeletal frame using child objects. " alt="" coords="120,157,231,184"/>
-</map>

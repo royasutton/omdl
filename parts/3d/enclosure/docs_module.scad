@@ -1,4 +1,4 @@
-//! 3d Enclosures Module documentation.
+//! Module: Project boxes, housings and enclosures.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

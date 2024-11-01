@@ -214,7 +214,7 @@ function polygon_line_p
             A 2d line, vector, or decimal angle 1.
   \param    v2 <line-2d | decimal> The arc end angle.
             A 2d line, vector, or decimal angle 2.
-  \param    fn <integer> The number of [facets].
+  \param    fn <integer> The number of [facets] (optional).
   \param    cw <boolean> Sweep clockwise along arc from the head of
             vector \p v1 to the head of vector \p v2 when \p cw =
             \b true, and counter clockwise when \p cw = \b false.
@@ -227,7 +227,8 @@ function polygon_line_p
     contained within the heads of vectors \p v1 and \p v2. The arc will
     start at the point coincident to \p v1 and will end at the point
     coincident to \p v2. When vectors \p v1 and \p v2 are parallel, the
-    arc will be a complete circle.
+    arc will be a complete circle. When \p fn is undefined, its value
+    is determined by get_fn().
 
   [facets]: \ref get_fn()
 *******************************************************************************/
@@ -276,7 +277,7 @@ function polygon_arc_p
             A 2d line, vector, or decimal.
   \param    s <boolean> Use signed vector angle conversions. When
             \b false, positive angle conversion will be used.
-  \param    fn <integer> The number of [facets].
+  \param    fn <integer> The number of [facets] (optional).
   \param    cw <boolean> The coordinate point ordering.
 
   \returns  <coords-2d> A list of coordinates points [[x, y], ...].
@@ -285,7 +286,8 @@ function polygon_arc_p
 
     The coordinates will be between angle 1 and angle 2 and will be
     ordered clockwise. The sector sweep direction can be controlled by
-    the sign of the angles.
+    the sign of the angles. When \p fn is undefined, its value is
+    determined by get_fn().
 
   [facets]: \ref get_fn()
 *******************************************************************************/
@@ -1163,44 +1165,84 @@ function polygon_round_eve_all_p
 //! \name Interpreter
 //! @{
 
-//! Generate list of coordinate points from simple step move notation.
+//! Generate list of coordinate points from simple operation step notation.
 /***************************************************************************//**
-  \param    s <datastruct-list> The list of step moves.
+  \param    s <datastruct> The list of steps.
   \param    i <point-2d> The initial coordinate [x, y].
+  \param    c <integer> (an internal recursion step count)
 
-  \returns  <point-2d-list> The list of coordinate point list.
+  \returns  <point-2d-list> The list of coordinate points.
 
   \details
 
-    This function is a simple interpreter that converts a list of move
-    commands into coordinate points for the construction of polygons.
-    Each move command produces a single new output point and may be
-    specified as an absolute coordinate or may be relative to the
-    previous coordinate point. The steps are specified by a list which
-    include the command along with one or two command arguments.
+    This function is a simple interpreter that converts a list of
+    operation steps into coordinate points for the construction of
+    polygons. It provides a convenient way to construct polygons using
+    a simple notation. It is inspired by the implementation of the
+    [Turtle graphics] geometric drawing language. Each step produces a
+    new output point or points and follow the following schema:
 
-     Move step definition:
+    Data structure schema:
 
-      datastruct types                  | syntax
-    :-----------------------------------|:----------------------------
-     [ <string>, <number>, (<number>)]  | [ command, arg1, (arg2) ]
+    name            | schema
+    ---------------:|:----------------------------------------------
+    s               | [ step, step, ..., step ]
+    step            | [ operation, arguments ]
+    arguments       | [ arg, arg, ..., arg ]
 
-    The following table summarized the commands and their semantics.
+    The following table summarized the available operations and their
+    semantics.
 
-     command    | short | argc | arg1 | arg1 | output coordinate point
-    :-----------|:-----:|:----:|:----:|:----:|:-----------------------
-     move_xy    | mxy   | 2    | x    | y    | [x, y]
-     move_x     | mx    | 1    | x    | -    | [x, i.y]
-     move_y     | my    | 1    | y    | -    | [i.x, y]
-     delta_xy   | dxy   | 2    | x    | y    | i + [x, y]
-     delta_x    | dx    | 1    | x    | -    | i + [x, 0]
-     delta_y    | dy    | 1    | y    | -    | i + [0, y]
-     delta_xv   | dxv   | 2    | x    | a    | i + [ x, x * tan(a) ]
-     delta_yv   | dyv   | 2    | y    | a    | i + l y / tan(a), y ]
-     delta_mv   | dmv   | 2    | m    | a    | i + line(m, a)
+     operation  | short | arguments         | output coordinate point
+    :-----------|:-----:|:-----------------:|:-----------------------
+     move_xy    | mxy   | [x, y]            | [x, y]
+     move_x     | mx    | x                 | [x, i.y]
+     move_y     | my    | y                 | [i.x, y]
+     delta_xy   | dxy   | [x, y]            | i + [x, y]
+     delta_x    | dx    | x                 | i + [x, 0]
+     delta_y    | dy    | y                 | i + [0, y]
+     delta_xa   | dxa   | [x, a]            | i + [ x, x * tan(a) ]
+     delta_ya   | dya   | [y, a]            | i + l y / tan(a), y ]
+     delta_v    | dv    | [m, a]            | i + line(m, a)
+     arc_pv     | apv   | [c, v, cw]        | (see below)
+     arc_vv     | avv   | [v, v, cw]        | (see below)
 
-    This functions provides a convenient way to construct polygons
-    using a simple notation based on incremental steps.
+    When an operation requires only one argument, the argument can be
+    specified as a scalar-value or a single-element list.
+
+    ## Operations
+
+    ### arc_pv
+
+      e | data type                             | parameter description
+    ---:|:-------------------------------------:|:------------------------------------
+      c | <point-2d>                            | arc center point [x, y]
+      v | <point-2d> \| <decimal>               | arc stop angle [x, y] or a
+     cw | <boolean>                             | arc sweep direction
+
+    This operation constructs an arc about the center point, specified
+    as a point coordinate. The arc begins at the angle formed by the
+    vector <tt>[c, i]</tt> and ends at the vector formed by either
+    <tt>[c, v]</tt> or the angle \p v (specified in degrees). The arc
+    sweep direction is controlled by the parameter \p cw. When \p cw is
+    assigned \b true, the arc is swept clockwise from the start angle
+    to the stop angle.
+
+    ### arc_vv
+
+      e | data type                             | parameter description
+    ---:|:-------------------------------------:|:------------------------------------
+      c | <point-2d>                            | arc center point [m, a]
+      v | <point-2d> \| <decimal>               | arc stop angle [x, y] or a
+     cw | <boolean>                             | arc sweep direction
+
+    This operation constructs an arc about the center point, specified
+    as a vector <tt>[m, a]</tt> beginning from the start point. The arc
+    begins at the angle formed by the vector <tt>[c, i]</tt> and ends
+    at the vector formed by either <tt>[c, v]</tt> or the angle \p v
+    (specified in degrees). The arc sweep direction is controlled by
+    the parameter \p cw. When \p cw is assigned \p true, the arc is
+    swept clockwise from the start angle to the stop angle.
 
     \amu_define title           (Motor mount plate design example)
     \amu_define image_views     (top diag)
@@ -1211,9 +1253,7 @@ function polygon_round_eve_all_p
     \amu_include (include/amu/scope_diagrams_3d.amu)
 
     The corners of this example 2d design plate have been rounded with
-    the library function polygon_round_eve_all_p(). This functions is
-    inspired by the implementation of the [Turtle graphics] geometric
-    drawing language.
+    the library function polygon_round_eve_all_p().
 
     [Turtle graphics]: https://en.wikipedia.org/wiki/Turtle_(robot)
 *******************************************************************************/
@@ -1221,38 +1261,68 @@ function polygon_turtle_p
 (
   s,
   i = origin2d,
+  c = 0
 ) = ! is_list( s ) ? empty_lst
   : let
-    ( // get next step definition
-       m = first( s ),
+    ( // get current step
+      stp = first( s ),
 
-      // get move operation and arguments
-       o =  first( m ),
-      a1 = second( m ),
-      a2 =  third( m ),
+      // get operation and argument vector
+      opr = first( stp ),
+      arv = second( stp ),
+      arc = is_undef( arv ) ? 0 : is_list( arv ) ? len( arv ) : 1,
 
-      // compute coordinate point for step operation
-       p = (o == "mxy" || o == "move_xy"  ) ? [a1, a2]
+      // assign arguments
+      a1  = defined_e_or( arv, 0, arv ),
+      a2  = defined_e_or( arv, 1, undef ),
+      a3  = defined_e_or( arv, 2, undef ),
 
-         : (o == "mx"  || o == "move_x"   ) ? [a1, i.y]
-         : (o == "my"  || o == "move_y"   ) ? [i.x, a1]
+      // compute coordinate point(s) for current operation
+      p = (opr == "mxy" || opr == "move_xy"  ) && (arc == 2) ? [a1, a2]
 
-         : (o == "dxy" || o == "delta_xy" ) ? i + [a1, a2]
+        : (opr == "mx"  || opr == "move_x"   ) && (arc == 1) ? [a1, i.y]
+        : (opr == "my"  || opr == "move_y"   ) && (arc == 1) ? [i.x, a1]
 
-         : (o == "dx"  || o == "delta_x"  ) ? i + [a1, 0]
-         : (o == "dy"  || o == "delta_y"  ) ? i + [0, a1]
+        : (opr == "dxy" || opr == "delta_xy" ) && (arc == 2) ? i + [a1, a2]
 
-         : (o == "dxv" || o == "delta_xv" ) ? i + [a1, a1 * tan(a2)]
-         : (o == "dyv" || o == "delta_yv" ) ? i + [a1 / tan(a2), a1]
+        : (opr == "dx"  || opr == "delta_x"  ) && (arc == 1) ? i + [a1, 0]
+        : (opr == "dy"  || opr == "delta_y"  ) && (arc == 1) ? i + [0, a1]
 
-         : (o == "dmv" || o == "delta_mv" ) ? line_tp( line2d_new(m=a1, a=a2, p1=i) )
+        : (opr == "dxa" || opr == "delta_xa" ) && (arc == 2) ? i + [a1, a1 * tan(a2)]
+        : (opr == "dya" || opr == "delta_ya" ) && (arc == 2) ? i + [a1 / tan(a2), a1]
 
-         : [str("ERROR at step: ", o)]
+        : (opr == "dv"  || opr == "delta_v"  ) && (arc == 2) ? line_tp( line2d_new(m=a1, a=a2, p1=i) )
+
+        : (opr == "apv" || opr == "arc_pv"   ) && (arc == 3) ?
+          let
+          ( // handle scalar angle or compute angle from vector
+            v2  = is_list(a2) ? [a1, a2] : a2
+          )
+          polygon_arc_p( r=distance_pp(i, a1), c=a1, v1=[a1, i], v2=v2, cw=a3 )
+
+        : (opr == "avv" || opr == "arc_vv"   ) && (arc == 3) ?
+          let
+          ( // calculate center point 'b1' from given vector [m, a] in 'a1'
+            b1 = line_tp( line2d_new(m=first(a1), a=second(a1), p1=i) ),
+            v2 = is_list(a2) ? [b1, a2] : a2
+          )
+          polygon_arc_p( r=distance_pp(i, b1), c=b1, v1=[b1, i], v2=v2, cw=a3 )
+
+        : assert
+          ( false,
+            str ( "ERROR at '", stp, "', num='", c, "', operation='", opr
+                  , "', argc='", arc, "', argv='", arv,"'" )
+          ),
+
+      ls  = len( s ),               // current step count
+      lp  = len( p ),               // points count in current step
+      cp  = (lp > 2) ? p : [p],     // point-list for current step
+      ni  = (lp > 2) ? last(p) : p  // initial point for next step
     )
-    // check if have reached last move
+    // check if have reached last step (ls == 1)?
     //  yes : terminate recursion
     //   no : pop current step and process remaining
-    ( len( s ) == 1 ) ? [p] : concat( [p], polygon_turtle_p( tailn(s), p ) );
+    ( ls == 1 ) ? cp : concat( cp, polygon_turtle_p( tailn(s), ni, c+1 ) );
 
 //! @}
 
@@ -1279,9 +1349,9 @@ BEGIN_SCOPE polygon_turtle_p;
       ["delta_y",  h1],
       ["delta_x",  w1],
       ["delta_y",  h2],
-      ["delta_xy", w3, h3],
+      ["delta_xy", [w3, h3]],
       ["delta_x",  w1+w2-w3*2],
-      ["delta_xy", w3, -h3],
+      ["delta_xy", [w3, -h3]],
       ["move_y",   0],
       ["move_x",   0],
     ];

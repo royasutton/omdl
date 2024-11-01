@@ -1,8 +1,8 @@
-//! Module: Electric battery specifications.
+//! Module: Black-box models of commodity components.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2018-2023
+  \date   2024
 
   \copyright
 
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Battery)
-    \amu_define group_brief (Electric battery specifications.)
+    \amu_define group_name  (Models)
+    \amu_define group_brief (Black-box models of commodity components.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
@@ -38,7 +38,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent.amu)
+  \amu_include (include/amu/group.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -48,9 +48,12 @@
 
   \details
 
-    General information on electric batteries is available at [wikipedia].
-
-  [wikipedia]: https://en.wikipedia.org/wiki/Electric_battery
+    This library considers a model to be any design element that is
+    fabricated elsewhere, such as commodity screws, linear rails,
+    motors, lights, circuit boards, etc. A model is typically either a
+    component that is a not a mechanical part or is an exterior
+    "black-box" descriptions of a mechanical part with internal detail
+    insufficient for manufacturing.
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

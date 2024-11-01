@@ -1,7 +1,0 @@
-<map id="Tools" name="Tools">
-<area shape="rect" id="node1" href="$group__tools__extrude.html" title="Shape extrusion tools. " alt="" coords="232,12,299,39"/>
-<area shape="rect" id="node2" href="$group__tools__polytope.html" title="Polygon and polyhedron tools. " alt="" coords="229,91,302,117"/>
-<area shape="rect" id="node3" href="$group__tools__align.html" title="Shape alignment tools. " alt="" coords="225,169,305,196"/>
-<area shape="rect" id="node4" href="$group__tools__repeat.html" title="Shape repetition and distribution tools. " alt="" coords="233,256,297,283"/>
-<area shape="rect" id="node5" href="$group__tools__edge.html" title="Shape edge finishing tools. " alt="" coords="239,320,291,347"/>
-</map>

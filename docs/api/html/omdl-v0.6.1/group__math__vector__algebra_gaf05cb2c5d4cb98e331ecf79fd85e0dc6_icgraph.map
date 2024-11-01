@@ -1,7 +1,0 @@
-<map id="get_line2origin" name="get_line2origin">
-<area shape="rect" id="node2" href="$group__tools__align.html#ga6feefab7f1d6951a75a8d7bb74ecf78e" title="Orient a line or vector to a reference line or vector. " alt="" coords="159,56,225,83"/>
-<area shape="rect" id="node5" href="$group__tools__align.html#ga8572146edee6a1b5b4b87392c2cd1928" title="Align a line or vector to a reference line or vector. " alt="" coords="161,107,223,133"/>
-<area shape="rect" id="node3" href="$group__tools__polytope.html#ga00b574079f19251be7281151d11db8fa" title="Label the vertices, paths, and edges of a polytope. " alt="" coords="273,5,395,32"/>
-<area shape="rect" id="node4" href="$group__tools__polytope.html#ga530c86f9c90ce074aa7adc29834f0539" title="Assemble a polytope skeletal frame using child objects. " alt="" coords="279,56,389,83"/>
-<area shape="rect" id="node6" href="$group__tools__align.html#gac0c4c3356fb23ec1ddd12e24f958ef6a" title="Align a shapes&#39; x, y, or z Cartesian axis to reference line or vector. " alt="" coords="305,107,363,133"/>
-</map>

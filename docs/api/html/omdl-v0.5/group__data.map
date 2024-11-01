@@ -1,5 +1,0 @@
-<map id="Data" name="Data">
-<area shape="rect" id="node1" href="$group__data__console.html" title="Console message logging. " alt="" coords="185,5,256,32"/>
-<area shape="rect" id="node2" href="$group__data__map.html" title="Mapped data access via key&#45;value pairs. " alt="" coords="197,92,244,119"/>
-<area shape="rect" id="node4" href="$group__data__table.html" title="Data table encoding and lookup. " alt="" coords="181,156,260,183"/>
-</map>

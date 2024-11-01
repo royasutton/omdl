@@ -1,8 +1,8 @@
-//! Module: Electric battery specifications.
+//! Module: Linear and radial bearings.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2018-2023
+  \date   2024
 
   \copyright
 
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Battery)
-    \amu_define group_brief (Electric battery specifications.)
+    \amu_define group_name  (Bearing)
+    \amu_define group_brief (Linear and radial bearings.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
@@ -39,18 +39,6 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent.amu)
-*******************************************************************************/
-
-//----------------------------------------------------------------------------//
-
-/***************************************************************************//**
-  \addtogroup \amu_eval(${group})
-
-  \details
-
-    General information on electric batteries is available at [wikipedia].
-
-  [wikipedia]: https://en.wikipedia.org/wiki/Electric_battery
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

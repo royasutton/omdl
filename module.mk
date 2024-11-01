@@ -11,13 +11,14 @@ local_library     :=  docs_start \
                       \
                       omdl-base
 
-local_release_add :=  stl/mainpage_quickstart.stl
+local_release_add :=
 
 local_backup_add  :=
 
 local_submodules  :=  common \
                       datatypes \
                       math \
+                      models \
                       parts \
                       shapes \
                       tools \

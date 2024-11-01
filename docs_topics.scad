@@ -61,7 +61,7 @@
 
     View documentation:
     \code{bash}
-    $ firefox .local/share/OpenSCAD/docs/html/index.html
+    $ google-chrome .local/share/OpenSCAD/docs/html/index.html
     \endcode
 
     The \c html documentation will be installed to the OpenSCAD user

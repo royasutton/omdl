@@ -1,4 +1,4 @@
-//! Math Module documentation.
+//! Module: Mathematical functions and operations.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

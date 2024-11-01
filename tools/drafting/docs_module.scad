@@ -1,4 +1,4 @@
-//! Drafting Module documentation.
+//! Module: Drafting and drawing tools.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

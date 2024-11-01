@@ -1,4 +1,4 @@
-//! Parts Module documentation.
+//! Module: Design parts, generators, and small assemblies.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Parts)
-    \amu_define group_brief (Parts, part generators, and small assemblies.)
+    \amu_define group_brief (Design parts, generators, and small assemblies.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
@@ -39,6 +39,17 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group.amu)
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+
+  \details
+
+    This library considers a part to be any mechanical component that
+    is the target of design and fabrication.
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

@@ -1,6 +1,0 @@
-<map id="edge_profile_r" name="edge_profile_r">
-<area shape="rect" id="node2" href="$group__math__vector__algebra.html#gaa71caf02a1433e6c84d61d13d12aa581" title="Compute the normalized unit vector of a Euclidean line (or vector). " alt="" coords="166,5,219,32"/>
-<area shape="rect" id="node3" href="$group__shapes__2d.html#ga8925cd75276266667fbc1f0896482a7a" title="An ellipse sector. " alt="" coords="156,56,229,83"/>
-<area shape="rect" id="node4" href="$group__datatypes__operate__iterable.html#ga3d679b4617986e31d5e2803971b37af8" title="Return an iterable element when it exists or a default value when it does not. " alt="" coords="384,56,473,83"/>
-<area shape="rect" id="node5" href="$group__shapes__2d.html#ga7d62c56f88b839dc7e879ff16f968ea2" title="An ellipse. " alt="" coords="277,81,336,108"/>
-</map>
