@@ -1430,7 +1430,7 @@ module project_box_rectangle
       // assign defaults when not specified with post instance
       //
 
-      // hole0: screw hole
+      // hole0: common screw hole (for all post types)
       h0_en  = (remove == true);
 
       h0_d    = defined_e_or(inst_h0, 0, def_h0_d);
