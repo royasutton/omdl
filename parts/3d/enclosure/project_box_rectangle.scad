@@ -598,11 +598,23 @@
       1 | remove features outside of enclosure envelope
       2 | scale interior with exterior wall during extrusion
       3 | do not limit wall rounding modes to bevel and rounded (1)
+      4 | do not construct exterior walls
+      5 | do not construct exterior wall lips
+      6 | do not construct lid
+      7 | do not construct ribs
+      8 | do not construct interior walls
+      9 | do not construct posts
 
     (1) When rounding mode limiting is disabled, the rounding mode
     value, \p vrm, is no longer mapped to \em bevel or \em rounded and
     any mode of the function polygon_round_eve_all_p() may be used to
     round the box exterior walls and lid.
+
+    Bits 4-9 can be used to disable the construction of select parts.
+    This may be used during design iteration to help understand
+    internal alignment and clearance. For example, turning off the
+    construction of exterior walls allows to see how a PCB fits inside
+    an assembled enclosure.
 
     \amu_define scope_id      (example_bottom)
     \amu_define title         (Project box bottom section example)
@@ -1531,17 +1543,17 @@ module project_box_rectangle
   // assembly feature additions
   module assembly_add()
   {
-    if ( wall_h > 0 )
+    if ( wall_h > 0 && binary_bit_is(mode, 4, 0) )
     {
       construct_exterior_walls();
     }
 
-    if ( is_defined( lip ) )
+    if ( is_defined( lip ) && binary_bit_is(mode, 5, 0) )
     {
       construct_lips();
     }
 
-    if ( lid_h > 0 )
+    if ( lid_h > 0 && binary_bit_is(mode, 6, 0) )
     {
       construct_lid();
     }
@@ -1550,19 +1562,19 @@ module project_box_rectangle
     // better to apply envelop_assembly() to union of all?
     //
 
-    if ( is_defined( rib ) )
+    if ( is_defined( rib ) && binary_bit_is(mode, 7, 0) )
     {
       envelop_assembly( mode_int_mask == true )
       construct_ribs();
     }
 
-    if ( is_defined( wall ) )
+    if ( is_defined( wall ) && binary_bit_is(mode, 8, 0) )
     {
       envelop_assembly( mode_int_mask == true )
       construct_interior_walls();
     }
 
-    if ( is_defined( post ) )
+    if ( is_defined( post ) && binary_bit_is(mode, 9, 0) )
     {
       envelop_assembly( mode_int_mask == true )
       construct_posts( add=true);
@@ -1572,7 +1584,7 @@ module project_box_rectangle
   // assembly feature removals
   module assembly_remove()
   {
-    if ( is_defined( post ) )
+    if ( is_defined( post ) && binary_bit_is(mode, 9, 0) )
     {
       construct_posts( remove=true);
     }
