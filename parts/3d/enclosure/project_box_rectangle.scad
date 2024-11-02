@@ -181,7 +181,7 @@
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | integer           | required          | mode
       1 | decimal           | wth               | height
-      2 | decimal           | 45                | base width percentage of wall
+      2 | decimal           | 35                | base width percentage of wall
       3 | decimal           | 10                | top taper width percentage of wall
       4 | integer           | 0                 | alignment
 
@@ -710,7 +710,7 @@ module project_box_rectangle
     // 'lip_h', bit '1', is set globally (ensure coherency with bits of 'lip')
     // wall lip: mode, height, base pct, taper pct, alignment
     lip_m         = defined_e_or(lip, 0, lip);
-    lip_bw        = defined_e_or(lip, 2, 45);
+    lip_bw        = defined_e_or(lip, 2, 35);
     lip_tw        = defined_e_or(lip, 3, 10);
     lip_a         = defined_e_or(lip, 4, 0);
 
