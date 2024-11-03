@@ -1,4 +1,4 @@
-//! [metric/bolts] Carriage bolts; ISO 8677; DIN 603.
+//! [metric/bolts] Carriage bolts, long neck; ISO 8677; DIN 603.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (ISO 8677)
-    \amu_define group_brief ([metric/bolts] Carriage bolts; ISO 8677; DIN 603.)
+    \amu_define group_brief ([metric/bolts] Carriage bolts, long neck; ISO 8677; DIN 603.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
   \amu_text parent (${parent}_Metric_Bolts)
@@ -42,10 +42,17 @@
 
   \details
 
+    \amu_copy (files="diagrams/bolt_carriage_long_neck.svg" types="html,latex")
+    \amu_text
+    (
+    \image html ${PATH_NAME}/diagrams/bolt_carriage_long_neck.svg "parameters"
+    \image latex ${PATH_NAME}/diagrams/bolt_carriage_long_neck.svg "parameters"
+    )
+
     \amu_define output_scad     (false)
     \amu_define output_console  (false)
 
-    \amu_define title           (Carriage bolts)
+    \amu_define title           (Carriage bolts, long neck)
     \amu_define notes_table     (l1_ref for [L<=125]; l2_ref for[L>125 & L<=200]; l3_ref for [L>200])
 
     \amu_include (include/amu/scope_table.amu)
