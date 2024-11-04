@@ -1234,7 +1234,7 @@ function polygon_round_eve_all_p
 
       e | data type                             | parameter description
     ---:|:-------------------------------------:|:------------------------------------
-      c | <point-2d>                            | arc center point [m, a]
+      c | <decimal-list-2>                      | arc center point [m, a]
       v | <point-2d> \| <decimal>               | arc stop angle [x, y] or a
      cw | <boolean>                             | arc sweep direction
      fn | <integer>                             | the number of facets (optional)
