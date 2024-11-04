@@ -1204,8 +1204,8 @@ function polygon_round_eve_all_p
      delta_xa   | dxa   | [x, a]            | i + [ x, x * tan(a) ]
      delta_ya   | dya   | [y, a]            | i + l y / tan(a), y ]
      delta_v    | dv    | [m, a]            | i + line(m, a)
-     arc_pv     | apv   | [c, v, cw]        | (see below)
-     arc_vv     | avv   | [v, v, cw]        | (see below)
+     arc_pv     | apv   | [c, v, cw, fn]    | (see below)
+     arc_vv     | avv   | [v, v, cw, fn]    | (see below)
 
     When an operation requires only one argument, the argument can be
     specified as a scalar-value or a single-element list.
@@ -1219,6 +1219,7 @@ function polygon_round_eve_all_p
       c | <point-2d>                            | arc center point [x, y]
       v | <point-2d> \| <decimal>               | arc stop angle [x, y] or a
      cw | <boolean>                             | arc sweep direction
+     fn | <integer>                             | the number of facets (optional)
 
     This operation constructs an arc about the center point, specified
     as a point coordinate. The arc begins at the angle formed by the
@@ -1226,7 +1227,8 @@ function polygon_round_eve_all_p
     <tt>[c, v]</tt> or the angle \p v (specified in degrees). The arc
     sweep direction is controlled by the parameter \p cw. When \p cw is
     assigned \b true, the arc is swept clockwise from the start angle
-    to the stop angle.
+    to the stop angle. The parameter \p fn is optional and, when not
+    defined, will be determined by get_fn().
 
     ### arc_vv
 
@@ -1235,6 +1237,7 @@ function polygon_round_eve_all_p
       c | <point-2d>                            | arc center point [m, a]
       v | <point-2d> \| <decimal>               | arc stop angle [x, y] or a
      cw | <boolean>                             | arc sweep direction
+     fn | <integer>                             | the number of facets (optional)
 
     This operation constructs an arc about the center point, specified
     as a vector <tt>[m, a]</tt> beginning from the start point. The arc
@@ -1242,7 +1245,9 @@ function polygon_round_eve_all_p
     at the vector formed by either <tt>[c, v]</tt> or the angle \p v
     (specified in degrees). The arc sweep direction is controlled by
     the parameter \p cw. When \p cw is assigned \p true, the arc is
-    swept clockwise from the start angle to the stop angle.
+    swept clockwise from the start angle to the stop angle. The
+    parameter \p fn is optional and, when not defined, will be
+    determined by get_fn().
 
     \amu_define title           (Motor mount plate design example)
     \amu_define image_views     (top diag)
@@ -1255,7 +1260,7 @@ function polygon_round_eve_all_p
     The corners of this example 2d design plate have been rounded with
     the library function polygon_round_eve_all_p().
 
-    [Turtle graphics]: https://en.wikipedia.org/wiki/Turtle_(robot)
+  [Turtle graphics]: https://en.wikipedia.org/wiki/Turtle_(robot)
 *******************************************************************************/
 function polygon_turtle_p
 (
@@ -1276,6 +1281,7 @@ function polygon_turtle_p
       a1  = defined_e_or( arv, 0, arv ),
       a2  = defined_e_or( arv, 1, undef ),
       a3  = defined_e_or( arv, 2, undef ),
+      a4  = defined_e_or( arv, 3, undef ),
 
       // compute coordinate point(s) for current operation
       p = (opr == "mxy" || opr == "move_xy"  ) && (arc == 2) ? [a1, a2]
@@ -1293,20 +1299,20 @@ function polygon_turtle_p
 
         : (opr == "dv"  || opr == "delta_v"  ) && (arc == 2) ? line_tp( line2d_new(m=a1, a=a2, p1=i) )
 
-        : (opr == "apv" || opr == "arc_pv"   ) && (arc == 3) ?
+        : (opr == "apv" || opr == "arc_pv"   ) && ((arc == 3) || (arc == 4)) ?
           let
           ( // handle scalar angle or compute angle from vector
             v2  = is_list(a2) ? [a1, a2] : a2
           )
-          polygon_arc_p( r=distance_pp(i, a1), c=a1, v1=[a1, i], v2=v2, cw=a3 )
+          polygon_arc_p( r=distance_pp(i, a1), c=a1, v1=[a1, i], v2=v2, cw=a3, fn=a4 )
 
-        : (opr == "avv" || opr == "arc_vv"   ) && (arc == 3) ?
+        : (opr == "avv" || opr == "arc_vv"   ) && ((arc == 3) || (arc == 4)) ?
           let
           ( // calculate center point 'b1' from given vector [m, a] in 'a1'
             b1 = line_tp( line2d_new(m=first(a1), a=second(a1), p1=i) ),
             v2 = is_list(a2) ? [b1, a2] : a2
           )
-          polygon_arc_p( r=distance_pp(i, b1), c=b1, v1=[b1, i], v2=v2, cw=a3 )
+          polygon_arc_p( r=distance_pp(i, b1), c=b1, v1=[b1, i], v2=v2, cw=a3, fn=a4 )
 
         : assert
           ( false,
