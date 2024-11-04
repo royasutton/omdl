@@ -484,7 +484,7 @@ function polygon_perimeter
   \warning  This function does not track secondary shapes subtraction as
             implemented by the polygon() function.
 
-    [Wikipedia]: https://en.wikipedia.org/wiki/Shoelace_formula
+  [Wikipedia]: https://en.wikipedia.org/wiki/Shoelace_formula
 *******************************************************************************/
 function polygon_area
 (
@@ -530,7 +530,7 @@ function polygon_area
   \warning  This function does not track secondary shapes subtraction as
             implemented by the polygon() function.
 
-    [Dan Sunday, 2012]: http://geomalgorithms.com/a01-_area.html
+  [Dan Sunday, 2012]: http://geomalgorithms.com/a01-_area.html
 *******************************************************************************/
 function polygon3d_area
 (
@@ -577,7 +577,7 @@ function polygon3d_area
   \warning  This function does not track secondary shapes subtraction as
             implemented by the polygon() function.
 
-    [Wikipedia]: https://en.wikipedia.org/wiki/Centroid#Centroid_of_polygon
+  [Wikipedia]: https://en.wikipedia.org/wiki/Centroid#Centroid_of_polygon
 *******************************************************************************/
 function polygon_centroid
 (
@@ -806,7 +806,7 @@ function polygon_wn_is_p_inside
   \warning  This function does not track secondary shapes subtraction as
             implemented by the polygon() function.
 
-    [Wikipedia]: https://en.wikipedia.org/wiki/Point_in_polygon
+  [Wikipedia]: https://en.wikipedia.org/wiki/Point_in_polygon
 *******************************************************************************/
 function polygon_as_is_p_inside
 (
