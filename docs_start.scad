@@ -44,8 +44,8 @@
     With Doxygen, the code documentation is written within the code
     itself, and is thus easy to keep current. Moreover, it provides a
     standard way to both write and present OpenSCAD design
-    documentation, compilable to common output formats (html, pdf,
-    etc). With [omdl], all library primitives are \em parametric with
+    documentation, translatable to common output formats (html, pdf,
+    etc). With [omdl], all library operations are \em parametric with
     minimal, mostly zero, global variable dependencies and all library
     API's include [markups] that describe its parameters, behavior, and
     use.
