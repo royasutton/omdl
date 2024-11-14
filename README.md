@@ -15,7 +15,9 @@ documentation, or can be done via [openscad-amu] (the design-flow
 automation framework used to develop omdl). If latter is used, the
 library will be tested and the documentation will be generated.
 
-The provided setup script is the recommended install method.
+The provided setup script is the recommended install method. On-line
+documentation and snapshots for manual installation are available in
+the [omdl-snapshot] repository.
 
 
 Evaluation
@@ -109,6 +111,8 @@ Please feel free to raise any problems, concerns, or [issues].
 [omdl]: https://royasutton.github.io/omdl
 [repository]: https://github.com/royasutton/omdl
 [issues]: https://github.com/royasutton/omdl/issues
+
+[omdl-snapshot]: https://github.com/royasutton/omdl-snapshot
 
 [openscad-amu]: https://royasutton.github.io/openscad-amu
 [installing openscad-amu]: https://github.com/royasutton/openscad-amu#installing
