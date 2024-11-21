@@ -133,8 +133,8 @@
     default as demonstrated below.
 
     \code
-      partial_config = [ 12.42, [1,2], [2,1], 0, [1,2], 31, [1,2,3], 0 ];
-         full_config = [ undef, undef, undef, 2, undef, 31 ];
+         full_config = [ 12.42, [1,2], [2,1], 0, [1,2], 31, [1,2,3], 0 ];
+      partial_config = [ undef, undef, undef, 2, undef, 31 ];
     \endcode
 
     ## Rounding and extrusions
