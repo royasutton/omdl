@@ -47,19 +47,38 @@
 //! A catch latch generator.
 /***************************************************************************//**
   \param  size  <decimal-list-6 | decimal> latch size;
-                a list [px, py, pz, bx, by, bz] or a single decimal for
-                predefined scaling based on a specified \p px.
+                a list [px, py, pz, bx, by, bz], the latch profile and
+                base-mount dimensions, or a single decimal px and the
+                remainder using predefined scaling of px.
 
-  \param  screw <decimal-list-5 | decimal>
+  \param  screw <decimal-list-5 | decimal> mount screw hole specifications;
+                a list [d, t, h, r, b], the hole-diameter, tolerance,
+                head-diameter, recess-height, bevel-height, or a single
+                decimal for the hole diameter.
 
-  \param  latch <integer-list-1 | integer>
-  \param  catch <integer, decimal, decimal | integer>
+  \param  latch <integer-list-1 | integer> latch; the latch type;
+                {1=no mount, 2=vertical mount, 3=horizontal mount}.
 
-  \param  p_bevel <decimal-list-3>
-  \param  p_width <decimal-list-3>
-  \param  p_height <decimal-list-3>
+  \param  catch <<integer, decimal, decimal> | integer> catch; a list
+                [t, h, g], the catch type, thickness, and gap, or a
+                single decimal t for the catch type; {1=no mount,
+                2=vertical mount, 3=horizontal mount}.
 
-  \param  align <integer-list-3> object alignment; a list [x, y, z].
+  \param  p_bevel <decimal-list-3> profile beveling; a list [f, v, h],
+                  the flat-height, bevel-height, bevel-width, specified
+                  as a percentage of the latch size.
+
+  \param  p_width <decimal-list-3> profile width shaping; a list [t, c, h],
+                  the width of the throat, catch, head, specified as a
+                  percentage of the latch size.
+
+  \param  p_height <decimal-list-3> profile height shaping; a list [t, s, e],
+                   the height of the throat-end, catch-start, catch-end,
+                   specified as a percentage of the latch size.
+
+  \param  align <integer-list-3> object alignment; a list [x, y, z], the
+                latch or catch alignment. Available alignment options
+                depends on the object and its mount-type.
 
   \param  verb  <integer> console output verbosity {0=quiet, 1=info}.
 
