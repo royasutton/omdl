@@ -4,18 +4,17 @@
 $(eval $(call clear-local-module))
 #------------------------------------------------------------------------------#
 
-local_path        :=  parts/3d
+local_path        :=  parts/3d/connector
 
-local_library     :=  docs_module
+local_library     :=  docs_module \
+                      \
+                      catch_latch
 
 local_release_add :=
 
 local_backup_add  :=
 
-local_submodules  := computer \
-                     connector \
-                     bearing \
-                     enclosure
+local_submodules  :=
 
 #------------------------------------------------------------------------------#
 # add local module
