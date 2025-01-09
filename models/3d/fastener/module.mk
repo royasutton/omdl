@@ -6,7 +6,9 @@ $(eval $(call clear-local-module))
 
 local_path        :=  models/3d/fastener
 
-local_library     :=  docs_module
+local_library     :=  docs_module \
+                      \
+                      screws.scad
 
 local_release_add :=
 
