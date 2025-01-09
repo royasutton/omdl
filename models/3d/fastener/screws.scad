@@ -127,7 +127,7 @@ module screw_bore
     if ( is_undef(t) && is_undef(s) )
     {
       // screw hole
-      cylinder(d=d*f, h=l + eps*8, center=true);
+      cylinder(d=d*f, h=l, center=true);
 
       // recessed flat-head
       translate(frtc)
@@ -146,7 +146,7 @@ module screw_bore
     { // slower equivalent with support for tolerance and nut slot
       hull() for( v=[-1, 1], w=[-1, 1] )
       translate([tx/2*v, ty/2*w, 0])
-      cylinder(d=d*f, h=l + eps*8, center=true);
+      cylinder(d=d*f, h=l, center=true);
 
       hull() for( v=[-1, 1], w=[-1, 1] )
       translate(frtc + [tx/2*v, ty/2*w, 0])
@@ -189,7 +189,7 @@ BEGIN_SCOPE example;
     %difference()
     {
       cube([10, 15, 18], center=true);
-      screw_bore(2.75, 18, h=[6,1,3], n=[6,2,30,3], t=[0,5], s=[0,[-6,6],0], f=1.15);
+      screw_bore(2.75, 18+eps*8, h=[6,1,3], n=[6,2,30,3], t=[0,5], s=[0,[-6,6],0], f=1.15);
     }
 
     // show actual minimal space required
