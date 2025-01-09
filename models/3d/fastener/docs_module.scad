@@ -1,4 +1,4 @@
-//! Module: Mechanical and electrical connectors.
+//! Module: Fasteners, connectors, latches, and hinges.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Connector)
-    \amu_define group_brief (Mechanical and electrical connectors.)
+    \amu_define group_name  (Fastener)
+    \amu_define group_brief (Fasteners, connectors, latches, and hinges.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

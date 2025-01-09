@@ -4,7 +4,7 @@
 $(eval $(call clear-local-module))
 #------------------------------------------------------------------------------#
 
-local_path        :=  parts/3d/connector
+local_path        :=  parts/3d/fastener
 
 local_library     :=  docs_module \
                       \

@@ -442,7 +442,7 @@ module catch_latch
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <parts/3d/connector/catch_latch.scad>;
+    include <parts/3d/fastener/catch_latch.scad>;
 
     s = 10;
     p = [10, 25, 10];

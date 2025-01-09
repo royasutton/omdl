@@ -13,9 +13,9 @@ local_release_add :=
 local_backup_add  :=
 
 local_submodules  := computer \
-                     connector \
                      bearing \
-                     enclosure
+                     enclosure \
+                     fastener
 
 #------------------------------------------------------------------------------#
 # add local module
