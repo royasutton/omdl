@@ -73,13 +73,14 @@
 
   \details
 
-    Construct a bore for a screw hole, screw head, and/or screw nut. A
-    tolerance can be specified along the bore x and y axis. A nut slot
-    cutout can be specified along the x, y, or z axis. The following
-    example uses both tolerance and a nut slot along the y axis. For
-    convenience, exact fastener dimensions can be specified along with
-    the an appropriately selected scale factor \p f to slightly
-    increase the bore for acceptable fastener fit.
+    Construct a bore for a screw hole, screw head, and/or screw nut.
+    Both the screw head and screw nut are optional. A tolerance can be
+    specified along the bore x and y axis. A nut slot cutout can be
+    specified along the x, y, or z axis. The following example uses
+    both tolerance and a nut slot along the y axis. For convenience,
+    exact fastener dimensions can be specified along with the an
+    appropriately selected scale factor \p f to slightly increase the
+    bore for acceptable fastener fit.
 
     \amu_define scope_id      (example)
     \amu_define title         (Screw bore example)
