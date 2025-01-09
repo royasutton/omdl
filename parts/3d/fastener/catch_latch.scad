@@ -39,6 +39,10 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_define includes_required_add
+  (
+    models/3d/fastener/screws.scad
+  )
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
@@ -154,25 +158,10 @@ module catch_latch
         pg_rectangle(size=[pad_dx, pad_dy], vr=mnt_vr, center=true);
       }
 
+      // screw holes on both sizes of mount
       for( s=[-1, 1] )
       translate([s*mnt_dx/2, pad_dy/2 - size_mz/2, 0])
-      union()
-      {
-        // screw hole with tolerance
-        hull() for( t=[-1, 1] )
-        translate([screw_t/2*t, 0, 0])
-        cylinder(d=screw_d, h=size_my + eps*8, center=true );
-
-        // flat-head recess with tolerance
-        hull() for( t=[-1, 1] )
-        translate([screw_t/2*t, 0, size_my/2 - screw_r/2 + eps*4])
-        cylinder(d=screw_h, h=screw_r, center=true );
-
-        // bevel-head recess with tolerance
-        hull() for( t=[-1, 1] )
-        translate([screw_t/2*t, 0, size_my/2 - screw_b/2 - screw_r + eps*4])
-        cylinder(d1=screw_d, d2=screw_h, h=screw_b, center=true );
-      }
+      screw_bore(d=screw_d, l=size_my+eps*8, h=[screw_h, screw_r, screw_b], t=[screw_t]);
     }
 
     if (verb > 0)
@@ -442,6 +431,7 @@ module catch_latch
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <models/3d/fastener/screws.scad>;
     include <parts/3d/fastener/catch_latch.scad>;
 
     s = 10;
