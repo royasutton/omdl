@@ -1305,7 +1305,7 @@ module project_box_rectangle
         {
           for (i = [0:c-1])
           {
-            rotate([0, 0, da/c * i + 180])
+            rotate([0, 0, da/c * i])
             translate([b/2 + d/2 - f_in, 0, 0])
             extrude_linear_mss(l)
             pg_rectangle( [b, w], vr=vr, vrm=vrm, center=true);
