@@ -78,11 +78,14 @@ module repeat_radial
   move = false
 )
 {
-  for ( p = polygon_regular_p( n=n, r=r, o=o ) )
+  if (n > 0)
   {
-    translate(move==true ? p : origin2d)
-    rotate(angle==true ? [0, 0, angle_ll(x_axis2d_uv, p)] : origin3d)
-    children();
+    for ( p = polygon_regular_p( n=n, r=r, o=o ) )
+    {
+      translate(move==true ? p : origin2d)
+      rotate(angle==true ? [0, 0, angle_ll(x_axis2d_uv, p)] : origin3d)
+      children();
+    }
   }
 }
 
