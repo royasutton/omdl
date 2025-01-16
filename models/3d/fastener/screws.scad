@@ -53,7 +53,7 @@
   \param  h   <decimal-list-3> screw head; a list [hd, fh, bh], the head
               diameter, flat-height, and beveled-height.
 
-  \param  n   <decimal-list-3> screw nut; a list [ns, nh, nr, no], the
+  \param  n   <decimal-list-4> screw nut; a list [ns, nh, nr, no], the
               nut size, height. rotation, and offset. The nut
               size is measured flat-to-flat. The offset is measured from
               bottom of length to center of nut.
