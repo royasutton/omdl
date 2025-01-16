@@ -118,16 +118,19 @@ module wire_clamp_cg
     {
       s   = defined_e_or(clamp, 0, clamp);      // wall side
 
-      sb  = defined_e_or(clamp, 1, wmax/4);     // (1) screw bore
-      cd  = defined_e_or(clamp, 2, wmax*2/3);   // clamp depth
-      bh  = defined_e_or(clamp, 3, wh);         // base height
-      pb  = defined_e_or(clamp, 4, wh/10);      // (2) pinch bar
+      bh  = defined_e_or(clamp, 1, wh);         // base height
+      sb  = defined_e_or(clamp, 2, wmax/4);     // (1) screw bore
 
-      // (1) screw bore: d, l, h, n, t, s, f
+      // (1) screw bore: d, l, h, n, s
       //  * see screw_bore()
       sbd = defined_e_or(sb, 0, sb);
       sbl = defined_e_or(sb, 1, bh);
       sbh = defined_e_or(sb, 2, [sbd*2, sbd/3, sbd/3]);
+      sbn = defined_e_or(sb, 3, undef);
+      sbs = defined_e_or(sb, 4, undef);
+
+      cd  = defined_e_or(clamp, 3, sbd*3);      // clamp depth
+      pb  = defined_e_or(clamp, 4, wh/10);      // (2) pinch bar
 
       // (2) pinch bar: [height, width]
       pbh = defined_e_or(pb, 0, pb);
@@ -203,13 +206,13 @@ module wire_clamp_cg
           }
 
           // remove hole
-          wire_clamp_cg(wth=cd+eps*8, mode=0, size=size);
+          wire_clamp_cg(size=size, wth=cd+eps*8, mode=0);
 
           // bore screws
           for (x = [-1, 1] )
           translate([x * (wsw + ssw/2), wh/2, 0])
           rotate([270, 0, 0])
-          screw_bore(d=sbd, l=sbl +wh/2 + eps*8, h=sbh, a=1);
+          screw_bore(d=sbd, l=sbl +wh/2 + eps*8, h=sbh, n=sbn, s=sbs, a=1);
         }
 
         // add strap pinch bars
