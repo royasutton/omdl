@@ -129,7 +129,7 @@ module screw_bore
   {
     frtc = [0, 0, +l/2 - fh/2 + eps*4];
     brtc = [0, 0, +l/2 - fh - bh/2 + eps*4];
-    nrtc = [0, 0, -l/2 + no - eps*4];
+    nrtc = [0, 0, -l/2 + nh/2 + no - eps*4];
 
     if ( is_undef(t) && is_undef(s) )
     {
