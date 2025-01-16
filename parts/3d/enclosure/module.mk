@@ -8,6 +8,7 @@ local_path        :=  parts/3d/enclosure
 
 local_library     :=  docs_module \
                       \
+                      hole_finishes \
                       project_box_rectangle
 
 local_release_add :=
