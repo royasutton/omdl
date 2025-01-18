@@ -167,7 +167,11 @@
     By way of the parameter \p lip, the box walls can have an overhang
     that interfaces with adjacent wall or lid sections. The adjacent
     section should be constructed with an opposite lip orientation
-    using the mode configuration.
+    using the mode configuration. The \p lip is considered to be a
+    feature of the exterior enclosure walls and therefore a specified
+    \p lip height should always be less than or equal to the total wall
+    height \p h (or the wall height plus \p lid height, when the mode
+    bit is set for sizes to be specified for enclosure interior).
 
     #### Data structure schema:
 
