@@ -170,8 +170,7 @@
     using the mode configuration. The \p lip is considered to be a
     feature of the exterior enclosure walls and therefore a specified
     \p lip height should always be less than or equal to the total wall
-    height \p h (or the wall height plus \p lid height, when the mode
-    bit is set for sizes to be specified for enclosure interior).
+    height \p h.
 
     #### Data structure schema:
 
