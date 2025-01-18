@@ -181,8 +181,8 @@
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | integer           | required          | mode
       1 | decimal           | wth               | height
-      2 | decimal           | 35                | base width percentage of wall
-      3 | decimal           | 10                | top taper width percentage of wall
+      2 | decimal           | 35                | base width percentage of wall thickness
+      3 | decimal           | 10                | top taper width percentage of wall thickness
       4 | integer           | 0                 | alignment
 
     #### lip[0]: mode
@@ -409,7 +409,7 @@
       4 | post base rounded same as top {0:opposite, 1:same}
       5 | set auxiliary screw hole on opposite side of lid
       6 | re-calculate defaults with each instance (1)
-      7 | post type that extends into lip height {0:normal, 1:recessed}
+      7 | post type that extends into lip height {0:recessed, 1:normal}
       8 | lip height extension count {0:one, 1:both}
       9 | offset all posts to bottom of lower lip
 
