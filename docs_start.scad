@@ -128,13 +128,15 @@ BEGIN_SCOPE logo;
     include <omdl-base.scad>;
     include <models/3d/misc/omdl_logo.scad>;
 
-    omdl_logo(c=false, b=true, t=false);
+    $fn = 36;
+
+    omdl_logo(d=10, c=false, b=true, t=false);
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
     include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
 
-    views     name "views" distance "250" views "top";
+    views     name "views" distance "25" views "top";
     images    name "slogo" aspect "1:1" xsizes "55";
     variables set_opts_combine "views slogo";
 
