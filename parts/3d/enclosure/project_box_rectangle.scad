@@ -457,10 +457,12 @@
 
     ##### post[0]: configuration[1]: defaults[1-4]: hole1-2, post1-2
 
-    The default values for hole1, hole2, post1, and post2 are computed
-    according to that outlined in the defaults calculation section
-    below. The height and offsets are set based on the post height and
-    other configured requirements.
+    The configuration of hole1, hole2, post1, and post2 uses the same
+    schema as described  for hole0 in the table of the previous
+    section, with the only difference being the default values. The
+    defaults are computed according to that outlined in the defaults
+    calculation section below. The post and screw hole height defaults
+    are based on the post height and other configured requirements.
 
     ##### post[0]: configuration[1]: defaults[5]: fins0: triangular-fins
 
