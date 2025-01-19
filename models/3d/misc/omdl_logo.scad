@@ -46,11 +46,13 @@
 
 //! Standard omdl logo.
 /***************************************************************************//**
-  \param  s   <decimal> scale factor.
+  \param  r   <decimal> logo radius.
   \param  c   <boolean> color model.
   \param  b   <boolean> bevel fins.
-  \param  t   <boolean> add "omdl" text.
-  \param  td  <string> text output direction {"ltr"|"rtl"}.
+  \param  t   <boolean> add logo text.
+  \param  td  <string> text direction: {"ltr" | "rtl"}.
+  \param  a   <integer> z-alignment: {0 | 1 | 2 | 3}.
+  \param  d   <decimal> logo diameter (overrides \p r).
 
   \details
 
@@ -65,53 +67,67 @@
 
 module omdl_logo
 (
-  s = 10,
-  c = false,
-  b = false,
-  t = false,
- td = "ltr"
+  r   = 5,
+  c   = false,
+  b   = false,
+  t   = false,
+  td  = "ltr",
+  a   = 0,
+  d
 )
 {
-  fs = [3, 5, 4] * s;
-  vr = [4, 2, 1]/10 * s;
+   s  = is_defined(d) ? d/10 : r/5;
 
-  ft = triangle2d_sss2ppp(fs * 1);
-  ct = triangle2d_sss2ppp(fs * 2/3);
-
-  fn = "Liberation Sans:style=Italic";
+  v1  = s/5;
+  v2  = [4, 2, 1] * s/10;
 
   // mss extrusions
-  h1 = s/2;
-  h2 = let( sh = 1/6, sf = 75/100 )
-       [ [sh, [sf, 1]], sh, [sh, [1, sf]] ];
+  h1  = s/2;
+  h2  = let
+        (
+          sh = s/6,
+          sf = 75/100
+        )
+        [ [sh, [sf, 1]], sh, [sh, [1, sf]] ];
 
-  // cone
-  color(c?"slategray":undef)
-  translate( [0, 0, -h1/2-eps*2] )
-  cone( h=s, r=s, vr=1/5*s );
-
-  // fins
-  color(c?"gainsboro":undef)
-  rotate(18)
-  repeat_radial( n=5, angle=true )
-  translate( triangle_centroid(ft) )
-  extrude_linear_mss( h=(b?h2:h1), center=true )
-  difference()
+  translate( [0, 0, select_ci([0, -h1/2, -h1, v1/2-s], a, false)] )
+  union()
   {
-    translate( -triangle_centroid(ft) )
-    polygon( polygon_round_eve_all_p(ft, vr=vr) );
+    fn = "Liberation Sans:style=Italic";
 
-    translate( -triangle_centroid(ct) )
-    polygon( polygon_round_eve_all_p(ct, vr=vr) );
-  }
+    ts = [3, 5, 4] * s;
 
-  // text
-  if( t )
-  {
+    t1 = triangle2d_sss2ppp(ts * 1);
+    t2 = triangle2d_sss2ppp(ts * 2/3);
+
+    // cone
     color(c?"slategray":undef)
-    extrude_linear_mss( h=h1, center=true )
-    translate([0, -fs.y, 0])
-    text(text="omdl", size=s, font=fn, halign="left", valign="bottom", direction=td);
+    translate( [0, 0, -eps*2] )
+    cone( h=s, r=s, vr=v1 );
+
+    // fins
+    color(c?"gainsboro":undef)
+    rotate(18)
+    repeat_radial( n=5, angle=true )
+    translate( triangle_centroid(t1) )
+    extrude_linear_mss( h=(b?h2:h1), center=false )
+    difference()
+    {
+      translate( -triangle_centroid(t1) )
+      polygon( polygon_round_eve_all_p(t1, vr=v2) );
+
+      translate( -triangle_centroid(t2) )
+      polygon( polygon_round_eve_all_p(t2, vr=v2) );
+    }
+
+    // text
+    if( t )
+    {
+      color(c?"slategray":undef)
+      translate([third(ts) * 4/5, 0])
+      extrude_linear_mss( h=h1, center=false )
+      text(text="omdl", size=s, font=fn, halign="center", valign="center", direction=td);
+    }
   }
 }
 
@@ -129,7 +145,9 @@ BEGIN_SCOPE example;
     include <omdl-base.scad>;
     include <models/3d/misc/omdl_logo.scad>;
 
-    omdl_logo(c=true, b=false, t=true);
+    $fn = 36;
+
+    omdl_logo(c=false, b=true, t=true);
 
     // end_include
   END_OPENSCAD;
