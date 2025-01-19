@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2024
+  \date   2015-2025
 
   \copyright
 
@@ -126,28 +126,9 @@
 BEGIN_SCOPE logo;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <models/3d/misc/omdl_logo.scad>;
 
-    s  = 10;
-
-    fs = [3, 5, 4] * s;
-    cs = fs * 2 / 3;
-    vr = [4, 2, 1]/10 * s;
-
-    ft = triangle2d_sss2ppp(fs);
-    ct = triangle2d_sss2ppp(cs);
-
-    cone( h=s*2, r=s, vr=2/10*s );
-    rotate([0, 0, 360/20])
-    repeat_radial( n=5, angle=true )
-    extrude_linear_mss( h=s )
-    translate(triangle_centroid(ft) + [-15,2]/s)
-    difference()
-    {
-      translate(-triangle_centroid(ft))
-      polygon( polygon_round_eve_all_p(ft, vr=vr) );
-      translate(-triangle_centroid(ct))
-      polygon( polygon_round_eve_all_p(ct, vr=vr) );
-    }
+    omdl_logo(c=false, b=true, t=false);
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
