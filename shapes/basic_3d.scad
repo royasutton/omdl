@@ -61,9 +61,8 @@
 
   \param    d <decimal> The base diameter.
 
-  \param    vr <decimal> The default corner rounding radius.
-  \param    vr1 <decimal> The base corner rounding radius.
-  \param    vr2 <decimal> The point corner rounding radius.
+  \param    vr <decimal-list-2 | decimal> A list [rb, rp] of decimals or
+            a single decimal for (rb=rp]. The corner rounding radius.
 
   \details
 
@@ -71,22 +70,18 @@
 *******************************************************************************/
 module cone
 (
-  r,
+  r = 1,
   h,
   d,
-  vr,
-  vr1,
-  vr2
+  vr
 )
 {
-  cr = is_defined(r) ? r
-     : is_defined(d) ? d/2
-     : 1;
+  cr = is_defined(d) ? d/2 : r;
 
-  br = defined_or(vr1, vr);
-  pr = defined_or(vr2, vr);
+  vr_b = defined_e_or(vr, 0, vr);
+  vr_p = defined_e_or(vr, 1, vr_b);
 
-  if ( any_undefined([br, pr]) )
+  if ( is_undef(vr) )
   {
     cylinder(h=h, r1=cr, r2=0, center=false);
   }
@@ -95,11 +90,13 @@ module cone
     hl = sqrt(cr*cr + h*h);
 
     rotate_extrude(angle=360)
-    translate([-cr, 0])
+    translate([eps*2-cr, 0])
     difference()
     {
-      polygon (polygon_round_eve_all_p(triangle2d_sss2ppp([hl, cr*2, hl]), vr=[br, br, pr]));
-      square( size=[cr,h], center=false );
+      tp = triangle2d_sss2ppp([hl, cr*2, hl]);
+
+      polygon( polygon_round_eve_all_p(tp, vr=[vr_p, vr_b, 0]) );
+      square( size=[cr, h], center=false );
     }
   }
 }
