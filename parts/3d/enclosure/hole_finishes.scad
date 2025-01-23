@@ -130,11 +130,14 @@ module wire_clamp_cg
       sbs = defined_e_or(sb, 4, undef);
 
       cd  = defined_e_or(clamp, 3, sbd*3);      // clamp depth
-      pb  = defined_e_or(clamp, 4, wh/10);      // (2) pinch bar
+      pb  = defined_e_or(clamp, 4, 15);         // (2) pinch bar
 
-      // (2) pinch bar: [height, width]
-      pbh = defined_e_or(pb, 0, pb);
-      pbw = defined_e_or(pb, 1, pbh);
+      // (2) pinch bar: percentage of wire height and clamp depth [height, width]
+      php = defined_e_or(pb, 0, pb);
+      pwp = defined_e_or(pb, 1, php);
+
+      pbh = php * wh / 100;                     // pinch bar height
+      pbw = pwp * cd / 100;                     // pinch bar width
 
       wsw = ww/2 * (1+5/10);                    // saddle width
       ssw = cd;                                 // screw bore shoulder width
