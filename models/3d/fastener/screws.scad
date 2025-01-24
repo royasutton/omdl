@@ -105,19 +105,26 @@ module screw_bore
   a = 0
 )
 {
-  hd = defined_e_or(h, 0, 0) * f;
+  // screw head
+  hs = defined_e_or(h, 0, 0);
   hf = defined_e_or(h, 1, 0);
   hb = defined_e_or(h, 2, 0);
 
-  // hex nut size measured flat-to-flat
-  ns = defined_e_or(n, 0, 0) * f / cos(30);
+  hd = hs * f;
+
+  // nut
+  ns = defined_e_or(n, 0, 0);
   nh = defined_e_or(n, 1, 0) * f;
   nr = defined_e_or(n, 2, 0);
   no = defined_e_or(n, 3, 0);
 
+  nd = ns * f / cos(180/6);
+
+  // tolerance
   tx = defined_e_or(t, 0, 0);
   ty = defined_e_or(t, 1, 0);
 
+  // slot
   sx = defined_e_or(s, 0, 0);
   sy = defined_e_or(s, 1, 0);
   sz = defined_e_or(s, 2, 0);
@@ -147,7 +154,7 @@ module screw_bore
       // hex nut
       translate(nrtc)
       rotate([0, 0, nr])
-      cylinder(d=ns, h=nh, center=true, $fn=6);
+      cylinder(d=nd, h=nh, center=true, $fn=6);
     }
     else
     { // slower equivalent with support for tolerance and nut slot
@@ -171,7 +178,7 @@ module screw_bore
       hull() for( v=[-1, 1], w=[-1, 1], x=ix, y=iy, z=iz )
       translate(nrtc + [tx/2*v + x, ty/2*w + y, z])
       rotate([0, 0, nr])
-      cylinder(d=ns, h=nh, center=true, $fn=6);
+      cylinder(d=nd, h=nh, center=true, $fn=6);
     }
   }
 }
