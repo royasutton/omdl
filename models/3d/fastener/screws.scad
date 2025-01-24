@@ -50,7 +50,7 @@
 
   \param  l   <decimal> bore length.
 
-  \param  h   <decimal-list-3> screw head; a list [hs, fh, bh], the head
+  \param  h   <decimal-list-3> screw head; a list [hs, hf, hb], the head
               size, flat-height, and beveled-height.
 
   \param  n   <decimal-list-4> screw nut; a list [ns, nh, nr, no], the
@@ -106,8 +106,8 @@ module screw_bore
 )
 {
   hd = defined_e_or(h, 0, 0) * f;
-  fh = defined_e_or(h, 1, 0);
-  bh = defined_e_or(h, 2, 0);
+  hf = defined_e_or(h, 1, 0);
+  hb = defined_e_or(h, 2, 0);
 
   // hex nut size measured flat-to-flat
   ns = defined_e_or(n, 0, 0) * f / cos(30);
@@ -122,13 +122,13 @@ module screw_bore
   sy = defined_e_or(s, 1, 0);
   sz = defined_e_or(s, 2, 0);
 
-  az = [0, -l/2, -l/2+fh, -l/2+fh+bh, +l/2-nh-no, +l/2-nh/2-no, +l/2-no, l/2];
+  az = [0, -l/2, -l/2+hf, -l/2+hf+hb, +l/2-nh-no, +l/2-nh/2-no, +l/2-no, l/2];
 
   translate([0, 0, select_ci(az, a, false)])
   union()
   {
-    frtc = [0, 0, +l/2 - fh/2 + eps*4];
-    brtc = [0, 0, +l/2 - fh - bh/2 + eps*4];
+    frtc = [0, 0, +l/2 - hf/2 + eps*4];
+    brtc = [0, 0, +l/2 - hf - hb/2 + eps*4];
     nrtc = [0, 0, -l/2 + nh/2 + no - eps*4];
 
     if ( is_undef(t) && is_undef(s) )
@@ -138,11 +138,11 @@ module screw_bore
 
       // recessed flat-head
       translate(frtc)
-      cylinder(d=hd, h=fh, center=true);
+      cylinder(d=hd, h=hf, center=true);
 
       // recessed bevel-head
       translate(brtc)
-      cylinder(d1=d*f, d2=hd, h=bh, center=true);
+      cylinder(d1=d*f, d2=hd, h=hb, center=true);
 
       // hex nut
       translate(nrtc)
@@ -157,11 +157,11 @@ module screw_bore
 
       hull() for( v=[-1, 1], w=[-1, 1] )
       translate(frtc + [tx/2*v, ty/2*w, 0])
-      cylinder(d=hd, h=fh, center=true);
+      cylinder(d=hd, h=hf, center=true);
 
       hull() for( v=[-1, 1], w=[-1, 1] )
       translate(brtc + [tx/2*v, ty/2*w, 0])
-      cylinder(d1=d*f, d2=hd, h=bh, center=true);
+      cylinder(d1=d*f, d2=hd, h=hb, center=true);
 
       // start slot from 0 for scalar argument
       ix = is_list(sx) ? sx : [0, sx];
