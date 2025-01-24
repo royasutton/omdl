@@ -50,13 +50,13 @@
 
   \param  l   <decimal> bore length.
 
-  \param  h   <decimal-list-3> screw head; a list [hd, fh, bh], the head
-              diameter, flat-height, and beveled-height.
+  \param  h   <decimal-list-3> screw head; a list [hs, fh, bh], the head
+              size, flat-height, and beveled-height.
 
   \param  n   <decimal-list-4> screw nut; a list [ns, nh, nr, no], the
-              nut size, height. rotation, and offset. The nut
-              size is measured flat-to-flat. The offset is measured from
-              bottom of length to center of nut.
+              nut size, height. rotation, and offset. The nut size is
+              measured flat-to-flat. The offset is measured from bottom
+              of length to center of nut.
 
   \param  t   <decimal-list-2> bore tolerance; a list [tx, ty], the
               tolerance along the x and/or y axis.
