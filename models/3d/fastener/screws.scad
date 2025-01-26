@@ -72,8 +72,8 @@
   \param  f   <decimal-list-2 | decimal> bore scale factor; a list [bf, hf],
               the bore diameter and bore height scale factors, or a
               single decimal to specify \p bf only. The default value
-              for \p hf = 1. The parameter \p hf scales only the screw
-              head and nut heights.
+              for \p hf = 1 and it scales only the screw head and nut
+              heights.
 
   \param  a   <integer> z-alignment index; one of eight preset alignments.
 
