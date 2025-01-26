@@ -108,8 +108,10 @@ module screw_bore
   a = 0
 )
 {
+  function cdc(s, n, m=0) = (m == 0) ? s * f : s * f / cos(180/n);
+
   // screw bore
-  bd = d * f;
+  bd = cdc(d);
 
   // screw head
   hs = defined_e_or(h, 0, 0);
@@ -118,9 +120,7 @@ module screw_bore
   hg = defined_e_or(h, 3, $fn);
   hr = defined_e_or(h, 4, 0);
 
-  hd = is_undef(h[3])
-     ? hs * f
-     : hs * f / cos(180/hg);
+  hd = is_undef(h[3]) ? cdc(hs) : cdc(hs, hg, 1);
 
   // nut
   ns = defined_e_or(n, 0, 0);
@@ -129,7 +129,7 @@ module screw_bore
   ng = defined_e_or(n, 3, 6);
   nr = defined_e_or(n, 4, 0);
 
-  nd = ns * f / cos(180/ng);
+  nd = cdc(ns, ng, 1);
 
   // tolerance
   tx = defined_e_or(t, 0, 0);
