@@ -55,11 +55,10 @@
               (flat side count), and rotation. The head size is
               measured flat-to-flat when \p hg is specified.
 
-  \param  n   <decimal-list-5> screw nut; a list [ns, nh, no, ng, nr],
-              the nut size, height, offset, side geometry (flat side
-              count), and rotation. The nut size is measured
-              flat-to-flat. The offset is measured from bottom of
-              length to center of nut.
+  \param  n   <decimal-list-5> screw nut; a list [ns, nf, nb, ng, nr, no],
+              the nut size, flat-height, bevel-height, side geometry
+              (flat side count), rotation, and bottom offset. The nut
+              size is measured flat-to-flat.
 
   \param  t   <decimal-list-2> bore tolerance; a list [tx, ty], the
               tolerance along the x and/or y axis.
@@ -219,11 +218,11 @@ BEGIN_SCOPE example;
     %difference()
     {
       cube([10, 15, 18], center=true);
-      screw_bore(2.75, 18+eps*8, h=[6,1,3], n=[6,2,30,3], t=[0,5], s=[0,[-6,6],0], f=1.15);
+      screw_bore(2.75, 18+eps*8, h=[6,1,3], n=[6,2,0,6,30,3], t=[0,5], s=[0,[-6,6],0], f=1.15);
     }
 
     // show actual minimal space required
-    screw_bore(2.75, 18, h=[6,1,3], n=[6,2,30,3]);
+    screw_bore(2.75, 18, h=[6,1,3], n=[6,2,0,6,30,3]);
 
     // end_include
   END_OPENSCAD;
