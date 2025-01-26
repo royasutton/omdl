@@ -63,11 +63,11 @@
   \param  t   <decimal-list-2> bore tolerance; a list [tx, ty], the
               tolerance along the x and/or y axis.
 
-  \param  s   <decimal-list-list-3> nut slot; a list of lists [sx, sy, sz],
-              the list of slot sizes along the x, y, and/or z axis.
-              Each of sx, sy, or sz can be a decimal list, such as
-              [lower, upper], or a single decimal value, to cover [0,
-              value].
+  \param  s   <decimal-list-list-3> nut slot cutout; a list of lists
+              [sx, sy, sz], the list of slot sizes along the x, y,
+              and/or z axis. Each of sx, sy, or sz can be a decimal
+              list, such as [lower, upper], or a single decimal value,
+              to cover [0, value].
 
   \param  f   <decimal-list-2 | decimal> bore scale factor; a list [bf, hf],
               the bore diameter and bore height scale factors, or a
