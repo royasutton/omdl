@@ -153,9 +153,10 @@ module screw_bore
   translate([0, 0, select_ci(az, a, false)])
   union()
   {
-    hfo = [0, 0, +l/2 - hf/2 + eps*4];
+    hfo = [0, 0, +l/2 - hf/2 + eps*2];
     hbo = [0, 0, +l/2 - hf - hb/2 + eps*4];
-    nfo = [0, 0, -l/2 + nf/2 + no - eps*4];
+    nbo = [0, 0, -l/2 + nf + nb/2 + no - eps*4];
+    nfo = [0, 0, -l/2 + nf/2 + no - eps*2];
 
     if ( is_undef(t) && is_undef(s) )
     {
@@ -170,6 +171,10 @@ module screw_bore
       // head bevel height
       translate(hbo)
       cylinder(d1=bd, d2=cdc(hs), h=hb, center=true);
+
+      // nut bevel height
+      translate(nbo)
+      cylinder(d2=bd, d1=cdc(ns), h=nb, center=true);
 
       // nut flat height
       translate(nfo)
@@ -195,6 +200,10 @@ module screw_bore
       ix = is_list(sx) ? sx : [0, sx];
       iy = is_list(sy) ? sy : [0, sy];
       iz = is_list(sz) ? sz : [0, sz];
+
+      hull() for( v=[-1, 1], w=[-1, 1], x=ix, y=iy, z=iz )
+      translate(nbo + [tx/2*v + x, ty/2*w + y, z])
+      cylinder(d2=bd, d1=cdc(ns), h=nb, center=true);
 
       hull() for( v=[-1, 1], w=[-1, 1], x=ix, y=iy, z=iz )
       translate(nfo + [tx/2*v + x, ty/2*w + y, z])
