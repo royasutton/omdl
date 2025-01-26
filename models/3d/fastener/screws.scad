@@ -115,7 +115,7 @@ module screw_bore
 
   // diameter and height scale factors
   fd = defined_e_or(f, 0, f);
-  fh = defined_e_or(f, 0, 1.1);
+  fh = defined_e_or(f, 1, 1);
 
   // screw bore
   bd = cdc(d);
