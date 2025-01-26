@@ -162,7 +162,7 @@ module screw_bore
       // head bevel height
       translate(brtc)
       rotate([0, 0, hr])
-      cylinder(d1=bd, d2=hd, h=hb, center=true, $fn=hg);
+      cylinder(d1=bd, d2=cdc(hs), h=hb, center=true);
 
       // nut
       translate(nrtc)
