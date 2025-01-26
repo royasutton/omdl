@@ -124,10 +124,11 @@ module screw_bore
 
   // nut
   ns = defined_e_or(n, 0, 0);
-  nh = defined_e_or(n, 1, 0);
-  no = defined_e_or(n, 2, 0);
+  nf = defined_e_or(n, 1, 0);
+  nb = defined_e_or(n, 2, 0);
   ng = defined_e_or(n, 3, 6);
   nr = defined_e_or(n, 4, 0);
+  no = defined_e_or(n, 5, 0);
 
   nd = cdc(ns, ng, 1);
 
@@ -140,14 +141,14 @@ module screw_bore
   sy = defined_e_or(s, 1, 0);
   sz = defined_e_or(s, 2, 0);
 
-  az = [0, -l/2, -l/2+hf, -l/2+hf+hb, +l/2-nh-no, +l/2-nh/2-no, +l/2-no, l/2];
+  az = [0, -l/2, -l/2+hf, -l/2+hf+hb, +l/2-nf-no, +l/2-nf/2-no, +l/2-no, l/2];
 
   translate([0, 0, select_ci(az, a, false)])
   union()
   {
     frtc = [0, 0, +l/2 - hf/2 + eps*4];
     brtc = [0, 0, +l/2 - hf - hb/2 + eps*4];
-    nrtc = [0, 0, -l/2 + nh/2 + no - eps*4];
+    nrtc = [0, 0, -l/2 + nf/2 + no - eps*4];
 
     if ( is_undef(t) && is_undef(s) )
     {
@@ -167,7 +168,7 @@ module screw_bore
       // nut
       translate(nrtc)
       rotate([0, 0, nr])
-      cylinder(d=nd, h=nh, center=true, $fn=ng);
+      cylinder(d=nd, h=nf, center=true, $fn=ng);
     }
     else
     { // slower equivalent with support for tolerance and nut slot
@@ -193,7 +194,7 @@ module screw_bore
       hull() for( v=[-1, 1], w=[-1, 1], x=ix, y=iy, z=iz )
       translate(nrtc + [tx/2*v + x, ty/2*w + y, z])
       rotate([0, 0, nr])
-      cylinder(d=nd, h=nh, center=true, $fn=ng);
+      cylinder(d=nd, h=nf, center=true, $fn=ng);
     }
   }
 }
