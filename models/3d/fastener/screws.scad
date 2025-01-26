@@ -148,7 +148,11 @@ module screw_bore
   sy = defined_e_or(s, 1, 0);
   sz = defined_e_or(s, 2, 0);
 
-  az = [0, -l/2, -l/2+hf, -l/2+hf+hb, +l/2-nf-no, +l/2-nf/2-no, +l/2-no, l/2];
+  az =
+  [
+    0, -l/2, -l/2+hf/2, -l/2+hf, -l/2+hf+hb,
+    +l/2-nb-nf-no, +l/2-nf-no, +l/2-nf/2-no, +l/2-no, +l/2
+  ];
 
   translate([0, 0, select_ci(az, a, false)])
   union()
