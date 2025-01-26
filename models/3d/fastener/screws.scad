@@ -124,7 +124,7 @@ module screw_bore
 
   // nut
   ns = defined_e_or(n, 0, 0);
-  nh = defined_e_or(n, 1, 0) * f;
+  nh = defined_e_or(n, 1, 0);
   no = defined_e_or(n, 2, 0);
   ng = defined_e_or(n, 3, 6);
   nr = defined_e_or(n, 4, 0);
