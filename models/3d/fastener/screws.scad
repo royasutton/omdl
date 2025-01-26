@@ -169,7 +169,6 @@ module screw_bore
 
       // head bevel height
       translate(hbo)
-      rotate([0, 0, hr])
       cylinder(d1=bd, d2=cdc(hs), h=hb, center=true);
 
       // nut flat height
@@ -190,7 +189,6 @@ module screw_bore
 
       hull() for( v=[-1, 1], w=[-1, 1] )
       translate(hbo + [tx/2*v, ty/2*w, 0])
-      rotate([0, 0, hr])
       cylinder(d1=bd, d2=cdc(hs), h=hb, center=true);
 
       // start slot from origin
