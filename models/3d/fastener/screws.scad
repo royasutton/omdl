@@ -153,9 +153,9 @@ module screw_bore
   translate([0, 0, select_ci(az, a, false)])
   union()
   {
-    frtc = [0, 0, +l/2 - hf/2 + eps*4];
-    brtc = [0, 0, +l/2 - hf - hb/2 + eps*4];
-    nrtc = [0, 0, -l/2 + nf/2 + no - eps*4];
+    hfo = [0, 0, +l/2 - hf/2 + eps*4];
+    hbo = [0, 0, +l/2 - hf - hb/2 + eps*4];
+    nfo = [0, 0, -l/2 + nf/2 + no - eps*4];
 
     if ( is_undef(t) && is_undef(s) )
     {
@@ -163,17 +163,17 @@ module screw_bore
       cylinder(d=bd, h=l, center=true);
 
       // head flat height
-      translate(frtc)
+      translate(hfo)
       rotate([0, 0, hr])
       cylinder(d=hd, h=hf, center=true, $fn=hg);
 
       // head bevel height
-      translate(brtc)
+      translate(hbo)
       rotate([0, 0, hr])
       cylinder(d1=bd, d2=cdc(hs), h=hb, center=true);
 
-      // nut
-      translate(nrtc)
+      // nut flat height
+      translate(nfo)
       rotate([0, 0, nr])
       cylinder(d=nd, h=nf, center=true, $fn=ng);
     }
@@ -184,12 +184,12 @@ module screw_bore
       cylinder(d=bd, h=l, center=true);
 
       hull() for( v=[-1, 1], w=[-1, 1] )
-      translate(frtc + [tx/2*v, ty/2*w, 0])
+      translate(hfo + [tx/2*v, ty/2*w, 0])
       rotate([0, 0, hr])
       cylinder(d=hd, h=hf, center=true, $fn=hg);
 
       hull() for( v=[-1, 1], w=[-1, 1] )
-      translate(brtc + [tx/2*v, ty/2*w, 0])
+      translate(hbo + [tx/2*v, ty/2*w, 0])
       rotate([0, 0, hr])
       cylinder(d1=bd, d2=cdc(hs), h=hb, center=true);
 
@@ -199,7 +199,7 @@ module screw_bore
       iz = is_list(sz) ? sz : [0, sz];
 
       hull() for( v=[-1, 1], w=[-1, 1], x=ix, y=iy, z=iz )
-      translate(nrtc + [tx/2*v + x, ty/2*w + y, z])
+      translate(nfo + [tx/2*v + x, ty/2*w + y, z])
       rotate([0, 0, nr])
       cylinder(d=nd, h=nf, center=true, $fn=ng);
     }
