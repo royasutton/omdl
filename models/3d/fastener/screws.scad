@@ -69,7 +69,11 @@
               [lower, upper], or a single decimal value, to cover [0,
               value].
 
-  \param  f   <decimal> bore scale factor.
+  \param  f   <decimal-list-2 | decimal> bore scale factor; a list [bf, hf],
+              the bore diameter and bore height scale factors, or a
+              single decimal to specify \p bf only. The default value
+              for \p hf = 1. The parameter \p hf scales only the screw
+              head and nut heights.
 
   \param  a   <integer> z-alignment index; one of eight preset alignments.
 
@@ -107,15 +111,19 @@ module screw_bore
   a = 0
 )
 {
-  function cdc(s, n, m=0) = (m == 0) ? s * f : s * f / cos(180/n);
+  function cdc(s, n, m=0) = (m == 0) ? s * fd : s * fd / cos(180/n);
+
+  // diameter and height scale factors
+  fd = defined_e_or(f, 0, f);
+  fh = defined_e_or(f, 0, 1.1);
 
   // screw bore
   bd = cdc(d);
 
   // screw head
   hs = defined_e_or(h, 0, 0);
-  hf = defined_e_or(h, 1, 0);
-  hb = defined_e_or(h, 2, 0);
+  hf = defined_e_or(h, 1, 0) * fh;
+  hb = defined_e_or(h, 2, 0) * fh;
   hg = defined_e_or(h, 3, $fn);
   hr = defined_e_or(h, 4, 0);
 
@@ -123,8 +131,8 @@ module screw_bore
 
   // nut
   ns = defined_e_or(n, 0, 0);
-  nf = defined_e_or(n, 1, 0);
-  nb = defined_e_or(n, 2, 0);
+  nf = defined_e_or(n, 1, 0) * fh;
+  nb = defined_e_or(n, 2, 0) * fh;
   ng = defined_e_or(n, 3, 6);
   nr = defined_e_or(n, 4, 0);
   no = defined_e_or(n, 5, 0);
