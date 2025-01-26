@@ -105,20 +105,28 @@ module screw_bore
   a = 0
 )
 {
+  // screw bore
+  bd = d * f;
+
   // screw head
   hs = defined_e_or(h, 0, 0);
   hf = defined_e_or(h, 1, 0);
   hb = defined_e_or(h, 2, 0);
+  hg = defined_e_or(h, 3, $fn);
+  hr = defined_e_or(h, 4, 0);
 
-  hd = hs * f;
+  hd = is_undef(h[3])
+     ? hs * f
+     : hs * f / cos(180/hg);
 
   // nut
   ns = defined_e_or(n, 0, 0);
   nh = defined_e_or(n, 1, 0) * f;
-  nr = defined_e_or(n, 2, 0);
-  no = defined_e_or(n, 3, 0);
+  no = defined_e_or(n, 2, 0);
+  ng = defined_e_or(n, 3, 6);
+  nr = defined_e_or(n, 4, 0);
 
-  nd = ns * f / cos(180/6);
+  nd = ns * f / cos(180/ng);
 
   // tolerance
   tx = defined_e_or(t, 0, 0);
@@ -141,34 +149,38 @@ module screw_bore
     if ( is_undef(t) && is_undef(s) )
     {
       // screw hole
-      cylinder(d=d*f, h=l, center=true);
+      cylinder(d=bd, h=l, center=true);
 
       // recessed flat-head
       translate(frtc)
-      cylinder(d=hd, h=hf, center=true);
+      rotate([0, 0, hr])
+      cylinder(d=hd, h=hf, center=true, $fn=hg);
 
       // recessed bevel-head
       translate(brtc)
-      cylinder(d1=d*f, d2=hd, h=hb, center=true);
+      rotate([0, 0, hr])
+      cylinder(d1=bd, d2=hd, h=hb, center=true, $fn=hg);
 
       // hex nut
       translate(nrtc)
       rotate([0, 0, nr])
-      cylinder(d=nd, h=nh, center=true, $fn=6);
+      cylinder(d=nd, h=nh, center=true, $fn=ng);
     }
     else
     { // slower equivalent with support for tolerance and nut slot
       hull() for( v=[-1, 1], w=[-1, 1] )
       translate([tx/2*v, ty/2*w, 0])
-      cylinder(d=d*f, h=l, center=true);
+      cylinder(d=bd, h=l, center=true);
 
       hull() for( v=[-1, 1], w=[-1, 1] )
       translate(frtc + [tx/2*v, ty/2*w, 0])
-      cylinder(d=hd, h=hf, center=true);
+      rotate([0, 0, hr])
+      cylinder(d=hd, h=hf, center=true, $fn=hg);
 
       hull() for( v=[-1, 1], w=[-1, 1] )
       translate(brtc + [tx/2*v, ty/2*w, 0])
-      cylinder(d1=d*f, d2=hd, h=hb, center=true);
+      rotate([0, 0, hr])
+      cylinder(d1=bd, d2=hd, h=hb, center=true, $fn=hg);
 
       // start slot from 0 for scalar argument
       ix = is_list(sx) ? sx : [0, sx];
@@ -178,7 +190,7 @@ module screw_bore
       hull() for( v=[-1, 1], w=[-1, 1], x=ix, y=iy, z=iz )
       translate(nrtc + [tx/2*v + x, ty/2*w + y, z])
       rotate([0, 0, nr])
-      cylinder(d=nd, h=nh, center=true, $fn=6);
+      cylinder(d=nd, h=nh, center=true, $fn=ng);
     }
   }
 }
