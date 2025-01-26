@@ -44,19 +44,22 @@
 
 //----------------------------------------------------------------------------//
 
-//! Flat and beveled-head screw bore with hex nut slot cutout.
+//! Flat and beveled-head screw bore with nut, nut slot, and bore tolerance.
 /***************************************************************************//**
   \param  d   <decimal> bore diameter.
 
   \param  l   <decimal> bore length.
 
-  \param  h   <decimal-list-3> screw head; a list [hs, hf, hb], the head
-              size, flat-height, and beveled-height.
+  \param  h   <decimal-list-5> screw head; a list [hs, hf, hb, hg, hr],
+              the head size, flat-height, bevel-height, side geometry
+              (flat side count), and rotation. The head size is
+              measured flat-to-flat when \p hg is specified.
 
-  \param  n   <decimal-list-4> screw nut; a list [ns, nh, nr, no], the
-              nut size, height. rotation, and offset. The nut size is
-              measured flat-to-flat. The offset is measured from bottom
-              of length to center of nut.
+  \param  n   <decimal-list-5> screw nut; a list [ns, nh, no, ng, nr],
+              the nut size, height, offset, side geometry (flat side
+              count), and rotation. The nut size is measured
+              flat-to-flat. The offset is measured from bottom of
+              length to center of nut.
 
   \param  t   <decimal-list-2> bore tolerance; a list [tx, ty], the
               tolerance along the x and/or y axis.
@@ -151,17 +154,17 @@ module screw_bore
       // screw hole
       cylinder(d=bd, h=l, center=true);
 
-      // recessed flat-head
+      // head flat height
       translate(frtc)
       rotate([0, 0, hr])
       cylinder(d=hd, h=hf, center=true, $fn=hg);
 
-      // recessed bevel-head
+      // head bevel height
       translate(brtc)
       rotate([0, 0, hr])
       cylinder(d1=bd, d2=hd, h=hb, center=true, $fn=hg);
 
-      // hex nut
+      // nut
       translate(nrtc)
       rotate([0, 0, nr])
       cylinder(d=nd, h=nh, center=true, $fn=ng);
@@ -182,7 +185,7 @@ module screw_bore
       rotate([0, 0, hr])
       cylinder(d1=bd, d2=hd, h=hb, center=true, $fn=hg);
 
-      // start slot from 0 for scalar argument
+      // start slot from origin
       ix = is_list(sx) ? sx : [0, sx];
       iy = is_list(sy) ? sy : [0, sy];
       iz = is_list(sz) ? sz : [0, sz];
