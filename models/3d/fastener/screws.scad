@@ -183,7 +183,7 @@ module screw_bore
       hull() for( v=[-1, 1], w=[-1, 1] )
       translate(brtc + [tx/2*v, ty/2*w, 0])
       rotate([0, 0, hr])
-      cylinder(d1=bd, d2=hd, h=hb, center=true, $fn=hg);
+      cylinder(d1=bd, d2=cdc(hs), h=hb, center=true);
 
       // start slot from origin
       ix = is_list(sx) ? sx : [0, sx];
