@@ -188,7 +188,7 @@
       3 | decimal           | 10                | top taper width percentage of wall thickness
       4 | integer           | 0                 | alignment
 
-    #### lip[0]: mode
+    ##### lip[0]: mode
 
     Integer value is binary encoded.
 
@@ -204,7 +204,7 @@
     can be approximated by using an inside lip with an alignment in the
     wall center (minimum lip gap).
 
-    #### lip[4]: alignment
+    ##### lip[4]: alignment
 
       v | description
     ---:|:---------------------------------------
@@ -238,7 +238,7 @@
       2 | decimal-list-3:1 \| decimal | 10            | [x, y, h] coverage percentage
       3 | integer-list-3:1 \| integer | (calculated)  | [x, y, h] count override
 
-    #### rib[0]: mode
+    ##### rib[0]: mode
 
     Integer value is binary encoded.
 
@@ -252,7 +252,7 @@
     5-6 | lip coverage count (2-bit encoded integer)
       7 | offset all ribs to bottom of lower lip
 
-    #### rib[1]: base and height extrusion
+    ##### rib[1]: base and height extrusion
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -289,14 +289,14 @@
       0 | datastruct        | required          | configuration
       1 | datastruct        | required          | instances
 
-    #### wall[0]: configuration
+    ##### wall[0]: configuration
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | integer           | required          | mode
       1 | datastruct        | (see below)       | defaults
 
-    ##### wall[0]: configuration[0]: mode
+    ###### wall[0]: configuration[0]: mode
 
     Integer value is binary encoded.
 
@@ -325,7 +325,7 @@
       5 | fillet-out        | fillet-out
       6 | round-out         | round-out
 
-    ##### wall[0]: configuration[1]: defaults
+    ###### wall[0]: configuration[1]: defaults
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -337,7 +337,7 @@
     The constants \em cfg_he and \em cfg_vrm define defaults that may
     be used to round the top, base, and edges of a wall.
 
-    #### wall[1]: instances
+    ##### wall[1]: instances
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -394,14 +394,14 @@
       0 | datastruct        | required          | configuration
       1 | datastruct        | required          | instances
 
-    #### post[0]: configuration
+    ##### post[0]: configuration
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | integer           | required          | mode
       1 | datastruct        | (see below)       | defaults
 
-    ##### post[0]: configuration[0]: mode
+    ###### post[0]: configuration[0]: mode
 
     Integer value is binary encoded.
 
@@ -422,7 +422,7 @@
     when the calculation is performed; either when defaults are
     configured (b=0), or when a post instance is created (b=1).
 
-    ##### post[0]: configuration[1]: defaults
+    ###### post[0]: configuration[1]: defaults
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -435,7 +435,7 @@
       6 | datastruct        | (see below)       | fins1: rectangular-fins
       7 | datastruct        | (see below)       | calculation
 
-    ##### post[0]: configuration[1]: defaults[0]: hole0
+    ###### post[0]: configuration[1]: defaults[0]: hole0
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -455,7 +455,7 @@
     example. Another example is for use in post height adjustment that
     allow clearance for circuit board mounting.
 
-    ##### post[0]: configuration[1]: defaults[1-4]: hole1-2, post1-2
+    ###### post[0]: configuration[1]: defaults[1-4]: hole1-2, post1-2
 
     The configuration of hole1, hole2, post1, and post2 uses the same
     schema as described  for hole0 in the table of the previous
@@ -464,7 +464,7 @@
     calculation section below. The post and screw hole height defaults
     are based on the post height and other configured requirements.
 
-    ##### post[0]: configuration[1]: defaults[5]: fins0: triangular-fins
+    ###### post[0]: configuration[1]: defaults[5]: fins0: triangular-fins
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -480,7 +480,7 @@
     fin rounding and may be overridden if needed. See the source code
     for more details.
 
-    ##### post[0]: configuration[1]: defaults[6]: fins1: rectangular-fins
+    ###### post[0]: configuration[1]: defaults[6]: fins1: rectangular-fins
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -496,7 +496,7 @@
     fin rounding and may be overridden if needed. See the source code
     for more details.
 
-    ##### post[0]: configuration[1]: defaults[7]: calculation
+    ###### post[0]: configuration[1]: defaults[7]: calculation
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -523,7 +523,7 @@
     post may be configured to replace the values shown in the above
     table.
 
-    #### post[1]: instances
+    ##### post[1]: instances
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -540,7 +540,7 @@
     based on the type and, when not specified with an instances, are
     obtained from the configured default values as described above.
 
-    ##### post[1]: instances[0]: type
+    ###### post[1]: instances[0]: type
 
     Integer value is binary encoded.
 
@@ -549,7 +549,7 @@
       0 | post type  {0:normal, 1:recessed}
       1 | fin type {0:triangular, 1:rectangular}
 
-    ##### post[1]: instances[1]: align
+    ###### post[1]: instances[1]: align
 
     The post x, y, and z zero-alignment is controlled independently.
     When x, y, or z is undefined, the post is aligned at the x-y center
