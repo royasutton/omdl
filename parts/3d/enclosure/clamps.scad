@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Hole finishes)
-    \amu_define group_brief (Hole finishes for walls, project boxes, and enclosures.)
+    \amu_define group_name  (Clamps)
+    \amu_define group_brief (Clamps, bushings, and grips for wires and hoses.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -152,7 +152,7 @@
 
 
 *******************************************************************************/
-module wire_clamp_cg
+module clamp_cg
 (
   size,
 
@@ -300,7 +300,7 @@ module wire_clamp_cg
           }
 
           // remove hole
-          wire_clamp_cg(size=size, wth=cd+eps*8, mode=0);
+          clamp_cg(size=size, wth=cd+eps*8, mode=0);
 
           // bore screws
           for (x = [-1, 1] )

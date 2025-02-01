@@ -8,7 +8,7 @@ local_path        :=  parts/3d/enclosure
 
 local_library     :=  docs_module \
                       \
-                      hole_finishes \
+                      clamps \
                       power_strip \
                       project_box_rectangle
 
