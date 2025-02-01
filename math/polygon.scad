@@ -214,7 +214,7 @@ function polygon_line_p
             A 2d line, vector, or decimal angle 1.
   \param    v2 <line-2d | decimal> The arc end angle.
             A 2d line, vector, or decimal angle 2.
-  \param    fn <integer> The number of [facets] (optional).
+  \param    fn <integer> The number of [facets] \(optional\).
   \param    cw <boolean> Sweep clockwise along arc from the head of
             vector \p v1 to the head of vector \p v2 when \p cw =
             \b true, and counter clockwise when \p cw = \b false.
@@ -277,7 +277,7 @@ function polygon_arc_p
             A 2d line, vector, or decimal.
   \param    s <boolean> Use signed vector angle conversions. When
             \b false, positive angle conversion will be used.
-  \param    fn <integer> The number of [facets] (optional).
+  \param    fn <integer> The number of [facets] \(optional\).
   \param    cw <boolean> The coordinate point ordering.
 
   \returns  <coords-2d> A list of coordinates points [[x, y], ...].
@@ -912,7 +912,7 @@ function polygon_linear_extrude_pf
             A 2d line, vector, or decimal angle 1.
   \param    v2 <line-2d | decimal> The round end angle.
             A 2d line, vector, or decimal angle 2.
-  \param    fn <integer> The number of [facets].
+  \param    fn <integer> The number of [facets] \(optional\).
   \param    cw <boolean> The coordinate point ordering.
 
   \returns  <coords-2d> A list of coordinates points [[x, y], ...].
@@ -1219,7 +1219,7 @@ function polygon_round_eve_all_p
       c | <point-2d>                            | arc center point [x, y]
       v | <point-2d> \| <decimal>               | arc stop angle [x, y] or a
      cw | <boolean>                             | arc sweep direction
-     fn | <integer>                             | the number of facets (optional)
+     fn | <integer>                             | the number of [facets] \(optional\)
 
     This operation constructs an arc about the center point, specified
     as a point coordinate. The arc begins at the angle formed by the
@@ -1237,7 +1237,7 @@ function polygon_round_eve_all_p
       c | <decimal-list-2>                      | arc center point [m, a]
       v | <point-2d> \| <decimal>               | arc stop angle [x, y] or a
      cw | <boolean>                             | arc sweep direction
-     fn | <integer>                             | the number of facets (optional)
+     fn | <integer>                             | the number of [facets] \(optional\)
 
     This operation constructs an arc about the center point, specified
     as a vector <tt>[m, a]</tt> beginning from the start point. The arc
@@ -1260,6 +1260,7 @@ function polygon_round_eve_all_p
     The corners of this example 2d design plate have been rounded with
     the library function polygon_round_eve_all_p().
 
+  [facets]: \ref get_fn()
   [Turtle graphics]: https://en.wikipedia.org/wiki/Turtle_(robot)
 *******************************************************************************/
 function polygon_turtle_p

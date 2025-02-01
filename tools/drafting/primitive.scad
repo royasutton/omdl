@@ -857,7 +857,7 @@ module draft_line_pp
     \amu_eval ( object=draft_arrow ${object_diagram_2d} )
 
     \ref $draft_arrow_fn sets arc fragment number for arrowhead
-    construction. The line segments are constructed by \ref draft_line_pp().
+    construction. The line segments are constructed by draft_line_pp().
 
     | see: \ref draft_config_map  |
     |:---------------------------:|
@@ -1028,7 +1028,7 @@ module draft_arrow
 
     \amu_eval ( object=draft_line ${object_diagram_2d} )
 
-    The line segments are constructed by \ref draft_line_pp().
+    The line segments are constructed by draft_line_pp().
 
     | see: \ref draft_config_map  |
     |:---------------------------:|
@@ -1170,7 +1170,7 @@ module draft_line
 
     \amu_eval ( object=draft_arc ${object_diagram_2d} )
 
-    The line segments are constructed by \ref draft_line_pp().
+    The line segments are constructed by draft_line_pp().
 *******************************************************************************/
 module draft_arc
 (
@@ -1224,7 +1224,7 @@ module draft_arc
 
     \amu_eval ( object=draft_rectangle ${object_diagram_2d} )
 
-    The line segments are constructed by \ref draft_line().
+    The line segments are constructed by draft_line().
 *******************************************************************************/
 module draft_rectangle
 (
@@ -1276,7 +1276,7 @@ module draft_rectangle
 
     \amu_eval ( object=draft_polygon ${object_diagram_2d} )
 
-    The line segments are constructed by \ref draft_line().
+    The line segments are constructed by draft_line().
 
   [specification]: \ref dt_index
 *******************************************************************************/
