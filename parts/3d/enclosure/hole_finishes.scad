@@ -1,4 +1,4 @@
-//! Hole finishes for walls, project boxes, and enclosures.
+//! Clamps, bushings, and grips for wires and hoses.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Hole finishes)
-    \amu_define group_brief (Hole finishes for walls, project boxes, and enclosures..)
+    \amu_define group_brief (Hole finishes for walls, project boxes, and enclosures.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -48,31 +48,122 @@
 
 //----------------------------------------------------------------------------//
 
-//! A rectangular box maker for project boxes, enclosures and housings.
+//! A clamp, bushing, and/or grip for wire/hose wall penetrations.
 /***************************************************************************//**
-  \param  size
-  \param  cone
-  \param  grip
-  \param  clamp
+  \param  size    <decimal-list-2 | decimal> the wire size; a list [w, h]
+                  or a single decimal to set the wire diameter.
+
+  \param  clamp   <datastruct | integer> screw clamp; structured data
+                  or a single integer to set the clamp wall side {0|1}.
+
+  \param  cone    <datastruct | integer> bushing cone; structured data
+                  or a single integer to set the cone wall side {0|1}.
+
+  \param  grip    <datastruct | integer> zip tie grip; structured data
+                  or a single integer to set the grip wall side {0|1}.
+
   \param  wth     <decimal> wall thickness.
-  \param  gap
-  \param  mode
+
+  \param  gap     <decimal> wire/hose gap percentage.
+
+  \param  mode    <integer> operation mode {0=hole, 1=part-a, 2=part-b,
+                  3=parts-a and b}.
 
   \details
+
+    Construct a clamp, cone bushing, and/or a grip as a stand alone
+    part or as a wall penetration hole finish that can secure or
+    provide strain relief for passing wires and/or hoses. The
+    penetration can be circular or rectangular dependent on the size
+    specification.
+
+    ## Multi-value and structured parameters
+
+    ### clamp
+
+    #### Data structure fields: clamp
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <integer-list-2 \| integer> | required    | wall side
+      1 | <decimal>                   | wire height | base height
+      2 | <datastruct \| decimal>     | (see below) | screw bore
+      3 | <decimal>                   | d*3         | clamp depth
+      4 | <decimal-list-2 \| decimal> | 15          | pinch bar size
+
+    ##### clamp[0]: wall side
+
+    The clamp can be placed on either side of the wall by assigning \b
+    0 or \b 1. To place a clamp on both sides of the wall, assign the
+    value list <b>[0, 1]</b>.
+
+    ##### clamp[2]: screw bore
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <decimal>         | required          | \p d : bore diameter
+      1 | <decimal>         | base height       | \p l : bore length
+      2 | (see below)       | [d*2, d/3, d/3]   | \p h : screw head
+      3 | (see below)       | \b undef          | \p n : screw nut
+      4 | (see below)       | \b undef          | \p s : nut slot cutout
+
+    See screw_bore() for documentation of the data types for the screw
+    bore parameters \p h, \p n, and \p s.
+
+    ##### clamp[4]: pinch bar size
+
+    The pinch bar size, [h, w], is specified as a percentage of the
+    penetration size height and the clamp depth. When a single decimal
+    is specified, the height and width percentage are the same.
+
+    ### cone
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <integer-list-2 \| integer> | required| wall side
+      1 | <decimal>         | max(size)/2       | cone base width
+      2 | <decimal>         | max(size)/3       | cone height
+
+    ##### cone[0]: wall side
+
+    The cone can be placed on either side of the wall by assigning \b 0
+    or \b 1. To place a cone on both sides of the wall, assign the
+    value list <b>[0, 1]</b>.
+
+    ### grip
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <integer-list-2 \| integer> | required| wall side
+      1 | <decimal>         | max(size)/2       | zip tie width
+      2 | <decimal>         | max(size)/6       | zip tie height
+      3 | <decimal>         | max(size)*3/7     | grip base width
+      4 | <decimal>         | max(size)*3/2     | grip height
+      5 | <integer>         | 4                 | cut count
+      6 | <decimal>         | 4/5               | cut height fraction
+      7 | <decimal>         | min(size)/5       | cut width
+      8 | <decimal>         | 0                 | cut rotational offset
+
+    ##### grip[0]: wall side
+
+    The grip can be placed on either side of the wall by assigning \b 0
+    or \b 1. To place a grip on both sides of the wall, assign the
+    value list <b>[0, 1]</b>.
+
 
 *******************************************************************************/
 module wire_clamp_cg
 (
-  size,     // size:              [w, h] | d
+  size,
 
-  cone,     // wall cone:    [s, w, h]; s={0,1,[0,1]}
-  grip,     // zip tie cord grip: [s, zw, zh, w, h, cn, cf, ct, co]
-  clamp,    // clamp:             [s,
+  clamp,
+  cone,
+  grip,
 
-  wth = 0,  // wall thickness
-  gap = 10, // size gap percentage
+  wth = 0,
+  gap = 10,
 
-  mode      // {0: hole, 1: add part-1, 2: add part-2 }
+  mode
 )
 {
   //
