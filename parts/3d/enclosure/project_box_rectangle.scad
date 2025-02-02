@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Rectangular project box)
+    \amu_define group_name  (Rectangular Project Box)
     \amu_define group_brief (Rectangular prism project box generator.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
