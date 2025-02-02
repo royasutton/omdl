@@ -150,7 +150,26 @@
     or \b 1. To place a grip on both sides of the wall, assign the
     value list <b>[0, 1]</b>.
 
+    \amu_define scope_id      (example_clamp)
+    \amu_define title         (Clamp example)
+    \amu_define image_views   (top back diag)
+    \amu_define image_size    (sxga)
 
+    \amu_include (include/amu/scope_diagrams_3d.amu)
+
+    \amu_define scope_id      (example_cone)
+    \amu_define title         (Cone example)
+    \amu_define image_views   (top back diag)
+    \amu_define image_size    (sxga)
+
+    \amu_include (include/amu/scope_diagrams_3d.amu)
+
+    \amu_define scope_id      (example_grip)
+    \amu_define title         (Grip example)
+    \amu_define image_views   (top back diag)
+    \amu_define image_size    (sxga)
+
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
 module clamp_cg
 (
@@ -421,6 +440,106 @@ module clamp_cg
 //----------------------------------------------------------------------------//
 // openscad-amu auxiliary scripts
 //----------------------------------------------------------------------------//
+
+/*
+BEGIN_SCOPE example_clamp;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <models/3d/fastener/screws.scad>;
+    include <parts/3d/enclosure/clamps.scad>;
+
+    $fn = 36;
+
+    d = 7.00;
+
+    clamp_cg(size=d, clamp=0, mode=3);
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "top back diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE example_cone;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <models/3d/fastener/screws.scad>;
+    include <parts/3d/enclosure/clamps.scad>;
+
+    $fn = 36;
+
+    w = 2;
+    d = 7.00;
+    difference()
+    {
+      translate(-[d*2,d*2,w/2]) cube([d*4,d*4,w]);
+      clamp_cg(size=d, wth=w, mode=0);
+    }
+    clamp_cg(size=d, cone=0, mode=1);
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "top back diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE example_grip;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <models/3d/fastener/screws.scad>;
+    include <parts/3d/enclosure/clamps.scad>;
+
+    $fn = 36;
+
+    w = 2;
+    d = [7.00, 3.50];
+    e = max(d);
+    difference()
+    {
+      translate(-[e*2,e*2,w/2]) cube([e*4,e*4,w]);
+      clamp_cg(size=d, wth=w, mode=0);
+    }
+    clamp_cg(size=d, grip=0, mode=1);
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "top back diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
 
 //----------------------------------------------------------------------------//
 // end of file
