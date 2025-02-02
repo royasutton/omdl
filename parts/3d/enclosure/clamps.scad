@@ -101,7 +101,7 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | required          | \p d : bore diameter
+      0 | <decimal>         | max(size)/4       | \p d : bore diameter
       1 | <decimal>         | base height       | \p l : bore length
       2 | (see below)       | [d*2, d/3, d/3]   | \p h : screw head
       3 | (see below)       | \b undef          | \p n : screw nut
