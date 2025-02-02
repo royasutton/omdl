@@ -452,7 +452,12 @@ BEGIN_SCOPE example_clamp;
 
     d = 7.00;
 
-    clamp_cg(size=d, clamp=0, mode=3);
+    head = undef;
+    nut  = [3.5, 1.5, 0, 4, 45, 1.25];
+    slot = [undef, -3];
+    bore = [3, undef, head, nut, slot];
+
+    clamp_cg(size=d, clamp=[0, undef, bore], mode=3);
 
     // end_include
   END_OPENSCAD;
@@ -486,7 +491,7 @@ BEGIN_SCOPE example_cone;
       translate(-[d*2,d*2,w/2]) cube([d*4,d*4,w]);
       clamp_cg(size=d, wth=w, mode=0);
     }
-    clamp_cg(size=d, cone=0, mode=1);
+    clamp_cg(size=d, cone=[[0, 1]], mode=1);
 
     // end_include
   END_OPENSCAD;
