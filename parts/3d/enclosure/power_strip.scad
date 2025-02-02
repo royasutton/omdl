@@ -1,38 +1,76 @@
-/*
+//! A power strip maker for electrical receptacles and/or devices.
+/***************************************************************************//**
+  \file
+  \author Roy Allen Sutton
+  \date   2025
 
-  Single gang electrical device power strip generator
+  \copyright
 
-  References:
-    * https://en.wikipedia.org/wiki/NEMA_connector
+    This file is part of [omdl] (https://github.com/royasutton/omdl),
+    an OpenSCAD mechanical design library.
 
-  TODO:
-    * update library to adjust pinch bar by percentage
+    The \em omdl is free software; you can redistribute it and/or modify
+    it under the terms of the [GNU Lesser General Public License]
+    (http://www.gnu.org/licenses/lgpl.html) as published by the Free
+    Software Foundation; either version 2.1 of the License, or (at
+    your option) any later version.
 
-    * cover mount options:
-      (1) device mount screws
-          * no center holes in cover
-          * two device mount holes in cover
-      (2) cover center screw
-          * lower mount post by screw height
-          * add spacer behind cover to raise by post mount screw head height
+    The \em omdl is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
 
-    * support box mount tabs
-    * support box back screw-hole slid mounts
+    You should have received a copy of the GNU Lesser General Public
+    License along with the \em omdl; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+    02110-1301, USA; or see <http://www.gnu.org/licenses/>.
 
-    * support arbitrary exterior box holes
-    * support arbitrary cover holes
+  \details
 
-  Requires:
-    include <omdl/omdl-base.scad>;
-    include <omdl/tools/operation_cs.scad>;
-    include <omdl/models/3d/misc/omdl_logo.scad>;
-    include <omdl/models/3d/fastener/screws.scad>;
-    include <omdl/parts/3d/enclosure/clamps.scad>;
-    include <omdl/parts/3d/enclosure/project_box_rectangle.scad>;
+    \amu_define group_name  (Power Strip Maker)
+    \amu_define group_brief (Electrical receptacle power strip generator.)
 
-*/
+  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+*******************************************************************************/
 
-// default box configuration map
+//----------------------------------------------------------------------------//
+
+/***************************************************************************//**
+  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_define includes_required_add
+  (
+    tools/operation_cs.scad
+    models/3d/misc/omdl_logo.scad
+    models/3d/fastener/screws.scad
+    parts/3d/enclosure/clamps.scad
+    parts/3d/enclosure/project_box_rectangle.scad
+  )
+  \amu_include (include/amu/includes_required.amu)
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// global configuration variables
+//----------------------------------------------------------------------------//
+
+//! \name Maps
+//! @{
+
+//! <map> A single gang electrical device box configuration.
+/***************************************************************************//**
+  \details
+
+    The default electrical device box configuration map.
+
+    \amu_define title (Default device box configuration map)
+    \amu_define scope_id (default_box)
+    \amu_define output_scad (false)
+    \amu_define output_console (false)
+    \amu_define notes_table (Map key description is available in source. See the map)
+
+    \amu_include (include/amu/scope_table.amu)
+
+  \hideinitializer
+*******************************************************************************/
 power_strip_sg_default_box =
 [
   ["wth",      2.0],                // box wall thickness
@@ -77,9 +115,23 @@ power_strip_sg_default_box =
       (1): see project_box_rectangle() in omdl for descriptions
       (2): see screw_bore() in omdl for descriptions
    */
-map_check(power_strip_sg_default_box, false);
 
-// default mount configuration map
+//! <map> A single gang electrical device mount configuration.
+/***************************************************************************//**
+  \details
+
+    The default electrical device mount configuration map.
+
+    \amu_define title (Default device mount configuration map)
+    \amu_define scope_id (default_mount)
+    \amu_define output_scad (false)
+    \amu_define output_console (false)
+    \amu_define notes_table (Map key description is available in source. See the map)
+
+    \amu_include (include/amu/scope_table.amu)
+
+  \hideinitializer
+*******************************************************************************/
 power_strip_sg_default_mount =
 [
   ["mss",   length(3+9/32, "in")],  // device mount screw separation
@@ -87,9 +139,23 @@ power_strip_sg_default_mount =
   ["rmsh",  length(  3/16, "in")],  // mount screw head height
   ["rmth",  length(  1/16, "in")]   // mount tab height
 ];
-map_check(power_strip_sg_default_mount, false);
 
-// default cover configuration map (fractional measurements)
+//! <map> A single gang duplex receptacle cover configuration.
+/***************************************************************************//**
+  \details
+
+    The default electrical device cover configuration map.
+
+    \amu_define title (Default device cover configuration map)
+    \amu_define scope_id (default_cover)
+    \amu_define output_scad (false)
+    \amu_define output_console (false)
+    \amu_define notes_table (Map key description is available in source. See the map)
+
+    \amu_include (include/amu/scope_table.amu)
+
+  \hideinitializer
+*******************************************************************************/
 power_strip_sg_default_cover =
 [
   ["drpo",  length(1+1/2, "in")],   // receptacle offset
@@ -98,22 +164,74 @@ power_strip_sg_default_cover =
   ["rcsd",                          // cover screw hole:
     [3.51, 6.50, 1.5, 1/2]]         // [diameter, head-diameter, head-height, tolerance]
 ];
+
+//! \cond DOXYGEN_SHOULD_SKIP_THIS
+map_check(power_strip_sg_default_box, false);
+map_check(power_strip_sg_default_mount, false);
 map_check(power_strip_sg_default_cover, false);
+//! \endcond
 
-// default cover configuration map (decimal measurements)
-power_strip_sg_default_cover_dm =
-[
-  ["drpo",  length(1.532, "in")],   // receptacle offset
-  ["rpd",   length(1.362, "in")],   // receptacle diameter
-  ["rpfl",  length(1.134, "in")],   // receptacle flat-to-flat height
-  ["rcsd",                          // cover screw hole:
-    [3.51, 6.50, 1.5, 1/2]]         // [diameter, head-diameter, head-height, tolerance]
-];
-map_check(power_strip_sg_default_cover_dm, false);
+//! @}
 
-//
-// Single gang electrical device power strip generator.
-//
+//----------------------------------------------------------------------------//
+// modules
+//----------------------------------------------------------------------------//
+
+//! A power strip generator for single gang electrical receptacles.
+/***************************************************************************//**
+  \param  cols    <integer> device column count.
+
+  \param  rows    <integer> device row count.
+
+  \param  mode    <integer> part mode.
+
+  \param  verb    <integer> console output verbosity {0|1|2}.
+
+  \details
+
+    This module constructs a power strip grid of standard [NEMA]
+    electrical power receptacles. The number of columns and rows in the
+    power strip are configurable as well as most aspects of the power
+    strip enclosure box, receptacle device mounts, and device cover.
+    The default configuration of the enclosure box, device mount, and
+    device cover are specified in global variable maps.
+
+    ### part mode
+
+    Integer value is binary encoded.
+
+      b | description
+    ---:|:---------------------------------------
+      0 | generate enclosure box
+      1 | generate clamp top
+      2 | generate enclosure cover
+
+    The default configuration maps can be completely replaced with a
+    user supplied maps or may be partially updated as shown in the
+    following example.
+
+    \amu_define scope_id      (example)
+    \amu_define title         (Custom power strip example)
+    \amu_define image_views   (top bottom diag)
+    \amu_define image_size    (sxga)
+    \amu_define output_scad   (true)
+
+    \amu_include (include/amu/scope_diagrams_3d.amu)
+
+  \todo Support the following cover mount configuration options:
+        (1) use device mount screws
+            * no center holes in cover
+            * two device mount holes in cover
+        (2) use cover center screw
+            * lower mount post by screw height
+            * add spacer behind cover to raise by post mount screw head height
+
+  \todo Support enclosure box mount tabs.
+
+  \todo Support enclosure box back screw-hole slid mounts.
+
+  [NEMA]: https://en.wikipedia.org/wiki/NEMA_connector
+*******************************************************************************/
 module power_strip_sg
 (
   cols = 1,
@@ -506,6 +624,117 @@ module power_strip_sg
   translate([+(iw/2 + ps), 0, 0])
   enclosure_cover();
 }
+
+//! @}
+//! @}
+
+
+//----------------------------------------------------------------------------//
+// openscad-amu auxiliary scripts
+//----------------------------------------------------------------------------//
+
+/*
+BEGIN_SCOPE example;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/operation_cs.scad>;
+    include <models/3d/misc/omdl_logo.scad>;
+    include <models/3d/fastener/screws.scad>;
+    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/enclosure/project_box_rectangle.scad>;
+    include <parts/3d/enclosure/power_strip.scad>;
+
+    box_conf =
+    [
+      ["iscl",       15.0],
+      ["oscl",       15.0],
+      ["pwcd", [8.6, 3.6]],
+      ["pwsh",        [6]],
+      ["pwco",     [0, 2]],
+      ["pwcp",         20]
+    ];
+
+    custom_box = map_merge(box_conf, power_strip_sg_default_box);
+    map_check(custom_box);
+
+    power_strip_sg(cm_box=custom_box);
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "top bottom diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
+
+/*
+BEGIN_SCOPE default_box;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/operation_cs.scad>;
+    include <models/3d/misc/omdl_logo.scad>;
+    include <models/3d/fastener/screws.scad>;
+    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/enclosure/project_box_rectangle.scad>;
+    include <parts/3d/enclosure/power_strip.scad>;
+
+    map_write( power_strip_sg_default_box );
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE default_mount;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/operation_cs.scad>;
+    include <models/3d/misc/omdl_logo.scad>;
+    include <models/3d/fastener/screws.scad>;
+    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/enclosure/project_box_rectangle.scad>;
+    include <parts/3d/enclosure/power_strip.scad>;
+
+    map_write( power_strip_sg_default_mount );
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE default_cover;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/operation_cs.scad>;
+    include <models/3d/misc/omdl_logo.scad>;
+    include <models/3d/fastener/screws.scad>;
+    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/enclosure/project_box_rectangle.scad>;
+    include <parts/3d/enclosure/power_strip.scad>;
+
+    map_write( power_strip_sg_default_cover );
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
 
 //----------------------------------------------------------------------------//
 // end of file
