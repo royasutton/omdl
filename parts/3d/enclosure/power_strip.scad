@@ -337,11 +337,11 @@ module power_strip_sg
       sc = dlts + wth;
 
       // offset from bottom by 'wth"
-      zh = wth*2 + iwpd/2;
+      zo = wth*2 + iwpd/2;
 
       // for echo row and wall instance
       for (i=[0:rows-1], j=[0 : nc])
-      translate([zr - i*sr * iwps, zc + j*sc, zh])
+      translate([zr - i*sr * iwps, zc + j*sc, zo])
       rotate([90, 0, 0])
       cylinder(d=iwpd, h = wth+eps*8, center=true);
     }
@@ -511,11 +511,12 @@ module power_strip_sg
       zc = -il/2 - wth + iscl + dlts/2;
       sc = dlts + wth;
 
-      zh = 0;
+      zh = wth  + eps*8;
+      zo = zh/2 - eps*4;
 
       // for echo row and wall instance
       for (i=[0:rows-1], j=[0 : cols-1])
-      translate([zr - i*sr, zc + j*sc, zh])
+      translate([zr - i*sr, zc + j*sc, zo])
       union()
       {
         // cover screw
@@ -523,22 +524,23 @@ module power_strip_sg
         screw_bore
         (
           d = first(rcsd),
-          l = wth + eps*4,
+          l = zh,
           h = [second(rcsd), 0, third(rcsd)],
           t = [rcsd[3]],
-          a = 1
+          a = 0
         );
 
         // duplex receptacle thru-holes
+        extrude_linear_uss(zh, center=true)
         for (i=[-1, 1])
-        translate([0, i * drpo/2, wth/2])
+        translate([0, i * drpo/2])
         difference()
         {
-          cylinder(d=rpd, h=wth+eps*4, center=true);
+          circle(d=rpd);
 
           for (j=[-1, 1])
-          translate([0, j * (rpd/2 + rpfl)/2, 0])
-          cube([rpd, rpd/2, wth+eps*8], center=true);
+          translate([0, j * (rpd/2 + rpfl)/2])
+          square([rpd, rpd/2], center=true);
         }
       }
     }
