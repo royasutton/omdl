@@ -386,7 +386,7 @@ module extrude_linear_mss
     function returns the resulting total extrusion height, as a single
     sum, or as a vector of the individual segment heights.
 *******************************************************************************/
-function extrude_linear_mss_teh
+function extrude_linear_mss_eht
 (
   h,
   s = false
