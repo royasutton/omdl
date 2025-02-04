@@ -1609,8 +1609,7 @@ module project_box_rectangle
 
   // specified wall extrusion height
   // calculate total extrusion 'h_h' height of all sections
-  hv            = is_defined(h) ? [for (e=h) is_list(e) ? first(e) : e] : [0];
-  h_h           = sum(hv);
+  h_h           = extrude_linear_mss_eht( h );
 
   // specified base size
   size_x        = defined_e_or(size, 0, size);
@@ -1629,8 +1628,7 @@ module project_box_rectangle
   lip_h         = defined_e_or(lip, 1, lip_hd);
 
   // lid extrusion height (calculate total height of all sections)
-  lid_hv        = is_defined(lid) ? [for (e=lid) is_list(e) ? first(e) : e] : [0];
-  lid_h         = sum(lid_hv);
+  lid_h         = extrude_linear_mss_eht( lid );
 
   // wall height
   wall_h        = (mode_size_in == true) ? h_h - lip_h : h_h - lip_h - lid_h;
