@@ -212,7 +212,7 @@ map_check(power_strip_sg_default_cover, false);
 
     \amu_define scope_id      (example)
     \amu_define title         (Custom power strip example)
-    \amu_define image_views   (top bottom diag)
+    \amu_define image_views   (bottom front diag)
     \amu_define image_size    (sxga)
     \amu_define output_scad   (true)
 
@@ -670,7 +670,7 @@ BEGIN_SCOPE example;
     table_unset_all sizes;
 
     images    name "sizes" types "sxga";
-    views     name "views" views "top bottom diag";
+    views     name "views" views "bottom front diag";
 
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter --view=axes";
