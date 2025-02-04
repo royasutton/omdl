@@ -511,7 +511,8 @@ module power_strip_sg
       zc = -il/2 - wth + iscl + dlts/2;
       sc = dlts + wth;
 
-      zh = wth  + eps*8;
+      // calculate the total lid extrusion height
+      zh = extrude_linear_mss_eht(lf) + eps*8;
       zo = zh/2 - eps*4;
 
       // for echo row and wall instance
