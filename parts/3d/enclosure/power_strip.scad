@@ -139,6 +139,7 @@ power_strip_sg_default_mount =
   ["mss",   length(3+9/32, "in")],  // device mount screw separation
   ["rmsd",  length(   1/8, "in")],  // mount screw hole diameter
   ["rmsh",  length(  3/32, "in")],  // mount screw head height
+  ["rshc",  length(  5/16, "in")],  // mount screw head clearance
   ["rmth",  length(  1/16, "in")]   // mount tab height
 ];
 
@@ -163,7 +164,7 @@ power_strip_sg_default_cover =
   ["drpo",  length(1+1/2, "in")],   // receptacle offset
   ["rpd",   length(1+3/8, "in")],   // receptacle diameter
   ["rpfl",  length(1+5/32, "in")],  // receptacle flat-to-flat height (1/32" added)
-  ["rcsd",                          // cover screw hole:
+  ["rcsd",                          // cover center hole screw:
     [3.51, 6.50, 1.5, 1/2]]         // [diameter, head-diameter, head-height, tolerance]
 ];
 
@@ -440,6 +441,7 @@ module power_strip_sg
 
     difference()
     {
+      // base enclosure
       project_box_rectangle
       (
          wth = wth,
@@ -501,25 +503,6 @@ module power_strip_sg
 
     module cover_round_cut_duplex()
     {
-      dlts = map_get_value(cm_box, "dlts");
-      roww = map_get_value(cm_box, "roww");
-      iscl = map_get_value(cm_box, "iscl");
-      cdms = map_get_value(cm_box, "cdms");
-
-      drpo = map_get_value(cm_cover, "drpo");
-       rpd = map_get_value(cm_cover, "rpd");
-      rpfl = map_get_value(cm_cover, "rpfl");
-
-      zr = iw/2 - roww/2;
-      sr = roww;
-
-      zc = -il/2 - wth + iscl + dlts/2;
-      sc = dlts + wth;
-
-      // calculate the total lid extrusion height
-      zh = extrude_linear_mss_eht(lf) + eps*8;
-      zo = zh/2 - eps*4;
-
       // for echo row and wall instance
       for (i=[0:rows-1], j=[0 : cols-1])
       translate([zr - i*sr, zc + j*sc, zo])
@@ -543,12 +526,14 @@ module power_strip_sg
         else
         { // cover center screw hole
           rcsd = map_get_value(cm_cover, "rcsd");
+          rmsh = map_get_value(cm_mount, "rmsh");
 
+          translate([0, 0, rmsh/2])
           mirror([0, 0, 1])
           screw_bore
           (
             d = first(rcsd),
-            l = zh,
+            l = zh + rmsh + eps*4,
             h = [second(rcsd), 0, third(rcsd)],
             t = [rcsd[3]],
             a = 0
@@ -556,6 +541,10 @@ module power_strip_sg
         }
 
         // duplex receptacle thru-holes
+        drpo = map_get_value(cm_cover, "drpo");
+         rpd = map_get_value(cm_cover, "rpd");
+        rpfl = map_get_value(cm_cover, "rpfl");
+
         extrude_linear_uss(zh, center=true)
         for (i=[-1, 1])
         translate([0, i * drpo/2])
@@ -570,6 +559,43 @@ module power_strip_sg
       }
     }
 
+    // add stabilizer pads when using cover center screw
+    // (mount screws will be hidden under cover)
+    module cover_stabilizers()
+    {
+      if ( cdms == false )
+      {
+        // for echo row and wall instance
+        for (i=[0:rows-1], j=[0 : cols-1])
+        translate([zr - i*sr, zc + j*sc, zo])
+        union()
+        {
+          mss  = map_get_value(cm_mount, "mss");
+          rmsh = map_get_value(cm_mount, "rmsh");
+          rshc = map_get_value(cm_mount, "rshc");
+
+          translate([0, 0, zo])
+          extrude_linear_uss(rmsh, center=false)
+          union()
+          {
+            rectangle([4, 1]*rshc, vr=rshc/4, vrm=0, center=true);
+
+            for (i=[-1, 1])
+            translate([0, i * (mss+rshc)/2])
+            rectangle_c
+            (
+              size = [4,1]*rshc,
+              core = [5/4,1]*rshc,
+              co = [0,1/3]*rshc * -i,
+              vr = rshc/4,
+              vrm = 0,
+              center = true
+            );
+          }
+        }
+      }
+    }
+
     //
     // local variables
     //
@@ -580,25 +606,47 @@ module power_strip_sg
     // lid edge finish
     lf = e( map_get_value(cm_box, "lefc") );
 
+    dlts = map_get_value(cm_box, "dlts");
+    roww = map_get_value(cm_box, "roww");
+    iscl = map_get_value(cm_box, "iscl");
+    cdms = map_get_value(cm_box, "cdms");
+
+    zr = iw/2 - roww/2;
+    sr = roww;
+
+    zc = -il/2 - wth + iscl + dlts/2;
+    sc = dlts + wth;
+
+    // calculate the total lid extrusion height
+    zh = extrude_linear_mss_eht(lf) + eps*8;
+    zo = zh/2 - eps*4;
+
     //
     // instances
     //
 
     difference()
     {
-      project_box_rectangle
-      (
-         wth = wth,
-         lid = lf,
-           h = ih, size = [iw, il],
-         vrm = evrm, vr = evr,
+      // cover enclosure
+      union()
+      {
+        project_box_rectangle
+        (
+           wth = wth,
+           lid = lf,
+             h = ih, size = [iw, il],
+           vrm = evrm, vr = evr,
 
-         lip = l(2),
+           lip = l(2),
 
-        mode = 1,
+          mode = 1,
 
-        verb = verb
-      );
+          verb = verb
+        );
+
+        // add cover stabilizers
+        cover_stabilizers();
+      }
 
       // duplex receptacle holes
       cover_round_cut_duplex();
