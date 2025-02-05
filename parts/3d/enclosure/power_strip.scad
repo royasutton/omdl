@@ -586,6 +586,22 @@ module power_strip_sg
     }
   }
 
+  // check configuration map
+  module check_cm(name, mc, md)
+  {
+    for ( k = map_get_keys(mc) )
+    if( !map_exists(md, k) )
+    {
+      log_warn
+      (
+        strl
+        ([
+          "bad entry in map [", name, "] = [", k, ",", map_get_value(mc, k), "]"
+        ])
+      );
+    }
+  }
+
   //
   // local variables
   //
@@ -608,6 +624,17 @@ module power_strip_sg
 
   evrm = map_get_value(cm_box, "evrm");
   evr  = map_get_value(cm_box, "evr");
+
+  //
+  // report errors in configuration maps
+  //
+
+  if ( verb > 0 )
+  {
+    check_cm("cm_box", cm_box, power_strip_sg_default_box);
+    check_cm("cm_mount", cm_mount, power_strip_sg_default_mount);
+    check_cm("cm_cover", cm_cover, power_strip_sg_default_cover);
+  }
 
   //
   // instances
