@@ -138,7 +138,7 @@ power_strip_sg_default_mount =
 [
   ["mss",   length(3+9/32, "in")],  // device mount screw separation
   ["rmsd",  length(   1/8, "in")],  // mount screw hole diameter
-  ["rmsh",  length(  3/16, "in")],  // mount screw head height
+  ["rmsh",  length(  3/32, "in")],  // mount screw head height
   ["rmth",  length(  1/16, "in")]   // mount tab height
 ];
 
@@ -271,7 +271,7 @@ module power_strip_sg
       )
     [
       m,      // lip mode
-      rmsh    // lip height
+      rmsh*2  // lip height
     ];
 
   // power cord connection z-offset
