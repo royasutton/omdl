@@ -238,7 +238,7 @@ module power_strip_sg
   rows = 1,
 
   mode = 7,
-  verb = 0,
+  verb = 1,
 
   cm_box = power_strip_sg_default_box,
   cm_mount = power_strip_sg_default_mount,
