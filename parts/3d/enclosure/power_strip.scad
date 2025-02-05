@@ -417,7 +417,7 @@ module power_strip_sg
           dc = mss,
 
           h0 = [rmsd],
-          p1 = [u, u, -rmth -(cdms==true?0:rmsh)],
+          p1 = [u, u, u, u, -rmth -(cdms==true?0:rmsh)],
            f = fins
         )
       [ // post configuration:mode
