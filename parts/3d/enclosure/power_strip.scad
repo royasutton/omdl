@@ -81,6 +81,8 @@ power_strip_sg_default_box =
   ["evrm",       2],                // box & cover rounding mode: {0|1|2}
   ["evr",      4.0],                // box & cover rounding radius
 
+  ["cdms",   false],                // cover uses device mount screws: {true|false}
+
   ["lefb",       2],                // box lid edge finish: {0|1|2|3|4}
   ["lefc",       2],                // cover lid edge finish: {0|1|2|3|4}
 
@@ -350,6 +352,8 @@ module power_strip_sg
     // local variables
     //
 
+    cdms = map_get_value(cm_box, "cdms");
+
     // box power cord connection
     pwcd = map_get_value(cm_box, "pwcd");
     pwcs = map_get_value(cm_box, "pwcs");
@@ -399,6 +403,7 @@ module power_strip_sg
 
             mss = map_get_value(cm_mount, "mss"),
            rmsd = map_get_value(cm_mount, "rmsd"),
+           rmsh = map_get_value(cm_mount, "rmsh"),
            rmth = map_get_value(cm_mount, "rmth"),
 
           u = undef,
@@ -411,7 +416,7 @@ module power_strip_sg
           dc = mss,
 
           h0 = [rmsd],
-          p1 = [u, u, -rmth],
+          p1 = [u, u, -rmth -(cdms==true?0:rmsh)],
            f = fins
         )
       [ // post configuration:mode
@@ -499,11 +504,11 @@ module power_strip_sg
       dlts = map_get_value(cm_box, "dlts");
       roww = map_get_value(cm_box, "roww");
       iscl = map_get_value(cm_box, "iscl");
+      cdms = map_get_value(cm_box, "cdms");
 
       drpo = map_get_value(cm_cover, "drpo");
        rpd = map_get_value(cm_cover, "rpd");
       rpfl = map_get_value(cm_cover, "rpfl");
-      rcsd = map_get_value(cm_cover, "rcsd");
 
       zr = iw/2 - roww/2;
       sr = roww;
@@ -520,16 +525,35 @@ module power_strip_sg
       translate([zr - i*sr, zc + j*sc, zo])
       union()
       {
-        // cover screw
-        mirror([0, 0, 1])
-        screw_bore
-        (
-          d = first(rcsd),
-          l = zh,
-          h = [second(rcsd), 0, third(rcsd)],
-          t = [rcsd[3]],
-          a = 0
-        );
+        if ( cdms == true )
+        { // device mount screw holes
+          mss  = map_get_value(cm_mount, "mss");
+          rmsd = map_get_value(cm_mount, "rmsd");
+
+          for (i=[-1, 1])
+          translate([0, i*mss/2, 0])
+          screw_bore
+          (
+            d = rmsd,
+            l = zh,
+            f = 1+25/100,
+            a = 0
+          );
+        }
+        else
+        { // cover center screw hole
+          rcsd = map_get_value(cm_cover, "rcsd");
+
+          mirror([0, 0, 1])
+          screw_bore
+          (
+            d = first(rcsd),
+            l = zh,
+            h = [second(rcsd), 0, third(rcsd)],
+            t = [rcsd[3]],
+            a = 0
+          );
+        }
 
         // duplex receptacle thru-holes
         extrude_linear_uss(zh, center=true)
