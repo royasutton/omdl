@@ -221,17 +221,9 @@ map_check(power_strip_sg_default_cover, false);
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 
-  \todo Support the following cover mount configuration options:
-        (1) use device mount screws
-            * no center holes in cover
-            * two device mount holes in cover
-        (2) use cover center screw
-            * lower mount post by screw height
-            * add spacer behind cover to raise by post mount screw head height
+  \todo Support enclosure box screw mount tabs.
 
-  \todo Support enclosure box mount tabs.
-
-  \todo Support enclosure box back screw-hole slid mounts.
+  \todo Support enclosure box screw-hole slid mounts.
 
   [NEMA]: https://en.wikipedia.org/wiki/NEMA_connector
 *******************************************************************************/
