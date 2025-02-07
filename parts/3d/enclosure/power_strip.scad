@@ -98,6 +98,8 @@ power_strip_sg_default_box =
 
   ["iscl",    15.0],                // input space: cord, switch, surge, etc
   ["oscl",       0],                // output space: wire-nuts, led, aux board, etc
+  ["lscl",       0],                // left-side extra space
+  ["rscl",       0],                // right-side extra space
 
   ["iwdo",    true],                // internal wall divisions on: {true|false}
   ["iwpd",    10.0],                // internal wall wire pass diameter
@@ -320,11 +322,19 @@ module power_strip_sg
       roww = map_get_value(cm_box, "roww");
       iscl = map_get_value(cm_box, "iscl");
       oscl = map_get_value(cm_box, "oscl");
+      lscl = map_get_value(cm_box, "lscl");
+      rscl = map_get_value(cm_box, "rscl");
       iwpd = map_get_value(cm_box, "iwpd");
       iwps = map_get_value(cm_box, "iwps");
 
       // offset from wall by "wth"
-      zr = (iw/2 - iwpd/2 - wth) * iwps;
+      zr = let
+           (
+             z = iw/2 - iwpd/2 - wth,
+             s = (iwps>0) ? 1 : -1,
+             o = (iwps>0) ? rscl : -lscl
+           )
+           z * s - o;
       sr = roww;
 
       nc = (oscl>0) ? cols : cols-1;
@@ -391,6 +401,7 @@ module power_strip_sg
            dlts = map_get_value(cm_box, "dlts"),
            roww = map_get_value(cm_box, "roww"),
            iscl = map_get_value(cm_box, "iscl"),
+           lscl = map_get_value(cm_box, "lscl"),
            fins = map_get_value(cm_box, "fins"),
           pmode = map_get_value(cm_box, "pmode"),
 
@@ -401,7 +412,7 @@ module power_strip_sg
 
           u = undef,
 
-          zr = -iw/2 + roww/2,
+          zr = -iw/2 + roww/2 + lscl,
           sr = roww,
 
           zc = iscl + (dlts - mss)/2,
@@ -601,9 +612,10 @@ module power_strip_sg
     dlts = map_get_value(cm_box, "dlts");
     roww = map_get_value(cm_box, "roww");
     iscl = map_get_value(cm_box, "iscl");
+    lscl = map_get_value(cm_box, "lscl");
     cdms = map_get_value(cm_box, "cdms");
 
-    zr = iw/2 - roww/2;
+    zr = iw/2 - roww/2 - lscl;
     sr = roww;
 
     zc = -il/2 - wth + iscl + dlts/2;
@@ -674,9 +686,11 @@ module power_strip_sg
 
   iw = let
        (
-          roww = map_get_value(cm_box, "roww")
+          roww = map_get_value(cm_box, "roww"),
+          lscl = map_get_value(cm_box, "lscl"),
+          rscl = map_get_value(cm_box, "rscl")
         )
-      roww * rows;
+      lscl + roww * rows + rscl;
 
   il = let
        (
