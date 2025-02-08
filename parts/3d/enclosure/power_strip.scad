@@ -422,7 +422,7 @@ module power_strip_sg
           zc = -il/2 - wth + iscl,
           sc = dlts + wth
         )
-      ( ! iwdo ) ? undef
+      ( !iwdo ) ? undef
       : [ // wall configuration:mode
           wmode,
 
@@ -463,7 +463,7 @@ module power_strip_sg
           dc = mss,
 
           h0 = [rmsd],
-          p1 = [u, u, u, u, -rmth -(cdms==true?0:rmsh)],
+          p1 = [u, u, u, u, -rmth -(cdms?0:rmsh)],
            f = fins
         )
       [ // post configuration:mode
@@ -560,7 +560,7 @@ module power_strip_sg
       translate([zr - i*sr, zc + j*sc, zo])
       union()
       {
-        if ( cdms == true )
+        if ( cdms )
         { // device mount screw holes
           mss  = map_get_value(cm_mount, "mss");
           rmsd = map_get_value(cm_mount, "rmsd");
@@ -615,7 +615,7 @@ module power_strip_sg
     // (mount screws will be hidden under cover)
     module cover_stabilizers()
     {
-      if ( cdms == false )
+      if ( !cdms )
       {
         // for echo row and wall instance
         for (i=[0:rows-1], j=[0 : cols-1])
