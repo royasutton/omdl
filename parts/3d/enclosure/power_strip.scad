@@ -99,6 +99,9 @@ power_strip_sg_default_box =
   ["piab",   undef],                // (1) box post instance additions
   ["piac",   undef],                // (1) cover post instance additions
 
+  ["mpc2b",   true],                // mirror cover post additions in box: {true|false}
+  ["mphda",      0],                // mirrored post hole diameter adjustment
+
   ["iscl",    15.0],                // input space: cord, switch, surge, etc
   ["oscl",       0],                // output space: wire-nuts, led, aux board, etc
   ["lscl",       0],                // left-side extra space
@@ -304,6 +307,34 @@ module power_strip_sg
     // local modules
     //
 
+    // convert cover post instance additions for box (x and y dimensions only)
+    //  mirror: type, x-align, x-move, and xy-rotate, add diameter adjustment
+    function piac_to_piab(pia)
+    = [
+        for (i=pia)
+        let
+        (
+          mphda = map_get_value(cm_box, "mphda"),
+
+          t = i[0],
+          a = i[1],   ax = a[0],  ay = a[1],
+          m = i[2],   mx = m[0],  my = m[1],
+          r = i[3],
+         h0 = i[4],
+         h1 = i[5],
+          p = i[6],
+          f = i[7]
+        )
+        [
+          t == 0 ? 1 : 0,
+          [is_undef(ax) ? undef : ax == 0 ? 1 : 0, ay],
+          [is_undef(m)  ? undef : -mx, my],
+           is_undef(r)  ? undef : -r,
+          [h0[0], h0[1], h0[2], mphda, h0[4], h0[5], h0[6]],
+          h1, p, f
+        ]
+      ];
+
     // tab mounts
     module mount_tabs()
     {
@@ -414,6 +445,8 @@ module power_strip_sg
            fins = map_get_value(cm_box, "fins"),
           pmode = map_get_value(cm_box, "pmode"),
            piab = map_get_value(cm_box, "piab"),
+           piac = map_get_value(cm_box, "piac"),
+          mpc2b = map_get_value(cm_box, "mpc2b"),
 
             mss = map_get_value(cm_mount, "mss"),
            rmsd = map_get_value(cm_mount, "rmsd"),
@@ -444,7 +477,10 @@ module power_strip_sg
             [2, [u, 0], [zr + i*sr, zc + j*sc + dc, 0], 000, h0, u, p1, f ],
 
           // add custom instances
-          if ( is_defined(piab) ) for (i=piab) i
+          if ( is_defined(piab) ) for (i=piab) i,
+
+          // mirror custom cover instances
+          if ( is_defined(piac) && mpc2b ) for (i=piac_to_piab(piac)) i
         ]
       ];
 
