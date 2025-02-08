@@ -76,7 +76,7 @@ power_strip_sg_default_box =
   ["wth",      2.0],                // box wall thickness
   ["roww",    50.0],                // receptacle row width
   ["dlts",  108.00],                // device length tab-to-tab space
-  ["boxd",    20.5],                // box internal depth
+  ["boxd",    25.0],                // box internal depth
 
   ["evrm",       2],                // box & cover rounding mode: {0|1|2}
   ["evr",      4.0],                // box & cover rounding radius
