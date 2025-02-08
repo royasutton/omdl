@@ -94,7 +94,10 @@ power_strip_sg_default_box =
     [3, 270, 3, 3/4] ],
   ["ribs",  [0, 1.75] ],            // (1) box ribs configuration
   ["wmode",    426],                // (1) box wall mode
+  ["wiab",   undef],                // (1) box wall instance additions
   ["pmode",    138],                // (1) box post mode (b7=1 required)
+  ["piab",   undef],                // (1) box post instance additions
+  ["piac",   undef],                // (1) cover post instance additions
 
   ["iscl",    15.0],                // input space: cord, switch, surge, etc
   ["oscl",       0],                // output space: wire-nuts, led, aux board, etc
@@ -381,6 +384,7 @@ module power_strip_sg
            iscl = map_get_value(cm_box, "iscl"),
            oscl = map_get_value(cm_box, "oscl"),
           wmode = map_get_value(cm_box, "wmode"),
+           wiab = map_get_value(cm_box, "wiab"),
            iwdo = map_get_value(cm_box, "iwdo"),
 
           nc = (oscl>0) ? cols : cols-1,
@@ -392,7 +396,12 @@ module power_strip_sg
           wmode,
 
           // wall instances
-          [ for (j=[0 : nc]) [0, zc + j*sc] ]
+          [
+            for (j=[0 : nc]) [0, zc + j*sc],
+
+            // add custom instances
+            if ( is_defined(wiab) ) for (i=wiab) i
+          ]
         ];
 
     // base screw posts
@@ -404,6 +413,7 @@ module power_strip_sg
            lscl = map_get_value(cm_box, "lscl"),
            fins = map_get_value(cm_box, "fins"),
           pmode = map_get_value(cm_box, "pmode"),
+           piab = map_get_value(cm_box, "piab"),
 
             mss = map_get_value(cm_mount, "mss"),
            rmsd = map_get_value(cm_mount, "rmsd"),
@@ -431,7 +441,10 @@ module power_strip_sg
           for (i=[0:rows-1], j=[0:cols-1])
             [2, [u, 0], [zr + i*sr, zc + j*sc,      0], 180, h0, u, p1, f ],
           for (i=[0:rows-1], j=[0:cols-1])
-            [2, [u, 0], [zr + i*sr, zc + j*sc + dc, 0], 000, h0, u, p1, f ]
+            [2, [u, 0], [zr + i*sr, zc + j*sc + dc, 0], 000, h0, u, p1, f ],
+
+          // add custom instances
+          if ( is_defined(piab) ) for (i=piab) i
         ]
       ];
 
@@ -606,6 +619,15 @@ module power_strip_sg
     // wall height must be >= lip height, with min of wth
     ih = max([ wth, second(l()) ]);
 
+    // cover screw posts (add custom instances)
+    p = let
+        (
+          pmode = map_get_value(cm_box, "pmode"),
+           piac = map_get_value(cm_box, "piac")
+        )
+        is_undef(piac) ? undef
+      : [pmode, [for (i=piac) i]];
+
     // lid edge finish
     lf = e( map_get_value(cm_box, "lefc") );
 
@@ -642,6 +664,8 @@ module power_strip_sg
            vrm = evrm, vr = evr,
 
            lip = l(2),
+
+          post = p,
 
           mode = 1,
 
