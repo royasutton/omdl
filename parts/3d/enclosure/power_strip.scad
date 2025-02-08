@@ -544,6 +544,12 @@ module power_strip_sg
 
     // add tab mounts
     mount_tabs();
+
+    // report power cord hole size
+    if ( verb > 0 )
+    {
+      echo(str( parent_module(0), "(): power cord hole size = ", pwcd ));
+    }
   }
 
   // power strip cover
