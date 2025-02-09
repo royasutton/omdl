@@ -43,6 +43,7 @@
     models/3d/misc/omdl_logo.scad
     models/3d/fastener/screws.scad
     parts/3d/enclosure/clamps.scad
+    parts/3d/enclosure/mounts.scad
     parts/3d/enclosure/project_box_rectangle.scad
   )
   \amu_include (include/amu/includes_required.amu)
@@ -119,11 +120,15 @@ power_strip_sg_default_box =
 
   ["pwsd",     3.5],                // power cord clamp screw diameter
   ["pwsh",  [6, 3.5]],              // (2) power cord clamp screw head spec
-  ["pwsn",  [5.75, 2.5]]            // (2) power cord clamp screw nut spec
+  ["pwsn",  [5.75, 2.5]],           // (2) power cord clamp screw nut spec
+
+  ["mtab", [4, 25, 4]],             // (3) mount tab: [screw, brace, vrm, vr, wth, size]
+  ["mtabs",  undef]                 // mount tab instances: [[edge, zero, move], ...]
 ];
   /*
       (1): see project_box_rectangle() in omdl for descriptions
       (2): see screw_bore() in omdl for descriptions
+      (3): see screw_mount_tab() in omdl for descriptions
    */
 
 //! <map> A single gang electrical device mount configuration.
@@ -335,18 +340,62 @@ module power_strip_sg
         ]
       ];
 
-    // tab mounts
+    // screw mount tabs
     module mount_tabs()
     {
-      // output tab x-y spacing
-      // output screw bore size
+      mtab = map_get_value(cm_box, "mtab");
+
+      // configuration and defaults
+      s   = defined_e_or(mtab, 0, undef);
+      b   = defined_e_or(mtab, 1, undef);
+      vrm = defined_e_or(mtab, 2, undef);
+      vr  = defined_e_or(mtab, 3, undef);
+      w   = defined_e_or(mtab, 4, wth*2);
+      sz  = defined_e_or(mtab, 5, undef);
+
+      //
+      // instantiate
+      //
+
+      mtabs = map_get_value(cm_box, "mtabs");
+
+      if ( is_defined( mtabs ) )
+      for ( i = mtabs )
+      {
+        e = defined_e_or(i, 0, 0);  // edge: {0|1|2|3}
+        z = defined_e_or(i, 1, 0);  // zero
+        m = defined_e_or(i, 2, 0);  // move
+
+        if ( e == 0 )
+        { // top edge
+          translate([limit(z,-1,+1)*iw/2 + m, il/2 + wth - eps*2, 0])
+          rotate([0, 0, 0])
+          screw_mount_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
+        } else
+        if ( e == 1 )
+        { // right edge
+          translate([iw/2 + wth - eps*2, limit(z,-1,+1)*il/2 + m, 0])
+          rotate([0, 0, -90])
+          screw_mount_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
+        } else
+        if ( e == 2 )
+        { // bottom edge
+          translate([limit(z,-1,+1)*iw/2 + m, -(il/2 + wth - eps*2), 0])
+          rotate([0, 0, 180])
+          screw_mount_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
+        } else
+        if ( e == 3 )
+        { // left edge
+          translate([-(iw/2 + wth - eps*2), limit(z,-1,+1)*il/2 + m, 0])
+          rotate([0, 0, +90])
+          screw_mount_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
+        }
+      }
     }
 
-    // screw hole slot mounts
-    module mount_screw_slot()
+    // screw mount slots
+    module mount_slots()
     {
-      // output tab x-y spacing
-      // output screw bore size
     }
 
     // base internal wall wire holes
@@ -519,8 +568,8 @@ module power_strip_sg
       translate([pwxo, -il/2-wth/2, pwzo]) rotate([90, 0, 0])
       clamp_cg(size=pwcd, wth=wth*4, mode=0);
 
-      // screw hole slot mounts
-      mount_screw_slot();
+      // screw mount slot holes
+      mount_slots();
 
       // detail: logo
       if ( map_get_value(cm_box, "dlogo") )
@@ -542,8 +591,11 @@ module power_strip_sg
     translate([pwxo, -il/2-wth/2, pwzo]) rotate([90, 0, 0])
     clamp_cg(size=pwcd, clamp=[pwcs, pwzo, [pwsd,undef,pwsh,pwsn], pwct, pwcp], cone=pwcs+1, wth=wth, mode=1);
 
-    // add tab mounts
+    // add mount tabs
     mount_tabs();
+
+    // add screw mount slots
+    mount_slots();
 
     // report power cord hole size
     if ( verb > 0 )
