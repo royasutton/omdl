@@ -90,8 +90,8 @@ power_strip_sg_default_box =
   ["drimb",   true],                // detail rim on box rear: {true|false}
   ["drimc",   true],                // detail rim on cover top: {true|false}
 
-  ["fins",                          // post fins: [number, angle, width, length]
-    [3, 270, 3, 3/4] ],
+  ["fins",  [3, 270, 3, 3/4]],      // post fins: [number, angle, width, length]
+
   ["ribs",  [0, 1.75] ],            // (1) box ribs configuration
   ["wmode",    426],                // (1) box wall mode
   ["wiab",   undef],                // (1) box wall instance additions
