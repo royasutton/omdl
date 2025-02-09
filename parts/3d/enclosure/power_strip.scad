@@ -836,14 +836,14 @@ module power_strip_sg
   // instances
   //
 
-  ps = wth*2;
+  ps = wth*10;
 
   if ( binary_bit_is(mode, 0, 1) )
   translate([-(iw/2 + ps), 0, 0])
   enclosure_box();
 
   if ( binary_bit_is(mode, 1, 1) )
-  translate([+(iw/2 + ps), -(il/2 + ps*4), 0])
+  translate([+(iw/2 + ps), -(il/2 + ps), 0])
   clamp_strap();
 
   if ( binary_bit_is(mode, 2, 1) )
