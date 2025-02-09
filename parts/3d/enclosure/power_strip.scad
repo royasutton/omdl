@@ -472,9 +472,9 @@ module power_strip_sg
         // post instances
         [
           for (i=[0:rows-1], j=[0:cols-1])
-            [2, [u, 0], [zr + i*sr, zc + j*sc,      0], 180, h0, u, p1, f ],
+            [2, [0, -1], [zr + i*sr, zc + j*sc,      0], 180, h0, u, p1, f ],
           for (i=[0:rows-1], j=[0:cols-1])
-            [2, [u, 0], [zr + i*sr, zc + j*sc + dc, 0], 000, h0, u, p1, f ],
+            [2, [0, -1], [zr + i*sr, zc + j*sc + dc, 0], 000, h0, u, p1, f ],
 
           // add custom instances
           if ( is_defined(piab) ) for (i=piab) i,
