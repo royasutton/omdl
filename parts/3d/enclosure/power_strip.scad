@@ -234,9 +234,7 @@ map_check(power_strip_sg_default_cover, false);
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 
-  \todo Support enclosure box screw mount tabs.
-
-  \todo Support enclosure box screw-hole slid mounts.
+  \todo Support enclosure box screw-hole slot mounts.
 
   [NEMA]: https://en.wikipedia.org/wiki/NEMA_connector
 *******************************************************************************/
@@ -867,6 +865,7 @@ BEGIN_SCOPE example;
     include <models/3d/misc/omdl_logo.scad>;
     include <models/3d/fastener/screws.scad>;
     include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/enclosure/mounts.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/enclosure/power_strip.scad>;
 
@@ -874,10 +873,13 @@ BEGIN_SCOPE example;
     [
       ["iscl",       15.0],
       ["oscl",       15.0],
+
       ["pwcd", [8.6, 3.6]],
       ["pwsh",        [6]],
       ["pwco",     [0, 2]],
-      ["pwcp",         20]
+      ["pwcp",         20],
+
+      ["mtabs",     [[0]]]
     ];
 
     custom_box = map_merge(box_conf, power_strip_sg_default_box);
