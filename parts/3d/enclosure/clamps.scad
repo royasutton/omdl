@@ -50,7 +50,7 @@
 
 //! A clamp, bushing, and/or grip for wire/hose wall penetrations.
 /***************************************************************************//**
-  \param  size    <decimal-list-2 | decimal> the wire size; a list [w, h]
+  \param  size    <decimal-list-2 | decimal> wire size; a list [w, h]
                   or a single decimal to set the wire diameter.
 
   \param  clamp   <datastruct | integer> screw clamp; structured data
