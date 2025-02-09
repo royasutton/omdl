@@ -327,7 +327,7 @@ module power_strip_sg
         )
         [
           t == 0 ? 1 : 0,
-          [is_undef(ax) ? undef : ax == 0 ? 1 : 0, ay],
+          [is_undef(ax) ? undef : -ax, ay],
           [is_undef(m)  ? undef : -mx, my],
            is_undef(r)  ? undef : -r,
           [h0[0], h0[1], h0[2], mphda, h0[4], h0[5], h0[6]],
