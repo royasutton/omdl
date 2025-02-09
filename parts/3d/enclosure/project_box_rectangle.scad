@@ -528,7 +528,7 @@
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | integer           | required          | type
-      1 | integer-list-3:1  | undef             | align
+      1 | decimal-list-3:1  | [0, 0, 0]         | zero
       2 | decimal-list-3:2  | [0, 0, 0]         | move
       3 | decimal-list-3:1 \| decimal | [0, 0, 0] | rotate
       4 | datastruct        | (see note)        | hole0; screw hole
@@ -549,15 +549,13 @@
       0 | post type  {0:normal, 1:recessed}
       1 | fin type {0:triangular, 1:rectangular}
 
-    ###### post[1]: instances[1]: align
+    ###### post[1]: instances[1]: zero
 
-    The post x, y, and z zero-alignment is controlled independently.
-    When x, y, or z is undefined, the post is aligned at the x-y center
-    and the top of the lid, respectively. Each can be assigned either 0
-    or 1 to move the alignment to the negative or positive edge of the
-    enclosure (or lid). To set the post zero alignment at the center of
-    the lower edge of the enclosure use <tt>[\b undef, 0]</tt>, for
-    example.
+    The x and y zero can be assigned decimal values in the interval
+    (-1, +1), to set the post zero alignment position along the
+    enclosure x and y dimensions. The z zero can be assigned a decimal
+    value in the interval (-1, 0), to set the post zero alignment
+    position along the enclosure lid height.
 
     ### align
 
@@ -1367,7 +1365,7 @@ module project_box_rectangle
     {
       inst_t    = defined_e_or(inst, 0, inst);        // type
 
-      inst_a    = defined_e_or(inst, 1, undef);       // align [x, y, z]
+      inst_a    = defined_e_or(inst, 1, zero3d);      // align [x, y, z]
       inst_m    = defined_e_or(inst, 2, zero3d);      // move [x, y, z]
       inst_r    = defined_e_or(inst, 3, zero3d);      // rotate [x, y, z]
 
@@ -1378,17 +1376,13 @@ module project_box_rectangle
       inst_f    = defined_e_or(inst, 7, undef);       // fins
 
       // alignment
-      inst_ax   = defined_e_or(inst_a, 0, undef);
-      inst_ay   = defined_e_or(inst_a, 1, undef);
+      inst_ax   = defined_e_or(inst_a, 0, 0);
+      inst_ay   = defined_e_or(inst_a, 1, 0);
       inst_az   = defined_e_or(inst_a, 2, 0);
 
-      inst_zx   = is_undef( inst_ax ) ? 0
-                : ( binary_bit_is(inst_ax, 0, 0) ? -1 : +1 ) * (max_x + wth)/2;
-
-      inst_zy   = is_undef( inst_ay ) ? 0
-                : ( binary_bit_is(inst_ay, 0, 0) ? -1 : +1 ) * (max_y + wth)/2;
-
-      inst_zz   = ( binary_bit_is(inst_az, 0, 0) ? 0 : -lid_h );
+      inst_zx   = limit(inst_ax, -1, 1) * (max_x + wth)/2;
+      inst_zy   = limit(inst_ay, -1, 1) * (max_y + wth)/2;
+      inst_zz   = limit(inst_az, -1, 0) * lid_h;
 
       //
       // default value updates based on types
@@ -1753,8 +1747,10 @@ BEGIN_SCOPE example_bottom;
       [
         [0, [undef, undef, undef, undef, undef, [0]]],
         [
-          [x, [0,0], [+1,+1]*o], [x, [0,1], [+1,-1]*o],
-          [x, [1,0], [-1,+1]*o], [x, [1,1], [-1,-1]*o],
+          [x, [-1,-1], [+1,+1]*o],
+          [x, [-1,+1], [+1,-1]*o],
+          [x, [+1,-1], [-1,+1]*o],
+          [x, [+1,+1], [-1,-1]*o],
         ]
       ];
 
