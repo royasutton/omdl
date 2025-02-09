@@ -178,7 +178,7 @@ power_strip_sg_default_cover =
   ["rpd",   length(1+3/8, "in")],   // receptacle diameter
   ["rpfl",  length(1+5/32, "in")],  // receptacle flat-to-flat height (1/32" added)
   ["rcsd",                          // cover center hole screw:
-    [3.51, 6.50, 1.5, 1/2]]         // [diameter, head-diameter, head-height, tolerance]
+    [3.51, 7.50, 2.5, 1/2]]         // [diameter, head-diameter, head-height, tolerance]
 ];
 
 //! \cond DOXYGEN_SHOULD_SKIP_THIS
