@@ -14,7 +14,8 @@ local_backup_add  :=
 
 local_submodules  := computer \
                      bearing \
-                     enclosure
+                     enclosure \
+                     fastener
 
 #------------------------------------------------------------------------------#
 # add local module

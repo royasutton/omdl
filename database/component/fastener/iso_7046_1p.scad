@@ -42,6 +42,13 @@
 
   \details
 
+    \amu_copy (files="diagrams/screw_machine_flat_phillips.svg" types="html,latex")
+    \amu_text
+    (
+    \image html ${PATH_NAME}/diagrams/screw_machine_flat_phillips.svg "parameters"
+    \image latex ${PATH_NAME}/diagrams/screw_machine_flat_phillips.svg "parameters"
+    )
+
     \amu_define output_scad     (false)
     \amu_define output_console  (false)
 

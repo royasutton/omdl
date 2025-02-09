@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Rectangular project box)
+    \amu_define group_name  (Rectangular Project Box)
     \amu_define group_brief (Rectangular prism project box generator.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
@@ -133,8 +133,8 @@
     default as demonstrated below.
 
     \code
-      partial_config = [ 12.42, [1,2], [2,1], 0, [1,2], 31, [1,2,3], 0 ];
-         full_config = [ undef, undef, undef, 2, undef, 31 ];
+         full_config = [ 12.42, [1,2], [2,1], 0, [1,2], 31, [1,2,3], 0 ];
+      partial_config = [ undef, undef, undef, 2, undef, 31 ];
     \endcode
 
     ## Rounding and extrusions
@@ -167,7 +167,10 @@
     By way of the parameter \p lip, the box walls can have an overhang
     that interfaces with adjacent wall or lid sections. The adjacent
     section should be constructed with an opposite lip orientation
-    using the mode configuration.
+    using the mode configuration. The \p lip is considered to be a
+    feature of the exterior enclosure walls and therefore a specified
+    \p lip height should always be less than or equal to the total wall
+    height \p h.
 
     #### Data structure schema:
 
@@ -181,11 +184,11 @@
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | integer           | required          | mode
       1 | decimal           | wth               | height
-      2 | decimal           | 45                | base width percentage of wall
-      3 | decimal           | 10                | top taper width percentage of wall
+      2 | decimal           | 35                | base width percentage of wall thickness
+      3 | decimal           | 10                | top taper width percentage of wall thickness
       4 | integer           | 0                 | alignment
 
-    #### lip[0]: mode
+    ##### lip[0]: mode
 
     Integer value is binary encoded.
 
@@ -201,7 +204,7 @@
     can be approximated by using an inside lip with an alignment in the
     wall center (minimum lip gap).
 
-    #### lip[4]: alignment
+    ##### lip[4]: alignment
 
       v | description
     ---:|:---------------------------------------
@@ -235,7 +238,7 @@
       2 | decimal-list-3:1 \| decimal | 10            | [x, y, h] coverage percentage
       3 | integer-list-3:1 \| integer | (calculated)  | [x, y, h] count override
 
-    #### rib[0]: mode
+    ##### rib[0]: mode
 
     Integer value is binary encoded.
 
@@ -249,7 +252,7 @@
     5-6 | lip coverage count (2-bit encoded integer)
       7 | offset all ribs to bottom of lower lip
 
-    #### rib[1]: base and height extrusion
+    ##### rib[1]: base and height extrusion
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -286,14 +289,14 @@
       0 | datastruct        | required          | configuration
       1 | datastruct        | required          | instances
 
-    #### wall[0]: configuration
+    ##### wall[0]: configuration
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | integer           | required          | mode
       1 | datastruct        | (see below)       | defaults
 
-    ##### wall[0]: configuration[0]: mode
+    ###### wall[0]: configuration[0]: mode
 
     Integer value is binary encoded.
 
@@ -322,7 +325,7 @@
       5 | fillet-out        | fillet-out
       6 | round-out         | round-out
 
-    ##### wall[0]: configuration[1]: defaults
+    ###### wall[0]: configuration[1]: defaults
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -334,7 +337,7 @@
     The constants \em cfg_he and \em cfg_vrm define defaults that may
     be used to round the top, base, and edges of a wall.
 
-    #### wall[1]: instances
+    ##### wall[1]: instances
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -391,14 +394,14 @@
       0 | datastruct        | required          | configuration
       1 | datastruct        | required          | instances
 
-    #### post[0]: configuration
+    ##### post[0]: configuration
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | integer           | required          | mode
       1 | datastruct        | (see below)       | defaults
 
-    ##### post[0]: configuration[0]: mode
+    ###### post[0]: configuration[0]: mode
 
     Integer value is binary encoded.
 
@@ -409,7 +412,7 @@
       4 | post base rounded same as top {0:opposite, 1:same}
       5 | set auxiliary screw hole on opposite side of lid
       6 | re-calculate defaults with each instance (1)
-      7 | post type that extends into lip height {0:normal, 1:recessed}
+      7 | post type that extends into lip height {0:recessed, 1:normal}
       8 | lip height extension count {0:one, 1:both}
       9 | offset all posts to bottom of lower lip
 
@@ -419,7 +422,7 @@
     when the calculation is performed; either when defaults are
     configured (b=0), or when a post instance is created (b=1).
 
-    ##### post[0]: configuration[1]: defaults
+    ###### post[0]: configuration[1]: defaults
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -432,7 +435,7 @@
       6 | datastruct        | (see below)       | fins1: rectangular-fins
       7 | datastruct        | (see below)       | calculation
 
-    ##### post[0]: configuration[1]: defaults[0]: hole0
+    ###### post[0]: configuration[1]: defaults[0]: hole0
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -452,14 +455,16 @@
     example. Another example is for use in post height adjustment that
     allow clearance for circuit board mounting.
 
-    ##### post[0]: configuration[1]: defaults[1-4]: hole1-2, post1-2
+    ###### post[0]: configuration[1]: defaults[1-4]: hole1, post1, hole2, and post2
 
-    The default values for hole1, hole2, post1, and post2 are computed
-    according to that outlined in the defaults calculation section
-    below. The height and offsets are set based on the post height and
-    other configured requirements.
+    The configuration of hole1, post1, hole2, and post2 uses the same
+    schema as described  for hole0 in the table of the previous
+    section, with the only difference being the default values. The
+    defaults are computed according to that outlined in the defaults
+    calculation section below. The post and screw hole height defaults
+    are based on the post height and other configured requirements.
 
-    ##### post[0]: configuration[1]: defaults[5]: fins0: triangular-fins
+    ###### post[0]: configuration[1]: defaults[5]: fins0: triangular-fins
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -475,7 +480,7 @@
     fin rounding and may be overridden if needed. See the source code
     for more details.
 
-    ##### post[0]: configuration[1]: defaults[6]: fins1: rectangular-fins
+    ###### post[0]: configuration[1]: defaults[6]: fins1: rectangular-fins
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -491,7 +496,7 @@
     fin rounding and may be overridden if needed. See the source code
     for more details.
 
-    ##### post[0]: configuration[1]: defaults[7]: calculation
+    ###### post[0]: configuration[1]: defaults[7]: calculation
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -518,12 +523,12 @@
     post may be configured to replace the values shown in the above
     table.
 
-    #### post[1]: instances
+    ##### post[1]: instances
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | integer           | required          | type
-      1 | integer-list-3:1  | undef             | align
+      1 | decimal-list-3:1  | [0, 0, 0]         | zero
       2 | decimal-list-3:2  | [0, 0, 0]         | move
       3 | decimal-list-3:1 \| decimal | [0, 0, 0] | rotate
       4 | datastruct        | (see note)        | hole0; screw hole
@@ -535,7 +540,7 @@
     based on the type and, when not specified with an instances, are
     obtained from the configured default values as described above.
 
-    ##### post[1]: instances[0]: type
+    ###### post[1]: instances[0]: type
 
     Integer value is binary encoded.
 
@@ -543,6 +548,14 @@
     ---:|:---------------------------------------
       0 | post type  {0:normal, 1:recessed}
       1 | fin type {0:triangular, 1:rectangular}
+
+    ###### post[1]: instances[1]: zero
+
+    The x and y zero can be assigned decimal values in the interval
+    (-1, +1), to set the post zero alignment position along the
+    enclosure x and y dimensions. The z zero can be assigned a decimal
+    value in the interval (-1, 0), to set the post zero alignment
+    position along the enclosure lid height.
 
     ### align
 
@@ -588,11 +601,23 @@
       1 | remove features outside of enclosure envelope
       2 | scale interior with exterior wall during extrusion
       3 | do not limit wall rounding modes to bevel and rounded (1)
+      4 | do not construct exterior walls
+      5 | do not construct exterior wall lips
+      6 | do not construct lid
+      7 | do not construct ribs
+      8 | do not construct interior walls
+      9 | do not construct posts
 
     (1) When rounding mode limiting is disabled, the rounding mode
     value, \p vrm, is no longer mapped to \em bevel or \em rounded and
     any mode of the function polygon_round_eve_all_p() may be used to
     round the box exterior walls and lid.
+
+    Bits 4-9 can be used to disable the construction of select parts.
+    This may be used during design iteration to help understand
+    internal alignment and clearance. For example, turning off the
+    construction of exterior walls allows to see how a PCB fits inside
+    an assembled enclosure.
 
     \amu_define scope_id      (example_bottom)
     \amu_define title         (Project box bottom section example)
@@ -688,7 +713,7 @@ module project_box_rectangle
     // 'lip_h', bit '1', is set globally (ensure coherency with bits of 'lip')
     // wall lip: mode, height, base pct, taper pct, alignment
     lip_m         = defined_e_or(lip, 0, lip);
-    lip_bw        = defined_e_or(lip, 2, 45);
+    lip_bw        = defined_e_or(lip, 2, 35);
     lip_tw        = defined_e_or(lip, 3, 10);
     lip_a         = defined_e_or(lip, 4, 0);
 
@@ -1283,7 +1308,7 @@ module project_box_rectangle
         {
           for (i = [0:c-1])
           {
-            rotate([0, 0, da/c * i + 180])
+            rotate([0, 0, da/c * i])
             translate([b/2 + d/2 - f_in, 0, 0])
             extrude_linear_mss(l)
             pg_rectangle( [b, w], vr=vr, vrm=vrm, center=true);
@@ -1340,7 +1365,7 @@ module project_box_rectangle
     {
       inst_t    = defined_e_or(inst, 0, inst);        // type
 
-      inst_a    = defined_e_or(inst, 1, undef);       // align [x, y, z]
+      inst_a    = defined_e_or(inst, 1, zero3d);      // align [x, y, z]
       inst_m    = defined_e_or(inst, 2, zero3d);      // move [x, y, z]
       inst_r    = defined_e_or(inst, 3, zero3d);      // rotate [x, y, z]
 
@@ -1351,17 +1376,13 @@ module project_box_rectangle
       inst_f    = defined_e_or(inst, 7, undef);       // fins
 
       // alignment
-      inst_ax   = defined_e_or(inst_a, 0, undef);
-      inst_ay   = defined_e_or(inst_a, 1, undef);
+      inst_ax   = defined_e_or(inst_a, 0, 0);
+      inst_ay   = defined_e_or(inst_a, 1, 0);
       inst_az   = defined_e_or(inst_a, 2, 0);
 
-      inst_zx   = is_undef( inst_ax ) ? 0
-                : ( binary_bit_is(inst_ax, 0, 0) ? -1 : +1 ) * (max_x + wth)/2;
-
-      inst_zy   = is_undef( inst_ay ) ? 0
-                : ( binary_bit_is(inst_ay, 0, 0) ? -1 : +1 ) * (max_y + wth)/2;
-
-      inst_zz   = ( binary_bit_is(inst_az, 0, 0) ? 0 : -lid_h );
+      inst_zx   = limit(inst_ax, -1, 1) * (max_x + wth)/2;
+      inst_zy   = limit(inst_ay, -1, 1) * (max_y + wth)/2;
+      inst_zz   = limit(inst_az, -1, 0) * lid_h;
 
       //
       // default value updates based on types
@@ -1408,7 +1429,7 @@ module project_box_rectangle
       // assign defaults when not specified with post instance
       //
 
-      // hole0: screw hole
+      // hole0: common screw hole (for all post types)
       h0_en  = (remove == true);
 
       h0_d    = defined_e_or(inst_h0, 0, def_h0_d);
@@ -1521,17 +1542,17 @@ module project_box_rectangle
   // assembly feature additions
   module assembly_add()
   {
-    if ( wall_h > 0 )
+    if ( wall_h > 0 && binary_bit_is(mode, 4, 0) )
     {
       construct_exterior_walls();
     }
 
-    if ( is_defined( lip ) )
+    if ( is_defined( lip ) && binary_bit_is(mode, 5, 0) )
     {
       construct_lips();
     }
 
-    if ( lid_h > 0 )
+    if ( lid_h > 0 && binary_bit_is(mode, 6, 0) )
     {
       construct_lid();
     }
@@ -1540,19 +1561,19 @@ module project_box_rectangle
     // better to apply envelop_assembly() to union of all?
     //
 
-    if ( is_defined( rib ) )
+    if ( is_defined( rib ) && binary_bit_is(mode, 7, 0) )
     {
       envelop_assembly( mode_int_mask == true )
       construct_ribs();
     }
 
-    if ( is_defined( wall ) )
+    if ( is_defined( wall ) && binary_bit_is(mode, 8, 0) )
     {
       envelop_assembly( mode_int_mask == true )
       construct_interior_walls();
     }
 
-    if ( is_defined( post ) )
+    if ( is_defined( post ) && binary_bit_is(mode, 9, 0) )
     {
       envelop_assembly( mode_int_mask == true )
       construct_posts( add=true);
@@ -1562,7 +1583,7 @@ module project_box_rectangle
   // assembly feature removals
   module assembly_remove()
   {
-    if ( is_defined( post ) )
+    if ( is_defined( post ) && binary_bit_is(mode, 9, 0) )
     {
       construct_posts( remove=true);
     }
@@ -1582,8 +1603,7 @@ module project_box_rectangle
 
   // specified wall extrusion height
   // calculate total extrusion 'h_h' height of all sections
-  hv            = is_defined(h) ? [for (e=h) is_list(e) ? first(e) : e] : [0];
-  h_h           = sum(hv);
+  h_h           = extrude_linear_mss_eht( h );
 
   // specified base size
   size_x        = defined_e_or(size, 0, size);
@@ -1602,8 +1622,7 @@ module project_box_rectangle
   lip_h         = defined_e_or(lip, 1, lip_hd);
 
   // lid extrusion height (calculate total height of all sections)
-  lid_hv        = is_defined(lid) ? [for (e=lid) is_list(e) ? first(e) : e] : [0];
-  lid_h         = sum(lid_hv);
+  lid_h         = extrude_linear_mss_eht( lid );
 
   // wall height
   wall_h        = (mode_size_in == true) ? h_h - lip_h : h_h - lip_h - lid_h;
@@ -1728,8 +1747,10 @@ BEGIN_SCOPE example_bottom;
       [
         [0, [undef, undef, undef, undef, undef, [0]]],
         [
-          [x, [0,0], [+1,+1]*o], [x, [0,1], [+1,-1]*o],
-          [x, [1,0], [-1,+1]*o], [x, [1,1], [-1,-1]*o],
+          [x, [-1,-1], [+1,+1]*o],
+          [x, [-1,+1], [+1,-1]*o],
+          [x, [+1,-1], [-1,+1]*o],
+          [x, [+1,+1], [-1,-1]*o],
         ]
       ];
 

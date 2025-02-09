@@ -375,6 +375,28 @@ module extrude_linear_mss
   }
 }
 
+//! Return the total extrusion height for extrude_linear_mss().
+/***************************************************************************//**
+  \param    h <datastruct-list-n | decimal> A data structure or a single decimal.
+  \param    s <boolean> return segment heights.
+
+  \details
+
+    For a given extrusion performed by extrude_linear_mss(), this
+    function returns the resulting total extrusion height, as a single
+    sum, or as a vector of the individual segment heights.
+*******************************************************************************/
+function extrude_linear_mss_eht
+(
+  h,
+  s = false
+) = let
+    (
+      v  = is_defined(h) ? [for (e=h) is_list(e) ? first(e) : e] : [0],
+      t = sum(v)
+    )
+    (s == true) ? v : sum(v);
+
 //! @}
 //! @}
 

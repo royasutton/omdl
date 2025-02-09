@@ -42,6 +42,13 @@
 
   \details
 
+    \amu_copy (files="diagrams/screw_socket_hex_button.svg" types="html,latex")
+    \amu_text
+    (
+    \image html ${PATH_NAME}/diagrams/screw_socket_hex_button.svg "parameters"
+    \image latex ${PATH_NAME}/diagrams/screw_socket_hex_button.svg "parameters"
+    )
+
     \amu_define output_scad     (false)
     \amu_define output_console  (false)
 

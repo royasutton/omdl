@@ -45,7 +45,7 @@
 // global configuration variables
 //----------------------------------------------------------------------------//
 
-//! \name Globals
+//! \name Variables
 //! @{
 
 //! <boolean> Extrude 2D drafted constructions to 3D.
@@ -297,7 +297,7 @@ draft_config_map_style1 =
 
 //! @}
 
-//! \name Globals
+//! \name Variables
 //! @{
 
 //! <map> Drafting configuration defaults map.

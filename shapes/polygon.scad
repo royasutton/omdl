@@ -65,8 +65,11 @@
   (
     The side rounding radius may be zero, positive, or negative. When
     positive, the rounding arc is swept clockwise. When negative, the
-    arc is swept counter clockwise. A positive radius much be greater
-    than the side length.
+    arc is swept counter clockwise. A positive radius must be greater
+    than the side length. The arch center point is located along a line
+    that starts at the mid-point of the side vertices and extends
+    perpendicularly by the radius distance. The arch is swept about the
+    center point with constant radius from one vertex to the next.
   )
 *******************************************************************************/
 

@@ -8,6 +8,9 @@ local_path        :=  parts/3d/enclosure
 
 local_library     :=  docs_module \
                       \
+                      clamps \
+                      mounts \
+                      power_strip \
                       project_box_rectangle
 
 local_release_add :=

@@ -42,6 +42,13 @@
 
   \details
 
+    \amu_copy (files="diagrams/bolt_hex.svg" types="html,latex")
+    \amu_text
+    (
+    \image html ${PATH_NAME}/diagrams/bolt_hex.svg "parameters"
+    \image latex ${PATH_NAME}/diagrams/bolt_hex.svg "parameters"
+    )
+
     \amu_define output_scad     (false)
     \amu_define output_console  (false)
 
@@ -77,7 +84,7 @@ dtc_fastener_metric_bolts_iso_4014b =
   ["w_max", "washer face thickness"],
   ["w_min", "washer face thickness"],
   ["t_max", "fillet transition diameter"],
-  ["u_max", "underhead fillet"],
+  ["u_max", "under head fillet"],
   ["e_min", "washer face diameter"],
   ["h_max", "head height"],
   ["h_min", "head height"],

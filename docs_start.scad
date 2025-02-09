@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2024
+  \date   2015-2025
 
   \copyright
 
@@ -44,8 +44,8 @@
     With Doxygen, the code documentation is written within the code
     itself, and is thus easy to keep current. Moreover, it provides a
     standard way to both write and present OpenSCAD design
-    documentation, compilable to common output formats (html, pdf,
-    etc). With [omdl], all library primitives are \em parametric with
+    documentation, translatable to common output formats (html, pdf,
+    etc). With [omdl], all library operations are \em parametric with
     minimal, mostly zero, global variable dependencies and all library
     API's include [markups] that describe its parameters, behavior, and
     use.
@@ -66,13 +66,11 @@
     \amu_define image_columns (4)
     \amu_define scope_id      (quickstart)
     \amu_define notes_scad
-      ( The \ref make_bearing_linear_rod operations can be used to
-        transform 2D and 3D objects into 3D-printable linear rod
-        bearings with arbitrary bearing-ball and rod sizes. )
+      ( In this example, make_bearing_linear_rod() is used to construct
+        a custom linear bearing for fabrication on a 3D-printer. )
     \amu_define notes_diagrams
-      ( Click image above to expand. See the end of ${FILE_NAME} in the
-        scope [ \em ${scope_id} ] for the the dimension operations used
-        in the above example. )
+      ( The dimension operations in the above example can be found near
+        the end of ${FILE_NAME} within the \em scope \c ${scope_id}. )
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 
@@ -128,34 +126,17 @@
 BEGIN_SCOPE logo;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <models/3d/misc/omdl_logo.scad>;
 
-    s  = 10;
+    $fn = 36;
 
-    fs = [3, 5, 4] * s;
-    cs = fs * 2 / 3;
-    vr = [4, 2, 1]/10 * s;
-
-    ft = triangle2d_sss2ppp(fs);
-    ct = triangle2d_sss2ppp(cs);
-
-    cone( h=s*2, r=s, vr=2/10*s );
-    rotate([0, 0, 360/20])
-    repeat_radial( n=5, angle=true )
-    extrude_linear_mss( h=s )
-    translate(triangle_centroid(ft) + [-15,2]/s)
-    difference()
-    {
-      translate(-triangle_centroid(ft))
-      polygon( polygon_round_eve_all_p(ft, vr=vr) );
-      translate(-triangle_centroid(ct))
-      polygon( polygon_round_eve_all_p(ct, vr=vr) );
-    }
+    omdl_logo(d=10, c=false, b=true, t=false);
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
     include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
 
-    views     name "views" distance "250" views "top";
+    views     name "views" distance "25" views "top";
     images    name "slogo" aspect "1:1" xsizes "55";
     variables set_opts_combine "views slogo";
 
