@@ -69,10 +69,10 @@
               list, such as [lower, upper], or a single decimal value,
               to cover [0, value].
 
-  \param  f   <decimal-list-2 | decimal> bore scale factor; a list [bf, hf],
+  \param  f   <decimal-list-2 | decimal> bore scale factor; a list [fd, fh],
               the bore diameter and bore height scale factors, or a
-              single decimal to specify \p bf only. The default value
-              for \p hf = 1 and it scales only the screw head and nut
+              single decimal to specify \p fd only. The default value
+              for \p fh = 1 and it scales only the screw head and nut
               heights.
 
   \param  a   <integer> z-alignment index; one of eight preset alignments.
