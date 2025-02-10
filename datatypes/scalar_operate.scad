@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2023
+  \date   2015-2025
 
   \copyright
 
@@ -73,6 +73,58 @@ function defined_or
   d
 ) = is_undef(v) ? d : v;
 
+//! Return given value, if it is Boolean, else return a secondary value, if not.
+/***************************************************************************//**
+  \param    v \<value> A primary value.
+  \param    d \<value> A secondary value.
+
+  \returns  \<value> \p v when it is Boolean and \p d otherwise.
+*******************************************************************************/
+function boolean_or
+(
+  v,
+  d
+) = is_bool(v) ? v : d;
+
+//! Return given value, if it is a number, else return a secondary value, if not.
+/***************************************************************************//**
+  \param    v \<value> A primary value.
+  \param    d \<value> A secondary value.
+
+  \returns  \<value> \p v when it is a number and \p d otherwise.
+*******************************************************************************/
+function number_or
+(
+  v,
+  d
+) = is_num(v) ? v : d;
+
+//! Return given value, if it is a string, else return a secondary value, if not.
+/***************************************************************************//**
+  \param    v \<value> A primary value.
+  \param    d \<value> A secondary value.
+
+  \returns  \<value> \p v when it is a string and \p d otherwise.
+*******************************************************************************/
+function string_or
+(
+  v,
+  d
+) = is_string(v) ? v : d;
+
+//! Return given value, if it is a list, else return a secondary value, if not.
+/***************************************************************************//**
+  \param    v \<value> A primary value.
+  \param    d \<value> A secondary value.
+
+  \returns  \<value> \p v when it is a list and \p d otherwise.
+*******************************************************************************/
+function list_or
+(
+  v,
+  d
+) = is_list(v) ? v : d;
+
 //! Return a circular index position.
 /***************************************************************************//**
   \param    i <integer> A integer position.
@@ -123,6 +175,12 @@ BEGIN_SCOPE validate;
 
     for ( id = map_validate_get_ids( db ) )
       map_validate( db, id, 2, defined_or ( v1(db, id), v2(db, id) ) );
+
+    // skip test for:
+    // * boolean_or()
+    // * number_or()
+    // * string_or()
+    // * list_or()
 
     // end_include
   END_OPENSCAD;
