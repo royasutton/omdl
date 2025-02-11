@@ -271,7 +271,7 @@ module screw_mount_slot
   sd = defined_or(depth, wth*2) * fh;
 
   // slot cover: default, over, top, bottom
-  cto = defined_eon_or(cover, 0, wth);
+  cto = defined_eon_or(cover, 0, 0);
   ctt = defined_e_or(cover, 1, cto);
   ctb = defined_e_or(cover, 2, ctt);
 
