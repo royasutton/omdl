@@ -167,8 +167,6 @@ module screw_mount_tab
 
   \param  screw   <datastruct> screw (see below).
 
-  \param  depth   <decimal> depth.
-
   \param  cover   <decimal-length-3 | decimal> cover envelope; a list
                   [co, ct, cb], the cover over and around the top and
                   base, or a single decimal to set (co=ct=cb).
@@ -217,7 +215,6 @@ module screw_mount_slot
   l,
   wth,
   screw,
-  depth,
   cover,
   align,
   mode,
@@ -264,11 +261,16 @@ module screw_mount_slot
   d = defined_e_or(screw, 0, screw);
   h = defined_e_or(screw, 1, undef);
 
-  // screw head diameter
+  // local scaled version of screw diameter
+  ld = d * fd;
+
+  // screw head: diameter, flat height, bevel height
   hd = defined_e_or(h, 0, d) * fd;
+  hf = defined_e_or(h, 1, 0) * fh;
+  hb = defined_e_or(h, 2, 0) * fh;
 
   // slot depth
-  sd = defined_or(depth, wth*2) * fh;
+  sd = wth + hf;
 
   // slot cover: default, over, top, bottom
   cto = defined_eon_or(cover, 0, 0);
@@ -277,9 +279,9 @@ module screw_mount_slot
 
   alignments =
   [
-    [0, -l-hd-ctt*2, -l-hd-ctb*2, -l-hd, -l, l, l+d, l+hd, l+hd+ctb*2, l+hd+ctt*2]/2,
-    [0, -hd-ctt*2, -hd-ctb*2, -hd, -d, d, hd, hd+ctb*2, hd+ctt*2]/2,
-    [0, -wth/2, -wth, -sd, -sd-cto]
+    [0, -l-hd-ctt*2, -l-hd-ctb*2, -l-hd, -l, l, l+ld, l+hd, l+hd+ctb*2, l+hd+ctt*2]/2,
+    [0, -hd-ctt*2, -hd-ctb*2, -hd, -ld, ld, hd, hd+ctb*2, hd+ctt*2]/2,
+    [0, -wth/2, -wth+hb, -wth, -sd, -sd-cto]
   ];
 
   // when 'align' is scalar assign to 'align_x'
