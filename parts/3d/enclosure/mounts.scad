@@ -227,14 +227,17 @@ module screw_mount_slot
   // slot cover
   module cover()
   {
+    // shape overlap adjustment
+    coa = eps*4;
+
     hull()
     for ( x=[-1, 1] )
     {
-      translate([l/2*x, 0, sd + cto])
-      cylinder(d=hd + ctt*2, h=eps);
+      translate([l/2*x, 0, sd + cto - coa])
+      cylinder(d=hd + ctt*2 - coa, h=eps);
 
-      translate([l/2*x, 0, 0])
-      cylinder(d=hd + ctb*2, h=eps);
+      translate([l/2*x, 0, coa])
+      cylinder(d=hd + ctb*2 - coa, h=eps);
     }
   }
 
