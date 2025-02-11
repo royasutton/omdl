@@ -159,6 +159,148 @@ module screw_mount_tab
   }
 }
 
+//! A screw mount slot with optional cover envelope.
+/***************************************************************************//**
+  \param  l       <decimal> length.
+
+  \param  wth     <decimal> wall thickness.
+
+  \param  screw   <datastruct> screw (see below).
+
+  \param  depth   <decimal> depth.
+
+  \param  cover   <decimal-length-3 | decimal> cover envelope; a list
+                  [co, ct, cb], the cover over and around the top and
+                  base, or a single decimal to set (co=ct=cb).
+
+  \param  align   <integer-list-3 | integer> mount alignment; a list
+                  [ax, ay, az] or a single integer to set ax.
+
+  \param mode     <integer> mode {0=cover shell only | 1=slot negative
+                  only | 2=cover with slot removed}.
+
+  \param  f       <decimal-list-2 | decimal> scale factor; a list
+                  [fd, fh], the bore diameter and bore height scale
+                  factors, or a single decimal to specify \p fd only.
+                  The default value for \p fh = 1.
+
+  \details
+
+    Construct a screw mount slot with an opening that allows for the
+    insertion and interlocking of a screw head. The mount is secured to
+    the screw by sliding the screw head into the mount slot. The mount
+    can be used with and without a cover.
+
+    ## Multi-value and structured parameters
+
+    ### screw
+
+    #### Data structure fields: screw
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <decimal>         | required          | \p d : neck diameter
+      1 | (see below)       | \b undef          | \p h : screw head
+
+    See screw_bore() for documentation of the data types for the screw
+    bore parameters \p h and \p t.
+
+    \amu_define scope_id      (example_mount_slot)
+    \amu_define title         (Screw mount slot example)
+    \amu_define image_views   (front top diag)
+    \amu_define image_size    (sxga)
+
+    \amu_include (include/amu/scope_diagrams_3d.amu)
+*******************************************************************************/
+module screw_mount_slot
+(
+  l,
+  wth,
+  screw,
+  depth,
+  cover,
+  align,
+  mode,
+  f
+)
+{
+  // slot cover
+  module cover()
+  {
+    hull()
+    for ( x=[-1, 1] )
+    {
+      translate([l/2*x, 0, sd + cto])
+      cylinder(d=hd + ctt*2, h=eps);
+
+      translate([l/2*x, 0, 0])
+      cylinder(d=hd + ctb*2, h=eps);
+    }
+  }
+
+  // slot
+  module slot()
+  {
+    translate([0, 0, -eps*4])
+    union()
+    {
+      // neck slot
+      screw_bore(d, l=sd, h=h, t=[l], f=f, a=9);
+
+      // screw insert hole
+      translate([l/2, 0, 0])
+      cylinder(d=hd, h=sd);
+    }
+  }
+
+  // diameter and height scale factors
+  fd = defined_eon_or(f, 0, 1);
+  fh = defined_e_or(f, 1, 1);
+
+  // screw: diameter, head
+  d = defined_e_or(screw, 0, screw);
+  h = defined_e_or(screw, 1, undef);
+
+  // screw head diameter
+  hd = defined_e_or(h, 0, d) * fd;
+
+  // slot depth
+  sd = defined_or(depth, wth*2) * fh;
+
+  // slot cover: default, over, top, bottom
+  cto = defined_eon_or(cover, 0, wth);
+  ctt = defined_e_or(cover, 1, cto);
+  ctb = defined_e_or(cover, 2, ctt);
+
+  alignments =
+  [
+    [0, -l-hd-ctt*2, -l-hd-ctb*2, -l-hd, -l, l, l+d, l+hd, l+hd+ctb*2, l+hd+ctt*2]/2,
+    [0, -hd-ctt*2, -hd-ctb*2, -hd, -d, d, hd, hd+ctb*2, hd+ctt*2]/2,
+    [0, -wth/2, -wth, -sd, -sd-cto]
+  ];
+
+  // when 'align' is scalar assign to 'align_x'
+  align_x = select_ci ( alignments.x, defined_eon_or(align, 0, 0), false );
+  align_y = select_ci ( alignments.y, defined_e_or(align, 1, 0), false );
+  align_z = select_ci ( alignments.z, defined_e_or(align, 2, 0), false );
+
+  translate([align_x, align_y, align_z])
+  {
+    if (mode == 0)
+    cover();
+
+    if (mode == 1)
+    slot();
+
+    if (mode == 2)
+    difference()
+    {
+      cover();
+      slot();
+    }
+  }
+}
+
 //! @}
 //! @}
 
@@ -192,6 +334,50 @@ BEGIN_SCOPE example_mount_tab;
 
     images    name "sizes" types "sxga";
     views     name "views" views "top right diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE example_mount_slot;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <models/3d/fastener/screws.scad>;
+    include <parts/3d/enclosure/mounts.scad>;
+
+    $fn = 36;
+
+    rotate([0, 90, 90])
+    {
+      s = [4, [8, 2, 1]];
+      w = 2;
+      l = 10;
+      c = [1, 3, 1];
+
+      translate([0, -15, 0])
+      screw_mount_slot(screw=s, wth=w, l=l, cover=c, mode=1);
+
+      screw_mount_slot(screw=s, wth=w, l=l, cover=c, mode=2);
+
+      translate([0, +15, 0])
+      difference() {
+        %screw_mount_slot(screw=s, wth=w, l=l, cover=c, mode=0);
+        screw_mount_slot(screw=s, wth=w, l=l, cover=c, mode=1);
+      }
+    }
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "front top diag";
 
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter --view=axes";
