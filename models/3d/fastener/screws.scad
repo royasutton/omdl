@@ -71,9 +71,9 @@
 
   \param  f   <decimal-list-2 | decimal> bore scale factor; a list [fd, fh],
               the bore diameter and bore height scale factors, or a
-              single decimal to specify \p fd only. The default value
-              for \p fh = 1 and it scales only the screw head and nut
-              heights.
+              single decimal to specify \p fd only. The default values
+              for both are 1 (\p fh scales only the screw head and nut
+              heights).
 
   \param  a   <integer> z-alignment index; one of eight preset alignments.
 
@@ -107,14 +107,14 @@ module screw_bore
   t,
   s,
 
-  f = 1,
-  a = 0
+  f,
+  a
 )
 {
   function cdc(s, n, m=0) = (m == 0) ? s * fd : s * fd / cos(180/n);
 
   // diameter and height scale factors
-  fd = defined_e_or(f, 0, f);
+  fd = defined_eon_or(f, 0, 1);
   fh = defined_e_or(f, 1, 1);
 
   // screw bore
