@@ -232,10 +232,10 @@ module screw_mount_slot
     hull()
     for ( x=[-1, 1] )
     {
-      translate([l/2*x, 0, sd + cto - coa])
+      translate([sl/2*x, 0, sd + cto - coa])
       cylinder(d=hd + ctt*2 - coa, h=eps);
 
-      translate([l/2*x, 0, coa])
+      translate([sl/2*x, 0, coa])
       cylinder(d=hd + ctb*2 - coa, h=eps);
     }
   }
@@ -247,10 +247,10 @@ module screw_mount_slot
     union()
     {
       // neck slot
-      screw_bore(d, l=sd, h=h, t=[l], f=f, a=9);
+      screw_bore(d, l=sd, h=h, t=[sl], f=f, a=9);
 
       // screw insert hole
-      translate([l/2, 0, 0])
+      translate([sl/2, 0, 0])
       cylinder(d=hd, h=sd);
     }
   }
@@ -271,20 +271,18 @@ module screw_mount_slot
   hf = defined_e_or(h, 1, 0) * fh;
   hb = defined_e_or(h, 2, 0) * fh;
 
-  // slot depth
-  sd = wth + hf;
-
   // slot cover: default, over, top, bottom
   cto = defined_eon_or(cover, 0, 0);
   ctt = defined_e_or(cover, 1, cto);
   ctb = defined_e_or(cover, 2, ctt);
 
-  // slot length
-  l = defined_or(size, d * 3);
+  // slot size: depth, length
+  sd = wth + hf;
+  sl = defined_or(size, d * 3);
 
   alignments =
   [
-    [0, -l-hd-ctt*2, -l-hd-ctb*2, -l-hd, -l, l, l+ld, l+hd, l+hd+ctb*2, l+hd+ctt*2]/2,
+    [0, -sl-hd-ctt*2, -sl-hd-ctb*2, -sl-hd, -sl, sl, sl+ld, sl+hd, sl+hd+ctb*2, sl+hd+ctt*2]/2,
     [0, -hd-ctt*2, -hd-ctb*2, -hd, -ld, ld, hd, hd+ctb*2, hd+ctt*2]/2,
     [0, -wth/2, -wth+hb, -wth, -sd, -sd-cto]
   ];
