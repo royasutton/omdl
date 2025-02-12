@@ -161,8 +161,6 @@ module screw_mount_tab
 
 //! A screw mount slot with optional cover envelope.
 /***************************************************************************//**
-  \param  l       <decimal> length.
-
   \param  wth     <decimal> wall thickness.
 
   \param  screw   <datastruct> screw (see below).
@@ -171,23 +169,27 @@ module screw_mount_tab
                   [co, ct, cb], the cover over and around the top and
                   base, or a single decimal to set (co=ct=cb).
 
+  \param  size    <decimal> slot length.
+
   \param  align   <integer-list-3 | integer> mount alignment; a list
                   [ax, ay, az] or a single integer to set ax.
 
-  \param mode     <integer> mode {0=cover shell only | 1=slot negative
-                  only | 2=cover with slot removed}.
+  \param mode     <integer> mode {0=cover, 1=slot (negative), 2=cover
+                  with slot removed}.
 
   \param  f       <decimal-list-2 | decimal> scale factor; a list
                   [fd, fh], the bore diameter and bore height scale
                   factors, or a single decimal to specify \p fd only.
-                  The default value for \p fh = 1.
+                  The default values for both \p fd and \p fh is 1.
 
   \details
 
     Construct a screw mount slot with an opening that allows for the
     insertion and interlocking of a screw head. The mount is secured to
     the screw by sliding the screw head into the mount slot. The mount
-    can be used with and without a cover.
+    can be used with and without a cover. The parameter \p size is
+    optional and when not specified, its value is 3 * d (the screw neck
+    diameter).
 
     ## Multi-value and structured parameters
 
@@ -198,10 +200,10 @@ module screw_mount_tab
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | <decimal>         | required          | \p d : neck diameter
-      1 | (see below)       | \b undef          | \p h : screw head
+      1 | <datastruct>      | required          | \p h : screw head
 
     See screw_bore() for documentation of the data types for the screw
-    bore parameters \p h and \p t.
+    parameters \p d and \p h.
 
     \amu_define scope_id      (example_mount_slot)
     \amu_define title         (Screw mount slot example)
@@ -212,10 +214,10 @@ module screw_mount_tab
 *******************************************************************************/
 module screw_mount_slot
 (
-  l,
   wth,
   screw,
   cover,
+  size,
   align,
   mode,
   f
@@ -276,6 +278,9 @@ module screw_mount_slot
   cto = defined_eon_or(cover, 0, 0);
   ctt = defined_e_or(cover, 1, cto);
   ctb = defined_e_or(cover, 2, ctt);
+
+  // slot length
+  l = defined_or(size, d * 3);
 
   alignments =
   [
@@ -357,20 +362,19 @@ BEGIN_SCOPE example_mount_slot;
 
     rotate([0, 90, 90])
     {
-      s = [4, [8, 2, 1]];
       w = 2;
-      l = 10;
+      s = [4, [8, 2, 1]];
       c = [1, 3, 1];
 
       translate([0, -15, 0])
-      screw_mount_slot(screw=s, wth=w, l=l, cover=c, mode=1);
+      screw_mount_slot(wth=w, screw=s, cover=c, mode=1);
 
-      screw_mount_slot(screw=s, wth=w, l=l, cover=c, mode=2);
+      screw_mount_slot(wth=w, screw=s, cover=c, mode=2);
 
       translate([0, +15, 0])
       difference() {
-        %screw_mount_slot(screw=s, wth=w, l=l, cover=c, mode=0);
-        screw_mount_slot(screw=s, wth=w, l=l, cover=c, mode=1);
+        %screw_mount_slot(wth=w, screw=s, cover=c, mode=0);
+        screw_mount_slot(wth=w, screw=s, cover=c, mode=1);
       }
     }
 
