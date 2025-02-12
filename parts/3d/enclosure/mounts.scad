@@ -200,7 +200,7 @@ module screw_mount_tab
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | <decimal>         | required          | \p d : neck diameter
-      1 | <datastruct>      | required          | \p h : screw head
+      1 | <datastruct>      | [d*2, d/2]        | \p h : screw head
 
     See screw_bore() for documentation of the data types for the screw
     parameters \p d and \p h.
@@ -261,13 +261,13 @@ module screw_mount_slot
 
   // screw: diameter, head
   d = defined_e_or(screw, 0, screw);
-  h = defined_e_or(screw, 1, undef);
+  h = defined_e_or(screw, 1, [d*2, d/2]);
 
   // local scaled version of screw diameter
   ld = d * fd;
 
   // screw head: diameter, flat height, bevel height
-  hd = defined_e_or(h, 0, d) * fd;
+  hd = defined_e_or(h, 0, 0) * fd;
   hf = defined_e_or(h, 1, 0) * fh;
   hb = defined_e_or(h, 2, 0) * fh;
 
