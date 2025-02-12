@@ -123,12 +123,16 @@ power_strip_sg_default_box =
   ["pwsn",  [5.75, 2.5]],           // (2) power cord clamp screw nut spec
 
   ["mtab", [4, 25, 4]],             // (3) mount tab: [screw, brace, vrm, vr, wth, size]
-  ["mtabs",  undef]                 // mount tab instances: [[edge, zero, move], ...]
+  ["mtabs",  undef],                // mount tab instances: [[edge, zero, move], ...]
+
+  ["mslot", [4, [1, 1, 4]]],        // (4) mount slot: [screw, cover, size, scale, wth]
+  ["mslots", undef]                 // mount slot instances: [[move, rotate, align], ...]
 ];
   /*
       (1): see project_box_rectangle() in omdl for descriptions
       (2): see screw_bore() in omdl for descriptions
       (3): see screw_mount_tab() in omdl for descriptions
+      (4): see screw_mount_slot() in omdl for descriptions
    */
 
 //! <map> A single gang electrical device mount configuration.
@@ -392,8 +396,35 @@ module power_strip_sg
     }
 
     // screw mount slots
-    module mount_slots()
+    module mount_slots(m)
     {
+      mslot = map_get_value(cm_box, "mslot");
+
+      // configuration and defaults
+      s = defined_e_or(mslot, 0, undef);
+      c = defined_e_or(mslot, 1, undef);
+      l = defined_e_or(mslot, 2, undef);
+      f = defined_e_or(mslot, 3, undef);
+      w = defined_e_or(mslot, 4, wth);
+
+      //
+      // instantiate
+      //
+
+      mslots = map_get_value(cm_box, "mslots");
+
+      if ( is_defined( mslots ) )
+      for ( i = mslots )
+      {
+        // instance
+        t = defined_e_or(i, 0, origin3d);
+        r = defined_e_or(i, 1, 0);
+        a = defined_e_or(i, 2, 0);
+
+        translate(t)
+        rotate(r)
+        screw_mount_slot(wth=w, screw=s, cover=c, size=l, align=a, mode=m, f=f);
+      }
     }
 
     // base internal wall wire holes
@@ -540,25 +571,30 @@ module power_strip_sg
 
     difference()
     {
-      // base enclosure
-      project_box_rectangle
-      (
-         wth = wth,
-         lid = lf,
-           h = ih, size = [iw, il],
-         vrm = evrm, vr = evr,
+      union()
+      {
+        // base enclosure
+        project_box_rectangle
+        (
+           wth = wth,
+           lid = lf,
+             h = ih, size = [iw, il],
+           vrm = evrm, vr = evr,
 
-         lip = l(1),
-         rib = r,
+           lip = l(1),
+           rib = r,
 
-        wall = w,
-        post = p,
+          wall = w,
+          post = p,
 
-        mode = 1,
+          mode = 1,
 
-        verb = verb
-      );
+          verb = verb
+        );
 
+        // screw mount slot cover
+        mount_slots(0);
+      }
       // internal wall wire passage holes
       internal_wire_passage();
 
@@ -566,8 +602,8 @@ module power_strip_sg
       translate([pwxo, -il/2-wth/2, pwzo]) rotate([90, 0, 0])
       clamp_cg(size=pwcd, wth=wth*4, mode=0);
 
-      // screw mount slot holes
-      mount_slots();
+      // screw mount slot (negative)
+      mount_slots(1);
 
       // detail: logo
       if ( map_get_value(cm_box, "dlogo") )
@@ -591,9 +627,6 @@ module power_strip_sg
 
     // add mount tabs
     mount_tabs();
-
-    // add screw mount slots
-    mount_slots();
 
     // report power cord hole size
     if ( verb > 0 )
