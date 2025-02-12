@@ -415,7 +415,7 @@ BEGIN_SCOPE diagram;
     if (shape == "extrude_rotate_tr")
       extrude_rotate_tr( r=50, pa=45, ra=270 ) square( [10,5], center=true );
     if (shape == "extrude_rotate_trs")
-      extrude_rotate_trs( r=50, pa=45, ra=180, s=[1, 3] ) circle( 5, center=true );
+      extrude_rotate_trs( r=50, pa=45, ra=180, s=[1, 3] ) circle( 5 );
     else if (shape == "extrude_rotate_trl")
       extrude_rotate_trl( r=25, l=[5, 50], pa=45, m=31 ) square( [10,5], center=true );
     else if (shape == "extrude_linear_uss")
