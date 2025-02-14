@@ -309,6 +309,266 @@ module screw_mount_slot
   }
 }
 
+//! A screw mount post.
+/***************************************************************************//**
+
+  \param  post    <datastruct> post (see below).
+  \param  screw   <datastruct> screw (see below).
+  \param  fins    <datastruct> fins (see below).
+  \param  cut     <datastruct> cut (see below).
+
+  \details
+
+    Construct a screw mount post with optional fins. The post can be
+    configured with a diagonally cut base for 3D printing posts that
+    are attached to walls. The posts and fins have preset rounding
+    configurations but can also be rounded manually. The post bore is
+    produced using screw_bore() so its feature are available, including
+    nut-slot cut-outs as shown in the example below.
+
+    ## Multi-value and structured parameters
+
+    ### post
+
+    #### Data structure fields: post
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <decimal>         | required          | \p pd : post diameter
+      1 | <decimal>         | required          | \p ph : post height
+      2 | <integer-list-4 \| integer \| string> | 0     | rounding mode
+      3 | <decimal-list-4 \| decimal>           | pd/8  | rounding radius
+
+      The rounding mode can be assigned one of the preset configuration
+      strings: {"p1", ..., "p13"} or assigned custom values. Both the
+      rounding mode and rounding radius can be assigned a 4 element
+      list, to control each edge individually, or a single value when
+      all elements shall be the same.
+
+    ### screw
+
+    #### Data structure fields: screw
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <decimal>         | required          | bore diameter
+      1 | <decimal>         | pd                | bore length
+      2 | <datastruct>      | undef             | screw head
+      3 | <datastruct>      | undef             | screw nut
+      4 | <datastruct>      | undef             | nut slot cutout
+      5 | <datastruct>      | undef             | bore scale factor
+
+    See screw_bore() for documentation of the data types for the screw
+    parameters.
+
+    ### fins
+
+    #### Data structure fields: fins
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <integer>         | required          | fin count
+      1 | <integer>         | 0                 | fin type: {0=triangular, 1=rectangular}
+      2 | <decimal-list-3 \| decimal>           | [ph*5/8, pd/4, pd/8] | size scale factors: [h, l, w]
+      3 | <integer-list-n \| integer \| string> | 0                    | rounding mode
+      4 | <decimal-list-n \| decimal>           | (see below)          | rounding radius
+      5 | <decimal>                             | 360                  | distribution angle
+
+      The rounding mode can be assigned one of the preset configuration
+      strings: {"p1", ...} or assigned custom values. Both the rounding
+      mode and rounding radius can be assigned an element list, to
+      control each edge individually, or a single value when all
+      elements shall be the same. The preset number and element list
+      size is dependent on the fin type.
+
+    ### cut
+
+    #### Data structure fields: cut
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <decimal>         | 0                 | cut x-angle
+      0 | <decimal>         | 0                 | cut base offset
+      0 | <decimal>         | 0                 | cut z-rotation
+      0 | <decimal>         | 4                 | removal scale
+
+      The \p cut parameter can be used to cut the base of the post at
+      an angle. This is useful for 3D-printing wall-attached post that
+      do not extend to the base of a shape.
+
+    \amu_define scope_id      (example_mount_post)
+    \amu_define title         (Screw mount post example)
+    \amu_define image_views   (front top diag)
+    \amu_define image_size    (sxga)
+
+    \amu_include (include/amu/scope_diagrams_3d.amu)
+*******************************************************************************/
+module screw_mount_post
+(
+  post,
+  screw,
+  fins,
+  cut
+)
+{
+  // round post fins
+  module round_post_fins()
+  {
+    // move distance for fin to always contact approximated polygon cylinder
+    function fin_embed(r, w) =
+      let
+      (
+        n = get_fn(r),
+        d = polygon_regular_perimeter(n, r) / n
+      )
+      r - sqrt( pow(r,2) - pow(w/2, 2) - pow(d/2, 2) );
+
+    c       = defined_eon_or(fins, 0, 0);       // count
+
+    if ( c  > 0 )
+    {
+      t     = defined_e_or(fins, 1, 0);         // type
+      sf    = defined_e_or(fins, 2, undef);     // size scale factors: [h, l, t]
+
+      h     = defined_eon_or(sf, 0, 5/8) * ph;
+      l     = defined_e_or  (sf, 1, 1/4) * pd;
+      w     = defined_e_or  (sf, 2, 1/8) * pd;
+
+      d_vr  = ( t == 0 ) ? min(h, l)/2 : min(l, w)/2;
+
+      vrm   = defined_e_or(fins, 3, 0);         // rounding mode
+      vr    = defined_e_or(fins, 4, d_vr);      // vertex rounding
+      da    = defined_e_or(fins, 5, 360);       // distribution angle
+
+      // triangular
+      if ( t == 0 )
+      {
+        p_vrm =
+          let
+          (
+            p = !is_string(vrm) ? vrm
+              : (vrm == "p1") ? [10, 0, 9]
+              : (vrm == "p2") ? [4, 0, 3]
+              : (vrm == "p3") ? [6, 0, 7]
+              : (vrm == "p4") ? [0, 0, 1]
+              : (vrm == "p5") ? [0, 0, 5]
+              : 0
+          )
+          p;
+
+        for (i = [0:c-1])
+        {
+          rotate([90, 0, da/c * i + 180])
+          translate([ -pd/2 - l + fin_embed(pd/2, w), 0, 0])
+          extrude_linear_mss(w, center=true)
+          pg_triangle_sas([h, 90, l], vr=vr, vrm=p_vrm);
+        }
+      }
+      else
+
+      // rectangular
+      if ( t == 1 )
+      {
+        p_vrm =
+          let
+          (
+            p = !is_string(vrm) ? vrm
+              : (vrm == "p1") ? [0, 10, 9, 0]
+              : (vrm == "p2") ? [0, 4, 3, 0]
+              : (vrm == "p3") ? [0, 8, 7, 0]
+              : (vrm == "p4") ? [0, 5, 5, 0]
+              : (vrm == "p5") ? [0, 1, 1, 0]
+              : (vrm == "p6") ? [0, 9, 10, 0]
+              : 0
+          )
+          p;
+
+        for (i = [0:c-1])
+        {
+          rotate([0, 0, da/c * i])
+          translate([pd/2 + l/2 - fin_embed(pd/2, w), 0, 0])
+          extrude_linear_mss(h)
+          pg_rectangle( [l, w], vr=vr, vrm=p_vrm, center=true);
+        }
+      }
+    }
+  }
+
+  pd  = defined_e_or(post, 0, 0);
+  ph  = defined_e_or(post, 1, 0);
+  vrm = defined_e_or(post, 2, 0);
+  vr  = defined_e_or(post, 3, pd/8);
+
+  p_vrm =
+    let
+    (
+      p = !is_string(vrm) ? vrm
+        : (vrm == "p1" ) ? [0, 5, 10, 0]
+        : (vrm == "p2" ) ? [0, 0, 10, 0]
+        : (vrm == "p3" ) ? [0, 5, 0, 0]
+        : (vrm == "p4" ) ? [0, 1, 0, 0]
+        : (vrm == "p5" ) ? [0, 9, 0, 0]
+        : (vrm == "p6" ) ? [0, 7, 0, 0]
+        : (vrm == "p7" ) ? [0, 1, 4, 0]
+        : (vrm == "p8" ) ? [0, 1, 8, 0]
+        : (vrm == "p9" ) ? [0, 5, 5, 0]
+        : (vrm == "p10") ? [0, 9, 10, 0]
+        : (vrm == "p11") ? [0, 1, 1, 0]
+        : (vrm == "p12") ? [0, 3, 4, 0]
+        : (vrm == "p13") ? [0, 7, 8, 0]
+        : 0
+    )
+    p;
+
+  //
+  // construct
+  //
+
+  difference()
+  {
+    union()
+    {
+      // round post
+      rotate_extrude()
+      pg_rectangle([pd/2, ph], vr=vr, vrm=p_vrm);
+
+      // fins
+      if ( is_defined(fins) )
+      round_post_fins();
+    }
+
+    // screw bore
+    if ( is_defined(screw) )
+    {
+      d = defined_eon_or(screw, 0, 0);
+      l = defined_e_or(screw, 1, ph);
+      h = defined_e_or(screw, 2, undef);
+      n = defined_e_or(screw, 3, undef);
+      s = defined_e_or(screw, 4, undef);
+      f = defined_e_or(screw, 5, undef);
+
+      translate([0, 0, ph+eps*2])
+      screw_bore(d=d, l=l, h=h, n=n, s=s, f=f, a=1);
+    }
+
+    // post cut
+    if ( is_defined(cut) )
+    {
+      a = defined_e_or(cut, 0, 0);  // cut x-angle
+      o = defined_e_or(cut, 1, 0);  // cut base offset
+      r = defined_e_or(cut, 2, 0);  // cut z-rotation
+      s = defined_e_or(cut, 3, 4);  // removal scale
+
+      c = [pd, pd, ph] * s;
+
+      translate([0, 0, o])
+      rotate([a, 0, r-90])
+      translate([0, 0, -third(c)/2])
+      cube(c, center=true);
+    }
+  }
+}
+
 //! @}
 //! @}
 
@@ -375,6 +635,43 @@ BEGIN_SCOPE example_mount_slot;
         screw_mount_slot(wth=w, screw=s, cover=c, mode=1);
       }
     }
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "front top diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE example_mount_post;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <models/3d/fastener/screws.scad>;
+    include <parts/3d/enclosure/mounts.scad>;
+
+    $fn = 36;
+
+    u = undef;
+
+    translate([-20, 0, 0])
+    screw_mount_post(post=[10, 15], screw=3, fins=4);
+
+    s = [3, 21, [5, 1, 1, 4], [5, 2, 0, 6, 0, 5], [0, -10]];
+    translate([0, 0, 0])
+    screw_mount_post(post=[10, 20, "p10"], screw=s, fins=[2, 1, 1, "p1"]);
+
+    translate([+20, 0, 0])
+    screw_mount_post(post=[10, 25, "p1"], screw=[3, 10, [5, 1, 1]], fins=[4, 0, u, "p1"]);
 
     // end_include
   END_OPENSCAD;
