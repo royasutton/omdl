@@ -88,8 +88,8 @@
       1 | (see below)       | \b undef          | \p h : screw head
       2 | (see below)       | \b undef          | \p t : tolerance
 
-    See screw_bore() for documentation of the data types for the screw
-    bore parameters \p h and \p t.
+      See screw_bore() for documentation of the data types for the
+      screw bore parameters \p h and \p t.
 
     \amu_define scope_id      (example_mount_tab)
     \amu_define title         (Screw mount tab example)
@@ -202,8 +202,8 @@ module screw_mount_tab
       0 | <decimal>         | required          | \p d : neck diameter
       1 | <datastruct>      | [d*2, d/2]        | \p h : screw head
 
-    See screw_bore() for documentation of the data types for the screw
-    parameters \p d and \p h.
+      See screw_bore() for documentation of the data types for the
+      screw parameters \p d and \p h.
 
     \amu_define scope_id      (example_mount_slot)
     \amu_define title         (Screw mount slot example)
