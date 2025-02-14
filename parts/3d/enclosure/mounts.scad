@@ -309,7 +309,7 @@ module screw_mount_slot
   }
 }
 
-//! A screw mount post.
+//! A screw mount post with screw bore and optional fins.
 /***************************************************************************//**
 
   \param  post    <datastruct> post (see below).
@@ -319,12 +319,14 @@ module screw_mount_slot
 
   \details
 
-    Construct a screw mount post with optional fins. The post can be
-    configured with a diagonally cut base for 3D printing posts that
-    are attached to walls. The posts and fins have preset rounding
-    configurations but can also be rounded manually. The post bore is
-    produced using screw_bore() so its feature are available, including
-    nut-slot cut-outs as shown in the example below.
+    Construct a screw mount post with optional screw bore, fins, and
+    diagonal cut at base. The post and fins have preset rounding
+    configurations, but also support manual rounding specifications.
+    The post screw bore is removed using screw_bore() so its relevant
+    features are made available, including nut-slot cut-outs as shown
+    in the center example below. The post can be configured with a
+    diagonally cut base to facilitate 3D printing posts without base
+    support, such as those attached elevated on walls.
 
     ## Multi-value and structured parameters
 
@@ -340,10 +342,16 @@ module screw_mount_slot
       3 | <decimal-list-4 \| decimal>           | pd/8  | rounding radius
 
       The rounding mode can be assigned one of the preset configuration
-      strings: {"p1", ..., "p13"} or assigned custom values. Both the
-      rounding mode and rounding radius can be assigned a 4 element
-      list, to control each edge individually, or a single value when
-      all elements shall be the same.
+      strings: {"p1", ..., "p13"} or assigned a custom value. Both the
+      rounding mode and rounding radius can be assigned a list, to
+      control each edge individually, or a single value when all edges
+      shall be the same.
+
+      \note When assigning the rounding mode and rounding radius
+            individually, the inner-upper and inner-lower edges of the
+            rectangular revolution, that forms the post, should be
+            assigned zero in most circumstances as follows, for
+            example: [0, 1, 4, 0].
 
     ### screw
 
@@ -358,8 +366,8 @@ module screw_mount_slot
       4 | <datastruct>      | undef             | nut slot cutout
       5 | <datastruct>      | undef             | bore scale factor
 
-    See screw_bore() for documentation of the data types for the screw
-    parameters.
+      See screw_bore() for documentation of the data types for the
+      screw parameters.
 
     ### fins
 
@@ -375,11 +383,13 @@ module screw_mount_slot
       5 | <decimal>                             | 360                  | distribution angle
 
       The rounding mode can be assigned one of the preset configuration
-      strings: {"p1", ...} or assigned custom values. Both the rounding
-      mode and rounding radius can be assigned an element list, to
-      control each edge individually, or a single value when all
-      elements shall be the same. The preset number and element list
-      size is dependent on the fin type.
+      strings: {"p1", ..., "p6"} or assigned custom values. Both the
+      rounding mode and rounding radius can be assigned a list, to
+      control each edge individually, or a single value when all edges
+      shall be the same.
+
+      \note The edge list size is dependent on the fin type; n=3 for
+            triangular, and n=4 for rectangular.
 
     ### cut
 
@@ -388,13 +398,13 @@ module screw_mount_slot
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | <decimal>         | 0                 | cut x-angle
-      0 | <decimal>         | 0                 | cut base offset
-      0 | <decimal>         | 0                 | cut z-rotation
-      0 | <decimal>         | 4                 | removal scale
+      1 | <decimal>         | 0                 | cut post base offset
+      2 | <decimal>         | 0                 | cut z-rotation
+      3 | <decimal>         | 4                 | cube removal scale
 
       The \p cut parameter can be used to cut the base of the post at
-      an angle. This is useful for 3D-printing wall-attached post that
-      do not extend to the base of a shape.
+      an angle. As previously discussed, this is useful for 3D-printing
+      wall-attached posts that does not have lower support.
 
     \amu_define scope_id      (example_mount_post)
     \amu_define title         (Screw mount post example)
