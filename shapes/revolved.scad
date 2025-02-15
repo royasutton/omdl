@@ -199,7 +199,7 @@ BEGIN_SCOPE diagram;
     else if (shape == "torus_ellipse_cs")
       torus_ellipse_cs( size=[20,15], t=[2,4], r=50, a1=0, a2=180, pa=90, ra=270, co=[0,2] );
     else if (shape == "torus_pg_trapezoid")
-      torus_pg_trapezoid( b=[20,30], sl=30, a=45, vr=[5,5,5,5], vrm=[3,2,1,4], r=40, l=[90,60], m=63, center=true );
+      torus_pg_trapezoid( b=[20,30], sl=30, a=45, vr=[5,5,5,5], vrm=[2,1,4,3], r=40, l=[90,60], m=63, center=true );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
