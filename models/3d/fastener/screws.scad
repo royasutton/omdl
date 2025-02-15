@@ -280,13 +280,13 @@ module screw_bore_tsf
   n   = defined_e_or(t, 5, undef);      // upper taper
   m   = defined_e_or(t, 6, undef);      // lower taper
 
-  // upper taper diameter and length
-  tdu = defined_eon_or(n, 0, 10) / 100;
-  tlu = defined_e_or  (n, 1, 10) * l/100;
+  // top taper: diameter and length
+  td  = defined_eon_or(n, 0, 10) / 100;
+  tl  = defined_e_or  (n, 1, 10) * l/100;
 
-  // lower taper diameter and length
-  tdl = defined_eon_or(m, 0, 0) / 100;
-  tll = defined_e_or  (m, 1, 10) * l/100;
+  // bottom taper: diameter and length
+  bd  = defined_eon_or(m, 0, 0) / 100;
+  bl  = defined_e_or  (m, 1, 10) * l/100;
 
   // bore diameter
   b   = d + g;
@@ -295,13 +295,20 @@ module screw_bore_tsf
   s   = e + g;
 
   // taper extrusion configuration
-  nl  = [
-          if (tll>0) [tll, [(1-tdl), 1]],
-          (l - tll  - tlu),
-          if (tlu>0) [tlu, [1, (1-tdu)]]
+  nl  = let
+        (
+          tt = (td != 0 && tl > 0),
+          tb = (bd != 0 && bl > 0),
+
+          ml = (l - (tb ? bl : 0) - (tt ? tl : 0))
+        )
+        [
+          if (tb) [bl, [(1-bd), 1]],
+          if (ml > 0) ml,
+          if (tt) [tl, [1, (1-td)]]
         ];
 
-  az  = [ 0, -l/2, -l/2+tlu, +l/2-tll, +l/2 ];
+  az  = [ 0, -l/2, -l/2+tl, +l/2-bl, +l/2 ];
 
   //
   // construct
