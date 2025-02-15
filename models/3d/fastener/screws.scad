@@ -88,14 +88,13 @@
     appropriately selected scale factor \p f to slightly increase the
     bore for acceptable fastener fit.
 
-    \amu_define scope_id      (example)
+    \amu_define scope_id      (example_bore)
     \amu_define title         (Screw bore example)
     \amu_define image_views   (top front diag)
     \amu_define image_size    (sxga)
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
-
 module screw_bore
 (
   d = 1,
@@ -153,6 +152,10 @@ module screw_bore
     0, -l/2, -l/2+hf/2, -l/2+hf, -l/2+hf+hb,
     +l/2-nb-nf-no, +l/2-nf-no, +l/2-nf/2-no, +l/2-no, +l/2
   ];
+
+  //
+  // construct
+  //
 
   translate([0, 0, select_ci(az, a, false)])
   union()
@@ -226,7 +229,7 @@ module screw_bore
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE example;
+BEGIN_SCOPE example_bore;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <models/3d/fastener/screws.scad>;
