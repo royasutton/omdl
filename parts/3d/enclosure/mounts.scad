@@ -708,7 +708,7 @@ BEGIN_SCOPE example_mount_post;
     u = undef;
 
     translate([-20, 0, 0])
-    screw_mount_post(post=[10, 15], screw=3, fins=4);
+    screw_mount_post(post=[10, 15], bore_sft=4, fins=4);
 
     s = [3, 21, [5, 1, 1, 4], [5, 2, 0, 6, 0, 5], [0, -10]];
     translate([0, 0, 0])
