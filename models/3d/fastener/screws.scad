@@ -220,6 +220,111 @@ module screw_bore
   }
 }
 
+//! Screw bore with self-forming threads, configurable gap, and engagement.
+/***************************************************************************//**
+  \param  d   <decimal> bore diameter.
+
+  \param  l   <decimal> bore length.
+
+  \param  t   <datastruct> thread engagement (see below).
+
+  \param  a   <integer> z-alignment index; one of eight preset alignments.
+
+  \details
+
+    Construct screw bore with a chip expansion gap and radial cylinders
+    that engage with the screw threads to self-form counter-threads
+    along the cylinder. The bore is enlarged by a configurable gap
+    which facilitated the thread formation without over stressing the
+    bore internal dimensions. When 3D printing a bore horizontally, it
+    is best to use 3 cylinders and orient one cylinder at the 6 o-clock
+    position. This prevents the formation of cliffs which would
+    otherwise require print support.
+
+    ## Multi-value and structured parameters
+
+    ### thread engagement
+
+    #### Data structure fields: thread engagement
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <decimal>         | 5                 | radial engagement percentage
+      1 | <decimal>         | 5                 | radial gap percentage
+      2 | <decimal>         | 0                 | rotational offset
+      3 | <decimal>         | 0                 | radial offset
+      4 | <integer>         | 3                 | cylinder count
+      5 | <decimal-list-2 \| decimal> | [10, 10] | upper taper percentage: [d, h]
+      6 | <decimal-list-2 \| decimal> | [ 0, 10] | lower taper percentage: [d, h]
+
+    \amu_define scope_id      (example_bore_tsf)
+    \amu_define title         (Screw bore example)
+    \amu_define image_views   (top front diag)
+    \amu_define image_size    (sxga)
+
+    \amu_include (include/amu/scope_diagrams_3d.amu)
+*******************************************************************************/
+module screw_bore_tsf
+(
+  d = 1,
+  l = 1,
+  t,
+  a
+)
+{
+  e   = defined_e_or(t, 0, 5) * d/50;   // radial engagement percentage (r=d/2)
+  g   = defined_e_or(t, 1, 5) * d/50;   // radial gap percentage
+  r   = defined_e_or(t, 2, 0);          // rotational offset
+  o   = defined_e_or(t, 3, 0);          // radial offset
+  c   = defined_e_or(t, 4, 3);          // cylinder count
+  n   = defined_e_or(t, 5, undef);      // upper taper
+  m   = defined_e_or(t, 6, undef);      // lower taper
+
+  // upper taper diameter and length
+  tdu = defined_eon_or(n, 0, 10) / 100;
+  tlu = defined_e_or  (n, 1, 10) * l/100;
+
+  // lower taper diameter and length
+  tdl = defined_eon_or(m, 0, 0) / 100;
+  tll = defined_e_or  (m, 1, 10) * l/100;
+
+  // bore diameter
+  b   = d + g;
+
+  // self-forming thread engagement cylinder diameter
+  s   = e + g;
+
+  // taper extrusion configuration
+  nl  = [
+          if (tll>0) [tll, [(1-tdl), 1]],
+          (l - tll  - tlu),
+          if (tlu>0) [tlu, [1, (1-tdu)]]
+        ];
+
+  az  = [ 0, -l/2, -l/2+tlu, +l/2-tll, +l/2 ];
+
+  //
+  // construct
+  //
+
+  translate([0, 0, select_ci(az, a, false)])
+  difference()
+  {
+    // bore cylinder
+    extrude_linear_mss(l, center=true)
+    circle( d=b );
+
+    // self-forming thread engagement cylinders
+    for (i = [0:c-1])
+    {
+      rotate([0, 0, 360/c * i + r])
+      translate([b/2 + o, 0, 0])
+      extrude_linear_mss(nl, center=true)
+      circle( d=s );
+    }
+  }
+}
+
 //! @}
 //! @}
 
@@ -245,6 +350,46 @@ BEGIN_SCOPE example_bore;
 
     // show actual minimal space required
     screw_bore(2.75, 18, h=[6,1,3], n=[6,2,0,6,30,3]);
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "top front diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE example_bore_tsf;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <models/3d/fastener/screws.scad>;
+
+    $fn = 36;
+
+    translate([+15, 0, 0])
+    difference()
+    {
+      cube([15, 15, 20], center=true);
+      screw_bore_tsf( d=10, l=20+eps*4);
+    }
+
+    %translate([-15, 0, 0])
+    difference()
+    {
+      %cube([15, 15, 20], center=true);
+      #%screw_bore_tsf( d=10, l=20+eps*8);
+    }
+    translate([-15, 0, 0])
+    cylinder(d=10, h=30, center=true);
 
     // end_include
   END_OPENSCAD;
