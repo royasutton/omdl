@@ -91,7 +91,7 @@
       See screw_bore() for documentation of the data types for the
       screw bore parameters \p h and \p t.
 
-    \amu_define scope_id      (example_mount_tab)
+    \amu_define scope_id      (example_mount_screw_tab)
     \amu_define title         (Screw mount tab example)
     \amu_define image_views   (top right diag)
     \amu_define image_size    (sxga)
@@ -205,7 +205,7 @@ module mount_screw_tab
       See screw_bore() for documentation of the data types for the
       screw parameters \p d and \p h.
 
-    \amu_define scope_id      (example_mount_slot)
+    \amu_define scope_id      (example_mount_screw_slot)
     \amu_define title         (Screw mount slot example)
     \amu_define image_views   (front top diag)
     \amu_define image_size    (sxga)
@@ -430,7 +430,7 @@ module mount_screw_slot
       an angle. As previously discussed, this is useful for 3D-printing
       wall-attached posts that does not have lower support.
 
-    \amu_define scope_id      (example_mount_post)
+    \amu_define scope_id      (example_mount_screw_post)
     \amu_define title         (Screw mount post example)
     \amu_define image_views   (front top diag)
     \amu_define image_size    (sxga)
@@ -629,7 +629,7 @@ module mount_screw_post
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE example_mount_tab;
+BEGIN_SCOPE example_mount_screw_tab;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <models/3d/fastener/screws.scad>;
@@ -661,7 +661,7 @@ BEGIN_SCOPE example_mount_tab;
   END_MFSCRIPT;
 END_SCOPE;
 
-BEGIN_SCOPE example_mount_slot;
+BEGIN_SCOPE example_mount_screw_slot;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <models/3d/fastener/screws.scad>;
@@ -704,7 +704,7 @@ BEGIN_SCOPE example_mount_slot;
   END_MFSCRIPT;
 END_SCOPE;
 
-BEGIN_SCOPE example_mount_post;
+BEGIN_SCOPE example_mount_screw_post;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <models/3d/fastener/screws.scad>;
