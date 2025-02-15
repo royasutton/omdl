@@ -280,12 +280,12 @@ module screw_bore_tsf
   n   = defined_e_or(t, 5, undef);      // upper taper
   m   = defined_e_or(t, 6, undef);      // lower taper
 
-  // top taper: diameter and length
-  td  = defined_eon_or(n, 0, 10) / 100;
+  // top taper: cylinder diameter-scale and scale-length percentage
+  td  = defined_eon_or(n, 0, 8/10);
   tl  = defined_e_or  (n, 1, 10) * l/100;
 
-  // bottom taper: diameter and length
-  bd  = defined_eon_or(m, 0, 0) / 100;
+  // bottom taper: cylinder diameter-scale and scale-length percentage
+  bd  = defined_eon_or(m, 0, 0);
   bl  = defined_e_or  (m, 1, 10) * l/100;
 
   // bore diameter
@@ -303,9 +303,9 @@ module screw_bore_tsf
           ml = (l - (tb ? bl : 0) - (tt ? tl : 0))
         )
         [
-          if (tb) [bl, [(1-bd), 1]],
+          if (tb) [bl, [bd, 1]],
           if (ml > 0) ml,
-          if (tt) [tl, [1, (1-td)]]
+          if (tt) [tl, [1, td]]
         ];
 
   az  = [ 0, -l/2, -l/2+tl, +l/2-bl, +l/2 ];
