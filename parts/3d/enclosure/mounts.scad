@@ -78,15 +78,15 @@
 
     ## Multi-value and structured parameters
 
-    ### screw
+    ### screw bore
 
     #### Data structure fields: screw
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | required          | \p d : bore diameter
-      1 | (see below)       | \b undef          | \p h : screw head
-      2 | (see below)       | \b undef          | \p t : tolerance
+      0 | <decimal>         | required          | \p d: bore diameter
+      1 | (see below)       | \b undef          | \p h: screw head
+      2 | (see below)       | \b undef          | \p t: tolerance
 
       See screw_bore() for documentation of the data types for the
       screw bore parameters \p h and \p t.
@@ -163,7 +163,7 @@ module screw_mount_tab
 /***************************************************************************//**
   \param  wth     <decimal> wall thickness.
 
-  \param  screw   <datastruct> screw (see below).
+  \param  screw   <datastruct> screw bore (see below).
 
   \param  cover   <decimal-length-3 | decimal> cover envelope; a list
                   [co, ct, cb], the cover over and around the top and
@@ -193,7 +193,7 @@ module screw_mount_tab
 
     ## Multi-value and structured parameters
 
-    ### screw
+    ### screw bore
 
     #### Data structure fields: screw
 
@@ -336,8 +336,8 @@ module screw_mount_slot
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | required          | \p pd : post diameter
-      1 | <decimal>         | required          | \p ph : post height
+      0 | <decimal>         | required          | \p pd: post diameter
+      1 | <decimal>         | required          | \p ph: post height
       2 | <integer-list-4 \| integer \| string> | 0     | rounding mode
       3 | <decimal-list-4 \| decimal>           | pd/8  | rounding radius
 
@@ -353,18 +353,18 @@ module screw_mount_slot
             assigned zero in most circumstances as follows, for
             example: [0, 1, 4, 0].
 
-    ### screw
+    ### screw bore
 
     #### Data structure fields: screw
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | required          | bore diameter
-      1 | <decimal>         | pd                | bore length
-      2 | <datastruct>      | undef             | screw head
-      3 | <datastruct>      | undef             | screw nut
-      4 | <datastruct>      | undef             | nut slot cutout
-      5 | <datastruct>      | undef             | bore scale factor
+      0 | <decimal>         | required          | \p d: bore diameter
+      1 | <decimal>         | pd                | \p l: bore length
+      2 | <datastruct>      | undef             | \p h: screw head
+      3 | <datastruct>      | undef             | \p n: screw nut
+      4 | <datastruct>      | undef             | \p s: nut slot cutout
+      5 | <datastruct>      | undef             | \p f: bore scale factor
 
       See screw_bore() for documentation of the data types for the
       screw parameters.

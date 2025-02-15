@@ -245,7 +245,7 @@ module screw_bore
 
     ### thread engagement
 
-    #### Data structure fields: thread engagement
+    #### Data structure fields: t
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
