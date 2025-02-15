@@ -131,8 +131,8 @@ power_strip_sg_default_box =
   /*
       (1): see project_box_rectangle() in omdl for descriptions
       (2): see screw_bore() in omdl for descriptions
-      (3): see screw_mount_tab() in omdl for descriptions
-      (4): see screw_mount_slot() in omdl for descriptions
+      (3): see mount_screw_tab() in omdl for descriptions
+      (4): see mount_screw_slot() in omdl for descriptions
    */
 
 //! <map> A single gang electrical device mount configuration.
@@ -372,25 +372,25 @@ module power_strip_sg
         { // top edge
           translate([limit(z,-1,+1)*iw/2 + m, il/2 + wth - eps*2, 0])
           rotate([0, 0, 0])
-          screw_mount_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
+          mount_screw_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
         } else
         if ( e == 1 )
         { // right edge
           translate([iw/2 + wth - eps*2, limit(z,-1,+1)*il/2 + m, 0])
           rotate([0, 0, -90])
-          screw_mount_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
+          mount_screw_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
         } else
         if ( e == 2 )
         { // bottom edge
           translate([limit(z,-1,+1)*iw/2 + m, -(il/2 + wth - eps*2), 0])
           rotate([0, 0, 180])
-          screw_mount_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
+          mount_screw_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
         } else
         if ( e == 3 )
         { // left edge
           translate([-(iw/2 + wth - eps*2), limit(z,-1,+1)*il/2 + m, 0])
           rotate([0, 0, +90])
-          screw_mount_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
+          mount_screw_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
         }
       }
     }
@@ -423,7 +423,7 @@ module power_strip_sg
 
         translate(t)
         rotate(r)
-        screw_mount_slot(wth=w, screw=s, cover=c, size=l, align=a, mode=m, f=f);
+        mount_screw_slot(wth=w, screw=s, cover=c, size=l, align=a, mode=m, f=f);
       }
     }
 

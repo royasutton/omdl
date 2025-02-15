@@ -98,7 +98,7 @@
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
-module screw_mount_tab
+module mount_screw_tab
 (
   wth,
   screw,
@@ -212,7 +212,7 @@ module screw_mount_tab
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
-module screw_mount_slot
+module mount_screw_slot
 (
   wth,
   screw,
@@ -437,7 +437,7 @@ module screw_mount_slot
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
-module screw_mount_post
+module mount_screw_post
 (
   post,
   screw,
@@ -642,7 +642,7 @@ BEGIN_SCOPE example_mount_tab;
     t = [0, 10];
 
     mirror([0,1,0])
-    screw_mount_tab(wth=3, screw=[d, h, t], brace=[50, 25], vrm=4);
+    mount_screw_tab(wth=3, screw=[d, h, t], brace=[50, 25], vrm=4);
 
     // end_include
   END_OPENSCAD;
@@ -676,14 +676,14 @@ BEGIN_SCOPE example_mount_slot;
       c = [1, 3, 1];
 
       translate([0, -15, 0])
-      screw_mount_slot(wth=w, screw=s, cover=c, mode=1);
+      mount_screw_slot(wth=w, screw=s, cover=c, mode=1);
 
-      screw_mount_slot(wth=w, screw=s, cover=c, mode=2);
+      mount_screw_slot(wth=w, screw=s, cover=c, mode=2);
 
       translate([0, +15, 0])
       difference() {
-        %screw_mount_slot(wth=w, screw=s, cover=c, mode=0);
-        screw_mount_slot(wth=w, screw=s, cover=c, mode=1);
+        %mount_screw_slot(wth=w, screw=s, cover=c, mode=0);
+        mount_screw_slot(wth=w, screw=s, cover=c, mode=1);
       }
     }
 
@@ -715,14 +715,14 @@ BEGIN_SCOPE example_mount_post;
     u = undef;
 
     translate([-20, 0, 0])
-    screw_mount_post(post=[[10, 5], 4], bore_sft=3, fins=[6, 1, 1]);
+    mount_screw_post(post=[[10, 5], 4], bore_sft=3, fins=[6, 1, 1]);
 
     s = [3, 21, [5, 1, 1, 4], [5, 2, 0, 6, 0, 5], [0, -10]];
     translate([0, 0, 0])
-    screw_mount_post(post=[10, 20, "p10"], screw=s, fins=[2, 1, 1, "p1"]);
+    mount_screw_post(post=[10, 20, "p10"], screw=s, fins=[2, 1, 1, "p1"]);
 
     translate([+20, 0, 0])
-    screw_mount_post(post=[10, 25, "p1"], screw=[3, 10, [5, 1, 1]], fins=[4, 0, u, "p1"]);
+    mount_screw_post(post=[10, 25, "p1"], screw=[3, 10, [5, 1, 1]], fins=[4, 0, u, "p1"]);
 
     // end_include
   END_OPENSCAD;
