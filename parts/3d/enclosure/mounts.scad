@@ -344,16 +344,19 @@ module screw_mount_slot
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | required          | \p pd: post diameter
-      1 | <decimal>         | required          | \p ph: post height
-      2 | <integer-list-4 \| integer \| string> | 0     | rounding mode
-      3 | <decimal-list-4 \| decimal>           | pd/8  | rounding radius
+      0 | <decimal-list-2 \| decimal>           | required  | \p pd: post diameter(s)
+      1 | <decimal>                             | required  | \p ph: post height
+      2 | <integer-list-4 \| integer \| string> | 0         | rounding mode
+      3 | <decimal-list-4 \| decimal>           | min(pd)/8 | rounding radius
 
-      The rounding mode can be assigned one of the preset configuration
-      strings: {"p1", ..., "p13"} or assigned a custom value. Both the
-      rounding mode and rounding radius can be assigned a list, to
-      control each edge individually, or a single value when all edges
-      shall be the same.
+      The post base and top can have different diameters by assigning a
+      list [pdb, pdt]. This is useful for 3D printing unsupported wall
+      attached posts. When \p pd is assigned a decimal the base and top
+      diameters will be equal. The rounding mode can be assigned one of
+      the preset configuration strings: {"p1", ..., "p13"} or assigned
+      a custom value. Both the rounding mode and rounding radius can be
+      assigned a list, to control each edge individually, or a single
+      value when all edges shall be the same.
 
       \note When assigning the rounding mode and rounding radius
             individually, the inner-upper and inner-lower edges of the
@@ -444,7 +447,7 @@ module screw_mount_post
 )
 {
   // round post fins
-  module round_post_fins()
+  module round_post_fins(rd, rh)
   {
     // move distance for fin to always contact approximated polygon cylinder
     function fin_embed(r, w) =
@@ -462,9 +465,9 @@ module screw_mount_post
       t     = defined_e_or(fins, 1, 0);         // type
       sf    = defined_e_or(fins, 2, undef);     // size scale factors: [h, l, t]
 
-      h     = defined_eon_or(sf, 0, 5/8) * ph;
-      l     = defined_e_or  (sf, 1, 1/4) * pd;
-      w     = defined_e_or  (sf, 2, 1/8) * pd;
+      h     = defined_eon_or(sf, 0, 5/8) * rh;
+      l     = defined_e_or  (sf, 1, 1/4) * rd;
+      w     = defined_e_or  (sf, 2, 1/8) * rd;
 
       d_vr  = ( t == 0 ) ? min(h, l)/2 : min(l, w)/2;
 
@@ -492,7 +495,7 @@ module screw_mount_post
         for (i = [0:c-1])
         {
           rotate([90, 0, da/c * i + 180])
-          translate([ -pd/2 - l + fin_embed(pd/2, w), 0, 0])
+          translate([ -rd/2 - l + fin_embed(rd/2, w), 0, 0])
           extrude_linear_mss(w, center=true)
           pg_triangle_sas([h, 90, l], vr=vr, vrm=p_vrm);
         }
@@ -519,7 +522,7 @@ module screw_mount_post
         for (i = [0:c-1])
         {
           rotate([0, 0, da/c * i])
-          translate([pd/2 + l/2 - fin_embed(pd/2, w), 0, 0])
+          translate([rd/2 + l/2 - fin_embed(rd/2, w), 0, 0])
           extrude_linear_mss(h)
           pg_rectangle( [l, w], vr=vr, vrm=p_vrm, center=true);
         }
@@ -530,7 +533,11 @@ module screw_mount_post
   pd  = defined_e_or(post, 0, 0);
   ph  = defined_e_or(post, 1, 0);
   vrm = defined_e_or(post, 2, 0);
-  vr  = defined_e_or(post, 3, pd/8);
+
+  pd_min = min( pd );
+  pd_max = max( pd );
+
+  vr  = defined_e_or(post, 3, pd_min/8);
 
   p_vrm =
     let
@@ -563,11 +570,11 @@ module screw_mount_post
     {
       // round post
       rotate_extrude()
-      pg_rectangle([pd/2, ph], vr=vr, vrm=p_vrm);
+      pg_trapezoid(b=pd/2, h=ph, vr=vr, vrm=p_vrm);
 
       // fins
       if ( is_defined(fins) )
-      round_post_fins();
+      round_post_fins(pd_min, ph);
     }
 
     // screw bore
@@ -603,7 +610,7 @@ module screw_mount_post
       r = defined_e_or(cut, 2, 0);  // cut z-rotation
       s = defined_e_or(cut, 3, 4);  // removal scale
 
-      c = [pd, pd, ph] * s;
+      c = [pd_max, pd_max, ph] * s;
 
       translate([0, 0, o])
       rotate([a, 0, r-90])
