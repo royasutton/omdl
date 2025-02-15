@@ -372,7 +372,7 @@ function polygon_trapezoid_p
     p4 = o  + [b1, 0],
 
     // cw ordering
-    pp  = [p4, p1, p2, p3]
+    pp  = [p1, p2, p3, p4]
   )
   (cw == true) ? pp : reverse(pp);
 
