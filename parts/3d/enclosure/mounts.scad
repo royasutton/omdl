@@ -312,21 +312,29 @@ module screw_mount_slot
 //! A screw mount post with screw bore and optional fins.
 /***************************************************************************//**
 
-  \param  post    <datastruct> post (see below).
-  \param  screw   <datastruct> screw (see below).
-  \param  fins    <datastruct> fins (see below).
-  \param  cut     <datastruct> cut (see below).
+  \param  post      <datastruct> post (see below).
+  \param  screw     <datastruct> screw bore (see below).
+  \param  bore_sft  <datastruct> self-forming threads screw bore (see below).
+  \param  fins      <datastruct> fins (see below).
+  \param  cut       <datastruct> cut (see below).
 
   \details
 
-    Construct a screw mount post with optional screw bore, fins, and
-    diagonal cut at base. The post and fins have preset rounding
-    configurations, but also support manual rounding specifications.
-    The post screw bore is removed using screw_bore() so its relevant
-    features are made available, including nut-slot cut-outs as shown
-    in the center example below. The post can be configured with a
-    diagonally cut base to facilitate 3D printing posts without base
-    support, such as those attached elevated on walls.
+    Construct a screw mount post with screw bore, fins, and diagonal
+    cut at base. The post and fins have preset rounding configurations,
+    but also support manual rounding specifications. The post screw
+    bore is removed using either screw_bore(), or screw_bore_tsf(), or
+    both. All relevant screw bore features are made available,
+    including nut-slot cut-outs as shown in the examples below. The
+    post can be configured with a diagonally cut base to facilitate 3D
+    printing posts without base support, such as those attached
+    elevated on walls.
+
+    \note Both \p screw and \p bore_sft may be used together when it is
+          desired to create a recessed screw head and a bore with self
+          forming threads. The \p screw bore diameter will need to be
+          sufficiently reduced so as to not remove the self-forming
+          thread engagement cylinders.
 
     ## Multi-value and structured parameters
 
@@ -368,6 +376,19 @@ module screw_mount_slot
 
       See screw_bore() for documentation of the data types for the
       screw parameters.
+
+    ### self-forming threads screw bore
+
+    #### Data structure fields: bore_sft
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <decimal>         | required          | \p d: bore diameter
+      1 | <decimal>         | pd                | \p l: bore length
+      2 | <datastruct>      | undef             | \p t: thread engagement
+
+      See screw_bore_tsf() for documentation of the data types for the
+      self-forming threads screw bore parameters.
 
     ### fins
 
@@ -417,6 +438,7 @@ module screw_mount_post
 (
   post,
   screw,
+  bore_sft,
   fins,
   cut
 )
@@ -560,6 +582,17 @@ module screw_mount_post
 
       translate([0, 0, ph+eps*2])
       screw_bore(d=d, l=l, h=h, n=n, s=s, f=f, a=1);
+    }
+
+    // self-forming threads screw bore
+    if ( is_defined(bore_sft) )
+    {
+      d = defined_eon_or(bore_sft, 0, 0);
+      l = defined_e_or(bore_sft, 1, ph);
+      t = defined_e_or(bore_sft, 2, undef);
+
+      translate([0, 0, ph+eps*2])
+      screw_bore_tsf(d=d, l=l, t=t, a=1);
     }
 
     // post cut
