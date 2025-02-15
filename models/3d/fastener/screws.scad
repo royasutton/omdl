@@ -75,7 +75,7 @@
               for both are 1 (\p fh scales only the screw head and nut
               heights).
 
-  \param  a   <integer> z-alignment index; one of eight preset alignments.
+  \param  a   <integer> z-alignment index; one of eight presets.
 
   \details
 
@@ -220,26 +220,30 @@ module screw_bore
   }
 }
 
-//! Screw bore with self-forming threads, configurable gap, and engagement.
+//! Gapped screw bore with engagement cylinders for self-forming threads.
 /***************************************************************************//**
-  \param  d   <decimal> bore diameter.
+  \param  d   <decimal> screw diameter.
 
   \param  l   <decimal> bore length.
 
   \param  t   <datastruct> thread engagement (see below).
 
-  \param  a   <integer> z-alignment index; one of eight preset alignments.
+  \param  a   <integer> z-alignment index; one of five presets.
 
   \details
 
-    Construct screw bore with a chip expansion gap and radial cylinders
-    that engage with the screw threads to self-form counter-threads
-    along the cylinder. The bore is enlarged by a configurable gap
-    which facilitated the thread formation without over stressing the
-    bore internal dimensions. When 3D printing a bore horizontally, it
-    is best to use 3 cylinders and orient one cylinder at the 6 o-clock
-    position. This prevents the formation of cliffs which would
-    otherwise require print support.
+    Construct a screw bore with a gap for chip expansion and radial
+    cylinders that engage with the inserted screw threads to self-form
+    counter-threads along the cylinder lengths. The bore is enlarged by
+    a configurable gap which facilitates thread formation with reduced
+    stress accumulation to the bore internal dimensions.
+
+    \note When 3D printing a bore horizontally, it is best practice to
+          use 3 cylinders and orient one cylinder at the 6 o-clock
+          position. This prevents the formation of cliffs which would
+          otherwise require print support. Vertically printed bores can
+          use increase cylinder count for increase holding strength at
+          the cost of greater bore thread formation stress.
 
     ## Multi-value and structured parameters
 
@@ -254,8 +258,18 @@ module screw_bore
       2 | <decimal>         | 0                 | rotational offset
       3 | <decimal>         | 0                 | radial offset
       4 | <integer>         | 3                 | cylinder count
-      5 | <decimal-list-2 \| decimal> | [10, 10] | upper taper percentage: [d, h]
-      6 | <decimal-list-2 \| decimal> | [ 0, 10] | lower taper percentage: [d, h]
+      5 | <decimal-list-2 \| decimal> | [8/10, 10] | cylinder upper taper: [f, h%]
+      6 | <decimal-list-2 \| decimal> | [   0, 10] | cylinder lower taper: [f, h%]
+
+    #### Data structure fields: t[5-6]: cylinder upper and lower taper
+
+      The diameter of the thread engagement cylinders can be configured
+      to gradually change along the bore height from either the bottom,
+      top, or both. The first element sets the cylinder diameter-scale
+      factor and the second sets the length over which the scaling is
+      performed. For \p f > 1, the cylinder diameter will increase in
+      size, and for \p f < 1, the cylinder diameter will decrease in
+      size.
 
     \amu_define scope_id      (example_bore_tsf)
     \amu_define title         (Screw bore example)
