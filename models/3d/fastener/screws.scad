@@ -1,4 +1,4 @@
-//! Screws and screw bores.
+//! Screws, bolts and fastener bores.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Screws)
-    \amu_define group_brief (Screws and screw bores.)
+    \amu_define group_name  (Screws and Bolts)
+    \amu_define group_brief (Screws, bolts and fastener bores.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -44,21 +44,21 @@
 
 //----------------------------------------------------------------------------//
 
-//! Flat and beveled-head screw bore with nut, nut slot, and bore tolerance.
+//! Flat and beveled-head fastener bore with nut, nut slot, and bore tolerance.
 /***************************************************************************//**
   \param  d   <decimal> bore diameter.
 
   \param  l   <decimal> bore length.
 
-  \param  h   <decimal-list-5> screw head; a list [hs, hf, hb, hg, hr],
-              the head size, flat-height, bevel-height, side geometry
-              (flat side count), and rotation. The head size is
-              measured flat-to-flat when \p hg is specified.
+  \param  h   <decimal-list-5> fastener head; a list [hs, hf, hb, hg,
+              hr], the head size, flat-height, bevel-height, side
+              geometry (flat side count), and rotation. The head size
+              is measured flat-to-flat when \p hg is specified.
 
-  \param  n   <decimal-list-5> screw nut; a list [ns, nf, nb, ng, nr, no],
-              the nut size, flat-height, bevel-height, side geometry
-              (flat side count), rotation, and bottom offset. The nut
-              size is measured flat-to-flat.
+  \param  n   <decimal-list-5> fastener nut; a list [ns, nf, nb, ng, nr,
+              no], the nut size, flat-height, bevel-height, side
+              geometry (flat side count), rotation, and bottom offset.
+              The nut size is measured flat-to-flat.
 
   \param  t   <decimal-list-2> bore tolerance; a list [tx, ty], the
               tolerance along the x and/or y axis.
@@ -69,19 +69,19 @@
               list, such as [lower, upper], or a single decimal value,
               to cover [0, value].
 
-  \param  f   <decimal-list-2 | decimal> bore scale factor; a list [fd, fh],
-              the bore diameter and bore height scale factors, or a
-              single decimal to specify \p fd only. The default values
-              for both are 1 (\p fh scales only the screw head and nut
-              heights).
+  \param  f   <decimal-list-2 | decimal> bore scale factor; a list [fd,
+              fh], the bore diameter and bore height scale factors, or
+              a single decimal to specify \p fd only. The default
+              values for both are 1 (\p fh scales only the fastener
+              head and nut heights).
 
   \param  a   <integer> z-alignment index; one of eight presets.
 
   \details
 
-    Construct a bore for a screw hole, screw head, and/or screw nut.
-    Both the screw head and screw nut are optional. A tolerance can be
-    specified along the bore x and y axis. A nut slot cutout can be
+    Construct a bore for a fastener hole, fastener head, and/or
+    fastener nut. Both the head and nut are optional. A tolerance can
+    be specified along the bore x and y axis. A nut slot cutout can be
     specified along the x, y, or z axis. The following example uses
     both tolerance and a nut slot along the y axis. For convenience,
     exact fastener dimensions can be specified along with the an
@@ -89,7 +89,7 @@
     bore for acceptable fastener fit.
 
     \amu_define scope_id      (example_bore)
-    \amu_define title         (Screw bore example)
+    \amu_define title         (Fastener bore examples)
     \amu_define image_views   (top front diag)
     \amu_define image_size    (sxga)
 
@@ -116,10 +116,10 @@ module screw_bore
   fd = defined_eon_or(f, 0, 1);
   fh = defined_e_or(f, 1, 1);
 
-  // screw bore
+  // fastener bore
   bd = cdc(d);
 
-  // screw head
+  // fastener head
   hs = defined_e_or(h, 0, 0);
   hf = defined_e_or(h, 1, 0) * fh;
   hb = defined_e_or(h, 2, 0) * fh;
@@ -167,7 +167,7 @@ module screw_bore
 
     if ( is_undef(t) && is_undef(s) )
     {
-      // screw hole
+      // fastener hole
       cylinder(d=bd, h=l, center=true);
 
       // head flat height
@@ -220,9 +220,9 @@ module screw_bore
   }
 }
 
-//! Gapped screw bore with engagement cylinders for self-forming threads.
+//! Gapped fastener bore with engagement cylinders for self-forming threads.
 /***************************************************************************//**
-  \param  d   <decimal> screw diameter.
+  \param  d   <decimal> fastener diameter.
 
   \param  l   <decimal> bore length.
 
@@ -232,11 +232,11 @@ module screw_bore
 
   \details
 
-    Construct a screw bore with a gap for chip expansion and radial
-    cylinders that engage with the inserted screw threads to self-form
-    counter-threads along the cylinder lengths. The bore is enlarged by
-    a configurable gap which facilitates thread formation with reduced
-    stress accumulation to the bore internal dimensions.
+    Construct a fastener bore with a gap for chip expansion and radial
+    cylinders that engage with the inserted fastener threads to
+    self-form counter-threads along the cylinder lengths. The bore is
+    enlarged by a configurable gap which facilitates thread formation
+    with reduced stress accumulation to the bore internal dimensions.
 
     \note When 3D printing a bore horizontally, it is best practice to
           use 3 cylinders and orient one cylinder at the 6 o-clock
@@ -362,7 +362,7 @@ BEGIN_SCOPE example_bore;
 
     $fn = 36;
 
-    // screw bore with tolerance and nut-slot from front to back
+    // fastener bore with tolerance and nut-slot from front to back
     %difference()
     {
       cube([10, 15, 18], center=true);
