@@ -238,8 +238,6 @@ map_check(power_strip_sg_default_cover, false);
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 
-  \todo Support enclosure box screw-hole slot mounts.
-
   [NEMA]: https://en.wikipedia.org/wiki/NEMA_connector
 *******************************************************************************/
 module power_strip_sg

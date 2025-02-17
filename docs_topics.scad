@@ -54,9 +54,9 @@
     ./setup-omdl.bash --branch-list tags1 --yes --install
     \endcode
 
-    A specific version, say v2.9, can be installed using:
+    or, a specific version, say v0.9.6, can be installed using:
     \code{bash}
-    ./setup-omdl.bash --branch v2.9 --yes --install
+    ./setup-omdl.bash --branch v0.9.6 --yes --install
     \endcode
 
     View documentation:
@@ -82,20 +82,20 @@
   \page lu How to use library modules
 
     The \em standard library includes are wrapped into a base include
-    file. There has been an attempt to include only the smallest set
-    required or commonly used library features. All other modules must
-    be manually included as needed prior to use.
+    file (omdl-base.scad). There has been an attempt to include only
+    the smallest set of commonly used library features. All other
+    modules must be manually included as needed prior to use.
 
     \amu_shell omdl_base    ( "grep include omdl-base.scad | awk -v FS='(<|>)' '{print $2}'" ++rmnl )
     \amu_word omdl_base_cnt ( words="${omdl_base}" t=" " r="^" ++count)
     \amu_word omdl_base     ( words="${omdl_base}" t=" " r="^" ++list)
     \amu_table
     (
-      id="omdl_base" table_caption="standard base includes (omdl-base.scad)"
+      id="omdl_base" table_caption="Standard base includes"
       columns="3" cell_texts="${omdl_base}"
     )
 
-    To include the base library modules, use the wrapper as follows:
+    To load the library base includes, use the wrapper as follows:
 
     \code{.C}
     include <omdl-base.scad>;
@@ -104,7 +104,7 @@
     \endcode
 
     This will read the \b \amu_eval(${omdl_base_cnt}) files listed in
-    table above. Library modules not listed, must be explicitly
+    table above. Library modules not listed above, must be explicitly
     included prior to use. The include requirements are outlined at the
     start of the detailed description for each module. See the example
     script in \ref tools_drafting for more information.
@@ -139,12 +139,11 @@
 /***************************************************************************//**
   \page dt_base Base types and values
 
-    OpenSCAD specified a \em value to be either a number, a boolean, a
-    string, a range, a vector or or the undefined value. See [OpenSCAD
-    types]. What is called a vector in the [OpenSCAD types]
-    documentation is refereed to as a \em list here in order to
-    distinguish between sequential lists of general or compound-values
-    and [Euclidean vectors] of numbers.
+    OpenSCAD specifies a \em value to be either a number, a boolean, a
+    string, a range, a vector or or the undefined value. What is called
+    a vector in the [OpenSCAD types] documentation is refereed to as a
+    \em list here in order to distinguish between sequential lists of
+    general or compound-values and [Euclidean vectors] of numbers.
 
     | type      | description                                         |
     |:---------:|:----------------------------------------------------|
@@ -226,13 +225,14 @@
   [map]: https://en.wikipedia.org/wiki/Associative_array
   [table]: https://en.wikipedia.org/wiki/Table_(information)
 
+  [Euclidean vectors]: https://en.wikipedia.org/wiki/Euclidean_vector
 *******************************************************************************/
 
 // Index sequence generation
 /***************************************************************************//**
   \page dt_index Index sequence generation
 
-    The data type \b index refers to a specified sequence of list
+    The data type \p index refers to a specified sequence of list
     element indexes. A list index sequence may be specified in one of
     the following forms.
 
@@ -408,8 +408,6 @@
   [plane]: \ref dt_plane
   [coords]: https://en.wikipedia.org/wiki/Coordinate_system
   [matrix]: https://en.wikipedia.org/wiki/Matrix_(mathematics)
-
-  [Euclidean vectors]: https://en.wikipedia.org/wiki/Euclidean_vector
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
