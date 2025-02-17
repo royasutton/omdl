@@ -149,7 +149,7 @@ BEGIN_SCOPE quickstart;
     include <omdl-base.scad>;
     include <tools/operation_cs.scad>;
     include <tools/drafting/draft-base.scad>;
-    include <parts/3d/bearing/bearing_linear_rod.scad>;
+    include <parts/3d/motion/bearing_linear_rod.scad>;
 
     $fn = 36;
 

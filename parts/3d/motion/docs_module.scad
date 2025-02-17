@@ -1,4 +1,4 @@
-//! Module: Mechanical motion bearings.
+//! Module: Parts that facilitate mechanical motion.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Bearing)
-    \amu_define group_brief (Mechanical motion bearings.)
+    \amu_define group_name  (Motion)
+    \amu_define group_brief (Parts that facilitate mechanical motion.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
