@@ -72,7 +72,7 @@
     [fasterner.eu]: https://www.fasteners.eu/standards/ISO/4161
 *******************************************************************************/
 
-//! <map> ISO 4161 fastener data table columns map.
+//! <map> ISO 4161 data table columns map.
 //! \hideinitializer
 dtc_fastener_metric_nuts_iso_4161 =
 [
@@ -86,7 +86,7 @@ dtc_fastener_metric_nuts_iso_4161 =
   ["b_max", "flange diameter"]
 ];
 
-//! \<table> ISO 4161 fastener data table rows.
+//! \<table> ISO 4161 data table rows.
 //! \hideinitializer
 dtr_fastener_metric_nuts_iso_4161 =
 [

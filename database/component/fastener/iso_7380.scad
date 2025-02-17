@@ -71,7 +71,7 @@
     [fasteners.eu]: https://www.fasteners.eu/standards/ISO/7380
 *******************************************************************************/
 
-//! <map> ISO 7380 fastener data table columns map.
+//! <map> ISO 7380 data table columns map.
 //! \hideinitializer
 dtc_fastener_metric_screws_iso_7380 =
 [
@@ -91,7 +91,7 @@ dtc_fastener_metric_screws_iso_7380 =
   ["f_max", "fillet transition diameter"]
 ];
 
-//! \<table> ISO 7380 fastener data table rows.
+//! \<table> ISO 7380 data table rows.
 //! \hideinitializer
 dtr_fastener_metric_screws_iso_7380 =
 [

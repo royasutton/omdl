@@ -73,7 +73,7 @@
     [fasteners.eu]: https://www.fasteners.eu/standards/ISO/7046/
 *******************************************************************************/
 
-//! <map> ISO 7046-1s fastener data table columns map.
+//! <map> ISO 7046-1s data table columns map.
 //! \hideinitializer
 dtc_fastener_metric_screws_iso_7046_1s =
 [
@@ -89,7 +89,7 @@ dtc_fastener_metric_screws_iso_7046_1s =
   ["u_max", "thread runout"]
 ];
 
-//! \<table> ISO 7046-1s fastener data table rows.
+//! \<table> ISO 7046-1s data table rows.
 //! \hideinitializer
 dtr_fastener_metric_screws_iso_7046_1s =
 [

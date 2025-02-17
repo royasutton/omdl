@@ -73,7 +73,7 @@
     [ISO 7040]: https://www.iso.org/standard/61363.html
 *******************************************************************************/
 
-//! <map> DIN 982 hp fastener data table columns map.
+//! <map> DIN 982 hp data table columns map.
 //! \hideinitializer
 dtc_fastener_metric_nuts_din_982_hp =
 [
@@ -87,7 +87,7 @@ dtc_fastener_metric_nuts_din_982_hp =
   ["i_min", "wrenching height"]
 ];
 
-//! \<table> DIN 982 hp fastener data table rows.
+//! \<table> DIN 982 hp data table rows.
 //! \hideinitializer
 dtr_fastener_metric_nuts_din_982_hp =
 [

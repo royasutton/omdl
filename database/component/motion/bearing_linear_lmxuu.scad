@@ -73,7 +73,7 @@
     [Wikipedia]: https://en.wikipedia.org/wiki/Linear-motion_bearing
 *******************************************************************************/
 
-//! <map> linear_lmxuu motion data table columns map.
+//! <map> linear_lmxuu data table columns map.
 //! \hideinitializer
 dtc_motion_bearing_linear_lmxuu =
 [
@@ -86,7 +86,7 @@ dtc_motion_bearing_linear_lmxuu =
   ["d1", "ring grove diameter"]
 ];
 
-//! \<table> linear_lmxuu motion data table rows.
+//! \<table> linear_lmxuu data table rows.
 //! \hideinitializer
 dtr_motion_bearing_linear_lmxuu =
 [

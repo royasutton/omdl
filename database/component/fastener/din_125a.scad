@@ -71,7 +71,7 @@
     [fasteners.eu]: https://www.fasteners.eu/standards/DIN/125-A
 *******************************************************************************/
 
-//! <map> DIN 125A fastener data table columns map.
+//! <map> DIN 125A data table columns map.
 //! \hideinitializer
 dtc_fastener_metric_washers_din_125a =
 [
@@ -84,7 +84,7 @@ dtc_fastener_metric_washers_din_125a =
   ["t_min", "thickness"]
 ];
 
-//! \<table> DIN 125A fastener data table rows.
+//! \<table> DIN 125A data table rows.
 //! \hideinitializer
 dtr_fastener_metric_washers_din_125a =
 [

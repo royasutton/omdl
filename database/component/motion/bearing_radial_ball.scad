@@ -73,7 +73,7 @@
     [Wikipedia]: https://en.wikipedia.org/wiki/Rolling-element_bearing
 *******************************************************************************/
 
-//! <map> radial_ball motion data table columns map.
+//! <map> radial_ball data table columns map.
 //! \hideinitializer
 dtc_motion_bearing_radial_ball =
 [
@@ -83,7 +83,7 @@ dtc_motion_bearing_radial_ball =
   ["b", "outer width"]
 ];
 
-//! \<table> radial_ball motion data table rows.
+//! \<table> radial_ball data table rows.
 //! \hideinitializer
 dtr_motion_bearing_radial_ball =
 [

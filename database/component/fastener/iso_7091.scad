@@ -71,7 +71,7 @@
     [fasteners.eu]: https://www.fasteners.eu/standards/ISO/7091/
 *******************************************************************************/
 
-//! <map> ISO 7091 fastener data table columns map.
+//! <map> ISO 7091 data table columns map.
 //! \hideinitializer
 dtc_fastener_metric_washers_iso_7091 =
 [
@@ -84,7 +84,7 @@ dtc_fastener_metric_washers_iso_7091 =
   ["t_min", "thickness"]
 ];
 
-//! \<table> ISO 7091 fastener data table rows.
+//! \<table> ISO 7091 data table rows.
 //! \hideinitializer
 dtr_fastener_metric_washers_iso_7091 =
 [

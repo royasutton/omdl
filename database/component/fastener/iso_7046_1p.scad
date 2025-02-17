@@ -73,7 +73,7 @@
     [fasteners.eu]: https://www.fasteners.eu/standards/ISO/7046/
 *******************************************************************************/
 
-//! <map> ISO 7046-1p fastener data table columns map.
+//! <map> ISO 7046-1p data table columns map.
 //! \hideinitializer
 dtc_fastener_metric_screws_iso_7046_1p =
 [
@@ -89,7 +89,7 @@ dtc_fastener_metric_screws_iso_7046_1p =
   ["t", "phillips driver size"]
 ];
 
-//! \<table> ISO 7046-1p fastener data table rows.
+//! \<table> ISO 7046-1p data table rows.
 //! \hideinitializer
 dtr_fastener_metric_screws_iso_7046_1p =
 [

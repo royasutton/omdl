@@ -71,7 +71,7 @@
     [ISO 4033]: https://www.iso.org/standard/75017.html
 *******************************************************************************/
 
-//! <map> ISO 4033 fastener data table columns map.
+//! <map> ISO 4033 data table columns map.
 //! \hideinitializer
 dtc_fastener_metric_nuts_iso_4033 =
 [
@@ -84,7 +84,7 @@ dtc_fastener_metric_nuts_iso_4033 =
   ["h_min", "thickness"]
 ];
 
-//! \<table> ISO 4033 fastener data table rows.
+//! \<table> ISO 4033 data table rows.
 //! \hideinitializer
 dtr_fastener_metric_nuts_iso_4033 =
 [

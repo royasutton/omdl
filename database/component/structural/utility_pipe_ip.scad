@@ -69,7 +69,7 @@
 
 *******************************************************************************/
 
-//! <map> ip structural data table columns map.
+//! <map> ip data table columns map.
 //! \hideinitializer
 dtc_structural_utility_pipe_ip =
 [
@@ -83,7 +83,7 @@ dtc_structural_utility_pipe_ip =
   ["t_xx", "wall thickness schedule 40"]
 ];
 
-//! \<table> ip structural data table rows.
+//! \<table> ip data table rows.
 //! \hideinitializer
 dtr_structural_utility_pipe_ip =
 [
