@@ -1,4 +1,4 @@
-//! Module: Linear and radial bearings.
+//! Module: Building blocks for basic mechanical motion.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Bearing)
-    \amu_define group_brief (Linear and radial bearings.)
+    \amu_define group_name  (Motion)
+    \amu_define group_brief (Building blocks for basic mechanical motion.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

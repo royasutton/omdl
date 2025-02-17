@@ -1,4 +1,4 @@
-//! Radial ball bearing model.
+//! Linear motion bearing model.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (radial ball)
-    \amu_define group_brief (Radial ball bearing model.)
+    \amu_define group_name  (lmxuu)
+    \amu_define group_brief (Linear motion bearing model.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -41,14 +41,14 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_define includes_required_add
   (
-    database/component/bearing/radial_ball.scad
+    database/component/bearing/linear_lmxuu.scad
   )
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
 
-//! Radial ball bearing model.
+//! Linear motion bearing model.
 /***************************************************************************//**
   \param  n     <string> the bearing model name (see: [database table]).
   \param  align <integer> model z-alignment; {0:bottom, 1:middle, 2:top}.
@@ -65,9 +65,9 @@
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 
-   [database table]: \ref database_component_bearing_radial_ball
+   [database table]: \ref database_component_bearing_linear_lmxuu
 *******************************************************************************/
-module radial_ball
+module lmxuu
 (
   n,
   align = 1,
@@ -75,7 +75,7 @@ module radial_ball
   wc = true
 )
 {
-  t = [dtr_bearing_radial_ball, dtc_bearing_radial_ball];
+  t = [dtr_bearing_linear_lmxuu, dtc_bearing_linear_lmxuu];
 
   assert
   (
@@ -83,58 +83,61 @@ module radial_ball
     str("model '", n, "' is undefined in table.")
   );
 
-  id = ctable_get(t, n, "id");
-  od = ctable_get(t, n, "od");
-  b  = ctable_get(t, n, "b");
+  dr =  ctable_get(t, n, "dr");
+  d  =  ctable_get(t, n, "d");
+  l  =  ctable_get(t, n, "l");
+  b  =  ctable_get(t, n, "b");
+  w  =  ctable_get(t, n, "w");
+  d1 =  ctable_get(t, n, "d1");
 
-  // feature decorations
-  idr = id * 1.30;  // bore rim
-  odr = od * 0.92;  // outer rim
-  odc = od * 0.85;  // outer clip rim
-  ifw =  b * 0.95;  // bearing cover width
-  ifc =  b * 0.88;  // bearing cover clip width 1
-  ifd =  b * 0.80;  // bearing cover clip width 2
+  dp = 94/100 * d;  // diameter of interior sleeve
+  lp = 96/100 * l;  // length of interior sleeve
 
-  translate( select_ci( [ [0,0,+b/2], origin3d, [0,0,-b/2]], align, false ) )
+
+  translate( select_ci( [ [0,0,+l/2], origin3d, [0,0,-l/2]], align, false ) )
   if (shell == true)
   {
     color("silver")
-    cylinder(d=od, h=b, center=true);
+    cylinder(d=d, h=l, center=true);
   }
   else
   {
+    color(wc?"silver":undef)
     difference()
     {
-      union()
+      cylinder(d=d, h=l, center=true);                      // bearing shell
+      cylinder(d=dp, h=l+eps*4, center=true);
+
+      for (i = [-1, +1] )                                   // mounting bands
+      translate([0, 0, b/2 * i])
+      difference()
       {
-        color(wc?"silver":undef)                            // outer diameter
-        difference()
-        {
-          cylinder(d=od, h=b, center=true);
-          cylinder(d=odr, h=b+eps*2, center=true);
-        }
-
-        color(wc?"gray":undef)                              // clip rim
-        cylinder(d=odr, h=ifd, center=true);
-
-        color(wc?"dimgray":undef)                           // cover
-        cylinder(d=odc, h=ifw, center=true);
-
-        color(wc?"silver":undef)                            // bore rim
-        cylinder(d=idr, h=b, center=true);
-
-        color(wc?"darkgray":undef)                          // cover clips
-        difference ()
-        {
-          cylinder(d=odr, h=ifc, center=true);
-          cylinder(d=odc, h=ifc+eps*4, center=true);
-          for (i = [0:6])
-          rotate([0, 0, 30*i])
-          cube([odr, (od-odr)/3, ifc+eps*4], center=true);
-        }
+        cylinder(d=d+eps, h=w, center=true);
+        cylinder(d=d1, h=w, center=true);
       }
+    }
 
-      cylinder(d=id, h=b+eps*2, center=true);               // inner bore
+    color(wc?"black":undef)                                 // body
+    difference()
+    {
+      cylinder(d=dp, h=lp, center=true);
+      cylinder(d=dr, h=lp+eps*4, center=true);
+    }
+
+    color(wc?"darkgray":undef)                              // sleeve
+    difference()
+    {
+      cylinder(d=(dr+d-dp), h=l-eps*4, center=true);
+      cylinder(d=dr, h=l, center=true);
+    }
+
+    color(wc?"dimgray":undef)                               // band color
+    for (i = [-1, +1] )
+    translate([0, 0, b/2 * i])
+    difference()
+    {
+      cylinder(d=d1+eps, h=w, center=true);
+      cylinder(d=d1, h=w+eps*4, center=true);
     }
   }
 }
@@ -151,10 +154,10 @@ module radial_ball
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <database/component/bearing/radial_ball.scad>;
-    include <models/3d/bearing/radial_ball.scad>;
+    include <database/component/bearing/linear_lmxuu.scad>;
+    include <models/3d/motion/lmxuu.scad>;
 
-    radial_ball("608");
+    lmxuu("lm8uu");
 
     // end_include
   END_OPENSCAD;

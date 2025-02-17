@@ -4,7 +4,7 @@
 $(eval $(call clear-local-module))
 #------------------------------------------------------------------------------#
 
-local_path        :=  models/3d/bearing
+local_path        :=  models/3d/motion
 
 local_library     :=  docs_module \
                       \

@@ -12,9 +12,9 @@ local_release_add :=
 
 local_backup_add  :=
 
-local_submodules  := bearing \
-                     fastener \
-                     misc
+local_submodules  := fastener \
+                     misc \
+                     motion
 
 #------------------------------------------------------------------------------#
 # add local module
