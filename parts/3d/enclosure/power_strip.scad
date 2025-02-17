@@ -199,13 +199,19 @@ map_check(power_strip_sg_default_cover, false);
 
 //! A power strip generator for single gang electrical receptacles.
 /***************************************************************************//**
-  \param  cols    <integer> device column count.
+  \param  cols      <integer> device column count.
 
-  \param  rows    <integer> device row count.
+  \param  rows      <integer> device row count.
 
-  \param  mode    <integer> part mode.
+  \param  mode      <integer> part mode.
 
-  \param  verb    <integer> console output verbosity {0|1|2}.
+  \param  verb      <integer> console output verbosity {0|1|2}.
+
+  \param  cm_box    <map> box configuration map.
+
+  \param  cm_mount  <map> device mount configuration map.
+
+  \param  cm_cover  <map> cover configuration map.
 
   \details
 
