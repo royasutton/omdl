@@ -8,8 +8,8 @@ local_path        :=  models/3d/motion
 
 local_library     :=  docs_module \
                       \
-                      lmxuu \
-                      radial_ball
+                      bearing_linear_lmxuu \
+                      bearing_radial_ball
 
 local_release_add :=
 

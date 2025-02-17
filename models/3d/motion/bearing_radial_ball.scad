@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (radial ball)
+    \amu_define group_name  (Radial Ball)
     \amu_define group_brief (Rotary motion radial ball bearing model.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
@@ -41,7 +41,7 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_define includes_required_add
   (
-    database/component/bearing/radial_ball.scad
+    database/component/motion/bearing_radial_ball.scad
   )
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
@@ -65,7 +65,7 @@
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 
-   [database table]: \ref database_component_bearing_radial_ball
+   [database table]: \ref database_component_motion_bearing_radial_ball
 *******************************************************************************/
 module radial_ball
 (
@@ -75,7 +75,7 @@ module radial_ball
   wc = true
 )
 {
-  t = [dtr_bearing_radial_ball, dtc_bearing_radial_ball];
+  t = [dtr_motion_bearing_radial_ball, dtc_motion_bearing_radial_ball];
 
   assert
   (
@@ -151,8 +151,8 @@ module radial_ball
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <database/component/bearing/radial_ball.scad>;
-    include <models/3d/motion/radial_ball.scad>;
+    include <database/component/motion/bearing_radial_ball.scad>;
+    include <models/3d/motion/bearing_radial_ball.scad>;
 
     radial_ball("608");
 

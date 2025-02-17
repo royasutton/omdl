@@ -13,8 +13,8 @@ local_release_add :=
 local_backup_add  :=
 
 local_submodules  :=  battery \
-                      bearing \
                       fastener \
+                      motion \
                       structural
 
 #------------------------------------------------------------------------------#

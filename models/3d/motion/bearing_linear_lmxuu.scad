@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (lmxuu)
+    \amu_define group_name  (Linear lmxuu)
     \amu_define group_brief (Linear motion bearing model.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
@@ -41,7 +41,7 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_define includes_required_add
   (
-    database/component/bearing/linear_lmxuu.scad
+    database/component/motion/bearing_linear_lmxuu.scad
   )
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
@@ -65,9 +65,9 @@
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 
-   [database table]: \ref database_component_bearing_linear_lmxuu
+   [database table]: \ref database_component_motion_bearing_linear_lmxuu
 *******************************************************************************/
-module lmxuu
+module linear_lmxuu
 (
   n,
   align = 1,
@@ -75,7 +75,7 @@ module lmxuu
   wc = true
 )
 {
-  t = [dtr_bearing_linear_lmxuu, dtc_bearing_linear_lmxuu];
+  t = [dtr_motion_bearing_linear_lmxuu, dtc_motion_bearing_linear_lmxuu];
 
   assert
   (
@@ -154,10 +154,10 @@ module lmxuu
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <database/component/bearing/linear_lmxuu.scad>;
-    include <models/3d/motion/lmxuu.scad>;
+    include <database/component/motion/bearing_linear_lmxuu.scad>;
+    include <models/3d/motion/bearing_linear_lmxuu.scad>;
 
-    lmxuu("lm8uu");
+    linear_lmxuu("lm8uu");
 
     // end_include
   END_OPENSCAD;

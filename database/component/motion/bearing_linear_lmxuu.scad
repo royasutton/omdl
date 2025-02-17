@@ -1,4 +1,4 @@
-//! [linear] Linear motion bearing; lmxuu; lm.
+//! [bearing] Linear motion bearing; linear_lmxuu; lm.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,11 +27,11 @@
 
   \details
 
-    \amu_define group_name  (lmxuu)
-    \amu_define group_brief ([linear] Linear motion bearing; lmxuu; lm.)
+    \amu_define group_name  (linear_lmxuu)
+    \amu_define group_brief ([bearing] Linear motion bearing; linear_lmxuu; lm.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
-  \amu_text parent (${parent}_Linear)
+  \amu_text parent (${parent}_Bearing)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -42,11 +42,11 @@
 
   \details
 
-    \amu_copy (files="diagrams/lmxuu.svg" types="html,latex")
+    \amu_copy (files="diagrams/linear_lmxuu.svg" types="html,latex")
     \amu_text
     (
-    \image html ${PATH_NAME}/diagrams/lmxuu.svg "parameters"
-    \image latex ${PATH_NAME}/diagrams/lmxuu.svg "parameters"
+    \image html ${PATH_NAME}/diagrams/linear_lmxuu.svg "parameters"
+    \image latex ${PATH_NAME}/diagrams/linear_lmxuu.svg "parameters"
     )
 
     \amu_define output_scad     (false)
@@ -62,20 +62,20 @@
           convert when the base units are changed. See \ref units_length
           for more information on setting the base units.
 
-    | References:  |
-    |:-------------|
-    | lmxuu        |
-    | lm           |
-    | [RepRap]     |
-    | [Wikipedia]  |
+    | References:   |
+    |:--------------|
+    | linear_lmxuu  |
+    | lm            |
+    | [RepRap]      |
+    | [Wikipedia]   |
 
     [RepRap]: https://reprap.org/wiki/Linear_bearing
     [Wikipedia]: https://en.wikipedia.org/wiki/Linear-motion_bearing
 *******************************************************************************/
 
-//! <map> lmxuu bearing data table columns map.
+//! <map> linear_lmxuu motion data table columns map.
 //! \hideinitializer
-dtc_bearing_linear_lmxuu =
+dtc_motion_bearing_linear_lmxuu =
 [
   ["n", "model number"],
   ["dr", "inscribed circle"],
@@ -86,9 +86,9 @@ dtc_bearing_linear_lmxuu =
   ["d1", "ring grove diameter"]
 ];
 
-//! \<table> lmxuu bearing data table rows.
+//! \<table> linear_lmxuu motion data table rows.
 //! \hideinitializer
-dtr_bearing_linear_lmxuu =
+dtr_motion_bearing_linear_lmxuu =
 [
   [  "lm3uu",l_mm(   3),l_mm(   7),l_mm(  10),l_mm(  7.3),l_mm(0.90),l_mm(  6.7)],
   [  "lm4uu",l_mm(   4),l_mm(   8),l_mm(  12),l_mm(  8.8),l_mm(0.90),l_mm(  7.6)],
@@ -124,7 +124,7 @@ dtr_bearing_linear_lmxuu =
 BEGIN_SCOPE table;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <database/component/bearing/linear_lmxuu.scad>;
+    include <database/component/motion/bearing_linear_lmxuu.scad>;
 
     // temporary override for table presentation.
     // function l_mm(v) = round_s(length(v,"mm"), 4);
@@ -135,8 +135,8 @@ BEGIN_SCOPE table;
     hi = true;                // include heading id
     ht = true;                // include heading description
 
-    tr = dtr_bearing_linear_lmxuu;
-    tc = dtc_bearing_linear_lmxuu;
+    tr = dtr_motion_bearing_linear_lmxuu;
+    tc = dtc_motion_bearing_linear_lmxuu;
 
     table_write( tr, tc, number=n, heading_id=hi, heading_text=ht );
 

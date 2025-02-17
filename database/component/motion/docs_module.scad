@@ -1,4 +1,4 @@
-//! Module: Mechanical bearing specifications.
+//! Module: Mechanical motion design component specifications.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Bearing)
-    \amu_define group_brief (Mechanical bearing specifications.)
+    \amu_define group_name  (Motion)
+    \amu_define group_brief (Mechanical motion design component specifications.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
@@ -56,8 +56,7 @@
 
   \amu_define groups_level1
   (
-    Linear
-    Radial
+    Bearing
   )
 
   /+ remove newlines from identifiers +/
