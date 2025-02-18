@@ -51,9 +51,9 @@
 //! Linear motion bearing model.
 /***************************************************************************//**
   \param  n     <string> the bearing model name (see: [database table]).
-  \param  align <integer> model z-alignment; {0:bottom, 1:middle, 2:top}.
-  \param  shell <boolean> render shell only.
-  \param  wc    <boolean> render with color.
+  \param  a     <integer> model z-alignment; {0:bottom, 1:middle, 2:top}.
+  \param  s     <boolean> render shell only.
+  \param  c     <boolean> render with color.
 
   \details
 
@@ -70,9 +70,9 @@
 module linear_lmxuu
 (
   n,
-  align = 1,
-  shell = false,
-  wc = true
+  a = 1,
+  s = false,
+  c = true
 )
 {
   t = [dtr_motion_bearing_linear_lmxuu, dtc_motion_bearing_linear_lmxuu];
@@ -94,15 +94,15 @@ module linear_lmxuu
   lp = 96/100 * l;  // length of interior sleeve
 
 
-  translate( select_ci( [ [0,0,+l/2], origin3d, [0,0,-l/2]], align, false ) )
-  if (shell == true)
+  translate( select_ci( [ [0,0,+l/2], origin3d, [0,0,-l/2]], a, false ) )
+  if (s == true)
   {
     color("silver")
     cylinder(d=d, h=l, center=true);
   }
   else
   {
-    color(wc?"silver":undef)
+    color(c?"silver":undef)
     difference()
     {
       cylinder(d=d, h=l, center=true);                      // bearing shell
@@ -117,21 +117,21 @@ module linear_lmxuu
       }
     }
 
-    color(wc?"black":undef)                                 // body
+    color(c?"black":undef)                                  // body
     difference()
     {
       cylinder(d=dp, h=lp, center=true);
       cylinder(d=dr, h=lp+eps*4, center=true);
     }
 
-    color(wc?"darkgray":undef)                              // sleeve
+    color(c?"darkgray":undef)                               // sleeve
     difference()
     {
       cylinder(d=(dr+d-dp), h=l-eps*4, center=true);
       cylinder(d=dr, h=l, center=true);
     }
 
-    color(wc?"dimgray":undef)                               // band color
+    color(c?"dimgray":undef)                                // band color
     for (i = [-1, +1] )
     translate([0, 0, b/2 * i])
     difference()

@@ -51,9 +51,9 @@
 //! Radial ball bearing model.
 /***************************************************************************//**
   \param  n     <string> the bearing model name (see: [database table]).
-  \param  align <integer> model z-alignment; {0:bottom, 1:middle, 2:top}.
-  \param  shell <boolean> render shell only.
-  \param  wc    <boolean> render with color.
+  \param  a     <integer> model z-alignment; {0:bottom, 1:middle, 2:top}.
+  \param  s     <boolean> render shell only.
+  \param  c     <boolean> render with color.
 
   \details
 
@@ -70,9 +70,9 @@
 module radial_ball
 (
   n,
-  align = 1,
-  shell = false,
-  wc = true
+  a = 1,
+  s = false,
+  c = true
 )
 {
   t = [dtr_motion_bearing_radial_ball, dtc_motion_bearing_radial_ball];
@@ -95,8 +95,8 @@ module radial_ball
   ifc =  b * 0.88;  // bearing cover clip width 1
   ifd =  b * 0.80;  // bearing cover clip width 2
 
-  translate( select_ci( [ [0,0,+b/2], origin3d, [0,0,-b/2]], align, false ) )
-  if (shell == true)
+  translate( select_ci( [ [0,0,+b/2], origin3d, [0,0,-b/2]], a, false ) )
+  if (s == true)
   {
     color("silver")
     cylinder(d=od, h=b, center=true);
@@ -107,23 +107,23 @@ module radial_ball
     {
       union()
       {
-        color(wc?"silver":undef)                            // outer diameter
+        color(c?"silver":undef)                             // outer diameter
         difference()
         {
           cylinder(d=od, h=b, center=true);
           cylinder(d=odr, h=b+eps*2, center=true);
         }
 
-        color(wc?"gray":undef)                              // clip rim
+        color(c?"gray":undef)                               // clip rim
         cylinder(d=odr, h=ifd, center=true);
 
-        color(wc?"dimgray":undef)                           // cover
+        color(c?"dimgray":undef)                            // cover
         cylinder(d=odc, h=ifw, center=true);
 
-        color(wc?"silver":undef)                            // bore rim
+        color(c?"silver":undef)                             // bore rim
         cylinder(d=idr, h=b, center=true);
 
-        color(wc?"darkgray":undef)                          // cover clips
+        color(c?"darkgray":undef)                           // cover clips
         difference ()
         {
           cylinder(d=odr, h=ifc, center=true);
