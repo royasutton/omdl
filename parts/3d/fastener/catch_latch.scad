@@ -107,9 +107,7 @@ module catch_latch
   latch,
   catch,
 
-  p_bevel,
-  p_width,
-  p_height,
+  profile,
 
   align,
   verb = 0
@@ -286,20 +284,25 @@ module catch_latch
   catch_h = defined_e_or(catch, 1, size_px/5);
   catch_g = defined_e_or(catch, 2, size_px/20);
 
+  // latch profile
+  prof_b  = defined_e_or(profile, 0, undef);
+  prof_w  = defined_e_or(profile, 1, undef);
+  prof_l  = defined_e_or(profile, 2, undef);
+
   // latch/catch edge bevel (percentages): v-flat, v-bevel, h-bevel
-  bevel_f = defined_e_or(p_bevel, 0, 0) / 100 * size_pz;
-  bevel_v = defined_e_or(p_bevel, 1, 0) / 100 * size_pz;
-  bevel_h = defined_e_or(p_bevel, 2, 0) / 100;
+  bevel_f = defined_e_or(prof_b, 0, 0) / 100 * size_pz;
+  bevel_v = defined_e_or(prof_b, 1, 0) / 100 * size_pz;
+  bevel_h = defined_e_or(prof_b, 2, 0) / 100;
 
   // latch/catch profile width percentages): throat, catch, head
-  width_t = defined_e_or(p_width, 0,  60) / 100 * size_px/2;
-  width_c = defined_e_or(p_width, 1, 100) / 100 * size_px/2;
-  width_h = defined_e_or(p_width, 2,  10) / 100 * size_px/2;
+  width_t = defined_e_or(prof_w, 0,  60) / 100 * size_px/2;
+  width_c = defined_e_or(prof_w, 1, 100) / 100 * size_px/2;
+  width_h = defined_e_or(prof_w, 2,  10) / 100 * size_px/2;
 
-  // latch/catch profile height (percentages): throat-end, catch-start, catch-end
-  height_t = defined_e_or(p_height, 0, 20) / 100 * size_py;
-  height_s = defined_e_or(p_height, 1, 40) / 100 * size_py;
-  height_e = defined_e_or(p_height, 2, 60) / 100 * size_py;
+  // latch/catch profile length (percentages): throat-end, catch-start, catch-end
+  length_t = defined_e_or(prof_l, 0, 20) / 100 * size_py;
+  length_s = defined_e_or(prof_l, 1, 40) / 100 * size_py;
+  length_e = defined_e_or(prof_l, 2, 60) / 100 * size_py;
 
   //
   // global variables
@@ -318,8 +321,8 @@ module catch_latch
   hprofile_p =
   [
     origin2d,                                 // base
-    [width_t, 0], [width_t, height_t],        // throat; start, end
-    [width_c, height_s], [width_c, height_e], // catch; start, end
+    [width_t, 0], [width_t, length_t],        // throat; start, end
+    [width_c, length_s], [width_c, length_e], // catch; start, end
     [width_h, size_py]                        // head
   ];
 
@@ -438,10 +441,10 @@ BEGIN_SCOPE example;
     p = [10, 25, 10];
     c = [5, 4, 10, 2, 1] * s/10;
 
-    catch_latch(latch=2, size=s, p_bevel=p, screw=c);
+    catch_latch(latch=2, size=s, profile=[p], screw=c);
 
     translate([0, s*7, 0]) rotate([0, 0, 180])
-    catch_latch(catch=3, size=s, p_bevel=p, screw=c);
+    catch_latch(catch=3, size=s, profile=[p], screw=c);
 
     // end_include
   END_OPENSCAD;
