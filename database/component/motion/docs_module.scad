@@ -57,6 +57,7 @@
   \amu_define groups_level1
   (
     Bearing
+    Motor
   )
 
   /+ remove newlines from identifiers +/

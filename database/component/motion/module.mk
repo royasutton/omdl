@@ -9,7 +9,8 @@ local_path        :=  database/component/motion
 local_library     :=  docs_module \
                       \
                       bearing_linear_lmxuu \
-                      bearing_radial_ball
+                      bearing_radial_ball \
+                      motor_nema_stepper
 
 local_release_add :=
 
