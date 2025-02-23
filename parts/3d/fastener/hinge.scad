@@ -347,8 +347,8 @@ module hinge
   p_l   = defined_eon_or(l, 0, wth);
   h_l   = defined_e_or(l, 1, p_l);
 
-  // knuckle
-  //  when pbore is specified always set pin mode to 3
+  // knuckle: diameter, count, gap, pin-mode, pin
+  //  when pbore is specified always set k_mps, pin-mode, to 3
   k_dia = defined_eon_or(knuckle, 0, wth);
   k_spc = ceil(defined_e_or(knuckle, 1, 2));
   k_gap = defined_e_or(knuckle, 2, 1/4);
