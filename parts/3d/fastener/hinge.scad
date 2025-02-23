@@ -348,10 +348,9 @@ module hinge
   h_l   = defined_e_or(l, 1, p_l);
 
   // knuckle
-  //  when pbore is specified, default pin mode is 3 and 0 otherwise
-  d_mps = is_defined(pbore) ? 3 : 0;
-
-  k_mps = defined_eon_or(knuckle, 0, d_mps);
+  //  when pbore is specified always set pin mode to 3
+  k_mps = is_defined(pbore) ? 3
+        : defined_eon_or(knuckle, 0, 0);
   k_dia = defined_e_or(knuckle, 1, wth);
   k_spc = ceil(defined_e_or(knuckle, 2, 2));
   k_gap = defined_e_or(knuckle, 3, 1/4);
