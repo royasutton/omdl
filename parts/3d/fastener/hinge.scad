@@ -349,11 +349,11 @@ module hinge
 
   // knuckle
   //  when pbore is specified always set pin mode to 3
+  k_dia = defined_eon_or(knuckle, 0, wth);
+  k_spc = ceil(defined_e_or(knuckle, 1, 2));
+  k_gap = defined_e_or(knuckle, 2, 1/4);
   k_mps = is_defined(pbore) ? 3
-        : defined_eon_or(knuckle, 0, 0);
-  k_dia = defined_e_or(knuckle, 1, wth);
-  k_spc = ceil(defined_e_or(knuckle, 2, 2));
-  k_gap = defined_e_or(knuckle, 3, 1/4);
+        : defined_e_or(knuckle, 3, 0);
   k_pin = defined_e_or(knuckle, 4, k_dia*3/5);
 
   // hinge offsets: open z-offset (closed y-offset) and open y-offset
