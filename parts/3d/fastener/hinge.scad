@@ -102,6 +102,7 @@ module hinge
   offset,   // plate offset [oy, oz]
 
   pbore,    // pivot pin bore
+
   mbore,    // mount screw bore
   mbores,   // mount screw bore instances [bl, br] or b for (bl=br)
 
@@ -294,12 +295,11 @@ module hinge
         }
 
         // hinge-half: plate
+        translate([0, (h_w/2 + k_dia/2 + k_yo) * hs, k_zo])
         difference()
         {
           // plate
-          translate([0, 0, k_zo])
           extrude_linear_uss(wth, center=true)
-          translate([0, (h_w/2 + k_dia/2 + k_yo) * hs])
           mirror([0, hm, 0])
           pg_rectangle([p_l, h_w], vr=h_vr, vrm=h_vrm, center=true);
 
