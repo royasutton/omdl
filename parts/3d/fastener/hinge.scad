@@ -56,12 +56,12 @@
   \param  vr
   \param  vrm
   \param  knuckle
+  \param  offset
 
   \param  pbore
   \param  mbore
   \param  mbores
 
-  \param  type
   \param  support
   \param  mode
 
@@ -98,13 +98,13 @@ module hinge
   size,     // size [l, w]; l=[lp, lh], w=[wp, wh]
   vr,       // plate rounding [vr_l, vr_r], vr for (vr_l=vr_r)
   vrm,      // plate rounding modes  [vrm_l, vrm_r], vrm for (vrm_l=vrm_r)
-  knuckle,    // knuckle [mode, dia, cnt, gap, pin, offset]
+  knuckle,  // knuckle [mode, dia, cnt, gap, pin]
+  offset,   // plate offset [oy, oz]
 
   pbore,    // pivot pin bore
   mbore,    // mount screw bore
   mbores,   // mount screw bore instances [bl, br] or b for (bl=br)
 
-  type = 0,       // hinge type {0=butt, 1=backflap)
   support = true, // print-in-place support; {0|1|true|false}
   mode = 3,       // 0=left-size, 1=right-side
 
@@ -273,12 +273,12 @@ module hinge
               construct_knuckle(m=mc, d=k_dia - eps*4, l=cs_len, g=k_gap, p=k_pin);
 
               // plate wall interface
-              translate([0, (k_dia/2 + k_oyo) * hs, -wth/2 -k_cyo])
+              translate([0, (k_dia/2 + k_yo) * hs, k_zo])
               construct_knuckle(m=ms, l=cs_len, w=wth, g=k_gap, p=k_pin);
 
               // print-in-place 45% angle build-up
               if ( support )
-              translate([0, k_dia/2 * hs, -wth -k_cyo])
+              translate([0, k_dia/2 * hs, -wth/2 + k_zo])
               rotate([90, 0, 0])
               construct_knuckle(m=ms, l=cs_len, w=k_dia/2, g=k_gap, p=k_pin);
             }
@@ -288,7 +288,7 @@ module hinge
             construct_knuckle(m=mc, d=k_dia, l=cs_len+eps*4, g=k_gap, p=k_pin);
           }
 
-          // add knuckle section
+          // add knuckle section (with selected pin mode)
           rotate([0, 90, 0])
           construct_knuckle(m=mp, d=k_dia, l=cs_len, g=k_gap, p=k_pin);
         }
@@ -297,9 +297,9 @@ module hinge
         difference()
         {
           // plate
-          translate([0, 0, -wth/2 -k_cyo])
+          translate([0, 0, k_zo])
           extrude_linear_uss(wth, center=true)
-          translate([0, (h_w/2 + k_dia/2 + k_oyo) * hs])
+          translate([0, (h_w/2 + k_dia/2 + k_yo) * hs])
           mirror([0, hm, 0])
           pg_rectangle([p_l, h_w], vr=h_vr, vrm=h_vrm, center=true);
 
@@ -356,11 +356,10 @@ module hinge
   k_spc = ceil(defined_e_or(knuckle, 2, 2));
   k_gap = defined_e_or(knuckle, 3, 1/4);
   k_pin = defined_e_or(knuckle, 4, k_dia*3/5);
-  k_oco = defined_e_or(knuckle, 5, undef);
 
-  // hinge open y-offset and hinge closed y-offset
-  k_oyo = defined_eon_or(k_oco, 0, 0);
-  k_cyo = defined_e_or(k_oco, 1, 0);
+  // hinge offsets: open z-offset (closed y-offset) and open y-offset
+  k_zo  = defined_eon_or(offset, 0, -wth/2);
+  k_yo  = defined_e_or(offset, 1, 0);
 
   //
   // global variables
@@ -368,12 +367,10 @@ module hinge
 
   if (verb > 0)
   {
-    hts = (type == 0) ? "butt" : "backflap";
-
-    echo(strl([ "hinge type = ", hts ]));
     echo(strl([ "size: l=", l, ", w=", w, ", l-plate=", p_l, ", l-hinge=", h_l ]));
     echo(strl([ "knuckle: mode=", k_mps, ", diameter=", k_dia, ", count=",
-       k_spc, ", gap=", k_gap, ", pin=", k_pin, ", offset=", k_oco ]));
+       k_spc, ", gap=", k_gap, ", pin=", k_pin ]));
+    echo(strl([ "offset: zo=", k_zo, ", yo=", k_yo ]));
   }
 
   //
