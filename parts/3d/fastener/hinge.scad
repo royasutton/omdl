@@ -57,14 +57,11 @@
   \param  vrm
   \param  knuckle
   \param  offset
-
   \param  pbore
   \param  mbore
   \param  mbores
-
   \param  support
   \param  mode
-
   \param  pivot
   \param  align
   \param  verb    <integer> console output verbosity {0=quiet, 1=info}.
@@ -98,6 +95,7 @@ module hinge
   size,     // size [l, w]; l=[lh, lpl, lpr], w=[wpl, wpr]
   vr,       // plate rounding [vr_l, vr_r], vr for (vr_l=vr_r)
   vrm,      // plate rounding modes  [vrm_l, vrm_r], vrm for (vrm_l=vrm_r)
+
   knuckle,  // knuckle [mode, dia, cnt, gap, pin]
   offset,   // plate offset [oy, oz]
 
@@ -111,7 +109,7 @@ module hinge
 
   pivot,          // pivot [pl, pr] or p for (pl=pr)
   align,          // alignment [x, y, z]
-  verb = 1        // verbosity
+  verb = 0        // verbosity
 )
 {
   // construct knuckle section
