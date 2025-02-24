@@ -82,9 +82,18 @@
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | <decimal-list-3>  | [0, 0, 0]         | \p bevel; [f, v, h]
 
-    \amu_define scope_id      (example)
+    \amu_define scope_id      (example_backflap)
     \amu_define title         (Backflap hinge example)
-    \amu_define image_views   (top bottom diag)
+    \amu_define image_views   (top bottom right diag)
+    \amu_define image_columns (4)
+    \amu_define image_size    (sxga)
+
+    \amu_include (include/amu/scope_diagrams_3d.amu)
+
+    \amu_define scope_id      (example_custom)
+    \amu_define title         (Custom hinge example)
+    \amu_define image_views   (top bottom right diag)
+    \amu_define image_columns (4)
     \amu_define image_size    (sxga)
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
@@ -439,11 +448,24 @@ module hinge
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE example;
+BEGIN_SCOPE example_backflap;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <models/3d/fastener/screws.scad>;
     include <parts/3d/fastener/hinge.scad>;
+
+    $fn = 36;
+
+    for (y = [[1, -2], [2, +2]])
+    translate([0, second(y), 0])
+    hinge
+    (
+      wth=3,
+      size=[[28,30], 10],
+      vr=1,vrm=1,
+      pivot=45/2,
+          mode=first(y)
+    );
 
     // end_include
   END_OPENSCAD;
@@ -453,7 +475,50 @@ BEGIN_SCOPE example;
     table_unset_all sizes;
 
     images    name "sizes" types "sxga";
-    views     name "views" views "top bottom diag";
+    views     name "views" views "top bottom right diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE example_custom;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <models/3d/fastener/screws.scad>;
+    include <parts/3d/fastener/hinge.scad>;
+
+    $fn = 36;
+
+    for (y = [[1, -3], [2, +3]])
+    translate([0, second(y), 0])
+    hinge
+    (
+      wth=3,
+      size=[[18, 20, 35], [4, 6]],
+      vr=1,
+      vrm=[[4,3,1,1],[10,9,5,5]],
+
+      knuckle=[5, 2, 1/2],
+
+      mbore=[1, [2, 1, 1/2], [2, 1]],
+      mbores=[[-7, 0, 7], [-14, -7, 0, 7, 14]],
+
+      offset=[undef, 2],
+      mode=first(y)
+    );
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "top bottom right diag";
 
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter --view=axes";
