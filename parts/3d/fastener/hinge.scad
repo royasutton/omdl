@@ -412,8 +412,8 @@ module hinge
   alignments =
   let
   (
-    ey = +k_dia/2 + k_yo,
-    ez = +k_dia/2 + k_zo
+    ey = k_yo + k_dia/2,
+    ez = k_zo + wth/2
   )
   [
     [0, -h_l, -pl_l, -pr_l, +pr_l, +pl_l, +h_l]/2,
