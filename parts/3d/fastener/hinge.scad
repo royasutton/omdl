@@ -95,7 +95,7 @@
 module hinge
 (
   wth = 1,  // wall thickness
-  size,     // size [l, w]; l=[lp, lh], w=[wp, wh]
+  size,     // size [l, w]; l=[lh, lpl, lpr], w=[wpl, wpr]
   vr,       // plate rounding [vr_l, vr_r], vr for (vr_l=vr_r)
   vrm,      // plate rounding modes  [vrm_l, vrm_r], vrm for (vrm_l=vrm_r)
   knuckle,  // knuckle [mode, dia, cnt, gap, pin]
@@ -205,15 +205,16 @@ module hinge
       hm    = third( hht_l );   // mirror
 
       // current side width, vr, vrm, and bores
-      h_w   = defined_eon_or(w, ns, wth);
-      h_vr  = defined_eon_or(vr, ns, undef);
-      h_vrm = defined_eon_or(vrm, ns, undef);
+      p_l   = defined_eon_or(plr_l, ns, h_l);
+      p_w   = defined_eon_or(w, ns, wth);
+      p_vr  = defined_eon_or(vr, ns, undef);
+      p_vrm = defined_eon_or(vrm, ns, undef);
 
       pbo_l =  defined_e_or(mbores, ns, undef);
 
       if (verb > 0)
-      echo(strl([ "side=", ns, ", w=", h_w, ", vr=", h_vr,
-        ", vrm=", h_vrm, ", bores=", pbo_l ]));
+      echo(strl([ "side=", ns, ", w=", p_w, ", vr=", p_vr,
+        ", vrm=", p_vrm, ", bores=", pbo_l ]));
 
       // hinge-half
       rotate([defined_eon_or(pivot, ns, 0) * hs, 0, 0])
@@ -298,13 +299,13 @@ module hinge
         }
 
         // hinge-half: plate
-        translate([0, (h_w/2 + k_dia/2 + k_yo) * hs, k_zo])
+        translate([0, (p_w/2 + k_dia/2 + k_yo) * hs, k_zo])
         mirror([0, hm, 0])
         difference()
         {
           // plate
           extrude_linear_uss(wth, center=true)
-          pg_rectangle([p_l, h_w], vr=h_vr, vrm=h_vrm, center=true);
+          pg_rectangle([p_l, p_w], vr=p_vr, vrm=p_vrm, center=true);
 
           // remove mount plate bores
           if ( is_defined(mbore) && is_defined(pbo_l) )
@@ -364,9 +365,12 @@ module hinge
   l     = defined_eon_or(size, 0, undef);
   w     = defined_e_or(size, 1, undef);
 
-  // length: plate and hinge
-  p_l   = defined_eon_or(l, 0, wth);
-  h_l   = defined_e_or(l, 1, p_l);
+  // length: hinge and plates
+  h_l   = defined_eon_or(l, 0, wth);
+  pl_l  = defined_e_or(l, 1, h_l);
+  pr_l  = defined_e_or(l, 2, pl_l);
+
+  plr_l = [pl_l, pr_l];
 
   // knuckle: diameter, count, gap, pin-mode, pin
   //  when pbore is specified always set k_mps, pin-mode, to 3
@@ -387,9 +391,10 @@ module hinge
 
   if (verb > 0)
   {
-    echo(strl([ "size: l=", l, ", w=", w, ", l-plate=", p_l, ", l-hinge=", h_l ]));
-    echo(strl([ "knuckle: mode=", k_mps, ", diameter=", k_dia, ", count=",
-       k_spc, ", gap=", k_gap, ", pin=", k_pin ]));
+    echo(strl([ "size: l=", l, ", w=", w, "; l-lplate=", pl_l,
+      ", l-rplate=", pr_l, ", l-hinge=", h_l ]));
+    echo(strl([ "knuckle: mode=", k_mps, ", diameter=", k_dia,
+       ", count=", k_spc, ", gap=", k_gap, ", pin=", k_pin ]));
     echo(strl([ "offset: zo=", k_zo, ", yo=", k_yo ]));
   }
 
