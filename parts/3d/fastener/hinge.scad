@@ -405,7 +405,7 @@ module hinge
   ];
 
   // when 'align' is scalar assign to 'align_x'
-  align_x = select_ci ( alignments.x, defined_eon_or(align, 0, 4), false );
+  align_x = select_ci ( alignments.x, defined_eon_or(align, 0, 0), false );
   align_y = select_ci ( alignments.y, defined_e_or(align, 1, 0), false );
   align_z = select_ci ( alignments.z, defined_e_or(align, 2, 0), false );
 
