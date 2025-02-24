@@ -204,13 +204,16 @@ module hinge
       hs    = second( hht_l );  // sign
       hm    = third( hht_l );   // mirror
 
-      // current side width, vr, and vrm
+      // current side width, vr, vrm, and bores
       h_w   = defined_eon_or(w, ns, wth);
       h_vr  = defined_eon_or(vr, ns, undef);
       h_vrm = defined_eon_or(vrm, ns, undef);
 
+      pbo_l =  defined_e_or(mbores, ns, undef);
+
       if (verb > 0)
-      echo(strl([ "side=", ns, ", w=", h_w, ", vr=", h_vr, ", vrm=", h_vrm ]));
+      echo(strl([ "side=", ns, ", w=", h_w, ", vr=", h_vr,
+        ", vrm=", h_vrm, ", bores=", pbo_l ]));
 
       // hinge-half
       rotate([defined_eon_or(pivot, ns, 0) * hs, 0, 0])
@@ -296,16 +299,34 @@ module hinge
 
         // hinge-half: plate
         translate([0, (h_w/2 + k_dia/2 + k_yo) * hs, k_zo])
+        mirror([0, hm, 0])
         difference()
         {
           // plate
           extrude_linear_uss(wth, center=true)
-          mirror([0, hm, 0])
           pg_rectangle([p_l, h_w], vr=h_vr, vrm=h_vrm, center=true);
 
           // remove mount plate bores
-          if ( is_defined(mbores) )
+          if ( is_defined(mbore) && is_defined(pbo_l) )
           {
+            pb_d = defined_eon_or(mbore, 0, 0);
+            pb_h = defined_e_or(mbore, 1, undef);
+            pb_n = defined_e_or(mbore, 2, undef);
+            pb_f = defined_e_or(mbore, 3, 1);
+
+            pb_l = wth + eps*4;
+
+            for ( pb = pbo_l )
+            {
+              xo = defined_eon_or(pb, 0, 0);
+              yo = defined_e_or(pb, 1, 0);
+
+              translate([xo, yo, 0])
+              screw_bore(d=pb_d, l=pb_l, h=pb_h, n=pb_n, f=pb_f);
+
+              if (verb > 0)
+              echo(strl([ "bore=[", xo, ", ", yo, "]" ]));
+            }
           }
         }
       }
