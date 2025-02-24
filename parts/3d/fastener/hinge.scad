@@ -372,8 +372,8 @@ module hinge
   plr_l = [pl_l, pr_l];
 
   // widths: plates
-  pl_w  =  defined_e_or(w, 0, wth);
-  pr_w  =  defined_e_or(w, 1, wth);
+  pl_w  =  defined_eon_or(w, 0, wth);
+  pr_w  =  defined_e_or(w, 1, pl_w);
 
   plr_w = [pl_w, pr_w];
 
