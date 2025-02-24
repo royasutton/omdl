@@ -207,7 +207,7 @@ module hinge
       p_w   = defined_e_or(plr_w, ns, undef);
 
       p_vr  = defined_eon_or(vr, ns, undef);
-      p_vrm = defined_eon_or(vrm, ns, undef);
+      p_vrm = defined_eon_or(vrm, ns, 0);
 
       pbo_l =  defined_e_or(mbores, ns, undef);
 
