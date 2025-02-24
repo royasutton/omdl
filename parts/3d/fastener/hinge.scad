@@ -412,16 +412,21 @@ module hinge
   //
 
   alignments =
+  let
+  (
+    ey = +k_dia/2 + k_yo,
+    ez = +k_dia/2 + k_zo
+  )
   [
-    [0],
-    [0],
-    [0]
+    [0, -h_l, -pl_l, -pr_l, +pr_l, +pl_l, +h_l]/2,
+    [0, -ey, -ey-pr_w/2, -ey-pr_w, +ey, +ey+pl_w/2, +ey+pl_w ],
+    [0, -ez, -ez+wth/2, -ez+wth]
   ];
 
-  // when 'align' is scalar assign to 'align_x'
-  align_x = select_ci ( alignments.x, defined_eon_or(align, 0, 0), false );
+  // when 'align' is scalar assign to 'align_z'
+  align_x = select_ci ( alignments.x, defined_e_or(align, 0, 0), false );
   align_y = select_ci ( alignments.y, defined_e_or(align, 1, 0), false );
-  align_z = select_ci ( alignments.z, defined_e_or(align, 2, 0), false );
+  align_z = select_ci ( alignments.z, defined_eon_or(align, 2, 0), false );
 
   translate([align_x, align_y, align_z])
   assemble();
