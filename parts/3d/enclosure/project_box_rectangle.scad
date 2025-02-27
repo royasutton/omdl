@@ -287,7 +287,7 @@
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | datastruct        | required          | configuration
-      1 | datastruct        | required          | instances
+      1 | datastruct-list   | required          | instance
 
     ##### wall[0]: configuration
 
@@ -337,7 +337,7 @@
     The constants \em cfg_he and \em cfg_vrm define defaults that may
     be used to round the top, base, and edges of a wall.
 
-    ##### wall[1]: instances
+    ##### wall[1]: instance
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -392,7 +392,7 @@
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | datastruct        | required          | configuration
-      1 | datastruct        | required          | instances
+      1 | datastruct-list   | required          | instance
 
     ##### post[0]: configuration
 
@@ -523,7 +523,7 @@
     post may be configured to replace the values shown in the above
     table.
 
-    ##### post[1]: instances
+    ##### post[1]: instance
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -537,10 +537,10 @@
       7 | datastruct        | (see note)        | fins
 
     \note The default values for the holes, post, and fins are set
-    based on the type and, when not specified with an instances, are
+    based on the type and, when not specified with an instance, are
     obtained from the configured default values as described above.
 
-    ###### post[1]: instances[0]: type
+    ###### post[1]: instance[0]: type
 
     Integer value is binary encoded.
 
@@ -549,7 +549,7 @@
       0 | post type  {0:normal, 1:recessed}
       1 | fin type {0:triangular, 1:rectangular}
 
-    ###### post[1]: instances[1]: zero
+    ###### post[1]: instance[1]: zero
 
     The x and y zero can be assigned decimal values in the interval
     (-1, +1), to set the post zero alignment position along the
