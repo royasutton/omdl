@@ -200,7 +200,7 @@
       0 | generate left mount plate
       1 | generate right mount plate
 
-    \amu_define scope_id      (example_backflap)
+    \amu_define scope_id      (example_sf_backflap)
     \amu_define title         (Backflap hinge example)
     \amu_define image_views   (top bottom right diag)
     \amu_define image_columns (4)
@@ -208,7 +208,7 @@
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 
-    \amu_define scope_id      (example_custom)
+    \amu_define scope_id      (example_sf_custom)
     \amu_define title         (Custom hinge example)
     \amu_define image_views   (top bottom right diag)
     \amu_define image_columns (4)
@@ -216,7 +216,7 @@
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
-module hinge
+module hinge_sf
 (
   wth = 1,
   size,
@@ -561,17 +561,17 @@ module hinge
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE example_backflap;
+BEGIN_SCOPE example_sf_backflap;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <parts/3d/fastener/hinge.scad>;
+    include <parts/3d/fastener/hinges.scad>;
 
     $fn = 36;
 
     for (y = [[1, -2], [2, +2]])
     translate([0, second(y), 0])
-    hinge
+    hinge_sf
     (
       wth=3,
       size=[[28,30], 10],
@@ -597,17 +597,17 @@ BEGIN_SCOPE example_backflap;
   END_MFSCRIPT;
 END_SCOPE;
 
-BEGIN_SCOPE example_custom;
+BEGIN_SCOPE example_sf_custom;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <parts/3d/fastener/hinge.scad>;
+    include <parts/3d/fastener/hinges.scad>;
 
     $fn = 36;
 
     for (y = [[1, -3], [2, +3]])
     translate([0, second(y), 0])
-    hinge
+    hinge_sf
     (
       wth=3,
       size=[[18, 20, 35], [4, 6]],
