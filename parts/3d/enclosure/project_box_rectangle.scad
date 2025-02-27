@@ -287,7 +287,7 @@
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | datastruct        | required          | configuration
-      1 | datastruct-list   | required          | instance
+      1 | datastruct-list   | required          | instance list
 
     ##### wall[0]: configuration
 
@@ -392,7 +392,7 @@
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | datastruct        | required          | configuration
-      1 | datastruct-list   | required          | instance
+      1 | datastruct-list   | required          | instance list
 
     ##### post[0]: configuration
 
