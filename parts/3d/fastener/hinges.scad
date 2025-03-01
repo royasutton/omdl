@@ -436,7 +436,7 @@ module hinge_sf
             pb_n = defined_e_or(mbore, 2, undef);
             pb_f = defined_e_or(mbore, 3, 1);
 
-            pb_l = wth + eps*4;
+            pb_l = wth + eps*8;
 
             for ( pb = pbo_l )
             {
