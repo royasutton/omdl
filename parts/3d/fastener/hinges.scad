@@ -325,8 +325,8 @@ module hinge_sf
       hm    = third( hht_l );   // mirror
 
       // current side width, vr, vrm, and bores
-      p_l   = defined_e_or(plr_l, ns, undef);
-      p_w   = defined_e_or(plr_w, ns, undef);
+      p_l   = defined_e_or(l_plr, ns, undef);
+      p_w   = defined_e_or(w_plr, ns, undef);
 
       p_vr  = defined_eon_or(vr, ns, undef);
       p_vrm = defined_eon_or(vrm, ns, 0);
@@ -342,8 +342,8 @@ module hinge_sf
       union()
       {
         // cylinder section length and x-offset
-        cs_len = h_l/(k_spc*2+1);
-        cs_xos = -(h_l - cs_len)/2;
+        cs_len = l_h/(k_spc*2+1);
+        cs_xos = -(l_h - cs_len)/2;
 
         // cylinder section half list and flatten-list
         //  right(+1)=even, left(-1)=odd
@@ -470,7 +470,7 @@ module hinge_sf
         pb_n = defined_e_or(pbore, 2, undef);
         pb_f = defined_e_or(pbore, 3, 1);
 
-        pb_l = h_l + eps*8;
+        pb_l = l_h + eps*8;
 
         rotate([0, -90, 0])
         screw_bore(d=pb_d, l=pb_l, h=pb_h, n=pb_n, f=pb_f);
@@ -487,17 +487,17 @@ module hinge_sf
   w     = defined_e_or(size, 1, undef);
 
   // length: hinge and plates
-  h_l   = defined_eon_or(l, 0, wth);
-  pl_l  = defined_e_or(l, 1, h_l);
-  pr_l  = defined_e_or(l, 2, pl_l);
+  l_h   = defined_eon_or(l, 0, wth);
+  l_pl  = defined_e_or(l, 1, l_h);
+  l_pr  = defined_e_or(l, 2, l_pl);
 
-  plr_l = [pl_l, pr_l];
+  l_plr = [l_pl, l_pr];
 
   // widths: plates
-  pl_w  =  defined_eon_or(w, 0, wth);
-  pr_w  =  defined_e_or(w, 1, pl_w);
+  w_pl  =  defined_eon_or(w, 0, wth);
+  w_pr  =  defined_e_or(w, 1, w_pl);
 
-  plr_w = [pl_w, pr_w];
+  w_plr = [w_pl, w_pr];
 
   // knuckle: diameter, count, gap, pin-mode, pin
   //  when pbore is specified always set k_mps, pin-mode, to 3
@@ -519,9 +519,9 @@ module hinge_sf
   if (verb > 0)
   {
     echo(strl([ "size: l=", l, ", w=", w ]));
-    echo(strl([ "size: hinge=", h_l,
-      ", left-plate=[", pl_w, ", ", pl_l, "]",
-      ", right-plate=[", pr_w, ", ", pr_l, "]"]));
+    echo(strl([ "size: hinge=", l_h,
+      ", left-plate=[", w_pl, ", ", l_pl, "]",
+      ", right-plate=[", w_pr, ", ", l_pr, "]"]));
     echo(strl([ "knuckle: mode=", k_mps, ", diameter=", k_dia,
        ", count=", k_spc, ", gap=", k_gap, ", pin=", k_pin ]));
     echo(strl([ "offset: zo=", k_zo, ", yo=", k_yo ]));
@@ -538,8 +538,8 @@ module hinge_sf
     ez = k_zo + wth/2
   )
   [
-    [0, -h_l, -pl_l, -pr_l, +pr_l, +pl_l, +h_l]/2,
-    [0, -ey, -ey-pr_w/2, -ey-pr_w, +ey, +ey+pl_w/2, +ey+pl_w ],
+    [0, -l_h, -l_pl, -l_pr, +l_pr, +l_pl, +l_h]/2,
+    [0, -ey, -ey-w_pr/2, -ey-w_pr, +ey, +ey+w_pl/2, +ey+w_pl ],
     [0, -ez, -ez+wth/2, -ez+wth]
   ];
 
