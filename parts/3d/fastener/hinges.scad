@@ -70,20 +70,20 @@
                   corner rounding radii for the left and right plates
                   or a single decimal to round all corners the same.
 
-  \param  vrm     <datastruct> plate rounding mode; a list [vrml,
-                  vrmr], the left and right rounding modes or a single
-                  decimal to set (vrml=vrmr). The parameters \p vrml
-                  and \p vrmr are <decimal-list-4 \| decimal>, the
+  \param  vrm     <datastruct \| integer> plate rounding mode; a list
+                  [vrml, vrmr], the left and right rounding modes or a
+                  single integer to set (vrml=vrmr). The parameters \p
+                  vrml and \p vrmr are <integer-list-4 \| integer>, the
                   corner rounding modes for the left and right plates
-                  or a single decimal to round all corners the same.
+                  or a single integer to round all corners the same.
 
   \param  knuckle <datastruct> knuckles (see below).
 
   \param  offset  <decimal-list-2 \| dcimal> pivot to plate offset; a
                   list [oz, oy], the z-offset and y-offset between the
-                  pivot and plates or a single decimale to set \p oz.
-                  The default offset value is \p -wth/2 for a backflap
-                  hinge configuration.
+                  pivot and plates or a single decimal to set \p oz.
+                  The default offset value is [-wth/2, 0] for a
+                  backflap hinge configuration.
 
 
   \param  pbore   <datastruct> the pivot bore (see below).
@@ -155,7 +155,7 @@
       specification and are performed using screw_bore(). The data
       structure is as follows.
 
-    ##### Data structure fields: pbore, mbore
+    #### Data structure fields: pbore, mbore
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
@@ -182,7 +182,7 @@
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | <datastruct-list> | undef             | instance list
 
-    #### Data structure fields: mbores[0]: instance
+    ##### Data structure fields: mbores[0]: instance
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
