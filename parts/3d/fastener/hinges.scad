@@ -79,20 +79,21 @@
 
   \param  knuckle <datastruct> knuckles (see below).
 
-  \param  offset  <decimal-list-2 \| dcimal> pivot to plate offset; a
+  \param  offset  <decimal-list-2 \| dcimal> pivot-to-plate offset; a
                   list [oz, oy], the z-offset and y-offset between the
                   pivot and plates or a single decimal to set \p oz.
                   The default offset value is [-wth/2, 0] for a
                   backflap hinge configuration.
 
 
-  \param  pbore   <datastruct> the pivot bore (see below).
+  \param  pbore   <datastruct> the knuckle pivot bore (see below).
 
   \param  mbore   <datastruct> mount plate bore (see below).
 
-  \param  mbores  <datastruct> mount plate bore list (see below).
+  \param  mbores  <datastruct> mount plate bore instance list (see
+                  below).
 
-  \param  support <boolean> add print support for pivot knuckles.
+  \param  support <boolean> add print support for knuckles.
 
   \param  mode    <integer> part mode (see below).
 
@@ -101,7 +102,8 @@
                   single decimal to set (pl=pr).
 
   \param  align   <integer-list-3 \| integer> the part alignment; a
-                  list [x, y, z], or a single integer to set \p z.
+                  list [x, y, z], or a single integer to set \p z
+                  (default = [0, 0, 0]).
 
   \param  verb    <integer> console output verbosity {0=quiet, 1=info}.
 
@@ -134,12 +136,12 @@
 
       v | description
     ---:|:---------------------------------------
-      0 | un-gaped cylinders
+      0 | cylinder with no gap
       1 | male pin
       2 | female pin
       3 | gaped cylinders
       4 | hole for external pin
-      5 | internal use ("shadow")
+      5 | print support projection (for internal use)
 
     ##### Data structure fields: knuckle[4]: pin
 
@@ -153,7 +155,7 @@
 
       The hinge pivot and the mount plate bores use a common
       specification and are performed using screw_bore(). The data
-      structure is as follows.
+      structure is detailed in the following section.
 
     #### Data structure fields: pbore, mbore
 
@@ -164,8 +166,8 @@
       2 | <datastruct>      | undef             | \p bn: bore nut
       3 | <datastruct>      | 1                 | \p bf: bore scale factor
 
-      for documentation of the data types for the bore parameters \p bh,
-      \p bn and \p bf can be found in the screw_bore().
+      The documentation of the bore parameters \p bh, \p bn and \p bf
+      can be found in the screw_bore().
 
     ### mbores
 
@@ -188,12 +190,12 @@
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | <decimal-list-2 \| decimal> | required | bore center offset [x, y]
 
-      For an instance with a single decimal, the value controls the
-      bore instance \p x-offset (with y=0).
+      For an instance with a single decimal, the supplied value
+      controls the bore instance \p x-offset (with y=0).
 
     ### part mode
 
-    Integer value is binary encoded.
+      A binary encoded integer value.
 
       b | description
     ---:|:---------------------------------------
@@ -579,29 +581,29 @@ module hinge_sf
                   corners the same.
 
   \param  vrm     <datastruct \| integer> plate rounding mode; a list
-                  [vrl, vrr, vrml, vrmr], the left, right, left-middle,
-                  and right-middle rounding mode or a single integer
-                  to set (vrl=vrr=vrml=vrmr). The parameters are
-                  <integer-list-4 \| integer>, the individual corner
-                  rounding modes or a single integer to round all
-                  corners the same.
+                  [vrml, vrmr, vrmml, vrmmr], the left, right,
+                  left-middle, and right-middle rounding mode or a
+                  single integer to set (vrml=vrmr=vrmml=vrmmr). The
+                  parameters are <integer-list-4 \| integer>, the
+                  individual corner rounding modes or a single integer
+                  to round all corners the same.
 
   \param  knuckle <datastruct> knuckles (see below).
 
-  \param  offset  <decimal-list-3 \| dcimal> pivot to plate offsets; a
+  \param  offset  <decimal-list-3 \| dcimal> pivot-to-plate offsets; a
                   list [oz, oyl, oyr], the z-offset, left, and right
-                  y-offset between the pivot and plates or a single
-                  decimal to set \p oz. The default offset value is [0,
-                  0, 0].
+                  y-offset between the pivots and plates or a single
+                  decimal to set \p oz (default = [0, 0, 0]).
 
 
-  \param  pbore   <datastruct> the pivot bore (see below).
+  \param  pbore   <datastruct> the knuckle pivot bore (see below).
 
   \param  mbore   <datastruct> mount plate bore (see below).
 
-  \param  mbores  <datastruct> mount plate bore list (see below).
+  \param  mbores  <datastruct> mount plate bore instance list (see
+                  below).
 
-  \param  support <boolean> add print support for pivot knuckles.
+  \param  support <boolean> add print support for knuckles.
 
   \param  mode    <integer> part mode (see below).
 
@@ -610,18 +612,20 @@ module hinge_sf
                   single decimal to set (pl=pr).
 
   \param  align   <integer-list-3 \| integer> the part alignment; a
-                  list [x, y, z], or a single integer to set \p z.
+                  list [x, y, z], or a single integer to set \p z
+                  (default = [0, 0, 0]).
 
-  \param  verb    <integer> console output verbosity {0=quiet, 1=info}.
+  \param  verb    <integer> console output verbosity {0=quiet, 1=info,
+                  2=details}.
 
   \details
 
-    This module constructs custom bi-fold hinges. Most
-    aspects of the hinge can be controlled via a parameter.
-
-    Alternatively, the pivot bore can be specified for use
-    with metal pins. The plate size and mount holes are configurable
-    and the bores are generated by screw_bore().
+    This module constructs custom bi-fold hinges with print-in-place
+    pivot pins. This type of hinge allows for full folding in both
+    directions. Most aspects of the hinge can be controlled via a
+    parameter. Alternatively, the pivot bore can be specified for use
+    with externally supplied pins. The plate size and mount holes are
+    configurable and the bores are generated by screw_bore().
 
     ## Multi-value and structured parameters
 
@@ -642,12 +646,12 @@ module hinge_sf
 
       v | description
     ---:|:---------------------------------------
-      0 | un-gaped cylinders
+      0 | cylinder with no gap
       1 | male pin
       2 | female pin
       3 | gaped cylinders
       4 | hole for external pin
-      5 | internal use ("shadow")
+      5 | print support projection (for internal use)
 
     ##### Data structure fields: knuckle[4]: pin
 
@@ -661,7 +665,7 @@ module hinge_sf
 
       The hinge pivot and the mount plate bores use a common
       specification and are performed using screw_bore(). The data
-      structure is as follows.
+      structure is detailed in the following section.
 
     #### Data structure fields: pbore, mbore
 
@@ -672,8 +676,8 @@ module hinge_sf
       2 | <datastruct>      | undef             | \p bn: bore nut
       3 | <datastruct>      | 1                 | \p bf: bore scale factor
 
-      for documentation of the data types for the bore parameters \p bh,
-      \p bn and \p bf can be found in the screw_bore().
+      The documentation of the bore parameters \p bh, \p bn and \p bf
+      can be found in the screw_bore().
 
     ### mbores
 
@@ -693,18 +697,21 @@ module hinge_sf
       2 | <datastruct-list> | undef             | instance list left-middle plate
       3 | <datastruct-list> | undef             | instance list right-middle plate
 
+      The left- and right-middle plate bores can be specified together
+      or separately as configured by a mode bit described below.
+
     ##### Data structure fields: mbores[0-3]: instance-*
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | <decimal-list-2 \| decimal> | required | bore center offset [x, y]
 
-      For an instance with a single decimal, the value controls the
-      bore instance \p x-offset (with y=0).
+      For an instance with a single decimal, the supplied value
+      controls the bore instance \p x-offset (with y=0).
 
     ### part mode
 
-    Integer value is binary encoded.
+      A binary encoded integer value.
 
       b | description
     ---:|:---------------------------------------
@@ -717,8 +724,7 @@ module hinge_sf
       left-middle and right-middle plate bores are independent and
       specified by \p mbores[2] and \p mbores[3], respectively. When
       mode bit-3 is set to zero, both the left and right are specified
-      together as configured by \p mbores[2].
-
+      together using by \p mbores[2].
 
     \amu_define scope_id      (example_bf)
     \amu_define title         (Bi-fold hinge example)
