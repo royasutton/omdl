@@ -1,4 +1,4 @@
-//! Custom print-in-place hinge generators.
+//! Print-in-place hinge generators.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Hinges)
-    \amu_define group_brief (Custom print-in-place hinge generators.)
+    \amu_define group_brief (Print-in-place hinge generators.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
