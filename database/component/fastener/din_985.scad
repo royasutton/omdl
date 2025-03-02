@@ -71,7 +71,7 @@
     [fasterner.eu]: https://www.fasteners.eu/standards/DIN/985/
 *******************************************************************************/
 
-//! <map> DIN 985 fastener data table columns map.
+//! <map> DIN 985 data table columns map.
 //! \hideinitializer
 dtc_fastener_metric_nuts_din_985 =
 [
@@ -84,7 +84,7 @@ dtc_fastener_metric_nuts_din_985 =
   ["i_min", "wrenching height"]
 ];
 
-//! \<table> DIN 985 fastener data table rows.
+//! \<table> DIN 985 data table rows.
 //! \hideinitializer
 dtr_fastener_metric_nuts_din_985 =
 [

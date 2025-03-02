@@ -71,7 +71,7 @@
     [ANSI/ASME B18.3.5M-1986]: https://webstore.ansi.org/standards/asme/ansiasmeb185m1986r2002
 *******************************************************************************/
 
-//! <map> ANSI B18.3.5M fastener data table columns map.
+//! <map> ANSI B18.3.5M data table columns map.
 //! \hideinitializer
 dtc_fastener_metric_screws_ansi_b18_3_5m =
 [
@@ -89,7 +89,7 @@ dtc_fastener_metric_screws_ansi_b18_3_5m =
   ["d_max", "drill allowance"]
 ];
 
-//! \<table> ANSI B18.3.5M fastener data table rows.
+//! \<table> ANSI B18.3.5M data table rows.
 //! \hideinitializer
 dtr_fastener_metric_screws_ansi_b18_3_5m =
 [

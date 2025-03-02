@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2023
+  \date   2015-2025
 
   \copyright
 
@@ -81,6 +81,25 @@ function defined_e_or
   : !is_undef( v[i] ) ? v[i]
   : d;
 
+//! Return the list element or scalar numeric value, if either is defined, otherwise the default value.
+/***************************************************************************//**
+  \param    v \<value> A value.
+  \param    i <integer> An element index.
+  \param    d \<value> A default value.
+
+  \returns  (1) <number> <tt>v</tt> when it is a scalar numeric value.
+            (2) \<value> <tt>v[i]</tt> when it is defined, or the
+                default value \p d otherwise.
+*******************************************************************************/
+function defined_eon_or
+(
+  v,
+  i,
+  d
+) = is_num(v) ? v
+  : !is_iterable(v) ? d
+  : !is_undef( v[i] ) ? v[i]
+  : d;
 
 //! Find the occurrences of a match value in an iterable value.
 /***************************************************************************//**
@@ -1299,6 +1318,7 @@ BEGIN_SCOPE validate;
     test_ids = table_validate_get_ids( db );
 
     for (id=test_ids) table_validate( db, id, "defined_e_or_DE3", 1, defined_e_or( v1(db,id), 3, "default" ) );
+    for (id=test_ids) table_validate( db, id, "defined_e_or_DE3", 1, defined_eon_or( v1(db,id), 3, "default" ) );
     for (id=test_ids) table_validate( db, id, "find_12", 1, find( [1,2], v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "count_S1", 1, count( 1, v1(db,id), true ) );
     for (id=test_ids) table_validate( db, id, "exists_S1", 1, exists( 1, v1(db,id), true ) );

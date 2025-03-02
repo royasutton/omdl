@@ -1,8 +1,8 @@
-//! [linear] Linear motion bearing; lmxuu; lm.
+//! [motor] Nema stepper motor; nema_stepper; stepper motor.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2024
+  \date   2025
 
   \copyright
 
@@ -27,11 +27,11 @@
 
   \details
 
-    \amu_define group_name  (lmxuu)
-    \amu_define group_brief ([linear] Linear motion bearing; lmxuu; lm.)
+    \amu_define group_name  (nema_stepper)
+    \amu_define group_brief ([motor] Nema stepper motor; nema_stepper; stepper motor.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
-  \amu_text parent (${parent}_Linear)
+  \amu_text parent (${parent}_Motor)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -42,18 +42,20 @@
 
   \details
 
-    \amu_copy (files="diagrams/lmxuu.svg" types="html,latex")
+    \amu_copy (files="diagrams/nema_stepper.svg" types="html,latex")
     \amu_text
     (
-    \image html ${PATH_NAME}/diagrams/lmxuu.svg "parameters"
-    \image latex ${PATH_NAME}/diagrams/lmxuu.svg "parameters"
+    \image html ${PATH_NAME}/diagrams/nema_stepper.svg "parameters"
+    \image latex ${PATH_NAME}/diagrams/nema_stepper.svg "parameters"
     )
+
+    <center>Smaller motor bolt holes have metric threas.</center>
 
     \amu_define output_scad     (false)
     \amu_define output_console  (false)
 
-    \amu_define title           (Linear motion bearing)
-    \amu_define notes_table     ()
+    \amu_define title           (Nema stepper motor)
+    \amu_define notes_table     (<center>Approximate and typical values differ across manufacturers and models.</center>)
 
     \amu_include (include/amu/scope_table.amu)
 
@@ -62,55 +64,42 @@
           convert when the base units are changed. See \ref units_length
           for more information on setting the base units.
 
-    | References:  |
-    |:-------------|
-    | lmxuu        |
-    | lm           |
-    | [RepRap]     |
-    | [Wikipedia]  |
+    | References:    |
+    |:---------------|
+    | nema_stepper   |
+    | stepper motor  |
+    | [Wikipedia]    |
+    | [RepRap]       |
 
-    [RepRap]: https://reprap.org/wiki/Linear_bearing
-    [Wikipedia]: https://en.wikipedia.org/wiki/Linear-motion_bearing
+    [Wikipedia]: https://en.wikipedia.org/wiki/Stepper_motor
+    [RepRap]: https://reprap.org/wiki/NEMA_17_Stepper_motor
 *******************************************************************************/
 
-//! <map> lmxuu bearing data table columns map.
+//! <map> nema_stepper data table columns map.
 //! \hideinitializer
-dtc_bearing_linear_lmxuu =
+dtc_motion_motor_nema_stepper =
 [
-  ["n", "model number"],
-  ["dr", "inscribed circle"],
-  ["d", "outer diameter"],
-  ["l", "length"],
-  ["b", "outside snap ring grove"],
-  ["w", "ring grove width"],
-  ["d1", "ring grove diameter"]
+  ["id", "identifier"],
+  ["s", "Frame size (approximate)"],
+  ["m", "Bolt hole distance"],
+  ["t", "Bolt hole thread"],
+  ["h", "Bolt hole diameter"],
+  ["d", "Motor shaft diameter (typical)"],
+  ["p", "Pilot diameter"],
+  ["e", "Piolet depth (typical)"]
 ];
 
-//! \<table> lmxuu bearing data table rows.
+//! \<table> nema_stepper data table rows.
 //! \hideinitializer
-dtr_bearing_linear_lmxuu =
+dtr_motion_motor_nema_stepper =
 [
-  [  "lm3uu",l_mm(   3),l_mm(   7),l_mm(  10),l_mm(  7.3),l_mm(0.90),l_mm(  6.7)],
-  [  "lm4uu",l_mm(   4),l_mm(   8),l_mm(  12),l_mm(  8.8),l_mm(0.90),l_mm(  7.6)],
-  [  "lm5uu",l_mm(   5),l_mm(  10),l_mm(  15),l_mm( 10.2),l_mm(1.10),l_mm(  9.6)],
-  [  "lm6uu",l_mm(   6),l_mm(  12),l_mm(  19),l_mm( 13.5),l_mm(1.10),l_mm( 11.5)],
-  [ "lm8suu",l_mm(   8),l_mm(  15),l_mm(  17),l_mm( 11.5),l_mm(1.10),l_mm( 14.3)],
-  [  "lm8uu",l_mm(   8),l_mm(  15),l_mm(  24),l_mm( 17.5),l_mm(1.10),l_mm( 14.3)],
-  [ "lm10uu",l_mm(  10),l_mm(  19),l_mm(  29),l_mm( 22.0),l_mm(1.30),l_mm( 18.0)],
-  [ "lm12uu",l_mm(  12),l_mm(  21),l_mm(  30),l_mm( 23.0),l_mm(1.30),l_mm( 20.0)],
-  [ "lm13uu",l_mm(  13),l_mm(  23),l_mm(  32),l_mm( 23.0),l_mm(1.30),l_mm( 22.0)],
-  [ "lm16uu",l_mm(  16),l_mm(  28),l_mm(  37),l_mm( 26.5),l_mm(1.60),l_mm( 27.0)],
-  [ "lm20uu",l_mm(  20),l_mm(  32),l_mm(  42),l_mm( 30.5),l_mm(1.60),l_mm( 30.5)],
-  [ "lm25uu",l_mm(  25),l_mm(  40),l_mm(  59),l_mm( 41.0),l_mm(1.85),l_mm( 38.0)],
-  [ "lm30uu",l_mm(  30),l_mm(  45),l_mm(  64),l_mm( 44.5),l_mm(1.85),l_mm( 43.0)],
-  [ "lm35uu",l_mm(  35),l_mm(  52),l_mm(  70),l_mm( 49.5),l_mm(2.10),l_mm( 49.0)],
-  [ "lm40uu",l_mm(  40),l_mm(  60),l_mm(  80),l_mm( 60.5),l_mm(2.10),l_mm( 57.0)],
-  [ "lm50uu",l_mm(  50),l_mm(  80),l_mm( 100),l_mm( 74.0),l_mm(2.60),l_mm( 76.5)],
-  [ "lm60uu",l_mm(  60),l_mm(  90),l_mm( 110),l_mm( 85.0),l_mm(3.15),l_mm( 86.5)],
-  [ "lm80uu",l_mm(  80),l_mm( 120),l_mm( 140),l_mm(105.5),l_mm(4.15),l_mm(116.0)],
-  ["lm100uu",l_mm( 100),l_mm( 150),l_mm( 175),l_mm(125.5),l_mm(4.15),l_mm(145.0)],
-  ["lm120uu",l_mm( 120),l_mm( 180),l_mm( 200),l_mm(158.5),l_mm(4.15),l_mm(175.0)],
-  ["lm150uu",l_mm( 150),l_mm( 210),l_mm( 240),l_mm(170.6),l_mm(5.15),l_mm(204.0)]
+  [ "nema_8",l_mm( 20.0),l_mm(16.0),   "m2",      undef,l_mm( 4.00),l_mm(16.00),l_mm(1.6)],
+  ["nema_11",l_mm( 28.2),l_mm(23.0), "m2.5",      undef,l_mm( 5.00),l_mm(22.00),l_mm(1.6)],
+  ["nema_14",l_mm( 35.2),l_mm(26.0),   "m3",      undef,l_mm( 5.00),l_mm(22.00),l_mm(2.0)],
+  ["nema_17",l_mm( 42.3),l_mm(31.0),   "m3",      undef,l_mm( 5.00),l_mm(22.00),l_mm(2.0)],
+  ["nema_23",l_mm( 56.4),l_mm(47.1),  undef,l_mm(  5.5),l_mm( 6.35),l_mm(38.10),l_mm(1.6)],
+  ["nema_34",l_mm( 86.0),l_mm(69.6),  undef,l_mm(  5.5),l_mm(14.00),l_mm(73.00),l_mm(1.6)],
+  ["nema_42",l_mm(110.0),l_mm(89.0),  undef,l_mm(  8.5),l_mm(19.00),l_mm(55.52),l_mm(3.0)]
 ];
 
 //! @}
@@ -124,7 +113,7 @@ dtr_bearing_linear_lmxuu =
 BEGIN_SCOPE table;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <database/component/bearing/linear_lmxuu.scad>;
+    include <database/component/motion/motor_nema_stepper.scad>;
 
     // temporary override for table presentation.
     // function l_mm(v) = round_s(length(v,"mm"), 4);
@@ -135,8 +124,8 @@ BEGIN_SCOPE table;
     hi = true;                // include heading id
     ht = true;                // include heading description
 
-    tr = dtr_bearing_linear_lmxuu;
-    tc = dtc_bearing_linear_lmxuu;
+    tr = dtr_motion_motor_nema_stepper;
+    tc = dtc_motion_motor_nema_stepper;
 
     table_write( tr, tc, number=n, heading_id=hi, heading_text=ht );
 

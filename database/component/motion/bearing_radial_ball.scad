@@ -1,4 +1,4 @@
-//! [radial] Radial ball bearing; ball; rbb.
+//! [bearing] Radial ball bearing; radial_ball; rbb.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,11 +27,11 @@
 
   \details
 
-    \amu_define group_name  (ball)
-    \amu_define group_brief ([radial] Radial ball bearing; ball; rbb.)
+    \amu_define group_name  (radial_ball)
+    \amu_define group_brief ([bearing] Radial ball bearing; radial_ball; rbb.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
-  \amu_text parent (${parent}_Radial)
+  \amu_text parent (${parent}_Bearing)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -64,7 +64,7 @@
 
     | References:  |
     |:-------------|
-    | ball         |
+    | radial_ball  |
     | rbb          |
     | [RepRap]     |
     | [Wikipedia]  |
@@ -73,9 +73,9 @@
     [Wikipedia]: https://en.wikipedia.org/wiki/Rolling-element_bearing
 *******************************************************************************/
 
-//! <map> ball bearing data table columns map.
+//! <map> radial_ball data table columns map.
 //! \hideinitializer
-dtc_bearing_radial_ball =
+dtc_motion_bearing_radial_ball =
 [
   ["n", "model number"],
   ["id", "inscribed circle"],
@@ -83,9 +83,9 @@ dtc_bearing_radial_ball =
   ["b", "outer width"]
 ];
 
-//! \<table> ball bearing data table rows.
+//! \<table> radial_ball data table rows.
 //! \hideinitializer
-dtr_bearing_radial_ball =
+dtr_motion_bearing_radial_ball =
 [
   [ "601x",l_mm( 1.5),l_mm(   6),l_mm( 3.0)],
   ["601xo",l_mm( 1.5),l_mm(   6),l_mm( 2.5)],
@@ -150,7 +150,7 @@ dtr_bearing_radial_ball =
 BEGIN_SCOPE table;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <database/component/bearing/radial_ball.scad>;
+    include <database/component/motion/bearing_radial_ball.scad>;
 
     // temporary override for table presentation.
     // function l_mm(v) = round_s(length(v,"mm"), 4);
@@ -161,8 +161,8 @@ BEGIN_SCOPE table;
     hi = true;                // include heading id
     ht = true;                // include heading description
 
-    tr = dtr_bearing_radial_ball;
-    tc = dtc_bearing_radial_ball;
+    tr = dtr_motion_bearing_radial_ball;
+    tc = dtc_motion_bearing_radial_ball;
 
     table_write( tr, tc, number=n, heading_id=hi, heading_text=ht );
 

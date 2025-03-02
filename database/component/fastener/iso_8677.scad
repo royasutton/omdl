@@ -71,7 +71,7 @@
     [fasteners.eu]: https://www.fasteners.eu/standards/ISO/8677/
 *******************************************************************************/
 
-//! <map> ISO 8677 fastener data table columns map.
+//! <map> ISO 8677 data table columns map.
 //! \hideinitializer
 dtc_fastener_metric_bolts_iso_8677 =
 [
@@ -91,7 +91,7 @@ dtc_fastener_metric_bolts_iso_8677 =
   ["l3_ref", "thread length"]
 ];
 
-//! \<table> ISO 8677 fastener data table rows.
+//! \<table> ISO 8677 data table rows.
 //! \hideinitializer
 dtr_fastener_metric_bolts_iso_8677 =
 [

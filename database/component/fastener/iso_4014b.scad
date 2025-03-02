@@ -73,7 +73,7 @@
     [fasteners.eu]: https://www.fasteners.eu/standards/ISO/4014/
 *******************************************************************************/
 
-//! <map> ISO 4014b fastener data table columns map.
+//! <map> ISO 4014b data table columns map.
 //! \hideinitializer
 dtc_fastener_metric_bolts_iso_4014b =
 [
@@ -94,7 +94,7 @@ dtc_fastener_metric_bolts_iso_4014b =
   ["k_min", "wrenching height"]
 ];
 
-//! \<table> ISO 4014b fastener data table rows.
+//! \<table> ISO 4014b data table rows.
 //! \hideinitializer
 dtr_fastener_metric_bolts_iso_4014b =
 [

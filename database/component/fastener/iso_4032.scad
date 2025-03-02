@@ -71,7 +71,7 @@
     [ISO 4032]: https://www.iso.org/standard/75016.html
 *******************************************************************************/
 
-//! <map> ISO 4032 fastener data table columns map.
+//! <map> ISO 4032 data table columns map.
 //! \hideinitializer
 dtc_fastener_metric_nuts_iso_4032 =
 [
@@ -84,7 +84,7 @@ dtc_fastener_metric_nuts_iso_4032 =
   ["h_min", "thickness"]
 ];
 
-//! \<table> ISO 4032 fastener data table rows.
+//! \<table> ISO 4032 data table rows.
 //! \hideinitializer
 dtr_fastener_metric_nuts_iso_4032 =
 [

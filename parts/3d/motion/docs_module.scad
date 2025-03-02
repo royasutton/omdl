@@ -1,4 +1,4 @@
-//! Module: Linear and radial bearings.
+//! Module: Parts that facilitate mechanical motion.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Bearing)
-    \amu_define group_brief (Linear and radial bearings.)
+    \amu_define group_name  (Motion)
+    \amu_define group_brief (Parts that facilitate mechanical motion.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
@@ -38,7 +38,17 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent.amu)
+  \amu_include (include/amu/group_in_parent_start.amu)
+
+    See Wikipedia for a introduction to [linear] and [rotational]
+    mechanical [bearings].
+
+  [bearings]: https://en.wikipedia.org/wiki/Bearing_(mechanical)
+  [rotational]: https://en.wikipedia.org/wiki/Ball_bearing
+  [linear]: https://en.wikipedia.org/wiki/Linear-motion_bearing
+
+  @}
+  @}
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

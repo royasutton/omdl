@@ -71,7 +71,7 @@
     [ISO 8678:1988]: https://www.iso.org/standard/16078.html
 *******************************************************************************/
 
-//! <map> ISO 8678 fastener data table columns map.
+//! <map> ISO 8678 data table columns map.
 //! \hideinitializer
 dtc_fastener_metric_bolts_iso_8678 =
 [
@@ -90,7 +90,7 @@ dtc_fastener_metric_bolts_iso_8678 =
   ["l2_ref", "thread length"]
 ];
 
-//! \<table> ISO 8678 fastener data table rows.
+//! \<table> ISO 8678 data table rows.
 //! \hideinitializer
 dtr_fastener_metric_bolts_iso_8678 =
 [

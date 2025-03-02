@@ -69,7 +69,7 @@
 
 *******************************************************************************/
 
-//! <map> emt structural data table columns map.
+//! <map> emt data table columns map.
 //! \hideinitializer
 dtc_structural_utility_pipe_emt =
 [
@@ -81,7 +81,7 @@ dtc_structural_utility_pipe_emt =
   ["id_mm", "internal diameter"]
 ];
 
-//! \<table> emt structural data table rows.
+//! \<table> emt data table rows.
 //! \hideinitializer
 dtr_structural_utility_pipe_emt =
 [

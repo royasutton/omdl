@@ -4,11 +4,13 @@
 $(eval $(call clear-local-module))
 #------------------------------------------------------------------------------#
 
-local_path        :=  parts/3d/bearing
+local_path        :=  database/component/motion
 
 local_library     :=  docs_module \
                       \
-                      bearing_linear_rod
+                      bearing_linear_lmxuu \
+                      bearing_radial_ball \
+                      motor_nema_stepper
 
 local_release_add :=
 

@@ -73,7 +73,7 @@
     [fasterner.eu]: https://www.fasteners.eu/standards/ISO/4035/
 *******************************************************************************/
 
-//! <map> ISO 4035 fastener data table columns map.
+//! <map> ISO 4035 data table columns map.
 //! \hideinitializer
 dtc_fastener_metric_nuts_iso_4035 =
 [
@@ -86,7 +86,7 @@ dtc_fastener_metric_nuts_iso_4035 =
   ["h_min", "thickness"]
 ];
 
-//! \<table> ISO 4035 fastener data table rows.
+//! \<table> ISO 4035 data table rows.
 //! \hideinitializer
 dtr_fastener_metric_nuts_iso_4035 =
 [

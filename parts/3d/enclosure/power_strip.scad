@@ -123,12 +123,16 @@ power_strip_sg_default_box =
   ["pwsn",  [5.75, 2.5]],           // (2) power cord clamp screw nut spec
 
   ["mtab", [4, 25, 4]],             // (3) mount tab: [screw, brace, vrm, vr, wth, size]
-  ["mtabs",  undef]                 // mount tab instances: [[edge, zero, move], ...]
+  ["mtabs",  undef],                // mount tab instances: [[edge, zero, move], ...]
+
+  ["mslot", [4, [1, 1, 4]]],        // (4) mount slot: [screw, cover, size, scale, wth]
+  ["mslots", undef]                 // mount slot instances: [[move, rotate, align], ...]
 ];
   /*
       (1): see project_box_rectangle() in omdl for descriptions
       (2): see screw_bore() in omdl for descriptions
-      (3): see screw_mount_tab() in omdl for descriptions
+      (3): see mount_screw_tab() in omdl for descriptions
+      (4): see mount_screw_slot() in omdl for descriptions
    */
 
 //! <map> A single gang electrical device mount configuration.
@@ -178,7 +182,7 @@ power_strip_sg_default_cover =
   ["rpd",   length(1+3/8, "in")],   // receptacle diameter
   ["rpfl",  length(1+5/32, "in")],  // receptacle flat-to-flat height (1/32" added)
   ["rcsd",                          // cover center hole screw:
-    [3.51, 6.50, 1.5, 1/2]]         // [diameter, head-diameter, head-height, tolerance]
+    [3.51, 7.50, 2.5, 1/2]]         // [diameter, head-diameter, head-height, tolerance]
 ];
 
 //! \cond DOXYGEN_SHOULD_SKIP_THIS
@@ -195,13 +199,19 @@ map_check(power_strip_sg_default_cover, false);
 
 //! A power strip generator for single gang electrical receptacles.
 /***************************************************************************//**
-  \param  cols    <integer> device column count.
+  \param  cols      <integer> device column count.
 
-  \param  rows    <integer> device row count.
+  \param  rows      <integer> device row count.
 
-  \param  mode    <integer> part mode.
+  \param  mode      <integer> part mode.
 
-  \param  verb    <integer> console output verbosity {0|1|2}.
+  \param  verb      <integer> console output verbosity {0|1|2}.
+
+  \param  cm_box    <map> box configuration map.
+
+  \param  cm_mount  <map> device mount configuration map.
+
+  \param  cm_cover  <map> cover configuration map.
 
   \details
 
@@ -233,8 +243,6 @@ map_check(power_strip_sg_default_cover, false);
     \amu_define output_scad   (true)
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
-
-  \todo Support enclosure box screw-hole slot mounts.
 
   [NEMA]: https://en.wikipedia.org/wiki/NEMA_connector
 *******************************************************************************/
@@ -368,32 +376,59 @@ module power_strip_sg
         { // top edge
           translate([limit(z,-1,+1)*iw/2 + m, il/2 + wth - eps*2, 0])
           rotate([0, 0, 0])
-          screw_mount_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
+          mount_screw_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
         } else
         if ( e == 1 )
         { // right edge
           translate([iw/2 + wth - eps*2, limit(z,-1,+1)*il/2 + m, 0])
           rotate([0, 0, -90])
-          screw_mount_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
+          mount_screw_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
         } else
         if ( e == 2 )
         { // bottom edge
           translate([limit(z,-1,+1)*iw/2 + m, -(il/2 + wth - eps*2), 0])
           rotate([0, 0, 180])
-          screw_mount_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
+          mount_screw_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
         } else
         if ( e == 3 )
         { // left edge
           translate([-(iw/2 + wth - eps*2), limit(z,-1,+1)*il/2 + m, 0])
           rotate([0, 0, +90])
-          screw_mount_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
+          mount_screw_tab(wth=w, screw=s, brace=b, size=sz, vr=vr, vrm=vrm);
         }
       }
     }
 
     // screw mount slots
-    module mount_slots()
+    module mount_slots(m)
     {
+      mslot = map_get_value(cm_box, "mslot");
+
+      // configuration and defaults
+      s = defined_e_or(mslot, 0, undef);
+      c = defined_e_or(mslot, 1, undef);
+      l = defined_e_or(mslot, 2, undef);
+      f = defined_e_or(mslot, 3, undef);
+      w = defined_e_or(mslot, 4, wth);
+
+      //
+      // instantiate
+      //
+
+      mslots = map_get_value(cm_box, "mslots");
+
+      if ( is_defined( mslots ) )
+      for ( i = mslots )
+      {
+        // instance
+        t = defined_e_or(i, 0, origin3d);
+        r = defined_e_or(i, 1, 0);
+        a = defined_e_or(i, 2, 0);
+
+        translate(t)
+        rotate(r)
+        mount_screw_slot(wth=w, screw=s, cover=c, size=l, align=a, mode=m, f=f);
+      }
     }
 
     // base internal wall wire holes
@@ -540,25 +575,30 @@ module power_strip_sg
 
     difference()
     {
-      // base enclosure
-      project_box_rectangle
-      (
-         wth = wth,
-         lid = lf,
-           h = ih, size = [iw, il],
-         vrm = evrm, vr = evr,
+      union()
+      {
+        // base enclosure
+        project_box_rectangle
+        (
+           wth = wth,
+           lid = lf,
+             h = ih, size = [iw, il],
+           vrm = evrm, vr = evr,
 
-         lip = l(1),
-         rib = r,
+           lip = l(1),
+           rib = r,
 
-        wall = w,
-        post = p,
+          wall = w,
+          post = p,
 
-        mode = 1,
+          mode = 1,
 
-        verb = verb
-      );
+          verb = verb
+        );
 
+        // screw mount slot cover
+        mount_slots(0);
+      }
       // internal wall wire passage holes
       internal_wire_passage();
 
@@ -566,8 +606,8 @@ module power_strip_sg
       translate([pwxo, -il/2-wth/2, pwzo]) rotate([90, 0, 0])
       clamp_cg(size=pwcd, wth=wth*4, mode=0);
 
-      // screw mount slot holes
-      mount_slots();
+      // screw mount slot (negative)
+      mount_slots(1);
 
       // detail: logo
       if ( map_get_value(cm_box, "dlogo") )
@@ -591,9 +631,6 @@ module power_strip_sg
 
     // add mount tabs
     mount_tabs();
-
-    // add screw mount slots
-    mount_slots();
 
     // report power cord hole size
     if ( verb > 0 )

@@ -1,4 +1,4 @@
-//! [metric/screws] Slotted flat head machine screws; ISO 7046-1s; DIN 965.
+//! [bearing] Linear motion bearing; linear_lmxuu; lm.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,11 +27,11 @@
 
   \details
 
-    \amu_define group_name  (ISO 7046-1s)
-    \amu_define group_brief ([metric/screws] Slotted flat head machine screws; ISO 7046-1s; DIN 965.)
+    \amu_define group_name  (linear_lmxuu)
+    \amu_define group_brief ([bearing] Linear motion bearing; linear_lmxuu; lm.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
-  \amu_text parent (${parent}_Metric_Screws)
+  \amu_text parent (${parent}_Bearing)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -42,17 +42,17 @@
 
   \details
 
-    \amu_copy (files="diagrams/screw_machine_flat_slot.svg" types="html,latex")
+    \amu_copy (files="diagrams/linear_lmxuu.svg" types="html,latex")
     \amu_text
     (
-    \image html ${PATH_NAME}/diagrams/screw_machine_flat_slot.svg "parameters"
-    \image latex ${PATH_NAME}/diagrams/screw_machine_flat_slot.svg "parameters"
+    \image html ${PATH_NAME}/diagrams/linear_lmxuu.svg "parameters"
+    \image latex ${PATH_NAME}/diagrams/linear_lmxuu.svg "parameters"
     )
 
     \amu_define output_scad     (false)
     \amu_define output_console  (false)
 
-    \amu_define title           (Slotted flat head machine screws)
+    \amu_define title           (Linear motion bearing)
     \amu_define notes_table     ()
 
     \amu_include (include/amu/scope_table.amu)
@@ -62,46 +62,55 @@
           convert when the base units are changed. See \ref units_length
           for more information on setting the base units.
 
-    | References:     |
-    |:----------------|
-    | ISO 7046-1s     |
-    | DIN 965         |
-    | [ISO 7046-1]    |
-    | [fasteners.eu]  |
+    | References:   |
+    |:--------------|
+    | linear_lmxuu  |
+    | lm            |
+    | [RepRap]      |
+    | [Wikipedia]   |
 
-    [ISO 7046-1]: https://www.iso.org/standard/57373.html
-    [fasteners.eu]: https://www.fasteners.eu/standards/ISO/7046/
+    [RepRap]: https://reprap.org/wiki/Linear_bearing
+    [Wikipedia]: https://en.wikipedia.org/wiki/Linear-motion_bearing
 *******************************************************************************/
 
-//! <map> ISO 7046-1s data table columns map.
+//! <map> linear_lmxuu data table columns map.
 //! \hideinitializer
-dtc_fastener_metric_screws_iso_7046_1s =
+dtc_motion_bearing_linear_lmxuu =
 [
-  ["ns", "nominal size"],
-  ["tp", "thread pitch"],
-  ["a_max", "head diameter"],
-  ["a_min", "head diameter"],
-  ["h_max", "head height"],
-  ["j_max", "width of slot"],
-  ["j_min", "width of slot"],
-  ["t_max", "depth of slot"],
-  ["t_min", "depth of slot"],
-  ["u_max", "thread runout"]
+  ["n", "model number"],
+  ["dr", "inscribed circle"],
+  ["d", "outer diameter"],
+  ["l", "length"],
+  ["b", "outside snap ring grove"],
+  ["w", "ring grove width"],
+  ["d1", "ring grove diameter"]
 ];
 
-//! \<table> ISO 7046-1s data table rows.
+//! \<table> linear_lmxuu data table rows.
 //! \hideinitializer
-dtr_fastener_metric_screws_iso_7046_1s =
+dtr_motion_bearing_linear_lmxuu =
 [
-  ["M1.6",l_mm(0.35),l_mm( 3.00),l_mm( 2.70),l_mm(1.00),l_mm(0.60),l_mm(0.46),l_mm(0.50),l_mm(0.32),l_mm(0.7)],
-  [  "M2",l_mm(0.40),l_mm( 3.80),l_mm( 3.50),l_mm(1.20),l_mm(0.70),l_mm(0.56),l_mm(0.60),l_mm(0.40),l_mm(0.8)],
-  ["M2.5",l_mm(0.45),l_mm( 4.70),l_mm( 4.40),l_mm(1.50),l_mm(0.80),l_mm(0.66),l_mm(0.75),l_mm(0.50),l_mm(0.9)],
-  [  "M3",l_mm(0.50),l_mm( 5.50),l_mm( 5.20),l_mm(1.65),l_mm(1.00),l_mm(0.86),l_mm(0.85),l_mm(0.60),l_mm(1.0)],
-  [  "M4",l_mm(0.70),l_mm( 8.40),l_mm( 8.04),l_mm(2.70),l_mm(1.51),l_mm(1.26),l_mm(1.30),l_mm(1.00),l_mm(1.4)],
-  [  "M5",l_mm(0.80),l_mm( 9.30),l_mm( 8.94),l_mm(2.70),l_mm(1.51),l_mm(1.26),l_mm(1.40),l_mm(1.10),l_mm(1.6)],
-  [  "M6",l_mm(1.00),l_mm(11.30),l_mm(10.87),l_mm(3.30),l_mm(1.91),l_mm(1.66),l_mm(1.60),l_mm(1.20),l_mm(2.0)],
-  [  "M8",l_mm(1.25),l_mm(15.80),l_mm(15.37),l_mm(4.65),l_mm(2.31),l_mm(2.06),l_mm(2.30),l_mm(1.80),l_mm(2.5)],
-  [ "M10",l_mm(1.50),l_mm(18.30),l_mm(17.78),l_mm(5.00),l_mm(2.81),l_mm(2.56),l_mm(2.60),l_mm(2.00),l_mm(3.0)]
+  [  "lm3uu",l_mm(   3),l_mm(   7),l_mm(  10),l_mm(  7.3),l_mm(0.90),l_mm(  6.7)],
+  [  "lm4uu",l_mm(   4),l_mm(   8),l_mm(  12),l_mm(  8.8),l_mm(0.90),l_mm(  7.6)],
+  [  "lm5uu",l_mm(   5),l_mm(  10),l_mm(  15),l_mm( 10.2),l_mm(1.10),l_mm(  9.6)],
+  [  "lm6uu",l_mm(   6),l_mm(  12),l_mm(  19),l_mm( 13.5),l_mm(1.10),l_mm( 11.5)],
+  [ "lm8suu",l_mm(   8),l_mm(  15),l_mm(  17),l_mm( 11.5),l_mm(1.10),l_mm( 14.3)],
+  [  "lm8uu",l_mm(   8),l_mm(  15),l_mm(  24),l_mm( 17.5),l_mm(1.10),l_mm( 14.3)],
+  [ "lm10uu",l_mm(  10),l_mm(  19),l_mm(  29),l_mm( 22.0),l_mm(1.30),l_mm( 18.0)],
+  [ "lm12uu",l_mm(  12),l_mm(  21),l_mm(  30),l_mm( 23.0),l_mm(1.30),l_mm( 20.0)],
+  [ "lm13uu",l_mm(  13),l_mm(  23),l_mm(  32),l_mm( 23.0),l_mm(1.30),l_mm( 22.0)],
+  [ "lm16uu",l_mm(  16),l_mm(  28),l_mm(  37),l_mm( 26.5),l_mm(1.60),l_mm( 27.0)],
+  [ "lm20uu",l_mm(  20),l_mm(  32),l_mm(  42),l_mm( 30.5),l_mm(1.60),l_mm( 30.5)],
+  [ "lm25uu",l_mm(  25),l_mm(  40),l_mm(  59),l_mm( 41.0),l_mm(1.85),l_mm( 38.0)],
+  [ "lm30uu",l_mm(  30),l_mm(  45),l_mm(  64),l_mm( 44.5),l_mm(1.85),l_mm( 43.0)],
+  [ "lm35uu",l_mm(  35),l_mm(  52),l_mm(  70),l_mm( 49.5),l_mm(2.10),l_mm( 49.0)],
+  [ "lm40uu",l_mm(  40),l_mm(  60),l_mm(  80),l_mm( 60.5),l_mm(2.10),l_mm( 57.0)],
+  [ "lm50uu",l_mm(  50),l_mm(  80),l_mm( 100),l_mm( 74.0),l_mm(2.60),l_mm( 76.5)],
+  [ "lm60uu",l_mm(  60),l_mm(  90),l_mm( 110),l_mm( 85.0),l_mm(3.15),l_mm( 86.5)],
+  [ "lm80uu",l_mm(  80),l_mm( 120),l_mm( 140),l_mm(105.5),l_mm(4.15),l_mm(116.0)],
+  ["lm100uu",l_mm( 100),l_mm( 150),l_mm( 175),l_mm(125.5),l_mm(4.15),l_mm(145.0)],
+  ["lm120uu",l_mm( 120),l_mm( 180),l_mm( 200),l_mm(158.5),l_mm(4.15),l_mm(175.0)],
+  ["lm150uu",l_mm( 150),l_mm( 210),l_mm( 240),l_mm(170.6),l_mm(5.15),l_mm(204.0)]
 ];
 
 //! @}
@@ -115,7 +124,7 @@ dtr_fastener_metric_screws_iso_7046_1s =
 BEGIN_SCOPE table;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <database/component/fastener/iso_7046_1s.scad>;
+    include <database/component/motion/bearing_linear_lmxuu.scad>;
 
     // temporary override for table presentation.
     // function l_mm(v) = round_s(length(v,"mm"), 4);
@@ -126,8 +135,8 @@ BEGIN_SCOPE table;
     hi = true;                // include heading id
     ht = true;                // include heading description
 
-    tr = dtr_fastener_metric_screws_iso_7046_1s;
-    tc = dtc_fastener_metric_screws_iso_7046_1s;
+    tr = dtr_motion_bearing_linear_lmxuu;
+    tc = dtc_motion_bearing_linear_lmxuu;
 
     table_write( tr, tc, number=n, heading_id=hi, heading_text=ht );
 

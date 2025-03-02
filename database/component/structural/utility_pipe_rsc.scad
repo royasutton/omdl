@@ -69,7 +69,7 @@
 
 *******************************************************************************/
 
-//! <map> rsc structural data table columns map.
+//! <map> rsc data table columns map.
 //! \hideinitializer
 dtc_structural_utility_pipe_rsc =
 [
@@ -81,7 +81,7 @@ dtc_structural_utility_pipe_rsc =
   ["id_mm", "internal diameter"]
 ];
 
-//! \<table> rsc structural data table rows.
+//! \<table> rsc data table rows.
 //! \hideinitializer
 dtr_structural_utility_pipe_rsc =
 [

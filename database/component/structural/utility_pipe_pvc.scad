@@ -69,7 +69,7 @@
 
 *******************************************************************************/
 
-//! <map> pvc structural data table columns map.
+//! <map> pvc data table columns map.
 //! \hideinitializer
 dtc_structural_utility_pipe_pvc =
 [
@@ -82,7 +82,7 @@ dtc_structural_utility_pipe_pvc =
   ["t_120", "wall thickness in"]
 ];
 
-//! \<table> pvc structural data table rows.
+//! \<table> pvc data table rows.
 //! \hideinitializer
 dtr_structural_utility_pipe_pvc =
 [

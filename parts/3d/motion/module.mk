@@ -4,12 +4,11 @@
 $(eval $(call clear-local-module))
 #------------------------------------------------------------------------------#
 
-local_path        :=  models/3d/bearing
+local_path        :=  parts/3d/motion
 
 local_library     :=  docs_module \
                       \
-                      lmxuu \
-                      radial_ball
+                      bearing_linear_rod
 
 local_release_add :=
 

@@ -1,4 +1,4 @@
-//! Module: Mechanical motion bearings.
+//! Module: Building blocks for basic mechanical motion.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Bearing)
-    \amu_define group_brief (Mechanical motion bearings.)
+    \amu_define group_name  (Motion)
+    \amu_define group_brief (Building blocks for basic mechanical motion.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
@@ -38,17 +38,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
-
-    See Wikipedia for a introduction to [linear] and [rotational]
-    mechanical [bearings].
-
-  [bearings]: https://en.wikipedia.org/wiki/Bearing_(mechanical)
-  [rotational]: https://en.wikipedia.org/wiki/Ball_bearing
-  [linear]: https://en.wikipedia.org/wiki/Linear-motion_bearing
-
-  @}
-  @}
+  \amu_include (include/amu/group_in_parent.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
