@@ -4,7 +4,7 @@
 #   \file   setup-omdl.bash
 #
 #   \author Roy Allen Sutton <royasutton@hotmail.com>.
-#   \date   2016-2024
+#   \date   2016-2025
 #
 #   \copyright
 #
@@ -955,7 +955,7 @@ function toolchain_prepare() {
 
   local setup_amu_bash="${repo_cache_root}/setup-amu.bash"
 
-  # assume tollchain setup if test command exists
+  # assume toolchain setup if test command exists
   local test_cmd_name="openscad-seam"
   local test_cmd_path
 
@@ -1365,9 +1365,9 @@ possible, including the openscad-amu toolchain.
 
  -v | --branch <name>       : Use branch 'name' default=(master).
 
- -b | --build               : Build programs.
- -i | --install             : Install programs.
- -u | --uninstall           : Uninstall everything.
+ -b | --build               : Build library documentation.
+ -i | --install             : Install library documentation.
+ -u | --uninstall           : Uninstall library documentation.
 
  -m | --make <list>         : Run make with target 'list'.
 
@@ -1431,11 +1431,11 @@ cat << EOF
 (6) See omdl library documentation.
 
     [cache]
-    $ firefox cache/local/share/OpenSCAD/docs/html/index.html
+    $ google-chrome cache/local/share/OpenSCAD/docs/html/index.html
 
     [OpenSCAD user library]
     $ (cd cache/omdl; make print-install_prefix_html)
-    $ firefox <install_prefix_html>/index.html
+    $ google-chrome <install_prefix_html>/index.html
 
 
 EOF
