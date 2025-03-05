@@ -127,7 +127,7 @@
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | <decimal>         | wth               | \p kd: diameter
       1 | <integer>         | 2                 | count
-      2 | <decimal>         | 1/4               | gap
+      2 | <decimal>         | 1/2               | gap
       3 | <integer>         | 0                 | mode
       4 | <datastruct>      | 4                 | pin
 
@@ -505,7 +505,7 @@ module hinge_sf
   //  when pbore is specified always set k_mps, pin-mode, to 3
   k_dia = defined_eon_or(knuckle, 0, wth);
   k_spc = ceil(defined_e_or(knuckle, 1, 2));
-  k_gap = defined_e_or(knuckle, 2, 1/4);
+  k_gap = defined_e_or(knuckle, 2, 1/2);
   k_mps = is_defined(pbore) ? 3
         : defined_e_or(knuckle, 3, 0);
   k_pin = defined_e_or(knuckle, 4, k_dia*3/5);
