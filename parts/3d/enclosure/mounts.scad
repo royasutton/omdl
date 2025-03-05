@@ -309,6 +309,124 @@ module mount_screw_slot
   }
 }
 
+//! A multi-directional screw mount slot with optional cover envelope.
+/***************************************************************************//**
+  \param  wth     <decimal> wall thickness.
+
+  \param  screw   <datastruct> screw bore (see below).
+
+  \param  cover   <decimal-length-3 | decimal> cover envelope; a list
+                  [co, ct, cb], the cover over and around the top and
+                  base, or a single decimal to set (co=ct=cb).
+
+  \param  size    <decimal> slot length.
+
+  \param  align   <integer-list-3 | integer> mount alignment; a list
+                  [ax, ay, az] or a single integer to set ax.
+
+  \param mode     <integer> mode {0=cover, 1=slot (negative), 2=cover
+                  with slot removed}.
+
+  \param  f       <decimal-list-2 | decimal> scale factor; a list
+                  [fd, fh], the bore diameter and bore height scale
+                  factors, or a single decimal to specify \p fd only.
+                  The default values for both \p fd and \p fh is 1.
+
+  \param  slots   <datastruct | integer> slot count and separation angle.
+
+  \details
+
+    Construct a screw mount slot with an opening that allows for the
+    insertion and interlocking of a screw head. The mount is secured to
+    the screw by sliding the screw head into the mount slot. The mount
+    can be used with and without a cover. The parameter \p size is
+    optional and when not specified, its value is 3 * d (the screw neck
+    diameter).
+
+    This is a version of mount_screw_slot() that supports multiple
+    slots equally divided around a circle.
+
+    ## Multi-value and structured parameters
+
+    ### screw bore
+
+    #### Data structure fields: screw
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <decimal>         | required          | \p d : neck diameter
+      1 | <datastruct>      | [d*2, d/2]        | \p h : screw head
+
+      See screw_bore() for documentation of the data types for the
+      screw parameters \p d and \p h.
+
+    ### Slot count and separation angle
+
+    #### Data structure fields: slots
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <integer>         | required          | \p sc : slot count
+      1 | <decimal>         | 360/sc            | \p sa : slot separation angle
+
+    \amu_define scope_id      (example_mount_screw_slot_md)
+    \amu_define title         (Multi-directional screw mount slot example)
+    \amu_define image_views   (front top diag)
+    \amu_define image_size    (sxga)
+
+    \amu_include (include/amu/scope_diagrams_3d.amu)
+*******************************************************************************/
+module mount_screw_slot_md
+(
+  wth,
+  screw,
+  cover,
+  size,
+  align,
+  mode,
+  f,
+  slots = 1
+)
+{
+  module multi_mss(m=0)
+  {
+    if (sc > 0)
+    for ( i=[0:sc-1] )
+    rotate([0, 0, sa*i])
+    mount_screw_slot
+    (
+      wth=wth,
+      screw=screw,
+      cover=cover,
+      size=size,
+      align=[4, 0, align_z],
+      mode=m,
+      f=f
+    );
+  }
+
+  module cover() { multi_mss(0); }
+  module slot()  { multi_mss(1); }
+
+  align_z = defined_eon_or(align, 2, 0);
+
+  sc = defined_eon_or(slots, 0, 0);
+  sa = defined_e_or(slots, 1, 360/sc);
+
+  if (mode == 0)
+  cover();
+
+  if (mode == 1)
+  slot();
+
+  if (mode == 2)
+  difference()
+  {
+    cover();
+    slot();
+  }
+}
+
 //! A screw mount post with screw bore and optional fins.
 /***************************************************************************//**
 
@@ -686,6 +804,38 @@ BEGIN_SCOPE example_mount_screw_slot;
         mount_screw_slot(wth=w, screw=s, cover=c, mode=1);
       }
     }
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "front top diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE example_mount_screw_slot_md;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <models/3d/fastener/screws.scad>;
+    include <parts/3d/enclosure/mounts.scad>;
+
+    $fn = 36;
+
+    w = 2;
+    s = [4, [8, 2, 1]];
+    c = [1, 3, 1];
+
+    rotate([-90, 0, 0])
+    mount_screw_slot_md(wth=w, screw=s, cover=c, mode=2, slots=[3, 90]);
 
     // end_include
   END_OPENSCAD;
