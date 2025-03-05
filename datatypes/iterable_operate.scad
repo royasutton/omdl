@@ -552,7 +552,7 @@ function shift
 //! Select a range of elements from an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
-  \param    i <range|list|integer> The index selection.
+  \param    i <range | list | integer> The index selection.
 
   \returns  (1) \<list> A list containing the selected elements.
             (2) Returns \b undef when \p v is not defined, is not
@@ -682,7 +682,7 @@ function append_e
 
   \param    i <integer> The index insert position.
 
-  \param    mv <list|string|value> Matched value candidates.
+  \param    mv <list | string | value> Matched value candidates.
   \param    mi <integer> The matched selection index.
 
   \param    s <boolean> Element matching search method.
@@ -745,9 +745,9 @@ function insert
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
 
-  \param    i <range|list|integer> Deletion Indexes.
+  \param    i <range | list | integer> Deletion Indexes.
 
-  \param    mv <list|string|value> Matched value candidates.
+  \param    mv <list | string | value> Matched value candidates.
   \param    mc <integer> A match count.
             For <tt>(mc>=1)</tt>, remove the first \p mc matches.
             For <tt>(mc<=0)</tt>, remove all matches.

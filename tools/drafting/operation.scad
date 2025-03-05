@@ -369,7 +369,7 @@ module draft_sheet
 
 //! Construct drafting sheet axes.
 /***************************************************************************//**
-  \param    size <decimal-list-2-list-2|decimal-list-2|decimal>
+  \param    size <decimal-list-2-list-2 | decimal-list-2 | decimal>
             An optional list [[-x, +x], [-y, +y]] or [-x/y, +x/y] of
             decimals or a single decimal for (-+x=-+y). The x and y
             negative and positive axes lengths.
@@ -377,10 +377,10 @@ module draft_sheet
   \param    w <decimal-list-2 | decimal> A list [-w, +w] or a single
             decimal for (-w=+w). The negative and positive axes segment
             weights.
-  \param    s <integer-list-2-list|integer-list-2|integer> A list
+  \param    s <integer-list-2-list | integer-list-2 | integer> A list
             [-[s], +[s]] or [-s, +s] of integers or a single integer
             for (-s=+s). The negative and positive axes [styles].
-  \param    a <integer-list-2-list|integer-list-2|integer> A list
+  \param    a <integer-list-2-list | integer-list-2 | integer> A list
             [-[a], +[a]] or [-a, +a] of integers or a single integer
             for (-a=+a). The negative and positive axes [arrows].
 

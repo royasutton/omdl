@@ -53,33 +53,33 @@
 
   \param  wth     <decimal> wall thickness.
 
-  \param  size    <datastruct \| decimal> pivot and plate sizes; a list
+  \param  size    <datastruct | decimal> pivot and plate sizes; a list
                   [l, w], the lengths and widths or a single decimal to
                   set the lengths. The parameter \p l is a <decimal
-                  list-3 \| decimal> [lh, lpl, lpr], the hinge, left,
+                  list-3 | decimal> [lh, lpl, lpr], the hinge, left,
                   and right plate lengths or a single decimal to set
-                  (lh=lpl=lpr). Parameter \p w is a <decimal-list-2 \|
+                  (lh=lpl=lpr). Parameter \p w is a <decimal-list-2 |
                   decimal> [wpl, wpr], the left and right plate widths
                   or a single decimal to set (wpl=wpr). Any unspecified
                   parameters are assigned the last specified value.
 
-  \param  vr      <datastruct \| decimal> plate rounding radii; a list
+  \param  vr      <datastruct | decimal> plate rounding radii; a list
                   [vrl, vrr], the left and right rounding radii or a
                   single decimal to set (vrl=vrr). The parameters \p
-                  vrl and \p vrr are <decimal-list-4 \| decimal>, the
+                  vrl and \p vrr are <decimal-list-4 | decimal>, the
                   corner rounding radii for the left and right plates
                   or a single decimal to round all corners the same.
 
-  \param  vrm     <datastruct \| integer> plate rounding mode; a list
+  \param  vrm     <datastruct | integer> plate rounding mode; a list
                   [vrml, vrmr], the left and right rounding modes or a
                   single integer to set (vrml=vrmr). The parameters \p
-                  vrml and \p vrmr are <integer-list-4 \| integer>, the
+                  vrml and \p vrmr are <integer-list-4 | integer>, the
                   corner rounding modes for the left and right plates
                   or a single integer to round all corners the same.
 
   \param  knuckle <datastruct> knuckles (see below).
 
-  \param  offset  <decimal-list-2 \| dcimal> pivot-to-plate offset; a
+  \param  offset  <decimal-list-2 | dcimal> pivot-to-plate offset; a
                   list [oz, oy], the z-offset and y-offset between the
                   pivot and plates or a single decimal to set \p oz.
                   The default offset value is [-wth/2, 0] for a
@@ -97,11 +97,11 @@
 
   \param  mode    <integer> part mode (see below).
 
-  \param  pivot   <decimal-list-2 \| decimal> the pivot; a list [pl,
+  \param  pivot   <decimal-list-2 | decimal> the pivot; a list [pl,
                   pr], the left and right mount plate pivots or a
                   single decimal to set (pl=pr).
 
-  \param  align   <integer-list-3 \| integer> the part alignment; a
+  \param  align   <integer-list-3 | integer> the part alignment; a
                   list [x, y, z], or a single integer to set \p z
                   (default = [0, 0, 0]).
 
@@ -559,38 +559,38 @@ module hinge_sf
 
   \param  wth     <decimal> wall thickness.
 
-  \param  size    <datastruct \| decimal> pivot and plate sizes; a list
+  \param  size    <datastruct | decimal> pivot and plate sizes; a list
                   [l, w], the lengths and widths or a single decimal to
                   set the lengths. The parameter \p l is a <decimal
-                  list-5 \| decimal> [lh, lpl, lpr, lpml, lpmr], the
+                  list-5 | decimal> [lh, lpl, lpr, lpml, lpmr], the
                   hinge, left plate, right plate, left-middle plate,
                   and right-middle plage lengths or a single decimal to
                   set (lh=lpl=lpr=lpml=lpmr). Parameter \p w is a
-                  <decimal-list-4 \| decimal> [wpl, wpr, wpml, wpmr],
+                  <decimal-list-4 | decimal> [wpl, wpr, wpml, wpmr],
                   the left, right, left-middle, and right-middle plate
                   widths or a single decimal to set
                   (wpl=wpr=wpml=wpmr). Any unspecified parameters are
                   assigned the last specified value.
 
-  \param  vr      <datastruct \| decimal> plate rounding radii; a list
+  \param  vr      <datastruct | decimal> plate rounding radii; a list
                   [vrl, vrr, vrml, vrmr], the left, right, left-middle,
                   and right-middle rounding radii or a single decimal
                   to set (vrl=vrr=vrml=vrmr). The parameters are
-                  <decimal-list-4 \| decimal>, the individual corner
+                  <decimal-list-4 | decimal>, the individual corner
                   rounding radii or a single decimal to round all
                   corners the same.
 
-  \param  vrm     <datastruct \| integer> plate rounding mode; a list
+  \param  vrm     <datastruct | integer> plate rounding mode; a list
                   [vrml, vrmr, vrmml, vrmmr], the left, right,
                   left-middle, and right-middle rounding mode or a
                   single integer to set (vrml=vrmr=vrmml=vrmmr). The
-                  parameters are <integer-list-4 \| integer>, the
+                  parameters are <integer-list-4 | integer>, the
                   individual corner rounding modes or a single integer
                   to round all corners the same.
 
   \param  knuckle <datastruct> knuckles (see below).
 
-  \param  offset  <decimal-list-3 \| dcimal> pivot-to-plate offsets; a
+  \param  offset  <decimal-list-3 | dcimal> pivot-to-plate offsets; a
                   list [oz, oyl, oyr], the z-offset, left, and right
                   y-offset between the pivots and plates or a single
                   decimal to set \p oz (default = [0, 0, 0]).
@@ -607,11 +607,11 @@ module hinge_sf
 
   \param  mode    <integer> part mode (see below).
 
-  \param  pivot   <decimal-list-2 \| decimal> the pivot; a list [pl,
+  \param  pivot   <decimal-list-2 | decimal> the pivot; a list [pl,
                   pr], the left and right mount plate pivots or a
                   single decimal to set (pl=pr).
 
-  \param  align   <integer-list-3 \| integer> the part alignment; a
+  \param  align   <integer-list-3 | integer> the part alignment; a
                   list [x, y, z], or a single integer to set \p z
                   (default = [0, 0, 0]).
 
