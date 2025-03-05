@@ -297,10 +297,10 @@ module mount_screw_slot
     if (mode == 0)
     cover();
 
-    if (mode == 1)
+    else if (mode == 1)
     slot();
 
-    if (mode == 2)
+    else if (mode == 2)
     difference()
     {
       cover();
