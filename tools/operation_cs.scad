@@ -51,7 +51,7 @@
 //! Conditionally apply the convex hull transformation.
 /***************************************************************************//**
   \param    c <boolean> conditional.
-  \param    s <integer|integer-list|range> child object selection(s).
+  \param    s <integer | integer-list | range> child object selection(s).
 
   \details
 
@@ -80,7 +80,7 @@ module hull_cs
 //! Conditionally apply the minkowski sum transformation.
 /***************************************************************************//**
   \param    c <boolean> conditional.
-  \param    s <integer|integer-list|range> child object selection(s).
+  \param    s <integer | integer-list | range> child object selection(s).
   \param    convexity <integer> The maximum number of front sides (or back
             sides) a ray intersection the object might penetrate..
 
@@ -117,7 +117,7 @@ module minkowski_cs
 //! Conditionally apply the union boolean operation.
 /***************************************************************************//**
   \param    c <boolean> conditional.
-  \param    s <integer|integer-list|range> child object selection(s).
+  \param    s <integer | integer-list | range> child object selection(s).
 
   \details
 
@@ -146,7 +146,7 @@ module union_cs
 //! Conditionally apply the difference boolean operation.
 /***************************************************************************//**
   \param    c <boolean> conditional.
-  \param    s <integer|integer-list|range> child object selection(s).
+  \param    s <integer | integer-list | range> child object selection(s).
 
   \details
 
@@ -176,7 +176,7 @@ module difference_cs
 //! Conditionally apply the difference intersection operation.
 /***************************************************************************//**
   \param    c <boolean> conditional.
-  \param    s <integer|integer-list|range> child object selection(s).
+  \param    s <integer | integer-list | range> child object selection(s).
 
   \details
 
