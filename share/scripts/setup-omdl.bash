@@ -1273,7 +1273,8 @@ function parse_commands_repo() {
         exit 0
       ;;
 
-      # add to command argument list
+      # argument is not "per-repository", add to argument list to be
+      # passed to the "per-branch" argument parser
       *)
         [[ -n $args ]] && args+=" $1"
         [[ -z $args ]] && args=$1
@@ -1281,6 +1282,10 @@ function parse_commands_repo() {
       esac
       shift 1
   done
+
+  #
+  # process argument list for each specified repository branch
+  #
 
   if [[ -z ${repo_branch_list} ]] ; then
     # empty list, single branch for command arguments
@@ -1405,9 +1410,9 @@ function print_examples() {
 print_m -j "${base_name}: (Examples)" -l
 
 cat << EOF
-(1) Build and install branch v0.6.1 to the OpenSCAD user library path.
+(1) Build and install branch v0.9.7 to the OpenSCAD user library path.
 
-    $ ./setup-omdl.bash --branch v0.6.1 --yes --install
+    $ ./setup-omdl.bash --branch v0.9.7 --yes --install
 
 (2) Build and install the latest source branch to a local cache.
 
@@ -1421,7 +1426,7 @@ cat << EOF
 (4) Build all scopes and install select tagged release versions, to the
     OpenSCAD user library path.
 
-    $ ./setup-omdl.bash --branch-list v0.2,v0.5,v0.6.1 --no-excludes --install
+    $ ./setup-omdl.bash --branch-list v0.9.1,v0.9.6,v0.9.7 --no-excludes --install
 
 (5) Build all scopes and install all release versions, to the OpenSCAD
     user library path.
