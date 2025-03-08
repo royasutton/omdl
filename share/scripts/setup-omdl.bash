@@ -1003,11 +1003,15 @@ function toolchain_prepare() {
       # test command not found in cache
       print_m "--> not found in cache, building..."
 
-      # get setup script
-      print_m "retrieving toolchain setup script..."
+      #
+      # setup toolchain
+      #
+
+      print_m "searching for toolchain setup script..."
       if [[ -x ${setup_amu_bash} ]] ; then
         print_m "${setup_amu_bash} script exists locally."
       else
+        print_m "retrieving toolchain setup script..."
         wget --no-verbose --output-document=${setup_amu_bash} ${setup_amu_url}
         chmod +x ${setup_amu_bash}
       fi
