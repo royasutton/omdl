@@ -977,37 +977,35 @@ function toolchain_prepare() {
   #
 
   # check shell path
-  print_m "searching for specified toolchain version in shell path..."
+  print_m "searching for openscad-amu ${amu_version} in shell path..."
   shell_cmd_path=$(which 2>/dev/null ${test_cmd_name}-${amu_version} | head -1)
 
   if [[ -n ${shell_cmd_path} ]] ; then
-    # test command found in shell path
+    print_m "--> found [${shell_cmd_path}]"
+
     test_cmd_path=${shell_cmd_path}
-    print_m "--> found [${test_cmd_path}]"
   else
-    # test command not found in shell path
     print_m "--> not found in shell path."
 
     # check cache path
-    print_m "searching for specified toolchain in cache..."
+    print_m "searching for openscad-amu ${amu_version} in cache..."
 
     if [[ -x ${cache_cmd_path} ]] ; then
-      # test command found in cache
+      print_m "--> found [${cache_cmd_path}]"
+
       test_cmd_path=${cache_cmd_path}
-      print_m "--> found [${test_cmd_path}]"
     else
-      # test command not found in cache
-      print_m "--> not found in cache, setting up toolchain..."
+      print_m "--> not found in cache, setting up..."
 
       #
       # setup toolchain
       #
 
-      print_m "searching for toolchain setup script..."
+      print_m "searching for openscad-amu setup script..."
       if [[ -x ${setup_amu_bash} ]] ; then
         print_m "${setup_amu_bash} script exists locally."
       else
-        print_m "retrieving toolchain setup script..."
+        print_m "retrieving setup script..."
         wget --no-verbose --output-document=${setup_amu_bash} ${setup_amu_url}
         chmod +x ${setup_amu_bash}
       fi
@@ -1030,7 +1028,7 @@ function toolchain_prepare() {
   fi
 
   #
-  # configure toolchain paths
+  # configure toolchain make options
   #
 
   # identify openscad-amu paths
@@ -1048,16 +1046,24 @@ function toolchain_prepare() {
     exit_vm 1 "Unable to find or setup ${test_cmd_name}-${amu_version}."
   fi
 
-  # append configured toolchain version and paths to make options
+  # configure openscad-amu version make options
   if [[ -n ${amu_version} && -x ${amu_lib_path} && -x ${amu_tool_prefix} ]] ; then
-    print_m "adding make options for openscad-amu ${amu_version} toolchain..."
+    print_m "adding make options for openscad-amu ${amu_version}..."
     make_opts+=(
       AMU_TOOL_VERSION=${amu_version}
       AMU_LIB_PATH=${amu_lib_path}
       AMU_TOOL_PREFIX=${amu_tool_prefix}
     )
   else
-    exit_vm 1 "Unable to find or setup openscad-amu ${amu_version} toolchain."
+    for opt in  ${make_opts[@]} \
+                "AMU_TOOL_VERSION=${amu_version}" \
+                "AMU_LIB_PATH=${amu_lib_path}" \
+                "AMU_TOOL_PREFIX=${amu_tool_prefix}"
+    do
+      print_m "make option --> $opt"
+    done
+
+    exit_vm 1 "Unable to update make options for toolchain."
   fi
 
   print_m "${FUNCNAME} end"
@@ -1112,7 +1118,8 @@ function source_make() {
   print_hb '+'
 
   print_m \( cd ${repo_cache} \&\& make "${make_opts[@]}" $* \)
-  ( cd ${repo_cache} && make "${make_opts[@]}" $* )
+  ( cd ${repo_cache} && make "${make_opts[@]}" $* ) ||
+      exit_vm 1 "make returned error."
 
   print_m "${FUNCNAME} end"
 
