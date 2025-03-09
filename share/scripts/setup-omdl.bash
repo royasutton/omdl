@@ -51,6 +51,7 @@ fi
 declare skip_check="no"
 declare skip_prep="no"
 declare skip_toolchain="no"
+declare local_toolchain="no"
 
 declare apt_cyg_path
 declare apt_get_opts="--verbose-versions"
@@ -84,6 +85,9 @@ declare -a conf_file_va=(
   "skip_toolchain"
       "skip toolchain preparation"
       "$skip_toolchain"
+  "local_toolchain"
+      "install design flow tools to local system"
+      "$local_toolchain"
   "apt_cyg_path"
       "path to apt-cyg"
       "/usr/local/bin/apt-cyg"
@@ -968,6 +972,7 @@ function toolchain_prepare() {
   local shell_cmd_path
 
   local setup_amu_bash="${repo_cache_root}/setup-amu.bash"
+  local setup_amu_bash_opts
 
   local amu_lib_path
   local amu_tool_prefix
@@ -1010,20 +1015,49 @@ function toolchain_prepare() {
         chmod +x ${setup_amu_bash}
       fi
 
-      # build toolchain for install to temporary cache
-      print_h1 "building toolchain from source for install to temporary cache..."
-      print_h2 ${setup_amu_bash} \-\-fetch \-\-reconfigure \-\-cache \-\-branch ${amu_version} ${setup_amu_yes} \-\-install
-      ${setup_amu_bash} --fetch --reconfigure --cache --branch ${amu_version} ${setup_amu_yes} --install
+      print_h1 "building openscad-amu ${amu_version} from source..."
 
-      # test return code
-      if [[ $? -eq 0 ]] ; then
-        print_h2 "${setup_amu_bash} exited normally."
+      if [[ "${local_toolchain}" == "no" ]] ; then
+        #
+        # setup openscad-amu in temporary cache
+        #
+        print_h1 "installing to temporary cache..."
+        setup_amu_bash_opts="--fetch --reconfigure --cache --branch ${amu_version} ${setup_amu_yes} --install"
+        print_h2 ${setup_amu_bash} ${setup_amu_bash_opts}
+
+        ${setup_amu_bash} ${setup_amu_bash_opts} ||
+            exit_vm 1 "${setup_amu_bash} returned errors."
+
         test_cmd_path=${cache_cmd_path}
       else
-        print_h2 "${setup_amu_bash} exited with errors. aborting..."
-        exit 1
-      fi
+        #
+        # setup openscad-amu on local system
+        #
+        print_h1 "building for install to local system..."
+        setup_amu_bash_opts="--fetch --reconfigure --branch ${amu_version} ${setup_amu_yes} --build"
+        print_h2 ${setup_amu_bash} ${setup_amu_bash_opts}
 
+        ${setup_amu_bash} ${setup_amu_bash_opts} ||
+            exit_vm 1 "${setup_amu_bash} returned errors."
+
+        print_h1 "installing to local system..."
+        setup_amu_bash_opts="--branch ${amu_version} --sudo --install"
+        print_h2 ${setup_amu_bash} ${setup_amu_bash_opts}
+
+        ${setup_amu_bash} ${setup_amu_bash_opts} ||
+            exit_vm 1 "${setup_amu_bash} returned errors."
+
+        print_m "searching for openscad-amu ${amu_version} in shell path..."
+        shell_cmd_path=$(which 2>/dev/null ${test_cmd_name}-${amu_version} | head -1)
+
+        if [[ -n ${shell_cmd_path} ]] ; then
+          print_m "--> found [${shell_cmd_path}]"
+        else
+          exit_vm 1 "--> installed to local system but not found in shell path."
+        fi
+
+        test_cmd_path=${shell_cmd_path}
+      fi
     fi
   fi
 
@@ -1145,6 +1179,10 @@ function parse_commands_branch() {
       --skip-toolchain)
         print_h2 "setting: skip toolchain preparation"
         skip_toolchain="yes"
+      ;;
+      --local-toolchain)
+        print_h2 "setting: local system toolchain processing"
+        local_toolchain="yes"
       ;;
 
       --list)
@@ -1366,6 +1404,7 @@ possible, including the openscad-amu toolchain.
       --skip-check          : Skip system prerequisites check.
       --skip-prep           : Skip source preparation (use with care).
       --skip-toolchain      : Skip toolchain preparation.
+      --local-toolchain     : Install design flow tools to local system.
 
       --list                : List prerequisites.
       --check               : Check system for prerequisites.
