@@ -977,10 +977,12 @@ function toolchain_prepare() {
 
   print_m "omdl ${repo_branch} uses openscad-amu ${amu_version}."
 
+  #
   # search for toolchain test command
+  #
 
   # check shell path
-  print_m "searching for specified toolchain in shell path..."
+  print_m "searching for specified toolchain version in shell path..."
   shell_cmd_path=$(which 2>/dev/null ${test_cmd_name}-${amu_version} | head -1)
 
   if [[ -n ${shell_cmd_path} ]] ; then
