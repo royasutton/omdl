@@ -261,8 +261,7 @@ function update_prerequisite_list() {
       packages="${packages_Common} ${packages_CYGWIN_NT}"
     ;;
     *)
-      print_m "ERROR: Configuration for [$sysname] required. aborting..."
-      exit 1
+      exit_vm 1 "ERROR: Configuration for [$sysname] required. aborting..."
     ;;
   esac
 
@@ -288,8 +287,7 @@ function prerequisites_status.Linux() {
 function prerequisites_install.Linux() {
   print_m "apt-get install options: [${apt_get_opts}]"
   if ! sudo apt-get install ${apt_get_opts} $* ; then
-    print_m "ERROR: install failed. aborting..."
-    exit 1
+    exit_vm 1 "ERROR: install failed. aborting..."
   fi
 
   return 0
@@ -307,8 +305,7 @@ function prerequisite_install_openscad.Linux() {
         local repo="deb https://download.opensuse.org/repositories/home:/t-paul/$(lsb_release -si)_$(lsb_release -sr)/ ./"
       ;;
       *)
-        print_m "ERROR: Configuration for [$(lsb_release -si)] required. aborting..."
-        exit 1
+        exit_vm 1 "ERROR: Configuration for [$(lsb_release -si)] required. aborting..."
       ;;
     esac
 
@@ -386,8 +383,7 @@ function prerequisites_status.CYGWIN_NT() {
 function prerequisites_install.CYGWIN_NT() {
   set_apt_cyg_path
   if ! ${apt_cyg_path} install $* ; then
-    print_m "ERROR: install failed. aborting..."
-    exit 1
+    exit_vm 1 "ERROR: install failed. aborting..."
   fi
 
   return 0
@@ -425,8 +421,7 @@ function prerequisite_install_openscad.CYGWIN_NT() {
         fpat="OpenSCAD-....\...\...-${arch}${fext}"
       ;;
       *)
-        print_m "ERROR: invalid package name [${pkg}]. aborting..."
-        exit 1
+        exit_vm 1 "ERROR: invalid package name [${pkg}]. aborting..."
       ;;
     esac
 
@@ -468,8 +463,7 @@ function prerequisite_install_openscad.CYGWIN_NT() {
       inst=$(cd ${path} && ls -1d {OpenSCAD-*,openscad-*} 2>/dev/null | head -1)
 
       if [[ -z "${inst}" ]] ; then
-        print_m "ERROR: unable to locate unpacked OpenSCAD distribution. aborting..."
-        exit 1
+        exit_vm 1 "ERROR: unable to locate unpacked OpenSCAD distribution. aborting..."
       fi
 
       # create path symbolic links
@@ -500,8 +494,7 @@ function prerequisite_install_openscad.CYGWIN_NT() {
     export PATH="${work_path}/${path}/${ldir}:${PATH}"
 
     if [[ -z $(which 2>/dev/null ${lcmd}) ]] ; then
-      print_m "ERROR: unable to locate or setup requirement: [${lcmd}]. aborting..."
-      exit 1
+      exit_vm 1 "ERROR: unable to locate or setup requirement: [${lcmd}]. aborting..."
     else
       print_m "confirmed ${lcmd} added to shell path"
     fi
@@ -566,8 +559,7 @@ function set_apt_cyg_path() {
         print_m "adding [${apt_cyg_path%/*}] to shell path"
         PATH=${apt_cyg_path%/*}:${PATH}
       else
-        print_m "ERROR: unable to locate or cache ${cmd_name}. aborting..."
-        exit 1
+        exit_vm 1 "ERROR: unable to locate or cache ${cmd_name}. aborting..."
       fi
     fi
   fi
@@ -882,8 +874,7 @@ function repository_update() {
       *)            print_m "info: configuration does not exists for [$sysname]." ;;
     esac
 
-    print_m "aborting..."
-    exit 1
+    exit_vm 1 "aborting..."
   fi
 
   if [[ -d ${out_dir} ]] ; then
@@ -891,8 +882,7 @@ function repository_update() {
       print_m "updating: Git repository cache"
       ( cd ${out_dir} && ${git} pull ${git_fetch_opts} )
     else
-      print_m "ERROR: directory [${out_dir}] exists and is not a repository. aborting..."
-      exit 1
+      exit_vm 1 "ERROR: directory [${out_dir}] exists and is not a repository. aborting..."
     fi
   else
     print_m "cloning: Git repository to cache"
@@ -903,8 +893,7 @@ function repository_update() {
     print_m -n "repository description: "
     ( cd ${out_dir} && git describe --tags --long --dirty )
   else
-    print_m "ERROR: repository update failed. aborting..."
-    exit 1
+    exit_vm 1 "ERROR: repository update failed. aborting..."
   fi
 
   print_m "${FUNCNAME} end"
@@ -947,8 +936,7 @@ function source_prepare() {
 
   # checkout branch
   if ! ( cd ${repo_cache} && git checkout ${repo_branch} ) ; then
-    print_m "ERROR: failed to checkout branch [${repo_branch}]. aborting..."
-    exit 1
+    exit_vm 1 "ERROR: failed to checkout branch [${repo_branch}]. aborting..."
   else
     print_m -n "repository branch description: "
     ( cd ${repo_cache} && git describe --tags --long --dirty )
@@ -1057,8 +1045,7 @@ function toolchain_prepare() {
     # get tool path prefix (add trailing directory slash)
     amu_tool_prefix=${test_cmd_path%/*}/
   else
-    print_m "ERROR: unable to find or setup ${test_cmd_name}-${amu_version}. aborting..."
-    exit 1
+    exit_vm 1 "ERROR: unable to find or setup ${test_cmd_name}-${amu_version}. aborting..."
   fi
 
   # append configured toolchain version and paths to make options
@@ -1070,8 +1057,7 @@ function toolchain_prepare() {
       AMU_TOOL_PREFIX=${amu_tool_prefix}
     )
   else
-    print_m "ERROR: unable to find or setup openscad-amu ${amu_version} toolchain... aborting..."
-    exit 1
+    exit_vm 1 "ERROR: unable to find or setup openscad-amu ${amu_version} toolchain... aborting..."
   fi
 
   print_m "${FUNCNAME} end"
@@ -1187,8 +1173,7 @@ function parse_commands_branch() {
       --cache-root)
         if [[ -z "$2" ]] ; then
           print_m "syntax: ${base_name} $1 <path>"
-          print_m "missing cache root path. aborting..."
-          exit 1
+          exit_vm 1 "missing cache root path. aborting..."
         fi
         repo_cache_root="$2" ; shift 1
         print_h2 "setting: cache root path [${repo_cache_root}]"
@@ -1197,8 +1182,7 @@ function parse_commands_branch() {
       -v|--branch)
         if [[ -z "$2" ]] ; then
           print_m "syntax: ${base_name} $1 <name>"
-          print_m "missing repository branch name. aborting..."
-          exit 1
+          exit_vm 1 "missing repository branch name. aborting..."
         fi
         repo_branch="$2" ; shift 1
         print_h2 "setting: source branch [${repo_branch}]"
@@ -1223,8 +1207,7 @@ function parse_commands_branch() {
       -m|--make)
         if [[ -z "$2" ]] ; then
           print_m "syntax: ${base_name} $1 <name1,name2,...>"
-          print_m "missing make target list. aborting..."
-          exit 1
+          exit_vm 1 "missing make target list. aborting..."
         fi
         # get list and tokenize with [,]
         local targets="${2//,/ }" ; shift 1
@@ -1239,8 +1222,7 @@ function parse_commands_branch() {
       ;;
 
       *)
-        print_m "invalid command [$1]. aborting..."
-        exit 1
+        exit_vm 1 "invalid command [$1]. aborting..."
       ;;
       esac
       shift 1
@@ -1268,8 +1250,7 @@ function parse_commands_repo() {
       -l|--branch-list)
         if [[ -z "$2" ]] ; then
           print_m "syntax: ${base_name} $1 <name1,name2,...>"
-          print_m "missing repository branch list. aborting..."
-          exit 1
+          exit_vm 1 "missing repository branch list. aborting..."
         fi
 
         # get list and tokenize with [,]
@@ -1279,19 +1260,19 @@ function parse_commands_repo() {
 
       -h|--help)
         print_help
-        exit 0
+        exit_vm 0
       ;;
       --examples)
         print_examples
-        exit 0
+        exit_vm 0
       ;;
       --info)
         print_info
-        exit 0
+        exit_vm 0
       ;;
       --write-conf)
         write_configuration_file "${conf_file}" "${conf_file_vw}" "${conf_file_va[@]}"
-        exit 0
+        exit_vm 0
       ;;
 
       # argument is not "per-repository", add to argument list to be
@@ -1512,7 +1493,7 @@ fi
 # show help if no command line arguments or configuration file commands
 if [[ $# == 0 && -z "${commands}" ]] ; then
   print_help
-  exit 0
+  exit_vm 0
 fi
 
 print_m "done."
