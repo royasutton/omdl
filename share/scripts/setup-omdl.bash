@@ -953,32 +953,29 @@ function source_prepare() {
 function toolchain_prepare() {
   print_m "${FUNCNAME} begin"
 
-  local setup_amu_bash="${repo_cache_root}/setup-amu.bash"
-
-  # assume toolchain is available if test command version exists
-  local test_cmd_name="openscad-seam"
-  local test_cmd_path
-
-  local shell_cmd_path
-  local cache_cmd_path
-
-  local amu_version
-  local amu_lib_path
-  local amu_tool_prefix
-
   # identify toolchain version specified in omdl Makefile
-  amu_version=$( \
+  local amu_version=$( \
     grep --invert-match '#' ${repo_cache}/Makefile |
     grep 'AMU_TOOL_VERSION[[:space:]]*:=' |
     head -1 |
     awk -F '=' '{print $2}' |
     sed -s 's/[[:space:]]*//g' \
   )
-
   print_m "omdl ${repo_branch} uses openscad-amu ${amu_version}."
 
+  local test_cmd_name="openscad-seam"
+  local test_cmd_path
+
+  local cache_cmd_path=${work_path}/${repo_cache_root}/local/bin/${sysname}/${test_cmd_name}-${amu_version}
+  local shell_cmd_path
+
+  local setup_amu_bash="${repo_cache_root}/setup-amu.bash"
+
+  local amu_lib_path
+  local amu_tool_prefix
+
   #
-  # search for toolchain test command
+  # assume toolchain is available if test command can be found
   #
 
   # check shell path
@@ -995,7 +992,6 @@ function toolchain_prepare() {
 
     # check cache path
     print_m "searching for specified toolchain in cache..."
-    cache_cmd_path=${work_path}/${repo_cache_root}/local/bin/${sysname}/${test_cmd_name}-${amu_version}
 
     if [[ -x ${cache_cmd_path} ]] ; then
       # test command found in cache
@@ -1003,7 +999,7 @@ function toolchain_prepare() {
       print_m "--> found [${test_cmd_path}]"
     else
       # test command not found in cache
-      print_m "--> not found in cache, building..."
+      print_m "--> not found in cache, setting up toolchain..."
 
       #
       # setup toolchain
@@ -1039,22 +1035,23 @@ function toolchain_prepare() {
   # configure toolchain paths
   #
 
-  # identify openscad-amu lib path and tool prefix
+  # identify openscad-amu paths
   if [[ -n ${test_cmd_path} && -x ${test_cmd_path} ]] ; then
+    # get library path
     amu_lib_path=$( \
       ${test_cmd_path} --version --verbose  |
       grep 'lib path' |
       awk '{print $4}' \
     )
 
-    # add trailing directory slash to prefix
+    # get tool path prefix (add trailing directory slash)
     amu_tool_prefix=${test_cmd_path%/*}/
   else
     print_m "ERROR: unable to find or setup ${test_cmd_name}-${amu_version}. aborting..."
     exit 1
   fi
 
-  # append configured toolchain paths to make options
+  # append configured toolchain version and paths to make options
   if [[ -n ${amu_version} && -x ${amu_lib_path} && -x ${amu_tool_prefix} ]] ; then
     print_m "adding make options for openscad-amu ${amu_version} toolchain..."
     make_opts+=(
