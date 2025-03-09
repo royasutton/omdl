@@ -1018,22 +1018,26 @@ function toolchain_prepare() {
         chmod +x ${setup_amu_bash}
       fi
 
-      # run setup script for cache
-      print_m "running toolchain setup script..."
-      print_m ${setup_amu_bash} \-\-fetch \-\-reconfigure \-\-cache \-\-branch ${amu_version} ${setup_amu_yes} \-\-install
+      # build toolchain for install to temporary cache
+      print_h1 "building toolchain from source for install to temporary cache..."
+      print_h2 ${setup_amu_bash} \-\-fetch \-\-reconfigure \-\-cache \-\-branch ${amu_version} ${setup_amu_yes} \-\-install
       ${setup_amu_bash} --fetch --reconfigure --cache --branch ${amu_version} ${setup_amu_yes} --install
 
-      # test setup script return code
+      # test return code
       if [[ $? -eq 0 ]] ; then
-        print_m "${setup_amu_bash} exited normally."
+        print_h2 "${setup_amu_bash} exited normally."
         test_cmd_path=${cache_cmd_path}
       else
-        print_m "${setup_amu_bash} exited with errors. aborting..."
+        print_h2 "${setup_amu_bash} exited with errors. aborting..."
         exit 1
       fi
 
     fi
   fi
+
+  #
+  # configure toolchain paths
+  #
 
   # identify openscad-amu lib path and tool prefix
   if [[ -n ${test_cmd_path} && -x ${test_cmd_path} ]] ; then
