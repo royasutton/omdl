@@ -9,9 +9,9 @@ omdl
 Setup
 -----
 
-To use [omdl], it should be installed to the OpenSCAD [library
-location]. A setup script is available to simplify the setup process.
-This script can also install [openscad-amu], the the design-flow
+To use [omdl], it must be installed to the OpenSCAD [library location].
+A setup script is available to simplify the setup and install process.
+This script can optionally install [openscad-amu], the the design-flow
 automation development framework used to test the library and build its
 documentation.
 
@@ -50,17 +50,27 @@ library documentation can be viewed:
 google-chrome ${HOME}/.local/share/OpenSCAD/docs/html/index.html
 ```
 
+
+Install Options
+---------------
+
 To install a specific library version, ie v0.6.1, use:
 
 ```bash
 ./setup-omdl.bash --branch v0.6.1 --no-excludes --yes --install
 ```
 
-To install the design-flow automation development framework version
-used to build the library to your system, use:
+To locally install the [openscad-amu] version used to build the
+library, to your system, use:
 
 ```bash
-./setup-omdl.bash --branch v0.6.1 --no-excludes --yes --local-toolchain --install
+./setup-omdl.bash --branch v0.9.7 --no-excludes --yes --local-toolchain --install
+```
+
+To see a complete list of setup options, type;
+
+```bash
+./setup-omdl.bash --help
 ```
 
 
