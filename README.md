@@ -10,21 +10,21 @@ Setup
 -----
 
 To use [omdl], it should be installed to the OpenSCAD [library
-location]. This can be done manually, as described in the OpenSCAD
-documentation, or can be done via [openscad-amu] (the design-flow
-automation framework used to develop omdl). If latter is used, the
-library will be tested and the documentation will be generated.
+location]. A setup script is available to simplify the setup process.
+This script can also install [openscad-amu], the the design-flow
+automation development framework used to test the library and build its
+documentation.
 
-The provided setup script is the recommended install method. On-line
+The setup script is the recommended install method. However, on-line
 documentation and snapshots for manual installation are available in
 the [omdl-snapshot] repository.
 
 
-Evaluation
+Installing
 ----------
 
-To setup the library to a temporary directory using the setup script,
-open the command shell and type:
+To install the latest release to the standard OpenSCAD user library
+path, use the following steps:
 
 ```bash
 mkdir tmp && cd tmp
@@ -35,7 +35,7 @@ wget https://git.io/setup-omdl.bash && chmod +x setup-omdl.bash
 ```
 
 ```bash
-./setup-omdl.bash --cache --branch-list tags1 --yes --install
+./setup-omdl.bash --branch-list tags1 --no-excludes --yes --install
 ```
 
 The option `--yes` can be omitted if you prefer to confirm the
@@ -43,43 +43,25 @@ installation of the required packages (see: `setup-omdl.bash --help`
 for more details). If you don't like shortened URLs, here is the full
 URL to [setup-omdl.bash] at the source repository.
 
-Once setup completes, the library documentation can be viewed from the
-temporary 'cache' directory:
-
-```bash
-google-chrome cache/local/share/OpenSCAD/docs/html/index.html
-```
-
-To setup the development branch, use:
-
-```bash
-./setup-omdl.bash --cache --branch develop --yes --install
-```
-
-
-Installing
-----------
-
-To install the latest release to the standard OpenSCAD user library
-path, use these options:
-
-```bash
-./setup-omdl.bash --branch-list tags1 --no-excludes --yes --install
-```
-
-To install a specific version, ie v0.6.1, use:
-
-```bash
-./setup-omdl.bash --branch v0.6.1 --no-excludes --yes --install
-```
-
-Once setup completes, the library documentation can be viewed from the
-standard install location:
+Once setup completes, the *cache* directory can be removed and the
+library documentation can be viewed:
 
 ```bash
 google-chrome ${HOME}/.local/share/OpenSCAD/docs/html/index.html
 ```
 
+To install a specific library version, ie v0.6.1, use:
+
+```bash
+./setup-omdl.bash --branch v0.6.1 --no-excludes --yes --install
+```
+
+To install the design-flow automation development framework version
+used to build the library to your system, use:
+
+```bash
+./setup-omdl.bash --branch v0.6.1 --no-excludes --yes --local-toolchain --install
+```
 
 
 Contributing
