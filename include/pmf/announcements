@@ -21,7 +21,7 @@ define ANNOUNCE_AMU_VERSION
   To install the version:
 
   $$ wget http://git.io/setup-amu.bash && chmod +x setup-amu.bash
-  $$ sudo ./setup-amu.bash --branch $(AMU_TOOL_VERSION) --yes --install
+  $$ ./setup-amu.bash --branch $(AMU_TOOL_VERSION) --yes --build --sudo --install
 
 endef
 
