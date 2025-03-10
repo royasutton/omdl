@@ -23,8 +23,7 @@ the [omdl-snapshot] repository.
 Installing
 ----------
 
-To install the latest release to the standard OpenSCAD user library
-path, use the following steps:
+To install the latest release of [omdl], use the following steps:
 
 ```bash
 mkdir tmp && cd tmp
@@ -39,20 +38,19 @@ wget https://git.io/setup-omdl.bash && chmod +x setup-omdl.bash
 ```
 
 The option `--yes` can be omitted if you prefer to confirm the
-installation of the required packages (see: `setup-omdl.bash --help`
-for more details). If you don't like shortened URLs, here is the full
-URL to [setup-omdl.bash] at the source repository.
+installation of the required packages. If you don't like shortened
+URLs, here is the full URL to [setup-omdl.bash] at the source
+repository. Once setup completes, the *cache* directory can be removed.
 
-Once setup completes, the *cache* directory can be removed and the
-library documentation can be viewed:
+View the installed library documentation with:
 
 ```bash
 google-chrome ${HOME}/.local/share/OpenSCAD/docs/html/index.html
 ```
 
 
-Install Options
----------------
+Setup Options
+-------------
 
 To install a specific library version, ie v0.6.1, use:
 
