@@ -48,9 +48,8 @@ View the installed library documentation with:
 google-chrome ${HOME}/.local/share/OpenSCAD/docs/html/index.html
 ```
 
-
-Setup Options
--------------
+Options
+=======
 
 To install a specific library version, ie v0.6.1, use:
 
