@@ -16,14 +16,16 @@ automation development framework used to test the library and build its
 documentation.
 
 The setup script is the recommended install method. However, on-line
-documentation and snapshots for manual installation are available in
-the [omdl-snapshot] repository.
+snapshots for manual installation are available at [omdl-snapshot].
+There you can review the latest release documentation prior to
+installing locally.
 
 
 Installing
 ----------
 
-To install the latest release of [omdl], use the following steps:
+To install the latest tagged release of [omdl], use the following
+steps:
 
 ```bash
 mkdir tmp && cd tmp
@@ -50,20 +52,20 @@ google-chrome ${HOME}/.local/share/OpenSCAD/docs/html/index.html
 
 ### Options
 
-To install a specific library version, ie v0.6.1, use:
+To install a specific library version, use:
 
 ```bash
 ./setup-omdl.bash --branch v0.6.1 --no-excludes --yes --install
 ```
 
-To locally install the [openscad-amu] version used to build the
-library, to your system, use:
+To install a specific library version along with the [openscad-amu]
+version used to build the library, use:
 
 ```bash
 ./setup-omdl.bash --branch v0.9.7 --no-excludes --yes --local-toolchain --install
 ```
 
-To see a complete list of setup options, type;
+For a complete list of setup options, type;
 
 ```bash
 ./setup-omdl.bash --help
