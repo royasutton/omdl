@@ -99,7 +99,7 @@
     each invocation. Therefore, a minimum of two invocations are
     required to construct a complete enclosure with six sides (top,
     walls, and bottom). Only the parameters \p wth and \p size are
-    require; all others are optional.
+    required; all others are optional.
 
     In a simple case, a box would consist of a (1) cover with attached
     walls and (2) a separate opposite cover, without walls, to close
