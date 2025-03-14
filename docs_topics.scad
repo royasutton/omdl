@@ -279,7 +279,6 @@
     | [normal]    | a vector that is perpendicular to a given object  |
     | [pnorm]     | a vector that is perpendicular to a plane         |
     | [plane]     | a flat 2d infinite surface ([plane wiki])         |
-    | [coords]    | a list of points in space                         |
     | [matrix]    | a rectangular array of values                     |
 
     When a particular dimension is expected, the dimensional
@@ -291,8 +290,11 @@
     | point-Nd    | a point in an 'N' dimensional space               |
     | vector-Nd   | a vector in an 'N' dimensional space              |
     | line-Nd     | a line in an 'N' dimensional space                |
-    | coords-Nd   | a coordinate list in an 'N' dimensional space     |
     | matrix-MxN  | a 'M' by 'N' matrix of values                     |
+
+    When a type is specified in the plural form, such as \b points, it
+    implies a list of the specified type. For example, \b points is the
+    same as a \b point-list.
 
   \subsubsection dt_line Lines and vectors
 
@@ -406,7 +408,6 @@
   [pnorm]: \ref dt_pnorm
   [plane wiki]: https://en.wikipedia.org/wiki/Plane_(geometry)
   [plane]: \ref dt_plane
-  [coords]: https://en.wikipedia.org/wiki/Coordinate_system
   [matrix]: https://en.wikipedia.org/wiki/Matrix_(mathematics)
 *******************************************************************************/
 

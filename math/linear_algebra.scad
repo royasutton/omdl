@@ -46,10 +46,10 @@
 
 //! Multiply all coordinates by a 4x4 transformation matrix in 3D.
 /***************************************************************************//**
-  \param    c <coords-3d> A list of 3d coordinate points.
+  \param    c <points-3d> A list of 3d coordinate points.
   \param    m <matrix-4x4> A 4x4 transformation matrix (decimal-list-4-list4).
 
-  \returns  <coords-3d> A list of 3d coordinate points multiplied by the
+  \returns  <points-3d> A list of 3d coordinate points multiplied by the
             transformation matrix.
 
   \details
@@ -80,10 +80,10 @@ function multmatrix_p
 
 //! Translate all coordinates dimensions.
 /***************************************************************************//**
-  \param    c <coords-nd> A list of nd coordinate points.
+  \param    c <points-nd> A list of nd coordinate points.
   \param    v <decimal-list-n> A list of translations for each dimension.
 
-  \returns  <coords-nd> A list of translated coordinate points.
+  \returns  <points-nd> A list of translated coordinate points.
 
   \details
 
@@ -107,7 +107,7 @@ function translate_p
 
 //! Rotate all coordinates about one or more axes in 2D or 3D.
 /***************************************************************************//**
-  \param    c <coords-3d | coords-2d> A list of 3d or 2d coordinate points.
+  \param    c <points-3d | points-2d> A list of 3d or 2d coordinate points.
   \param    a <decimal-list-3 | decimal> The axis rotation angle.
             A list [ax, ay, az] or a single decimal to specify az only.
   \param    v <vector-3d> An arbitrary axis for the rotation. When
@@ -116,7 +116,7 @@ function translate_p
   \param    o <point-3d> A 3d point origin for the rotation.
             Ignored when \p v is not specified.
 
-  \returns  <coords-3d | coords-2d> A list of 3d or 2d rotated coordinates.
+  \returns  <points-3d | points-2d> A list of 3d or 2d rotated coordinates.
             Rotation order is rz, ry, rx.
 
   \details
@@ -200,10 +200,10 @@ function rotate_p
 
 //! Scale all coordinates dimensions.
 /***************************************************************************//**
-  \param    c <coords-nd> A list of nd coordinate points.
+  \param    c <points-nd> A list of nd coordinate points.
   \param    v <decimal-list-n> A list of scalers for each dimension.
 
-  \returns  <coords-nd> A list of scaled coordinate points.
+  \returns  <points-nd> A list of scaled coordinate points.
 *******************************************************************************/
 function scale_p
 (
@@ -220,10 +220,10 @@ function scale_p
 
 //! Scale all coordinates dimensions proportionately to fit inside a region.
 /***************************************************************************//**
-  \param    c <coords-nd> A list of nd coordinate points.
+  \param    c <points-nd> A list of nd coordinate points.
   \param    v <decimal-list-n> A list of bounds for each dimension.
 
-  \returns  <coords-nd> A list of proportionately scaled coordinate
+  \returns  <points-nd> A list of proportionately scaled coordinate
             points which exactly fit the region bounds \p v.
 *******************************************************************************/
 function resize_p

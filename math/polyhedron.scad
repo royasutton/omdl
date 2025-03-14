@@ -53,7 +53,7 @@
 
 //! Compute the surface area of a polyhedron in a Euclidean 3d-space.
 /***************************************************************************//**
-  \param    c <coords-3d> A list of 3d cartesian coordinates
+  \param    c <points-3d> A list of 3d cartesian coordinates
             [[x, y, z], ...].
   \param    f <integer-list-list> A list of faces that enclose
             the shape where each face is a list of coordinate indexes.
@@ -68,7 +68,7 @@ function polyhedron_area
 
 //! Compute the volume of a triangulated polyhedron in a Euclidean 3d-space.
 /***************************************************************************//**
-  \param    c <coords-3d> A list of 3d cartesian coordinates
+  \param    c <points-3d> A list of 3d cartesian coordinates
             [[x, y, z], ...].
   \param    f <integer-list-3-list> A list of triangular faces that
             enclose the polyhedron where each face is a list of three
@@ -113,7 +113,7 @@ function polyhedron_tf_volume
 
 //! Compute the center of mass of a triangulated polyhedron in a Euclidean 3d-space.
 /***************************************************************************//**
-  \param    c <coords-3d> A list of 3d cartesian coordinates
+  \param    c <points-3d> A list of 3d cartesian coordinates
             [[x, y, z], ...].
   \param    f <integer-list-3-list> A list of triangular faces that
             enclose the polyhedron where each face is a list of three

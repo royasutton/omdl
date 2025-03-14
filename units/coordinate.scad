@@ -295,11 +295,11 @@ function coordinate_inv
 
 //! Radially scale a list of 2d cartesian coordinates.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of cartesian coordinates [[x, y], ...].
+  \param    c <points-2d> A list of cartesian coordinates [[x, y], ...].
   \param    r <decimal> A polar radius.
   \param    t <boolean> Translate or scale radius.
 
-  \returns  <coords-2d> A list of scaled cartesian coordinates.
+  \returns  <points-2d> A list of scaled cartesian coordinates.
 
   \details
 
@@ -321,11 +321,11 @@ function coordinate_scale2d_cpc
 
 //! Radially scale and convert a list of 2d polar coordinates to cartesian.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of polar coordinates [[r, aa], ...].
+  \param    c <points-2d> A list of polar coordinates [[r, aa], ...].
   \param    r <decimal> A polar radius.
   \param    t <boolean> Translate or scale radius.
 
-  \returns  <coords-2d> A list of scaled cartesian coordinates.
+  \returns  <points-2d> A list of scaled cartesian coordinates.
 
   \details
 
@@ -346,11 +346,11 @@ function coordinate_scale2d_p2c
 
 //! Spherically scale a list of 3d cartesian coordinates.
 /***************************************************************************//**
-  \param    c <coords-3d> A list of cartesian coordinates [[x, y, z], ...].
+  \param    c <points-3d> A list of cartesian coordinates [[x, y, z], ...].
   \param    r <decimal> A spherical radius.
   \param    t <boolean> Translate or scale radius.
 
-  \returns  <coords-3d> A list of scaled cartesian coordinates.
+  \returns  <points-3d> A list of scaled cartesian coordinates.
 
   \details
 
@@ -372,11 +372,11 @@ function coordinate_scale3d_csc
 
 //! Spherically scale and convert a list of 3d spherical coordinates to cartesian.
 /***************************************************************************//**
-  \param    c <coords-3d> A list of spherical coordinates [[r, aa, pa], ...].
+  \param    c <points-3d> A list of spherical coordinates [[r, aa, pa], ...].
   \param    r <decimal> A spherical radius.
   \param    t <boolean> Translate or scale radius.
 
-  \returns  <coords-3d> A list of scaled cartesian coordinates.
+  \returns  <points-3d> A list of scaled cartesian coordinates.
 
   \details
 

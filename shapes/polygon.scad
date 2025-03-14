@@ -391,7 +391,7 @@ module pg_ngon
 
 //! A polygon triangle specified by three coordinate points with vertex rounding.
 /***************************************************************************//**
-  \param    c <coords-list-3> A list, [v1, v2, v3], the vertex coordinates in 2d.
+  \param    c <points-list-3> A list, [v1, v2, v3], the vertex coordinates in 2d.
 
   \amu_eval ( ${triangle_common_api} )
 

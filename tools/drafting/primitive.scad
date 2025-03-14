@@ -1255,7 +1255,7 @@ module draft_rectangle
 
 //! Draft a polygon with configurable style.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of 2d coordinate points.
+  \param    c <points-2d> A list of 2d coordinate points.
 
   \param    p <integer-list-list> A list of paths that enclose the
             shape where each face is a list of coordinate indexes.

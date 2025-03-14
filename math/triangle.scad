@@ -60,7 +60,7 @@
 
 //! Compute the side lengths of a triangle given its vertex coordinates.
 /***************************************************************************//**
-  \param    c <coords-3d | coords-2d>  A list, [v1, v2, v3], the 3d or 2d
+  \param    c <points-3d | points-2d>  A list, [v1, v2, v3], the 3d or 2d
             vertex coordinates.
 
   \returns  <decimal-list-3> A list of side lengths [s1, s2, s3].
@@ -201,7 +201,7 @@ function triangle_aas2sss
             < \b x_axis_ci | \b y_axis_ci >.
   \param    cw <boolean> Order vertices clockwise.
 
-  \returns  <coords-2d> A list of vertex coordinates [v1, v2, v3],
+  \returns  <points-2d> A list of vertex coordinates [v1, v2, v3],
             when \p cw = \b true, else [v1, v3, v2].
 
   \details
@@ -257,7 +257,7 @@ function triangle2d_sss2ppp
 
 //! Compute the area of a triangle given its vertex coordinates in 2D.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of vertex coordinates [v1, v2, v3].
+  \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
   \param    s <boolean> Return the vertex ordering sign.
 
   \returns  <decimal> The area of the given triangle.
@@ -275,7 +275,7 @@ function triangle2d_area
 
 //! Compute the centroid of a triangle.
 /***************************************************************************//**
-  \param    c <coords-3d | coords-2d>  A list of 3d or 2d vertex
+  \param    c <points-3d | points-2d>  A list of 3d or 2d vertex
             coordinates [v1, v2, v3].
   \param    d <integer> The number of dimensions [2:3].
 
@@ -307,7 +307,7 @@ function triangle_centroid
 
 //! Compute the center coordinate of a triangle's incircle in 2D.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of vertex coordinates [v1, v2, v3].
+  \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
 
   \returns  <point-2d> The incircle center coordinate [x, y].
 
@@ -339,7 +339,7 @@ function triangle2d_incenter
 
 //! Compute the inradius of a triangle's incircle in 2D.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of vertex coordinates [v1, v2, v3].
+  \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
 
   \returns  <decimal> The incircle radius.
 
@@ -367,7 +367,7 @@ function triangle2d_inradius
 
 //! Compute the center coordinate of a triangle's excircle in 2D.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of vertex coordinates [v1, v2, v3].
+  \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
   \param    v <integer> Return coordinate opposite vertex \p v.
 
   \returns  <point-2d> The excircle center coordinate [x, y].
@@ -406,7 +406,7 @@ function triangle2d_excenter
 
 //! Compute the exradius of a triangle's excircle in 2D.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of vertex coordinates [v1, v2, v3].
+  \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
   \param    v <integer> Return coordinate opposite vertex \p v.
 
   \returns  <decimal> The excircle radius of the excircle opposite \p v.
@@ -440,7 +440,7 @@ function triangle2d_exradius
 
 //! Compute the coordinate of a triangle's circumcenter.
 /***************************************************************************//**
-  \param    c <coords-3d | coords-2d>  A list of 3d or 2d vertex
+  \param    c <points-3d | points-2d>  A list of 3d or 2d vertex
             coordinates [v1, v2, v3].
   \param    d <integer> The number of dimensions [2:3].
 
@@ -486,7 +486,7 @@ function triangle_circumcenter
 
 //! Test the vertex ordering, or orientation, of a triangle in 2D.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of vertex coordinates [v1, v2, v3].
+  \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
 
   \returns  <boolean> \b true if the vertices are ordered clockwise,
             \b false if the vertices are ordered counterclockwise, and
@@ -506,7 +506,7 @@ function triangle2d_is_cw
 
 //! Test if a point is inside a triangle in 2d.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of vertex coordinates [v1, v2, v3].
+  \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
   \param    p <point-2d> A test point coordinate [x, y].
 
   \returns  <boolean> \b true when the point is inside the polygon and
@@ -555,7 +555,7 @@ function triangle2d_is_pit
 
 //! Compute the rounding center coordinate for a given radius of a triangle vertex in 2D.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of vertex coordinates [v1, v2, v3].
+  \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
   \param    r <decimal> The vertex rounding radius.
 
   \returns  <decimal> The rounding center coordinate.
@@ -569,7 +569,7 @@ function triangle2d_vround3_center
 
 //! Compute the rounding tangent coordinates for a given radius of a triangle vertex in 2D.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of vertex coordinates [v1, v2, v3].
+  \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
   \param    r <decimal> The vertex rounding radius.
 
   \returns  <decimal> The rounding tangent coordinates [t1, t2].

@@ -78,7 +78,7 @@ function polytope_faces2edges
 
 //! Get a line from an edge or any two vetices of a polytope.
 /***************************************************************************//**
-  \param    c <coords-3d | coords-2d> A list of 3d or 2d coordinate points.
+  \param    c <points-3d | points-2d> A list of 3d or 2d coordinate points.
 
   \param    f <integer-list-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
@@ -124,7 +124,7 @@ function polytope_line
 
 //! Determine the bounding limits of a polytope.
 /***************************************************************************//**
-  \param    c <coords-3d | coords-2d> A list of 3d or 2d cartesian
+  \param    c <points-3d | points-2d> A list of 3d or 2d cartesian
             coordinates [[x, y (, z)], ...].
   \param    f <integer-list-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
@@ -196,7 +196,7 @@ function polytope_limits
 
 //! Generate a bounding box polytope for another polytope in 3d or 2d.
 /***************************************************************************//**
-  \param    c <coords-3d | coords-2d> A list of 3d or 2d cartesian
+  \param    c <points-3d | points-2d> A list of 3d or 2d cartesian
             coordinates [[x, y (, z)], ...].
   \param    f <integer-list-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
@@ -204,10 +204,10 @@ function polytope_limits
             A list of lengths to equally pad the box dimensions.
 
   \returns  <datastruct> A structure: (1) <tt>[points, faces]</tt>,
-            where \c points are <coords-3d> and \c faces are a
+            where \c points are <points-3d> and \c faces are a
             <integer-list-list>, that define the bounding box of the
             given polyhedron. Or: (2) <tt>[points, path]</tt>, where
-            \c points are <coords-2d> and \c path is a
+            \c points are <points-2d> and \c path is a
             <integer-list-list>, that define the bounding box of the
             given polygon.
 
@@ -367,7 +367,7 @@ function polytope_edge_adjacent_faces
 
 //! Get a normal vector for a polytope vertex.
 /***************************************************************************//**
-  \param    c <coords-3d | coords-2d> A list of 3d or 2d coordinate points.
+  \param    c <points-3d | points-2d> A list of 3d or 2d coordinate points.
   \param    f <integer-list-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
   \param    i <integer> The vertex index.
@@ -395,7 +395,7 @@ function polytope_vertex_normal
 
 //! Get a normal vector for a polytope edge.
 /***************************************************************************//**
-  \param    c <coords-3d | coords-2d> A list of 3d or 2d coordinate points.
+  \param    c <points-3d | points-2d> A list of 3d or 2d coordinate points.
   \param    f <integer-list-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
   \param    e <integer-list-2-list> A list of edges where each edge is
@@ -429,7 +429,7 @@ function polytope_edge_normal
 
 //! Get the normal vector of a polytope face.
 /***************************************************************************//**
-  \param    c <coords-3d | coords-2d> A list of 3d or 2d coordinate points.
+  \param    c <points-3d | points-2d> A list of 3d or 2d coordinate points.
   \param    f <integer-list-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
 
@@ -475,7 +475,7 @@ function polytope_face_normal
 
 //! Get the mean coordinate of all vertices of a polytope face.
 /***************************************************************************//**
-  \param    c <coords-3d | coords-2d> A list of 3d or 2d coordinate points.
+  \param    c <points-3d | points-2d> A list of 3d or 2d coordinate points.
   \param    f <integer-list-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
 
@@ -483,7 +483,7 @@ function polytope_face_normal
   \param    l <integer-list> The face specified as a list of all the
             coordinate indexes that define it.
 
-  \returns  <coords-3d> The mean coordinate of a polytope face.
+  \returns  <points-3d> The mean coordinate of a polytope face.
 
   \details
 
@@ -509,7 +509,7 @@ function polytope_face_mean
 
 //! Get the mean coordinate and normal vector of a polytope face.
 /***************************************************************************//**
-  \param    c <coords-3d | coords-2d> A list of 3d or 2d coordinate points.
+  \param    c <points-3d | points-2d> A list of 3d or 2d coordinate points.
   \param    f <integer-list-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
 
@@ -519,7 +519,7 @@ function polytope_face_mean
 
   \param    cw <boolean> Face vertex ordering.
 
-  \returns  <plane> <tt>[mp, nv]</tt>, where \c mp is \c coords-3d, the
+  \returns  <plane> <tt>[mp, nv]</tt>, where \c mp is \c points-3d, the
             mean coordinate, and \c nv is \c vector-3d, the normal
             vector, of the polytope face-plane.
 
@@ -568,7 +568,7 @@ function polytope_face_vertex_counts
 
 //! List the angles between all adjacent faces of a polyhedron.
 /***************************************************************************//**
-  \param    c <coords-3d> A list of 3d cartesian coordinates
+  \param    c <points-3d> A list of 3d cartesian coordinates
             [[x, y, z], ...].
   \param    f <integer-list-list> A list of faces that enclose
             the shape where each face is a list of coordinate indexes.
@@ -612,7 +612,7 @@ function polytope_face_angles
 
 //! List the edge lengths of a polytope.
 /***************************************************************************//**
-  \param    c <coords-3d | coords-2d> A list of 3d or 2d cartesian
+  \param    c <points-3d | points-2d> A list of 3d or 2d cartesian
             coordinates [[x, y (, z)], ...].
   \param    e <integer-list-2-list> A list of edges where each edge is
             a list of two coordinate indexes.
@@ -627,7 +627,7 @@ function polytope_edge_lengths
 
 //! List the adjacent edge angles for each polytope vertex.
 /***************************************************************************//**
-  \param    c <coords-3d | coords-2d> A list of 3d or 2d cartesian
+  \param    c <points-3d | points-2d> A list of 3d or 2d cartesian
             coordinates [[x, y (, z)], ...].
   \param    f <integer-list-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
@@ -655,7 +655,7 @@ function polytope_edge_angles
 
 //! Test if the faces of a polytope are all regular.
 /***************************************************************************//**
-  \param    c <coords-3d | coords-2d> A list of 3d or 2d cartesian
+  \param    c <points-3d | points-2d> A list of 3d or 2d cartesian
             coordinates [[x, y (, z)], ...].
   \param    f <integer-list-list> A list of faces (or paths) that enclose
             the shape where each face is a list of coordinate indexes.
