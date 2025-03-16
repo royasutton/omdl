@@ -47,18 +47,18 @@
 
   \details
 
-    To work with a smaller data table set, include the specific table
-    of interest rather than \ref polyhedra_all.scad, shown as required
-    above. Here is an example that uses a limited set.
+    To work with a smaller polyhedra data set, include the specific
+    table of interest rather than \ref polyhedra_all.scad, as shown in
+    the following example. For a list of those available, see the \ref
+    database_geometry_polyhedra "polyhedra database" section.
+
+    Here is an example that uses a limited set.
 
     \amu_define title         (Cupolas example)
     \amu_define image_views   (top bottom diag)
     \amu_define image_size    (sxga)
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
-
-    For a list of all available polyhedra, see the polyhedra
-    \ref database_geometry_polyhedra "datbase".
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
