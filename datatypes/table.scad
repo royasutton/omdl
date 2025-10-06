@@ -868,6 +868,15 @@ module table_write
             identifier matrix (2 x C-columns).
 
   \copydoc table_get()
+
+  \details
+
+    \b Example
+    \code
+    rows = ctable_get( t, ri );
+    cols = ctable_get( t, ci=ci );
+    cell = ctable_get( t, ri, ci );
+    \endcode
 *******************************************************************************/
 function ctable_get( t, ri, ci ) = table_get( first(t), second(t), ri, ci );
 
