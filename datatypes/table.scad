@@ -580,22 +580,22 @@ module table_dump
 *******************************************************************************/
 module table_dump_getters
 (
-r,
-c,
+  r,
+  c,
 
-tr = "table_rows",
-tc = "table_cols",
+  tr = "table_rows",
+  tc = "table_cols",
 
-ri = "ri",
-ci = "ci",
+  ri = "ri",
+  ci = "ci",
 
-vri = false,
-vci = false,
+  vri = false,
+  vci = false,
 
-name = "get_helper",
-append = false,
-comment = 0,
-verbose = false
+  name = "get_helper",
+  append = false,
+  comment = 0,
+  verbose = false
 )
 {
   function qri(ri) = (ri == "ri") ? ri : (vri == true) ? ri : str("\"", ri, "\"");
