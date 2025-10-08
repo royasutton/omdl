@@ -46,15 +46,40 @@
 
 //! A stand maker for rectangular project boxes, enclosures and housings.
 /***************************************************************************//**
-  \param  wth   <decimal> wall thickness.
+  \param  size    <decimal-list-3 | decimal> dimension(s); a list
+                  [w, d, h], the width, depth, and height, or a single
+                  decimal for width.
 
-  \param  verb  <integer> console output verbosity
-                {0=quiet, 1=info, 2=details}.
+  \param  offset  <decimal> the case seat vertical offset.
+
+  \param  brace   <decimal> the stand brace member percentage of
+                  (seat + offset).
+
+  \param  count   <integer> the number of enclosures.
+
+  \param  space   <decimal> the additional separation space between
+                  multiple enclosures.
+
+  \param  form    <integer> the stand form {0 : 6}. Form 6 can be used
+                  as a top brace for a multi-enclosure stand.
+
+  \param  mode    <integer> the size specification mode
+                  {0: size of case, 1: size of stand}.
 
   \details
 
-    Construct a rectangular enclosure for electronic and or other
-    project boxes of the like.
+    Construct a stand for a rectangular prism enclosure. A
+    multi-enclosure stand can be constructed using the \p count
+    parameter. The size can refer to the enclosure size or the stand
+    size as controlled by the \p mode parameter. The \p form = 6 is
+    useful for creating top braces for multi-enclosure stands.
+
+    \amu_define scope_id      (example)
+    \amu_define title         (Muilti-enclosure example)
+    \amu_define image_views   (right front diag)
+    \amu_define image_size    (sxga)
+
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
 module stand_rectangle
 (
@@ -211,6 +236,49 @@ module stand_rectangle
 // openscad-amu auxiliary scripts
 //----------------------------------------------------------------------------//
 
+/*
+BEGIN_SCOPE example;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <parts/3d/enclosure/stands_rectangle.scad>;
+
+    rotate([90, 0, 0])
+    {
+      e = [35, 125, 125]; w = first(e);
+      c = 3; o = 8 + 3/4; s = 2 + 17/32;
+
+      translate([0, 0, -w/2 + w])
+      stand_rectangle( size=w, count=c );
+
+      translate([0, 0, -w/2 - w])
+      stand_rectangle( size=w, count=c );
+
+      translate([0, third(e)+o*2, -w/2])
+      mirror([0, 1, 0])
+      stand_rectangle( size=w, count=c, form=6 );
+
+      %for (x = [-1, 0, +1])
+      translate([(w+s*2)*x, second(e)/2+o, 0])
+      cube(e, center=true);
+    }
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "right front diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
 
 //----------------------------------------------------------------------------//
 // end of file
