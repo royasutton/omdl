@@ -11,7 +11,8 @@ local_library     :=  docs_module \
                       clamps \
                       mounts \
                       power_strip \
-                      project_box_rectangle
+                      project_box_rectangle \
+                      stands_rectangle
 
 local_release_add :=
 
