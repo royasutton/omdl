@@ -1,4 +1,4 @@
-//! A stand maker for rectangular prism project boxes, enclosures and housings.
+//! A stand maker for rectangular prism project boxes, housings, and enclosures.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -44,7 +44,7 @@
 
 //----------------------------------------------------------------------------//
 
-//! A stand maker for rectangular project boxes, enclosures and housings.
+//! A stand maker for rectangular project boxes, housings, and enclosures.
 /***************************************************************************//**
   \param  size    <decimal-list-3 | decimal> dimension(s); a list
                   [w, d, h], the width, depth, and height, or a single
