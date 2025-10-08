@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Power Strip Maker)
+    \amu_define group_name  (Power Strip)
     \amu_define group_brief (Electrical receptacle power strip generator.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
