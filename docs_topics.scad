@@ -468,40 +468,50 @@
   \amu_file bi_general (file="${DOXYGEN_OUTPUT}buildinfo/general.amu" ++read)
   \amu_table
   (
-    id="bi_general"    table_caption="General"
-    columns="2"       column_headings="name^value"
+    id="bi_general"
+    table_caption="General"
+    columns="2"
+    column_headings="name^value"
     cell_texts="${bi_general}"
   )
 
   \amu_file bi_toolchain (file="${DOXYGEN_OUTPUT}buildinfo/toolchain.amu" ++read)
   \amu_table
   (
-    id="bi_toolchain"    table_caption="Toolchain"
-    columns="3"       column_headings="name^version^path"
+    id="bi_toolchain"
+    table_caption="Toolchain"
+    columns="3"
+    column_headings="name^version^path"
     cell_texts="${bi_toolchain}"
   )
 
   \amu_file bi_components (file="${DOXYGEN_OUTPUT}buildinfo/components.amu" ++read)
   \amu_table
   (
-    id="bi_components"    table_caption="Components"
-    columns="3"       column_headings="name^count^value"
+    id="bi_components"
+    table_caption="Components"
+    columns="3"
+    column_headings="name^count^value"
     cell_texts="${bi_components}"
   )
 
   \amu_file bi_scopes (file="${DOXYGEN_OUTPUT}buildinfo/scopes.amu" ++read)
   \amu_table
   (
-    id="bi_scopes"    table_caption="Scopes Filter"
-    columns="3"       column_headings="name^count^value"
+    id="bi_scopes"
+    table_caption="Scopes Filter"
+    columns="3"
+    column_headings="name^count^value"
     cell_texts="${bi_scopes}"
   )
 
   \amu_file bi_modules (file="${DOXYGEN_OUTPUT}buildinfo/modules.amu" ++read)
   \amu_table
   (
-    id="bi_modules"    table_caption="Modules Filter"
-    columns="3"       column_headings="name^count^value"
+    id="bi_modules"
+    table_caption="Modules Filter"
+    columns="3"
+    column_headings="name^count^value"
     cell_texts="${bi_modules}"
   )
 
