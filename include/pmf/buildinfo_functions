@@ -81,27 +81,38 @@ endef
 
 # build_info_components (empty)
 define build_info_components
-  AMU_TOOL_PREFIX^ ^$(AMU_TOOL_PREFIX)^
-  AMU_LIB_PATH^ ^$(AMU_LIB_PATH)^
-  AMU_PM_DESIGN_FLOW^ ^$(AMU_PM_DESIGN_FLOW)^
-  AMU_PM_COMPONENTS^ $(words $(AMU_PM_COMPONENTS))^ $(if $(AMU_PM_COMPONENTS),$(AMU_PM_COMPONENTS),--)^
-  AMU_PM_COMPONENTS_ADD^ $(words $(AMU_PM_COMPONENTS_ADD))^ $(if $(AMU_PM_COMPONENTS_ADD),$(AMU_PM_COMPONENTS_ADD),--)^
-  AMU_PM_COMPONENTS_LOCAL^ $(words $(AMU_PM_COMPONENTS_LOCAL))^ $(if $(AMU_PM_COMPONENTS_LOCAL),$(AMU_PM_COMPONENTS_LOCAL),--)^
-  AMU_PM_COMPONENTS_LOCAL_PATH^ ^$(AMU_PM_COMPONENTS_LOCAL_PATH)^
+  AMU_TOOL_PREFIX^ ---^$(AMU_TOOL_PREFIX)^
+  AMU_LIB_PATH^ ---^$(AMU_LIB_PATH)^
+  AMU_PM_DESIGN_FLOW^ ---^$(AMU_PM_DESIGN_FLOW)^
+  AMU_PM_COMPONENTS^ $(words $(AMU_PM_COMPONENTS))^ $(if $(AMU_PM_COMPONENTS),$(AMU_PM_COMPONENTS),---)^
+  AMU_PM_COMPONENTS_ADD^ $(words $(AMU_PM_COMPONENTS_ADD))^ $(if $(AMU_PM_COMPONENTS_ADD),$(AMU_PM_COMPONENTS_ADD),---)^
+  AMU_PM_COMPONENTS_LOCAL^ $(words $(AMU_PM_COMPONENTS_LOCAL))^ $(if $(AMU_PM_COMPONENTS_LOCAL),$(AMU_PM_COMPONENTS_LOCAL),---)^
+  AMU_PM_COMPONENTS_LOCAL_PATH^ ---^$(AMU_PM_COMPONENTS_LOCAL_PATH)^
 endef
 
 # build_info_scopes (empty)
 define build_info_scopes
-  ignore_scopes_include^ ^ \$(call bool_string,$(ignore_scopes_include))^
-  ignore_scopes_exclude^ ^ \$(call bool_string,$(ignore_scopes_exclude))^
-  scopes_include^ $(words $(scopes_include))^ $(if $(scopes_include),(scopes_include),--)^
-  scopes_exclude^ $(words $(scopes_exclude))^ $(if $(scopes_exclude),$(scopes_exclude),--)^
+  ignore_scopes_include^ ---^ \$(call bool_string,$(ignore_scopes_include))^
+  ignore_scopes_exclude^ ---^ \$(call bool_string,$(ignore_scopes_exclude))^
+  scopes_include^ $(words $(scopes_include))^ $(if $(scopes_include),(scopes_include),---)^
+  scopes_exclude^ $(words $(scopes_exclude))^ $(if $(scopes_exclude),$(scopes_exclude),---)^
+  scopes_scripts_source^ $(words $(scopes_scripts_source))^ $(if $(scopes_scripts_source),...,---)^
+  scopes_scripts_selected^ $(words $(scopes_scripts_selected))^ $(if $(scopes_scripts_selected),...,---)^
+  scopes_mfs^ $(words $(scopes_mfs))^ $(if $(scopes_mfs),...,---)^
+  scopes_mf^ $(words $(scopes_mf))^ $(if $(scopes_mf),...,---)^
 endef
 
 # build_info_modules (empty)
 define build_info_modules
-  ignore_modules_exclude^ ^ \$(call bool_string,$(ignore_modules_exclude))^
-  modules_exclude^ $(words $(modules_exclude))^ $(if $(modules_exclude),$(modules_exclude),--)^
+  ignore_modules_exclude^ ---^ \$(call bool_string,$(ignore_modules_exclude))^
+  modules_exclude^ $(words $(modules_exclude))^ $(if $(modules_exclude),$(modules_exclude),---)^
+  modules^ $(words $(modules))^ $(if $(modules),...,---)^
+endef
+
+# build_info_sources (empty)
+define build_info_sources
+  design^ $(words $(design))^ $(if $(design),...,----)^
+  library^ $(words $(library))^ $(if $(library),...,---)^
 endef
 
 ################################################################################

@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2018-2023
+  \date   2018-2025
 
   \copyright
 
@@ -499,7 +499,7 @@
   \amu_table
   (
     id="bi_scopes"
-    table_caption="Scopes Filter"
+    table_caption="Scopes"
     columns="3"
     column_headings="name^count^value"
     cell_texts="${bi_scopes}"
@@ -509,10 +509,20 @@
   \amu_table
   (
     id="bi_modules"
-    table_caption="Modules Filter"
+    table_caption="Modules"
     columns="3"
     column_headings="name^count^value"
     cell_texts="${bi_modules}"
+  )
+
+  \amu_file bi_sources (file="${DOXYGEN_OUTPUT}buildinfo/sources.amu" ++read)
+  \amu_table
+  (
+    id="bi_sources"
+    table_caption="Sources"
+    columns="3"
+    column_headings="name^count^value"
+    cell_texts="${bi_sources}"
   )
 
 *******************************************************************************/
