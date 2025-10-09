@@ -79,6 +79,17 @@ define build_info_toolchain
   GNU Make^ $(gnumakevn)^ $(path_gnumake)^
 endef
 
+# build_info_components (empty)
+define build_info_components
+  AMU_TOOL_PREFIX^ ^$(AMU_TOOL_PREFIX)^
+  AMU_LIB_PATH^ ^$(AMU_LIB_PATH)^
+  AMU_PM_DESIGN_FLOW^ ^$(AMU_PM_DESIGN_FLOW)^
+  AMU_PM_COMPONENTS^ $(words $(AMU_PM_COMPONENTS))^ $(if $(AMU_PM_COMPONENTS),$(AMU_PM_COMPONENTS),--)^
+  AMU_PM_COMPONENTS_ADD^ $(words $(AMU_PM_COMPONENTS_ADD))^ $(if $(AMU_PM_COMPONENTS_ADD),$(AMU_PM_COMPONENTS_ADD),--)^
+  AMU_PM_COMPONENTS_LOCAL^ $(words $(AMU_PM_COMPONENTS_LOCAL))^ $(if $(AMU_PM_COMPONENTS_LOCAL),$(AMU_PM_COMPONENTS_LOCAL),--)^
+  AMU_PM_COMPONENTS_LOCAL_PATH^ ^$(AMU_PM_COMPONENTS_LOCAL_PATH)^
+endef
+
 # build_info_scopes (empty)
 define build_info_scopes
   ignore_scopes_include^ ^ \$(call bool_string,$(ignore_scopes_include))^

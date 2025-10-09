@@ -481,6 +481,14 @@
     cell_texts="${bi_toolchain}"
   )
 
+  \amu_file bi_components (file="${DOXYGEN_OUTPUT}buildinfo/components.amu" ++read)
+  \amu_table
+  (
+    id="bi_components"    table_caption="Components"
+    columns="3"       column_headings="name^count^value"
+    cell_texts="${bi_components}"
+  )
+
   \amu_file bi_scopes (file="${DOXYGEN_OUTPUT}buildinfo/scopes.amu" ++read)
   \amu_table
   (
