@@ -60,8 +60,9 @@
   \param  space   <decimal> the additional separation space between
                   multiple enclosures.
 
-  \param  form    <integer> the stand form {0 : 6}. Form 6 can be used
-                  as a top brace for a multi-enclosure stand.
+  \param  form    <integer> the stand form {0 : 7}. Form 6 and 7 can be
+                  used as a top brace, or stacking stop brace, for a
+                  multi-enclosure stand.
 
   \param  mode    <integer> the size specification mode
                   {0: size of case, 1: size of stand}.
@@ -176,6 +177,14 @@ module enclosure_stand_rectangle
         [[x1, y1], [x1, y2], [x2, y2], [x2, y3], [x3, y3], [x5, y5], [x5, y1]],
         [r/10, 0, r/5, r*3/5, r, r/5, r*2/5],
         [1, 0, 1, 1, 1, 1, 1]
+      ],
+      [ // center section (dual side)
+        [[x1, y1], [x1, y2], [x2, y2], [x2, y3], [x6, y3], [x6, y2], [x7, y2], [x7, y1],
+         [x6, y1], [x6, y2-y3], [x2, y2-y3], [x2, y1]],
+        [r/5, 0, r/5, r/5, 0, r/5, r/5, 0, r/5,
+         r/5, 0, r/5, r/5],
+        [1, 0, 1, 1, 0, 1, 1, 0,
+         1, 1, 0, 1]
       ]
     ];
 
@@ -189,7 +198,8 @@ module enclosure_stand_rectangle
         [ pg_fs0[4], pg_fs0[0] ],
         [ pg_fs0[5], pg_fs0[0] ],
         [ pg_fs0[6], pg_fs0[0] ],
-        [ pg_fs0[0], pg_fs0[0] ]
+        [ pg_fs0[0], pg_fs0[0] ],
+        [ pg_fs0[7], pg_fs0[7] ]
       ], form, false
     );
 
