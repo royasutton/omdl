@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Rectangular Stand)
+    \amu_define group_name  (Rectangular Enclosure Stand)
     \amu_define group_brief (Stand maker for rectangular prism enclosures.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
@@ -81,7 +81,7 @@
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
-module stand_rectangle
+module enclosure_stand_rectangle
 (
   size,
 
@@ -240,7 +240,7 @@ module stand_rectangle
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <parts/3d/enclosure/stands_rectangle.scad>;
+    include <parts/3d/enclosure/enclosure_stand_rectangle.scad>;
 
     rotate([90, 0, 0])
     {
@@ -248,14 +248,14 @@ BEGIN_SCOPE example;
       c = 3; o = 8 + 3/4; s = 2 + 17/32;
 
       translate([0, 0, -w/2 + w])
-      stand_rectangle( size=w, count=c );
+      enclosure_stand_rectangle( size=w, count=c );
 
       translate([0, 0, -w/2 - w])
-      stand_rectangle( size=w, count=c );
+      enclosure_stand_rectangle( size=w, count=c );
 
       translate([0, third(e)+o*2, -w/2])
       mirror([0, 1, 0])
-      stand_rectangle( size=w, count=c, form=6 );
+      enclosure_stand_rectangle( size=w, count=c, form=6 );
 
       %for (x = [-1, 0, +1])
       translate([(w+s*2)*x, second(e)/2+o, 0])

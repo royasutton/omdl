@@ -12,7 +12,7 @@ local_library     :=  docs_module \
                       mounts \
                       power_strip \
                       project_box_rectangle \
-                      stands_rectangle
+                      enclosure_stand_rectangle
 
 local_release_add :=
 
