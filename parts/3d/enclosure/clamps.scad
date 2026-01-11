@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2025
+  \date   2025-2026
 
   \copyright
 
@@ -123,6 +123,10 @@
       0 | <integer-list-2 \| integer> | required| wall side
       1 | <decimal>         | max(size)/2       | cone base width
       2 | <decimal>         | max(size)/3       | cone height
+      3 | <decimal>         | 255               | extrude mode
+
+    The extrusion mode controls which sections of the cone are rendered.
+    For more information see the mode parameter for extrude_mode_trl().
 
     ##### cone[0]: wall side
 
@@ -351,6 +355,7 @@ module clamp_cg
       s = defined_e_or(cone, 0, cone);
       w = defined_e_or(cone, 1, wmax/2);
       h = defined_e_or(cone, 2, wmax/3);
+      m = defined_e_or(cone, 3, 255);
 
       p =
       [
@@ -368,7 +373,7 @@ module clamp_cg
       for (s = is_list(s) ? s : [s])
       rotate([0, s * 180, 0])
       translate([0, 0, wth/2])
-      extrude_rotate_trl(l=wl, r=wr)
+      extrude_rotate_trl(l=wl, r=wr, m=m)
       polygon(pr);
     }
 
