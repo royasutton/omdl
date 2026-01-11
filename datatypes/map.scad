@@ -62,8 +62,7 @@ function map_get_index
 (
   m,
   k
-) = !is_string(k) ? undef
-  : let(i = first(search([k], m, 1, 0 )))
+) = let(i = first(search([k], m, 1, 0 )))
     (i == empty_lst) ? undef : i;
 
 //! Test if a key exists.
@@ -202,22 +201,8 @@ function map_errors
           )
     ],
 
-    // (2) each key must be a string.
+    // (2) no repeat key identifiers.
     ec2 =
-    [
-      for ( i = [0:map_get_size(m)-1] )
-      let ( entry = m[i], key = first(entry) )
-        if (  is_string(key) == false )
-          str
-          (
-            "map index ", i,
-            ", entry=", entry,
-            ", key=[", key,"] is not a string."
-          )
-    ],
-
-    // (3) no repeat key identifiers.
-    ec3 =
     [
       for ( i = [0:map_get_size(m)-1] )
       let ( entry = m[i], key = first(entry) )
@@ -229,7 +214,7 @@ function map_errors
           )
     ]
   )
-  concat(ec1, ec2, ec3);
+  concat(ec1, ec2);
 
 //! Perform basic format checks on a map and output errors to console.
 /***************************************************************************//**
@@ -270,19 +255,7 @@ module map_check
       )
     );
 
-    // (2) each key must be a string.
-    assert
-    (
-      is_string(key),
-      str
-      (
-        "map index ", i,
-        ", entry=", entry,
-        ", key=[", key,"] is not a string."
-      )
-    );
-
-    // (3) no repeat key identifiers.
+    // (2) no repeat key identifiers.
     if ( len(first(search([key], m, 0, 0))) > 1 )
       log_warn
       (
