@@ -12,7 +12,8 @@ local_library     :=  docs_module \
                       mounts \
                       power_strip \
                       project_box_rectangle \
-                      enclosure_stand_rectangle
+                      enclosure_stand_rectangle \
+                      pcie_enclosure
 
 local_release_add :=
 
