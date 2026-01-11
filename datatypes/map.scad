@@ -287,6 +287,7 @@ module map_check
   \param    m <map> A list of N key-value map pairs.
   \param    sort <boolean> Sort the output by key.
   \param    number <boolean> Output index number.
+  \param    align <boolean> pad keys for right alignment.
   \param    p <integer> Number of places for zero-padded numbering.
 *******************************************************************************/
 module map_dump
@@ -294,28 +295,43 @@ module map_dump
   m,
   sort = false,
   number = true,
+  align = true,
   p = 3
 )
 {
   if ( map_get_size(m) > 0 )
   {
-    keys = map_get_keys(m);
-    maxl = max( [for (i = keys) len(i)] ) + 1;
+    keys  = map_get_keys(m);
 
-    for (key = (sort == true) ? sort_q(keys) : keys)
+    // calculate max key field length
+    maxl  = align ?
+            max ( [ for (i = keys) is_string(i) ? len(i) : len( strl([i]) ) ] ) + 1
+          : 0;
+
+    for (k = (sort == true) ? sort_q(keys) : keys)
     {
-      idx = map_get_index(m, key);
+      // numbering with prefixed zero-padding
+      num = let
+            (
+              i = map_get_index(m, k),
+              z = chr( consts(p - len(str(i)), 48) )
+            )
+            number ?
+            str(z, i, ": ")
+          : empty_str;
 
-      log_echo
-      (
-        str
-        (
-          number ? chr(consts(p-len(str(idx)), 48)) : empty_str,
-          number ? str(idx, ": ") : empty_str,
-          chr(consts(maxl-len(key), 32)), "'", key, "' = ",
-          "'", map_get_value(m, key), "'"
-        )
-      );
+      // right align key with space padding
+      pad = let
+            (
+              s = is_string(k) ? len(k) : len( strl([k]) )
+            )
+            align ?
+            chr( consts(maxl - s, 32) )
+          : empty_str;
+
+      val = map_get_value(m, k);
+
+      log_echo ( str( num, pad, "'", k, "' = ", "'", val, "'" ) );
     }
   }
 
@@ -362,41 +378,36 @@ module map_write
 {
   if ( map_get_size(m) > 0 )
   {
-    // heading
-    log_echo
-    (
-      str
-      (
-        number ? str(thn,fs) : empty_str,
-        "key", fs,
-        "value"
-      )
-    );
+    num = number ? str(thn, fs) : empty_str;
 
-    // data
+    // map heading
+    log_echo ( str ( num, "key", fs, "value" ) );
+
+    // map data
     keys = map_get_keys(m);
-    maxl = max( [for (i = keys) len(i)] ) + 1;
 
-    for (key = (sort == true) ? sort_q(keys) : keys)
+    for (k = (sort == true) ? sort_q(keys) : keys)
     {
-      idx = map_get_index(m, key);
-
       if
       (
         is_undef( ks ) ||
-        is_number( first( search( [key], ks, 1, 0 ) ) )
+        is_number( first( search( [k], ks, 1, 0 ) ) )
       )
-      log_echo
-      (
-        str
-        (
-          (number == true) ?
-            str(strl_html([idx], p=[index_tags]),fs)
-          : empty_str,
-          strl_html(key, p=[key_tags]), fs,
-          strl_html([map_get_value(m, key)], p=[value_tags]), fs
-        )
-      );
+      {
+        num = let
+              (
+                i = map_get_index(m, k)
+              )
+              number ?
+              str( strl_html([i], p=[index_tags]), fs )
+            : empty_str;
+
+        key = strl_html([k], p=[key_tags]);
+
+        val = strl_html([map_get_value(m, k)], p=[value_tags]);
+
+        log_echo ( str ( num, key, fs, val, fs ) );
+      }
     }
   }
 }
