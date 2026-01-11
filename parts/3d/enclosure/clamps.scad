@@ -438,6 +438,198 @@ module clamp_cg
   }
 }
 
+//! A one piece zip-tie clamp.
+/***************************************************************************//**
+  \param  wire    <decimal-list-2 | decimal> wire size; a list [w, h]
+                  or a single decimal to set the wire diameter.
+
+  \param  mode    <integer> operation mode {0=removals, 1=additions}.
+
+  \details
+
+    Construct a clamp.
+*******************************************************************************/
+module clamp_zt_1p
+(
+  wire,       // wire: [w, h]
+  ztie,       // zip tie: [w, h]
+
+  size,       // clamp size: [w, h, d, [pinch-bar]]
+  tunnel,     // zip tie tunnel: [cr, inst, mode, wh-adjust, wh-offset]
+
+  vr,         // rounding radius: [clamp, wire seat, zip tunnel]
+  vrm,        // rounding mode: [clamp, wire seat, zip tunnel]
+
+  align,      // alignment [w, h, d]
+
+  mode = 1    // mode: b0:removals/additions
+)
+{
+  //
+  // remove section at bottom for access to tunnel
+  //
+  module open_tunnel_access()
+  {
+    children(0);
+
+    if ( binary_bit_is(tm, 4, 1) )
+    difference()
+    {
+      children(1);
+
+      translate([0, +eps*2, 0])
+      hull()
+      children(0);
+    }
+  }
+
+  // wire
+  wx  = defined_e_or(wire, 0, wire);
+  wy  = defined_e_or(wire, 1, wx);
+
+  // zip tie
+  zx  = defined_e_or(ztie, 0, ztie);
+  zy  = defined_e_or(ztie, 1, zx/2);
+
+  // clamp size
+  sx  = defined_e_or(size, 0, wx*2);
+  sy  = defined_e_or(size, 1, wy*2);
+  sz  = defined_e_or(size, 2, zx*2);
+
+  pb  = defined_e_or(size, 3, zx*2/6);
+
+  // tunnel:
+  cr  = defined_e_or(tunnel, 0, 1);           // corner radius
+  zi  = defined_e_or(tunnel, 1, 0);           // list of offset instances
+  tm  = defined_e_or(tunnel, 2, 0);           // 5-bit integer tunnel mode
+  ta  = defined_e_or(tunnel, 3, [0, 0]);      // tunnel wh-radial adjustment
+  to  = defined_e_or(tunnel, 4, [0, 0]);      // tunnel wh-offset
+
+  // rounding
+  vr0 = defined_e_or(vr, 0, vr);
+  vr1 = defined_e_or(vr, 1, 0);
+  vr2 = defined_e_or(vr, 2, 0);
+
+  // rounding modes
+  vrm0  = defined_e_or(vrm, 0, [1, 1, 4, 3]);
+  vrm1  = defined_e_or(vrm, 1, [4, 3, 1, 1]);
+  vrm2  = defined_e_or(vrm, 2, 1);
+
+
+  //
+  // decode pinch bar configuration
+  //
+
+  pw  = defined_e_or(pb, 0, pb);
+  ph  = defined_e_or(pb, 1, pw/3);
+  po  = defined_e_or(pb, 2, zx*3/2);
+
+
+  //
+  // decode zip tie tunnel modes
+  //
+
+  // B0-1: x-size select
+  ztx = select_ci( [ wx, (sx+wx/2)/2, sx ], binary_iw2i(tm, 0, 2), false );
+
+  // B2-3: y-size select
+  zty = select_ci ( [ sy, (sy+wy/2)/2, wy ], binary_iw2i(tm, 2, 2), false );
+
+  // B2-3: y-offset select
+  zto = select_ci ( [ 0, (sy-wy/2)/4, (sy-wy)/2 ], binary_iw2i(tm, 2, 2), false );
+
+  // B4: project tunnel to bottom of clamp
+  ztp = binary_bit_is(tm, 4, 1);
+
+
+  // align construction
+  translate
+  (
+    [
+      select_ci( [ 0, +sx/2, 0, -sx/2 ], defined_e_or(align, 0, 0), false ),
+      select_ci( [ 0, +sy/2, 0, -sy/2 ], defined_e_or(align, 1, 0), false ),
+      select_ci( [ 0, +sz/2, 0, -sz/2 ], defined_e_or(align, 2, 0), false )
+    ]
+  )
+  {
+    //
+    // construct clamp
+    //
+
+    // clamp with wire seat and tunnel removed
+    difference()
+    {
+      // clamp body
+      if ( binary_bit_is(mode, 0, 1) )
+      extrude_linear_uss(sz, center=true)
+      pg_rectangle
+      (
+        size = [sx, sy],
+        vr = vr0,
+        vrm = vrm0,
+        center = true
+      );
+
+      // remove wire passage
+      if ( binary_bit_is(mode, 0, 1) )
+      translate([0, (sy-wy)/2 + eps*2, 0])
+      extrude_linear_uss(sz + eps*4, center=true)
+      pg_rectangle
+      (
+        size = [wx, wy],
+        vr = vr1,
+        vrm = vrm1,
+        center = true
+      );
+
+      // remove tunnel passage
+      for (zio = zi)
+      translate([0, zto, zio] + concat(to, 0))
+      open_tunnel_access()
+      {
+        // child-0: tunnel
+        extrude_rotate_trl
+        (
+          r = cr,
+          l = [ztx, zty] - 2*[cr, cr] + [zy, zy] + ta
+        )
+        pg_rectangle
+        (
+          size = [zy, zx],
+          vr = vr2,
+          vrm = vrm2,
+          center = true
+        );
+
+        // child-1: area under tunnel
+        translate([0, -sy/2 + zty/4 - second(to)/2, 0])
+        rotate([90, 0, 0])
+        extrude_linear_uss(sy - zty/2 + second(to) + eps*4, center=true)
+        pg_rectangle
+        (
+          size = [ztx + zy*2 + first(ta), zx],
+          vr = vr2,
+          vrm = 1,
+          center = true
+        );
+      }
+    }
+
+    // add base pinch bars (when > 0)
+    if ( binary_bit_is(mode, 0, 1) && ( pw > 0 ) )
+    for (i = [-1, 1])
+    translate([0, sy/2 - wy, i * po/2])
+    rotate([0, 90, 0])
+    extrude_linear_mss( h=wx, center=true )
+    difference()
+    {
+      rhombus( [pw, ph*2], center=true);
+      translate([0, -ph/2])
+      square([pw, ph], center=true);
+    }
+  }
+}
+
 //! @}
 //! @}
 
