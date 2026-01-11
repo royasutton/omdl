@@ -303,9 +303,9 @@ module map_dump
   {
     keys  = map_get_keys(m);
 
-    // calculate max key field length
+    // calculate max key field length when aligning
     maxl  = align ?
-            max ( [ for (i = keys) is_string(i) ? len(i) : len( strl([i]) ) ] ) + 1
+            max ( [ for (i = keys) is_string(i) ? len(i) : len( strl([i]) ) ] )
           : 0;
 
     for (k = (sort == true) ? sort_q(keys) : keys)
