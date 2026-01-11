@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2024
+  \date   2015-2026
 
   \copyright
 
@@ -135,7 +135,7 @@ function table_get_value
   c,
   ri,
   ci
-) = r[table_get_row_index(r,ri)][table_get_column_index(c,ci)];
+) = r[ table_get_row_index(r,ri) ][ table_get_column_index(c,ci) ];
 
 //! Form a list of a select column across all table rows.
 /***************************************************************************//**
@@ -152,7 +152,7 @@ function table_get_columns
   c,
   ci
 ) = table_exists(r,c,ci=ci) ?
-    select_e(table_get_copy(r,c,cs=[ci]),f=true)
+    select_e(table_get_copy(r,c,cs=[ci]), f=true)
   : undef;
 
 //! Get a row, a column, or a specific cell value from a table.
@@ -425,7 +425,7 @@ module table_check
     if (verbose) log_info ("row identifier found at column zero.");
   }
 
-  // (2) each row has correct column count
+  // (2) each row must have correct column count
   if (verbose) log_info ("checking row column counts.");
   col_cnt = table_get_size(c=c);
   for ( r_iter = r )
@@ -477,6 +477,7 @@ module table_check
   \param    rs <string-list> A list of selected row identifiers.
   \param    cs <string-list> A list of selected column identifiers.
   \param    number <boolean> Number the rows.
+  \param    align <boolean> pad columns for value alignment.
 
   \details
 
@@ -491,13 +492,28 @@ module table_dump
   c,
   rs,
   cs,
-  number = true
+  number = true,
+  align = true
 )
 {
-  // determine maximum field lengths
-  maxr0 = max( [for (r_iter = r) len( first(r_iter) )] ) + 1;
-  maxc0 = max( [for (c_iter = c) len( first(c_iter) )] ) + 1;
-  maxc1 = max( [for (c_iter = c) len( c_iter[1] )] ) + 1;
+  // determine maximum field lengths when aligning
+  maxr0 = align ?
+          max ( [ for ( r_iter = r )
+                    let( v = first(r_iter) )
+                    is_string(v) ? len(v) : len( strl([v]) ) ] )
+        : 0;
+
+  maxc0 = align ?
+          max ( [ for ( c_iter = c )
+                    let( v = first(c_iter) )
+                    is_string(v) ? len(v) : len( strl([v]) ) ] )
+        : 0;
+
+  maxc1 = align ?
+          max ( [ for ( c_iter = c )
+                    let( v = second(c_iter) )
+                    is_string(v) ? len(v) : len( strl([v]) ) ] )
+        : 0;
 
   for ( r_iter = r )
   {
@@ -507,11 +523,13 @@ module table_dump
       is_number( first( search( r_iter, rs, 1, 0 ) ) )
     )
     {
+      // number row
       if ( number )
       {
         log_echo();
         log_echo( str("row: ", table_get_row_index(r, r_iter)) );
       }
+
       for ( c_iter = c )
       {
         if
@@ -520,20 +538,50 @@ module table_dump
           is_number( first( search( c_iter, cs, 1, 0 ) ) )
         )
         {
+          rid     = first(r_iter);
+          cid     = first(c_iter);
+          cdn     = second(c_iter);
+
+          rid_pad = let
+                    (
+                      s = is_string(rid) ? len(rid) : len( strl( [rid] ) )
+                    )
+                    align ?
+                    chr( consts(maxr0 - s, 32 ) )
+                  : empty_str;
+
+          cid_pad = let
+                    (
+                      s = is_string(cid) ? len(cid) : len( strl( [cid] ) )
+                    )
+                    align ?
+                    chr( consts(maxc0 - s, 32 ) )
+                  : empty_str;
+
+          cdn_pad = let
+                    (
+                      s = is_string(cdn) ? len(cdn) : len( strl( [cdn] ) )
+                    )
+                    align ?
+                    chr( consts(maxc1 - s, 32 ) )
+                  : empty_str;
+
+          rc_val  = table_get_value(r, c, r_iter, c_iter);
+
           log_echo
           (
             str
             (
-              "[", first(r_iter), "]", chr(consts(maxr0-len(first(r_iter)), 32)),
-              "[", first(c_iter), "]", chr(consts(maxc0-len(first(c_iter)), 32)),
-              "(", c_iter[1], ")", chr(consts(maxc1-len(c_iter[1]), 32)),
-              "= [", table_get_value(r, c, r_iter, c_iter), "]"
+              "'", rid, "'", rid_pad, " ",
+              cid_pad, "'", cid, "' (", cdn, ")", cdn_pad,
+              " = '", rc_val, "'"
             )
           );
-        }
-      }
-    }
-  }
+
+        } // c-sel
+      } // c
+    } // r-sel
+  } // r
 
   if ( number )
   {
@@ -805,7 +853,7 @@ module table_write
   // heading identifiers and/or text descriptions
   th_text =
   [
-    if(number == true)
+    if ( number == true )
       thn,
 
     for ( c_iter = c )
@@ -838,7 +886,7 @@ module table_write
         if (number == true)
           str(strl_html([table_get_row_index(r, r_iter)], p=[index_tags]),fs),
 
-        strl_html(first(r_iter), p=[row_id_tags]), fs,
+        strl_html([first(r_iter)], p=[row_id_tags]), fs,
         for ( c_iter = tailn(c, n=1) )
           if
           ( // when column selected
@@ -848,7 +896,7 @@ module table_write
             str(strl_html([table_get_value(r, c, r_iter, c_iter)], p=[value_tags]),fs)
       ];
 
-      log_echo ( strl(tdr_text) );
+      log_echo ( strl( tdr_text ) );
     }
   }
 }
