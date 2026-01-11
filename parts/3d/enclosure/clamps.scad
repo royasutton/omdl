@@ -50,7 +50,7 @@
 
 //! A clamp, bushing, and/or grip for wire/hose wall penetrations.
 /***************************************************************************//**
-  \param  size    <decimal-list-2 | decimal> wire size; a list [w, h]
+  \param  wire    <decimal-list-2 | decimal> wire size; a list [w, h]
                   or a single decimal to set the wire diameter.
 
   \param  clamp   <datastruct | integer> screw clamp; structured data
@@ -101,7 +101,7 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | max(size)/4       | \p d : bore diameter
+      0 | <decimal>         | max(wire)/4       | \p d : bore diameter
       1 | <decimal>         | base height       | \p l : bore length
       2 | (see below)       | [d*2, d/3, d/3]   | \p h : screw head
       3 | (see below)       | \b undef          | \p n : screw nut
@@ -121,8 +121,8 @@
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | <integer-list-2 \| integer> | required| wall side
-      1 | <decimal>         | max(size)/2       | cone base width
-      2 | <decimal>         | max(size)/3       | cone height
+      1 | <decimal>         | max(wire)/2       | cone base width
+      2 | <decimal>         | max(wire)/3       | cone height
       3 | <decimal>         | 255               | extrude mode
 
     The extrusion mode controls which sections of the cone are rendered.
@@ -139,13 +139,13 @@
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | <integer-list-2 \| integer> | required| wall side
-      1 | <decimal>         | max(size)/2       | zip tie width
-      2 | <decimal>         | max(size)/6       | zip tie height
-      3 | <decimal>         | max(size)*3/7     | grip base width
-      4 | <decimal>         | max(size)*3/2     | grip height
+      1 | <decimal>         | max(wire)/2       | zip tie width
+      2 | <decimal>         | max(wire)/6       | zip tie height
+      3 | <decimal>         | max(wire)*3/7     | grip base width
+      4 | <decimal>         | max(wire)*3/2     | grip height
       5 | <integer>         | 4                 | cut count
       6 | <decimal>         | 4/5               | cut height fraction
-      7 | <decimal>         | min(size)/5       | cut width
+      7 | <decimal>         | min(wire)/5       | cut width
       8 | <decimal>         | 0                 | cut rotational offset
 
     ##### grip[0]: wall side
@@ -177,7 +177,7 @@
 *******************************************************************************/
 module clamp_cg
 (
-  size,
+  wire,
 
   clamp,
   cone,
@@ -193,8 +193,8 @@ module clamp_cg
   // hole
   //
 
-  sw = defined_e_or(size, 0, size);
-  sh = defined_e_or(size, 1, sw);
+  sw = defined_e_or(wire, 0, wire);
+  sh = defined_e_or(wire, 1, sw);
 
   ww = sw * (1 + gap/100);
   wh = sh * (1 + gap/100);
@@ -203,7 +203,7 @@ module clamp_cg
   wmin = min([ww, wh]);
 
   // type; 0=circle, 1=rectangle
-  wt = is_list(size) && (len(size) > 1) ? 1 : 0;
+  wt = is_list(wire) && (len(wire) > 1) ? 1 : 0;
 
   wr = (wt == 0) ? ww/2 : wmin/4;
   wl = (wt == 0) ? undef : [ww-wr*2, wh-wr*2];
@@ -323,7 +323,7 @@ module clamp_cg
           }
 
           // remove hole
-          clamp_cg(size=size, wth=cd+eps*8, mode=0);
+          clamp_cg(wire=wire, wth=cd+eps*8, mode=0);
 
           // bore screws
           for (x = [-1, 1] )
@@ -462,7 +462,7 @@ BEGIN_SCOPE example_clamp;
     slot = [undef, -3];
     bore = [3, undef, head, nut, slot];
 
-    clamp_cg(size=d, clamp=[0, undef, bore], mode=3);
+    clamp_cg(wire=d, clamp=[0, undef, bore], mode=3);
 
     // end_include
   END_OPENSCAD;
@@ -494,9 +494,9 @@ BEGIN_SCOPE example_cone;
     difference()
     {
       translate(-[d*2,d*2,w/2]) cube([d*4,d*4,w]);
-      clamp_cg(size=d, wth=w, mode=0);
+      clamp_cg(wire=d, wth=w, mode=0);
     }
-    clamp_cg(size=d, cone=[[0, 1]], mode=1);
+    clamp_cg(wire=d, cone=[[0, 1]], mode=1);
 
     // end_include
   END_OPENSCAD;
@@ -529,9 +529,9 @@ BEGIN_SCOPE example_grip;
     difference()
     {
       translate(-[e*2,e*2,w/2]) cube([e*4,e*4,w]);
-      clamp_cg(size=d, wth=w, mode=0);
+      clamp_cg(wire=d, wth=w, mode=0);
     }
-    clamp_cg(size=d, grip=0, mode=1);
+    clamp_cg(wire=d, grip=0, mode=1);
 
     // end_include
   END_OPENSCAD;
