@@ -438,31 +438,120 @@ module clamp_cg
   }
 }
 
-//! A one piece zip-tie clamp.
+//! A one piece zip-tie clamp to securing provide strain relief for wires.
 /***************************************************************************//**
-  \param  wire    <decimal-list-2 | decimal> wire size; a list [w, h]
-                  or a single decimal to set the wire diameter.
+  \param  wire    <decimal-list-2 | decimal> wire size; a list [ww, wh]
+                  or a single decimal to set the \p w = \p h.
 
-  \param  mode    <integer> operation mode {0=removals, 1=additions}.
+  \param  ztie    <decimal-list-2 | decimal> zip tie size; a list [zw, zh]
+                  or a single decimal to set the zip tie width \p w;
+                  height will be assigned w/2..
+
+  \param  clamp   <datastruct> clamp size; a list [w, h, d, [pb]], the
+                  clamp width, height, depth, and pinch-bar
+                  specification.
+
+  \param  tunnel  <datastruct> zip tie tunnel; see below.
+
+  \param  vr      <datastruct> rounding radii for clamp, wire seat and
+                  zip tie tunnel; see below.
+
+  \param  vrm     <datastruct> rounding mode for clamp, wire seat and
+                  zip tie tunnel; see below.
+
+  param  align    <integer-list-3> part alignment; [w, h, d].
+
+  \param  mode    <integer> construction mode {0=removals, 1=additions}.
 
   \details
 
-    Construct a clamp.
+    Construct a one piece clamp that make use of zip ties to secure the
+    wire in place. The wire pinch bars and number of zip tie tunnels
+    can be configured as described below. When the size of the clamp is
+    not specified, default values will be assigned. The clamp is
+    incorporated into other part using the \p mode parameter for
+    feature removal and additions.
+
+    ## Multi-value and structured parameters
+
+    ### clamp
+
+    #### Data structure fields: clamp
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <decimal>                   | ww *2   | clamp width
+      1 | <decimal>                   | wh *2   | clamp height
+      2 | <decimal>                   | zw *2   | clamp depth
+      3 | <decimal-list-3 \| decimal> | zw /3   | pinch bar [pw, ph, po]
+
+    ##### clamp[3]: pinch bar
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <decimal>         | required          | bar width
+      1 | <decimal>         | pw                | bar height
+      2 | <decimal>         | zw *3/2           | bar center offset
+
+    ### tunnel
+
+    #### Data structure fields: tunnel
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <decimal>                   | 1       | corner radius
+      1 | <decimal-list-n \| decimal> | 0       | list of center offsets
+      2 | <integer>                   | 0       | tunnel mode
+      3 | <decimal-list-2>            | [0, 0]  | radial adjustment [w, h]
+      4 | <decimal-list-2>            | [0, 0]  | center offset [w, h]
+
+    ###### tunnel[2]: tunnel mode
+
+    Integer value is binary encoded.
+
+      b | description
+    ---:|:---------------------------------------
+    0-1 | w-size select {0:inner, 1:middle, 2:outer}
+    2-3 | h-size select {0:inner, 1:middle, 2:outer}
+      4 | project tunnel to bottom of clamp for zip tie access
+
+    ### vr
+
+    #### Data structure fields: vr
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <decimal-list-4 \| decimal> | required| clamp rounding radii
+      1 | <decimal-list-4 \| decimal> | 0       | seat rounding radii
+      2 | <decimal-list-4 \| decimal> | 0       | tunnel rounding radii
+
+    ### vrm
+
+    #### Data structure fields: vrm
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <decimal-list-4 \| decimal> | [1, 1, 4, 3] | clamp rounding radii
+      1 | <decimal-list-4 \| decimal> | [4, 3, 1, 1] | seat rounding radii
+      2 | <decimal-list-4 \| decimal> | 1            | tunnel rounding radii
+
+    \todo support rounded wire passage when wire is integer.
+
 *******************************************************************************/
 module clamp_zt_1p
 (
-  wire,       // wire: [w, h]
-  ztie,       // zip tie: [w, h]
+  wire,
+  ztie,
 
-  size,       // clamp size: [w, h, d, [pinch-bar]]
-  tunnel,     // zip tie tunnel: [cr, inst, mode, wh-adjust, wh-offset]
+  size,
+  tunnel,
 
-  vr,         // rounding radius: [clamp, wire seat, zip tunnel]
-  vrm,        // rounding mode: [clamp, wire seat, zip tunnel]
+  vr,
+  vrm,
 
-  align,      // alignment [w, h, d]
+  align,
 
-  mode = 1    // mode: b0:removals/additions
+  mode = 1
 )
 {
   //
@@ -496,21 +585,22 @@ module clamp_zt_1p
   sy  = defined_e_or(size, 1, wy*2);
   sz  = defined_e_or(size, 2, zx*2);
 
+  // wire pinch bar
   pb  = defined_e_or(size, 3, zx*2/6);
 
-  // tunnel:
+  // tunnel: [cr, inst, mode, wh-adjust, wh-offset]
   cr  = defined_e_or(tunnel, 0, 1);           // corner radius
   zi  = defined_e_or(tunnel, 1, 0);           // list of offset instances
   tm  = defined_e_or(tunnel, 2, 0);           // 5-bit integer tunnel mode
   ta  = defined_e_or(tunnel, 3, [0, 0]);      // tunnel wh-radial adjustment
   to  = defined_e_or(tunnel, 4, [0, 0]);      // tunnel wh-offset
 
-  // rounding
+  // rounding: [clamp, wire seat, zip tunnel]
   vr0 = defined_e_or(vr, 0, vr);
   vr1 = defined_e_or(vr, 1, 0);
   vr2 = defined_e_or(vr, 2, 0);
 
-  // rounding modes
+  // rounding modes: [clamp, wire seat, zip tunnel]
   vrm0  = defined_e_or(vrm, 0, [1, 1, 4, 3]);
   vrm1  = defined_e_or(vrm, 1, [4, 3, 1, 1]);
   vrm2  = defined_e_or(vrm, 2, 1);
