@@ -438,7 +438,7 @@ module clamp_cg
   }
 }
 
-//! A one piece zip-tie clamp to securing provide strain relief for wires.
+//! A one piece zip tie clamp to secure and/or provide strain relief.
 /***************************************************************************//**
   \param  wire    <decimal-list-2 | decimal> wire size; a list [ww, wh]
                   or a single decimal to set the \p w = \p h.
@@ -535,8 +535,12 @@ module clamp_cg
       1 | <decimal-list-4 \| decimal> | [4, 3, 1, 1] | seat rounding radii
       2 | <decimal-list-4 \| decimal> | 1            | tunnel rounding radii
 
-    \todo support rounded wire passage when wire is integer.
+    \amu_define scope_id      (example_clamp_zt_1p)
+    \amu_define title         (Zip tie clamp example)
+    \amu_define image_views   (top bottom right back diag)
+    \amu_define image_size    (sxga)
 
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
 module clamp_zt_1p
 (
@@ -824,6 +828,42 @@ BEGIN_SCOPE example_grip;
 
     images    name "sizes" types "sxga";
     views     name "views" views "top back diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
+
+/*
+BEGIN_SCOPE example_clamp_zt_1p;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <parts/3d/enclosure/clamps.scad>;
+
+    w = [10, 4];
+    z = 4;
+    s = [20, 10, 30];
+    t = [1, [-10, 0, +10], 5 + 16, [4, -2]];
+    v = [4, 1, 1];
+
+    rotate([90,0,0]) {
+      clamp_zt_1p (wire=w, ztie=z, size=s, tunnel=t, vr=v);
+      color("white")
+      clamp_zt_1p (wire=w, ztie=z, size=s, tunnel=t, vr=v, mode=0);
+    }
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "top bottom right back diag";
 
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter --view=axes";
