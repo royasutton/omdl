@@ -472,6 +472,12 @@ module clamp_cg
     constructed alone for object difference when integrating with other
     design components.
 
+    When \p size is a single decimal, the wire seat is a half-circle,
+    centered at the top edge of the clamp. When \p size is a
+    decimal-list-2, the seat is a rectangle with the upper top edge
+    aligned with the top edge of the clamp. The wire seat rounding
+    parameters are used only for the latter case.
+
     ## Multi-value and structured parameters
 
     ### clamp
@@ -577,8 +583,9 @@ module clamp_zt_1p
   }
 
   // wire size
+  od  = !is_list(size);                       // size one dimensional
   wx  = defined_e_or(size, 0, size);
-  wy  = defined_e_or(size, 1, wx);
+  wy  = defined_e_or(size, 1, od ? wx/2 : wx);
 
   // zip tie
   zx  = defined_e_or(ztie, 0, ztie);
@@ -666,17 +673,25 @@ module clamp_zt_1p
 
       // remove wire passage
       if ( binary_bit_is(mode, 0, 1) )
-      translate([0, (sy-wy)/2 + eps*2, 0])
       extrude_linear_uss(sz + eps*4, center=true)
-      pg_rectangle
-      (
-        size = [wx, wy],
-        vr = vr1,
-        vrm = vrm1,
-        center = true
-      );
+      if ( od )
+      {
+        translate([0, sy/2 + eps*2, 0])
+        circle(d = wx);
+      }
+      else
+      {
+        translate([0, (sy-wy)/2 + eps*2, 0])
+        pg_rectangle
+        (
+          size = [wx, wy],
+          vr = vr1,
+          vrm = vrm1,
+          center = true
+        );
+      }
 
-      // remove tunnel passage
+      // remove zip tie tunnel passage
       for (zio = zi)
       translate([0, zto, zio] + concat(to, 0))
       open_tunnel_access()
@@ -709,7 +724,7 @@ module clamp_zt_1p
       }
     }
 
-    // add base pinch bar set for tunnel instance (when > 0)
+    // add base pinch bar sets for tunnel instance (when > 0)
     if ( binary_bit_is(mode, 0, 1) && ( pw > 0 ) )
     for (zio = zi, i = [-1, 1])
     translate([0, sy/2 - wy, zio + i * po/2])
