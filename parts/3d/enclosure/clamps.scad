@@ -48,7 +48,7 @@
 
 //----------------------------------------------------------------------------//
 
-//! A clamp, bushing, and/or grip for wire/hose wall penetrations.
+//! A clamp, bushing, and/or grip for wire, hose, and/or pipe wall penetrations.
 /***************************************************************************//**
   \param  size    <decimal-list-2 | decimal> wire size; a list [w, h]
                   or a single decimal to set the wire diameter.
@@ -64,7 +64,7 @@
 
   \param  wth     <decimal> wall thickness.
 
-  \param  gap     <decimal> wire/hose gap percentage.
+  \param  gap     <decimal> wire gap percentage.
 
   \param  mode    <integer> operation mode {0=hole, 1=part-a, 2=part-b,
                   3=parts-a and b}.
@@ -73,7 +73,7 @@
 
     Construct a clamp, cone bushing, and/or a grip as a stand alone
     part or as a wall penetration hole finish that can secure or
-    provide strain relief for passing wires and/or hoses. The
+    provide strain relief for passing wires, pipes, hoses, etc. The
     penetration can be circular or rectangular dependent on the size
     specification.
 
@@ -102,7 +102,7 @@
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | <decimal>         | max(size)/4       | \p d : bore diameter
-      1 | <decimal>         | base height       | \p l : bore length
+      1 | <decimal>         | h                 | \p l : bore length
       2 | (see below)       | [d*2, d/3, d/3]   | \p h : screw head
       3 | (see below)       | \b undef          | \p n : screw nut
       4 | (see below)       | \b undef          | \p s : nut slot cutout
@@ -126,7 +126,7 @@
       3 | <decimal>         | 255               | extrude mode
 
     The extrusion mode controls which sections of the cone are rendered.
-    For more information see the mode parameter for extrude_mode_trl().
+    For more information see the mode parameter for extrude_rotate_trl().
 
     ##### cone[0]: wall side
 
