@@ -573,8 +573,8 @@ module pcie_enclosure
 
   part_color,
 
-  part      = 1,
-  mode      = 0,
+  part      = 7,
+  mode      = 3,
 
   verb      = 0
 )
