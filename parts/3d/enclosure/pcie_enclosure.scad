@@ -619,7 +619,7 @@ module pcie_enclosure
           (
             wire    = clamp_conf[0],
             ztie    = clamp_conf[1],
-            size    = clamp_conf[2],
+            clamp   = clamp_conf[2],
             tunnel  = clamp_conf[3],
             vr      = clamp_conf[4],
             vrm     = clamp_conf[5],

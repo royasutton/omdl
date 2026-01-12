@@ -447,7 +447,7 @@ module clamp_cg
                   or a single decimal to set the zip tie width \p w;
                   height will be assigned w/2..
 
-  \param  size    <datastruct> clamp size; a list [w, h, d, [pb]], the
+  \param  clamp   <datastruct> clamp size; a list [w, h, d, [pb]], the
                   clamp width, height, depth, and pinch-bar
                   specification.
 
@@ -547,7 +547,7 @@ module clamp_zt_1p
   wire = 1,
   ztie = 1,
 
-  size,
+  clamp,
   tunnel,
 
   vr,
@@ -585,12 +585,12 @@ module clamp_zt_1p
   zy  = defined_e_or(ztie, 1, zx/2);
 
   // clamp size
-  sx  = defined_e_or(size, 0, wx*2);
-  sy  = defined_e_or(size, 1, wy*2);
-  sz  = defined_e_or(size, 2, zx*2);
+  sx  = defined_e_or(clamp, 0, wx*2);
+  sy  = defined_e_or(clamp, 1, wy*2);
+  sz  = defined_e_or(clamp, 2, zx*2);
 
   // wire pinch bar
-  pb  = defined_e_or(size, 3, zx*2/6);
+  pb  = defined_e_or(clamp, 3, zx*2/6);
 
   // tunnel: [cr, inst, mode, wh-adjust, wh-offset]
   cr  = defined_e_or(tunnel, 0, 1);           // corner radius
@@ -845,14 +845,14 @@ BEGIN_SCOPE example_clamp_zt_1p;
 
     w = [10, 4];
     z = 4;
-    s = [20, 10, 30];
+    c = [20, 10, 30];
     t = [1, [-10, 0, +10], 5 + 16, [4, -2]];
     v = [4, 1, 1];
 
     rotate([90,0,0]) {
-      clamp_zt_1p (wire=w, ztie=z, size=s, tunnel=t, vr=v);
+      clamp_zt_1p (wire=w, ztie=z, clamp=c, tunnel=t, vr=v);
       color("white")
-      clamp_zt_1p (wire=w, ztie=z, size=s, tunnel=t, vr=v, mode=0);
+      clamp_zt_1p (wire=w, ztie=z, clamp=c, tunnel=t, vr=v, mode=0);
     }
 
     // end_include
