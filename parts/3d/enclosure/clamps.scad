@@ -438,26 +438,25 @@ module clamp_cg
   }
 }
 
-//! A one piece zip tie clamp to secure and/or provide strain relief.
+//! A one piece zip tie clamp to secure wires or provide strain relief.
 /***************************************************************************//**
-  \param  size    <decimal-list-2 | decimal> wire size; a list [ww, wh]
-                  or a single decimal to set the \p w = \p h.
+  \param  size    <decimal-list-2 | decimal> wire size; a list [w, h]
+                  or a single decimal for (w=h).
 
   \param  ztie    <decimal-list-2 | decimal> zip tie size; a list [zw, zh]
-                  or a single decimal to set the zip tie width \p w;
-                  height will be assigned w/2..
+                  or a single decimal to set zw with (zh=zw/2).
 
-  \param  clamp   <datastruct> clamp size; a list [w, h, d, [pb]], the
-                  clamp width, height, depth, and pinch-bar
-                  specification.
+  \param  clamp   <datastruct> clamp size; a list [cw, ch, cd, [pbs]],
+                  the clamp width, height, depth, and pinch bar
+                  specification (pbs).
 
-  \param  tunnel  <datastruct> zip tie tunnel; see below.
+  \param  tunnel  <datastruct> zip tie tunnel configuration; (see below).
 
   \param  vr      <datastruct> rounding radii for clamp, wire seat and
-                  zip tie tunnel; see below.
+                  zip tie tunnel; (see below).
 
   \param  vrm     <datastruct> rounding mode for clamp, wire seat and
-                  zip tie tunnel; see below.
+                  zip tie tunnel; (see below).
 
   \param  align   <integer-list-3> part alignment; [w, h, d].
 
@@ -465,12 +464,13 @@ module clamp_cg
 
   \details
 
-    Construct a one piece clamp that make use of zip ties to secure the
-    wire in place. The wire pinch bars and number of zip tie tunnels
-    can be configured as described below. When the size of the clamp is
-    not specified, default values will be assigned. The clamp is
-    incorporated into other part using the \p mode parameter for
-    feature removal and additions.
+    Construct a one piece clamp that uses one or more zip ties to
+    secure a wires hose, pipe, etc. The pinch bars and number of zip
+    tie tunnels can be configured as described below. When the size of
+    the clamp is not specified, default values will be assigned based
+    on the wire size. Via the \p mode parameter, the tunnels can be
+    constructed alone for object difference when integrating with other
+    design components.
 
     ## Multi-value and structured parameters
 
@@ -480,8 +480,8 @@ module clamp_cg
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>                   | ww *2   | clamp width
-      1 | <decimal>                   | wh *2   | clamp height
+      0 | <decimal>                   |  w *2   | clamp width
+      1 | <decimal>                   |  h *2   | clamp height
       2 | <decimal>                   | zw *2   | clamp depth
       3 | <decimal-list-3 \| decimal> | zw /3   | pinch bar [pw, ph, po]
 
@@ -490,7 +490,7 @@ module clamp_cg
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | <decimal>         | required          | bar width
-      1 | <decimal>         | pw                | bar height
+      1 | <decimal>         | pw /3             | bar height
       2 | <decimal>         | zw *3/2           | bar center offset
 
     ### tunnel
@@ -590,7 +590,7 @@ module clamp_zt_1p
   sz  = defined_e_or(clamp, 2, zx*2);
 
   // wire pinch bar
-  pb  = defined_e_or(clamp, 3, zx*2/6);
+  pb  = defined_e_or(clamp, 3, zx/3);
 
   // tunnel: [cr, inst, mode, wh-adjust, wh-offset]
   cr  = defined_e_or(tunnel, 0, 1);           // corner radius
