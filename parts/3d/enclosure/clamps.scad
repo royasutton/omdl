@@ -447,7 +447,7 @@ module clamp_cg
                   or a single decimal to set the zip tie width \p w;
                   height will be assigned w/2..
 
-  \param  clamp   <datastruct> clamp size; a list [w, h, d, [pb]], the
+  \param  size    <datastruct> clamp size; a list [w, h, d, [pb]], the
                   clamp width, height, depth, and pinch-bar
                   specification.
 
@@ -459,7 +459,7 @@ module clamp_cg
   \param  vrm     <datastruct> rounding mode for clamp, wire seat and
                   zip tie tunnel; see below.
 
-  param  align    <integer-list-3> part alignment; [w, h, d].
+  \param  align   <integer-list-3> part alignment; [w, h, d].
 
   \param  mode    <integer> construction mode {0=removals, 1=additions}.
 
