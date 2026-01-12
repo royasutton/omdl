@@ -617,7 +617,7 @@ module pcie_enclosure
           rotate([90, 0, eci_rotate])
           clamp_zt_1p
           (
-            wire    = clamp_conf[0],
+            size    = clamp_conf[0],
             ztie    = clamp_conf[1],
             clamp   = clamp_conf[2],
             tunnel  = clamp_conf[3],
@@ -837,7 +837,7 @@ module pcie_enclosure
           rotate([90, 0, eci_rotate])
           clamp_cg
           (
-            wire  = wire + [0, pass_hcut],
+            size  = wire + [0, pass_hcut],
             cone  = pass_cone,
             wth   = encl_wth*2,
             gap   = 10,

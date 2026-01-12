@@ -308,7 +308,7 @@ module power_strip_sg
     pwzo = pczo( pwcd );
 
     translate([0, 0, pwct - eps*2])
-    clamp_cg(wire=pwcd, clamp=[1, pwzo, [pwsd,undef,pwsh,pwsn], pwct, pwcp], wth=0, mode=2);
+    clamp_cg(size=pwcd, clamp=[1, pwzo, [pwsd,undef,pwsh,pwsn], pwct, pwcp], wth=0, mode=2);
   }
 
   // power strip base
@@ -604,7 +604,7 @@ module power_strip_sg
 
       // power cord hole (wth*4 to remove obstructing ribs)
       translate([pwxo, -il/2-wth/2, pwzo]) rotate([90, 0, 0])
-      clamp_cg(wire=pwcd, wth=wth*4, mode=0);
+      clamp_cg(size=pwcd, wth=wth*4, mode=0);
 
       // screw mount slot (negative)
       mount_slots(1);
@@ -627,7 +627,7 @@ module power_strip_sg
 
     // add power cord clamp bottom
     translate([pwxo, -il/2-wth/2, pwzo]) rotate([90, 0, 0])
-    clamp_cg(wire=pwcd, clamp=[pwcs, pwzo, [pwsd,undef,pwsh,pwsn], pwct, pwcp], cone=pwcs+1, wth=wth, mode=1);
+    clamp_cg(size=pwcd, clamp=[pwcs, pwzo, [pwsd,undef,pwsh,pwsn], pwct, pwcp], cone=pwcs+1, wth=wth, mode=1);
 
     // add mount tabs
     mount_tabs();
