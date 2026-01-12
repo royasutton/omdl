@@ -709,10 +709,10 @@ module clamp_zt_1p
       }
     }
 
-    // add base pinch bars (when > 0)
+    // add base pinch bar set for tunnel instance (when > 0)
     if ( binary_bit_is(mode, 0, 1) && ( pw > 0 ) )
-    for (i = [-1, 1])
-    translate([0, sy/2 - wy, i * po/2])
+    for (zio = zi, i = [-1, 1])
+    translate([0, sy/2 - wy, zio + i * po/2])
     rotate([0, 90, 0])
     extrude_linear_mss( h=wx, center=true )
     difference()
