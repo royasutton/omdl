@@ -497,7 +497,7 @@ riser_pcb_def = riser_PCE164P_NO3_VER_007;
 
   \returns  <decimal-list-3> The board size [w, l, h].
 *******************************************************************************/
-function pcie_enclosure_rb_size_wlh
+function pcie_enclosure_rb_size
 (
   riser_pcb,
 
@@ -540,7 +540,7 @@ function pcie_enclosure_rb_size_wlh
 
   \returns  <decimal-list-3> The enclosure size [w, l, h].
 *******************************************************************************/
-function pcie_enclosure_size_wlh
+function pcie_enclosure_size
 (
   pcie_base = pcie_spec_common,
   pcie_form = pcie_spec_half,
@@ -554,7 +554,7 @@ function pcie_enclosure_size_wlh
   let
   (
     riser_width             = is_undef( riser_pcb_width ) ?
-                              first( pcie_enclosure_rb_size_wlh(riser_pcb) )
+                              first( pcie_enclosure_rb_size(riser_pcb) )
                             : riser_pcb_width,
 
     // pcie
@@ -624,7 +624,7 @@ function pcie_enclosure_size_wlh
 
   \returns  <decimal-list-3> The enclosure size [w, l, h].
 *******************************************************************************/
-function pcie_enclosure_rbs_keys_wlh
+function pcie_enclosure_rbs_keys
 (
   pcie_base = pcie_spec_common,
   pcie_form = pcie_spec_half,
@@ -641,11 +641,11 @@ function pcie_enclosure_rbs_keys_wlh
   let
   (
     riser_width   = is_undef( riser_pcb_width ) ?
-                    first( pcie_enclosure_rb_size_wlh(riser_pcb) )
+                    first( pcie_enclosure_rb_size(riser_pcb) )
                   : riser_pcb_width,
 
     encl_size_wlh = is_undef( enclosure_size ) ?
-                    pcie_enclosure_size_wlh
+                    pcie_enclosure_size
                     (
                       pcie_base,
                       pcie_form,
@@ -1426,10 +1426,10 @@ module pcie_enclosure
   encl_posts_cover          = map_get_value(enclosure, "posts_cover");
 
   // rise board width
-  riser_width   = first( pcie_enclosure_rb_size_wlh(riser_pcb) );
+  riser_width   = first( pcie_enclosure_rb_size(riser_pcb) );
 
   // enclosure internal size
-  encl_size_wlh = pcie_enclosure_size_wlh
+  encl_size_wlh = pcie_enclosure_size
                   (
                     pcie_base,
                     pcie_form,
@@ -1441,7 +1441,7 @@ module pcie_enclosure
                   );
 
   // riser boards and slot key offsets
-  slot_keys_wlh = pcie_enclosure_rbs_keys_wlh
+  slot_keys_wlh = pcie_enclosure_rbs_keys
                   (
                     pcie_base,
                     pcie_form,
@@ -1463,7 +1463,7 @@ module pcie_enclosure
   if (verb > 0)
   {
     encl_size_int = encl_size_wlh;
-    encl_size_ext = pcie_enclosure_size_wlh
+    encl_size_ext = pcie_enclosure_size
                     (
                       pcie_base,
                       pcie_form,
