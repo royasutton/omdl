@@ -53,7 +53,7 @@
 // global configuration variables
 //----------------------------------------------------------------------------//
 
-//! \name Maps
+//! \name Configuration
 //! @{
 
 //! <map> A single gang electrical device box configuration.
