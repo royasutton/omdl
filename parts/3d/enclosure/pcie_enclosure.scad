@@ -115,7 +115,23 @@ pcie_spec_half =
 //! @{
 
 //! <map> USB 3.0 PCE164P-NO3 VER 007 1-slot riser board.
-//! \hideinitializer
+/***************************************************************************//**
+  \details
+
+    A configuration for the PCE164P-NO3 VER 007 1-slot riser board.
+    This is the default riser board and can be used as a basis for
+    constructing new riser board configuration.
+
+    \amu_define title (Default enclosure configuration map)
+    \amu_define scope_id (riser_PCE164P_NO3_VER_007)
+    \amu_define output_scad (false)
+    \amu_define output_console (false)
+    \amu_define notes_table (Map key description is available in source. See the map)
+
+    \amu_include (include/amu/scope_table.amu)
+
+  \hideinitializer
+*******************************************************************************/
 riser_PCE164P_NO3_VER_007 =
 [
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
@@ -151,7 +167,13 @@ riser_PCE164P_NO3_VER_007 =
 ];
 
 //! <map> AAAPCIE4HUB multiplier HUB 4-slot riser board.
-//! \hideinitializer
+/***************************************************************************//**
+  \details
+
+    A configuration for the AAAPCIE4HUB multiplier HUB 1-slot riser board.
+
+  \hideinitializer
+*******************************************************************************/
 riser_AAAPCIE4HUB =
 [
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
@@ -189,8 +211,14 @@ riser_AAAPCIE4HUB =
   //! \endcond
 ];
 
-//! <map> AAAPCIE4HUB multiplier HUB 1-slot riser board.
-//! \hideinitializer
+//! <map> SFF-8612 4X lane to 16X 1-slot riser board.
+/***************************************************************************//**
+  \details
+
+    A configuration for the SFF-8612 4X lane to 16X 1-slot riser board.
+
+  \hideinitializer
+*******************************************************************************/
 riser_SFF_8612_4X_to_PCI_E_16X =
 [
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
@@ -231,7 +259,21 @@ riser_SFF_8612_4X_to_PCI_E_16X =
 //! @{
 
 //! <map> Default enclosure configuration.
-//! \hideinitializer
+/***************************************************************************//**
+  \details
+
+    The default enclosure configuration map.
+
+    \amu_define title (Default enclosure configuration map)
+    \amu_define scope_id (enclosure_def)
+    \amu_define output_scad (false)
+    \amu_define output_console (false)
+    \amu_define notes_table (Map key description is available in source. See the map)
+
+    \amu_include (include/amu/scope_table.amu)
+
+  \hideinitializer
+*******************************************************************************/
 enclosure_def =
 [
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
@@ -697,6 +739,22 @@ if ( pcie_enclosure_debug )
 
   \details
 
+    This module constructs chassis and enclosures for common Peripheral
+    Component Interconnect Express [PCIe] riser boards that provide
+    external PCIe slots access. These boards have found popularity to
+    connect one or more GPUs externally to a computer system. This
+    module can generate open chassis and closed enclosures.
+
+    \amu_define scope_id      (example)
+    \amu_define title         (Enclosure customization example)
+    \amu_define image_views   (front right back diag)
+    \amu_define image_columns (4)
+    \amu_define image_size    (sxga)
+    \amu_define output_scad   (true)
+
+    \amu_include (include/amu/scope_diagrams_3d.amu)
+
+  [PCIe]: https://en.wikipedia.org/wiki/PCI_Express
 *******************************************************************************/
 module pcie_enclosure
 (
@@ -1484,6 +1542,85 @@ module pcie_enclosure
 
 //! @}
 //! @}
+
+
+//----------------------------------------------------------------------------//
+// openscad-amu auxiliary scripts
+//----------------------------------------------------------------------------//
+
+/*
+BEGIN_SCOPE example;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/operation_cs.scad>;
+    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/enclosure/project_box_rectangle.scad>;
+    include <parts/3d/enclosure/pcie_enclosure.scad>;
+
+    encl_conf =
+    [
+      ["board_count",         1],
+      ["space_min_length",  238],
+    ];
+
+    custom_encl = map_merge( encl_conf, enclosure_def );
+    map_check( custom_encl );
+
+    pcie_enclosure( enclosure=custom_encl, verb=1 );
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "front right back diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
+
+/*
+BEGIN_SCOPE riser_PCE164P_NO3_VER_007;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/operation_cs.scad>;
+    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/enclosure/project_box_rectangle.scad>;
+    include <parts/3d/enclosure/pcie_enclosure.scad>;
+
+    map_write( riser_PCE164P_NO3_VER_007 );
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE enclosure_def;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/operation_cs.scad>;
+    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/enclosure/project_box_rectangle.scad>;
+    include <parts/3d/enclosure/pcie_enclosure.scad>;
+
+    map_write( enclosure_def );
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
 
 //----------------------------------------------------------------------------//
 // end of file
