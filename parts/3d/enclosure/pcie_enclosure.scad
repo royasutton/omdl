@@ -1,25 +1,63 @@
-/*
+//! A PCI Express chassis and/or enclosure generator.
+/***************************************************************************//**
+  \file
+  \author Roy Allen Sutton
+  \date   2026
 
-  pcie expansion chassis / enclosure generator
+  \copyright
 
-  TODO:
-  - enclosure option to raise rb-pcb bottom clearance
-  - mode to render black-box model of riser board on base
-  - option to use 3d-print overhang scaffolding
+    This file is part of [omdl] (https://github.com/royasutton/omdl),
+    an OpenSCAD mechanical design library.
 
-*/
+    The \em omdl is free software; you can redistribute it and/or modify
+    it under the terms of the [GNU Lesser General Public License]
+    (http://www.gnu.org/licenses/lgpl.html) as published by the Free
+    Software Foundation; either version 2.1 of the License, or (at
+    your option) any later version.
+
+    The \em omdl is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with the \em omdl; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+    02110-1301, USA; or see <http://www.gnu.org/licenses/>.
+
+  \details
+
+    \amu_define group_name  (PCIe Enclosure)
+    \amu_define group_brief (PCI Express chassis and/or enclosure generator.)
+
+  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+*******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// PCI-E standard specifications
+
+/***************************************************************************//**
+  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_define includes_required_add
+  (
+    tools/operation_cs.scad
+    parts/3d/enclosure/clamps.scad
+    parts/3d/enclosure/project_box_rectangle.scad
+  )
+  \amu_include (include/amu/includes_required.amu)
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// global configuration
 //----------------------------------------------------------------------------//
 
-// set to true to check maps structure
-pcie_enclosure_debug = false;
-pcie_enclosure_debug_verbose = false;
+//! \name Configuration: PCI-E standard
+//! @{
 
-// common to full and half-length
+//! <map> PCI-E standard specifications common to full and half-length cards.
+//! \hideinitializer
 pcie_spec_common =
 [
+  //! \cond DOXYGEN_SHOULD_SKIP_THIS
   ["h_connector_max",                   11.25],
   ["l_keya_2_bkto",                     59.05],
   ["w_bkt_width",                       18.42],
@@ -30,11 +68,14 @@ pcie_spec_common =
   ["w_bkt_tabo",                         4.11],
   ["l_card_max_full",                  312.00],
   ["l_card_max_half",                  167.65],
+  //! \endcond
 ];
 
-// full-length cards
+//! <map> PCI-E full-length card standard specifications.
+//! \hideinitializer
 pcie_spec_full =
 [
+  //! \cond DOXYGEN_SHOULD_SKIP_THIS
   ["h_card_max",                       111.15],
   ["h_card_max_2_pciblck",             106.65],
   ["h_pciblck_2_bktb",                 100.36],
@@ -46,11 +87,14 @@ pcie_spec_full =
   ["wl_mnt_tab",       [+21.59 - 2.54, 11.43]],
   ["w_mnt_tab_o",     -1.57/2 + 18.42 - 21.59],
   ["wl_mnt_hole_o",  [-1.57/2 - 1.27, -64.13]],
+  //! \endcond
 ];
 
-// half-length cards
+//! <map> PCI-E half-length card standard specifications.
+//! \hideinitializer
 pcie_spec_half =
 [
+  //! \cond DOXYGEN_SHOULD_SKIP_THIS
   ["h_card_max",                        68.90],
   ["h_card_max_2_pciblck",              64.40],
   ["h_pciblck_2_bktb",                  63.58],
@@ -62,15 +106,19 @@ pcie_spec_half =
   ["wl_mnt_tab",               [18.59, 11.84]],
   ["w_mnt_tab_o",              +1.57/2 + 0.37],
   ["wl_mnt_hole_o", [+1.57/2 + 14.71, -65.40]],
+  //! \endcond
 ];
 
-//----------------------------------------------------------------------------//
-// Riser board specifications
-//----------------------------------------------------------------------------//
+//! @}
 
-// PCE164P-NO3 VER 007 (and VER 008C)
+//! \name Configuration: Riser board
+//! @{
+
+//! <map> USB 3.0 PCE164P-NO3 VER 007 1-slot riser board.
+//! \hideinitializer
 riser_PCE164P_NO3_VER_007 =
 [
+  //! \cond DOXYGEN_SHOULD_SKIP_THIS
   ["bottom_clearance",        3],         // riser bottom electronics h-clearance
   ["top_clearance",          12],         // riser top electronics h-clearance
   ["slot_count",              1],         // riser slot count
@@ -99,11 +147,14 @@ riser_PCE164P_NO3_VER_007 =
   ["post_fins",             [4]],         // mount post fin configuration
   ["post_hole_d",          3.00],         // mount post hole diameter
   ["post_pad_d",    2.75 * 3.00]          // mount post diameter
+  //! \endcond
 ];
 
-// PCI-E 1x to 4 PCI-E Multiplier HUB - AAAPCIE4HUB
+//! <map> AAAPCIE4HUB multiplier HUB 4-slot riser board.
+//! \hideinitializer
 riser_AAAPCIE4HUB =
 [
+  //! \cond DOXYGEN_SHOULD_SKIP_THIS
   ["bottom_clearance",        3],         // riser bottom electronics h-clearance
   ["top_clearance",           8],         // riser top electronics h-clearance
   ["slot_count",              4],         // riser slot count
@@ -135,11 +186,14 @@ riser_AAAPCIE4HUB =
   ["post_fins",             [4]],         // mount post fin configuration
   ["post_hole_d",          3.00],         // mount post hole diameter
   ["post_pad_d",    2.75 * 3.00]          // mount post diameter
+  //! \endcond
 ];
 
-// SFF-8612 4X to PCI-E 16X
+//! <map> AAAPCIE4HUB multiplier HUB 1-slot riser board.
+//! \hideinitializer
 riser_SFF_8612_4X_to_PCI_E_16X =
 [
+  //! \cond DOXYGEN_SHOULD_SKIP_THIS
   ["bottom_clearance",        0],         // riser bottom electronics h-clearance
   ["top_clearance",           6],         // riser top electronics h-clearance
   ["slot_count",              1],         // riser slot count
@@ -168,18 +222,19 @@ riser_SFF_8612_4X_to_PCI_E_16X =
   ["post_fins",             [4]],         // mount post fin configuration
   ["post_hole_d",          2.75],         // mount post hole diameter
   ["post_pad_d",    2.75 * 2.75]          // mount post diameter
+  //! \endcond
 ];
 
-// default riser board
-riser_pcb_def = riser_PCE164P_NO3_VER_007;
+//! @}
 
-//----------------------------------------------------------------------------//
-// Enclosure specifications
-//----------------------------------------------------------------------------//
+//! \name Configuration: Enclosure
+//! @{
 
-// default enclosure configuration
+//! <map> Default enclosure configuration.
+//! \hideinitializer
 enclosure_def =
 [
+  //! \cond DOXYGEN_SHOULD_SKIP_THIS
   ["rounding",                  6.75],    // corner rounding radius
   ["wth",                        2.0],    // minimum wall thickness
 
@@ -366,36 +421,40 @@ enclosure_def =
   ["mode_sides",                   0],    // enclosure sides mode
   ["mode_proj_box",                0],    // project_box_rectangle() mode
   ["verb",                         0]     // construction verbosity
+  //! \endcond
 ];
 
-//----------------------------------------------------------------------------//
-//
-// debug maps structure
-//
-//----------------------------------------------------------------------------//
-
-if ( pcie_enclosure_debug )
-{
-  verbose = pcie_enclosure_debug_verbose;
-
-  map_check(pcie_spec_common, verbose);
-  map_check(pcie_spec_full, verbose);
-  map_check(pcie_spec_half, verbose);
-
-  map_check(riser_PCE164P_NO3_VER_007, verbose);
-  map_check(riser_AAAPCIE4HUB, verbose);
-  map_check(riser_SFF_8612_4X_to_PCI_E_16X, verbose);
-
-  map_check(enclosure_def, verbose);
-}
+//! @}
 
 //----------------------------------------------------------------------------//
-//
-// Global functions
-//
+// global variables
 //----------------------------------------------------------------------------//
 
-// rise board size
+//! \name Variables
+//! @{
+
+//! <boolean> Set to true to check configuration structure.
+pcie_enclosure_debug = false;
+
+//! <boolean> Set to true for verbose configuration checking.
+pcie_enclosure_debug_verbose = false;
+
+//! <map> Default riser board configuration.
+riser_pcb_def = riser_PCE164P_NO3_VER_007;
+
+//! @}
+
+//----------------------------------------------------------------------------//
+// functions
+//----------------------------------------------------------------------------//
+
+//! Get riser board size for riser configuration.
+/***************************************************************************//**
+  \param    riser_pcb <map> The riser board configuration.
+  \param    slots <integer> Optional slot count override.
+
+  \returns  <decimal-list-3> The board size [w, l, h].
+*******************************************************************************/
 function pcie_enclosure_rb_size_wlh
 (
   riser_pcb,
@@ -425,7 +484,20 @@ function pcie_enclosure_rb_size_wlh
   )
   [ w, l, h ];
 
-// enclosure internal or external size
+//! Get enclosure internal or external size.
+/***************************************************************************//**
+  \param    pcie_base <map> PCI-E standard common configuration.
+  \param    pcie_form <map> PCI-E half or full configuration.
+  \param    riser_pcb <map> The riser board configuration.
+  \param    enclosure <map> The enclosure design configuration.
+
+  \param    riser_pcb_width <decimal> The riser board width.
+
+  \param    external <boolean> Set \b true to return external size and
+            \b false for internal size.
+
+  \returns  <decimal-list-3> The enclosure size [w, l, h].
+*******************************************************************************/
 function pcie_enclosure_size_wlh
 (
   pcie_base = pcie_spec_common,
@@ -488,7 +560,28 @@ function pcie_enclosure_size_wlh
   ( external )  ? [ w, l_min, h_min ] + [ encl_wth*2, encl_wth*2, encl_wth*2 ]
                 : [ w, l_min, h_min ];
 
-// enclosure internal or external size
+//! Get data structure with slot key locations on all riser boards.
+/***************************************************************************//**
+  \param    pcie_base <map> PCI-E standard common configuration.
+  \param    pcie_form <map> PCI-E half or full configuration.
+  \param    riser_pcb <map> The riser board configuration.
+  \param    enclosure <map> The enclosure design configuration.
+
+  \param    riser_pcb_width <decimal> The riser board width.
+  \param    enclosure_size <decimal-list-3> The enclosure's internal size.
+
+  \param    center_w <boolean> Use center of the enclosure as zero for
+            the widths.
+
+  \param    zero_lh <boolean> Zero the lengths and heights for each
+            slot location, corresponding to the enclosure location
+            [center, bottom].
+
+  \param    edge1_w <boolean> The initial offset is for each riser board
+            edge-1 rather than the slot-1 for board edge identification.
+
+  \returns  <decimal-list-3> The enclosure size [w, l, h].
+*******************************************************************************/
 function pcie_enclosure_rbs_keys_wlh
 (
   pcie_base = pcie_spec_common,
@@ -499,9 +592,9 @@ function pcie_enclosure_rbs_keys_wlh
   riser_pcb_width,
   enclosure_size,
 
-  center_w = true,    // use enclosure center as width zero
-  zero_lh  = false,   // zero length and height; enclosure [center, bottom]
-  edge1_w  = false    // initial offset is each riser edge1 rather slot1
+  center_w = true,
+  zero_lh  = false,
+  edge1_w  = false
 ) =
   let
   (
@@ -558,12 +651,53 @@ function pcie_enclosure_rbs_keys_wlh
     ]
   ];
 
+
 //----------------------------------------------------------------------------//
-//
-// Module: pcie_enclosure
-//
+// modules
 //----------------------------------------------------------------------------//
 
+//! \cond DOXYGEN_SHOULD_SKIP_THIS
+if ( pcie_enclosure_debug )
+{
+  verbose = pcie_enclosure_debug_verbose;
+
+  //
+  // check maps
+  //
+
+  map_check(pcie_spec_common, verbose);
+  map_check(pcie_spec_full, verbose);
+  map_check(pcie_spec_half, verbose);
+
+  map_check(riser_PCE164P_NO3_VER_007, verbose);
+  map_check(riser_AAAPCIE4HUB, verbose);
+  map_check(riser_SFF_8612_4X_to_PCI_E_16X, verbose);
+
+  map_check(enclosure_def, verbose);
+}
+//! \endcond
+
+//! Generate the enclosure or
+/***************************************************************************//**
+  \param    pcie_base <map> PCI-E standard common configuration.
+  \param    pcie_form <map> PCI-E half or full configuration.
+  \param    riser_pcb <map> The riser board configuration.
+  \param    enclosure <map> The enclosure design configuration.
+
+  \param    part_color <color-list-3> a list of colors for each part;
+            [base, sides, cover].
+
+  \param    part <integer> The part to construct; A binary encoded
+            integer value with (B0=base, B1=sides, B2=cover).
+
+  \param    mode <integer> The construction orientation mode with
+            (0=design, 1=print, 2=assembled, 3=exploded, 4=build-plate).
+
+  \param    verb <integer> The output console verbosity.
+
+  \details
+
+*******************************************************************************/
 module pcie_enclosure
 (
   pcie_base = pcie_spec_common,
@@ -573,10 +707,10 @@ module pcie_enclosure
 
   part_color,
 
-  part      = 7,
-  mode      = 3,
+  part  = 7,
+  mode  = 3,
 
-  verb      = 0
+  verb  = 0
 )
 {
   //
@@ -1183,7 +1317,7 @@ module pcie_enclosure
     ];
 
   //
-  // global variables
+  // module global variables
   //
 
   // pci specification:
@@ -1286,8 +1420,7 @@ module pcie_enclosure
     echo(strl([parent_module(0), ".size.interior: [w, l, h] = ", encl_size_int]));
   }
 
-  // mode: rotate-translate configurations
-  // [0=design, 1=print, 2=assembled, 3=exploded, 4=build-plate]
+  // mode: construction orientation configurations [rotate, translate]
   rt_base_sides_cover =
     let
     (
@@ -1299,7 +1432,7 @@ module pcie_enclosure
       b   = t * 4,            // build plate separation
       e   = eps*2             // assembled view overlap
     )
-    [
+    [ // [0=design, 1=print, 2=assembled, 3=exploded, 4=build-plate]
       [ // base
         [nop, nop],
         [nop, nop],
@@ -1327,18 +1460,21 @@ module pcie_enclosure
   rt_sides = select_ci(second(rt_base_sides_cover), mode, false);
   rt_cover = select_ci( third(rt_base_sides_cover), mode, false);
 
+  // base
   if ( binary_bit_is(part, 0, 1) )
   color(defined_e_or(part_color, 0, undef))
   translate(second(rt_base))
   rotate(first(rt_base))
   enclosure_base();
 
+  // sides
   if ( binary_bit_is(part, 1, 1) )
   color(defined_e_or(part_color, 1, undef))
   translate(second(rt_sides))
   rotate(first(rt_sides))
   enclosure_sides();
 
+  // cover
   if ( binary_bit_is(part, 2, 1) )
   color(defined_e_or(part_color, 2, undef))
   translate(second(rt_cover))
@@ -1346,6 +1482,8 @@ module pcie_enclosure
   enclosure_cover();
 }
 
+//! @}
+//! @}
 
 //----------------------------------------------------------------------------//
 // end of file
