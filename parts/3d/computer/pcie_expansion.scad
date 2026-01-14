@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (PCIe Enclosure)
+    \amu_define group_name  (PCIe Expansion)
     \amu_define group_brief (PCI Express expansion chassis and/or enclosure generator.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
