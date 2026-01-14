@@ -752,7 +752,7 @@ BEGIN_SCOPE example_clamp;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/fastener/clamps.scad>;
 
     $fn = 36;
 
@@ -786,7 +786,7 @@ BEGIN_SCOPE example_cone;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/fastener/clamps.scad>;
 
     $fn = 36;
 
@@ -820,7 +820,7 @@ BEGIN_SCOPE example_grip;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/fastener/clamps.scad>;
 
     $fn = 36;
 
@@ -856,7 +856,7 @@ END_SCOPE;
 BEGIN_SCOPE example_clamp_zt_1p;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/fastener/clamps.scad>;
 
     d = [10, 4];
     z = 4;

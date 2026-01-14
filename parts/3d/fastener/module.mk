@@ -9,7 +9,9 @@ local_path        :=  parts/3d/fastener
 local_library     :=  docs_module \
                       \
                       catch_latch \
-                      hinges
+                      clamps \
+                      hinges \
+                      mounts
 
 local_release_add :=
 

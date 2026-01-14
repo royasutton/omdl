@@ -8,7 +8,8 @@ local_path        :=  parts/3d/computer
 
 local_library     :=  docs_module \
                       \
-                      pci_bracket
+                      pci_bracket \
+                      pcie_enclosure
 
 local_release_add :=
 

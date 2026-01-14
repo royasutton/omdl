@@ -40,7 +40,7 @@
   \amu_define includes_required_add
   (
     tools/operation_cs.scad
-    parts/3d/enclosure/clamps.scad
+    parts/3d/fastener/clamps.scad
     parts/3d/enclosure/project_box_rectangle.scad
   )
   \amu_include (include/amu/includes_required.amu)
@@ -1553,9 +1553,9 @@ BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <tools/operation_cs.scad>;
-    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
-    include <parts/3d/enclosure/pcie_enclosure.scad>;
+    include <parts/3d/computer/pcie_enclosure.scad>;
 
     encl_conf =
     [
@@ -1591,9 +1591,9 @@ BEGIN_SCOPE riser_PCE164P_NO3_VER_007;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <tools/operation_cs.scad>;
-    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
-    include <parts/3d/enclosure/pcie_enclosure.scad>;
+    include <parts/3d/computer/pcie_enclosure.scad>;
 
     map_write( riser_PCE164P_NO3_VER_007 );
   END_OPENSCAD;
@@ -1608,9 +1608,9 @@ BEGIN_SCOPE enclosure_def;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <tools/operation_cs.scad>;
-    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
-    include <parts/3d/enclosure/pcie_enclosure.scad>;
+    include <parts/3d/computer/pcie_enclosure.scad>;
 
     map_write( enclosure_def );
   END_OPENSCAD;

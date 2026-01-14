@@ -8,12 +8,9 @@ local_path        :=  parts/3d/enclosure
 
 local_library     :=  docs_module \
                       \
-                      clamps \
-                      mounts \
                       power_strip \
                       project_box_rectangle \
-                      enclosure_stand_rectangle \
-                      pcie_enclosure
+                      enclosure_stand_rectangle
 
 local_release_add :=
 

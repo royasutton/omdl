@@ -42,8 +42,8 @@
     tools/operation_cs.scad
     models/3d/misc/omdl_logo.scad
     models/3d/fastener/screws.scad
-    parts/3d/enclosure/clamps.scad
-    parts/3d/enclosure/mounts.scad
+    parts/3d/fastener/clamps.scad
+    parts/3d/fastener/mounts.scad
     parts/3d/enclosure/project_box_rectangle.scad
   )
   \amu_include (include/amu/includes_required.amu)
@@ -901,8 +901,8 @@ BEGIN_SCOPE example;
     include <tools/operation_cs.scad>;
     include <models/3d/misc/omdl_logo.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <parts/3d/enclosure/clamps.scad>;
-    include <parts/3d/enclosure/mounts.scad>;
+    include <parts/3d/fastener/clamps.scad>;
+    include <parts/3d/fastener/mounts.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/enclosure/power_strip.scad>;
 
@@ -949,7 +949,7 @@ BEGIN_SCOPE default_box;
     include <tools/operation_cs.scad>;
     include <models/3d/misc/omdl_logo.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/enclosure/power_strip.scad>;
 
@@ -968,7 +968,7 @@ BEGIN_SCOPE default_mount;
     include <tools/operation_cs.scad>;
     include <models/3d/misc/omdl_logo.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/enclosure/power_strip.scad>;
 
@@ -987,7 +987,7 @@ BEGIN_SCOPE default_cover;
     include <tools/operation_cs.scad>;
     include <models/3d/misc/omdl_logo.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/enclosure/power_strip.scad>;
 
