@@ -1,4 +1,4 @@
-//! A PCI Express chassis and/or enclosure generator.
+//! A PCI Express expansion chassis and/or enclosure generator.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (PCIe Enclosure)
-    \amu_define group_brief (PCI Express chassis and/or enclosure generator.)
+    \amu_define group_brief (PCI Express expansion chassis and/or enclosure generator.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -476,10 +476,10 @@ enclosure_def =
 //! @{
 
 //! <boolean> Set to true to check configuration structure.
-pcie_enclosure_debug = false;
+pcie_expansion_debug = false;
 
 //! <boolean> Set to true for verbose configuration checking.
-pcie_enclosure_debug_verbose = false;
+pcie_expansion_debug_verbose = false;
 
 //! <map> Default riser board configuration.
 riser_pcb_def = riser_PCE164P_NO3_VER_007;
@@ -497,7 +497,7 @@ riser_pcb_def = riser_PCE164P_NO3_VER_007;
 
   \returns  <decimal-list-3> The board size [w, l, h].
 *******************************************************************************/
-function pcie_enclosure_rb_size
+function pcie_expansion_rb_size
 (
   riser_pcb,
 
@@ -540,7 +540,7 @@ function pcie_enclosure_rb_size
 
   \returns  <decimal-list-3> The enclosure size [w, l, h].
 *******************************************************************************/
-function pcie_enclosure_size
+function pcie_expansion_size
 (
   pcie_base = pcie_spec_common,
   pcie_form = pcie_spec_half,
@@ -554,7 +554,7 @@ function pcie_enclosure_size
   let
   (
     riser_width             = is_undef( riser_pcb_width ) ?
-                              first( pcie_enclosure_rb_size(riser_pcb) )
+                              first( pcie_expansion_rb_size(riser_pcb) )
                             : riser_pcb_width,
 
     // pcie
@@ -624,7 +624,7 @@ function pcie_enclosure_size
 
   \returns  <decimal-list-3> The enclosure size [w, l, h].
 *******************************************************************************/
-function pcie_enclosure_rbs_keys
+function pcie_expansion_rbs_keys
 (
   pcie_base = pcie_spec_common,
   pcie_form = pcie_spec_half,
@@ -641,11 +641,11 @@ function pcie_enclosure_rbs_keys
   let
   (
     riser_width   = is_undef( riser_pcb_width ) ?
-                    first( pcie_enclosure_rb_size(riser_pcb) )
+                    first( pcie_expansion_rb_size(riser_pcb) )
                   : riser_pcb_width,
 
     encl_size_wlh = is_undef( enclosure_size ) ?
-                    pcie_enclosure_size
+                    pcie_expansion_size
                     (
                       pcie_base,
                       pcie_form,
@@ -699,9 +699,9 @@ function pcie_enclosure_rbs_keys
 //----------------------------------------------------------------------------//
 
 //! \cond DOXYGEN_SHOULD_SKIP_THIS
-if ( pcie_enclosure_debug )
+if ( pcie_expansion_debug )
 {
-  verbose = pcie_enclosure_debug_verbose;
+  verbose = pcie_expansion_debug_verbose;
 
   //
   // check maps
@@ -719,7 +719,7 @@ if ( pcie_enclosure_debug )
 }
 //! \endcond
 
-//! Generate the enclosure or
+//! Generate a PCI Express expansion open chassis or closed enclosure
 /***************************************************************************//**
   \param    pcie_base <map> PCI-E standard common configuration.
   \param    pcie_form <map> PCI-E half or full configuration.
@@ -756,7 +756,7 @@ if ( pcie_enclosure_debug )
 
   [PCIe]: https://en.wikipedia.org/wiki/PCI_Express
 *******************************************************************************/
-module pcie_enclosure
+module pcie_expansion
 (
   pcie_base = pcie_spec_common,
   pcie_form = pcie_spec_half,
@@ -1426,10 +1426,10 @@ module pcie_enclosure
   encl_posts_cover          = map_get_value(enclosure, "posts_cover");
 
   // rise board width
-  riser_width   = first( pcie_enclosure_rb_size(riser_pcb) );
+  riser_width   = first( pcie_expansion_rb_size(riser_pcb) );
 
   // enclosure internal size
-  encl_size_wlh = pcie_enclosure_size
+  encl_size_wlh = pcie_expansion_size
                   (
                     pcie_base,
                     pcie_form,
@@ -1441,7 +1441,7 @@ module pcie_enclosure
                   );
 
   // riser boards and slot key offsets
-  slot_keys_wlh = pcie_enclosure_rbs_keys
+  slot_keys_wlh = pcie_expansion_rbs_keys
                   (
                     pcie_base,
                     pcie_form,
@@ -1463,7 +1463,7 @@ module pcie_enclosure
   if (verb > 0)
   {
     encl_size_int = encl_size_wlh;
-    encl_size_ext = pcie_enclosure_size
+    encl_size_ext = pcie_expansion_size
                     (
                       pcie_base,
                       pcie_form,
@@ -1555,7 +1555,7 @@ BEGIN_SCOPE example;
     include <tools/operation_cs.scad>;
     include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
-    include <parts/3d/computer/pcie_enclosure.scad>;
+    include <parts/3d/computer/pcie_expansion.scad>;
 
     encl_conf =
     [
@@ -1566,7 +1566,7 @@ BEGIN_SCOPE example;
     custom_encl = map_merge( encl_conf, enclosure_def );
     map_check( custom_encl );
 
-    pcie_enclosure( enclosure=custom_encl, verb=1 );
+    pcie_expansion( enclosure=custom_encl, verb=1 );
 
     // end_include
   END_OPENSCAD;
@@ -1593,7 +1593,7 @@ BEGIN_SCOPE riser_PCE164P_NO3_VER_007;
     include <tools/operation_cs.scad>;
     include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
-    include <parts/3d/computer/pcie_enclosure.scad>;
+    include <parts/3d/computer/pcie_expansion.scad>;
 
     map_write( riser_PCE164P_NO3_VER_007 );
   END_OPENSCAD;
@@ -1610,7 +1610,7 @@ BEGIN_SCOPE enclosure_def;
     include <tools/operation_cs.scad>;
     include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
-    include <parts/3d/computer/pcie_enclosure.scad>;
+    include <parts/3d/computer/pcie_expansion.scad>;
 
     map_write( enclosure_def );
   END_OPENSCAD;
