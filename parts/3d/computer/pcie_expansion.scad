@@ -580,6 +580,9 @@ function pcie_expansion_size
     encl_space_min_length   = map_get_value(enclosure, "space_min_length"),
     encl_space_min_height   = map_get_value(enclosure, "space_min_height"),
 
+    // riser board mount post height = (rib height + board bottom clearance)
+    rb_mount_post_height    = encl_wth + rb_bottom_clearance,
+
     w = riser_width
       + (encl_board_count-1) * (riser_width + encl_multi_board_offset)
       + encl_space_add_edge1
@@ -589,8 +592,7 @@ function pcie_expansion_size
       + pcie_l_keya_2_bkto
       + encl_space_add_length,
 
-    h = encl_wth                    // ribs height
-      + rb_bottom_clearance
+    h = rb_mount_post_height
       + rb_pcb_th
       + pcie_h_rbpcbt_2_fngrb
       + pcie_h_card_max
@@ -673,12 +675,15 @@ function pcie_expansion_rbs_keys
     encl_multi_board_offset = map_get_value(enclosure, "multi_board_offset"),
     encl_space_add_edge1    = map_get_value(enclosure, "space_add_edge1"),
 
+    // riser board mount post height = (rib height + board bottom clearance)
+    rb_mount_post_height    = encl_wth + rb_bottom_clearance,
+
     w_zero  = + encl_space_add_edge1
               + (    edge1_w ? 0 : rb_slot1_to_edge1 )
               - ( ! center_w ? 0 : first(encl_size_wlh)/2 ),
 
     l_zero  = zero_lh ? 0 : - second(encl_size_wlh)/2 + pcie_l_keya_2_bkto,
-    h_zero  = zero_lh ? 0 : + encl_wth*2 + rb_bottom_clearance
+    h_zero  = zero_lh ? 0 : + encl_wth + rb_mount_post_height
   )
   [ // each riser board
     for (rb_n = [0:encl_board_count-1])
