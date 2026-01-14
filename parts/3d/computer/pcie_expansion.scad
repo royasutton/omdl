@@ -1574,6 +1574,7 @@ BEGIN_SCOPE example;
     [
       ["board_count",         1],
       ["space_min_length",  238],
+      ["mode_sides",          1]
     ];
 
     custom_encl = map_merge( encl_conf, enclosure_def );
