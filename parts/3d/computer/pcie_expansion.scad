@@ -1058,11 +1058,11 @@ module pcie_expansion
       for (wlh_rb_inst = slot_keys_wlh)
       difference()
       {
-        wth = defined_e_or(encl_bracket_mount_tab, 0, encl_wth);
-        wa  = defined_e_or(encl_bracket_mount_tab, 1, 0);
-        hd  = defined_e_or(encl_bracket_mount_tab, 2, 3.125);
-        vr  = defined_e_or(encl_bracket_mount_tab, 3, 0);
-        vrm = defined_e_or(encl_bracket_mount_tab, 4, 1);
+        wth = defined_e_or(encl_bracket_mount_tab, 0, encl_wth);  // tab thickness
+        wa  = defined_e_or(encl_bracket_mount_tab, 1, 0);         // tab width addition
+        hd  = defined_e_or(encl_bracket_mount_tab, 2, 3.125);     // screw hole diameter
+        vr  = defined_e_or(encl_bracket_mount_tab, 3, 0);         // tab rounding radius
+        vrm = defined_e_or(encl_bracket_mount_tab, 4, 1);         // tab rounding modes
 
         // mode_sides B1: hull adjacent-slot mount tab shelf
         hull_cs( binary_bit_is(encl_mode_sides, 1, 1) )
