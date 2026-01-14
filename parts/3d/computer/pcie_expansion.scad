@@ -291,6 +291,8 @@ enclosure_def =
   ["space_min_length",             0],    // enclosure minimum interior length
   ["space_min_height",             0],    // enclosure minimum interior height
 
+  ["rb_min_clearance",             0],    // riser board minimum bottom clearance
+
   ["lips_sides",       1 + pow(2, 3)],    // sides lips specification
   ["lips_base",                    1],    // base lips specification
   ["lips_cover",                   2],    // cover lips specification
@@ -580,8 +582,11 @@ function pcie_expansion_size
     encl_space_min_length   = map_get_value(enclosure, "space_min_length"),
     encl_space_min_height   = map_get_value(enclosure, "space_min_height"),
 
+    encl_rb_min_clearance   = map_get_value(enclosure, "rb_min_clearance"),
+
     // riser board mount post height = (rib height + board bottom clearance)
-    rb_mount_post_height    = encl_wth + rb_bottom_clearance,
+    rb_mount_post_height    = encl_wth
+                            + max(rb_bottom_clearance, encl_rb_min_clearance),
 
     w = riser_width
       + (encl_board_count-1) * (riser_width + encl_multi_board_offset)
@@ -675,8 +680,11 @@ function pcie_expansion_rbs_keys
     encl_multi_board_offset = map_get_value(enclosure, "multi_board_offset"),
     encl_space_add_edge1    = map_get_value(enclosure, "space_add_edge1"),
 
+    encl_rb_min_clearance   = map_get_value(enclosure, "rb_min_clearance"),
+
     // riser board mount post height = (rib height + board bottom clearance)
-    rb_mount_post_height    = encl_wth + rb_bottom_clearance,
+    rb_mount_post_height    = encl_wth
+                            + max(rb_bottom_clearance, encl_rb_min_clearance),
 
     w_zero  = + encl_space_add_edge1
               + (    edge1_w ? 0 : rb_slot1_to_edge1 )
