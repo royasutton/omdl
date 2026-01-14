@@ -896,7 +896,7 @@ module pcie_expansion
     // reference: slot-1 of rb-1 [w, l, h]
     wlh_ref_rb1s1_o =
     [
-      -pcie_w_pcb_mth/2 + pcie_w_bkt_tabo,
+      -pcie_w_pcb_mth/2 - pcie_bkt_mth + pcie_w_bkt_tabo,
 
       -pcie_l_keya_2_bkto,
 
