@@ -4,17 +4,17 @@
 $(eval $(call clear-local-module))
 #------------------------------------------------------------------------------#
 
-local_path        :=  models/3d
+local_path        :=  models/2d/joints
 
-local_library     :=  docs_module
+local_library     :=  docs_module \
+                      \
+                      dovetail.scad
 
 local_release_add :=
 
 local_backup_add  :=
 
-local_submodules  :=  fastener \
-                      misc \
-                      motion
+local_submodules  :=
 
 #------------------------------------------------------------------------------#
 # add local module

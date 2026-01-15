@@ -12,7 +12,8 @@ local_release_add :=
 
 local_backup_add  :=
 
-local_submodules  := 3d
+local_submodules  :=  2d \
+                      3d
 
 #------------------------------------------------------------------------------#
 # add local module
