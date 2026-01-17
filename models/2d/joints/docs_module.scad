@@ -1,4 +1,4 @@
-//! Module: Models for connecting planar members.
+//! Module: Models for connecting 2d planar members.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Joints)
-    \amu_define group_brief (Models for connecting planar members.)
+    \amu_define group_brief (Models for connecting 2d planar members.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

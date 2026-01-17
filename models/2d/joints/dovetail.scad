@@ -1,4 +1,4 @@
-//! Models for generating dovetailed joints.
+//! Models for generating dovetailed joints in 2d.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Dovetails)
-    \amu_define group_brief (Models for generating dovetailed joints.)
+    \amu_define group_brief (Models for generating dovetailed joints in 2d.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
