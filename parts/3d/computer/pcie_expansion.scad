@@ -40,6 +40,7 @@
   \amu_define includes_required_add
   (
     tools/operation_cs.scad
+    models/2d/joints/dovetail.scad
     parts/3d/fastener/clamps.scad
     parts/3d/enclosure/project_box_rectangle.scad
   )
@@ -988,7 +989,7 @@ module pcie_expansion
   //
   // enclosure sides
   //
-  module enclosure_sides(enable = 1+2+4)
+  module enclosure_sides(enable = 1+2+4+8)
   {
     /*
       enable
@@ -996,6 +997,9 @@ module pcie_expansion
         B0: sides
         B1: wire clamps passage hole
         B2: wire clamps passage cone
+        B3: in-place bracket mount tab shelf
+        B4: remove female dovetails from side for use with separate shelf
+        B5: separate bracket mount tab shelf with male dovetails added
 
       mode_sides bits
 
@@ -1064,8 +1068,16 @@ module pcie_expansion
     }
 
     // bracket mount tab shelf and mount screw-hole
-    module bracket_mount_tab_shelf()
+    module bracket_mount_tab_shelf
+    (
+      inplace = true,
+      dovetail = false,
+      dovetail_mode = 1
+    )
     {
+      // selective move to bottom of sides with y-offset by encl_wth
+      function zz_oy ( p ) = inplace ? p : [p.x, p.y - encl_wth*3, -encl_wth + wth];
+
       wth = defined_e_or(encl_bracket_mount_tab, 0, encl_wth);  // tab thickness
       wa  = defined_e_or(encl_bracket_mount_tab, 1, 0);         // tab width addition
       hd  = defined_e_or(encl_bracket_mount_tab, 2, 3.125);     // screw hole diameter
@@ -1078,7 +1090,7 @@ module pcie_expansion
         // mode_sides B1: hull adjacent-slot mount tab shelf
         hull_cs( binary_bit_is(encl_mode_sides, 1, 1) )
         for (wlh_slot_inst = wlh_rb_inst)
-          translate(wlh_slot_inst + wlh_ref_rb1s1_o)
+          translate( zz_oy (wlh_slot_inst + wlh_ref_rb1s1_o) )
           {
             w_o = -wa + pcie_w_mnt_tab_o;
             l_o = -encl_wth;
@@ -1092,7 +1104,7 @@ module pcie_expansion
 
         // mount tab screw hole
         for (wlh_slot_inst = wlh_rb_inst)
-          translate(wlh_slot_inst + wlh_ref_rb1s1_o)
+          translate( zz_oy (wlh_slot_inst + wlh_ref_rb1s1_o) )
           {
             w_o = 0;
             l_o = +pcie_l_keya_2_bkto;
@@ -1102,6 +1114,24 @@ module pcie_expansion
             cylinder(d=hd, h=wth+eps*4, center=true);
           }
       }
+
+      // add dovetails
+      for (wlh_rb_inst = slot_keys_wlh, wlh_slot_inst = wlh_rb_inst)
+        translate( zz_oy (wlh_slot_inst + wlh_ref_rb1s1_o) )
+        {
+          // dovetail configuration
+          w   = first( pcie_wl_mnt_tab );
+          d   = encl_wth + eps*4;
+          t   = [w/5, w/6];
+
+          w_o = pcie_w_mnt_tab_o;
+          l_o = -encl_wth;
+          h_o = -wth;
+
+          translate([w_o, l_o, h_o])
+          extrude_linear_uss(wth, center=false)
+          dovetail2d(t=t, d=d, w=w, center=true, mode=dovetail_mode);
+        }
     }
 
     // cut enclosure sides
@@ -1209,8 +1239,8 @@ module pcie_expansion
         wire_clamps_passage(1);
 
         // mode_sides B0: add bracket mount tab shelf and mount screw-hole(s)
-        if ( binary_bit_is(encl_mode_sides, 0, 1) )
-        bracket_mount_tab_shelf();
+        if ( binary_bit_is(enable, 3, 1) && binary_bit_is(encl_mode_sides, 0, 1) )
+        bracket_mount_tab_shelf(inplace=true, dovetail=false);
       }
 
       // project_box_rectangle() default rib height = encl_wth
@@ -1332,8 +1362,17 @@ module pcie_expansion
       // mode_sides B5: cut sides for open enclosure modes
       if ( binary_bit_is(encl_mode_sides, 5, 1) )
       cut_enclosure_sides();
+
+      // remove bracket mount tab shelf dovetail slots
+      if ( binary_bit_is(enable, 4, 1) && binary_bit_is(encl_mode_sides, 0, 1) )
+        bracket_mount_tab_shelf(inplace=true, dovetail=true, dovetail_mode=0);
     }
 
+    //
+    // separate bracket mount tab shelf with dovetail joint
+    //
+    if ( binary_bit_is(enable, 5, 1) && binary_bit_is(encl_mode_sides, 0, 1) )
+      bracket_mount_tab_shelf(inplace=false, dovetail=true, dovetail_mode=1);
   }
 
   //
@@ -1555,12 +1594,12 @@ module pcie_expansion
   rotate(first(rt_base))
   enclosure_base();
 
-  // sides
+  // sides with in-place bracket mount tab shelf
   if ( binary_bit_is(part, 1, 1) )
   color(defined_e_or(part_color, 1, undef))
   translate(second(rt_sides))
   rotate(first(rt_sides))
-  enclosure_sides();
+  enclosure_sides(1+2+4+8);
 
   // cover
   if ( binary_bit_is(part, 2, 1) )
@@ -1568,6 +1607,20 @@ module pcie_expansion
   translate(second(rt_cover))
   rotate(first(rt_cover))
   enclosure_cover();
+
+  // sides with female dovetails use with separate shelf
+  if ( binary_bit_is(part, 3, 1) )
+  color(defined_e_or(part_color, 1, undef))
+  translate(second(rt_sides))
+  rotate(first(rt_sides))
+  enclosure_sides(1+2+4+16);
+
+  // separate bracket mount tab shelf with male dovetails
+  if ( binary_bit_is(part, 4, 1) )
+  color(defined_e_or(part_color, 1, undef))
+  translate(second(rt_sides))
+  rotate(first(rt_sides))
+  enclosure_sides(32);
 }
 
 //! @}
