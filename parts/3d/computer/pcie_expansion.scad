@@ -787,7 +787,7 @@ module pcie_expansion
   //
   // enclosure base
   //
-  module enclosure_base()
+  module enclosure_base(enable = 0)
   {
     // base
     encl_bracket_shoe_offset  = map_get_value(enclosure, "bracket_shoe_offset");
@@ -983,7 +983,7 @@ module pcie_expansion
   //
   // enclosure sides
   //
-  module enclosure_sides()
+  module enclosure_sides(enable = 0)
   {
     /*
       mode_sides bits
@@ -1325,7 +1325,7 @@ module pcie_expansion
   //
   // enclosure cover
   //
-  module enclosure_cover()
+  module enclosure_cover(enable = 0)
   {
     // merge all post: enclosure posts, and cover-only
     encl_posts_cover =
