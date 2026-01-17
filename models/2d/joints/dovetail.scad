@@ -86,7 +86,7 @@
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | <decimal>         |  required         | \p m : male tail width
       1 | <decimal>         |  m                | \p s : female slot width
-      2 | <decimal>         |  m/5              | \p f : tail fan expansion
+      2 | <decimal>         |  m/5              | \p f : tail fin width expansion
       3 | <decimal>         |  m/25             | \p g : tail male/female gap
       4 | <decimal>         |  f/4              | \p r : tail external edge rounding
 
