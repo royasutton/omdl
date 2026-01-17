@@ -744,7 +744,7 @@ if ( pcie_expansion_debug )
             [base, sides, cover].
 
   \param    part <integer> The part to construct; A binary encoded
-            integer value with (B0=base, B1=sides, B2=cover).
+            integer value (see below).
 
   \param    mode <integer> The construction orientation mode with
             (0=design, 1=print, 2=assembled, 3=exploded, 4=build-plate).
@@ -758,6 +758,20 @@ if ( pcie_expansion_debug )
     external PCIe slots access. These boards have found popularity to
     connect one or more GPUs externally to a computer system. This
     module can generate open chassis and closed enclosures.
+
+    ## Multi-value and structured parameters
+
+    ### part
+
+    Integer value is binary encoded.
+
+      b | description
+    ---:|:---------------------------------------
+      0 | base
+      1 | sides with in-place bracket mount tab shelf
+      2 | cover
+      3 | sides with female dovetails for use with separate shelf
+      4 | separate bracket mount tab shelf with male dovetails
 
     \amu_define scope_id      (example)
     \amu_define title         (Enclosure customization example)
@@ -1608,7 +1622,7 @@ module pcie_expansion
   rotate(first(rt_cover))
   enclosure_cover();
 
-  // sides with female dovetails use with separate shelf
+  // sides with female dovetails for use with separate shelf
   if ( binary_bit_is(part, 3, 1) )
   color(defined_e_or(part_color, 1, undef))
   translate(second(rt_sides))
