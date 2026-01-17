@@ -787,8 +787,10 @@ module pcie_expansion
   //
   // enclosure base
   //
-  module enclosure_base(enable = 0)
+  module enclosure_base(enable = 1+2)
   {
+    // enable: B0: base, B1: wire_clamp
+
     // base
     encl_bracket_shoe_offset  = map_get_value(enclosure, "bracket_shoe_offset");
 
@@ -910,6 +912,7 @@ module pcie_expansion
     //
     // construct base
     //
+    if ( binary_bit_is(enable, 0, 1) )
     difference()
     {
       // bracket shoe tab dimensions
@@ -973,19 +976,27 @@ module pcie_expansion
           }
 
       // remove wire clamp tunnels
+      if ( binary_bit_is(enable, 1, 1) )
       wire_clamps(0);
     }
 
     // add wire clamps
+    if ( binary_bit_is(enable, 1, 1) )
     wire_clamps(1);
   }
 
   //
   // enclosure sides
   //
-  module enclosure_sides(enable = 0)
+  module enclosure_sides(enable = 1+2+4)
   {
     /*
+      enable
+
+        B0: sides
+        B1: wire clamps passage hole
+        B2: wire clamps passage cone
+
       mode_sides bits
 
         B0: add mount tab shelves
@@ -1169,6 +1180,7 @@ module pcie_expansion
     //
     // construct sides
     //
+    if ( binary_bit_is(enable, 0, 1) )
     difference()
     {
       union()
@@ -1192,6 +1204,7 @@ module pcie_expansion
         );
 
         // add cone to wire clamp passage hole
+        if ( binary_bit_is(enable, 2, 1) )
         translate(wlh_s2b_ao)
         wire_clamps_passage(1);
 
@@ -1258,6 +1271,7 @@ module pcie_expansion
       }
 
       // remove wire clamp passage hole
+      if ( binary_bit_is(enable, 1, 1) )
       translate(wlh_s2b_ao)
       wire_clamps_passage(0);
 
@@ -1325,8 +1339,10 @@ module pcie_expansion
   //
   // enclosure cover
   //
-  module enclosure_cover(enable = 0)
+  module enclosure_cover(enable = 1)
   {
+    // enable: B0: base
+
     // merge all post: enclosure posts, and cover-only
     encl_posts_cover =
       let
@@ -1349,6 +1365,7 @@ module pcie_expansion
     //
     // construct cover
     //
+    if ( binary_bit_is(enable, 0, 1) )
     mirror([ 0, 0, 1])
     project_box_rectangle
     (
