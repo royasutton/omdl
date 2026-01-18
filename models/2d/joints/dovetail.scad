@@ -72,9 +72,19 @@
 
   \details
 
-    Construct a 2d profile for the construction of dovetail joints. The
-    dovetail male digits are constructed with \p move = 1, and the
-    female slots are constructed with \p mode = 0.
+    Use this module to generate a 2D profile for constructing dovetail
+    joints. Set \p mode = 1 to create the male dovetail fingers, and
+    set \p mode = 0 to create the corresponding female slots. Ensure
+    that the same profile parameters are used for both components to
+    achieve proper alignment and fit.
+
+    When creating dovetail joints using 3D-printed plastics, it’s
+    important to carefully manage the joint gap due to the rigidity of
+    most plastics. It’s a good idea to test with small sample joints
+    before proceeding with larger parts. Additionally, applying gentle
+    heat to the joint during assembly using a hot air gun (or hair
+    dryer) can help soften the male and female components slightly,
+    improving the fit and ease of assembly.
 
     ## Multi-value and structured parameters
 
@@ -87,7 +97,7 @@
       0 | <decimal>         |  required         | \p m : male tail width
       1 | <decimal>         |  m                | \p s : female slot width
       2 | <decimal>         |  m/5              | \p f : tail fin width expansion
-      3 | <decimal>         |  m/25             | \p g : tail male/female gap
+      3 | <decimal>         |  m/25             | \p g : joint gap (male and female)
       4 | <decimal>         |  f/4              | \p r : tail external edge rounding
 
     \amu_define scope_id      (example)
