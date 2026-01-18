@@ -450,7 +450,8 @@ enclosure_def =
       4.00,                               // tab-boarders (width addition)
       3.125,                              // screw hole diameter
       [3,3,5,5],                          // tab rounding
-      [1,1,4,3]                           // tab rounding modes
+      [1,1,4,3],                          // tab rounding modes
+      [5.0, 7.0, 1.5, 1, 1/4]             // dovetail configuration: see dovetail2d()
     ]
   ],
 
@@ -1097,6 +1098,7 @@ module pcie_expansion
       hd  = defined_e_or(encl_bracket_mount_tab, 2, 3.125);     // screw hole diameter
       vr  = defined_e_or(encl_bracket_mount_tab, 3, 0);         // tab rounding radius
       vrm = defined_e_or(encl_bracket_mount_tab, 4, 1);         // tab rounding modes
+      dt  = defined_e_or(encl_bracket_mount_tab, 5, [5, 6]);    // dovetail configuration
 
       for (wlh_rb_inst = slot_keys_wlh)
       difference()
@@ -1136,7 +1138,6 @@ module pcie_expansion
           // dovetail configuration
           w   = first( pcie_wl_mnt_tab );
           d   = encl_wth + eps*4;
-          t   = [w/5, w/6];
 
           w_o = pcie_w_mnt_tab_o;
           l_o = -encl_wth;
@@ -1144,7 +1145,7 @@ module pcie_expansion
 
           translate([w_o, l_o, h_o])
           extrude_linear_uss(wth, center=false)
-          dovetail2d(t=t, d=d, w=w, center=true, mode=dovetail_mode);
+          dovetail2d(t=dt, d=d, w=w, center=true, mode=dovetail_mode);
         }
     }
 
