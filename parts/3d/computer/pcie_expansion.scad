@@ -754,11 +754,12 @@ if ( pcie_expansion_debug )
 
   \details
 
-    This module constructs chassis and enclosures for common Peripheral
-    Component Interconnect Express [PCIe] riser boards that provide
-    external PCIe slots access. These boards have found popularity to
-    connect one or more GPUs externally to a computer system. This
-    module can generate open chassis and closed enclosures.
+    This module is designed to construct chassis and enclosures for
+    common Peripheral Component Interconnect Express (PCIe) riser
+    boards, which provide external access to PCIe slots. These riser
+    boards are commonly used to connect one or more GPUs, or other PCIe
+    cards, externally to a computer system. The module offers the
+    capability to generate both open chassis and closed enclosures.
 
     ## Multi-value and structured parameters
 
