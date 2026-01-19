@@ -451,7 +451,7 @@ enclosure_def =
       3.125,                              // screw hole diameter
       [3,3,5,5],                          // tab rounding
       [1,1,4,3],                          // tab rounding modes
-      [5.0, 7.0, 1.5, 1, 1/4]             // dovetail configuration: see dovetail2d()
+      [5.0, 6.0, 2.0, 3/4, 1/4]           // dovetail configuration: see dovetail2d(t)
     ]
   ],
 
@@ -1466,7 +1466,7 @@ module pcie_expansion
     // assembled joint
     if (select == 0)
     {
-      %difference()
+      difference()
       {
         translate([-x/2, +eps*2, -wth/2-eps*2])
         cube([w+x, d-eps*4, wth*3/2], center=false);
