@@ -830,7 +830,7 @@ function strip
 //! Apply a binary mask to an interable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
-  \param    m <iterable> A binary mask.
+  \param    m <iterable> A binary mask list (or string) of \p 0 or \p 1.
   \param    r <boolean> Right align the mask to \p v value.
   \param    o <integer> A positive or negative mask offset.
   \param    u \<value> The value assigned to elements of the mask that
