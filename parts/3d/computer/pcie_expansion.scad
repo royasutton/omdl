@@ -1626,14 +1626,14 @@ module pcie_expansion
 
   // sides with female dovetails for use with separate shelf
   if ( binary_bit_is(part, 3, 1) )
-  color(defined_e_or(part_color, 1, undef))
+  color(defined_e_or(part_color, 3, undef))
   translate(second(rt_sides))
   rotate(first(rt_sides))
   enclosure_sides(1+2+4+16);
 
   // separate bracket mount tab shelf with male dovetails
   if ( binary_bit_is(part, 4, 1) )
-  color(defined_e_or(part_color, 1, undef))
+  color(defined_e_or(part_color, 4, undef))
   translate(second(rt_sides))
   rotate(first(rt_sides))
   enclosure_sides(32);
