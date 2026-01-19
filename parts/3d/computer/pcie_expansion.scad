@@ -741,8 +741,8 @@ if ( pcie_expansion_debug )
   \param    riser_pcb <map> The riser board configuration.
   \param    enclosure <map> The enclosure design configuration.
 
-  \param    part_color <color-list-3> a list of colors for each part;
-            [base, sides, cover].
+  \param    part_color <color-list-6> a list of colors for each part;
+            [base, sides,  cover, ...].
 
   \param    part <integer> The part to construct; A binary encoded
             integer value (see below).
@@ -772,8 +772,17 @@ if ( pcie_expansion_debug )
       0 | base
       1 | sides with in-place bracket mount tab shelf
       2 | cover
-      3 | sides with female dovetails for use with separate shelf
-      4 | separate bracket mount tab shelf with male dovetails
+      3 | sides with female dovetails for use with separate mount tab
+      4 | separate bracket mount tab with male dovetails
+      5 | mount tab dovetail joint test assembly (design mode)
+      6 | mount tab  dovetail joint test build plate for fabrication
+
+    Before fabricating a design that includes a dovetailed bracket
+    mount tab, create and assemble a dovetail test joint to verify
+    proper fit. Enable the test joint by setting part bit 6 to 1 (for
+    example, \p part = pow(2, 6)). To refine or evaluate the dovetail
+    configuration, model an assembled test joint by enabling \p part
+    bit 5.
 
     \amu_define scope_id      (example)
     \amu_define title         (Enclosure customization example)
@@ -1441,6 +1450,76 @@ module pcie_expansion
   }
 
   //
+  // dovetail joint test assemble
+  //
+  module dovetail_test(select = 0)
+  {
+    encl_bracket_mount_tab = map_get_value(enclosure, "bracket_mount_tab");
+
+    wth = defined_e_or(encl_bracket_mount_tab, 0, encl_wth);
+    dt  = defined_e_or(encl_bracket_mount_tab, 5, [5, 6]);
+
+    w   = first( pcie_wl_mnt_tab );
+    d   = encl_wth + eps*4;
+    x   = w / 5;
+
+    // assembled joint
+    if (select == 0)
+    {
+      %difference()
+      {
+        translate([-x/2, +eps*2, -wth/2-eps*2])
+        cube([w+x, d-eps*4, wth*3/2], center=false);
+        extrude_linear_uss(wth, center=false)
+        dovetail2d(t=dt, d=d, w=w, center=true, mode=0);
+      }
+
+      #union()
+      {
+        extrude_linear_uss(wth, center=false)
+        dovetail2d(t=dt, d=d, w=w, center=true, mode=1);
+        translate([-x/2, -d, 0])
+        cube([w+x, d, wth], center=false);
+      }
+    }
+
+    // test joint build plate for 3d printer
+    if (select == 1)
+    {
+      // female joint printed horizontally
+      translate([0, wth + d*2, 0])
+      rotate([90, 0, 0])
+      difference()
+      {
+        translate([-x/2, +eps*2, -wth/2-eps*2])
+        cube([w+x, d-eps*4, wth*3/2], center=false);
+        extrude_linear_uss(wth, center=false)
+        dovetail2d(t=dt, d=d, w=w, center=true, mode=0);
+      }
+
+      // female joint printed vertically
+      translate([0, 0, +wth/2])
+      difference()
+      {
+        translate([-x/2, +eps*2, -wth/2-eps*2])
+        cube([w+x, d-eps*4, wth*3/2], center=false);
+        extrude_linear_uss(wth, center=false)
+        dovetail2d(t=dt, d=d, w=w, center=true, mode=0);
+      }
+
+      // male joint
+      translate([0, -d*2, 0])
+      union()
+      {
+        extrude_linear_uss(wth, center=false)
+        dovetail2d(t=dt, d=d, w=w, center=true, mode=1);
+        translate([-x/2, -d, 0])
+        cube([w+x, d, wth], center=false);
+      }
+    }
+  }
+
+  //
   // enclosure posts: (base, sides, cover)
   //
   function encl_post(configuration, set_type, instances) =
@@ -1632,6 +1711,14 @@ module pcie_expansion
   // separate bracket mount tab shelf with male dovetails
   construct_ctrl( 4, rt_sides )
   enclosure_sides(32);
+
+  // dovetail joint test assembly
+  construct_ctrl( 5, [zero3d, origin3d] )
+  dovetail_test(0);
+
+  // dovetail joint test build plate
+  construct_ctrl( 6, [zero3d, origin3d] )
+  dovetail_test(1);
 }
 
 //! @}
