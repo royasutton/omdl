@@ -1603,39 +1603,34 @@ module pcie_expansion
   rt_sides = select_ci(second(rt_base_sides_cover), mode, false);
   rt_cover = select_ci( third(rt_base_sides_cover), mode, false);
 
+  // part construction control
+  module construct_ctrl( bit, rt )
+  {
+    if ( binary_bit_is(part, bit, 1) )
+    color(defined_e_or(part_color, bit, undef))
+    translate(second(rt))
+    rotate(first(rt))
+    children();
+  }
+
   // base
-  if ( binary_bit_is(part, 0, 1) )
-  color(defined_e_or(part_color, 0, undef))
-  translate(second(rt_base))
-  rotate(first(rt_base))
+  construct_ctrl( 0, rt_base )
   enclosure_base();
 
   // sides with in-place bracket mount tab shelf
-  if ( binary_bit_is(part, 1, 1) )
-  color(defined_e_or(part_color, 1, undef))
-  translate(second(rt_sides))
-  rotate(first(rt_sides))
+  construct_ctrl( 1, rt_sides )
   enclosure_sides(1+2+4+8);
 
   // cover
-  if ( binary_bit_is(part, 2, 1) )
-  color(defined_e_or(part_color, 2, undef))
-  translate(second(rt_cover))
-  rotate(first(rt_cover))
+  construct_ctrl( 2, rt_cover )
   enclosure_cover();
 
   // sides with female dovetails for use with separate shelf
-  if ( binary_bit_is(part, 3, 1) )
-  color(defined_e_or(part_color, 3, undef))
-  translate(second(rt_sides))
-  rotate(first(rt_sides))
+  construct_ctrl( 3, rt_sides )
   enclosure_sides(1+2+4+16);
 
   // separate bracket mount tab shelf with male dovetails
-  if ( binary_bit_is(part, 4, 1) )
-  color(defined_e_or(part_color, 4, undef))
-  translate(second(rt_sides))
-  rotate(first(rt_sides))
+  construct_ctrl( 4, rt_sides )
   enclosure_sides(32);
 }
 
