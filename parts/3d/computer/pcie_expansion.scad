@@ -466,7 +466,7 @@ enclosure_def =
   ["mode_rounding",                2],    // rounding mode: 0, 1, 2
   ["mode_sides",                   0],    // enclosure sides mode
   ["mode_proj_box",                0],    // project_box_rectangle() mode
-  ["verb",                         0]     // construction verbosity
+  ["verb_proj_box",                0]     // project_box_rectangle() verbosity
   //! \endcond
 ];
 
@@ -970,7 +970,7 @@ module pcie_expansion
           vrm   = encl_mode_rounding,
           align = [0, 0, 0],
           mode  = binary_or(encl_mode_proj_box, 1),   // bit-0=1, others unchanged
-          verb  = encl_verb
+          verb  = encl_verb_proj_box
         );
 
         // add tab shoe (as needed for minimal insertion = encl_wth)
@@ -1255,7 +1255,7 @@ module pcie_expansion
           vrm   = encl_mode_rounding,
           align = [0, 0, 0],
           mode  = binary_or(encl_mode_proj_box, 1),   // bit-0=1, others unchanged
-          verb  = encl_verb
+          verb  = encl_verb_proj_box
         );
 
         // add cone to wire clamp passage hole
@@ -1445,7 +1445,7 @@ module pcie_expansion
       vrm   = encl_mode_rounding,
       align = [0, 0, 0],
       mode  = binary_or(encl_mode_proj_box, 1),       // bit-0=1, others unchanged
-      verb  = encl_verb
+      verb  = encl_verb_proj_box
     );
   }
 
@@ -1578,7 +1578,7 @@ module pcie_expansion
   encl_lips_cover           = map_get_value(enclosure, "lips_cover");
   encl_walls                = map_get_value(enclosure, "walls");
   encl_mode_proj_box        = map_get_value(enclosure, "mode_proj_box");
-  encl_verb                 = map_get_value(enclosure, "verb");
+  encl_verb_proj_box        = map_get_value(enclosure, "verb_proj_box");
 
   // enclosure: posts (base, sides, cover)
   encl_posts_sides_conf     = map_get_value(enclosure, "posts_sides_conf");
