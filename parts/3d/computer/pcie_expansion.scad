@@ -631,6 +631,10 @@ function pcie_expansion_size
   \param    edge1_w <boolean> The initial offset is for each riser board
             edge-1 rather than the slot-1 for board edge identification.
 
+  \param    adjust_h <boolean> Adjust all heights by the offset of the
+            enclosure sides and cover relative to the base when
+            assembled.
+
   \returns  <decimal-list-3> The enclosure size [w, l, h].
 *******************************************************************************/
 function pcie_expansion_rbs_keys
@@ -645,7 +649,8 @@ function pcie_expansion_rbs_keys
 
   center_w = true,
   zero_lh  = false,
-  edge1_w  = false
+  edge1_w  = false,
+  adjust_h = false
 ) =
   let
   (
@@ -693,7 +698,9 @@ function pcie_expansion_rbs_keys
               - ( ! center_w ? 0 : first(encl_size_wlh)/2 ),
 
     l_zero  = zero_lh ? 0 : - second(encl_size_wlh)/2 + pcie_l_keya_2_bkto,
-    h_zero  = zero_lh ? 0 : + encl_wth + rb_mount_post_height
+    h_zero  = zero_lh ? 0 : + encl_wth + rb_mount_post_height,
+
+    h_zadj  = adjust_h ? -encl_wth*2 : 0
   )
   [ // each riser board
     for (rb_n = [0:encl_board_count-1])
@@ -704,7 +711,7 @@ function pcie_expansion_rbs_keys
         w_oi  = rb_n * (riser_width + encl_multi_board_offset),
         w_os  = rb_s * rb_multi_slot_offset
       )
-      [w_zero + w_oi + w_os, l_zero, h_zero]
+      [w_zero + w_oi + w_os, l_zero, h_zero + h_zadj]
     ]
   ];
 
