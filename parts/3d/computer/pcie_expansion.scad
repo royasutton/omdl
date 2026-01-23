@@ -751,6 +751,9 @@ if ( pcie_expansion_debug )
   \param    riser_pcb <map> The riser board configuration.
   \param    enclosure <map> The enclosure design configuration.
 
+  \param    show_riser <boolean> Render model of riser board on the
+            enclosure base.
+
   \param    part_color <color-list-6> a list of colors for each part;
             [base, sides,  cover, ...].
 
