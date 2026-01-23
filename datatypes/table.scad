@@ -151,7 +151,7 @@ function table_get_columns
   r,
   c,
   ci
-) = table_exists(r,c,ci=ci) ?
+) = table_exists(c=c,ci=ci) ?
     select_e(table_get_copy(r,c,cs=[ci]), f=true)
   : undef;
 
