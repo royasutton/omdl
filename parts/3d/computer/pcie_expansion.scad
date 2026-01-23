@@ -143,6 +143,7 @@ riser_PCE164P_NO3_VER_007 =
   ["slot1_to_edge1",         15],         // riser slot-1 to pcb adjacent dimension
   ["slotn_to_edgen",         28],         // riser slot-n to pcb adjacent dimension
   ["slot_key_to_edgef",     114],         // riser key to pcb length to front
+  ["slot_link_width",        16],         // slot connector link width {1, 4, 8, or 16}
   ["pcb_length",         127.75],         // riser board pcb length rear to front
   ["pcb_th",               1.75],         // riser pcb thickness
   ["mount_holes",                         // riser mount holes; ref = slot-1 key
@@ -185,6 +186,7 @@ riser_AAAPCIE4HUB =
   ["slot1_to_edge1",         12],         // riser slot-1 to pcb adjacent dimension
   ["slotn_to_edgen",         12],         // riser slot-n to pcb adjacent dimension
   ["slot_key_to_edgef",      74],         // riser key to pcb length to front
+  ["slot_link_width",         1],         // slot connector link width {1, 4, 8, or 16}
   ["pcb_length",             99],         // riser board pcb length rear to front
   ["pcb_th",                1.5],         // riser pcb thickness
   ["mount_holes",                         // riser mount holes; ref = slot-1 key
@@ -230,6 +232,7 @@ riser_SFF_8612_4X_to_PCI_E_16X =
   ["slot1_to_edge1",       5.75],         // riser slot-1 to pcb adjacent dimension
   ["slotn_to_edgen",      37.00],         // riser slot-n to pcb adjacent dimension
   ["slot_key_to_edgef",   89.50],         // riser key to pcb length to front
+  ["slot_link_width",        16],         // slot connector link width {1, 4, 8, or 16}
   ["pcb_length",         122.00],         // riser board pcb length rear to front
   ["pcb_th",               1.75],         // riser pcb thickness
   ["mount_holes",                         // riser mount holes; ref = slot-1 key
@@ -809,6 +812,8 @@ module pcie_expansion
   riser_pcb = riser_pcb_def,
   enclosure = enclosure_def,
 
+  show_riser = false,
+
   part_color,
 
   part  = 7,
@@ -868,6 +873,50 @@ module pcie_expansion
             mode    = mode
           );
         }
+      }
+    }
+
+    // model riser board
+    module model_riser()
+    {
+      rb_slot1_to_edge1     = map_get_value(riser_pcb, "slot1_to_edge1");
+      rb_slot_key_to_edgef  = map_get_value(riser_pcb, "slot_key_to_edgef");
+
+      rb_slot_link_width    = map_get_value(riser_pcb, "slot_link_width");
+
+      rb_mount_holes        = map_get_value(riser_pcb, "mount_holes");
+      rb_post_hole_d        = map_get_value(riser_pcb, "post_hole_d");
+
+      // pcie slot lane width map and slot key offset
+      sm = [ [1, 25], [4, 39], [8, 56], [16, 89] ];
+      ko = 14.50;
+
+      // slot size for riser lane width (use 1x when undefined)
+      ss = [7.50, defined_or(map_get_value(sm, rb_slot_link_width), 25), 11.25];
+
+      // riser and slot fixed offsets
+      ro = [-rb_slot1_to_edge1, -riser_size.y + rb_slot_key_to_edgef, 0];
+      so = [-ss.x/2, -ko, rb_pcb_th];
+
+      for (wlh_rb_inst = slot_keys_wlh)
+      {
+        // riser board pcd and mount holes
+        difference()
+        {
+          wlh_rb_inst_o = first( wlh_rb_inst );
+
+          translate(wlh_rb_inst_o + ro)
+          cube(riser_size, center=false);
+
+          for (p = rb_mount_holes)
+            translate(wlh_rb_inst_o + concat(p, -eps*2))
+            cylinder(d=rb_post_hole_d, h=rb_pcb_th+eps*4, center=false);
+        }
+
+        // riser board slots
+        for (wlh_slot_inst = wlh_rb_inst)
+          translate(wlh_slot_inst + so)
+          cube(ss, center=false);
       }
     }
 
@@ -1016,6 +1065,10 @@ module pcie_expansion
     // add wire clamps
     if ( binary_bit_is(enable, 1, 1) )
     wire_clamps(1);
+
+    // model riser boards
+    if ( show_riser == true )
+    %model_riser();
   }
 
   //
@@ -1597,7 +1650,8 @@ module pcie_expansion
   encl_posts_cover          = map_get_value(enclosure, "posts_cover");
 
   // rise board width
-  riser_width   = first( pcie_expansion_rb_size(riser_pcb) );
+  riser_size    = pcie_expansion_rb_size(riser_pcb);
+  riser_width   = first( riser_size );
 
   // enclosure internal size
   encl_size_wlh = pcie_expansion_size
