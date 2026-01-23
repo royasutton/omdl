@@ -142,7 +142,7 @@ riser_PCE164P_NO3_VER_007 =
   ["multi_slot_offset",   20.32],         // standard pcie multi-slot spacing
   ["slot1_to_edge1",         15],         // riser slot-1 to pcb adjacent dimension
   ["slotn_to_edgen",         28],         // riser slot-n to pcb adjacent dimension
-  ["slot_key_to_edgef",     114],         // riser key to pcb length to front
+  ["slot_key_to_edgef",  113.25],         // riser key to pcb length to front
   ["slot_link_width",        16],         // slot connector link width {1, 4, 8, or 16}
   ["pcb_length",         127.75],         // riser board pcb length rear to front
   ["pcb_th",               1.75],         // riser pcb thickness
