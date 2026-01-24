@@ -64,6 +64,9 @@ $map_strict = false;
 // functions and modules
 //----------------------------------------------------------------------------//
 
+//! \name Functions: 1-to-1
+//! @{
+
 //! Return the index of a map key.
 /***************************************************************************//**
   \param    m <map> A list of N key-value map pairs.
@@ -427,6 +430,8 @@ module map_write
     }
   }
 }
+
+//! @}
 
 //! @}
 //! @}

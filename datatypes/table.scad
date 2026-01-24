@@ -70,7 +70,7 @@ $table_strict = false;
 // Separate
 //----------------------------------------------------------------------------//
 
-//! \name Separate table data
+//! \name Functions: Separate parameters
 //! @{
 
 //! Get the table row index that matches a table row identifier.
@@ -928,7 +928,7 @@ module table_write
 // Combined
 //----------------------------------------------------------------------------//
 
-//! \name Combined table data
+//! \name Functions: Combined parameters
 //! @{
 
 /***************************************************************************//**
