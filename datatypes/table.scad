@@ -55,6 +55,18 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+// global configuration variables
+//----------------------------------------------------------------------------//
+
+//! \name Variables
+//! @{
+
+//! <boolean> Enforce strict checking for table value references.
+$table_strict = false;
+
+//! @}
+
+//----------------------------------------------------------------------------//
 // Separate
 //----------------------------------------------------------------------------//
 
@@ -88,7 +100,9 @@ function table_get_row
 (
   r,
   ri
-) = r[ table_get_row_index(r, ri) ];
+) = let( row_check = ! $table_strict || table_exists(r=r, ri=ri) )
+    assert( row_check, strl(["table row missing [", ri, "]."]) )
+    r[ table_get_row_index(r, ri) ];
 
 //! Get the table column index that matches a table column identifier.
 /***************************************************************************//**
@@ -117,7 +131,9 @@ function table_get_column
 (
   c,
   ci
-) = c[ table_get_column_index(c, ci) ];
+) = let( column_check = ! $table_strict || table_exists(c=c, ci=ci) )
+    assert( column_check, strl(["table column missing [", ci, "]."]) )
+    c[ table_get_column_index(c, ci) ];
 
 //! Get the table cell value for a specified row and column identifier.
 /***************************************************************************//**
@@ -135,7 +151,11 @@ function table_get_value
   c,
   ri,
   ci
-) = r[ table_get_row_index(r,ri) ][ table_get_column_index(c,ci) ];
+) = let( row_check = ! $table_strict || table_exists(r=r, ri=ri) )
+    let( column_check = ! $table_strict || table_exists(c=c, ci=ci) )
+    assert( row_check, strl(["table row missing [", ri, "]."]) )
+    assert( column_check, strl(["table column missing [", ci, "]."]) )
+    r[ table_get_row_index(r,ri) ][ table_get_column_index(c,ci) ];
 
 //! Form a list of a select column across all table rows.
 /***************************************************************************//**
@@ -151,9 +171,9 @@ function table_get_columns
   r,
   c,
   ci
-) = table_exists(c=c,ci=ci) ?
-    select_e(table_get_copy(r,c,cs=[ci]), f=true)
-  : undef;
+) = let( column_check = ! $table_strict || table_exists(c=c, ci=ci) )
+    assert( column_check, strl(["table column missing [", ci, "]."]) )
+    select_e(table_get_copy(r,c,cs=[ci]), f=true);
 
 //! Get a row, a column, or a specific cell value from a table.
 /***************************************************************************//**
