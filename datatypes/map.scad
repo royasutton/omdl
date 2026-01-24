@@ -64,7 +64,7 @@ $map_strict = false;
 // functions and modules
 //----------------------------------------------------------------------------//
 
-//! \name Functions: 1-to-1
+//! \name Functions
 //! @{
 
 //! Return the index of a map key.
