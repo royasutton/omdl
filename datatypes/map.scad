@@ -188,6 +188,43 @@ function map_merge
           [k, map_get_value(m2, k)]
     ];
 
+//! Compare the keys and/or values of two maps to test for equality.
+/***************************************************************************//**
+  \param    m1 <map> A list of N key-value map pairs.
+  \param    m2 <map> A list of N key-value map pairs.
+  \param    keys <boolean> Comparison includes the map keys.
+  \param    values <boolean> Comparison includes the map values.
+  \param    sort <boolean> Sort prior to the comparison.
+
+  \returns  <boolean> \b true when equal and \b false otherwise.
+*******************************************************************************/
+function map_equal(m1, m2, keys=true, values=false, sort=true) =
+  let
+  (
+    k = ! keys ? true
+      : let
+        (
+          k1  = map_get_keys(m1),
+          k2  = map_get_keys(m2),
+
+          kc1 = sort ? sort_q2(k1) : k1,
+          kc2 = sort ? sort_q2(k2) : k2
+        )
+        (kc1 == kc2),
+
+    v = ! values ? true
+      : let
+        (
+          v1  = map_get_values(m1),
+          v2  = map_get_values(m2),
+
+          vc1 = sort ? sort_q2(v1) : v1,
+          vc2 = sort ? sort_q2(v2) : v2
+        )
+        (vc1 == vc2)
+  )
+  ( k && v );
+
 //! Perform basic format checks on a map and return errors.
 /***************************************************************************//**
   \param    m <map> A list of N key-value map pairs.
