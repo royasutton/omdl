@@ -874,6 +874,42 @@ function delete
         if (is_empty(find(j, p))) v[j]
     ];
 
+//! Replace the first occurrence(s) of a matched value  in iterable value.
+/***************************************************************************//**
+  \param    v <iterable> The iterable value.
+
+  \param    mv <value> The match value.
+  \param    nv <value> The new value.
+
+  \param    mc <integer> A match count.
+            For <tt>(mc>=1)</tt>, replaces the first \p mc matches.
+            For <tt>(mc=0)</tt>, replaces all matches.
+
+  \returns  (1) \<list> The list with the first \mc occurrences of the
+                match value replaced by \p nv.
+            (2) Returns \b undef when \p v is not defined, or is not
+                iterable.
+*******************************************************************************/
+function replace_first
+(
+  v,
+  mv,
+  nv,
+  mc = 1
+) = !is_iterable(v) ? undef
+  : let
+    (
+      p = find_all(mv, v),
+      q = (mc == 0) ? p : firstn(p, mc)
+    )
+    [
+      for (j = [0 : len(v)-1])
+        if (is_empty(find_all(j, q)))
+          v[j]
+        else
+          nv
+    ];
+
 //! Strip all matching values from an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
@@ -1454,6 +1490,7 @@ BEGIN_SCOPE validate;
     // delete_first()
     // delete_each()
     for (id=test_ids) table_validate( db, id, "delete_T0", 1, delete( v1(db,id), mv=["x","r","apple","s",[2,3],5] ) );
+    // replace_first()
     for (id=test_ids) table_validate( db, id, "strip", 1, strip( v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "mask_01R", 1, mask( v1(db,id), [0,1], r=true ) );
     for (id=test_ids) table_validate( db, id, "unique", 1, unique( v1(db,id) ) );
