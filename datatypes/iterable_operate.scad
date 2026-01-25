@@ -950,6 +950,49 @@ function unique
   : exists(last(v), headn(v), s=false) ? unique(headn(v))
   : concat(unique(headn(v)), lastn(v));
 
+//! Return a list of the common elements of two iterable values.
+/***************************************************************************//**
+  \param    v1 <iterable> The first iterable value.
+  \param    v2 <iterable> The second iterable value.
+
+  \param    e <iterable> The common elements list (used for recursion
+            value tracking or may be initialed by user).
+
+  \returns  (1) \<list> The list of elements common to both iterable
+                values as list intersection with a one-to-one
+                correspondence among the elements.
+*******************************************************************************/
+function common
+(
+  v1,
+  v2,
+  e = empty_lst
+) = let( mv = first(v1) )
+    is_empty(v1) ? e
+  : (find_all(mv, v2) != empty_lst) ?
+    common( tailn(v1), delete_first(v=v2, mv=mv), concat(e, [mv]) )
+  : common( tailn(v1), delete_first(v=v2, mv=mv), e);
+
+//! Return a list of the elements not present in both iterable values.
+/***************************************************************************//**
+  \param    v1 <iterable> The first iterable value.
+  \param    v2 <iterable> The second iterable value.
+
+  \returns  (1) \<list> The list of elements that do not exists in both
+                iterable values as a list difference with a one-to-one
+                correspondence among the elements.
+*******************************************************************************/
+function not_common
+(
+  v1,
+  v2
+) = let
+    (
+      d1 = delete_each(v1, v2),
+      d2 = delete_each(v2, v1)
+    )
+    concat(d1, d2);
+
 
 //! @}
 //! @}
@@ -1401,6 +1444,8 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "strip", 1, strip( v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "mask_01R", 1, mask( v1(db,id), [0,1], r=true ) );
     for (id=test_ids) table_validate( db, id, "unique", 1, unique( v1(db,id) ) );
+    // common()
+    // not_common()
 
     // end_include
   END_OPENSCAD;
