@@ -776,7 +776,7 @@ function delete_first
   : let( p = first( find_all(mv, v) ) )
     [ for (j = [0 : len(v)-1]) if (j != p) v[j] ];
 
-//! Delete all occurrence of a match value from an iterable value.
+//! Delete each occurrence of matching values from an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
 
@@ -785,12 +785,12 @@ function delete_first
   \returns  (1) \<list> The list with all occurrence of the match
                 value removed.
 *******************************************************************************/
-function delete_all
+function delete_each
 (
   v,
   mv
 ) = is_empty(mv) ? v
-  : delete_all( delete_first(v=v, mv=first(mv)), tailn(mv) );
+  : delete_each( delete_first(v=v, mv=first(mv)), tailn(mv) );
 
 //! Delete elements from an iterable value.
 /***************************************************************************//**
@@ -988,8 +988,8 @@ function not_common
   v2
 ) = let
     (
-      d1 = delete_all(v1, v2),
-      d2 = delete_all(v2, v1)
+      d1 = delete_each(v1, v2),
+      d2 = delete_each(v2, v1)
     )
     concat(d1, d2);
 
@@ -1439,7 +1439,7 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "append_e_T0", 1, append_e( 0, v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "insert_T0", 1, insert( 0, v1(db,id), mv=["x","r","apple","s",[2,3],5] ) );
     // delete_first()
-    // delete_all()
+    // delete_each()
     for (id=test_ids) table_validate( db, id, "delete_T0", 1, delete( v1(db,id), mv=["x","r","apple","s",[2,3],5] ) );
     for (id=test_ids) table_validate( db, id, "strip", 1, strip( v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "mask_01R", 1, mask( v1(db,id), [0,1], r=true ) );
