@@ -757,9 +757,9 @@ function insert
     // result valid iff a valid insert position was specified
     is_undef(p) ? undef : concat(h, nv, t);
 
-//! Delete the first occurrence(s) of a match value from an iterable value.
+//! Delete the first occurrence(s) of a matched value from an iterable value.
 /***************************************************************************//**
-  \param    v <iterable> An iterable value.
+  \param    v <iterable> The iterable value.
 
   \param    mv <value> The match value.
 
@@ -767,8 +767,8 @@ function insert
             For <tt>(mc>=1)</tt>, remove the first \p mc matches.
             For <tt>(mc<=0)</tt>, remove all matches.
 
-  \returns  (1) \<list> The list with the first occurrence of the match
-                value removed.
+  \returns  (1) \<list> The list with the first \p mc occurrences of the
+                match value removed.
             (2) Returns \b undef when \p v is not defined, or is not
                 iterable.
 *******************************************************************************/
