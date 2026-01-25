@@ -101,6 +101,22 @@ function defined_eon_or
   : !is_undef( v[i] ) ? v[i]
   : d;
 
+//! Find all occurrences of a match value in an iterable value.
+/***************************************************************************//**
+  \param    mv \<value> A match value.
+  \param    v <iterable> An iterable value.
+
+  \returns  (1) \<list> A list of indexes where elements match \p mv.
+            (2) Returns \b empty_lst when no element of \p v matches
+                \p mv or when \p v is not iterable.
+*******************************************************************************/
+function find_all
+(
+  mv,
+  v
+) = !is_iterable(v) ? empty_lst
+  : [ for (j = [0 : len(v)-1]) if (v[j] == mv) j ];
+
 //! Find the occurrences of a match value in an iterable value.
 /***************************************************************************//**
   \param    mv \<value> A match value.
