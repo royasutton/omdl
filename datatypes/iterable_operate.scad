@@ -698,13 +698,13 @@ function append_e
 
   \param    i <integer> The index insert position.
 
-  \param    mv <list | string | value> Matched value candidates.
+  \param    mv <list | string | value> Match value candidates.
   \param    mi <integer> The matched selection index.
 
   \param    s <boolean> Element matching search method.
   \param    si <integer> The search element index when matching.
 
-  \returns  (1) \<list> A list with \p nv inserted into \p v at the
+  \returns  (1) \<list> The list with \p nv inserted into \p v at the
                 specified position.
             (2) Returns \b undef when no value of \p mv exists in
                 \p v, when <tt>(mi + 1)</tt> exceeds the matched
@@ -763,7 +763,7 @@ function insert
 
   \param    i <range | list | integer> Deletion Indexes.
 
-  \param    mv <list | string | value> Matched value candidates.
+  \param    mv <list | string | value> Match value candidates.
   \param    mc <integer> A match count.
             For <tt>(mc>=1)</tt>, remove the first \p mc matches.
             For <tt>(mc<=0)</tt>, remove all matches.
@@ -771,7 +771,7 @@ function insert
   \param    s <boolean> Element matching search method.
   \param    si <integer> The element column index when matching.
 
-  \returns  (1) \<list> A list with all specified elements removed.
+  \returns  (1) \<list> The list with all specified elements removed.
             (2) Returns \b undef when \p i does not map to an element
                 of \p v, when \p v is not defined, or is not iterable.
 
