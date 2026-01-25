@@ -1370,6 +1370,7 @@ BEGIN_SCOPE validate;
 
     for (id=test_ids) table_validate( db, id, "defined_e_or_DE3", 1, defined_e_or( v1(db,id), 3, "default" ) );
     for (id=test_ids) table_validate( db, id, "defined_e_or_DE3", 1, defined_eon_or( v1(db,id), 3, "default" ) );
+    // find_all()
     for (id=test_ids) table_validate( db, id, "find_12", 1, find( [1,2], v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "count_S1", 1, count( 1, v1(db,id), true ) );
     for (id=test_ids) table_validate( db, id, "exists_S1", 1, exists( 1, v1(db,id), true ) );
@@ -1394,6 +1395,8 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "sequence_ns_31", 1, sequence_ns( v1(db,id), n=3, s=1 ) );
     for (id=test_ids) table_validate( db, id, "append_e_T0", 1, append_e( 0, v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "insert_T0", 1, insert( 0, v1(db,id), mv=["x","r","apple","s",[2,3],5] ) );
+    // delete_first()
+    // delete_each()
     for (id=test_ids) table_validate( db, id, "delete_T0", 1, delete( v1(db,id), mv=["x","r","apple","s",[2,3],5] ) );
     for (id=test_ids) table_validate( db, id, "strip", 1, strip( v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "mask_01R", 1, mask( v1(db,id), [0,1], r=true ) );
