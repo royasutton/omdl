@@ -757,6 +757,41 @@ function insert
     // result valid iff a valid insert position was specified
     is_undef(p) ? undef : concat(h, nv, t);
 
+//! Delete the first occurrence of a match value from an iterable value.
+/***************************************************************************//**
+  \param    v <iterable> An iterable value.
+
+  \param    mv <value> The match value.
+
+  \returns  (1) \<list> The list with the first occurrence of the match
+                value removed.
+            (2) Returns \b undef when \p v is not defined, or is not
+                iterable.
+*******************************************************************************/
+function delete_first
+(
+  v,
+  mv
+) = !is_iterable(v) ? undef
+  : let( p = first( find_all(mv, v) ) )
+    [ for (j = [0 : len(v)-1]) if (j != p) v[j] ];
+
+//! Delete each occurrence of a match value from an iterable value.
+/***************************************************************************//**
+  \param    v <iterable> An iterable value.
+
+  \param    mv <value> The match value.
+
+  \returns  (1) \<list> The list with each occurrence of the match
+                value removed.
+*******************************************************************************/
+function delete_each
+(
+  v,
+  mv
+) = is_empty(mv) ? v
+  : delete_each( delete_first(v=v, mv=first(mv)), tailn(mv) );
+
 //! Delete elements from an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
