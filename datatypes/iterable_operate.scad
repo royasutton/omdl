@@ -765,7 +765,7 @@ function insert
 
   \param    mc <integer> A match count.
             For <tt>(mc>=1)</tt>, remove the first \p mc matches.
-            For <tt>(mc<=0)</tt>, remove all matches.
+            For <tt>(mc=0)</tt>, remove all matches.
 
   \returns  (1) \<list> The list with the first \p mc occurrences of the
                 match value removed.
