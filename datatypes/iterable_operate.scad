@@ -761,7 +761,7 @@ function insert
 /***************************************************************************//**
   \param    v <iterable> The iterable value.
 
-  \param    mv <value> The match value.
+  \param    mv \<value> The match value.
 
   \param    mc <integer> A match count.
             For <tt>(mc>=1)</tt>, remove the first \p mc matches.
@@ -789,11 +789,11 @@ function delete_first
           v[j]
     ];
 
-//! Delete each occurrence of matching values from an iterable value.
+//! Delete each match value from an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
 
-  \param    mv <value> The match value.
+  \param    mv <iterable> The list of match values.
 
   \returns  (1) \<list> The list with all occurrence of the match
                 value removed.
@@ -874,12 +874,12 @@ function delete
         if (is_empty(find(j, p))) v[j]
     ];
 
-//! Replace the first occurrence(s) of a matched value  in iterable value.
+//! Replace the first occurrence(s) of a matched value in iterable value.
 /***************************************************************************//**
   \param    v <iterable> The iterable value.
 
-  \param    mv <value> The match value.
-  \param    nv <value> The new value.
+  \param    mv \<value> The match value.
+  \param    nv \<value> The new value.
 
   \param    mc <integer> A match count.
             For <tt>(mc>=1)</tt>, replaces the first \p mc matches.
