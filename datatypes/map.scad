@@ -244,6 +244,7 @@ function map_from_table(t, keys=0, values=1) =
 //! Create a table from a list of maps with common keys.
 /***************************************************************************//**
   \param    ml <map-list> A list of one or more maps.
+  \param    sort <boolean> Sort the output by key.
 
   \returns  \<table> The table row data matrix (C-columns x R-Rows),
             where \p C is the number of maps and \p R is the number of
@@ -251,7 +252,8 @@ function map_from_table(t, keys=0, values=1) =
 *******************************************************************************/
 function map_to_table
 (
-  ml
+  ml,
+  sort = false
 ) = let
     (
       // first map
@@ -277,7 +279,7 @@ function map_to_table
       strl([ "All maps must have same keys; kv=[", kv, "]." ])
     )
     [ // for each key
-      for (k = map_get_keys( m0 ))
+      for (k = sort ? sort_q2( k0 ) : k0)
       [ // output the key value of each map
         k, for (m = ml) map_get_value(m, k)
       ]
