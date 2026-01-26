@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2025
+  \date   2025-2026
 
   \copyright
 
@@ -72,7 +72,7 @@
 
   \hideinitializer
 *******************************************************************************/
-power_strip_sg_default_box =
+power_strip_sg_box_default =
 [
   ["wth",      2.0],                // box wall thickness
   ["roww",    50.0],                // receptacle row width
@@ -151,7 +151,7 @@ power_strip_sg_default_box =
 
   \hideinitializer
 *******************************************************************************/
-power_strip_sg_default_mount =
+power_strip_sg_mount_default =
 [
   ["mss",   length(3+9/32, "in")],  // device mount screw separation
   ["rmsd",  length(   1/8, "in")],  // mount screw hole diameter
@@ -176,7 +176,7 @@ power_strip_sg_default_mount =
 
   \hideinitializer
 *******************************************************************************/
-power_strip_sg_default_cover =
+power_strip_sg_cover_default =
 [
   ["drpo",  length(1+1/2, "in")],   // receptacle offset
   ["rpd",   length(1+3/8, "in")],   // receptacle diameter
@@ -186,9 +186,9 @@ power_strip_sg_default_cover =
 ];
 
 //! \cond DOXYGEN_SHOULD_SKIP_THIS
-map_check(power_strip_sg_default_box, false);
-map_check(power_strip_sg_default_mount, false);
-map_check(power_strip_sg_default_cover, false);
+map_check(power_strip_sg_box_default, false);
+map_check(power_strip_sg_mount_default, false);
+map_check(power_strip_sg_cover_default, false);
 //! \endcond
 
 //! @}
@@ -254,9 +254,9 @@ module power_strip_sg
   mode = 7,
   verb = 1,
 
-  cm_box = power_strip_sg_default_box,
-  cm_mount = power_strip_sg_default_mount,
-  cm_cover = power_strip_sg_default_cover
+  cm_box = power_strip_sg_box_default,
+  cm_mount = power_strip_sg_mount_default,
+  cm_cover = power_strip_sg_cover_default
 )
 {
   //
@@ -862,9 +862,9 @@ module power_strip_sg
 
   if ( verb > 0 )
   {
-    check_cm("cm_box", cm_box, power_strip_sg_default_box);
-    check_cm("cm_mount", cm_mount, power_strip_sg_default_mount);
-    check_cm("cm_cover", cm_cover, power_strip_sg_default_cover);
+    check_cm("cm_box", cm_box, power_strip_sg_box_default);
+    check_cm("cm_mount", cm_mount, power_strip_sg_mount_default);
+    check_cm("cm_cover", cm_cover, power_strip_sg_cover_default);
   }
 
   //
@@ -919,7 +919,7 @@ BEGIN_SCOPE example;
       ["mtabs",     [[0]]]
     ];
 
-    custom_box = map_merge(box_conf, power_strip_sg_default_box);
+    custom_box = map_merge(box_conf, power_strip_sg_box_default);
     map_check(custom_box);
 
     power_strip_sg(cm_box=custom_box);
@@ -953,7 +953,7 @@ BEGIN_SCOPE default_box;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/enclosure/power_strip.scad>;
 
-    map_write( power_strip_sg_default_box );
+    map_write( power_strip_sg_box_default );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -972,7 +972,7 @@ BEGIN_SCOPE default_mount;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/enclosure/power_strip.scad>;
 
-    map_write( power_strip_sg_default_mount );
+    map_write( power_strip_sg_mount_default );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -991,7 +991,7 @@ BEGIN_SCOPE default_cover;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/enclosure/power_strip.scad>;
 
-    map_write( power_strip_sg_default_cover );
+    map_write( power_strip_sg_cover_default );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
