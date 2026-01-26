@@ -63,7 +63,7 @@
     The default electrical device box configuration map.
 
     \amu_define title (Default device box configuration map)
-    \amu_define scope_id (default_box)
+    \amu_define scope_id (box_default)
     \amu_define output_scad (false)
     \amu_define output_console (false)
     \amu_define notes_table (Map key description is available in source. See the map)
@@ -142,7 +142,7 @@ power_strip_sg_box_default =
     The default electrical device mount configuration map.
 
     \amu_define title (Default device mount configuration map)
-    \amu_define scope_id (default_mount)
+    \amu_define scope_id (mount_default)
     \amu_define output_scad (false)
     \amu_define output_console (false)
     \amu_define notes_table (Map key description is available in source. See the map)
@@ -167,7 +167,7 @@ power_strip_sg_mount_default =
     The default electrical device cover configuration map.
 
     \amu_define title (Default device cover configuration map)
-    \amu_define scope_id (default_cover)
+    \amu_define scope_id (cover_default)
     \amu_define output_scad (false)
     \amu_define output_console (false)
     \amu_define notes_table (Map key description is available in source. See the map)
@@ -943,7 +943,7 @@ END_SCOPE;
 */
 
 /*
-BEGIN_SCOPE default_box;
+BEGIN_SCOPE box_default;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <tools/operation_cs.scad>;
@@ -962,7 +962,7 @@ BEGIN_SCOPE default_box;
   END_MFSCRIPT;
 END_SCOPE;
 
-BEGIN_SCOPE default_mount;
+BEGIN_SCOPE mount_default;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <tools/operation_cs.scad>;
@@ -981,7 +981,7 @@ BEGIN_SCOPE default_mount;
   END_MFSCRIPT;
 END_SCOPE;
 
-BEGIN_SCOPE default_cover;
+BEGIN_SCOPE cover_default;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <tools/operation_cs.scad>;
