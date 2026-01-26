@@ -241,6 +241,48 @@ function map_from_table(t, keys=0, values=1) =
   )
   merge_p([k, v], j=true);
 
+//! Create a table from a list of maps with common keys.
+/***************************************************************************//**
+  \param    ml <map-list> A list of one or more maps.
+
+  \returns  \<table> The table row data matrix (C-columns x R-Rows),
+            where \p C is the number of maps and \p R is the number of
+            map keys.
+*******************************************************************************/
+function map_to_table
+(
+  ml
+) = let
+    (
+      // first map
+      m0 = first( ml ),
+
+      // first map keys
+      k0 = map_get_keys( m0 ),
+
+      // vector of map sizes
+      sv = [for (m = ml) map_get_size(m)],
+
+      // vector of map key differences
+      kv = [for (m = ml) not_common(k0, map_get_keys(m))]
+    )
+    assert
+    ( // all map sizes must be equal
+      all_equal( cv = map_get_size(m0), v = sv ),
+      strl([ "All maps must be of equal size; sv=[", sv, "]." ])
+    )
+    assert
+    ( // all map must have same keys (all keys must be in common)
+      all_equal( cv = empty_lst, v = kv ),
+      strl([ "All maps must have same keys; kv=[", kv, "]." ])
+    )
+    [ // for each key
+      for (k = map_get_keys( m0 ))
+      [ // output the key value of each map
+        k, for (m = ml) map_get_value(m, k)
+      ]
+    ];
+
 //! Perform basic format checks on a map and return errors.
 /***************************************************************************//**
   \param    m <map> A list of N key-value map pairs.
