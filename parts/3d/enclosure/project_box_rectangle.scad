@@ -1727,7 +1727,9 @@ BEGIN_SCOPE example_multiple;
     include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
+*/
 
+/*
 BEGIN_SCOPE example_bottom;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
