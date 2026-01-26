@@ -264,6 +264,9 @@ map_check(power_strip_cover_default, false);
 // modules
 //----------------------------------------------------------------------------//
 
+//! \name Modules
+//! @{
+
 //! A power strip generator for single gang electrical receptacles.
 /***************************************************************************//**
   \param  cols      <integer> device column count.
@@ -952,6 +955,8 @@ module power_strip_sg
   translate([+(iw/2 + ps), 0, 0])
   enclosure_cover();
 }
+
+//! @}
 
 //! @}
 //! @}
