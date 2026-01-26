@@ -231,9 +231,9 @@ function map_equal(m1, m2, keys=true, values=false, sort=true) =
   \param    keys <integer> The table column for the map keys.
   \param    values <integer> The table column for the map values.
 
-  \returns  <map> A list of N key-value map pairs..
+  \returns  <map> A list of N key-value map pairs.
 *******************************************************************************/
-function map_table(t, keys=0, values=1) =
+function map_from_table(t, keys=0, values=1) =
   let
   (
     k = select_e (t, keys),
