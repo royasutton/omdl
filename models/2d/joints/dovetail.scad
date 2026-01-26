@@ -50,7 +50,7 @@
 
 //! Create 2D edge profiles for dovetail joint construction.
 /***************************************************************************//**
-  \param  t       <decimal-list-2 | decimal> tail configuration; a list
+  \param  t       <decimal-list-5 | decimal> tail configuration; a list
                   [m, s, f, g, r] or a single decimal to set m
                   (see below).
 
@@ -88,9 +88,9 @@
 
     ## Multi-value and structured parameters
 
-    ### clamp
+    ### tail
 
-    #### Data structure fields: clamp
+    #### Data structure fields: t (tail configuration)
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
