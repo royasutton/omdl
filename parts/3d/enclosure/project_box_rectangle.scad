@@ -442,8 +442,8 @@
       0 | decimal           | 3.25              | diameter
       1 | decimal           | (maximum)         | height
       2 | decimal           | 0                 | height offset
-      3 | decimal           | 0                 | diameter adjust (1)
-      4 | decimal           | 0                 | height adjust (1)
+      3 | decimal           | 0                 | \em late diameter adjust (1)
+      4 | decimal           | 0                 | \em late height adjust (1)
       5 | decimal-list-4 \| decimal| 0          | rounding radius
       6 | integer-list-4 \| integer| 0          | rounding mode
 
