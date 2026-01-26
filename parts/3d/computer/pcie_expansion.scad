@@ -115,6 +115,28 @@ pcie_spec_half =
 //! \name Configuration: Riser board
 //! @{
 
+//! \cond DOXYGEN_SHOULD_SKIP_THIS
+riser_map_doc =
+[
+  ["bottom_clearance",   "Vertical clearance under riser board"],
+  ["top_clearance",      "Vertical clearance above riser board for components excluding slot"],
+  ["slot_count",         "Riser board slot count"],
+  ["multi_slot_offset",  "PCI-E multi-slot, slot-to-slot spacing"],
+  ["slot1_to_edge1",     "Riser board slot-1 to adjacent edge distance"],
+  ["slotn_to_edgen",     "Riser board slot-n to adjacent edge distance"],
+  ["slot_key_to_edgef",  "Riser board key to front edge distance"],
+  ["slot_link_width",    "Slot connector link width {1|4|8|16}"],
+  ["pcb_length",         "Riser board PCB length front to rear"],
+  ["pcb_th",             "Riser board PCB thickness"],
+  ["mount_holes",        "Riser board mount holes; referenced to slot-1 key"],
+  ["mount_holes_add",    "Riser board mount holes additions"],
+  ["post_rotate",        "Mount post rotation in degrees"],
+  ["post_fins",          "Mount post fin configuration: see project_box_rectangle()"],
+  ["post_hole_d",        "Mount post hole diameter"],
+  ["post_pad_d",         "Mount post diameter"]
+];
+//! \endcond
+
 //! <map> USB 3.0 PCE164P-NO3 VER 007 1-slot riser board.
 /***************************************************************************//**
   \details
@@ -123,11 +145,10 @@ pcie_spec_half =
     This is the default riser board and can be used as a basis for
     constructing new riser board configuration.
 
-    \amu_define title (Default enclosure configuration map)
+    \amu_define title (Riser board configuration)
     \amu_define scope_id (riser_PCE164P_NO3_VER_007)
     \amu_define output_scad (false)
     \amu_define output_console (false)
-    \amu_define notes_table (Map key description is available in source. See the map)
 
     \amu_include (include/amu/scope_table.amu)
 
@@ -173,6 +194,13 @@ riser_PCE164P_NO3_VER_007 =
   \details
 
     A configuration for the AAAPCIE4HUB multiplier HUB 1-slot riser board.
+
+    \amu_define title (Riser board configuration)
+    \amu_define scope_id (riser_AAAPCIE4HUB)
+    \amu_define output_scad (false)
+    \amu_define output_console (false)
+
+    \amu_include (include/amu/scope_table.amu)
 
   \hideinitializer
 *******************************************************************************/
@@ -220,6 +248,13 @@ riser_AAAPCIE4HUB =
 
     A configuration for the SFF-8612 4X lane to 16X 1-slot riser board.
 
+    \amu_define title (Riser board configuration)
+    \amu_define scope_id (riser_SFF_8612_4X_to_PCI_E_16X)
+    \amu_define output_scad (false)
+    \amu_define output_console (false)
+
+    \amu_include (include/amu/scope_table.amu)
+
   \hideinitializer
 *******************************************************************************/
 riser_SFF_8612_4X_to_PCI_E_16X =
@@ -262,17 +297,56 @@ riser_SFF_8612_4X_to_PCI_E_16X =
 //! \name Configuration: Enclosure
 //! @{
 
+//! \cond DOXYGEN_SHOULD_SKIP_THIS
+enclosure_map_doc =
+[
+  ["rounding",            "Enclosure corner rounding radius"],
+  ["wth",                 "Enclosure minimum wall thickness"],
+  ["board_count",         "Enclosure riser board count"],
+  ["multi_board_offset",  "Multi-riser inter board offset"],
+  ["space_add_edge1",     "Space to add to riser edge-1"],
+  ["space_add_edgen",     "Space to add to riser edge-n"],
+  ["space_add_length",    "Space to add to riser end length"],
+  ["space_add_height",    "Space to add to enclosure height"],
+  ["space_min_length",    "Enclosure minimum interior length"],
+  ["space_min_height",    "Enclosure minimum interior height"],
+  ["rb_min_clearance",    "Riser board minimum bottom clearance"],
+  ["lips_sides",          "Sides lips specification: see project_box_rectangle()"],
+  ["lips_base",           "Base lips specification: see project_box_rectangle()"],
+  ["lips_cover",          "Cover lips specification: see project_box_rectangle()"],
+  ["walls",               "Enclosure interior walls: see project_box_rectangle()"],
+  ["ribs",                "Enclosure wall rib specification: see project_box_rectangle()"],
+  ["posts_sides_conf",    "Post configuration sides: [mode, default]: see project_box_rectangle()"],
+  ["posts_base_conf",     "Post configuration base: [mode, default]: see project_box_rectangle()"],
+  ["posts_cover_conf",    "Post configuration cover: [mode, default]: see project_box_rectangle()"],
+  ["posts_basecover",     "Post instances for base and cover"],
+  ["posts_sides",         "Post instances sides only"],
+  ["posts_base",          "Post instances base only"],
+  ["posts_cover",         "Post instances cover only"],
+  ["clamps_base",         "Enclosure base clamps: see clamp_zt_1p()"],
+  ["holes_sides",         "Enclosure side hole instances"],
+  ["bracket_window_gap",  "Bracket connector window gap [w]"],
+  ["bracket_shoe_gap_p",  "Bracket shoe gap% [w, l, h]"],
+  ["bracket_shoe_offset", "Bracket shoe vertical offset [h]"],
+  ["bracket_mount_tab",   "Bracket mount tab configuration"],
+  ["cut_sides",           "Enclosure sides cut [insets, vr, vrm]"],
+  ["mode_rounding",       "Enclosure rounding mode: {0|1|2}"],
+  ["mode_sides",          "Enclosure sides mode"],
+  ["mode_proj_box",       "Mode for project_box_rectangle() module"],
+  ["verb_proj_box",       "Verbosity for project_box_rectangle()"]
+];
+//! \endcond
+
 //! <map> Default enclosure configuration.
 /***************************************************************************//**
   \details
 
     The default enclosure configuration map.
 
-    \amu_define title (Default enclosure configuration map)
+    \amu_define title (Default enclosure configuration)
     \amu_define scope_id (enclosure_def)
     \amu_define output_scad (false)
     \amu_define output_console (false)
-    \amu_define notes_table (Map key description is available in source. See the map)
 
     \amu_include (include/amu/scope_table.amu)
 
@@ -497,12 +571,15 @@ riser_pcb_def = riser_PCE164P_NO3_VER_007;
 // functions
 //----------------------------------------------------------------------------//
 
+//! \name Functions
+//! @{
+
 //! Get riser board size for riser configuration.
 /***************************************************************************//**
   \param    riser_pcb <map> The riser board configuration.
   \param    slots <integer> Optional slot count override.
 
-  \returns  <decimal-list-3> The board size [w, l, h].
+  \returns  <decimal-list-3> The riser board size [w, l, h].
 *******************************************************************************/
 function pcie_expansion_rb_size
 (
@@ -614,7 +691,7 @@ function pcie_expansion_size
   ( external )  ? [ w, l_min, h_min ] + [ encl_wth*2, encl_wth*2, encl_wth*2 ]
                 : [ w, l_min, h_min ];
 
-//! Get data structure with slot key locations on all riser boards.
+//! Get list of slot key locations of all riser boards.
 /***************************************************************************//**
   \param    pcie_base <map> PCI-E standard common configuration.
   \param    pcie_form <map> PCI-E half or full configuration.
@@ -638,7 +715,9 @@ function pcie_expansion_size
             enclosure sides and cover relative to the base when
             assembled.
 
-  \returns  <decimal-list-3> The enclosure size [w, l, h].
+  \returns  <datastruct> The location <decimal-list-3> of each slot on
+            each riser board; a <decimal-list-list-list-3> or
+            (board.slot.location_wlh).
 *******************************************************************************/
 function pcie_expansion_rbs_keys
 (
@@ -718,10 +797,14 @@ function pcie_expansion_rbs_keys
     ]
   ];
 
+//! @}
 
 //----------------------------------------------------------------------------//
 // modules
 //----------------------------------------------------------------------------//
+
+//! \name Modules
+//! @{
 
 //! \cond DOXYGEN_SHOULD_SKIP_THIS
 if ( pcie_expansion_debug )
@@ -1786,6 +1869,8 @@ module pcie_expansion
 }
 
 //! @}
+
+//! @}
 //! @}
 
 
@@ -1841,7 +1926,14 @@ BEGIN_SCOPE riser_PCE164P_NO3_VER_007;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/computer/pcie_expansion.scad>;
 
-    map_write( riser_PCE164P_NO3_VER_007 );
+    map = riser_PCE164P_NO3_VER_007;
+    doc = riser_map_doc;
+
+    table_write
+    (
+      r = map_to_table( [map, doc], sort=true ),
+      c = [["key","key"], ["value","value"], ["description","description"]]
+    );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -1850,6 +1942,56 @@ BEGIN_SCOPE riser_PCE164P_NO3_VER_007;
   END_MFSCRIPT;
 END_SCOPE;
 
+BEGIN_SCOPE riser_AAAPCIE4HUB;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/operation_cs.scad>;
+    include <parts/3d/fastener/clamps.scad>;
+    include <parts/3d/enclosure/project_box_rectangle.scad>;
+    include <parts/3d/computer/pcie_expansion.scad>;
+
+    map = riser_AAAPCIE4HUB;
+    doc = riser_map_doc;
+
+    table_write
+    (
+      r = map_to_table( [map, doc], sort=true ),
+      c = [["key","key"], ["value","value"], ["description","description"]]
+    );
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+
+BEGIN_SCOPE riser_SFF_8612_4X_to_PCI_E_16X;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/operation_cs.scad>;
+    include <parts/3d/fastener/clamps.scad>;
+    include <parts/3d/enclosure/project_box_rectangle.scad>;
+    include <parts/3d/computer/pcie_expansion.scad>;
+
+    map = riser_SFF_8612_4X_to_PCI_E_16X;
+    doc = riser_map_doc;
+
+    table_write
+    (
+      r = map_to_table( [map, doc], sort=true ),
+      c = [["key","key"], ["value","value"], ["description","description"]]
+    );
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
+
+/*
 BEGIN_SCOPE enclosure_def;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
@@ -1858,7 +2000,14 @@ BEGIN_SCOPE enclosure_def;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/computer/pcie_expansion.scad>;
 
-    map_write( enclosure_def );
+    map = enclosure_def;
+    doc = enclosure_map_doc;
+
+    table_write
+    (
+      r = map_to_table( [map, doc], sort=true ),
+      c = [["key","key"], ["value","value"], ["description","description"]]
+    );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
