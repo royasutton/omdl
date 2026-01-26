@@ -350,6 +350,107 @@ enclosure_map_doc =
 
     \amu_include (include/amu/scope_table.amu)
 
+    ## Multi-value and structured parameters
+
+    ### bracket_mount_tab
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | decimal           |                   | thickness
+      1 | decimal           |                   | tab-boarders (width addition)
+      2 | decimal           |                   | screw hole diameter
+      3 | <decimal-list-4\|decimal> |           | tab rounding
+      4 | <decimal-list-4\|decimal> |           | tab rounding modes
+      4 | <decimal-list-5\|decimal> |           | dovetail configuration: see dovetail2d() \p t
+
+    ### clamps_base
+
+    #### Data structure schema:
+
+    name            | schema
+    ---------------:|:----------------------------------------------
+    clamps_base     | [[configuration, instances]]
+
+    #### Data structure fields: clamps_base[0]: configuration
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <decimal-list-2>        |                   | wire hole size [w, h]
+      1 | <decimal-list-2>        |                   | zip-tie hole size [w, h]
+      2 | <decimal-list-3>        |                   | clamp envelope size [w, h, d]
+      3 | <datastruct>            |                   | tunnel configuration: see clamp_zt_1p() \p tunnel
+      4 | <decimal-list3-list-4>  |                   | vr [clamp, wire, tunnel]
+      5 | <integer-list3-list-4>  |                   | vrm [clamp, wire, tunnel]
+
+    #### Data structure fields: clamps_base[1]: instances
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <integer-list-2>  |                   | enclosure side [w, l]
+      1 | <decimal>         |                   | clamp rotate [z]
+      2 | <integer>         |                   | clamp align [d]
+      3 | <decimal-list-2>  |                   | clamp move [w, l]
+      4 | <datastruct>      |                   | side passage hole
+
+    #### Data structure fields: clamps_base[1]: instances[4]: side passage hole
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <binary>          |                   | enabled
+      1 | <decimal>         |                   | vertical cut extension
+      2 | <datastruct>      |                   | wall cone: see clamp_cg() \p cone
+
+    ### cut_sides
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <decimal-list-4>  |                   | edge cut insets: [bb, bt, ft, fb]
+      1 | <decimal-list-4>  |                   | cut rounding: [bb, bt, ft, fb]
+      2 | <integer-list-4>  |                   | cut rounding mode: [bb, bt, ft, fb]
+
+    ### holes_sides
+
+    #### Data structure schema:
+
+    name            | schema
+    ---------------:|:----------------------------------------------
+    holes_sides     | [instances]
+
+    #### Data structure fields: holes_sides[*]: instances
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <integer-list-3>  |                   | enclosure side [w, l, h]
+      1 | <decimal>         |                   | side rotate (group)
+      2 | <decimal-list-2>  |                   | offsets (group) [w/l, h]
+      3 | <integer-list-2>  |                   | shape counts [w/l, h]
+      4 | <decimal-list-2>  |                   | shape grid spacing [w/l, h]
+      5 | <decimal-list-2>  |                   | offset to group  center [w/l, h]
+      6 | <decimal-list-2\|decimal> |           | shape diameter (integer or list)
+      7 | <integer>         |                   | shape facets ($fn)
+      8 | <decimal>         |                   | shape rotate
+      9 | <decimal>         |                   | shape extrusion height
+
+    ### posts
+
+    See project_box_rectangle() on \p post configuration for
+    documentation on the post defaults and post instances.
+
+    ### mode_sides
+
+    Integer value is binary encoded.
+
+      b | description
+    ---:|:---------------------------------------
+      0 | Add mount tab shelves
+      1 | Hull adjacent-slot mount tab shelf
+      2 | Hull removal of adjacent-slot connector windows
+      3 | Hull removal of adjacent-slot ribs from wall
+      4 | Hull removal of adjacent-slot bracket slide-down space
+      5 | Enable enclosure side cutting
+      6 | Cut enclosure front (positive side)
+      7 | Cut enclosure rear (negative side near bracket)
+
   \hideinitializer
 *******************************************************************************/
 enclosure_def =
