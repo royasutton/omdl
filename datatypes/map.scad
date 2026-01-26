@@ -188,6 +188,42 @@ function map_merge
           [k, map_get_value(m2, k)]
     ];
 
+//! Update existing key-value pairs of a map.
+/***************************************************************************//**
+  \param    m <map> A list of N key-value map pairs.
+  \param    u <map> The update list of N key-value map pairs.
+  \param    ignore <boolean> Ignore the entries of \p u missing from \p m.
+
+  \returns  \<value> The key value-pairs of \p m together with the
+            updates from \p u that are present in \p m.
+*******************************************************************************/
+function map_update
+(
+  m,
+  u,
+  ignore = false
+) = let
+    (
+      mk = map_get_keys(m),
+      uk = map_get_keys(u),
+
+      ak = common(uk, not_common(mk, uk)),
+
+      missing_keys = is_empty( ak ) || ignore
+    )
+    assert
+    (
+      missing_keys,
+      strl(["Update includes keys missing in map = ", ak])
+    )
+    [
+      for (k = map_get_keys(m) )
+        if ( map_exists(u, k) )
+          [k, map_get_value(u, k)]
+        else
+          [k, map_get_value(m, k)]
+    ];
+
 //! Compare the keys and/or values of two maps to test for equality.
 /***************************************************************************//**
   \param    m1 <map> A list of N key-value map pairs.
