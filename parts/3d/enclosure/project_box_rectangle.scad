@@ -437,6 +437,14 @@
 
     ###### post[0]: configuration[1]: defaults[0]: hole0
 
+    The default values and instance configuration for post, hole0,
+    hole1, post1, hole2, and post2 follow the schema described in the
+    table below, with the only difference being the default values.
+    These defaults are calculated according to the method outlined in
+    the "Defaults Calculation" section. Specifically, the default
+    heights for the posts and screw holes are determined based on the
+    post height and other configured requirements.
+
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | decimal           | 3.25              | diameter
@@ -464,15 +472,6 @@
     the full height of the enclosure. The ends of the removed sections
     may be cut at an angle to provide a gradual phase-in during 3D
     printing, eliminating the need for additional support structures.
-
-    ###### post[0]: configuration[1]: defaults[1-4]: hole1, post1, hole2, and post2
-
-    The configuration of hole1, post1, hole2, and post2 uses the same
-    schema as described  for hole0 in the table of the previous
-    section, with the only difference being the default values. The
-    defaults are computed according to that outlined in the defaults
-    calculation section below. The post and screw hole height defaults
-    are based on the post height and other configured requirements.
 
     ###### post[0]: configuration[1]: defaults[5]: fins0: triangular-fins
 
