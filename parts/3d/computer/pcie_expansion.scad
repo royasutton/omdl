@@ -319,10 +319,10 @@ enclosure_map_doc =
   ["posts_sides_conf",    "Post configuration sides: [mode, default]: see project_box_rectangle()"],
   ["posts_base_conf",     "Post configuration base: [mode, default]: see project_box_rectangle()"],
   ["posts_cover_conf",    "Post configuration cover: [mode, default]: see project_box_rectangle()"],
-  ["posts_basecover",     "Post instances for base and cover"],
-  ["posts_sides",         "Post instances sides only"],
-  ["posts_base",          "Post instances base only"],
-  ["posts_cover",         "Post instances cover only"],
+  ["posts_sides",         "Post instances sides only: see project_box_rectangle()"],
+  ["posts_base",          "Post instances base only: see project_box_rectangle()"],
+  ["posts_cover",         "Post instances cover only: see project_box_rectangle()"],
+  ["posts",               "Post instances for sides, base and cover: see project_box_rectangle()"],
   ["clamps_base",         "Enclosure base clamps: see clamp_zt_1p()"],
   ["holes_sides",         "Enclosure side hole instances"],
   ["bracket_window_gap",  "Bracket connector window gap [w]"],
@@ -527,15 +527,6 @@ enclosure_def =
       ]
     ]
   ],
-  ["posts_basecover",                     // post instances base and cover
-    let(u=undef, t=2, o=7, f=2, d=180, l=1/6)
-    [
-      [t, [-1,-1], [+o,+o], 000, u, u, u, [f, d, u, l]],
-      [t, [-1,+1], [+o,-o], 270, u, u, u, [f, d, u, l]],
-      [t, [+1,-1], [-o,+o], 090, u, u, u, [f, d, u, l]],
-      [t, [+1,+1], [-o,-o], 180, u, u, u, [f, d, u, l]]
-    ]
-  ],
   ["posts_sides",                         // post instances sides only
     let(u=undef, t=2, o=7, f=2, d=180, l=1/6)
     [
@@ -546,9 +537,24 @@ enclosure_def =
     ]
   ],
   ["posts_base",                          // post instances base only
-    undef
+    let(u=undef, t=2, o=7, f=2, d=180, l=1/6)
+    [
+      [t, [-1,-1], [+o,+o], 000, u, u, u, [f, d, u, l]],
+      [t, [-1,+1], [+o,-o], 270, u, u, u, [f, d, u, l]],
+      [t, [+1,-1], [-o,+o], 090, u, u, u, [f, d, u, l]],
+      [t, [+1,+1], [-o,-o], 180, u, u, u, [f, d, u, l]]
+    ]
   ],
   ["posts_cover",                         // post instances cover only
+    let(u=undef, t=2, o=7, f=2, d=180, l=1/6)
+    [
+      [t, [-1,-1], [+o,+o], 000, u, u, u, [f, d, u, l]],
+      [t, [-1,+1], [+o,-o], 270, u, u, u, [f, d, u, l]],
+      [t, [+1,-1], [-o,+o], 090, u, u, u, [f, d, u, l]],
+      [t, [+1,+1], [-o,-o], 180, u, u, u, [f, d, u, l]]
+    ]
+  ],
+  ["posts",                               // post instances for sides, base and cover
     undef
   ],
 
@@ -1149,13 +1155,13 @@ module pcie_expansion
       (
         type  = 1,                                  // post set type
         conf  = encl_posts_base_conf,               // cover post configuration
-        posts = encl_posts_basecover,               // standard base and cover posts
+        posts = encl_posts_base,                    // base-only posts
 
         d = first( encl_post(conf, type, posts) ),  // post configuration
         i = second( encl_post(conf, type, posts) ), // post instances
 
-        r = rb_mount_post_insts,                    // riser board mounts
-        b = encl_posts_base                         // enclosure base-only
+        r = rb_mount_post_insts,                    // riser board mount posts
+        b = encl_posts                              // global posts
       )
       [ d,
            is_undef(r) &&  is_undef(b) ? concat ( i )
@@ -1660,12 +1666,12 @@ module pcie_expansion
       (
         type  = 1,                                  // post set type
         conf  = encl_posts_cover_conf,              // cover post configuration
-        posts = encl_posts_basecover,               // standard base and cover posts
+        posts = encl_posts_cover,                   // cover-only posts
 
         d = first( encl_post(conf, type, posts) ),  // post configuration
         i = second( encl_post(conf, type, posts) ), // post instances
 
-        c = encl_posts_cover                        // enclosure cover-only
+        c = encl_posts                              // global posts
       )
       [
         d,
@@ -1831,10 +1837,10 @@ module pcie_expansion
   encl_posts_sides_conf     = map_get_value(enclosure, "posts_sides_conf");
   encl_posts_base_conf      = map_get_value(enclosure, "posts_base_conf");
   encl_posts_cover_conf     = map_get_value(enclosure, "posts_cover_conf");
-  encl_posts_basecover      = map_get_value(enclosure, "posts_basecover");
   encl_posts_sides          = map_get_value(enclosure, "posts_sides");
   encl_posts_base           = map_get_value(enclosure, "posts_base");
   encl_posts_cover          = map_get_value(enclosure, "posts_cover");
+  encl_posts                = map_get_value(enclosure, "posts");
 
   // rise board width
   riser_size    = pcie_expansion_rb_size(riser_pcb);
