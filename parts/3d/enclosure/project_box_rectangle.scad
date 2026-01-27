@@ -1434,7 +1434,7 @@ module project_box_rectangle
           }
 
           // removal post section
-          remove_cylinder(d, r, eps_d=eps*4);
+          remove_cylinder(d, r, eps_d=d);
         }
       }
     }
