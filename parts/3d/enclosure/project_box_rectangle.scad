@@ -1109,7 +1109,7 @@ module project_box_rectangle
     }
   }
 
-  // posts and screw holes
+  // posts and post holes
   module construct_posts( add=false, remove=false )
   {
     // post
@@ -1372,7 +1372,7 @@ module project_box_rectangle
         l   = h * hf;
 
         if (verb > 2)
-          echo(strl(["post-inst-fins: [d, h, t, f] = ", [d, h, t, f]]));
+          echo(strl(["post-inst-cylinder-fins: [d, h, t, f] = ", [d, h, t, f]]));
 
         f_in = fin_embed(d/2, w);
 
@@ -1497,10 +1497,10 @@ module project_box_rectangle
       tdef_h1_vr  = (inst_pt == 0) ? def_h1_vr : def_h2_vr;
       tdef_h1_vrm = (inst_pt == 0) ? def_h1_vrm : def_h2_vrm;
 
-      tdef_h1_rh   = (inst_pt == 0) ? def_h1_rh : def_h2_rh;
-      tdef_h1_ro   = (inst_pt == 0) ? def_h1_ro : def_h2_ro;
-      tdef_h1_rta  = (inst_pt == 0) ? def_h1_rta : def_h2_rta;
-      tdef_h1_rba  = (inst_pt == 0) ? def_h1_rba : def_h2_rba;
+      tdef_h1_rh  = (inst_pt == 0) ? def_h1_rh : def_h2_rh;
+      tdef_h1_ro  = (inst_pt == 0) ? def_h1_ro : def_h2_ro;
+      tdef_h1_rta = (inst_pt == 0) ? def_h1_rta : def_h2_rta;
+      tdef_h1_rba = (inst_pt == 0) ? def_h1_rba : def_h2_rba;
 
       // post:
       tdef_p_d_c  = (inst_pt == 0) ? def_p1_d_c : def_p2_d_c;
@@ -1534,7 +1534,7 @@ module project_box_rectangle
       //
 
       // hole0: common screw hole (for all post types)
-      h0_en  = (remove == true);
+      h0_en   = (remove == true);
 
       h0_d    = defined_e_or(inst_h0, 0, def_h0_d);
       h0_h    = defined_e_or(inst_h0, 1, def_h0_h);
@@ -1560,7 +1560,7 @@ module project_box_rectangle
       tdef_p_ims  = (cfg_hp_idr == true) ? h0_d + tdef_p_d_c : tdef_p_d;
 
       // hole1: aux screw hole or thru lid access hole
-      h1_en  = (remove == true);
+      h1_en   = (remove == true);
 
       h1_d    = defined_e_or(inst_h1, 0, tdef_h1_ims);
       h1_h    = defined_e_or(inst_h1, 1, tdef_h1_h);
@@ -1580,7 +1580,7 @@ module project_box_rectangle
       h1r     = [h1_rh, h1_ro, h1_rta, h1_rba];
 
       // post: post and fins
-      p_en   = (add == true);
+      p_en    = (add == true);
 
       p_d     = defined_e_or(inst_p, 0, tdef_p_ims);
       p_h     = defined_e_or(inst_p, 1, tdef_p_h);
