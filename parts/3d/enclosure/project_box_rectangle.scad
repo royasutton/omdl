@@ -1300,7 +1300,7 @@ module project_box_rectangle
     //
 
     // remove cylinder section
-    module remove_cylinder ( d, r, eps_d=0 )
+    module remove_cylinder ( d, r, eps_h=0, eps_d=0 )
     {
       h     = r[0];
       ho    = r[1];
@@ -1316,16 +1316,16 @@ module project_box_rectangle
       br  = defined_e_or  (ba, 1, 0);
 
       if (verb > 2)
-        echo(strl(["post-inst-cylinder-remove: [d, r, eps_d] = ", [d, r, eps_d]]));
+        echo(strl(["post-inst-cylinder-remove: [d, r, eps_h, eps_d] = ", [d, r, eps_h, eps_d]]));
 
-      translate([0, 0, ho])
+      translate([0, 0, ho - eps_h/2])
       difference()
       {
         // cut blade [x, y, z]
         x = h; y = h; z = d;
 
         // cylinder removal section
-        cylinder(d=d + eps_d, h=h);
+        cylinder(d=d + eps_d, h=h + eps_h);
 
         // cut at top of cylinder
         rotate(tr)
@@ -1434,7 +1434,7 @@ module project_box_rectangle
           }
 
           // removal post section
-          remove_cylinder(d, r, eps_d=d);
+          remove_cylinder(d, r, eps_h=eps*8, eps_d=d);
         }
       }
     }
