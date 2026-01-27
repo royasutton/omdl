@@ -1403,7 +1403,7 @@ module project_box_rectangle
     }
 
     // construct a cylinder with optional fins
-    module construct_cylinder ( en, c, r, ft, f, eps_z=0 )
+    module construct_cylinder ( en, c, r, ft, f, eps_h=0 )
     {
       if (en == true)
       {
@@ -1416,19 +1416,19 @@ module project_box_rectangle
         vrm   = c[6];
 
         if (verb > 2)
-          echo(strl(["post-inst-cylinder: [c, eps_z] = ", [c, eps_z]]));
+          echo(strl(["post-inst-cylinder: [c, eps_h] = ", [c, eps_h]]));
 
         difference()
         {
           // construct post and fins
-          translate([0, 0, ho - eps_z/2])
+          translate([0, 0, ho - eps_h/2])
           {
             // late diameter and height adjustments
             d_adj = d + da;
             h_adj = h + ha;
 
             rotate_extrude()
-            pg_rectangle([d_adj/2, h_adj + eps_z], vr=vr, vrm=vrm);
+            pg_rectangle([d_adj/2, h_adj + eps_h], vr=vr, vrm=vrm);
 
             construct_fins(d_adj, h_adj, ft, f);
           }
@@ -1620,8 +1620,8 @@ module project_box_rectangle
       {
         construct_cylinder(p_en, p, pr, inst_ft, f);
 
-        construct_cylinder(h0_en, h0, h0r, eps_z=eps*8);
-        construct_cylinder(h1_en, h1, h1r, eps_z=eps*8);
+        construct_cylinder(h0_en, h0, h0r, eps_h=eps*8);
+        construct_cylinder(h1_en, h1, h1r, eps_h=eps*8);
       }
 
       if (verb > 1)
