@@ -1901,7 +1901,7 @@ module pcie_expansion
       w   = first(encl_size_wlh),
       h   = third(encl_size_wlh),
       s   = t * 10,           // "explode-view" separation
-      b   = t * 4,            // build plate separation
+      b   = t * 8,            // build plate separation
       e   = eps*2             // assembled view overlap
     )
     [ // [0=design, 1=print, 2=assembled, 3=exploded, 4=build-plate]
