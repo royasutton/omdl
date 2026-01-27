@@ -442,18 +442,18 @@
       0 | decimal           | 3.25              | diameter
       1 | decimal           | (maximum)         | height
       2 | decimal           | 0                 | height offset
-      3 | decimal           | 0                 | \em late diameter adjust (1)
-      4 | decimal           | 0                 | \em late height adjust (1)
+      3 | decimal           | 0                 | (1) \em late diameter adjust
+      4 | decimal           | 0                 | (1) \em late height adjust
       5 | decimal-list-4 \| decimal| 0          | rounding radius
       6 | integer-list-4 \| integer| 0          | rounding mode
 
-    (1) The elements 3 and 4 are used for \em late adjustments to
-    diameters and heights for posts and holes. By \em late, it is meant
-    that they allow for dimension changes without affecting dependent
-    value calculations. This is useful to construct screw holes gaps or
-    for a diameter increase required for brass metal screw inserts, for
-    example. Another example is for use in post height adjustment that
-    allow clearance for circuit board mounting.
+    (1) Elements 3–4 are used for \em late adjustments to post and hole
+    diameters and heights. By \em late, it is meant that these elements
+    allow dimensional changes to be made without affecting dependent
+    value calculations. This is useful for creating screw-hole
+    clearances or increasing diameters to accommodate brass threaded
+    inserts, for example. Another application is post height adjustment
+    to provide clearance for circuit board mounting.
 
     ###### post[0]: configuration[1]: defaults[1-4]: hole1, post1, hole2, and post2
 
@@ -531,14 +531,19 @@
       1 | decimal-list-3:1  | [0, 0, 0]         | zero
       2 | decimal-list-3:2  | [0, 0, 0]         | move
       3 | decimal-list-3:1 \| decimal | [0, 0, 0] | rotate
-      4 | datastruct        | (see note)        | hole0; screw hole
-      5 | datastruct        | (see note)        | hole1; aux hole
-      6 | datastruct        | (see note)        | post
-      7 | datastruct        | (see note)        | fins
+      4 | datastruct        | (see note)        | (1) hole0; screw hole
+      5 | datastruct        | (see note)        | (1) hole1; aux hole
+      6 | datastruct        | (see note)        | (1) post
+      7 | datastruct        | (see note)        | (1) fins
 
-    \note The default values for the holes, post, and fins are set
-    based on the type and, when not specified with an instance, are
-    obtained from the configured default values as described above.
+    (1) The elements of the datastruct for hole0, hole1, post, and fins
+    instances are described in the post configuration defaults section,
+    which covers posts, holes, and fins.
+
+    \note The default values for the holes, post, and fins are
+    determined by their type. When not explicitly specified for an
+    instance, these values are automatically derived from the
+    configured default settings, as outlined above.
 
     ###### post[1]: instance[0]: type
 
