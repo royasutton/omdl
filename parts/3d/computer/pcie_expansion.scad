@@ -537,7 +537,7 @@ enclosure_def =
     ]
   ],
   ["posts_base",                          // post instances base only
-    let(u=undef, t=2, o=7, f=2, d=180, l=1/6)
+    let(u=undef, t=3, o=7, f=2, d=180, l=1/6)
     [
       [t, [-1,-1], [+o,+o], 000, u, u, u, [f, d, u, l]],
       [t, [-1,+1], [+o,-o], 270, u, u, u, [f, d, u, l]],
@@ -546,7 +546,7 @@ enclosure_def =
     ]
   ],
   ["posts_cover",                         // post instances cover only
-    let(u=undef, t=2, o=7, f=2, d=180, l=1/6)
+    let(u=undef, t=3, o=7, f=2, d=180, l=1/6)
     [
       [t, [-1,-1], [+o,+o], 000, u, u, u, [f, d, u, l]],
       [t, [-1,+1], [+o,-o], 270, u, u, u, [f, d, u, l]],
@@ -1149,26 +1149,14 @@ module pcie_expansion
         ]
       ];
 
-    // merge defined posts: enclosure, riser, base-only
+    // merge all posts
     encl_posts_base_all =
-      let
+      merge_post_inst_sets
       (
-        type  = 1,                                  // post set type
-        conf  = encl_posts_base_conf,               // cover post configuration
-        posts = encl_posts_base,                    // base-only posts
-
-        d = first( encl_post(conf, type, posts) ),  // post configuration
-        i = second( encl_post(conf, type, posts) ), // post instances
-
-        r = rb_mount_post_insts,                    // riser board mount posts
-        b = encl_posts                              // global posts
-      )
-      [ d,
-           is_undef(r) &&  is_undef(b) ? concat ( i )
-        : !is_undef(r) &&  is_undef(b) ? concat ( i, r )
-        :  is_undef(r) && !is_undef(b) ? concat ( i, b )
-        :                                concat ( i, r, b )
-      ];
+        encl_posts_base_conf,
+        [ encl_posts_base, rb_mount_post_insts ],
+        1, [ encl_posts ]
+      );
 
     // reference: slot-1 of rb-1 [w, l, h]
     wlh_ref_rb1s1_o =
@@ -1456,7 +1444,14 @@ module pcie_expansion
       }
     }
 
-    encl_posts_sides_all = encl_post(encl_posts_sides_conf, 0, encl_posts_sides);
+    // merge all posts
+    encl_posts_sides_all =
+      merge_post_inst_sets
+      (
+        encl_posts_sides_conf,
+        [ encl_posts_sides ],
+        0, [ encl_posts ]
+      );
 
     // reference: base to sides zero alignment
     wlh_s2b_ao = [ 0, 0, encl_wth*2 ];
@@ -1660,24 +1655,14 @@ module pcie_expansion
   {
     // enable: B0: base
 
-    // merge all post: enclosure posts, and cover-only
+    // merge all posts
     encl_posts_cover_all =
-      let
+      merge_post_inst_sets
       (
-        type  = 1,                                  // post set type
-        conf  = encl_posts_cover_conf,              // cover post configuration
-        posts = encl_posts_cover,                   // cover-only posts
-
-        d = first( encl_post(conf, type, posts) ),  // post configuration
-        i = second( encl_post(conf, type, posts) ), // post instances
-
-        c = encl_posts                              // global posts
-      )
-      [
-        d,
-          is_undef( c ) ? concat( i )
-        :                 concat( i, c )
-      ];
+        encl_posts_cover_conf,
+        [ encl_posts_cover ],
+        1, [ encl_posts ]
+      );
 
     //
     // construct cover
@@ -1773,21 +1758,32 @@ module pcie_expansion
   }
 
   //
-  // enclosure posts: (base, sides, cover)
+  // merge post instances
   //
-  function encl_post(configuration, set_type, instances) =
-    [ // post configuration
-      configuration,
+  function merge_post_inst_sets
+  (
+    post_configuration,
+    local_instance_sets,
+    global_type_append,
+    global_instance_sets
+  ) =
+    [
+      post_configuration,
 
-      // post instances with updated set type
-      [
-        for (inst = instances)
-        let
-        (
-          inst_type = first(inst),
-          inst_spec = tailn(inst)
-        )
-        concat(set_type + inst_type, inst_spec)
+      [ // copy local instances unchanged
+        for (set = local_instance_sets)
+          for (instance = set)
+            instance,
+
+        // update type for global instances
+        for (set = global_instance_sets)
+          for (instance = set)
+          let
+          (
+            type = first(instance),
+            inst = tailn(instance)
+          )
+          concat(type + global_type_append, inst)
       ]
     ];
 
