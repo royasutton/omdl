@@ -1144,7 +1144,7 @@ module pcie_expansion
       ];
 
     // merge defined posts: enclosure, riser, base-only
-    encl_posts_base =
+    encl_posts_base_all =
       let
       (
         type  = 1,                                  // post set type
@@ -1208,7 +1208,7 @@ module pcie_expansion
           lip   = encl_lips_base,
           rib   = encl_ribs,
           wall  = encl_walls,
-          post  = encl_posts_base,
+          post  = encl_posts_base_all,
           vr    = encl_rounding,
           vrm   = encl_mode_rounding,
           align = [0, 0, 0],
@@ -1450,7 +1450,7 @@ module pcie_expansion
       }
     }
 
-    encl_posts_sides = encl_post(encl_posts_sides_conf, 0, encl_posts_sides);
+    encl_posts_sides_all = encl_post(encl_posts_sides_conf, 0, encl_posts_sides);
 
     // reference: base to sides zero alignment
     wlh_s2b_ao = [ 0, 0, encl_wth*2 ];
@@ -1497,7 +1497,7 @@ module pcie_expansion
           lip   = encl_lips_sides,
           rib   = encode_ribs,
           wall  = encl_walls,
-          post  = encl_posts_sides,
+          post  = encl_posts_sides_all,
           vr    = encl_rounding,
           vrm   = encl_mode_rounding,
           align = [0, 0, 0],
@@ -1655,7 +1655,7 @@ module pcie_expansion
     // enable: B0: base
 
     // merge all post: enclosure posts, and cover-only
-    encl_posts_cover =
+    encl_posts_cover_all =
       let
       (
         type  = 1,                                  // post set type
@@ -1687,7 +1687,7 @@ module pcie_expansion
       lip   = encl_lips_cover,
       rib   = encl_ribs,
       wall  = encl_walls,
-      post  = encl_posts_cover,
+      post  = encl_posts_cover_all,
       vr    = encl_rounding,
       vrm   = encl_mode_rounding,
       align = [0, 0, 0],
