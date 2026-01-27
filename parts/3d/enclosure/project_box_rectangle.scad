@@ -446,6 +446,10 @@
       4 | decimal           | 0                 | (1) \em late height adjust
       5 | decimal-list-4 \| decimal| 0          | rounding radius
       6 | integer-list-4 \| integer| 0          | rounding mode
+      7 | decimal           | 0                 | (2) removal height
+      8 | decimal           | 0                 | (2) removal height offset
+      9 | decimal-list-2 \| decimal | [0, 0]    | (2) removal top cut angles [t, r]
+      10| decimal-list-2 \| decimal | [0, 0]    | (2) removal bottom cut angles [t, r]
 
     (1) Elements 3–4 are used for \em late adjustments to post and hole
     diameters and heights. By \em late, it is meant that these elements
@@ -454,6 +458,12 @@
     clearances or increasing diameters to accommodate brass threaded
     inserts, for example. Another application is post height adjustment
     to provide clearance for circuit board mounting.
+
+    (2) Elements 7–10 may be used to remove sections of the post
+    structure. This feature allows support for posts that do not extend
+    the full height of the enclosure. The ends of the removed sections
+    may be cut at an angle to provide a gradual phase-in during 3D
+    printing, eliminating the need for additional support structures.
 
     ###### post[0]: configuration[1]: defaults[1-4]: hole1, post1, hole2, and post2
 
@@ -1186,6 +1196,11 @@ module project_box_rectangle
     def_h0_vr   = defined_e_or(def_h0, 5, 0);
     def_h0_vrm  = defined_e_or(def_h0, 6, 0);
 
+    def_h0_rh   = defined_e_or(def_h0, 7, 0);
+    def_h0_ro   = defined_e_or(def_h0, 8, 0);
+    def_h0_rta  = defined_e_or(def_h0, 9, [0, 0]);
+    def_h0_rba  = defined_e_or(def_h0,10, [0, 0]);
+
     //
     // default diameter calculations based on hole0
     //
@@ -1214,6 +1229,11 @@ module project_box_rectangle
     def_h1_vr   = defined_e_or(def_h1, 5, 0);
     def_h1_vrm  = defined_e_or(def_h1, 6, 0);
 
+    def_h1_rh   = defined_e_or(def_h1, 7, 0);
+    def_h1_ro   = defined_e_or(def_h1, 8, 0);
+    def_h1_rta  = defined_e_or(def_h1, 9, [0, 0]);
+    def_h1_rba  = defined_e_or(def_h1,10, [0, 0]);
+
     // post1: normal mount post
     def_p1_d    = defined_e_or(def_p1, 0, def_p1_d_c);
     def_p1_h    = defined_e_or(def_p1, 1, cfg_p1_h);
@@ -1222,6 +1242,11 @@ module project_box_rectangle
     def_p1_ha   = defined_e_or(def_p1, 4, 0);
     def_p1_vr   = defined_e_or(def_p1, 5, cfg_p_vr_sf * wth);
     def_p1_vrm  = defined_e_or(def_p1, 6, cfg_p_vrm);
+
+    def_p1_rh   = defined_e_or(def_p1, 7, 0);
+    def_p1_ro   = defined_e_or(def_p1, 8, 0);
+    def_p1_rta  = defined_e_or(def_p1, 9, [0, 0]);
+    def_p1_rba  = defined_e_or(def_p1,10, [0, 0]);
 
     // hole2: recessed access hole thru lid
     def_h2_d    = defined_e_or(def_h2, 0, def_h2_d_c);
@@ -1232,6 +1257,11 @@ module project_box_rectangle
     def_h2_vr   = defined_e_or(def_h2, 5, cfg_p_vr_sf * wth/2);
     def_h2_vrm  = defined_e_or(def_h2, 6, cfg_p_vrm);
 
+    def_h2_rh   = defined_e_or(def_h2, 7, 0);
+    def_h2_ro   = defined_e_or(def_h2, 8, 0);
+    def_h2_rta  = defined_e_or(def_h2, 9, [0, 0]);
+    def_h2_rba  = defined_e_or(def_h2,10, [0, 0]);
+
     // post2: recessed access post
     def_p2_d    = defined_e_or(def_p2, 0, def_p2_d_c);
     def_p2_h    = defined_e_or(def_p2, 1, cfg_p2_h);
@@ -1240,6 +1270,11 @@ module project_box_rectangle
     def_p2_ha   = defined_e_or(def_p2, 4, 0);
     def_p2_vr   = defined_e_or(def_p2, 5, cfg_p_vr_sf * wth);
     def_p2_vrm  = defined_e_or(def_p2, 6, cfg_p_vrm);
+
+    def_p2_rh   = defined_e_or(def_p2, 7, 0);
+    def_p2_ro   = defined_e_or(def_p2, 8, 0);
+    def_p2_rta  = defined_e_or(def_p2, 9, [0, 0]);
+    def_p2_rba  = defined_e_or(def_p2,10, [0, 0]);
 
     // fins0: triangular fins
     def_f0_c    = defined_e_or(def_f0, 0, 4);
@@ -1264,6 +1299,51 @@ module project_box_rectangle
     // construct posts
     //
     //
+
+    // remove cylinder section
+    module remove_cylinder ( d, r, eps_d=0 )
+    {
+      h     = r[0];
+      ho    = r[1];
+      ta    = r[2];
+      ba    = r[3];
+
+      // top cut tilt and rotation
+      tt  = defined_eon_or(ta, 0, 0);
+      tr  = defined_e_or  (ta, 1, 0);
+
+      // bottom cut tilt and rotation
+      bt  = defined_eon_or(ba, 0, 0);
+      br  = defined_e_or  (ba, 1, 0);
+
+      if (verb > 2)
+        echo(strl(["post-inst-cylinder-remove: [d, r, eps_d] = ", [d, r, eps_d]]));
+
+      translate([0, 0, ho])
+      difference()
+      {
+        // cut blade [x, y, z]
+        x = h; y = h; z = d;
+
+        // cylinder removal section
+        cylinder(d=d + eps_d, h=h);
+
+        // cut at top of cylinder
+        rotate(tr)
+        translate([0, -d/2, 0])
+        translate([0, 0, h])
+        rotate([tt, 0, 0])
+        translate([-x/2, 0, 0])
+        cube([x, y, z], center=false);
+
+        // cut at bottom of cylinder
+        rotate(br)
+        translate([0, -d/2, 0])
+        rotate([bt, 0, 0])
+        translate([-x/2, 0, -z])
+        cube([x, y, z], center=false);
+      }
+    }
 
     // construct fins around a cylinder
     module construct_fins(d, h, t, f)
@@ -1324,7 +1404,7 @@ module project_box_rectangle
     }
 
     // construct a cylinder with optional fins
-    module construct_cylinder ( en, c, ft, f, eps=0 )
+    module construct_cylinder ( en, c, r, ft, f, eps_z=0 )
     {
       if (en == true)
       {
@@ -1337,18 +1417,25 @@ module project_box_rectangle
         vrm   = c[6];
 
         if (verb > 2)
-          echo(strl(["post-inst-cylinder: [c, eps] = ", [c, eps]]));
+          echo(strl(["post-inst-cylinder: [c, eps_z] = ", [c, eps_z]]));
 
-        translate([0, 0, ho - eps/2])
+        difference()
         {
-          // late adjustments
-          d_adj = d + da;
-          h_adj = h + ha;
+          // construct post and fins
+          translate([0, 0, ho - eps_z/2])
+          {
+            // late diameter and height adjustments
+            d_adj = d + da;
+            h_adj = h + ha;
 
-          rotate_extrude()
-          pg_rectangle([d_adj/2, h_adj + eps], vr=vr, vrm=vrm);
+            rotate_extrude()
+            pg_rectangle([d_adj/2, h_adj + eps_z], vr=vr, vrm=vrm);
 
-          construct_fins(d_adj, h_adj, ft, f);
+            construct_fins(d_adj, h_adj, ft, f);
+          }
+
+          // removal post section
+          remove_cylinder(d, r, eps_d=eps*4);
         }
       }
     }
@@ -1364,7 +1451,9 @@ module project_box_rectangle
       echo(strl(["post: construction phase = ", post_cfm]));
     }
 
+    //
     // process 'post' instance list
+    //
     translate(post_lo)
     for (inst=inst_l)
     {
@@ -1408,6 +1497,11 @@ module project_box_rectangle
       tdef_h1_vr  = (inst_pt == 0) ? def_h1_vr : def_h2_vr;
       tdef_h1_vrm = (inst_pt == 0) ? def_h1_vrm : def_h2_vrm;
 
+      tdef_h1_rh   = (inst_pt == 0) ? def_h1_rh : def_h2_rh;
+      tdef_h1_ro   = (inst_pt == 0) ? def_h1_ro : def_h2_ro;
+      tdef_h1_rta  = (inst_pt == 0) ? def_h1_rta : def_h2_rta;
+      tdef_h1_rba  = (inst_pt == 0) ? def_h1_rba : def_h2_rba;
+
       // post:
       tdef_p_d_c  = (inst_pt == 0) ? def_p1_d_c : def_p2_d_c;
       tdef_p_d    = (inst_pt == 0) ? def_p1_d : def_p2_d;
@@ -1417,6 +1511,11 @@ module project_box_rectangle
       tdef_p_ha   = (inst_pt == 0) ? def_p1_ha : def_p2_ha;
       tdef_p_vr   = (inst_pt == 0) ? def_p1_vr : def_p2_vr;
       tdef_p_vrm  = (inst_pt == 0) ? def_p1_vrm : def_p2_vrm;
+
+      tdef_p_rh   = (inst_pt == 0) ? def_p1_rh : def_p2_rh;
+      tdef_p_ro   = (inst_pt == 0) ? def_p1_ro : def_p2_ro;
+      tdef_p_rta  = (inst_pt == 0) ? def_p1_rta : def_p2_rta;
+      tdef_p_rba  = (inst_pt == 0) ? def_p1_rba : def_p2_rba;
 
       // B1: fins-type
       inst_ft     = binary_iw2i(inst_t, 1, 1);
@@ -1447,6 +1546,13 @@ module project_box_rectangle
 
       h0      = [h0_d, h0_h, h0_ho, h0_da, h0_ha, h0_vr, h0_vrm];
 
+      h0_rh   = defined_e_or(inst_h0, 7, def_h0_rh);
+      h0_ro   = defined_e_or(inst_h0, 8, def_h0_ro);
+      h0_rta  = defined_e_or(inst_h0, 9, def_h0_rta);
+      h0_rba  = defined_e_or(inst_h0,10, def_h0_rba);
+
+      h0r     = [h0_rh, h0_ro, h0_rta, h0_rba];
+
       //
       // assign hole and post defaults based on selected mode 'cfg_hp_idr'
       //
@@ -1466,6 +1572,13 @@ module project_box_rectangle
 
       h1      = [h1_d, h1_h, h1_ho, h1_da, h1_ha, h1_vr, h1_vrm];
 
+      h1_rh   = defined_e_or(inst_h1, 7, tdef_h1_rh);
+      h1_ro   = defined_e_or(inst_h1, 8, tdef_h1_ro);
+      h1_rta  = defined_e_or(inst_h1, 9, tdef_h1_rta);
+      h1_rba  = defined_e_or(inst_h1,10, tdef_h1_rba);
+
+      h1r     = [h1_rh, h1_ro, h1_rta, h1_rba];
+
       // post: post and fins
       p_en   = (add == true);
 
@@ -1479,6 +1592,14 @@ module project_box_rectangle
 
       p       = [p_d, p_h, p_ho, p_da, p_ha, p_vr, p_vrm];
 
+      p_rh    = defined_e_or(inst_p, 7, tdef_p_rh);
+      p_ro    = defined_e_or(inst_p, 8, tdef_p_ro);
+      p_rta   = defined_e_or(inst_p, 9, tdef_p_rta);
+      p_rba   = defined_e_or(inst_p,10, tdef_p_rba);
+
+      pr      = [p_rh, p_ro, p_rta, p_rba];
+
+      // post-fins
       f_c     = defined_e_or(inst_f, 0, tdef_f_c);
       f_da    = defined_e_or(inst_f, 1, tdef_f_da);
       f_w     = defined_e_or(inst_f, 2, tdef_f_w);
@@ -1498,10 +1619,10 @@ module project_box_rectangle
       rotate(inst_r)
       union()
       {
-        construct_cylinder(p_en, p, inst_ft, f);
+        construct_cylinder(p_en, p, pr, inst_ft, f);
 
-        construct_cylinder(h0_en, h0, eps=10*eps);
-        construct_cylinder(h1_en, h1, eps=10*eps);
+        construct_cylinder(h0_en, h0, h0r, eps_z=eps*8);
+        construct_cylinder(h1_en, h1, h1r, eps_z=eps*8);
       }
 
       if (verb > 1)
