@@ -528,7 +528,7 @@ enclosure_def =
     ]
   ],
   ["posts_sides",                         // post instances sides only
-    let(u=undef, t=2, o=7.5, f=[2, 180, u, 1/6])
+    let(u=undef, t=2, o=7.5, f=[4, 120, u, 1/6])
     [
       [t, [-1,-1], [+o,+o], 180, u, u, u, f],
       [t, [-1,+1], [+o,-o], 090, u, u, u, f],
