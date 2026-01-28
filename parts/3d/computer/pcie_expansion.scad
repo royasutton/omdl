@@ -528,30 +528,30 @@ enclosure_def =
     ]
   ],
   ["posts_sides",                         // post instances sides only
-    let(u=undef, t=2, o=7, f=2, d=180, l=1/6)
+    let(u=undef, t=2, o=7, f=[2, 180, u, 1/6])
     [
-      [t, [-1,-1], [+o,+o], 180, u, u, u, [f, d, u, l]],
-      [t, [-1,+1], [+o,-o], 090, u, u, u, [f, d, u, l]],
-      [t, [+1,-1], [-o,+o], 270, u, u, u, [f, d, u, l]],
-      [t, [+1,+1], [-o,-o], 000, u, u, u, [f, d, u, l]]
+      [t, [-1,-1], [+o,+o], 180, u, u, u, f],
+      [t, [-1,+1], [+o,-o], 090, u, u, u, f],
+      [t, [+1,-1], [-o,+o], 270, u, u, u, f],
+      [t, [+1,+1], [-o,-o], 000, u, u, u, f]
     ]
   ],
   ["posts_base",                          // post instances base only
-    let(u=undef, t=3, o=7, f=2, d=180, l=1/6)
+    let(u=undef, t=3, o=7, f=[2, 180, u, 1/6])
     [
-      [t, [-1,-1], [+o,+o], 000, u, u, u, [f, d, u, l]],
-      [t, [-1,+1], [+o,-o], 270, u, u, u, [f, d, u, l]],
-      [t, [+1,-1], [-o,+o], 090, u, u, u, [f, d, u, l]],
-      [t, [+1,+1], [-o,-o], 180, u, u, u, [f, d, u, l]]
+      [t, [-1,-1], [+o,+o], 000, u, u, u, f],
+      [t, [-1,+1], [+o,-o], 270, u, u, u, f],
+      [t, [+1,-1], [-o,+o], 090, u, u, u, f],
+      [t, [+1,+1], [-o,-o], 180, u, u, u, f]
     ]
   ],
   ["posts_cover",                         // post instances cover only
-    let(u=undef, t=3, o=7, f=2, d=180, l=1/6)
+    let(u=undef, t=3, o=7, f=[2, 180, u, 1/6])
     [
-      [t, [-1,-1], [+o,+o], 000, u, u, u, [f, d, u, l]],
-      [t, [-1,+1], [+o,-o], 270, u, u, u, [f, d, u, l]],
-      [t, [+1,-1], [-o,+o], 090, u, u, u, [f, d, u, l]],
-      [t, [+1,+1], [-o,-o], 180, u, u, u, [f, d, u, l]]
+      [t, [-1,-1], [+o,+o], 000, u, u, u, f],
+      [t, [-1,+1], [+o,-o], 270, u, u, u, f],
+      [t, [+1,-1], [-o,+o], 090, u, u, u, f],
+      [t, [+1,+1], [-o,-o], 180, u, u, u, f]
     ]
   ],
   ["posts",                               // post instances for sides, base and cover
