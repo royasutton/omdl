@@ -1079,6 +1079,8 @@ module pcie_expansion
     // model riser board
     module model_riser()
     {
+      rb_slot_count         = map_get_value(riser_pcb, "slot_count");
+
       rb_slot1_to_edge1     = map_get_value(riser_pcb, "slot1_to_edge1");
       rb_slot_key_to_edgef  = map_get_value(riser_pcb, "slot_key_to_edgef");
 
@@ -1095,7 +1097,7 @@ module pcie_expansion
       ss = [7.50, defined_or(map_get_value(sm, rb_slot_link_width), 25), 11.25];
 
       // riser and slot fixed offsets
-      ro = [-rb_slot1_to_edge1, -riser_size.y + rb_slot_key_to_edgef, 0];
+      ro = [-rb_slot1_to_edge1, -riser_size0.y + rb_slot_key_to_edgef, 0];
       so = [-ss.x/2, -ko, rb_pcb_th];
 
       for (wlh_rb_inst = slot_keys_wlh)
@@ -1106,17 +1108,21 @@ module pcie_expansion
           wlh_rb_inst_o = first( wlh_rb_inst );
 
           translate(wlh_rb_inst_o + ro)
-          cube(riser_size, center=false);
+          cube(riser_size0, center=false);
 
           for (p = rb_mount_holes)
             translate(wlh_rb_inst_o + concat(p, -eps*2))
             cylinder(d=rb_post_hole_d, h=rb_pcb_th+eps*4, center=false);
         }
 
-        // riser board slots
-        for (wlh_slot_inst = wlh_rb_inst)
+        // riser board slots; only show physical slots (skip vslots)
+        for (i = [0 : rb_slot_count-1])
+        {
+          wlh_slot_inst = wlh_rb_inst[i];
+
           translate(wlh_slot_inst + so)
           cube(ss, center=false);
+        }
       }
     }
 
@@ -1846,6 +1852,7 @@ module pcie_expansion
   encl_posts                = map_get_value(enclosure, "posts");
 
   // rise board width
+  riser_size0   = pcie_expansion_rb_size(riser_pcb, 0);
   riser_size    = pcie_expansion_rb_size(riser_pcb);
   riser_width   = first( riser_size );
 
