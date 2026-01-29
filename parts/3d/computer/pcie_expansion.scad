@@ -119,7 +119,7 @@ pcie_spec_half =
 riser_map_doc =
 [
   ["bottom_clearance",   "Vertical clearance under riser board"],
-  ["top_clearance",      "Vertical clearance above riser board for components excluding slot"],
+  ["edgef_clearance",    "Vertical clearance for connectors at front edge of PCB"],
   ["slot_count",         "Riser board slot count"],
   ["multi_slot_offset",  "PCI-E multi-slot, slot-to-slot spacing"],
   ["slot1_to_edge1",     "Riser board slot-1 to adjacent edge distance"],
@@ -158,7 +158,7 @@ riser_PCE164P_NO3_VER_007 =
 [
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
   ["bottom_clearance",        3],         // riser bottom electronics h-clearance
-  ["top_clearance",          12],         // riser top electronics h-clearance
+  ["edgef_clearance",        12],         // riser front edge connector h-clearance
   ["slot_count",              1],         // riser slot count
   ["multi_slot_offset",   20.32],         // standard pcie multi-slot spacing
   ["slot1_to_edge1",         15],         // riser slot-1 to pcb adjacent dimension
@@ -208,7 +208,7 @@ riser_AAAPCIE4HUB =
 [
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
   ["bottom_clearance",        3],         // riser bottom electronics h-clearance
-  ["top_clearance",           8],         // riser top electronics h-clearance
+  ["edgef_clearance",        12],         // riser front edge connector h-clearance
   ["slot_count",              4],         // riser slot count
   ["multi_slot_offset",   20.32],         // standard pcie multi-slot spacing
   ["slot1_to_edge1",         12],         // riser slot-1 to pcb adjacent dimension
@@ -261,7 +261,7 @@ riser_SFF_8612_4X_to_PCI_E_16X =
 [
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
   ["bottom_clearance",        0],         // riser bottom electronics h-clearance
-  ["top_clearance",           6],         // riser top electronics h-clearance
+  ["edgef_clearance",         8],         // riser front edge connector h-clearance
   ["slot_count",              1],         // riser slot count
   ["multi_slot_offset",   20.32],         // standard pcie multi-slot spacing
   ["slot1_to_edge1",       5.75],         // riser slot-1 to pcb adjacent dimension
