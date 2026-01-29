@@ -120,7 +120,8 @@ riser_map_doc =
 [
   ["bottom_clearance",   "Vertical clearance under riser board"],
   ["edgef_clearance",    "Vertical clearance for connectors at front edge of PCB"],
-  ["slot_count",         "Riser board slot count"],
+  ["slot_count",         "Riser physical slot count (fixed)"],
+  ["vslot_count",        "Riser virtual slot count (user adjustable)"],
   ["multi_slot_offset",  "PCI-E multi-slot, slot-to-slot spacing"],
   ["slot1_to_edge1",     "Riser board slot-1 to adjacent edge distance"],
   ["slotn_to_edgen",     "Riser board slot-n to adjacent edge distance"],
@@ -159,7 +160,8 @@ riser_PCE164P_NO3_VER_007 =
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
   ["bottom_clearance",        3],         // riser bottom electronics h-clearance
   ["edgef_clearance",        12],         // riser front edge connector h-clearance
-  ["slot_count",              1],         // riser slot count
+  ["slot_count",              1],         // riser physical slot count
+  ["vslot_count",             0],         // riser virtual slot count
   ["multi_slot_offset",   20.32],         // standard pcie multi-slot spacing
   ["slot1_to_edge1",         15],         // riser slot-1 to pcb adjacent dimension
   ["slotn_to_edgen",         28],         // riser slot-n to pcb adjacent dimension
@@ -209,7 +211,8 @@ riser_AAAPCIE4HUB =
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
   ["bottom_clearance",        3],         // riser bottom electronics h-clearance
   ["edgef_clearance",        12],         // riser front edge connector h-clearance
-  ["slot_count",              4],         // riser slot count
+  ["slot_count",              4],         // riser physical slot count
+  ["vslot_count",             0],         // riser virtual slot count
   ["multi_slot_offset",   20.32],         // standard pcie multi-slot spacing
   ["slot1_to_edge1",         12],         // riser slot-1 to pcb adjacent dimension
   ["slotn_to_edgen",         12],         // riser slot-n to pcb adjacent dimension
@@ -262,7 +265,8 @@ riser_SFF_8612_4X_to_PCI_E_16X =
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
   ["bottom_clearance",        0],         // riser bottom electronics h-clearance
   ["edgef_clearance",         8],         // riser front edge connector h-clearance
-  ["slot_count",              1],         // riser slot count
+  ["slot_count",              1],         // riser physical slot count
+  ["vslot_count",             0],         // riser virtual slot count
   ["multi_slot_offset",   20.32],         // standard pcie multi-slot spacing
   ["slot1_to_edge1",       5.75],         // riser slot-1 to pcb adjacent dimension
   ["slotn_to_edgen",      37.00],         // riser slot-n to pcb adjacent dimension
@@ -692,13 +696,15 @@ function pcie_expansion_rb_size
 (
   riser_pcb,
 
-  slots
+  vslots
 ) =
   let
   (
-    rb_slot_count         = is_undef( slots ) ?
-                            map_get_value(riser_pcb, "slot_count")
-                          : slots,
+    rb_vslot_count        = is_undef( vslots ) ?
+                            map_get_value(riser_pcb, "vslot_count")
+                          : vslots,
+
+    rb_slot_count         = map_get_value(riser_pcb, "slot_count"),
 
     rb_slot1_to_edge1     = map_get_value(riser_pcb, "slot1_to_edge1"),
     rb_slotn_to_edgen     = map_get_value(riser_pcb, "slotn_to_edgen"),
@@ -708,7 +714,7 @@ function pcie_expansion_rb_size
     rb_pcb_th             = map_get_value(riser_pcb, "pcb_th"),
 
     w = rb_slot1_to_edge1
-      + (rb_slot_count-1) * rb_multi_slot_offset
+      + (rb_slot_count + max(0, rb_vslot_count) - 1) * rb_multi_slot_offset
       + rb_slotn_to_edgen,
 
     l = rb_pcb_length,
@@ -866,6 +872,7 @@ function pcie_expansion_rbs_keys
 
     // riser
     rb_slot_count           = map_get_value(riser_pcb, "slot_count"),
+    rb_vslot_count          = map_get_value(riser_pcb, "vslot_count"),
     rb_multi_slot_offset    = map_get_value(riser_pcb, "multi_slot_offset"),
     rb_slot1_to_edge1       = map_get_value(riser_pcb, "slot1_to_edge1"),
     rb_bottom_clearance     = map_get_value(riser_pcb, "bottom_clearance"),
@@ -894,7 +901,7 @@ function pcie_expansion_rbs_keys
   [ // each riser board
     for (rb_n = [0:encl_board_count-1])
     [ // each riser board slot
-      for (rb_s = [0 : rb_slot_count-1])
+      for (rb_s = [0 : rb_slot_count + max(0, rb_vslot_count) - 1])
       let
       ( // instance offsets: board and board-slot
         w_oi  = rb_n * (riser_width + encl_multi_board_offset),
