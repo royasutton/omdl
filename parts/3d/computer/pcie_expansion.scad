@@ -311,6 +311,7 @@ enclosure_map_doc =
   ["space_min_length",    "Enclosure minimum interior length"],
   ["space_min_height",    "Enclosure minimum interior height"],
   ["rb_min_clearance",    "Riser board minimum bottom clearance"],
+  ["rib_pcb_gap",         "Rib removal gap for PCIE and riser board PCB"],
   ["lips_sides",          "Sides lips specification: see project_box_rectangle()"],
   ["lips_base",           "Base lips specification: see project_box_rectangle()"],
   ["lips_cover",          "Cover lips specification: see project_box_rectangle()"],
@@ -473,6 +474,8 @@ enclosure_def =
   ["space_min_height",             0],    // enclosure minimum interior height
 
   ["rb_min_clearance",             0],    // riser board minimum bottom clearance
+
+  ["rib_pcb_gap",                1/2],    // rib removal gap for pcie and riser board pcb
 
   ["lips_sides",       1 + pow(2, 3)],    // sides lips specification
   ["lips_base",                    1],    // base lips specification
@@ -1296,6 +1299,7 @@ module pcie_expansion
     rb_slot1_to_edge1         = map_get_value(riser_pcb, "slot1_to_edge1");
 
     // sides
+    encl_rib_pcb_gap          = map_get_value(enclosure, "rib_pcb_gap");
     encl_mode_sides           = map_get_value(enclosure, "mode_sides");
     encl_cut_sides            = map_get_value(enclosure, "cut_sides");
     encl_holes_sides          = map_get_value(enclosure, "holes_sides");
@@ -1602,8 +1606,7 @@ module pcie_expansion
             wlh_rbs1.z
           ];
 
-          // fixed hard-coded pcb gap
-          g = [1/2, 1/2];
+          g = [encl_rib_pcb_gap, encl_rib_pcb_gap];
 
           translate( wlh_rb1s1_fwo )
           {
@@ -1631,8 +1634,7 @@ module pcie_expansion
               wlh_slot_inst.z
             ];
 
-            // fixed hard-coded pcb gap
-            g = [1/2, 1/2];
+            g = [encl_rib_pcb_gap, 0];
 
             translate( wlh_rb1s1_fwo )
             {
