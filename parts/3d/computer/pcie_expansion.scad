@@ -1290,6 +1290,9 @@ module pcie_expansion
         B8: remove ribs on front edge of wall for riser PCB
     */
 
+    // riser board
+    rb_slot1_to_edge1         = map_get_value(riser_pcb, "slot1_to_edge1");
+
     // sides
     encl_mode_sides           = map_get_value(enclosure, "mode_sides");
     encl_cut_sides            = map_get_value(enclosure, "cut_sides");
@@ -1533,7 +1536,7 @@ module pcie_expansion
       // bracket window features gap [w]
       gap_w = encl_bracket_window_gap;
 
-      // remove bracket connector features for each slot
+      // remove per-board x per-slot features
       for (wlh_rb_inst = slot_keys_wlh)
       {
         // mode_sides B2: remove connector window
@@ -1582,29 +1585,26 @@ module pcie_expansion
             extrude_linear_uss(e, center=false)
             pg_rectangle(size=w + [gap_w, 0, 0], center=false);
           }
-      }
 
-      // mode_sides B8: remove ribs on front edge of wall for riser PCB
-      if ( binary_bit_is(encl_mode_sides, 8, 1) )
-      {
-        rb_slot1_to_edge1   = map_get_value(riser_pcb, "slot1_to_edge1");
-
-        for (wlh_rb_inst = slot_keys_wlh)
+        // mode_sides B8: remove ribs on front edge of wall for riser PCB
+        if ( binary_bit_is(encl_mode_sides, 8, 1) )
         {
           // position of slot-1 of riser board instance
-          wlh_rb_s1 = first( wlh_rb_inst );
+          wlh_rbs1 = first( wlh_rb_inst );
 
-          wlh_wo =
+          // reference: slot-1 key on front interior wall at base of riser
+          wlh_rb1s1_fwo =
           [
-            wlh_rb_s1.x - rb_slot1_to_edge1,  // relative to slot-1
-            encl_size_wlh.y/2,                // front interior wall of enclosure
-            wlh_rb_s1.z                       // base of riser board
+            wlh_rbs1.x - rb_slot1_to_edge1,
+            encl_size_wlh.y/2,
+            wlh_rbs1.z
           ];
 
-          translate( wlh_wo )
-          {
-            g = [1/2, 1/2];                   // fixed hard-coded gap
+          // fixed hard-coded pcb gap
+          g = [1/2, 1/2];
 
+          translate( wlh_rb1s1_fwo )
+          {
             w = [riser_size0.x, riser_size0.z] + g;
             e = rib_h + eps*8;
             r = [90, 0, 0];
