@@ -617,7 +617,7 @@ BEGIN_SCOPE diagram;
       for (i = [0 : len(c)-1])
       {
         cv = c[i];
-        os = shift_cd(shift_cd(v=c, n=i, r=false), 1, r=false, c=false);
+        os = shift_cd(shift_cd(v=c, n=i, r=false), 1, r=false, d=true);
 
         if ( !is_empty( find( mv=i, v=vl )) )
         draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s*1, cmv=s);

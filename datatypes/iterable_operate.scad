@@ -532,7 +532,7 @@ function reverse
   \param    v <iterable> An iterable value.
   \param    n <integer> The element shift count.
   \param    r <boolean> Shift the elements to the right (or left).
-  \param    c <boolean> Perform circular shift (or drop).
+  \param    d <boolean> Drop elements outside of iterable value shift window.
 
   \returns  (1) \<list> A list containing the elements of \p v shifted
                 by \p n elements.
@@ -547,23 +547,22 @@ function shift_cd
   v,
   n = 0,
   r = true,
-  c = true
+  d = false
 ) = !is_iterable(v) ? undef
   : let
     (
       l = len(v),
       s = abs(n),           // absolute magnitude
       m = s % l,            // circular magnitude
-      d = (n > 0) ? r : !r  // shift direction
+      p = (n > 0) ? r : !r  // shift direction
     )
-    // non-circular and shift greater than elements
-    (c == false && s > l-1) ? empty_lst
-    // shift direction
-  : (d == true) ?
+    // drop-shift and shift magnitude greater than element count
+    ( d && s > l-1 ) ? empty_lst
+  : ( p ) ?
     // shift right
-    [ if (m && c) for (i = [l-m : l-1]) v[i], for (i = [0 : l-1-m]) v[i] ]
+    [ if (m && !d) for (i = [l-m : l-1]) v[i], for (i = [0 : l-1-m]) v[i] ]
     // shift left
-  : [ for (i = [m : l-1]) v[i], if (m && c) for (i = [0 : m-1]) v[i] ];
+  : [ for (i = [m : l-1]) v[i], if (m && !d) for (i = [0 : m-1]) v[i] ];
 
 //! Select a range of elements from an iterable value.
 /***************************************************************************//**
