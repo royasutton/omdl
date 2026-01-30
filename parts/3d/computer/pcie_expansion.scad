@@ -119,7 +119,6 @@ pcie_spec_half =
 riser_map_doc =
 [
   ["bottom_clearance",   "Vertical clearance under riser board"],
-  ["edgef_clearance",    "Vertical clearance for connectors at front edge of PCB"],
   ["slot_count",         "Riser physical slot count (fixed)"],
   ["vslot_count",        "Riser virtual slot count (user adjustable)"],
   ["multi_slot_offset",  "PCI-E multi-slot, slot-to-slot spacing"],
@@ -159,7 +158,6 @@ riser_PCE164P_NO3_VER_007 =
 [
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
   ["bottom_clearance",        3],         // riser bottom electronics h-clearance
-  ["edgef_clearance",        12],         // riser front edge connector h-clearance
   ["slot_count",              1],         // riser physical slot count
   ["vslot_count",             0],         // riser virtual slot count
   ["multi_slot_offset",   20.32],         // standard pcie multi-slot spacing
@@ -210,7 +208,6 @@ riser_AAAPCIE4HUB =
 [
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
   ["bottom_clearance",        3],         // riser bottom electronics h-clearance
-  ["edgef_clearance",        12],         // riser front edge connector h-clearance
   ["slot_count",              4],         // riser physical slot count
   ["vslot_count",             0],         // riser virtual slot count
   ["multi_slot_offset",   20.32],         // standard pcie multi-slot spacing
@@ -264,7 +261,6 @@ riser_SFF_8612_4X_to_PCI_E_16X =
 [
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
   ["bottom_clearance",        0],         // riser bottom electronics h-clearance
-  ["edgef_clearance",         8],         // riser front edge connector h-clearance
   ["slot_count",              1],         // riser physical slot count
   ["vslot_count",             0],         // riser virtual slot count
   ["multi_slot_offset",   20.32],         // standard pcie multi-slot spacing
