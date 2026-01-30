@@ -269,61 +269,6 @@ function index_sel
   : all_numbers(s) ? s
   : empty_lst;
 
-//! Pad a value to a constant number of elements.
-/***************************************************************************//**
-  \param    v \<value> The value.
-  \param    w <integer> The total element count.
-  \param    p \<value> The pad value.
-  \param    rj <boolean> Use right or left justification.
-
-  \returns  (1) \<list> The value as a list of elements padded to the
-                left or right to \p w total elements.
-            (2) When the value has greater than \p w elements, the it is
-                returned without padding.
-
-  \details
-
-    The elements of the input value \p v and pad value \p p are
-    considered to be characters. When either is not a list of
-    characters or a string, it is converted to one prior to the
-    padding. When \p v is a multi-dimensional, the first-dimension is
-    considered the element count.
-
-    \b Example
-    \code{.C}
-    echo (strl(pad_e([1,2,3,4], 8)));
-    echo (strl(pad_e(192, 8)));
-    echo (strl(pad_e("010111", 8)));
-    \endcode
-*******************************************************************************/
-function pad_e
-(
-  v,
-  w,
-  p = 0,
-  rj = true
-) = is_undef(v) ? undef
-  : !is_number(w) ? undef
-  : let
-    ( // convert to string when not iterable
-      iv = is_iterable(v) ? v : str(v),
-      ip = is_iterable(p) ? p : str(p),
-      // get element size for the value and padding
-      lv = len(iv),
-      lp = len(ip),
-      // calculate the full and partial padding counts
-      cf = floor((w-lv)/lp),
-      cp = w - lv - lp * cf,
-      // construct the value, full and partial padding lists
-      vl = (lv > 0) ? [for (i=[1:lv]) iv[ (i-1) ]]
-                    : empty_lst,
-      fp = (cf > 0) ? [for (i=[1:cf], j=[1:lp]) ip[ (j-1) ]]
-                    : empty_lst,
-      pp = (cp > 0) ? [for (i=[1:cp]) ip[(rj == false) ? (i-1) : (lp-cp+i-1) ]]
-                    : empty_lst
-    )
-    (rj == false) ? concat(vl, fp, pp) : concat(pp, fp, vl);
-
 //! Round a list of numbers to a fixed number of decimal point digits.
 /***************************************************************************//**
   \param    v \<list> A list of values.
@@ -864,19 +809,6 @@ BEGIN_SCOPE validate;
         [0,1,2,3],                                          // t10
         [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
       ],
-      ["pad_e_9",
-        undef,                                              // t01
-        ["0","0","0","0","0","0","0","0","0"],              // t02
-        ["[","0"," ",":"," ","0",".","5"," ",":"," ","9","]"],
-        ["0","A"," ","s","t","r","i","n","g"],              // t04
-        ["0","0","0","0","0","orange","apple","grape","banana"],
-        ["0","0","b","a","n","a","n","a","s"],              // t06
-        ["0","0","0","0","0","0","0","0",undef],            // t07
-        ["0","0","0","0","0","0","0",[1,2],[2,3]],          // t08
-        ["0","0","0","0","0","ab",[1,2],[2,3],[4,5]],       // t09
-        ["0","0","0","0","0",[1,2,3],[4,5,6],[7,8,9],["a","b","c"]],
-        [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]             // t11
-      ],
       ["sum",
         skip,                                               // t11
         skip,                                               // t11
@@ -1078,7 +1010,6 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "strl_html_B", 1, strl_html( v1(db,id),p="b") );
     for (id=test_ids) table_validate( db, id, "consts", 1, consts( v1(db,id)) );
     for (id=test_ids) table_validate( db, id, "index_sel", 1, index_sel( v1(db,id)) );
-    for (id=test_ids) table_validate( db, id, "pad_e_9", 1, pad_e( v1(db,id), w=9) );
     validate_skip( "round_d()" );
     validate_skip( "round_s()" );
     validate_skip( "limit()" );
