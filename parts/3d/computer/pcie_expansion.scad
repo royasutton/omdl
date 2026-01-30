@@ -450,7 +450,8 @@ enclosure_map_doc =
       5 | Enable enclosure side cutting
       6 | Cut enclosure front (positive side)
       7 | Cut enclosure rear (negative side near bracket)
-      8 | Remove ribs on enclosure wall adjacent to front-edge of riser PCB
+      8 | Remove ribs on front enclosure wall for riser PCB
+      9 | Remove ribs on front enclosure wall for PCIE card PCB
 
   \hideinitializer
 *******************************************************************************/
@@ -1288,6 +1289,7 @@ module pcie_expansion
         B6: cut enclosure front (positive side)
         B7: cut enclosure rear (negative side near bracket)
         B8: remove ribs on front edge of wall for riser PCB
+        B9: remove ribs on front edge of wall for PCIE card PCB
     */
 
     // riser board
@@ -1450,7 +1452,7 @@ module pcie_expansion
       {
         polygon( cp );
 
-        // mode_sides B6-7: remove enclosure front and/or rear
+        // mode_sides B6-7: remove enclosure front and/or rear side walls
         for ( x = [0, 1] )
         if ( binary_bit_is(encl_mode_sides, 6+x, 1) )
         mirror([x, 0])
@@ -1613,6 +1615,36 @@ module pcie_expansion
             translate( t ) rotate( r )
             extrude_linear_uss(e, center=false)
             pg_rectangle(size=w, center=false);
+          }
+        }
+
+        // mode_sides B9: remove ribs on front edge of wall for PCIE card PCB
+        if ( binary_bit_is(encl_mode_sides, 9, 1) )
+        {
+          for (wlh_slot_inst = wlh_rb_inst)
+          {
+            // reference: slot-1 key on front interior wall at base of riser
+            wlh_rb1s1_fwo =
+            [
+              wlh_slot_inst.x,
+              encl_size_wlh.y/2,
+              wlh_slot_inst.z
+            ];
+
+            // fixed hard-coded pcb gap
+            g = [1/2, 1/2];
+
+            translate( wlh_rb1s1_fwo )
+            {
+              w = [pcie_w_pcb_mth, encl_size_wlh.z] + g;
+              e = rib_h + eps*8;
+              r = [90, 0, 0];
+              t = [ -g.x/2 - pcie_w_pcb_mth/2, eps*4, -g.y/2-rib_h ];
+
+              translate( t ) rotate( r )
+              extrude_linear_uss(e, center=false)
+              pg_rectangle(size=w, center=false);
+            }
           }
         }
       }
