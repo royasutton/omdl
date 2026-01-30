@@ -230,11 +230,15 @@
 
 // Index sequence generation
 /***************************************************************************//**
-  \page dt_index Index sequence generation
+  \page dt_index Element index selection
 
-    The data type \p index refers to a specified sequence of list
-    element indexes. A list index sequence may be specified in one of
-    the following forms.
+    The data type \p index is used to describe how one or more elements
+    of a list are selected by their index positions. Rather than
+    specifying indices explicitly in all cases, this data type allows
+    several convenient shorthand forms for common selection patterns.
+
+    An index selection may be specified using any of the following
+    forms:
 
     | value / form    | description                                   |
     |:---------------:|:----------------------------------------------|
@@ -249,8 +253,10 @@
     | <range>         | The range of positions given by a <range>     |
     | <integer-list>  | The list of positions give in <integer-list>  |
 
-    The function index_sel() can be used to convert a value of this
-    data type into a sequence of list element indexes.
+    To obtain the actual sequence of list element indices represented
+    by a value of this data type, the function index_sel() can be used.
+    This function expands the selection specification into an explicit
+    list of index positions.
 
     \b Example
 
