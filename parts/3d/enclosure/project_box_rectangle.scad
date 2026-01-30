@@ -1054,14 +1054,14 @@ module project_box_rectangle
                   def_vr
                 : (inst_t == 0) ?
                     def_vr
-                  : shift(def_vr, n=-1, r=false, c=true);
+                  : shift_cd(def_vr, n=-1, r=false, c=true);
 
       // wall-end rounding modes (adjusted for vertical walls)
       tdef_vrm  = !is_list(def_vrm) ?
                   def_vrm
                 : (inst_t == 0) ?
                     def_vrm
-                  : shift(def_vrm, n=+1, r=false, c=true);
+                  : shift_cd(def_vrm, n=+1, r=false, c=true);
 
       //
       // assign defaults when not specified with wall instance

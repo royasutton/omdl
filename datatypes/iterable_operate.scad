@@ -527,7 +527,7 @@ function reverse
   : is_empty(v) ? empty_lst
   : [for (i = [len(v)-1 : -1 : 0]) v[i]];
 
-//! Shift the elements of an iterable value.
+//! Circularly shift the elements of an iterable, with an optional element drop.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
   \param    n <integer> The element shift count.
@@ -542,7 +542,7 @@ function reverse
 
     The shift count \p n may be positive or negative.
 *******************************************************************************/
-function shift
+function shift_cd
 (
   v,
   n = 0,
@@ -1294,7 +1294,7 @@ BEGIN_SCOPE validate;
         [["a","b","c"],[7,8,9],[4,5,6],[1,2,3]],            // t10
         [15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0]             // t11
       ],
-      ["shift_r1",
+      ["shift_cd_r1",
         undef,                                              // t01
         empty_lst,                                          // t02
         undef,                                              // t03
@@ -1307,7 +1307,7 @@ BEGIN_SCOPE validate;
         [["a","b","c"],[1,2,3],[4,5,6],[7,8,9]],            // t10
         [15,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]             // t11
       ],
-      ["shift_l1",
+      ["shift_cd_l1",
         undef,                                              // t01
         empty_lst,                                          // t02
         undef,                                              // t03
@@ -1481,8 +1481,8 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "headn_1", 1, headn( v1(db,id), n=1 ) );
     for (id=test_ids) table_validate( db, id, "tailn_1", 1, tailn( v1(db,id), n=1 ) );
     for (id=test_ids) table_validate( db, id, "reverse", 1, reverse( v1(db,id) ) );
-    for (id=test_ids) table_validate( db, id, "shift_r1", 1, shift( v1(db,id), n=1, r=true ) );
-    for (id=test_ids) table_validate( db, id, "shift_l1", 1, shift( v1(db,id), n=1, r=false ) );
+    for (id=test_ids) table_validate( db, id, "shift_cd_r1", 1, shift_cd( v1(db,id), n=1, r=true ) );
+    for (id=test_ids) table_validate( db, id, "shift_cd_l1", 1, shift_cd( v1(db,id), n=1, r=false ) );
     for (id=test_ids) table_validate( db, id, "select_r_02", 1, select_r( v1(db,id), i=[0:2] ) );
     for (id=test_ids) table_validate( db, id, "sequence_ns_31", 1, sequence_ns( v1(db,id), n=3, s=1 ) );
     for (id=test_ids) table_validate( db, id, "append_e_T0", 1, append_e( 0, v1(db,id) ) );
