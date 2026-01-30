@@ -1169,7 +1169,7 @@ module pcie_expansion
       );
 
     // reference: slot-1 of rb-1 [w, l, h]
-    wlh_rb1s1_bw_o =
+    wlh_rb1s1_bwo =
     [
       -pcie_w_pcb_mth/2 - pcie_bkt_mth + pcie_w_bkt_tabo,
 
@@ -1225,7 +1225,7 @@ module pcie_expansion
           for (wlh_slot_inst = wlh_rb_inst)
             let
             (
-              so  = wlh_slot_inst + wlh_rb1s1_bw_o + [tab_so - encl_wth, 0, 0],
+              so  = wlh_slot_inst + wlh_rb1s1_bwo + [tab_so - encl_wth, 0, 0],
               // height for minimal insertion = encl_wth
               sh  = max(encl_wth*2, third(so) + encl_wth),
               vrm = [1, 1, 4 ,3],
@@ -1239,7 +1239,7 @@ module pcie_expansion
       // remove slot for bracket bottom shoe tab
       for (wlh_rb_inst = slot_keys_wlh)
         for (wlh_slot_inst = wlh_rb_inst)
-          translate(wlh_slot_inst + wlh_rb1s1_bw_o)
+          translate(wlh_slot_inst + wlh_rb1s1_bwo)
           rotate([90, 0, 0])
           translate([tab_so, tab_ho, -tab_tl])
           extrude_linear_uss(tab_tl)
@@ -1368,7 +1368,7 @@ module pcie_expansion
         // mode_sides B1: hull adjacent-slot mount tab shelf
         hull_cs( binary_bit_is(encl_mode_sides, 1, 1) )
         for (wlh_slot_inst = wlh_rb_inst)
-          translate( zz_oy (wlh_slot_inst + wlh_rb1s1_bw_o) )
+          translate( zz_oy (wlh_slot_inst + wlh_rb1s1_bwo) )
           {
             w_o = -wa + pcie_w_mnt_tab_o;
             l_o = -encl_wth;
@@ -1382,7 +1382,7 @@ module pcie_expansion
 
         // mount tab screw hole
         for (wlh_slot_inst = wlh_rb_inst)
-          translate( zz_oy (wlh_slot_inst + wlh_rb1s1_bw_o) )
+          translate( zz_oy (wlh_slot_inst + wlh_rb1s1_bwo) )
           {
             w_o = 0;
             l_o = +pcie_l_keya_2_bkto;
@@ -1395,7 +1395,7 @@ module pcie_expansion
 
       // add dovetails
       for (wlh_rb_inst = slot_keys_wlh, wlh_slot_inst = wlh_rb_inst)
-        translate( zz_oy (wlh_slot_inst + wlh_rb1s1_bw_o) )
+        translate( zz_oy (wlh_slot_inst + wlh_rb1s1_bwo) )
         {
           // dovetail configuration
           w   = first( pcie_wl_mnt_tab );
@@ -1468,7 +1468,7 @@ module pcie_expansion
     wlh_s2b_ao = [ 0, 0, encl_wth*2 ];
 
     // reference: slot-1 of rb-1 [w, l, h]
-    wlh_rb1s1_bw_o =
+    wlh_rb1s1_bwo =
     [
       0,
 
@@ -1539,7 +1539,7 @@ module pcie_expansion
         // mode_sides B2: remove connector window
         hull_cs( binary_bit_is(encl_mode_sides, 2, 1) )
         for (wlh_slot_inst = wlh_rb_inst)
-          translate(wlh_slot_inst + wlh_rb1s1_bw_o)
+          translate(wlh_slot_inst + wlh_rb1s1_bwo)
           {
             w = pcie_wh_copen_window;                     // window
             e = encl_wth + rib_h;                         // extrude
@@ -1556,7 +1556,7 @@ module pcie_expansion
         // mode_sides B3: remove ribs from wall
         hull_cs( binary_bit_is(encl_mode_sides, 3, 1) )
         for (wlh_slot_inst = wlh_rb_inst)
-          translate(wlh_slot_inst + wlh_rb1s1_bw_o)
+          translate(wlh_slot_inst + wlh_rb1s1_bwo)
           {
             w = [pcie_w_bkt_width, pcie_h_bktb_2_bkttabb];
             e = rib_h + eps*4;
@@ -1571,7 +1571,7 @@ module pcie_expansion
         // mode_sides B4: remove slide-down space for bracket mount tab
         hull_cs( binary_bit_is(encl_mode_sides, 4, 1) )
         for (wlh_slot_inst = wlh_rb_inst)
-          translate(wlh_slot_inst + wlh_rb1s1_bw_o)
+          translate(wlh_slot_inst + wlh_rb1s1_bwo)
           {
             w = pcie_wl_mnt_tab + [0, rib_h];
             e = pcie_h_connector_max - pcie_h_rbpcbt_2_fngrb + pcie_bkt_mth;
