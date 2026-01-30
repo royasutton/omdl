@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2023
+  \date   2015-2026
 
   \copyright
 
@@ -228,13 +228,13 @@ function consts
   : (u == false) ? [for (i=[0:1:l-1]) i]
   : [for (i=[0:1:l-1]) undef];
 
-//! Create a element selection index list for a given list of values.
+//! Selected element indices of a given list according to a selection scheme.
 /***************************************************************************//**
   \param    l \<list> The list.
   \param    s <index> The index sequence \ref dt_index "specification".
   \param    rs <number> A random number sequence seed.
 
-  \returns  (1) <list-l> The specified selection index.
+  \returns  (1) <list-l> The element indices per the specified selection scheme.
             (2) Returns \b empty_lst when \p l is not a list or for any
                 \p v that does not fall into one of the specification
                 forms.
@@ -243,7 +243,7 @@ function consts
 
     See \ref dt_index for argument specification and conventions.
 *******************************************************************************/
-function index_gen
+function index_sel
 (
   l,
   s = true,
@@ -851,7 +851,7 @@ BEGIN_SCOPE validate;
         empty_lst,                                          // t10
         empty_lst                                           // t11
       ],
-      ["index_gen",
+      ["index_sel",
         empty_lst,                                          // t01
         empty_lst,                                          // t02
         empty_lst,                                          // t03
@@ -1077,7 +1077,7 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "strl", 1, strl( v1(db,id)) );
     for (id=test_ids) table_validate( db, id, "strl_html_B", 1, strl_html( v1(db,id),p="b") );
     for (id=test_ids) table_validate( db, id, "consts", 1, consts( v1(db,id)) );
-    for (id=test_ids) table_validate( db, id, "index_gen", 1, index_gen( v1(db,id)) );
+    for (id=test_ids) table_validate( db, id, "index_sel", 1, index_sel( v1(db,id)) );
     for (id=test_ids) table_validate( db, id, "pad_e_9", 1, pad_e( v1(db,id), w=9) );
     validate_skip( "round_d()" );
     validate_skip( "round_s()" );

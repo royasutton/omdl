@@ -249,7 +249,7 @@
     | <range>         | The range of positions given by a <range>     |
     | <integer-list>  | The list of positions give in <integer-list>  |
 
-    The function index_gen() can be used to convert a value of this
+    The function index_sel() can be used to convert a value of this
     data type into a sequence of list element indexes.
 
     \b Example
@@ -259,8 +259,8 @@
     l1 = [a,b,c,d,e,f]
 
     // index sequence
-    index_gen(l1)          = [0,1,2,3,4,5]
-    index_gen(l1, "rands") = [0,2,5]
+    index_sel(l1)          = [0,1,2,3,4,5]
+    index_sel(l1, "rands") = [0,2,5]
     \endcode
 *******************************************************************************/
 
