@@ -158,61 +158,61 @@ module dovetail2d
     ]
   )
   {
-  // male and female joint construction; female removal or male additions
-  if (mode == 0 || mode == 1)
-  intersection_cs(trim, trim ? undef : 1)
-  {
-    // child-0: joint area = length x depth
-    square([w, d]);
-
-    // child-1: dovetails
-    for ( i = [0 : tc-1] )
-    translate ([io + (t1 + t2)*i, 0])
+    // male and female joint construction; female removal or male additions
+    if (mode == 0 || mode == 1)
+    intersection_cs(trim, trim ? undef : 1)
     {
-      // male and female finger construction
-      if (te > 0)
-      { // finder tail with engagement
-        pg_te = let
-                (
-                  sss = triangle_sas2sss( [d, 90, te/2] ),
-                  ppp = triangle2d_sss2ppp( sss ),
+      // child-0: joint area = length x depth
+      square([w, d]);
 
-                  vrm = [0,0,1]
-                )
-                polygon_round_eve_all_p(ppp, vr=mr, vrm=vrm);
+      // child-1: dovetails
+      for ( i = [0 : tc-1] )
+      translate ([io + (t1 + t2)*i, 0])
+      {
+        // male and female finger construction
+        if (te > 0)
+        { // finder tail with engagement
+          pg_te = let
+                  (
+                    sss = triangle_sas2sss( [d, 90, te/2] ),
+                    ppp = triangle2d_sss2ppp( sss ),
 
-        // straight section rounder out at base (female mode)
-        pg_rectangle([s1, d], vr=fr, vrm=[0,0,4,3]);
+                    vrm = [0,0,1]
+                  )
+                  polygon_round_eve_all_p(ppp, vr=mr, vrm=vrm);
 
-        translate([-te/2,d])
-        rotate([180,0])
-        polygon(pg_te);
+          // straight section rounder out at base (female mode)
+          pg_rectangle([s1, d], vr=fr, vrm=[0,0,4,3]);
 
-        translate([s1 + te/2, d])
-        rotate([180,180])
-        polygon(pg_te);
-      }
-      else
-      { // straight finger / pin
-        pg_rectangle([s1, d], vr=er, vrm=mode ? [1,1,0,0] : [0,0,4,3]);
+          translate([-te/2,d])
+          rotate([180,0])
+          polygon(pg_te);
+
+          translate([s1 + te/2, d])
+          rotate([180,180])
+          polygon(pg_te);
+        }
+        else
+        { // straight finger / pin
+          pg_rectangle([s1, d], vr=er, vrm=mode ? [1,1,0,0] : [0,0,4,3]);
+        }
       }
     }
-  }
 
-  // interior corner minimum cut radius; removal modes only
-  if ( ir > 0 && (mode == 0 || mode == 2))
-  for
-  (
-    i = [0 : tc-1],
+    // interior corner minimum cut radius; removal modes only
+    if ( ir > 0 && (mode == 0 || mode == 2))
+    for
+    (
+      i = [0 : tc-1],
 
-    mcr_o =
-    [
-      [   - te/2, d] + (mode ? [+(te-ir)/2, -d] : [+ir/2, 0]),
-      [s1 + te/2, d] + (mode ? [-(te-ir)/2, -d] : [-ir/2, 0])
-    ]
-  )
-  translate([io + (t1 + t2)*i, 0] + mcr_o)
-  circle(d=ir);
+      mcr_o =
+      [
+        [   - te/2, d] + (mode ? [+(te-ir)/2, -d] : [+ir/2, 0]),
+        [s1 + te/2, d] + (mode ? [-(te-ir)/2, -d] : [-ir/2, 0])
+      ]
+    )
+    translate([io + (t1 + t2)*i, 0] + mcr_o)
+    circle(d=ir);
   }
 }
 
