@@ -182,7 +182,7 @@ module dovetail2d
       }
       else
       { // straight finger / pin
-        pg_rectangle([s1, d], vr=mr, vrm=[1,1,0,0]);
+        pg_rectangle([s1, d], vr=vr, vrm=mode ? [1,1,0,0] : [0,0,4,3]);
       }
     }
   }
