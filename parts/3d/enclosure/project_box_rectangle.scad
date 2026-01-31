@@ -752,8 +752,9 @@ module project_box_rectangle
     {
       if ( binary_bit_is(lip_m, first(z), 1) == true )
       {
-        hc  = z[3];
         ro  = second(z);
+        zo  = third(z);
+        hc  = z[3];
 
         // addition
         h1  = (ro == 0) ? [lip_h + 0 * eps]
@@ -773,7 +774,7 @@ module project_box_rectangle
             : (ro == 2) ? wall_xy - 2 * [wth, wth]
             :             wall_xy - 4 * [wth, wth] * lip_bw/100;
 
-        translate([0, 0, (wall_h + lip_h - eps)/2 * third(z)])
+        translate([0, 0, (wall_h + lip_h - eps)/2 * zo])
         difference_cs( envelop == false )
         {
           extrude_linear_uss(h1, center=true)
