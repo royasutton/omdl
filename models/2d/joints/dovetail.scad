@@ -50,8 +50,8 @@
 
 //! Create 2D edge profiles for dovetail joint construction.
 /***************************************************************************//**
-  \param  t       <decimal-list-5 | decimal> tail configuration; a list
-                  [m, s, f, g, r] or a single decimal to set m
+  \param  t       <decimal-list-6 | decimal> tail configuration; a list
+                  [m, s, f, g, er, ir] or a single decimal to set m
                   (see below).
 
   \param  d       <decimal> joint depth (tail length).
@@ -99,8 +99,8 @@
       1 | <decimal>         |  m                | \p s : female slot width
       2 | <decimal>         |  m/5              | \p f : tail fin width expansion
       3 | <decimal>         |  m/25             | \p g : joint gap (male and female)
-      4 | <decimal>         |  f/4              | \p er : tail external edge rounding
-      5 | <decimal>         |  f/4              | \p ir : tail internal edge minimum cut rounding
+      4 | <decimal>         |  f/4              | \p er : external edge rounding
+      5 | <decimal>         |  f/4              | \p ir : internal edge rounding (minimum cut radius)
 
     The parameter \p ir can be used to define an internal corner edge
     overcut, which helps accommodate the minimum cut radius required
