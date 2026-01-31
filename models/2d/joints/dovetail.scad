@@ -206,7 +206,7 @@ BEGIN_SCOPE example;
     include <models/2d/joints/dovetail.scad>;
 
     w = 20;
-    t = [2, 3.25, 1/4, 1/20, 1/4];
+    t = [2, 3.25, 1/2, 1/20, 1/8];
     d = 2.75;
     c = true;
 
