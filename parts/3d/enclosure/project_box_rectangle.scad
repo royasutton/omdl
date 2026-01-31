@@ -757,8 +757,8 @@ module project_box_rectangle
         hc  = z[3];
 
         // addition
-        h1  = (ro == 0) ? [lip_h + 0 * eps]
-            :             [lip_h + 0 * eps, hc];
+        h1  = (ro == 0) ? [lip_h +  0 * eps]
+            :             [lip_h +  0 * eps, hc];
 
         s1  = (ro == 0) ? wall_xy - 0 * [wth, wth] * lip_bw/100
             : (ro == 1) ? wall_xy - 2 * [wth, wth] * (1-lip_bw/100)
