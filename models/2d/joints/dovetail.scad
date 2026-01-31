@@ -68,7 +68,8 @@
   \param  align   <integer-list-2> joint alignment; edge-1, center, and
                   edge-2 for both [x, y].
 
-  \param  mode    <integer> construction mode {0=removals, 1=additions}.
+  \param  mode    <integer> construction mode {0=female removals,
+                  1=male additions, 2=male removals}.
 
   \details
 
@@ -98,7 +99,14 @@
       1 | <decimal>         |  m                | \p s : female slot width
       2 | <decimal>         |  m/5              | \p f : tail fin width expansion
       3 | <decimal>         |  m/25             | \p g : joint gap (male and female)
-      4 | <decimal>         |  f/4              | \p r : tail external edge rounding
+      4 | <decimal>         |  f/4              | \p er : tail external edge rounding
+      5 | <decimal>         |  f/4              | \p ir : tail internal edge minimum cut rounding
+
+    The parameter \p ir can be used to define an internal corner edge
+    overcut, which helps accommodate the minimum cut radius required
+    for subtractive manufacturing. This overcut is based on the minimum
+    diameter of the cut tool. By clearing the rounded section, it
+    ensures proper clearance for mating joint members during assembly.
 
     \amu_define scope_id      (example)
     \amu_define title         (Dovetail profiles example)
@@ -127,12 +135,13 @@ module dovetail2d
   t2 = defined_e_or(t, 1, t1);        // female width
   te = defined_e_or(t, 2, t1/5);      // "engagement" width
   tg = defined_e_or(t, 3, t1/25);     // finger gap width
-  vr = defined_e_or(t, 4, te/4);      // finger exterior edge rounding
+  er = defined_e_or(t, 4, te/4);      // finger exterior edge rounding
+  ir = defined_e_or(t, 5, te/4);      // finger interior edge rounding
 
   tc = ceil(w / (t1 + t2));           // finger count
 
-  mr = (mode == 1) ? vr : 0;          // male rounding
-  fr = (mode == 0) ? vr : 0;          // female rounding
+  mr = (mode == 1) ? er : 0;          // male exterior rounding
+  fr = (mode == 0) ? er : 0;          // female exterior rounding
   sg = (mode == 0) ? -tg/2 : +tg/2;   // gap adjustment
 
   s1 = t1 - sg;                       // finger sized for gap
@@ -148,6 +157,9 @@ module dovetail2d
       select_ci( [ 0, -d/2, -d ], defined_e_or(align, 1, 0), false ),
     ]
   )
+  {
+  // male and female joint construction; female removal or male additions
+  if (mode == 0 || mode == 1)
   intersection_cs(trim, trim ? undef : 1)
   {
     // child-0: joint area = length x depth
@@ -157,7 +169,7 @@ module dovetail2d
     for ( i = [0 : tc-1] )
     translate ([io + (t1 + t2)*i, 0])
     {
-      // male finger construction
+      // male and female finger construction
       if (te > 0)
       { // finder tail with engagement
         pg_te = let
@@ -182,11 +194,26 @@ module dovetail2d
       }
       else
       { // straight finger / pin
-        pg_rectangle([s1, d], vr=vr, vrm=mode ? [1,1,0,0] : [0,0,4,3]);
+        pg_rectangle([s1, d], vr=er, vrm=mode ? [1,1,0,0] : [0,0,4,3]);
       }
     }
   }
 
+  // interior corner minimum cut radius; removal modes only
+  if ( ir > 0 && (mode == 0 || mode == 2))
+  for
+  (
+    i = [0 : tc-1],
+
+    mcr_o =
+    [
+      [   - te/2, d] + (mode ? [+(te-ir)/2, -d] : [+ir/2, 0]),
+      [s1 + te/2, d] + (mode ? [-(te-ir)/2, -d] : [-ir/2, 0])
+    ]
+  )
+  translate([io + (t1 + t2)*i, 0] + mcr_o)
+  circle(d=ir);
+  }
 }
 
 
