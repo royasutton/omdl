@@ -233,20 +233,17 @@ BEGIN_SCOPE example;
     include <models/2d/joints/dovetail.scad>;
 
     w = 20;
-    t = [2, 3.25, 1/2, 1/20, 1/8];
+    t = [2, 3.25, 1, 1/20, 1/8, 1/4];
     d = 2.75;
     c = true;
 
     // male section (lower)
     dovetail2d (w=w, t=t, d=d, mode=1, center=c );
-    translate([0, -d/2]) square([w,d/2]);
+    difference() { translate([0, -d/2]) square([w, d/2]); dovetail2d (w=w, t=t, d=d, mode=2, center=c ); }
 
     // female section (upper)
     translate([0, d*1.25])
-    {
-      difference() { square([w,d]); dovetail2d (w=w, t=t, d=d, mode=0, center=c ); }
-      translate([0, d]) square([w,d/2]);
-    }
+    difference() { square([w, d+d/2]); dovetail2d (w=w, t=t, d=d, mode=0, center=c ); }
 
     // end_include
   END_OPENSCAD;
