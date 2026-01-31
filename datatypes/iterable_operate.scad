@@ -569,7 +569,7 @@ function shift_cd
   \param    v <iterable> The iterable value.
   \param    n <integer> The element shift count.
   \param    r <boolean> Shift the elements to the right (or left).
-  \param    i <value> The value to shit-in on the left or right.
+  \param    i \<value> The value to shit-in on the left or right.
 
   \returns  (1) \<list> A list containing the elements of \p v shifted
                 by \p n elements with the value \p i inserted on the
