@@ -1813,6 +1813,70 @@ module project_box_rectangle
   }
 }
 
+//! Get the bounding box dimensions for a specified project box.
+/***************************************************************************//**
+  \param  bbox   <integer> bounding box selections {0=exterior, 1=interior}.
+
+  \details
+
+    This function returns the bounding box dimensions for the specified
+    project box. The parameter values must correspond to those of the
+    box in question. Detailed descriptions of the undocumented
+    parameters can be found in project_box_rectangle().
+*******************************************************************************/
+function project_box_rectangle_size
+(
+  wth,
+  h,
+  size,
+
+  inset,
+
+  lid,
+  lip,
+
+  mode = 0,
+
+  bbox = 0
+) =
+  let
+  (
+    //
+    // maintain coherence with
+    //  global parameter calculation in project_box_rectangle()
+    //
+
+    mode_size_in  = binary_bit_is(mode, 0, 1),
+
+    h_h           = extrude_linear_mss_eht( h ),
+
+    size_x        = defined_e_or(size, 0, size),
+    size_y        = defined_e_or(size, 1, size_x),
+
+    lip_hd        = is_defined(lip) ? wth : 0,
+    lip_h         = defined_e_or(lip, 1, lip_hd),
+
+    lid_h         = extrude_linear_mss_eht( lid ),
+
+    wall_h        = (mode_size_in == true) ? h_h - lip_h : h_h - lip_h - lid_h,
+
+    wall_od       = ( is_defined(inset) && is_scalar(inset) ) ? inset : 0,
+    wall_ox       = defined_e_or(inset, 0, wall_od) * -1,
+    wall_oy       = defined_e_or(inset, 1, wall_od) * -1,
+
+    encl_x        = (mode_size_in == true) ? size_x + 2*wth - wall_ox : size_x,
+    encl_y        = (mode_size_in == true) ? size_y + 2*wth - wall_oy : size_y,
+    encl_z        = (mode_size_in == true) ? wall_h + lip_h + lid_h : h_h,
+
+    wall_xy       = [encl_x + wall_ox, encl_y + wall_oy],
+
+    szint_x = first (wall_xy) - 2*wth,
+    szint_y = second(wall_xy) - 2*wth,
+    szint_z = wall_h + lip_h
+  )
+  bbox ? [szint_x, szint_y, szint_z] : [encl_x, encl_y, encl_z];
+
+
 //! @}
 //! @}
 
