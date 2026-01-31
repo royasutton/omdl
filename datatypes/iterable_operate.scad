@@ -564,6 +564,45 @@ function shift_cd
     // shift left
   : [ for (i = [m : l-1]) v[i], if (m && !d) for (i = [0 : m-1]) v[i] ];
 
+//! Shift-in a value to the elements of a given iterable value.
+/***************************************************************************//**
+  \param    v <iterable> The iterable value.
+  \param    n <integer> The element shift count.
+  \param    r <boolean> Shift the elements to the right (or left).
+  \param    i <value> The value to shit-in on the left or right.
+
+  \returns  (1) \<list> A list containing the elements of \p v shifted
+                by \p n elements with the value \p i inserted on the
+                left or right side of the given iterable value.
+            (2) Returns \b undef when \p v is not defined or is not iterable.
+
+  \details
+
+    The shift count \p n may be positive or negative.
+*******************************************************************************/
+function shift_ci
+(
+  v,
+  n = 0,
+  r = true,
+  i
+) = !is_iterable(v) ? undef
+  : let
+    (
+      l = len(v),
+      s = abs(n),           // absolute magnitude
+      m = s % l,            // circular magnitude
+      d = (n > 0) ? r : !r  // shift direction
+    )
+    // shift greater than elements
+    ( s > l-1 ) ? is_undef(i) ? consts(l, u=true) : consts(l, i)
+    // shift direction
+  : ( d ) ?
+    // shift right
+    [ if (m) for (j = [0 : s-1]) i, for (j = [0 : l-1-m]) v[j] ]
+    // shift left
+  : [ for (j = [m : l-1]) v[j], if (m) for (j = [0 : s-1]) i ];
+
 //! Select a range of elements from an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
@@ -1482,6 +1521,7 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "reverse", 1, reverse( v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "shift_cd_r1", 1, shift_cd( v1(db,id), n=1, r=true ) );
     for (id=test_ids) table_validate( db, id, "shift_cd_l1", 1, shift_cd( v1(db,id), n=1, r=false ) );
+    // shift_ci()
     for (id=test_ids) table_validate( db, id, "select_r_02", 1, select_r( v1(db,id), i=[0:2] ) );
     for (id=test_ids) table_validate( db, id, "sequence_ns_31", 1, sequence_ns( v1(db,id), n=3, s=1 ) );
     for (id=test_ids) table_validate( db, id, "append_e_T0", 1, append_e( 0, v1(db,id) ) );
