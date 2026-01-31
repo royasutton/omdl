@@ -729,6 +729,40 @@ function append_e
   : (j == true) ? concat( [concat(ce, nv)], append_e(nv, tailn(v), r, j, l) )
   :               concat(  concat(ce, nv) , append_e(nv, tailn(v), r, j, l) );
 
+//! Append a value to the end or beginning of an iterable value.
+/***************************************************************************//**
+  \param    nv \<value> The value to append.
+  \param    v <iterable> An iterable value.
+  \param    n <integer> The element shift count.
+  \param    r <boolean> Shift the elements to the right (or left).
+
+  \returns  (1) \<list> A list containing the elements of \p v shifted
+                by \p n elements with the value \p a appended the given
+                iterable value as specified.
+            (2) Returns \b undef when \p v is not defined or is not iterable.
+
+  \details
+
+    The shift count \p n may be positive or negative.
+*******************************************************************************/
+function append_v
+(
+  nv,
+  v,
+  n = 0,
+  r = false
+) = !is_iterable(v) ? undef
+  : let
+    (
+      s = abs(n),           // absolute magnitude
+      d = (n > 0) ? r : !r  // shift direction
+    )
+    ( d ) ?
+    // shift right, prepend
+    [ for (j = [0 : s-1]) nv, for (j = v) j ]
+    // shift left, append
+  : [ for (j = v) j, for (j = [0 : s-1]) nv ];
+
 //! Insert a new value into an iterable value.
 /***************************************************************************//**
   \param    nv \<value> A new value to insert.
@@ -1525,6 +1559,7 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "select_r_02", 1, select_r( v1(db,id), i=[0:2] ) );
     for (id=test_ids) table_validate( db, id, "sequence_ns_31", 1, sequence_ns( v1(db,id), n=3, s=1 ) );
     for (id=test_ids) table_validate( db, id, "append_e_T0", 1, append_e( 0, v1(db,id) ) );
+    // append_v()
     for (id=test_ids) table_validate( db, id, "insert_T0", 1, insert( 0, v1(db,id), mv=["x","r","apple","s",[2,3],5] ) );
     // delete_first()
     // delete_each()
