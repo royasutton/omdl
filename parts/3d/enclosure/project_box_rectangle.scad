@@ -733,19 +733,22 @@ module project_box_rectangle
     //  scale control parameter is percentage of wall thickness
     sf = 2*wth / max(wall_xy) * lip_tw/100;
 
-    // 'uss' extrusion profile for inner and otter lip at top.
-    ep_it = [1, 1 - sf];
-    ep_ot = [1, 1 + sf];
+    // 'uss' extrusion profile for inner and otter lip at top and bottom.
+    ep_it = [lip_h, [1, 1 - sf]];
+    ep_ot = [lip_h, [1, 1 + sf]];
+
+    ep_ib = [lip_h, [1 - sf, 1]];
+    ep_ob = [lip_h, [1 + sf, 1]];
 
     translate( [0, 0, wall_h/2] )
     for
     (
       z =
       [ // mode, in/out, top/bottom, extrusion profile
-        [0, 1, +1,         ep_it ],   // inner top
-        [1, 0, +1,         ep_ot ],   // outer top
-        [2, 1, -1, reverse(ep_it)],   // inner bottom
-        [3, 0, -1, reverse(ep_ot)]    // outer bottom
+        [0, 1, +1, ep_it],   // inner top
+        [1, 0, +1, ep_ot],   // outer top
+        [2, 1, -1, ep_ib],   // inner bottom
+        [3, 0, -1, ep_ob]    // outer bottom
       ]
     )
     {
@@ -756,18 +759,18 @@ module project_box_rectangle
         ep  = z[3];
 
         // addition {0=outer, 1=inner}
-        ae  = (io == 0) ? [lip_h +  0 * eps]
-            :             [lip_h +  0 * eps, ep];
+        ae  = (io == 0) ? lip_h
+            :             ep;
 
-        as  = (io == 0) ? wall_xy - 0 * [wth, wth] *    lip_bw/100
-            :             wall_xy - 2 * [wth, wth] * (1-lip_bw/100);
+        as  = (io == 0) ? wall_xy
+            :             wall_xy - 2*[wth, wth] * (1-lip_bw/100);
 
         // removal {0=outer, 1=inner}
-        re  = (io == 0) ? [lip_h + 10 * eps, ep]
-            :             [lip_h + 10 * eps];
+        re  = (io == 0) ? ep
+            :             lip_h + 4*eps;
 
-        rs  = (io == 0) ? wall_xy - 2 * [wth, wth] * lip_bw/100
-            :             wall_xy - 2 * [wth, wth];
+        rs  = (io == 0) ? wall_xy - 2*[wth, wth] * lip_bw/100
+            :             wall_xy - 2*[wth, wth];
 
         translate([0, 0, (wall_h + lip_h - eps)/2 * tb])
         difference_cs( envelop == false )
