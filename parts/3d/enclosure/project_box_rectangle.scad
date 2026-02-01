@@ -739,14 +739,14 @@ module project_box_rectangle
       z =
       let
       (
-        // removal extrusion height for inner lips
+        // removal extrusion height
         lip_hr  = lip_h + eps*4,
 
         // extrusion profile; inner and otter lip at top and bottom.
-        ep_it = [lip_h, [1, 1 - sf]],
-        ep_ot = [lip_h+eps*4, [1, 1 + sf]],
-        ep_ib = [lip_h, [1 - sf, 1]],
-        ep_ob = [lip_h+eps*4, [1 + sf, 1]],
+        ep_it = [lip_h , [1, 1 - sf]],
+        ep_ot = [lip_hr, [1, 1 + sf]],
+        ep_ib = [lip_h , [1 - sf, 1]],
+        ep_ob = [lip_hr, [1 + sf, 1]],
 
         // lip wall sizes; for outer and inner combinations
         ws_oo   = wall_xy,
