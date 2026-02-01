@@ -743,10 +743,10 @@ module project_box_rectangle
         lip_hr  = lip_h + eps*4,
 
         // extrusion profile; inner and otter lip at top and bottom.
-        ep_it = [lip_h , [1, 1 - sf]],
-        ep_ot = [lip_hr, [1, 1 + sf]],
-        ep_ib = [lip_h , [1 - sf, 1]],
-        ep_ob = [lip_hr, [1 + sf, 1]],
+        ep_it = [ [lip_h , [1, 1 - sf]] ],
+        ep_ot = [ [lip_hr, [1, 1 + sf]] ],
+        ep_ib = [ [lip_h , [1 - sf, 1]] ],
+        ep_ob = [ [lip_hr, [1 + sf, 1]] ],
 
         // lip wall sizes; for outer and inner combinations
         ws_oo   = wall_xy,
@@ -774,10 +774,10 @@ module project_box_rectangle
         translate([0, 0, (wall_h + lip_h - eps)/2 * tb])
         difference_cs( envelop == false )
         {
-          extrude_linear_uss(ap, center=true)
+          extrude_linear_mss(ap, center=true)
           pg_rectangle(as, vr=vr, vrm=vrm_ci, center=true);
 
-          extrude_linear_uss(rp, center=true)
+          extrude_linear_mss(rp, center=true)
           pg_rectangle(rs, vr=vr, vrm=vrm_ci, center=true);
         }
       }
