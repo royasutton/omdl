@@ -789,7 +789,6 @@ module project_box_rectangle
       echo(strl(["lip: height = ", lip_h]));
       echo(strl(["lip: base width percentage = ", lip_bw]));
       echo(strl(["lip: top reduction percentage = ", lip_tw]));
-      echo(strl(["lip: inner lip alignment index = ", lip_a]));
     }
   }
 
