@@ -755,28 +755,28 @@ module project_box_rectangle
         tb  = third(z);
         ep  = z[3];
 
-        // addition
-        h1  = (io == 0) ? [lip_h +  0 * eps]
+        // addition {0=outer, 1=inner}
+        ae  = (io == 0) ? [lip_h +  0 * eps]
             :             [lip_h +  0 * eps, ep];
 
-        s1  = (io == 0) ? wall_xy - 0 * [wth, wth] * lip_bw/100
+        as  = (io == 0) ? wall_xy - 0 * [wth, wth] *    lip_bw/100
             :             wall_xy - 2 * [wth, wth] * (1-lip_bw/100);
 
-        // removal
-        h2  = (io == 0) ? [lip_h + 10 * eps, ep]
+        // removal {0=outer, 1=inner}
+        re  = (io == 0) ? [lip_h + 10 * eps, ep]
             :             [lip_h + 10 * eps];
 
-        s2  = (io == 0) ? wall_xy - 2 * [wth, wth] * lip_bw/100
+        rs  = (io == 0) ? wall_xy - 2 * [wth, wth] * lip_bw/100
             :             wall_xy - 2 * [wth, wth];
 
         translate([0, 0, (wall_h + lip_h - eps)/2 * tb])
         difference_cs( envelop == false )
         {
-          extrude_linear_uss(h1, center=true)
-          pg_rectangle(s1, vr=vr, vrm=vrm_ci, center=true);
+          extrude_linear_uss(ae, center=true)
+          pg_rectangle(as, vr=vr, vrm=vrm_ci, center=true);
 
-          extrude_linear_uss(h2, center=true)
-          pg_rectangle(s2, vr=vr, vrm=vrm_ci, center=true);
+          extrude_linear_uss(re, center=true)
+          pg_rectangle(rs, vr=vr, vrm=vrm_ci, center=true);
         }
       }
     }
