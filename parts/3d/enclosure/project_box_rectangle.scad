@@ -186,7 +186,6 @@
       1 | decimal           | wth               | height
       2 | decimal           | 35                | base width percentage of wall thickness
       3 | decimal           | 10                | top taper width percentage of wall thickness
-      4 | integer           | 0                 | alignment
 
     ##### lip[0]: mode
 
@@ -729,14 +728,10 @@ module project_box_rectangle
     lip_m         = defined_e_or(lip, 0, lip);
     lip_bw        = defined_e_or(lip, 2, 35);
     lip_tw        = defined_e_or(lip, 3, 10);
-    lip_a         = defined_e_or(lip, 4, 0);
 
     // calculate lip bevel scaling factor
     //  scale control parameter is percentage of wall thickness
     sf = 2*wth / max(wall_xy) * lip_tw/100;
-
-    // inner lip alignment method selection
-    lip_ro = select_ci( [1,2,3], lip_a );
 
     translate( [0, 0, wall_h/2] )
     for
@@ -744,9 +739,9 @@ module project_box_rectangle
       z =
       [ // [mode, r-offset, z-offset, hc]
         [3,      0, -1, [1 + sf, 1]],     // outer, lower
-        [2, lip_ro, -1, [1 - sf, 1]],     // inner, lower
+        [2,      1, -1, [1 - sf, 1]],     // inner, lower
         [1,      0, +1, [1, 1 + sf]],     // outer, upper
-        [0, lip_ro, +1, [1, 1 - sf]]      // inner, upper
+        [0,      1, +1, [1, 1 - sf]]      // inner, upper
       ]
     )
     {
@@ -761,18 +756,14 @@ module project_box_rectangle
             :             [lip_h +  0 * eps, hc];
 
         s1  = (ro == 0) ? wall_xy - 0 * [wth, wth] * lip_bw/100
-            : (ro == 1) ? wall_xy - 2 * [wth, wth] * (1-lip_bw/100)
-            : (ro == 2) ? wall_xy - 2 * [wth, wth] * lip_bw/100
-            :             wall_xy - 2 * [wth, wth] * lip_bw/100;
+            :             wall_xy - 2 * [wth, wth] * (1-lip_bw/100);
 
         // removal
         h2  = (ro == 0) ? [lip_h + 10 * eps, hc]
             :             [lip_h + 10 * eps];
 
         s2  = (ro == 0) ? wall_xy - 2 * [wth, wth] * lip_bw/100
-            : (ro == 1) ? wall_xy - 2 * [wth, wth]
-            : (ro == 2) ? wall_xy - 2 * [wth, wth]
-            :             wall_xy - 4 * [wth, wth] * lip_bw/100;
+            :             wall_xy - 2 * [wth, wth];
 
         translate([0, 0, (wall_h + lip_h - eps)/2 * zo])
         difference_cs( envelop == false )
