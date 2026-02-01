@@ -739,13 +739,14 @@ module project_box_rectangle
       dt =
       let
       (
-        // removal extrusion height
-        lip_hr  = lip_h + eps*4,
+        // straight extrusion height for additions and removals
+        lip_ha  = lip_h + eps*0,
+        lip_hr  = lip_h + eps*10,
 
         // extrusion profile; inner and otter lip at top and bottom.
-        ep_it = [ [lip_h , [1, 1 - sf]] ],
+        ep_it = [ [lip_ha, [1, 1 - sf]] ],
         ep_ot = [ [lip_hr, [1, 1 + sf]] ],
-        ep_ib = [ [lip_h , [1 - sf, 1]] ],
+        ep_ib = [ [lip_ha, [1 - sf, 1]] ],
         ep_ob = [ [lip_hr, [1 + sf, 1]] ],
 
         // lip wall sizes; for outer and inner combinations
@@ -754,11 +755,11 @@ module project_box_rectangle
         ws_io   = wall_xy - 2*[wth, wth] * (1-lip_bw/100),
         ws_ii   = wall_xy - 2*[wth, wth]
       )
-      [ // m, io, tb,    ae,     re,    as,    rs
-          [0,  1, +1, ep_it, lip_hr, ws_io, ws_ii],  // inner lip at top
-          [1,  0, +1, lip_h,  ep_ot, ws_oo, ws_oi],  // outer lip at top
-          [2,  1, -1, ep_ib, lip_hr, ws_io, ws_ii],  // inner lip at bottom
-          [3,  0, -1, lip_h,  ep_ob, ws_oo, ws_oi]   // outer lip at bottom
+      [ // m, io, tb,     ae,     re,    as,    rs
+          [0,  1, +1,  ep_it, lip_hr, ws_io, ws_ii],  // inner lip at top
+          [1,  0, +1, lip_ha,  ep_ot, ws_oo, ws_oi],  // outer lip at top
+          [2,  1, -1,  ep_ib, lip_hr, ws_io, ws_ii],  // inner lip at bottom
+          [3,  0, -1, lip_ha,  ep_ob, ws_oo, ws_oi]   // outer lip at bottom
       ]
     )
     {
