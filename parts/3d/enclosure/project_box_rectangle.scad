@@ -729,43 +729,47 @@ module project_box_rectangle
     lip_bw        = defined_e_or(lip, 2, 35);
     lip_tw        = defined_e_or(lip, 3, 10);
 
-    // calculate lip bevel scaling factor
+    // calculate lip beveled-end scaling factor
     //  scale control parameter is percentage of wall thickness
     sf = 2*wth / max(wall_xy) * lip_tw/100;
+
+    // 'uss' extrusion profile for inner and otter lip at top.
+    ep_it = [1, 1 - sf];
+    ep_ot = [1, 1 + sf];
 
     translate( [0, 0, wall_h/2] )
     for
     (
       z =
-      [ // [mode, r-offset, z-offset, hc]
-        [3,      0, -1, [1 + sf, 1]],     // outer, lower
-        [2,      1, -1, [1 - sf, 1]],     // inner, lower
-        [1,      0, +1, [1, 1 + sf]],     // outer, upper
-        [0,      1, +1, [1, 1 - sf]]      // inner, upper
+      [ // mode, in/out, top/bottom, extrusion profile
+        [0, 1, +1,         ep_it ],   // inner top
+        [1, 0, +1,         ep_ot ],   // outer top
+        [2, 1, -1, reverse(ep_it)],   // inner bottom
+        [3, 0, -1, reverse(ep_ot)]    // outer bottom
       ]
     )
     {
       if ( binary_bit_is(lip_m, first(z), 1) == true )
       {
-        ro  = second(z);
-        zo  = third(z);
-        hc  = z[3];
+        io  = second(z);
+        tb  = third(z);
+        ep  = z[3];
 
         // addition
-        h1  = (ro == 0) ? [lip_h +  0 * eps]
-            :             [lip_h +  0 * eps, hc];
+        h1  = (io == 0) ? [lip_h +  0 * eps]
+            :             [lip_h +  0 * eps, ep];
 
-        s1  = (ro == 0) ? wall_xy - 0 * [wth, wth] * lip_bw/100
+        s1  = (io == 0) ? wall_xy - 0 * [wth, wth] * lip_bw/100
             :             wall_xy - 2 * [wth, wth] * (1-lip_bw/100);
 
         // removal
-        h2  = (ro == 0) ? [lip_h + 10 * eps, hc]
+        h2  = (io == 0) ? [lip_h + 10 * eps, ep]
             :             [lip_h + 10 * eps];
 
-        s2  = (ro == 0) ? wall_xy - 2 * [wth, wth] * lip_bw/100
+        s2  = (io == 0) ? wall_xy - 2 * [wth, wth] * lip_bw/100
             :             wall_xy - 2 * [wth, wth];
 
-        translate([0, 0, (wall_h + lip_h - eps)/2 * zo])
+        translate([0, 0, (wall_h + lip_h - eps)/2 * tb])
         difference_cs( envelop == false )
         {
           extrude_linear_uss(h1, center=true)
