@@ -733,52 +733,51 @@ module project_box_rectangle
     //  scale control parameter is percentage of wall thickness
     sf = 2*wth / max(wall_xy) * lip_tw/100;
 
-    // 'uss' extrusion profile for inner and otter lip at top and bottom.
-    ep_it = [lip_h, [1, 1 - sf]];
-    ep_ot = [lip_h, [1, 1 + sf]];
-
-    ep_ib = [lip_h, [1 - sf, 1]];
-    ep_ob = [lip_h, [1 + sf, 1]];
-
     translate( [0, 0, wall_h/2] )
     for
     (
       z =
-      [ // mode, in/out, top/bottom, extrusion profile
-        [0, 1, +1, ep_it],   // inner top
-        [1, 0, +1, ep_ot],   // outer top
-        [2, 1, -1, ep_ib],   // inner bottom
-        [3, 0, -1, ep_ob]    // outer bottom
+      let
+      (
+        // removal extrusion height for inner lips
+        lip_hr  = lip_h + eps*4,
+
+        // extrusion profile; inner and otter lip at top and bottom.
+        ep_it = [lip_h, [1, 1 - sf]],
+        ep_ot = [lip_h+eps*4, [1, 1 + sf]],
+        ep_ib = [lip_h, [1 - sf, 1]],
+        ep_ob = [lip_h+eps*4, [1 + sf, 1]],
+
+        // lip wall sizes; for outer and inner combinations
+        ws_oo   = wall_xy,
+        ws_oi   = wall_xy - 2*[wth, wth] * lip_bw/100,
+        ws_io   = wall_xy - 2*[wth, wth] * (1-lip_bw/100),
+        ws_ii   = wall_xy - 2*[wth, wth]
+      )
+      [ // m, io, tb,    ae,     re,    as,    rs
+          [0,  1, +1, ep_it, lip_hr, ws_io, ws_ii],  // inner lip at top
+          [1,  0, +1, lip_h,  ep_ot, ws_oo, ws_oi],  // outer lip at top
+          [2,  1, -1, ep_ib, lip_hr, ws_io, ws_ii],  // inner lip at bottom
+          [3,  0, -1, lip_h,  ep_ob, ws_oo, ws_oi]   // outer lip at bottom
       ]
     )
     {
       if ( binary_bit_is(lip_m, first(z), 1) == true )
       {
-        io  = second(z);
-        tb  = third(z);
-        ep  = z[3];
-
-        // addition {0=outer, 1=inner}
-        ae  = (io == 0) ? lip_h
-            :             ep;
-
-        as  = (io == 0) ? wall_xy
-            :             wall_xy - 2*[wth, wth] * (1-lip_bw/100);
-
-        // removal {0=outer, 1=inner}
-        re  = (io == 0) ? ep
-            :             lip_h + 4*eps;
-
-        rs  = (io == 0) ? wall_xy - 2*[wth, wth] * lip_bw/100
-            :             wall_xy - 2*[wth, wth];
+        io  = z[1];   // io  : inside / outside
+        tb  = z[2];   // tb  : top / bottom
+        ap  = z[3];   // ap  : add extrusion profile
+        rp  = z[4];   // rp  : remove extrusion profile
+        as  = z[5];   // as  : add size
+        rs  = z[6];   // rs  : remove size
 
         translate([0, 0, (wall_h + lip_h - eps)/2 * tb])
         difference_cs( envelop == false )
         {
-          extrude_linear_uss(ae, center=true)
+          extrude_linear_uss(ap, center=true)
           pg_rectangle(as, vr=vr, vrm=vrm_ci, center=true);
 
-          extrude_linear_uss(re, center=true)
+          extrude_linear_uss(rp, center=true)
           pg_rectangle(rs, vr=vr, vrm=vrm_ci, center=true);
         }
       }
