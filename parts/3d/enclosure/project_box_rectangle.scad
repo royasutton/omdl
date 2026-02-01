@@ -736,7 +736,7 @@ module project_box_rectangle
     translate( [0, 0, wall_h/2] )
     for
     (
-      z =
+      dt =
       let
       (
         // removal extrusion height
@@ -762,14 +762,16 @@ module project_box_rectangle
       ]
     )
     {
-      if ( binary_bit_is(lip_m, first(z), 1) == true )
+      m     = dt[0];  //  m  : configuration mode
+
+      if ( binary_bit_is(lip_m, m, 1) )
       {
-        io  = z[1];   // io  : inside / outside
-        tb  = z[2];   // tb  : top / bottom
-        ap  = z[3];   // ap  : add extrusion profile
-        rp  = z[4];   // rp  : remove extrusion profile
-        as  = z[5];   // as  : add size
-        rs  = z[6];   // rs  : remove size
+        io  = dt[1];  // io  : inside / outside
+        tb  = dt[2];  // tb  : top / bottom
+        ap  = dt[3];  // ap  : add extrusion profile
+        rp  = dt[4];  // rp  : remove extrusion profile
+        as  = dt[5];  // as  : add size
+        rs  = dt[6];  // rs  : remove size
 
         translate([0, 0, (wall_h + lip_h - eps)/2 * tb])
         difference_cs( envelop == false )
