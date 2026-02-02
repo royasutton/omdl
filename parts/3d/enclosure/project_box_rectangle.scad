@@ -186,7 +186,7 @@
       1 | decimal           | wth               | height
       2 | decimal           | 35                | base width percentage of wall thickness
       3 | decimal           | 10                | top taper width percentage of wall thickness
-      4 | datastruct \| integer | 0             | snap ridge configuration
+      4 | datastruct \| integer | 0             | snap
 
     ##### lip[0]: mode
 
