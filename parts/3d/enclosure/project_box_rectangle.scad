@@ -733,7 +733,8 @@ module project_box_rectangle
     function el_mss_profile
     (
       h,  // total height
-      t   // 0=bottom, 1=top
+      t,  // location {0=bottom | 1=top}
+      i   // inversion {+1 | -1}
     ) =
     let
     (
@@ -742,15 +743,15 @@ module project_box_rectangle
       s = lip_sc_s,   // lip snap divisions
       f = lip_sc_f,   // snap scale multiplier steps
 
-      // lip insertion wall taper scale factors
+      // wall taper scale factors (referenced to taper width)
       fx  = (2 * wth * lip_tw / 100) / wall_xy.x,
       fy  = (2 * wth * lip_tw / 100) / wall_xy.y,
 
       h1  = h * (d-s)/d,
       h2  = h * s /d,
 
-      s1  = [1, [1 - fx, 1 - fy]],
-      s2  = [for (i=f) [1 - fx*(1-i*m), 1 - fy*(1-i*m)]]
+      s1  = [1, [1 - i*fx, 1 - i*fy]],
+      s2  = [for (j=f) [1 - i*fx*(1-j*m), 1 - i*fy*(1-j*m)]]
     )
     t ?
       [ [h1, s1], if (s ) [h2, s2] ]
@@ -763,14 +764,20 @@ module project_box_rectangle
       let
       (
         // straight extrusion height for additions and removals
-        lip_ha  = lip_h + eps*0,
+        lip_ha  = lip_h,
         lip_hr  = lip_h + eps*10,
 
         // extrusion profile; inner and outer lip at top and bottom.
-        ep_it = el_mss_profile( lip_ha, 1 ),
-        ep_ot = el_mss_profile( lip_hr, 0 ),
-        ep_ib = el_mss_profile( lip_ha, 0 ),
-        ep_ob = el_mss_profile( lip_hr, 1 ),
+        ep_it = el_mss_profile( lip_ha, 1, +1 ),
+        ep_ot = el_mss_profile( lip_hr, 0, +1 ),
+        ep_ib = el_mss_profile( lip_ha, 0, +1 ),
+        ep_ob = el_mss_profile( lip_hr, 1, +1 ),
+
+        // extrusion profile; 'pin' and 'clip' at top and bottom.
+        ep_pt = el_mss_profile( lip_hr, 1, -1 ),
+        ep_ct = el_mss_profile( lip_ha, 0, -1 ),
+        ep_pb = el_mss_profile( lip_hr, 0, -1 ),
+        ep_cb = el_mss_profile( lip_ha, 1, -1 ),
 
         // lip wall sizes; for outer and inner combinations
         ws_oo   = wall_xy,
@@ -782,7 +789,12 @@ module project_box_rectangle
           [0,  1, +1,  ep_it, lip_hr, ws_io, ws_ii],  // inner lip at top
           [1,  0, +1, lip_ha,  ep_ot, ws_oo, ws_oi],  // outer lip at top
           [2,  1, -1,  ep_ib, lip_hr, ws_io, ws_ii],  // inner lip at bottom
-          [3,  0, -1, lip_ha,  ep_ob, ws_oo, ws_oi]   // outer lip at bottom
+          [3,  0, -1, lip_ha,  ep_ob, ws_oo, ws_oi],  // bottom outer lip
+
+          [4,  1, +1,  ep_it,  ep_pt, ws_oi, ws_io],  // top pin
+          [5,  0, +1,  ep_ct, lip_hr, ws_io, ws_ii],  // top clip inner section
+          [6,  1, -1,  ep_ib,  ep_pb, ws_oi, ws_io],  // bottom pin
+          [7,  0, -1,  ep_cb, lip_hr, ws_io, ws_ii]   // bottom clip inner section
       ]
     )
     {
