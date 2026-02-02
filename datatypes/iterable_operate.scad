@@ -63,14 +63,13 @@
 
 //----------------------------------------------------------------------------//
 
-//! Return an element of an iterable when it exists or a default value otherwise.
+//! Returns an element from an iterable if it exists, or a default value if not.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
   \param    i <integer> An element index.
   \param    d \<value> A default value.
 
-  \returns  (1) \<value> <tt>v[i]</tt> when it is defined or \p d
-                otherwise.
+  \returns  (1) <value> <tt>v[i]</tt> if it is defined, or \p d otherwise.
 *******************************************************************************/
 function defined_e_or
 (
@@ -81,15 +80,15 @@ function defined_e_or
   : !is_undef( v[i] ) ? v[i]
   : d;
 
-//! Return the list element or scalar numeric value, if either is defined, otherwise the default value.
+//! Returns the list element or scalar numeric value if defined, otherwise returns the default value.
 /***************************************************************************//**
   \param    v \<value> A value.
   \param    i <integer> An element index.
   \param    d \<value> A default value.
 
-  \returns  (1) <number> <tt>v</tt> when it is a scalar numeric value.
-            (2) \<value> <tt>v[i]</tt> when it is defined, or the
-                default value \p d otherwise.
+  \returns  (1) <number> <tt>v</tt> if it is a scalar numeric value;
+            (2) <value> <tt>v[i]</tt> if it is defined, otherwise the
+                default value \p d.
 *******************************************************************************/
 function defined_eon_or
 (
