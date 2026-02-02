@@ -728,10 +728,39 @@ module project_box_rectangle
     lip_m         = defined_e_or(lip, 0, lip);
     lip_bw        = defined_e_or(lip, 2, 35);
     lip_tw        = defined_e_or(lip, 3, 10);
+    lip_sc        = defined_e_or(lip, 4, 0);
 
-    // calculate lip beveled-end scaling factor
-    //  scale control parameter is percentage of wall thickness
-    sf = 2*wth / max(wall_xy) * lip_tw/100;
+    lip_sc_s      = defined_eon_or(lip_sc, 0, 2);
+    lip_sc_d      = defined_e_or  (lip_sc, 1, 5);
+    lip_sc_m      = defined_e_or  (lip_sc, 2, 1);
+    lip_sc_f      = defined_e_or  (lip_sc, 3, [0, 3.5/5, 4.5/5, 1, 4.5/5, 3.5/5, 0]);
+
+    // generate 'mss' linerar scaled extrusion profile
+    function el_mss_profile
+    (
+      h,  // total height
+      t   // 0=bottom, 1=top
+    ) =
+    let
+    (
+      m = lip_sc_m,   // max amplitude
+      d = lip_sc_d,   // total segment divisions
+      s = lip_sc_s,   // lip snap divisions
+      f = lip_sc_f,   // snap scale multiplier steps
+
+      // lip insertion wall taper scale factors
+      fx  = (2 * wth * lip_tw / 100) / wall_xy.x,
+      fy  = (2 * wth * lip_tw / 100) / wall_xy.y,
+
+      h1  = h * (d-s)/d,
+      h2  = h * s /d,
+
+      s1  = [1, [1 - fx, 1 - fy]],
+      s2  = [for (i=f) [1 - fx*(1-i*m), 1 - fy*(1-i*m)]]
+    )
+    t ?
+      [ [h1, s1], if (s ) [h2, s2] ]
+    : [ if (s) [h2, reverse(s2)], [h1, reverse(s1)] ];
 
     translate( [0, 0, wall_h/2] )
     for
@@ -743,11 +772,11 @@ module project_box_rectangle
         lip_ha  = lip_h + eps*0,
         lip_hr  = lip_h + eps*10,
 
-        // extrusion profile; inner and otter lip at top and bottom.
-        ep_it = [ [lip_ha, [1, 1 - sf]] ],
-        ep_ot = [ [lip_hr, [1, 1 + sf]] ],
-        ep_ib = [ [lip_ha, [1 - sf, 1]] ],
-        ep_ob = [ [lip_hr, [1 + sf, 1]] ],
+        // extrusion profile; inner and outer lip at top and bottom.
+        ep_it = el_mss_profile( lip_ha, 1 ),
+        ep_ot = el_mss_profile( lip_hr, 0 ),
+        ep_ib = el_mss_profile( lip_ha, 0 ),
+        ep_ob = el_mss_profile( lip_hr, 1 ),
 
         // lip wall sizes; for outer and inner combinations
         ws_oo   = wall_xy,
@@ -792,6 +821,7 @@ module project_box_rectangle
       echo(strl(["lip: height = ", lip_h]));
       echo(strl(["lip: base width percentage = ", lip_bw]));
       echo(strl(["lip: top reduction percentage = ", lip_tw]));
+      echo(strl(["lip: lip snap configuration = ", lip_sc]));
     }
   }
 
