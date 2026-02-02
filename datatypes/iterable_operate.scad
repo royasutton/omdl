@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2025
+  \date   2015-2026
 
   \copyright
 
@@ -99,6 +99,30 @@ function defined_eon_or
 ) = is_num(v) ? v
   : !is_iterable(v) ? d
   : !is_undef( v[i] ) ? v[i]
+  : d;
+
+//! Returns an element from an iterable if it exists and is a iterable, otherwise returns a default value.
+/***************************************************************************//**
+  \param    v \<value> A value.
+  \param    i <integer> An element index.
+  \param    d \<value> A default value.
+  \param    n <integer> The optional expected element length.
+
+  \returns  (1) <tt>v[i]</tt>, a <list-n> if the element is iterable of
+                length \p n (or \<list> if \p n is unspecified),
+            (2) or the default value \p d if the element is not defined.
+*******************************************************************************/
+function defined_ei_or
+(
+  v,
+  i,
+  d,
+  n
+) = !is_iterable(v) ? d
+  : !is_undef( v[i] ) && is_iterable( v[i] )
+    ? is_undef( n ) ? v[i]
+    : (len( v[i] ) == n) ? v[i]
+      : d
   : d;
 
 //! Find all occurrences of a match value in an iterable value.
@@ -1534,6 +1558,7 @@ BEGIN_SCOPE validate;
 
     for (id=test_ids) table_validate( db, id, "defined_e_or_DE3", 1, defined_e_or( v1(db,id), 3, "default" ) );
     for (id=test_ids) table_validate( db, id, "defined_e_or_DE3", 1, defined_eon_or( v1(db,id), 3, "default" ) );
+    // defined_el_or()
     // find_all()
     for (id=test_ids) table_validate( db, id, "find_12", 1, find( [1,2], v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "count_S1", 1, count( 1, v1(db,id), true ) );
