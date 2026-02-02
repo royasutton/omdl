@@ -724,7 +724,7 @@ module project_box_rectangle
     lip_tw        = defined_e_or(lip, 3, 10);
     lip_sc        = defined_e_or(lip, 4, 0);
 
-    lip_sc_s      = defined_eon_or(lip_sc, 0, 2);
+    lip_sc_s      = defined_eon_or(lip_sc, 0, 0);
     lip_sc_d      = defined_e_or  (lip_sc, 1, 5);
     lip_sc_m      = defined_e_or  (lip_sc, 2, 1);
     lip_sc_f      = defined_e_or  (lip_sc, 3, [0, 3.5/5, 4.5/5, 1, 4.5/5, 3.5/5, 0]);
