@@ -194,10 +194,14 @@
 
       b | description
     ---:|:---------------------------------------
-      0 | upper and inside edge of wall
-      1 | upper and outer edge of wall
-      2 | lower and inside edge of wall
-      3 | lower and outer edge of wall
+      0 | inside lip at upper edge of wall
+      1 | outer lip at upper edge of wall
+      2 | inside lip at lower edge of wall
+      3 | outer lip at lower edge of wall
+      4 | center pin at upper wall
+      5 | inside lip at upper edge of wall
+      6 | center pin at lower wall
+      7 | inside lip at lower edge of wall
 
     ##### lip[4]: snap
 
