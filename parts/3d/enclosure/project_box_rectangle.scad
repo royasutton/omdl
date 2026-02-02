@@ -793,12 +793,12 @@ module project_box_rectangle
           [0,  1, +1,  ep_it, lip_hr, ws_io, ws_ii],  // inner lip at top
           [1,  0, +1, lip_ha,  ep_ot, ws_oo, ws_oi],  // outer lip at top
           [2,  1, -1,  ep_ib, lip_hr, ws_io, ws_ii],  // inner lip at bottom
-          [3,  0, -1, lip_ha,  ep_ob, ws_oo, ws_oi],  // bottom outer lip
+          [3,  0, -1, lip_ha,  ep_ob, ws_oo, ws_oi],  // outer lip at bottom
 
-          [4,  1, +1,  ep_it,  ep_pt, ws_oi, ws_io],  // top pin
-          [5,  0, +1,  ep_ct, lip_hr, ws_io, ws_ii],  // top clip inner section
-          [6,  1, -1,  ep_ib,  ep_pb, ws_oi, ws_io],  // bottom pin
-          [7,  0, -1,  ep_cb, lip_hr, ws_io, ws_ii]   // bottom clip inner section
+          [4,  1, +1,  ep_it,  ep_pt, ws_oi, ws_io],  // center pin at top
+          [5,  0, +1,  ep_ct, lip_hr, ws_io, ws_ii],  // inner lip at top (clip section)
+          [6,  1, -1,  ep_ib,  ep_pb, ws_oi, ws_io],  // center pin at bottom
+          [7,  0, -1,  ep_cb, lip_hr, ws_io, ws_ii]   // inner lip at bottom (clip section)
       ]
     )
     {
