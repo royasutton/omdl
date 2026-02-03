@@ -854,7 +854,7 @@ module project_box_rectangle
         // section removal: format = [ [m, ee, ep], ... ]
         //
 
-        sr  = lip_sr[ first(search(m, lip_sr, 1, 0)) ];
+        sr  = lip_sr[ last(search(m, lip_sr, 0, 0)) ];
 
         ee  = defined_ei_or(sr, 1, [0, 0], 2);            // enable {0, 1}
         eo  = defined_ei_or(sr, 2, [0, 0], 2);            // offset {-1, 0, +1}
