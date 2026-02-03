@@ -2101,8 +2101,8 @@ BEGIN_SCOPE example_lip;
     vr   = 5;
     vrm  = 2;
 
-    lip1 = [1, undef, 47.5, 10, [2,5,1.5], [ [0, [0,1], [0,-1]] ] ];
-    lip2 = [2, undef, 47.5, 10, [2,5,1.5], [ [1, [0,1], [0,+1]] ] ];
+    lip1 = [1, undef, 49.0, 10, [3,5,2], [ [0, [0,1], [0,-1]] ] ];
+    lip2 = [2, undef, 49.0, 10, [3,5,2], [ [1, [0,1], [0,+1]] ] ];
 
     translate([-size.x*2/3, 0, 0])
     project_box_rectangle ( wth=wth, size=size, h=6, lid=lid, rib=rib, vr=vr, vrm=vrm, lip = lip1 );
