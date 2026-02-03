@@ -238,14 +238,24 @@
     instances. If a mode is repeated in the instance list, the last
     occurrence is used.
 
-    For example, to remove the positive section of the inside lip at
-    the upper wall edge (mode = 0), set bit 0 as shown below:
+    \amu_define scope_id      (example_lip)
+    \amu_define title         (slide-in snap-lip example)
+    \amu_define image_views   (front back diag)
+    \amu_define image_size    (sxga)
 
-    \code{.C}
-    mode = 0;
+    \amu_include (include/amu/scope_diagrams_3d.amu)
 
-    lip = [ pow(2, mode), undef, undef, undef, undef, [ [ mode, [0,1], [0,+1]] ] ];
-    \endcode
+    The above shows an example of a lip with a basic snap-in edge
+    configuration, with sections removed from the upper and lower
+    halves of the box. This allows the box to be assembled by sliding
+    the halves together. If the sections were not removed, the two
+    halves could instead be snapped together and held in place by the
+    configured snap edges on the lip.
+
+    Depending on the flexibility of the construction material, the
+    engagement and gap sizes of the mating halves may need to be
+    adjusted. Specifically, this includes considering the base width,
+    taper width, and maximum snap scaling.
 
     ### rib
 
@@ -2067,6 +2077,48 @@ BEGIN_SCOPE example_bottom;
 
     images    name "sizes" types "sxga";
     views     name "views" views "top front right diag";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
+
+/*
+BEGIN_SCOPE example_lip;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <tools/operation_cs.scad>;
+    include <parts/3d/enclosure/project_box_rectangle.scad>;
+
+    wth  = 2;
+    size = [20, 40];
+    lid  = wth;
+    rib  = [0, wth/2];
+
+    vr   = 5;
+    vrm  = 2;
+
+    lip1 = [1, undef, 47.5, 10, [2,5,1.5], [ [0, [0,1], [0,-1]] ] ];
+    lip2 = [2, undef, 47.5, 10, [2,5,1.5], [ [1, [0,1], [0,+1]] ] ];
+
+    translate([-size.x*2/3, 0, 0])
+    project_box_rectangle ( wth=wth, size=size, h=6, lid=lid, rib=rib, vr=vr, vrm=vrm, lip = lip1 );
+
+    translate([+size.x*2/3, 0, 0])
+    project_box_rectangle ( wth=wth, size=size, h=5, lid=lid, rib=rib, vr=vr, vrm=vrm, lip = lip2 );
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "top front right back diag";
 
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter --view=axes";
