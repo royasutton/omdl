@@ -184,9 +184,10 @@
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | integer           | required          | mode
       1 | decimal           | wth               | height
-      2 | decimal           | 35                | base width percentage of wall thickness
-      3 | decimal           | 10                | top taper width percentage of wall thickness
-      4 | datastruct \| integer | 0             | snap
+      2 | decimal           | 35                | base width (percentage of wall thickness)
+      3 | decimal           | 10                | top taper width (percentage of wall thickness)
+      4 | datastruct \| integer | 0             | snap configuration
+      5 | datastruct        |  undef            | removals instances
 
     ##### lip[0]: mode
 
@@ -221,7 +222,7 @@
     removals        | [ removal, removal, ..., removal ]
     removal         | [ mode, axis, offset ]
 
-    ##### Data structure fields: removal (instance)
+    ##### Data structure fields: removal instance
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
