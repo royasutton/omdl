@@ -176,7 +176,7 @@
 
     name            | schema
     ---------------:|:----------------------------------------------
-    lip             | [ mode, height, width, taper, snap ]
+    lip             | [ mode, height, width, taper, snap, removals ]
 
     #### Data structure fields: lip
 
@@ -211,6 +211,40 @@
       1 | integer           | 5                 | total segment steps
       2 | decimal           | 1.0               | max scale (1 = 1x taper width)
       3 | decimal-list      | [0, 3.5/5, 4.5/5, 1, 4.5/5, 3.5/5, 0] | scale multiplier steps
+
+    ##### lip[5]: removals
+
+    ##### Data structure schema:
+
+    name            | schema
+    ---------------:|:----------------------------------------------
+    removals        | [ removal, removal, ..., removal ]
+    removal         | [ mode, axis, offset ]
+
+    ##### Data structure fields: removal (instance)
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | integer           | required          | mode: lip section application
+      1 | integer-list-2    | [0, 0]            | axis [x, y]; {0=unchanged, 1=remove}
+      2 | integer-list-2    | [0, 0]            | offset [x, y]; {-1, 0, +1}
+
+    Any lip sections specified by the \p mode variable can have their
+    walls selectively removed, enabling features like sliding lid
+    assembly, for example. This removal specification allows anywhere
+    from zero to all four sections to be removed, with each lip mode
+    being independent. Removals are defined by one or more removal
+    instances. If a mode is repeated in the instance list, the last
+    occurrence is used.
+
+    For example, to remove the positive section of the inside lip at
+    the upper wall edge (mode = 0), set bit 0 as shown below:
+
+    \code{.C}
+    mode = 0;
+
+    lip = [ pow(2, mode), undef, undef, undef, undef, [ [ mode, [0,1], [0,+1]] ] ];
+    \endcode
 
     ### rib
 
@@ -727,7 +761,9 @@ module project_box_rectangle
     lip_bw        = defined_e_or(lip, 2, 35);
     lip_tw        = defined_e_or(lip, 3, 10);
     lip_sc        = defined_e_or(lip, 4, 0);
+    lip_sr        = defined_e_or(lip, 5, 0);
 
+    // lip snap configuration
     lip_sc_s      = defined_eon_or(lip_sc, 0, 0);
     lip_sc_d      = defined_e_or  (lip_sc, 1, 5);
     lip_sc_m      = defined_e_or  (lip_sc, 2, 1);
@@ -813,6 +849,18 @@ module project_box_rectangle
         as  = dt[5];  // as  : add size
         rs  = dt[6];  // rs  : remove size
 
+        //
+        // section removal: format = [ [m, ee, ep], ... ]
+        //
+
+        sr  = lip_sr[ first(search(m, lip_sr, 1, 0)) ];
+
+        ee  = defined_ei_or(sr, 1, [0, 0], 2);            // enable {0, 1}
+        eo  = defined_ei_or(sr, 2, [0, 0], 2);            // offset {-1, 0, +1}
+
+        es  = [wall_xy.x * ee.x, wall_xy.y * ee.y] / 2;   // size
+        et  = [es.x * eo.x, es.y * eo.y] / 2;             // translation
+
         translate([0, 0, (wall_h + lip_h - eps)/2 * tb])
         difference_cs( envelop == false )
         {
@@ -820,7 +868,8 @@ module project_box_rectangle
           pg_rectangle(as, vr=vr, vrm=vrm_ci, center=true);
 
           extrude_linear_mss(rp, center=true)
-          pg_rectangle(rs, vr=vr, vrm=vrm_ci, center=true);
+          translate(et)
+          pg_rectangle(rs + es, vr=vr, vrm=vrm_ci, center=true);
         }
       }
     }
@@ -832,6 +881,7 @@ module project_box_rectangle
       echo(strl(["lip: base width percentage = ", lip_bw]));
       echo(strl(["lip: top reduction percentage = ", lip_tw]));
       echo(strl(["lip: snap = ", lip_sc]));
+      echo(strl(["lip: section removal = ", lip_sr]));
     }
   }
 
