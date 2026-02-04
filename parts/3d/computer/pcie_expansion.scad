@@ -1752,7 +1752,7 @@ module pcie_expansion
       wth   = encl_wth,
       size  = firstn(encl_size_wlh, 2),
       lid   = encl_wth,
-      h     = encl_wth,
+      h     = encl_wth*2,
       lip   = encl_lips_cover,
       rib   = encl_ribs,
       wall  = encl_walls,
