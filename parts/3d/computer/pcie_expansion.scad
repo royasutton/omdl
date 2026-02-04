@@ -477,7 +477,7 @@ enclosure_def =
 
   ["rib_pcb_gap",                1/2],    // rib removal gap for pcie and riser board pcb
 
-  ["lips_sides",       1 + pow(2, 3)],    // sides lips specification
+  ["lips_sides",               1 + 8],    // sides lips specification (top and bottom)
   ["lips_base",                    1],    // base lips specification
   ["lips_cover",                   2],    // cover lips specification
 
