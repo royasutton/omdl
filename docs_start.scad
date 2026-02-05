@@ -38,26 +38,26 @@
   \section intro_overview Overview
 
   [omdl], OpenSCAD Mechanical Design Library, is an open-source
-  parametric framework for mechanical design in OpenSCAD. It provides
+  parametric framework for mechanical design in [OpenSCAD]. It provides
   reusable engineering primitives, unit-aware operations, and
   fabrication-oriented modules intended to support real mechanical
   workflows rather than isolated geometric modeling.
 
   The library emphasizes:
 
-  - Parametric mechanical design — components are defined by
+  - *Parametric mechanical design:* components are defined by
     dimensions and intent rather than fixed geometry.
 
-  - Unit-aware operations — consistent handling of lengths, angles, and
+  - *Unit-aware operations:* consistent handling of lengths, angles, and
     dimensional data.
 
-  - Minimal global state — modules are designed to be predictable and
+  - *Minimal global state:* modules are designed to be predictable and
     composable.
 
-  - Integrated documentation — API behavior and usage are documented
+  - *Integrated documentation:* API behavior and usage are documented
     directly in source using [Doxygen] and [openscad-amu].
 
-  - Validation-driven development — automated scripts verify
+  - *Validation-driven development:* automated scripts verify
     functionality across evolving OpenSCAD versions.
 
   Instead of treating OpenSCAD purely as a shape generator, omdl
@@ -85,12 +85,13 @@
   The library is organized into modular groups representing functional
   areas such as tools, drafting operations, and mechanical parts.
   Modules can be included individually as needed to keep projects
-  lightweight.
+  lightweight and integrate easily with other design libraries.
 
   \section intro_docs Documentation Approach
 
   All documentation is generated from inline source comments using
-  Doxygen.
+  Doxygen. The documentation is retrieved from the source code and
+  pre-processed by [openscad-amu] before being sent to Doxygen.
 
   This approach ensures that:
 
