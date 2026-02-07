@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2025
+  \date   2025-2026
 
   \copyright
 
@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Power Strip Maker)
+    \amu_define group_name  (Power Strip)
     \amu_define group_brief (Electrical receptacle power strip generator.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
@@ -42,8 +42,8 @@
     tools/operation_cs.scad
     models/3d/misc/omdl_logo.scad
     models/3d/fastener/screws.scad
-    parts/3d/enclosure/clamps.scad
-    parts/3d/enclosure/mounts.scad
+    parts/3d/fastener/clamps.scad
+    parts/3d/fastener/mounts.scad
     parts/3d/enclosure/project_box_rectangle.scad
   )
   \amu_include (include/amu/includes_required.amu)
@@ -53,8 +53,54 @@
 // global configuration variables
 //----------------------------------------------------------------------------//
 
-//! \name Maps
+//! \name Configuration
 //! @{
+
+//! \cond DOXYGEN_SHOULD_SKIP_THIS
+power_strip_box_doc =
+[
+  ["wth",     "Box wall thickness"],
+  ["roww",    "Receptacle row width"],
+  ["dlts",    "Device length tab-to-tab space"],
+  ["boxd",    "Box internal depth"],
+  ["evrm",    "Box & cover rounding mode: {0|1|2}"],
+  ["evr",     "Box & cover rounding radius"],
+  ["cdms",    "Cover uses device mount screws: {true|false}"],
+  ["lefb",    "Box lid edge finish: {0|1|2|3|4}"],
+  ["lefc",    "Cover lid edge finish: {0|1|2|3|4}"],
+  ["dlogo",   "Detail logo on box rear: {true|false}"],
+  ["drimb",   "Detail rim on box rear: {true|false}"],
+  ["drimc",   "Detail rim on cover top: {true|false}"],
+  ["fins",    "Post fins: [number, angle, width, length]"],
+  ["ribs",    "Box ribs configuration: see project_box_rectangle()"],
+  ["wmode",   "Box wall mode: see project_box_rectangle()"],
+  ["wiab",    "Box wall instance additions: see project_box_rectangle()"],
+  ["pmode",   "Box post mode (b7=1 required): see project_box_rectangle()"],
+  ["piab",    "Box post instance additions: see project_box_rectangle()"],
+  ["piac",    "Cover post instance additions: see project_box_rectangle()"],
+  ["mpc2b",   "Mirror cover post additions in box: {true|false}"],
+  ["mphda",   "Mirrored post hole diameter adjustment"],
+  ["iscl",    "Input space: cord, switch, surge, etc"],
+  ["oscl",    "Output space: wire-nuts, led, aux board, etc"],
+  ["lscl",    "Left-side extra space"],
+  ["rscl",    "Right-side extra space"],
+  ["iwdo",    "Internal wall divisions on: {true|false}"],
+  ["iwpd",    "Internal wall wire pass diameter"],
+  ["iwps",    "Internal wall wire pass side: {+1|-1}"],
+  ["pwco",    "Power cord connections offset: [x, z]"],
+  ["pwcd",    "Power cord dimensions: {d|[w,h]}"],
+  ["pwcs",    "Power cord clamp side: {0|1}"],
+  ["pwct",    "Power cord clamp tab width"],
+  ["pwcp",    "Power cord clamp pinch bar percentage: [h, w]"],
+  ["pwsd",    "Power cord clamp screw diameter"],
+  ["pwsh",    "Power cord clamp screw head spec: see screw_bore()"],
+  ["pwsn",    "Power cord clamp screw nut spec: see screw_bore()"],
+  ["mtab",    "Mount tab: [screw, brace, vrm, vr, wth, size]: see mount_screw_tab()"],
+  ["mtabs",   "Mount tab instances: [[edge, zero, move], ...]"],
+  ["mslot",   "Mount slot: [screw, cover, size, scale, wth]: see mount_screw_slot()"],
+  ["mslots",  "Mount slot instances: [[move, rotate, align], ...]"]
+];
+//! \endcond
 
 //! <map> A single gang electrical device box configuration.
 /***************************************************************************//**
@@ -63,7 +109,7 @@
     The default electrical device box configuration map.
 
     \amu_define title (Default device box configuration map)
-    \amu_define scope_id (default_box)
+    \amu_define scope_id (box_default)
     \amu_define output_scad (false)
     \amu_define output_console (false)
     \amu_define notes_table (Map key description is available in source. See the map)
@@ -72,7 +118,7 @@
 
   \hideinitializer
 *******************************************************************************/
-power_strip_sg_default_box =
+power_strip_box_default =
 [
   ["wth",      2.0],                // box wall thickness
   ["roww",    50.0],                // receptacle row width
@@ -135,6 +181,17 @@ power_strip_sg_default_box =
       (4): see mount_screw_slot() in omdl for descriptions
    */
 
+//! \cond DOXYGEN_SHOULD_SKIP_THIS
+power_strip_mount_doc =
+[
+  ["mss",     "Device mount screw separation"],
+  ["rmsd",    "Mount screw hole diameter"],
+  ["rmsh",    "Mount screw head height"],
+  ["rshc",    "Mount screw head clearance"],
+  ["rmth",    "Mount tab height"]
+];
+//! \endcond
+
 //! <map> A single gang electrical device mount configuration.
 /***************************************************************************//**
   \details
@@ -142,7 +199,7 @@ power_strip_sg_default_box =
     The default electrical device mount configuration map.
 
     \amu_define title (Default device mount configuration map)
-    \amu_define scope_id (default_mount)
+    \amu_define scope_id (mount_default)
     \amu_define output_scad (false)
     \amu_define output_console (false)
     \amu_define notes_table (Map key description is available in source. See the map)
@@ -151,7 +208,7 @@ power_strip_sg_default_box =
 
   \hideinitializer
 *******************************************************************************/
-power_strip_sg_default_mount =
+power_strip_mount_default =
 [
   ["mss",   length(3+9/32, "in")],  // device mount screw separation
   ["rmsd",  length(   1/8, "in")],  // mount screw hole diameter
@@ -160,6 +217,16 @@ power_strip_sg_default_mount =
   ["rmth",  length(  1/16, "in")]   // mount tab height
 ];
 
+//! \cond DOXYGEN_SHOULD_SKIP_THIS
+power_strip_cover_doc =
+[
+  ["drpo",    "Receptacle offset"],
+  ["rpd",     "Receptacle diameter"],
+  ["rpfl",    "Receptacle flat-to-flat height"],
+  ["rcsd",    "Cover center hole screw: [diameter, head-diameter, head-height, tolerance]"]
+];
+//! \endcond
+
 //! <map> A single gang duplex receptacle cover configuration.
 /***************************************************************************//**
   \details
@@ -167,7 +234,7 @@ power_strip_sg_default_mount =
     The default electrical device cover configuration map.
 
     \amu_define title (Default device cover configuration map)
-    \amu_define scope_id (default_cover)
+    \amu_define scope_id (cover_default)
     \amu_define output_scad (false)
     \amu_define output_console (false)
     \amu_define notes_table (Map key description is available in source. See the map)
@@ -176,7 +243,7 @@ power_strip_sg_default_mount =
 
   \hideinitializer
 *******************************************************************************/
-power_strip_sg_default_cover =
+power_strip_cover_default =
 [
   ["drpo",  length(1+1/2, "in")],   // receptacle offset
   ["rpd",   length(1+3/8, "in")],   // receptacle diameter
@@ -186,9 +253,9 @@ power_strip_sg_default_cover =
 ];
 
 //! \cond DOXYGEN_SHOULD_SKIP_THIS
-map_check(power_strip_sg_default_box, false);
-map_check(power_strip_sg_default_mount, false);
-map_check(power_strip_sg_default_cover, false);
+map_check(power_strip_box_default, false);
+map_check(power_strip_mount_default, false);
+map_check(power_strip_cover_default, false);
 //! \endcond
 
 //! @}
@@ -196,6 +263,9 @@ map_check(power_strip_sg_default_cover, false);
 //----------------------------------------------------------------------------//
 // modules
 //----------------------------------------------------------------------------//
+
+//! \name Modules
+//! @{
 
 //! A power strip generator for single gang electrical receptacles.
 /***************************************************************************//**
@@ -254,9 +324,9 @@ module power_strip_sg
   mode = 7,
   verb = 1,
 
-  cm_box = power_strip_sg_default_box,
-  cm_mount = power_strip_sg_default_mount,
-  cm_cover = power_strip_sg_default_cover
+  cm_box = power_strip_box_default,
+  cm_mount = power_strip_mount_default,
+  cm_cover = power_strip_cover_default
 )
 {
   //
@@ -862,9 +932,9 @@ module power_strip_sg
 
   if ( verb > 0 )
   {
-    check_cm("cm_box", cm_box, power_strip_sg_default_box);
-    check_cm("cm_mount", cm_mount, power_strip_sg_default_mount);
-    check_cm("cm_cover", cm_cover, power_strip_sg_default_cover);
+    check_cm("cm_box", cm_box, power_strip_box_default);
+    check_cm("cm_mount", cm_mount, power_strip_mount_default);
+    check_cm("cm_cover", cm_cover, power_strip_cover_default);
   }
 
   //
@@ -887,6 +957,8 @@ module power_strip_sg
 }
 
 //! @}
+
+//! @}
 //! @}
 
 
@@ -901,8 +973,8 @@ BEGIN_SCOPE example;
     include <tools/operation_cs.scad>;
     include <models/3d/misc/omdl_logo.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <parts/3d/enclosure/clamps.scad>;
-    include <parts/3d/enclosure/mounts.scad>;
+    include <parts/3d/fastener/clamps.scad>;
+    include <parts/3d/fastener/mounts.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/enclosure/power_strip.scad>;
 
@@ -919,7 +991,7 @@ BEGIN_SCOPE example;
       ["mtabs",     [[0]]]
     ];
 
-    custom_box = map_merge(box_conf, power_strip_sg_default_box);
+    custom_box = map_merge(box_conf, power_strip_box_default);
     map_check(custom_box);
 
     power_strip_sg(cm_box=custom_box);
@@ -943,17 +1015,24 @@ END_SCOPE;
 */
 
 /*
-BEGIN_SCOPE default_box;
+BEGIN_SCOPE box_default;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <tools/operation_cs.scad>;
     include <models/3d/misc/omdl_logo.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/enclosure/power_strip.scad>;
 
-    map_write( power_strip_sg_default_box );
+    map = power_strip_box_default;
+    doc = power_strip_box_doc;
+
+    table_write
+    (
+      r = map_to_table( [map, doc], sort=true ),
+      c = [["key","key"], ["value","value"], ["description","description"]]
+    );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -962,17 +1041,24 @@ BEGIN_SCOPE default_box;
   END_MFSCRIPT;
 END_SCOPE;
 
-BEGIN_SCOPE default_mount;
+BEGIN_SCOPE mount_default;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <tools/operation_cs.scad>;
     include <models/3d/misc/omdl_logo.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/enclosure/power_strip.scad>;
 
-    map_write( power_strip_sg_default_mount );
+    map = power_strip_mount_default;
+    doc = power_strip_mount_doc;
+
+    table_write
+    (
+      r = map_to_table( [map, doc], sort=true ),
+      c = [["key","key"], ["value","value"], ["description","description"]]
+    );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
@@ -981,17 +1067,24 @@ BEGIN_SCOPE default_mount;
   END_MFSCRIPT;
 END_SCOPE;
 
-BEGIN_SCOPE default_cover;
+BEGIN_SCOPE cover_default;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <tools/operation_cs.scad>;
     include <models/3d/misc/omdl_logo.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <parts/3d/enclosure/clamps.scad>;
+    include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/enclosure/power_strip.scad>;
 
-    map_write( power_strip_sg_default_cover );
+    map = power_strip_cover_default;
+    doc = power_strip_cover_doc;
+
+    table_write
+    (
+      r = map_to_table( [map, doc], sort=true ),
+      c = [["key","key"], ["value","value"], ["description","description"]]
+    );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;

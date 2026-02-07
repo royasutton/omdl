@@ -59,7 +59,7 @@
   \param    vr <decimal> The vertex rounding radius.
   \param    cw <boolean> Use clockwise point ordering.
 
-  \returns  <coords-2d> A list of coordinates points [[x, y], ...].
+  \returns  <points-2d> A list of coordinates points [[x, y], ...].
 
   \details
 
@@ -129,7 +129,7 @@ function polygon_regular_p
             centered, beginning at \p p1 and terminating at \p p2.
   \param    fn <integer> A fixed number of equally spaced points.
 
-  \returns  <coords-2d> A list of coordinates points [[x, y], ...].
+  \returns  <points-2d> A list of coordinates points [[x, y], ...].
 
   \details
 
@@ -219,7 +219,7 @@ function polygon_line_p
             vector \p v1 to the head of vector \p v2 when \p cw =
             \b true, and counter clockwise when \p cw = \b false.
 
-  \returns  <coords-2d> A list of coordinates points [[x, y], ...].
+  \returns  <points-2d> A list of coordinates points [[x, y], ...].
 
   \details
 
@@ -280,7 +280,7 @@ function polygon_arc_p
   \param    fn <integer> The number of [facets] \(optional\).
   \param    cw <boolean> The coordinate point ordering.
 
-  \returns  <coords-2d> A list of coordinates points [[x, y], ...].
+  \returns  <points-2d> A list of coordinates points [[x, y], ...].
 
   \details
 
@@ -339,7 +339,7 @@ function polygon_elliptical_sector_p
   \param    o <point-2d> The origin offset coordinate [x, y].
   \param    cw <boolean> Polygon vertex ordering.
 
-  \returns  <coords-2d> A list of coordinates points [[x, y], ...].
+  \returns  <points-2d> A list of coordinates points [[x, y], ...].
 
   \details
 
@@ -431,7 +431,7 @@ function polygon_regular_area
 
 //! Calculate the perimeter length of a polygon in 2d.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of 2d cartesian coordinates
+  \param    c <points-2d> A list of 2d cartesian coordinates
             [[x, y], ...].
   \param    p <integer-list-list> An \em optional list of paths that
             define one or more closed shapes where each is a list of
@@ -465,7 +465,7 @@ function polygon_perimeter
 
 //! Compute the signed area of a polygon in a Euclidean 2d-space.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of 2d cartesian coordinates
+  \param    c <points-2d> A list of 2d cartesian coordinates
             [[x, y], ...].
   \param    p <integer-list-list> An \em optional list of paths that
             define one or more closed shapes where each is a list of
@@ -509,7 +509,7 @@ function polygon_area
 
 //! Compute the area of a polygon in a Euclidean 3d-space.
 /***************************************************************************//**
-  \param    c <coords-3d> A list of 3d cartesian coordinates
+  \param    c <points-3d> A list of 3d cartesian coordinates
             [[x, y, z], ...].
   \param    p <integer-list-list> An \em optional list of paths that
             define one or more closed shapes where each is a list of
@@ -559,7 +559,7 @@ function polygon3d_area
 
 //! Compute the center of mass of a polygon in a Euclidean 2d-space.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of 2d cartesian coordinates
+  \param    c <points-2d> A list of 2d cartesian coordinates
             [[x, y], ...].
   \param    p <integer-list-list> An \em optional list of paths that
             define one or more closed shapes where each is a list of
@@ -614,7 +614,7 @@ function polygon_centroid
 
 //! Compute the winding number of a polygon about a point in a Euclidean 2d-space.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of 2d cartesian coordinates
+  \param    c <points-2d> A list of 2d cartesian coordinates
             [[x, y], ...].
   \param    p <integer-list-list> An \em optional list of paths that
             define one or more closed shapes where each is a list of
@@ -692,7 +692,7 @@ function polygon_winding
 
 //! Test the vertex ordering of a polygon in a Euclidean 2d-space.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of 2d cartesian coordinates
+  \param    c <points-2d> A list of 2d cartesian coordinates
             [[x, y], ...].
   \param    p <integer-list-list> An \em optional list of paths that
             define one or more closed shapes where each is a list of
@@ -722,7 +722,7 @@ function polygon_is_clockwise
 
 //! Test the convexity of a polygon in a Euclidean 2d-space.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of 2d cartesian coordinates
+  \param    c <points-2d> A list of 2d cartesian coordinates
             [[x, y], ...].
   \param    p <integer-list-list> An \em optional list of paths that
             define one or more closed shapes where each is a list of
@@ -760,7 +760,7 @@ function polygon_is_convex
 
 //! Test if a point is inside a polygon in a Euclidean 2d-space using winding number.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of 2d cartesian coordinates
+  \param    c <points-2d> A list of 2d cartesian coordinates
             [[x, y], ...].
   \param    p <integer-list-list> An \em optional list of paths that
             define one or more closed shapes where each is a list of
@@ -786,7 +786,7 @@ function polygon_wn_is_p_inside
 
 //! Test if a point is inside a polygon in a Euclidean 2d-space using angle summation.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of 2d cartesian coordinates
+  \param    c <points-2d> A list of 2d cartesian coordinates
             [[x, y], ...].
   \param    p <integer-list-list> An \em optional list of paths that
             define one or more closed shapes where each is a list of
@@ -844,7 +844,7 @@ function polygon_as_is_p_inside
 
 //! Convert a polygon in 2D to a polyhedron by adding a height dimension.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of 2d cartesian coordinates
+  \param    c <points-2d> A list of 2d cartesian coordinates
             [[x, y], ...].
   \param    p <integer-list-list> An \em optional list of paths that
             define one or more closed shapes where each is a list of
@@ -854,7 +854,7 @@ function polygon_as_is_p_inside
   \param    center <boolean> Center polyhedron height about xy-plane.
 
   \returns  <datastruct> A structure <tt>[points, faces]</tt>, where
-            \c points are <coords-3d> and \c faces are a
+            \c points are <points-3d> and \c faces are a
             <integer-list-list>, that define the bounding box of the
             given polyhedron.
 
@@ -915,7 +915,7 @@ function polygon_linear_extrude_pf
   \param    fn <integer> The number of [facets] \(optional\).
   \param    cw <boolean> The coordinate point ordering.
 
-  \returns  <coords-2d> A list of coordinates points [[x, y], ...].
+  \returns  <points-2d> A list of coordinates points [[x, y], ...].
 
   \details
 
@@ -979,7 +979,7 @@ function polygon_round_eve_p
 
 //! Compute coordinates that round all of the vertices between each adjacent edges in 2D.
 /***************************************************************************//**
-  \param    c <coords-2d> A list of \em n 2d cartesian coordinates
+  \param    c <points-2d> A list of \em n 2d cartesian coordinates
             [[x1, y1], [x2, y2], ..., [xn, yn]].
   \param    vr <decimal-list-n | decimal> The vertices rounding radius.
             A list [v1r, v2r, v3r, ... vnr] of \em n decimals or a
@@ -995,7 +995,7 @@ function polygon_round_eve_p
   \param    w <boolean> Wrap-at-end during 3-point coordinate selection.
   \param    cw <boolean> Polygon vertex ordering.
 
-  \returns  <coords-2d> A new list of coordinates points [[x, y], ...]
+  \returns  <points-2d> A new list of coordinates points [[x, y], ...]
             that define the polygon with rounded vertices.
 
   \details

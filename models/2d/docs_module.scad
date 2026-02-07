@@ -1,8 +1,8 @@
-//! Module: 3d black-box models of design components.
+//! Module: 2d black-box models of design components.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2024
+  \date   2026
 
   \copyright
 
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (3d Models)
-    \amu_define group_brief (3d black-box models of design components.)
+    \amu_define group_name  (2d Models)
+    \amu_define group_brief (2d black-box models of design components.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

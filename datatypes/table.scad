@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2024
+  \date   2015-2026
 
   \copyright
 
@@ -55,10 +55,22 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+// global configuration variables
+//----------------------------------------------------------------------------//
+
+//! \name Variables
+//! @{
+
+//! <boolean> Enforce strict checking for table value references.
+$table_strict = false;
+
+//! @}
+
+//----------------------------------------------------------------------------//
 // Separate
 //----------------------------------------------------------------------------//
 
-//! \name Separate table data
+//! \name Functions: Separate parameters
 //! @{
 
 //! Get the table row index that matches a table row identifier.
@@ -88,7 +100,9 @@ function table_get_row
 (
   r,
   ri
-) = r[ table_get_row_index(r, ri) ];
+) = let( row_check = ! $table_strict || table_exists(r=r, ri=ri) )
+    assert( row_check, strl(["table row missing [", ri, "]."]) )
+    r[ table_get_row_index(r, ri) ];
 
 //! Get the table column index that matches a table column identifier.
 /***************************************************************************//**
@@ -117,7 +131,9 @@ function table_get_column
 (
   c,
   ci
-) = c[ table_get_column_index(c, ci) ];
+) = let( column_check = ! $table_strict || table_exists(c=c, ci=ci) )
+    assert( column_check, strl(["table column missing [", ci, "]."]) )
+    c[ table_get_column_index(c, ci) ];
 
 //! Get the table cell value for a specified row and column identifier.
 /***************************************************************************//**
@@ -135,7 +151,11 @@ function table_get_value
   c,
   ri,
   ci
-) = r[table_get_row_index(r,ri)][table_get_column_index(c,ci)];
+) = let( row_check = ! $table_strict || table_exists(r=r, ri=ri) )
+    let( column_check = ! $table_strict || table_exists(c=c, ci=ci) )
+    assert( row_check, strl(["table row missing [", ri, "]."]) )
+    assert( column_check, strl(["table column missing [", ci, "]."]) )
+    r[ table_get_row_index(r,ri) ][ table_get_column_index(c,ci) ];
 
 //! Form a list of a select column across all table rows.
 /***************************************************************************//**
@@ -151,9 +171,9 @@ function table_get_columns
   r,
   c,
   ci
-) = table_exists(r,c,ci=ci) ?
-    select_e(table_get_copy(r,c,cs=[ci]),f=true)
-  : undef;
+) = let( column_check = ! $table_strict || table_exists(c=c, ci=ci) )
+    assert( column_check, strl(["table column missing [", ci, "]."]) )
+    select_e(table_get_copy(r,c,cs=[ci]), f=true);
 
 //! Get a row, a column, or a specific cell value from a table.
 /***************************************************************************//**
@@ -250,9 +270,10 @@ function table_exists
   ri,
   ci
 ) = let ( dr = is_defined(ri), dc = is_defined(ci) )
-    ( dr && dc ) ? is_defined(table_get_value(r, c, ri, ci))
-  : dr ? is_number(table_get_row_index(r,ri))
-  : dc ? is_number(table_get_column_index(c,ci))
+    ( dr && dc ) ? is_defined(table_get_row_index(r,ri)) &&
+                   is_defined(table_get_column_index(c,ci))
+  : dr ? is_defined(table_get_row_index(r,ri))
+  : dc ? is_defined(table_get_column_index(c,ci))
   : false;
 
 //! Get the size of a table.
@@ -425,7 +446,7 @@ module table_check
     if (verbose) log_info ("row identifier found at column zero.");
   }
 
-  // (2) each row has correct column count
+  // (2) each row must have correct column count
   if (verbose) log_info ("checking row column counts.");
   col_cnt = table_get_size(c=c);
   for ( r_iter = r )
@@ -477,6 +498,7 @@ module table_check
   \param    rs <string-list> A list of selected row identifiers.
   \param    cs <string-list> A list of selected column identifiers.
   \param    number <boolean> Number the rows.
+  \param    align <boolean> pad columns for value alignment.
 
   \details
 
@@ -491,13 +513,28 @@ module table_dump
   c,
   rs,
   cs,
-  number = true
+  number = true,
+  align = true
 )
 {
-  // determine maximum field lengths
-  maxr0 = max( [for (r_iter = r) len( first(r_iter) )] ) + 1;
-  maxc0 = max( [for (c_iter = c) len( first(c_iter) )] ) + 1;
-  maxc1 = max( [for (c_iter = c) len( c_iter[1] )] ) + 1;
+  // determine maximum field lengths when aligning
+  maxr0 = align ?
+          max ( [ for ( r_iter = r )
+                    let( v = first(r_iter) )
+                    is_string(v) ? len(v) : len( strl([v]) ) ] )
+        : 0;
+
+  maxc0 = align ?
+          max ( [ for ( c_iter = c )
+                    let( v = first(c_iter) )
+                    is_string(v) ? len(v) : len( strl([v]) ) ] )
+        : 0;
+
+  maxc1 = align ?
+          max ( [ for ( c_iter = c )
+                    let( v = second(c_iter) )
+                    is_string(v) ? len(v) : len( strl([v]) ) ] )
+        : 0;
 
   for ( r_iter = r )
   {
@@ -507,11 +544,13 @@ module table_dump
       is_number( first( search( r_iter, rs, 1, 0 ) ) )
     )
     {
+      // number row
       if ( number )
       {
         log_echo();
         log_echo( str("row: ", table_get_row_index(r, r_iter)) );
       }
+
       for ( c_iter = c )
       {
         if
@@ -520,20 +559,50 @@ module table_dump
           is_number( first( search( c_iter, cs, 1, 0 ) ) )
         )
         {
+          rid     = first(r_iter);
+          cid     = first(c_iter);
+          cdn     = second(c_iter);
+
+          rid_pad = let
+                    (
+                      s = is_string(rid) ? len(rid) : len( strl( [rid] ) )
+                    )
+                    align ?
+                    chr( consts(maxr0 - s, 32 ) )
+                  : empty_str;
+
+          cid_pad = let
+                    (
+                      s = is_string(cid) ? len(cid) : len( strl( [cid] ) )
+                    )
+                    align ?
+                    chr( consts(maxc0 - s, 32 ) )
+                  : empty_str;
+
+          cdn_pad = let
+                    (
+                      s = is_string(cdn) ? len(cdn) : len( strl( [cdn] ) )
+                    )
+                    align ?
+                    chr( consts(maxc1 - s, 32 ) )
+                  : empty_str;
+
+          rc_val  = table_get_value(r, c, r_iter, c_iter);
+
           log_echo
           (
             str
             (
-              "[", first(r_iter), "]", chr(consts(maxr0-len(first(r_iter)), 32)),
-              "[", first(c_iter), "]", chr(consts(maxc0-len(first(c_iter)), 32)),
-              "(", c_iter[1], ")", chr(consts(maxc1-len(c_iter[1]), 32)),
-              "= [", table_get_value(r, c, r_iter, c_iter), "]"
+              "'", rid, "'", rid_pad, " ",
+              cid_pad, "'", cid, "' (", cdn, ")", cdn_pad,
+              " = '", rc_val, "'"
             )
           );
-        }
-      }
-    }
-  }
+
+        } // c-sel
+      } // c
+    } // r-sel
+  } // r
 
   if ( number )
   {
@@ -580,22 +649,22 @@ module table_dump
 *******************************************************************************/
 module table_dump_getters
 (
-r,
-c,
+  r,
+  c,
 
-tr = "table_rows",
-tc = "table_cols",
+  tr = "table_rows",
+  tc = "table_cols",
 
-ri = "ri",
-ci = "ci",
+  ri = "ri",
+  ci = "ci",
 
-vri = false,
-vci = false,
+  vri = false,
+  vci = false,
 
-name = "get_helper",
-append = false,
-comment = 0,
-verbose = false
+  name = "get_helper",
+  append = false,
+  comment = 0,
+  verbose = false
 )
 {
   function qri(ri) = (ri == "ri") ? ri : (vri == true) ? ri : str("\"", ri, "\"");
@@ -805,7 +874,7 @@ module table_write
   // heading identifiers and/or text descriptions
   th_text =
   [
-    if(number == true)
+    if ( number == true )
       thn,
 
     for ( c_iter = c )
@@ -838,7 +907,7 @@ module table_write
         if (number == true)
           str(strl_html([table_get_row_index(r, r_iter)], p=[index_tags]),fs),
 
-        strl_html(first(r_iter), p=[row_id_tags]), fs,
+        strl_html([first(r_iter)], p=[row_id_tags]), fs,
         for ( c_iter = tailn(c, n=1) )
           if
           ( // when column selected
@@ -848,7 +917,7 @@ module table_write
             str(strl_html([table_get_value(r, c, r_iter, c_iter)], p=[value_tags]),fs)
       ];
 
-      log_echo ( strl(tdr_text) );
+      log_echo ( strl( tdr_text ) );
     }
   }
 }
@@ -859,7 +928,7 @@ module table_write
 // Combined
 //----------------------------------------------------------------------------//
 
-//! \name Combined table data
+//! \name Functions: Combined parameters
 //! @{
 
 /***************************************************************************//**
@@ -868,6 +937,15 @@ module table_write
             identifier matrix (2 x C-columns).
 
   \copydoc table_get()
+
+  \details
+
+    \b Example
+    \code
+    rows = ctable_get( t, ri );
+    cols = ctable_get( t, ci=ci );
+    cell = ctable_get( t, ri, ci );
+    \endcode
 *******************************************************************************/
 function ctable_get( t, ri, ci ) = table_get( first(t), second(t), ri, ci );
 

@@ -5,11 +5,9 @@
 /contrib/
 
 #
-# backup, build, and release directories
+# build directory
 #
 
-/backups/
-/release/
 /build/
 
 #

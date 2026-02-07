@@ -35,7 +35,8 @@ buildinfo_groups                        := general \
                                            toolchain \
                                            components \
                                            scopes \
-                                           modules
+                                           modules \
+                                           sources
 
 # output file names
 buildinfo_stamp_name                     = buildinfo$(stamp_ext)

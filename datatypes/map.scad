@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2024
+  \date   2015-2026
 
   \copyright
 
@@ -49,6 +49,23 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+// global configuration variables
+//----------------------------------------------------------------------------//
+
+//! \name Variables
+//! @{
+
+//! <boolean> Enforce strict checking for map value references.
+$map_strict = false;
+
+//! @}
+
+//----------------------------------------------------------------------------//
+// functions and modules
+//----------------------------------------------------------------------------//
+
+//! \name Functions
+//! @{
 
 //! Return the index of a map key.
 /***************************************************************************//**
@@ -62,8 +79,7 @@ function map_get_index
 (
   m,
   k
-) = !is_string(k) ? undef
-  : let(i = first(search([k], m, 1, 0 )))
+) = let(i = first(search([k], m, 1, 0 )))
     (i == empty_lst) ? undef : i;
 
 //! Test if a key exists.
@@ -91,7 +107,9 @@ function map_get_value
 (
   m,
   k
-) = second(m[map_get_index(m, k)]);
+) = let( key_check = ! $map_strict || map_exists(m, k) )
+    assert( key_check, strl(["map key missing [", k, "]."]) )
+    second(m[map_get_index(m, k)]);
 
 //! Get a list of all map keys.
 /***************************************************************************//**
@@ -170,6 +188,139 @@ function map_merge
           [k, map_get_value(m2, k)]
     ];
 
+//! Update existing key-value pairs of a map.
+/***************************************************************************//**
+  \param    m <map> A list of N key-value map pairs.
+  \param    u <map> The update list of N key-value map pairs.
+  \param    ignore <boolean> Ignore the entries of \p u missing from \p m.
+
+  \returns  \<value> The key value-pairs of \p m together with the
+            updates from \p u that are present in \p m.
+*******************************************************************************/
+function map_update
+(
+  m,
+  u,
+  ignore = false
+) = let
+    (
+      mk = map_get_keys(m),
+      uk = map_get_keys(u),
+
+      ak = common(uk, not_common(mk, uk)),
+
+      missing_keys = is_empty( ak ) || ignore
+    )
+    assert
+    (
+      missing_keys,
+      strl(["Update includes keys missing in map = ", ak])
+    )
+    [
+      for (k = map_get_keys(m) )
+        if ( map_exists(u, k) )
+          [k, map_get_value(u, k)]
+        else
+          [k, map_get_value(m, k)]
+    ];
+
+//! Compare the keys and/or values of two maps to test for equality.
+/***************************************************************************//**
+  \param    m1 <map> A list of N key-value map pairs.
+  \param    m2 <map> A list of N key-value map pairs.
+  \param    keys <boolean> Comparison includes the map keys.
+  \param    values <boolean> Comparison includes the map values.
+  \param    sort <boolean> Sort prior to the comparison.
+
+  \returns  <boolean> \b true when equal and \b false otherwise.
+*******************************************************************************/
+function map_equal(m1, m2, keys=true, values=false, sort=true) =
+  let
+  (
+    k = ! keys ? true
+      : let
+        (
+          k1  = map_get_keys(m1),
+          k2  = map_get_keys(m2),
+
+          kc1 = sort ? sort_q2(k1) : k1,
+          kc2 = sort ? sort_q2(k2) : k2
+        )
+        (kc1 == kc2),
+
+    v = ! values ? true
+      : let
+        (
+          v1  = map_get_values(m1),
+          v2  = map_get_values(m2),
+
+          vc1 = sort ? sort_q2(v1) : v1,
+          vc2 = sort ? sort_q2(v2) : v2
+        )
+        (vc1 == vc2)
+  )
+  ( k && v );
+
+//! Create a map from two selected columns of a data table.
+/***************************************************************************//**
+  \param    t <table> A 2d data matrix.
+  \param    keys <integer> The table column for the map keys.
+  \param    values <integer> The table column for the map values.
+
+  \returns  <map> A list of N key-value map pairs.
+*******************************************************************************/
+function map_from_table(t, keys=0, values=1) =
+  let
+  (
+    k = select_e (t, keys),
+    v = select_e (t, values)
+  )
+  merge_p([k, v], j=true);
+
+//! Create a table from a list of maps with common keys.
+/***************************************************************************//**
+  \param    ml <map-list> A list of one or more maps.
+  \param    sort <boolean> Sort the output by key.
+
+  \returns  \<table> The table row data matrix (C-columns x R-Rows),
+            where \p C is the number of maps and \p R is the number of
+            map keys.
+*******************************************************************************/
+function map_to_table
+(
+  ml,
+  sort = false
+) = let
+    (
+      // first map
+      m0 = first( ml ),
+
+      // first map keys
+      k0 = map_get_keys( m0 ),
+
+      // vector of map sizes
+      sv = [for (m = ml) map_get_size(m)],
+
+      // vector of map key differences
+      kv = [for (m = ml) not_common(k0, map_get_keys(m))]
+    )
+    assert
+    ( // all map sizes must be equal
+      all_equal( cv = map_get_size(m0), v = sv ),
+      strl([ "All maps must be of equal size; sv=[", sv, "]." ])
+    )
+    assert
+    ( // all map must have same keys (all keys must be in common)
+      all_equal( cv = empty_lst, v = kv ),
+      strl([ "All maps must have same keys; kv=[", kv, "]." ])
+    )
+    [ // for each key
+      for (k = sort ? sort_q2( k0 ) : k0)
+      [ // output the key value of each map
+        k, for (m = ml) map_get_value(m, k)
+      ]
+    ];
+
 //! Perform basic format checks on a map and return errors.
 /***************************************************************************//**
   \param    m <map> A list of N key-value map pairs.
@@ -202,22 +353,8 @@ function map_errors
           )
     ],
 
-    // (2) each key must be a string.
+    // (2) no repeat key identifiers.
     ec2 =
-    [
-      for ( i = [0:map_get_size(m)-1] )
-      let ( entry = m[i], key = first(entry) )
-        if (  is_string(key) == false )
-          str
-          (
-            "map index ", i,
-            ", entry=", entry,
-            ", key=[", key,"] is not a string."
-          )
-    ],
-
-    // (3) no repeat key identifiers.
-    ec3 =
     [
       for ( i = [0:map_get_size(m)-1] )
       let ( entry = m[i], key = first(entry) )
@@ -229,7 +366,7 @@ function map_errors
           )
     ]
   )
-  concat(ec1, ec2, ec3);
+  concat(ec1, ec2);
 
 //! Perform basic format checks on a map and output errors to console.
 /***************************************************************************//**
@@ -270,19 +407,7 @@ module map_check
       )
     );
 
-    // (2) each key must be a string.
-    assert
-    (
-      is_string(key),
-      str
-      (
-        "map index ", i,
-        ", entry=", entry,
-        ", key=[", key,"] is not a string."
-      )
-    );
-
-    // (3) no repeat key identifiers.
+    // (2) no repeat key identifiers.
     if ( len(first(search([key], m, 0, 0))) > 1 )
       log_warn
       (
@@ -314,6 +439,7 @@ module map_check
   \param    m <map> A list of N key-value map pairs.
   \param    sort <boolean> Sort the output by key.
   \param    number <boolean> Output index number.
+  \param    align <boolean> pad keys for right alignment.
   \param    p <integer> Number of places for zero-padded numbering.
 *******************************************************************************/
 module map_dump
@@ -321,28 +447,43 @@ module map_dump
   m,
   sort = false,
   number = true,
+  align = true,
   p = 3
 )
 {
   if ( map_get_size(m) > 0 )
   {
-    keys = map_get_keys(m);
-    maxl = max( [for (i = keys) len(i)] ) + 1;
+    keys  = map_get_keys(m);
 
-    for (key = (sort == true) ? sort_q(keys) : keys)
+    // calculate max key field length when aligning
+    maxl  = align ?
+            max ( [ for (i = keys) is_string(i) ? len(i) : len( strl([i]) ) ] )
+          : 0;
+
+    for (k = (sort == true) ? sort_q(keys) : keys)
     {
-      idx = map_get_index(m, key);
+      // numbering with prefixed zero-padding
+      num = let
+            (
+              i = map_get_index(m, k),
+              z = chr( consts(p - len(str(i)), 48) )
+            )
+            number ?
+            str(z, i, ": ")
+          : empty_str;
 
-      log_echo
-      (
-        str
-        (
-          number ? chr(consts(p-len(str(idx)), 48)) : empty_str,
-          number ? str(idx, ": ") : empty_str,
-          chr(consts(maxl-len(key), 32)), "'", key, "' = ",
-          "'", map_get_value(m, key), "'"
-        )
-      );
+      // right align key with space padding
+      pad = let
+            (
+              s = is_string(k) ? len(k) : len( strl([k]) )
+            )
+            align ?
+            chr( consts(maxl - s, 32) )
+          : empty_str;
+
+      val = map_get_value(m, k);
+
+      log_echo ( str( num, pad, "'", k, "' = ", "'", val, "'" ) );
     }
   }
 
@@ -389,44 +530,41 @@ module map_write
 {
   if ( map_get_size(m) > 0 )
   {
-    // heading
-    log_echo
-    (
-      str
-      (
-        number ? str(thn,fs) : empty_str,
-        "key", fs,
-        "value"
-      )
-    );
+    num = number ? str(thn, fs) : empty_str;
 
-    // data
+    // map heading
+    log_echo ( str ( num, "key", fs, "value" ) );
+
+    // map data
     keys = map_get_keys(m);
-    maxl = max( [for (i = keys) len(i)] ) + 1;
 
-    for (key = (sort == true) ? sort_q(keys) : keys)
+    for (k = (sort == true) ? sort_q(keys) : keys)
     {
-      idx = map_get_index(m, key);
-
       if
       (
         is_undef( ks ) ||
-        is_number( first( search( [key], ks, 1, 0 ) ) )
+        is_number( first( search( [k], ks, 1, 0 ) ) )
       )
-      log_echo
-      (
-        str
-        (
-          (number == true) ?
-            str(strl_html([idx], p=[index_tags]),fs)
-          : empty_str,
-          strl_html(key, p=[key_tags]), fs,
-          strl_html([map_get_value(m, key)], p=[value_tags]), fs
-        )
-      );
+      {
+        num = let
+              (
+                i = map_get_index(m, k)
+              )
+              number ?
+              str( strl_html([i], p=[index_tags]), fs )
+            : empty_str;
+
+        key = strl_html([k], p=[key_tags]);
+
+        val = strl_html([map_get_value(m, k)], p=[value_tags]);
+
+        log_echo ( str ( num, key, fs, val, fs ) );
+      }
     }
   }
 }
+
+//! @}
 
 //! @}
 //! @}

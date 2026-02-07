@@ -751,7 +751,7 @@ BEGIN_SCOPE example_mount_screw_tab;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <parts/3d/enclosure/mounts.scad>;
+    include <parts/3d/fastener/mounts.scad>;
 
     $fn = 36;
 
@@ -783,7 +783,7 @@ BEGIN_SCOPE example_mount_screw_slot;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <parts/3d/enclosure/mounts.scad>;
+    include <parts/3d/fastener/mounts.scad>;
 
     $fn = 36;
 
@@ -826,7 +826,7 @@ BEGIN_SCOPE example_mount_screw_slot_md;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <parts/3d/enclosure/mounts.scad>;
+    include <parts/3d/fastener/mounts.scad>;
 
     $fn = 36;
 
@@ -858,7 +858,7 @@ BEGIN_SCOPE example_mount_screw_post;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <parts/3d/enclosure/mounts.scad>;
+    include <parts/3d/fastener/mounts.scad>;
 
     $fn = 36;
 

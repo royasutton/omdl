@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2025
+  \date   2015-2026
 
   \copyright
 
@@ -63,14 +63,13 @@
 
 //----------------------------------------------------------------------------//
 
-//! Return an element of an iterable when it exists or a default value otherwise.
+//! Returns an element from an iterable if it exists, or a default value if not.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
   \param    i <integer> An element index.
   \param    d \<value> A default value.
 
-  \returns  (1) \<value> <tt>v[i]</tt> when it is defined or \p d
-                otherwise.
+  \returns  (1) <value> <tt>v[i]</tt> if it is defined, or \p d otherwise.
 *******************************************************************************/
 function defined_e_or
 (
@@ -81,15 +80,15 @@ function defined_e_or
   : !is_undef( v[i] ) ? v[i]
   : d;
 
-//! Return the list element or scalar numeric value, if either is defined, otherwise the default value.
+//! Returns the list element or scalar numeric value if defined, otherwise returns the default value.
 /***************************************************************************//**
   \param    v \<value> A value.
   \param    i <integer> An element index.
   \param    d \<value> A default value.
 
-  \returns  (1) <number> <tt>v</tt> when it is a scalar numeric value.
-            (2) \<value> <tt>v[i]</tt> when it is defined, or the
-                default value \p d otherwise.
+  \returns  (1) <number> <tt>v</tt> if it is a scalar numeric value;
+            (2) <value> <tt>v[i]</tt> if it is defined, otherwise the
+                default value \p d.
 *******************************************************************************/
 function defined_eon_or
 (
@@ -100,6 +99,46 @@ function defined_eon_or
   : !is_iterable(v) ? d
   : !is_undef( v[i] ) ? v[i]
   : d;
+
+//! Returns an element from an iterable if it exists and is a iterable, otherwise returns a default value.
+/***************************************************************************//**
+  \param    v \<value> A value.
+  \param    i <integer> An element index.
+  \param    d \<value> A default value.
+  \param    n <integer> The optional expected element length.
+
+  \returns  (1) <tt>v[i]</tt>, a <list-n> if the element is iterable of
+                length \p n (or \<list> if \p n is unspecified),
+            (2) or the default value \p d if the element is not defined.
+*******************************************************************************/
+function defined_ei_or
+(
+  v,
+  i,
+  d,
+  n
+) = !is_iterable(v) ? d
+  : !is_undef( v[i] ) && is_iterable( v[i] )
+    ? is_undef( n ) ? v[i]
+    : (len( v[i] ) == n) ? v[i]
+      : d
+  : d;
+
+//! Find all occurrences of a match value in an iterable value.
+/***************************************************************************//**
+  \param    mv \<value> A match value.
+  \param    v <iterable> An iterable value.
+
+  \returns  (1) \<list> A list of indexes where elements match \p mv.
+            (2) Returns \b empty_lst when no element of \p v matches
+                \p mv or when \p v is not iterable.
+*******************************************************************************/
+function find_all
+(
+  mv,
+  v
+) = !is_iterable(v) ? empty_lst
+  : [ for (j = [0 : len(v)-1]) if (v[j] == mv) j ];
 
 //! Find the occurrences of a match value in an iterable value.
 /***************************************************************************//**
@@ -511,12 +550,12 @@ function reverse
   : is_empty(v) ? empty_lst
   : [for (i = [len(v)-1 : -1 : 0]) v[i]];
 
-//! Shift the elements of an iterable value.
+//! Circularly shift the elements of an iterable, with an optional element drop.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
   \param    n <integer> The element shift count.
   \param    r <boolean> Shift the elements to the right (or left).
-  \param    c <boolean> Perform circular shift (or drop).
+  \param    d <boolean> Drop elements outside of iterable value shift window.
 
   \returns  (1) \<list> A list containing the elements of \p v shifted
                 by \p n elements.
@@ -526,12 +565,50 @@ function reverse
 
     The shift count \p n may be positive or negative.
 *******************************************************************************/
-function shift
+function shift_cd
 (
   v,
   n = 0,
   r = true,
-  c = true
+  d = false
+) = !is_iterable(v) ? undef
+  : let
+    (
+      l = len(v),
+      s = abs(n),           // absolute magnitude
+      m = s % l,            // circular magnitude
+      p = (n > 0) ? r : !r  // shift direction
+    )
+    // drop-shift and shift magnitude greater than element count
+    ( d && s > l-1 ) ? empty_lst
+  : ( p ) ?
+    // shift right
+    [ if (m && !d) for (i = [l-m : l-1]) v[i], for (i = [0 : l-1-m]) v[i] ]
+    // shift left
+  : [ for (i = [m : l-1]) v[i], if (m && !d) for (i = [0 : m-1]) v[i] ];
+
+//! Shift-in a value to the elements of a given iterable value.
+/***************************************************************************//**
+  \param    v <iterable> The iterable value.
+  \param    n <integer> The element shift count.
+  \param    r <boolean> Shift the elements to the right (or left).
+  \param    i \<value> The value to shit-in on the left or right.
+
+  \returns  (1) \<list> A list containing the elements of \p v shifted
+                by \p n elements with the value \p i inserted on the
+                left or right side of the given iterable value.
+            (2) Returns \b undef when \p v is not defined or is not iterable.
+
+  \details
+
+    The shift count \p n may be positive or negative.
+*******************************************************************************/
+function shift_ci
+(
+  v,
+  n = 0,
+  r = true,
+  i
 ) = !is_iterable(v) ? undef
   : let
     (
@@ -540,14 +617,14 @@ function shift
       m = s % l,            // circular magnitude
       d = (n > 0) ? r : !r  // shift direction
     )
-    // non-circular and shift greater than elements
-    (c == false && s > l-1) ? empty_lst
+    // shift greater than elements
+    ( s > l-1 ) ? is_undef(i) ? consts(l, u=true) : consts(l, i)
     // shift direction
-  : (d == true) ?
+  : ( d ) ?
     // shift right
-    [ if (m && c) for (i = [l-m : l-1]) v[i], for (i = [0 : l-1-m]) v[i] ]
+    [ if (m) for (j = [0 : s-1]) i, for (j = [0 : l-1-m]) v[j] ]
     // shift left
-  : [ for (i = [m : l-1]) v[i], if (m && c) for (i = [0 : m-1]) v[i] ];
+  : [ for (j = [m : l-1]) v[j], if (m) for (j = [0 : s-1]) i ];
 
 //! Select a range of elements from an iterable value.
 /***************************************************************************//**
@@ -675,6 +752,40 @@ function append_e
   : (j == true) ? concat( [concat(ce, nv)], append_e(nv, tailn(v), r, j, l) )
   :               concat(  concat(ce, nv) , append_e(nv, tailn(v), r, j, l) );
 
+//! Append a value to the end or beginning of an iterable value.
+/***************************************************************************//**
+  \param    nv \<value> The value to append.
+  \param    v <iterable> An iterable value.
+  \param    n <integer> The element shift count.
+  \param    r <boolean> Shift the elements to the right (or left).
+
+  \returns  (1) \<list> A list containing the elements of \p v shifted
+                by \p n elements with the value \p a appended the given
+                iterable value as specified.
+            (2) Returns \b undef when \p v is not defined or is not iterable.
+
+  \details
+
+    The shift count \p n may be positive or negative.
+*******************************************************************************/
+function append_v
+(
+  nv,
+  v,
+  n = 0,
+  r = false
+) = !is_iterable(v) ? undef
+  : let
+    (
+      s = abs(n),           // absolute magnitude
+      d = (n > 0) ? r : !r  // shift direction
+    )
+    ( d ) ?
+    // shift right, prepend
+    [ for (j = [0 : s-1]) nv, for (j = v) j ]
+    // shift left, append
+  : [ for (j = v) j, for (j = [0 : s-1]) nv ];
+
 //! Insert a new value into an iterable value.
 /***************************************************************************//**
   \param    nv \<value> A new value to insert.
@@ -682,13 +793,13 @@ function append_e
 
   \param    i <integer> The index insert position.
 
-  \param    mv <list | string | value> Matched value candidates.
+  \param    mv <list | string | value> Match value candidates.
   \param    mi <integer> The matched selection index.
 
   \param    s <boolean> Element matching search method.
   \param    si <integer> The search element index when matching.
 
-  \returns  (1) \<list> A list with \p nv inserted into \p v at the
+  \returns  (1) \<list> The list with \p nv inserted into \p v at the
                 specified position.
             (2) Returns \b undef when no value of \p mv exists in
                 \p v, when <tt>(mi + 1)</tt> exceeds the matched
@@ -741,13 +852,61 @@ function insert
     // result valid iff a valid insert position was specified
     is_undef(p) ? undef : concat(h, nv, t);
 
+//! Delete the first occurrence(s) of a matched value from an iterable value.
+/***************************************************************************//**
+  \param    v <iterable> The iterable value.
+
+  \param    mv \<value> The match value.
+
+  \param    mc <integer> A match count.
+            For <tt>(mc>=1)</tt>, remove the first \p mc matches.
+            For <tt>(mc=0)</tt>, remove all matches.
+
+  \returns  (1) \<list> The list with the first \p mc occurrences of the
+                match value removed.
+            (2) Returns \b undef when \p v is not defined, or is not
+                iterable.
+*******************************************************************************/
+function delete_first
+(
+  v,
+  mv,
+  mc = 1
+) = !is_iterable(v) ? undef
+  : let
+    (
+      p = find_all(mv, v),
+      q = (mc == 0) ? p : firstn(p, mc)
+    )
+    [
+      for (j = [0 : len(v)-1])
+        if (is_empty(find_all(j, q)))
+          v[j]
+    ];
+
+//! Delete each match value from an iterable value.
+/***************************************************************************//**
+  \param    v <iterable> An iterable value.
+
+  \param    mv <iterable> The list of match values.
+
+  \returns  (1) \<list> The list with all occurrence of the match
+                value removed.
+*******************************************************************************/
+function delete_each
+(
+  v,
+  mv
+) = is_empty(mv) ? v
+  : delete_each( delete_first(v=v, mv=first(mv)), tailn(mv) );
+
 //! Delete elements from an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
 
   \param    i <range | list | integer> Deletion Indexes.
 
-  \param    mv <list | string | value> Matched value candidates.
+  \param    mv <list | string | value> Match value candidates.
   \param    mc <integer> A match count.
             For <tt>(mc>=1)</tt>, remove the first \p mc matches.
             For <tt>(mc<=0)</tt>, remove all matches.
@@ -755,7 +914,7 @@ function insert
   \param    s <boolean> Element matching search method.
   \param    si <integer> The element column index when matching.
 
-  \returns  (1) \<list> A list with all specified elements removed.
+  \returns  (1) \<list> The list with all specified elements removed.
             (2) Returns \b undef when \p i does not map to an element
                 of \p v, when \p v is not defined, or is not iterable.
 
@@ -810,6 +969,42 @@ function delete
         if (is_empty(find(j, p))) v[j]
     ];
 
+//! Replace the first occurrence(s) of a matched value in iterable value.
+/***************************************************************************//**
+  \param    v <iterable> The iterable value.
+
+  \param    mv \<value> The match value.
+  \param    nv \<value> The new value.
+
+  \param    mc <integer> A match count.
+            For <tt>(mc>=1)</tt>, replaces the first \p mc matches.
+            For <tt>(mc=0)</tt>, replaces all matches.
+
+  \returns  (1) \<list> The list with the first \mc occurrences of the
+                match value replaced by \p nv.
+            (2) Returns \b undef when \p v is not defined, or is not
+                iterable.
+*******************************************************************************/
+function replace_first
+(
+  v,
+  mv,
+  nv,
+  mc = 1
+) = !is_iterable(v) ? undef
+  : let
+    (
+      p = find_all(mv, v),
+      q = (mc == 0) ? p : firstn(p, mc)
+    )
+    [
+      for (j = [0 : len(v)-1])
+        if (is_empty(find_all(j, q)))
+          v[j]
+        else
+          nv
+    ];
+
 //! Strip all matching values from an iterable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
@@ -830,7 +1025,7 @@ function strip
 //! Apply a binary mask to an interable value.
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
-  \param    m <iterable> A binary mask.
+  \param    m <iterable> A binary mask list (or string) of \p 0 or \p 1.
   \param    r <boolean> Right align the mask to \p v value.
   \param    o <integer> A positive or negative mask offset.
   \param    u \<value> The value assigned to elements of the mask that
@@ -898,6 +1093,49 @@ function unique
     // set s=false to use find() for single element matching
   : exists(last(v), headn(v), s=false) ? unique(headn(v))
   : concat(unique(headn(v)), lastn(v));
+
+//! Return a list of the common elements of two iterable values.
+/***************************************************************************//**
+  \param    v1 <iterable> The first iterable value.
+  \param    v2 <iterable> The second iterable value.
+
+  \param    e <iterable> The common elements list (used for recursion
+            value tracking or may be initialed by user).
+
+  \returns  (1) \<list> The list of elements common to both iterable
+                values as list intersection with a one-to-one
+                correspondence among the elements.
+*******************************************************************************/
+function common
+(
+  v1,
+  v2,
+  e = empty_lst
+) = let( mv = first(v1) )
+    is_empty(v1) ? e
+  : (find_all(mv, v2) != empty_lst) ?
+    common( tailn(v1), delete_first(v=v2, mv=mv), concat(e, [mv]) )
+  : common( tailn(v1), delete_first(v=v2, mv=mv), e);
+
+//! Return a list of the elements not present in both iterable values.
+/***************************************************************************//**
+  \param    v1 <iterable> The first iterable value.
+  \param    v2 <iterable> The second iterable value.
+
+  \returns  (1) \<list> The list of elements that do not exists in both
+                iterable values as a list difference with a one-to-one
+                correspondence among the elements.
+*******************************************************************************/
+function not_common
+(
+  v1,
+  v2
+) = let
+    (
+      d1 = delete_each(v1, v2),
+      d2 = delete_each(v2, v1)
+    )
+    concat(d1, d2);
 
 
 //! @}
@@ -1151,7 +1389,7 @@ BEGIN_SCOPE validate;
         [["a","b","c"],[7,8,9],[4,5,6],[1,2,3]],            // t10
         [15,14,13,12,11,10,9,8,7,6,5,4,3,2,1,0]             // t11
       ],
-      ["shift_r1",
+      ["shift_cd_r1",
         undef,                                              // t01
         empty_lst,                                          // t02
         undef,                                              // t03
@@ -1164,7 +1402,7 @@ BEGIN_SCOPE validate;
         [["a","b","c"],[1,2,3],[4,5,6],[7,8,9]],            // t10
         [15,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]             // t11
       ],
-      ["shift_l1",
+      ["shift_cd_l1",
         undef,                                              // t01
         empty_lst,                                          // t02
         undef,                                              // t03
@@ -1319,6 +1557,8 @@ BEGIN_SCOPE validate;
 
     for (id=test_ids) table_validate( db, id, "defined_e_or_DE3", 1, defined_e_or( v1(db,id), 3, "default" ) );
     for (id=test_ids) table_validate( db, id, "defined_e_or_DE3", 1, defined_eon_or( v1(db,id), 3, "default" ) );
+    // defined_el_or()
+    // find_all()
     for (id=test_ids) table_validate( db, id, "find_12", 1, find( [1,2], v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "count_S1", 1, count( 1, v1(db,id), true ) );
     for (id=test_ids) table_validate( db, id, "exists_S1", 1, exists( 1, v1(db,id), true ) );
@@ -1337,16 +1577,23 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "headn_1", 1, headn( v1(db,id), n=1 ) );
     for (id=test_ids) table_validate( db, id, "tailn_1", 1, tailn( v1(db,id), n=1 ) );
     for (id=test_ids) table_validate( db, id, "reverse", 1, reverse( v1(db,id) ) );
-    for (id=test_ids) table_validate( db, id, "shift_r1", 1, shift( v1(db,id), n=1, r=true ) );
-    for (id=test_ids) table_validate( db, id, "shift_l1", 1, shift( v1(db,id), n=1, r=false ) );
+    for (id=test_ids) table_validate( db, id, "shift_cd_r1", 1, shift_cd( v1(db,id), n=1, r=true ) );
+    for (id=test_ids) table_validate( db, id, "shift_cd_l1", 1, shift_cd( v1(db,id), n=1, r=false ) );
+    // shift_ci()
     for (id=test_ids) table_validate( db, id, "select_r_02", 1, select_r( v1(db,id), i=[0:2] ) );
     for (id=test_ids) table_validate( db, id, "sequence_ns_31", 1, sequence_ns( v1(db,id), n=3, s=1 ) );
     for (id=test_ids) table_validate( db, id, "append_e_T0", 1, append_e( 0, v1(db,id) ) );
+    // append_v()
     for (id=test_ids) table_validate( db, id, "insert_T0", 1, insert( 0, v1(db,id), mv=["x","r","apple","s",[2,3],5] ) );
+    // delete_first()
+    // delete_each()
     for (id=test_ids) table_validate( db, id, "delete_T0", 1, delete( v1(db,id), mv=["x","r","apple","s",[2,3],5] ) );
+    // replace_first()
     for (id=test_ids) table_validate( db, id, "strip", 1, strip( v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "mask_01R", 1, mask( v1(db,id), [0,1], r=true ) );
     for (id=test_ids) table_validate( db, id, "unique", 1, unique( v1(db,id) ) );
+    // common()
+    // not_common()
 
     // end_include
   END_OPENSCAD;

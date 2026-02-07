@@ -391,7 +391,7 @@ module pg_ngon
 
 //! A polygon triangle specified by three coordinate points with vertex rounding.
 /***************************************************************************//**
-  \param    c <coords-list-3> A list, [v1, v2, v3], the vertex coordinates in 2d.
+  \param    c <points-list-3> A list, [v1, v2, v3], the vertex coordinates in 2d.
 
   \amu_eval ( ${triangle_common_api} )
 
@@ -642,7 +642,7 @@ BEGIN_SCOPE diagram_label;
       for (i = [0 : len(c)-1])
       {
         cv = c[i];
-        os = shift(shift(v=c, n=i, r=false), 1, r=false, c=false);
+        os = shift_cd(shift_cd(v=c, n=i, r=false), 1, r=false, d=true);
 
         if ( !is_empty( find( mv=i, v=vl )) )
         draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s*1, cmv=s);

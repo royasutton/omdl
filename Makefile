@@ -82,14 +82,14 @@ doxygen_depends_buildinfo         := $(true)
 targets_depends_project           := $(false)
 generate_latex                    := $(false)
 
-release_root                      := release
+release_root                      := ../omdl-release
 release_project                   := $(false)
 release_library                   := $(false)
 release_archive_project           := $(false)
 release_archive_doxygen           := $(true)
 release_archive_scopes            := $(false)
 
-backup_root                       := backups
+backup_root                       := ../omdl-backup
 
 #------------------------------------------------------------------------------#
 # Library Build Configuration
