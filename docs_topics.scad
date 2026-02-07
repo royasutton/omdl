@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2018-2025
+  \date   2018-2026
 
   \copyright
 
@@ -58,14 +58,82 @@
 
   \section architectural_layers Architectural Layers
 
-  omdl is organized into logical layers. Each layer builds on the
-  capabilities of the previous one.
+  The omdl library is organized into a set of logical layers, where
+  each successive layer builds upon the capabilities provided by the
+  previous one. The development and documentation workflow relies on a
+  dedicated toolchain composed of custom utilities together with freely
+  available open-source software, including openscad-amu, Doxygen, GNU
+  Make, GNU Bash, and their prerequisites.
 
-  -# Core Utilities Layer
-  -# Geometry Primitives Layer
-  -# Mechanical Feature Layer
-  -# Assembly Layer
-  -# Documentation and Validation Tooling
+  \dot Library Tools, Components, and Layers
+  digraph omdl_architecture
+  {
+    graph [fontname="Helvetica", fontsize=12, style="dashed", color="gray"];
+    node  [fontname="Helvetica", fontsize=10, shape=record, style="rounded"];
+    edge  [fontname="Helvetica", fontsize=8, arrowhead=vee];
+
+    subgraph cluster_layers
+    {
+      subgraph cluster_tools
+      {
+        label = "Tooling";
+
+        node [fontname="Helvetica", fontsize=10, shape=box, peripheries=2, style="filled"];
+
+        openscad_amu [label="openscad-amu" URL="https://royasutton.github.io/openscad-amu"];
+        doxygen [label="Doxygen" URL="http://www.doxygen.nl"];
+      }
+
+      assemblies
+      [
+        label = "\
+        { \
+          Assembly Layer |\
+          - Design intent\l \
+          - Multi-part constructs\l \
+        }"
+      ];
+
+      features
+      [
+        label = " \
+        { \
+          Mechanical Feature Layer | \
+          - Components & parts\l \
+          - Engineering conventions\l \
+        }"
+      ];
+
+      primitives
+      [
+        label=" \
+        { \
+          Geometry Primitives Layer | \
+          - Parametric solids\l \
+          - Structural profiles\l \
+        }"
+      ];
+
+      core
+      [
+        label=" \
+        { \
+          Core Utilities Layer | \
+          - Configuration management\l \
+          - Computations & transformations\l \
+          - Shared conventions & constants\l \
+        }"
+      ];
+
+      doxygen -> assemblies [style="invis"];
+      openscad_amu -> assemblies [style="invis"];
+
+      assemblies -> features   [label="uses"];
+      features   -> primitives [label="builds from"];
+      primitives -> core       [label="depends on"];
+    }
+  }
+  \enddot
 
   \section module_philosophy Module Design Philosophy
 
@@ -89,7 +157,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page installing Building and installing
+  \page building_and_installing Building and installing
 
   A script is provided to build the library documentation. If the setup
   script does not detect that [openscad-amu], the development environment
@@ -140,18 +208,22 @@
 
   \section module_inclusion Module Inclusion Workflow
 
-  The standard library includes are wrapped into a base include file,
-  omdl-base.scad. This base file contains only the minimal set of
-  commonly used library features to keep projects lightweight. Any
-  additional modules must be explicitly included before use, allowing
-  developers to selectively import functionality as needed.
+  he standard library includes are encapsulated within the base include
+  file omdl-base.scad. This file provides only the minimal subset of
+  commonly used functionality, consisting primarily of core utilities
+  and geometric primitives, in order to maintain a lightweight
+  dependency footprint. Modules outside of this base set are not
+  imported implicitly and must be explicitly included prior to use.
+  This approach allows developers to control library scope and
+  selectively import functionality as required by a given project.
 
   \amu_shell omdl_base    ( "grep include omdl-base.scad | awk -v FS='(<|>)' '{print $2}'" ++rmnl )
   \amu_word omdl_base_cnt ( words="${omdl_base}" t=" " r="^" ++count)
   \amu_word omdl_base     ( words="${omdl_base}" t=" " r="^" ++list)
   \amu_table
   (
-    id="omdl_base" table_caption="Standard base includes"
+    id="omdl_base"
+    table_caption="Standard includes: Core utilities and geometric primitives"
     columns="3" cell_texts="${omdl_base}"
   )
 
@@ -195,24 +267,24 @@
   /+
     add to main conventions page until the section contents grows
 
-    \li \subpage dt
+    \li \subpage data_types
 
-  \page dt Data types and values
+  \page data_types Data types and values
   \tableofcontents
   +/
 
-    \li \subpage base_data_types
-    \li \subpage index_selection
-    \li \subpage euclidean_data_types
+    \li \subpage data_types_base
+    \li \subpage data_types_index
+    \li \subpage data_types_euclidean
 *******************************************************************************/
 
-//
+//----------------------------------------------------------------------------//
 // Data types and values
-//
+//----------------------------------------------------------------------------//
 
 // Base types and values
 /***************************************************************************//**
-  \page base_data_types Base types and values
+  \page data_types_base Base types and values
 
   OpenSCAD defines a value as one of the following: a number, boolean,
   string, range, vector, or the undefined value. Within omdl, what the
@@ -240,7 +312,7 @@
   | [nan]     | a numerical value which is not a number             |
   | [inf]     | a numerical value which is infinite                 |
 
-  \subsubsection type_specification Specification conventions
+  \subsubsection data_types_conventions Specification conventions
 
   For clarity and consistency, the following naming conventions are
   used when referring to common [data types] within the library.
@@ -300,7 +372,7 @@
   [odd]: https://en.wikipedia.org/wiki/Parity_(mathematics)
 
   [decimal]: https://en.wikipedia.org/wiki/Decimal
-  [index]: \ref index_selection
+  [index]: \ref data_types_index
   [datastruct]: https://en.wikipedia.org/wiki/Data_structure
   [data]: https://en.wikipedia.org/wiki/Data
 
@@ -312,7 +384,7 @@
 
 // Index sequence generation
 /***************************************************************************//**
-  \page index_selection Element index selection
+  \page data_types_index Element index selection
 
   The data type index describes how one or more elements of a list are
   selected by their index positions. Rather than requiring indices to
@@ -359,7 +431,7 @@
 
 // Euclidean space data types
 /***************************************************************************//**
-  \page euclidean_data_types Euclidean space data types
+  \page data_types_euclidean Euclidean space data types
 
   For [geometric] specifications and [geometric algebra], omdl adopts
   the following type definitions and conventions.
@@ -385,19 +457,19 @@
   | line-Nd     | a line in an 'N' dimensional space                |
   | matrix-MxN  | a 'M' by 'N' matrix of values                     |
 
-  When a type is specified in the plural form, such as \b points, it
-  implies a list of the specified type. For example, \b points is the
-  same as a \b point-list.
+  When a type is specified in plural form, such as \b points, it
+  implies a list of the specified type. For example, \b points is
+  equivalent to a \b point-list.
 
-  \subsubsection dt_line Lines and vectors
+  \subsubsection data_types_lines Lines and vectors
 
-  A \b vector has a direction and magnitude in space. A \b line, too,
-  has direction and magnitude, but also has location, as it starts at
-  one point in space and ends at another. Although a line can be
-  specified in one dimension, most library functions operate on two
-  and/or three dimensional lines. Operators in omdl make use of a
-  common convention for specifying Euclidean vectors and straight
-  lines as summarized in the following table:
+  A \b vector has both direction and magnitude in space. A \b line
+  likewise has direction and magnitude, but also includes location, as
+  it begins at one point in space and ends at another. Although a line
+  may be defined in one dimension, most library functions operate on
+  two- and/or three-dimensional lines. Operators in omdl follow a
+  common convention for representing Euclidean vectors and straight
+  lines, as summarized in the following table:
 
   Given two points \c 'p1' and \c 'p2', in space:
 
@@ -409,7 +481,7 @@
 
   The functions is_point(), is_vector(), is_line(), line_dim(),
   line_tp(), line_ip(), vol_to_point(), and vol_to_origin(), are
-  available for type identification and convertion.
+  available for type identification and conversion.
 
   \b Example
 
@@ -429,25 +501,26 @@
   v1 == v2 == v3, iff p1 == origin3d
   \endcode
 
-  \subsubsection dt_plane Planes
+  \subsubsection data_types_planes Planes
 
-  Operators in omdl use a common convention for specifying planes.
-  A \b plane is identified by a [point] on its surface together with
-  its [normal] vector specified by [pnorm], which is discussed in the
-  following section. A list with a point and normal together specify
-  the plane as follows:
+  Operators in omdl follow a common convention for defining planes. A
+  \b plane is specified by a [point] located on its surface together
+  with a [normal] vector, denoted by \b pnorm, which is described in
+  the following section. The plane definition is therefore represented
+  as a list containing both the point and its corresponding normal
+  vector, as shown below:
 
   | name    | form                |
   |:-------:|:-------------------:|
   | [plane] | [[point], [pnorm]]  |
 
-  \subsubsection dt_pnorm Planes' normal
+  \subsubsection data_types_planes_normal Planes' normal
 
-  The data type \b pnorm refers to a convention for specifying a
-  direction vector that is perpendicular to a plane. Given three
-  points \c 'p1', \c 'p2', \c 'p3', and three vectors \c 'v1',
-  \c 'v2', \c 'vn', the planes' [normal] can be specified in any of
-  the following forms:
+  The data type \b pnorm defines a convention for specifying a
+  direction vector that is perpendicular to a plane. Given three points
+  \c 'p1', \c 'p2', \c 'p3', and three vectors \c 'v1', \c 'v2', \c
+  'vn', the plane [normal] may be expressed using any of the following
+  equivalent forms:
 
   | no. | form          | description                                   |
   |:---:|:-------------:|:----------------------------------------------|
@@ -457,7 +530,7 @@
   |  4  | [p1, p2, p3]  | three (or more) non-collinear coplanar points |
 
   The functions is_plane() and plane_to_normal() are available for
-  type identification and convertion.
+  type identification and conversion.
 
   \b Example
 
@@ -496,11 +569,11 @@
   [point]: https://en.wikipedia.org/wiki/Point_(geometry)
   [vector]: https://en.wikipedia.org/wiki/Euclidean_vector
   [line wiki]: https://en.wikipedia.org/wiki/Line_(geometry)
-  [line]: \ref dt_line
+  [line]: \ref data_types_lines
   [normal]: https://en.wikipedia.org/wiki/Normal_(geometry)
-  [pnorm]: \ref dt_pnorm
+  [pnorm]: \ref data_types_planes_normal
   [plane wiki]: https://en.wikipedia.org/wiki/Plane_(geometry)
-  [plane]: \ref dt_plane
+  [plane]: \ref data_types_planes
   [matrix]: https://en.wikipedia.org/wiki/Matrix_(mathematics)
 *******************************************************************************/
 
@@ -513,12 +586,13 @@
 
   ### Scripts and Results ###
 
-  The documentation for [omdl] is produced by [openscad-amu]. An
-  integral part of building the library documentation is verifying
-  that the basic operations work as expected. As [OpenSCAD] evolves,
-  changes in the language and/or compiler may break basic library
-  behavior. These validations are performed to identify library
-  routines that require updating to conform to any such changes.
+  The documentation for [omdl] is generated using [openscad-amu].
+  An integral part of the documentation build process is the validation
+  of core library operations to ensure they behave as expected. As
+  [OpenSCAD] evolves, changes to the language or compiler may introduce
+  regressions that affect existing functionality. These validation steps
+  help identify library routines that require updates to maintain
+  compatibility and correct behavior.
 
   | format                  | description
   |:-----------------------:|:------------------------------------------
@@ -537,7 +611,7 @@
 // Validation Tests and Results
 /***************************************************************************//**
   /+
-      Define seperate pages for validation results. Modules can
+      Define separate pages for validation results. Modules can
       attached results to the related page reference.
   +/
 
@@ -556,7 +630,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page bi Build information
+  \page build_information Build information
 
   \amu_file bi_general (file="${DOXYGEN_OUTPUT}buildinfo/general.amu" ++read)
   \amu_table
