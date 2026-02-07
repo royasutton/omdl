@@ -39,26 +39,50 @@
 
   [omdl], OpenSCAD Mechanical Design Library, is an open-source
   parametric framework for mechanical design in [OpenSCAD]. It provides
-  reusable engineering primitives, unit-aware operations, and
-  fabrication-oriented modules intended to support real mechanical
-  workflows rather than isolated geometric modeling.
+  reusable design primitives and fabrication-oriented modules intended
+  to support real mechanical workflows rather than isolated geometric
+  modeling.
+
+  omdl was originally conceived to support the design of mechanically
+  engineered objects intended for real-world CNC-based fabrication. A
+  central goal of the library is to **separate design intent from
+  implementation parameters**, enabling late-time parameter binding
+  during model composition.
+
+  By decoupling intent from geometry, designers can work at a higher
+  level of abstraction, describing what a component must achieve rather
+  than committing early to specific dimensions or configurations. This
+  approach increases target outcome flexibility, allowing designs to be
+  recomposed or adapted to new requirements without rewriting core
+  geometry.
+
+  In practice, this means that assemblies can be adjusted to match a
+  particular application, manufacturing constraint, or the commodity
+  components currently available. Late parameter binding allows the
+  same design definition to integrate different off-the-shelf parts,
+  making OMDL well suited for iterative engineering workflows and
+  fabrication-driven design.
 
   The library emphasizes:
 
-  - *Parametric mechanical design:* components are defined by
-    dimensions and intent rather than fixed geometry.
+  - **Parametric mechanical design:** components are defined by
+    properties and intent rather than fixed geometry.
 
-  - *Unit-aware operations:* consistent handling of lengths, angles, and
-    dimensional data.
+  - **Standardized data types:** Structured parameter abstractions used
+    to convey configuration, intent, and implementation details between
+    modules.
 
-  - *Minimal global state:* modules are designed to be predictable and
+  - **Minimal global state:** modules are designed to be predictable and
     composable.
 
-  - *Integrated documentation:* API behavior and usage are documented
+  - **Unit operations:** consistent handling of lengths, angles, and
+    dimensional data.
+
+  - **Integrated documentation:** API behavior and usage are documented
     directly in source using [Doxygen] and [openscad-amu].
 
-  - *Validation-driven development:* automated scripts verify
-    functionality across evolving OpenSCAD versions.
+  - **Validation-driven development:** automated scripts verify
+    functionality of core primities  across evolving OpenSCAD versions.
 
   Instead of treating OpenSCAD purely as a shape generator, omdl
   introduces a structured mechanical design layer that helps bridge
@@ -66,32 +90,47 @@
 
   \section intro_philosophy Design Philosophy
 
-  omdl is designed for users who want to build mechanically meaningful
-  models using reusable patterns, such as assemblies, motion
-  components, fabrication tools, and drafting aids.
+  omdl is designed for users who want to create mechanically meaningful
+  models intended for CNC-based fabrication. The library emphasizes
+  reusable design patterns that reflect real engineering workflows,
+  including assemblies, components, fabrication tooling, and drafting
+  aids. By providing structured, parametric building blocks, omdl
+  enables designers to move beyond low-level geometry.
 
   Key goals include:
 
   - Provide higher-level abstractions built on standard OpenSCAD
     primitives.
 
+  - Separate geometry construction from mechanical intent.
+
+  - Formalizes parameter communication and late-binding of
+    implementation details across modules.
+
   - Encourage consistent dimensional practices through explicit unit
     conversion.
 
-  - Separate geometry construction from mechanical intent.
-
   - Maintain readable source code that doubles as its own documentation.
 
-  The library is organized into modular groups representing functional
-  areas such as tools, drafting operations, and mechanical parts.
-  Modules can be included individually as needed to keep projects
-  lightweight and integrate easily with other design libraries.
+  The library is organized into modular groups that represent distinct
+  functional areas, including tooling utilities, drafting operations,
+  design data, mathematical operations, geometric primitives, and
+  mechanical components. This structure encourages separation of
+  concerns while allowing developers to work at the appropriate level
+  of abstraction for their design.
+
+  Modules are designed to be included individually as needed, helping
+  keep projects lightweight and reducing unnecessary dependencies. This
+  modular approach also supports interoperability, making it easier to
+  integrate omdl alongside other OpenSCAD design libraries without
+  imposing a rigid project structure.
 
   \section intro_docs Documentation Approach
 
   All documentation is generated from inline source comments using
-  Doxygen. The documentation is retrieved from the source code and
-  pre-processed by [openscad-amu] before being sent to Doxygen.
+  [Doxygen]. The documentation is retrieved from the source code and
+  pre-processed by [openscad-amu] before being sent to Doxygen for
+  processing into the desired output format.
 
   This approach ensures that:
 
@@ -116,7 +155,9 @@
 
   - Developers creating reusable mechanical modules
 
-  - Projects that benefit from unit-aware modeling and structured APIs
+  - Projects that benefit from application-specific mechanical design
+
+  - “Just-fit” solutions using available commodity components
 
   It may be less suitable for purely artistic modeling workflows where
   strict dimensional control is unnecessary.
@@ -133,9 +174,11 @@
   \amu_define image_size    (sxga)
   \amu_define image_columns (4)
   \amu_define scope_id      (quickstart)
+
   \amu_define notes_scad
     ( In this example, make_bearing_linear_rod() is used to construct
       a custom linear bearing for fabrication on a 3D-printer. )
+
   \amu_define notes_diagrams
     ( The dimension operations in the above example can be found near
       the end of ${FILE_NAME} within the \em scope \c ${scope_id}. )
@@ -144,7 +187,7 @@
 
   \section intro_contributing Contributing
 
-  omdl is developed using Git and hosted on GitHub. Contributions
+  omdl is developed using [Git] and hosted on [GitHub]. Contributions
   typically follow the standard fork-and-pull-request workflow. Because
   the project is licensed under the GNU Lesser General Public License,
   modified files should retain original copyright notices alongside any
