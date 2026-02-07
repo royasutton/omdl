@@ -2,8 +2,8 @@
 
 [![LGPL licensed](https://img.shields.io/badge/license-LGPL-blue.svg?style=flat)](https://raw.githubusercontent.com/royasutton/omdl/master/gnu-lgpl-v2.1.txt)
 
-  Overview
-  --------
+Overview
+--------
 
   [omdl], OpenSCAD Mechanical Design Library, is an open-source
   parametric framework for mechanical design in [OpenSCAD]. It provides
@@ -28,7 +28,7 @@
   particular application, manufacturing constraint, or the commodity
   components currently available. Late parameter binding allows the
   same design definition to integrate different off-the-shelf parts,
-  making OMDL well suited for iterative engineering workflows and
+  making omdl well suited for iterative engineering workflows and
   fabrication-driven design.
 
   The library emphasizes:
@@ -56,8 +56,8 @@
   introduces a structured mechanical design layer that helps bridge
   conceptual design, drafting, and fabrication.
 
-  Design Philosophy
-  -----------------
+Design Philosophy
+-----------------
 
   omdl is designed for users who want to create mechanically meaningful
   models intended for CNC-based fabrication. The library emphasizes
@@ -94,8 +94,8 @@
   integrate omdl alongside other OpenSCAD design libraries without
   imposing a rigid project structure.
 
-  Documentation Approach
-  ----------------------
+Documentation Approach
+----------------------
 
   All documentation is generated from inline source comments using
   [Doxygen]. The documentation is retrieved from the source code and
@@ -115,8 +115,8 @@
   supported OpenSCAD versions. This has become less pressing with the
   maturing OpenSCAD language.
 
-  Who This Library Is For
-  -----------------------
+Who This Library Is For
+-----------------------
 
   omdl is intended for:
 
@@ -133,14 +133,17 @@
   It may be less suitable for purely artistic modeling workflows where
   strict dimensional control is unnecessary.
 
-  Getting started
-  ---------------
+Getting started
+---------------
 
-  To get started using [omdl], please see the GitHub source [repository].
+  To get started using [omdl], please see the GitHub source
+  [repository]. An online [omdl-snapshot] of the library documentation
+  is available for quick reference, though it may not always reflect
+  the latest updates.
 
 
-  Design Examples
-  ---------------
+Design Examples
+---------------
 
   <table>
   <colgroup>
@@ -221,6 +224,8 @@
 
 [omdl]: https://royasutton.github.io/omdl
 [repository]: https://github.com/royasutton/omdl
+
+[omdl-snapshot]: https://royasutton.github.io/omdl-snapshot
 
 [openscad-amu]: https://royasutton.github.io/openscad-amu
 [Doxygen]: http://www.doxygen.nl

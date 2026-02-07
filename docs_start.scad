@@ -60,7 +60,7 @@
   particular application, manufacturing constraint, or the commodity
   components currently available. Late parameter binding allows the
   same design definition to integrate different off-the-shelf parts,
-  making OMDL well suited for iterative engineering workflows and
+  making omdl well suited for iterative engineering workflows and
   fabrication-driven design.
 
   The library emphasizes:
