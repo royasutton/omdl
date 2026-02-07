@@ -31,42 +31,99 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+// Architecture Overview
+//----------------------------------------------------------------------------//
+
+/***************************************************************************//**
+  \page architecture_overview Architecture Overview
+
+  \section design_goals Design Goals
+
+  The OpenSCAD Mechanical Design Library (omdl) is structured as
+  a **layered parametric design framework** rather than a flat
+  collection of modules. The architecture is intended to:
+
+  - Separate mechanical intent and properties from geometric
+    implementation
+
+  - Promote reuse through parametric primitives
+
+  - Enable automated documentation generation
+
+  - Support both end-users (designers) and contributors (developers)
+
+  omdl emphasizes predictable behavior, explicit parameters, and
+  attempts consistent naming so that models remain maintainable as
+  assemblies grow.
+
+  \section architectural_layers Architectural Layers
+
+  omdl is organized into logical layers. Each layer builds on the
+  capabilities of the previous one.
+
+  -# Core Utilities Layer
+  -# Geometry Primitives Layer
+  -# Mechanical Feature Layer
+  -# Assembly Layer
+  -# Documentation and Validation Tooling
+
+  \section module_philosophy Module Design Philosophy
+
+  When adding or modifying modules, follow these architectural
+  guidelines:
+
+  - Prefer composition over duplication: reuse existing building blocks
+    (primitives, features, utilities) by composing them together, rather
+    than rewriting geometry or functionality from scratch.
+
+  - Separate intent from implementation: Modules should express what
+    the design is supposed to do independently from how the geometry is
+    actually created/
+
+  - Thoughtful Parameter Contracts: Modules should define and enforce
+    their inputs to ensure predictable, safe, and reusable designs.
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
 // Building and installing
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page lb Building and installing
+  \page installing Building and installing
 
-    A script is available to build the library documentation. If the
-    setup script does not detect that [openscad-amu], the development
-    environment used by [omdl], is installed, it will download and set
-    it up in local cache director in the current path.
+  A script is provided to build the library documentation. If the setup
+  script does not detect that [openscad-amu], the development environment
+  used by [omdl], is installed, it will automatically download and
+  configure it in a local cache directory within the current path. This
+  ensures that the documentation can be generated without requiring a
+  system-wide installation of the development environment.
 
-    Download the omdl setup script:
-    \code{bash}
-    $ mkdir tmp && cd tmp
-    $ wget https://git.io/setup-omdl.bash
-    $ chmod +x setup-omdl.bash
-    \endcode
+  Download the omdl setup script:
+  \code{bash}
+  $ mkdir tmp && cd tmp
+  $ wget https://git.io/setup-omdl.bash
+  $ chmod +x setup-omdl.bash
+  \endcode
 
-    Fetch and install the latest library distribution:
-    \code{bash}
-    ./setup-omdl.bash --branch-list tags1 --yes --install
-    \endcode
+  Fetch and install the latest library distribution:
+  \code{bash}
+  ./setup-omdl.bash --branch-list tags1 --yes --install
+  \endcode
 
-    or, a specific version, say v0.9.6, can be installed using:
-    \code{bash}
-    ./setup-omdl.bash --branch v0.9.6 --yes --install
-    \endcode
+  or, a specific version, say v0.9.6, can be installed using:
+  \code{bash}
+  ./setup-omdl.bash --branch v0.9.6 --yes --install
+  \endcode
 
-    View documentation:
-    \code{bash}
-    $ google-chrome .local/share/OpenSCAD/docs/html/index.html
-    \endcode
+  View documentation:
+  \code{bash}
+  $ google-chrome .local/share/OpenSCAD/docs/html/index.html
+  \endcode
 
-    The \c html documentation will be installed to the OpenSCAD user
-    library path in a sub-folder \c 'docs/html'. The above example
-    assumes a Linux OS.
+  The generated HTML documentation will be installed to the OpenSCAD
+  user library path in a subfolder named 'docs/html'. The example above
+  assumes a Linux operating system; paths may differ on other
+  platforms.
 
   [omdl]: https://royasutton.github.io/omdl
   [repository]: https://github.com/royasutton/omdl
@@ -75,39 +132,57 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// How to use library modules
+// Library Usage
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page lu How to use library modules
+  \page library_usage Library Usage
 
-    The \em standard library includes are wrapped into a base include
-    file (omdl-base.scad). There has been an attempt to include only
-    the smallest set of commonly used library features. All other
-    modules must be manually included as needed prior to use.
+  \section module_inclusion Module Inclusion Workflow
 
-    \amu_shell omdl_base    ( "grep include omdl-base.scad | awk -v FS='(<|>)' '{print $2}'" ++rmnl )
-    \amu_word omdl_base_cnt ( words="${omdl_base}" t=" " r="^" ++count)
-    \amu_word omdl_base     ( words="${omdl_base}" t=" " r="^" ++list)
-    \amu_table
-    (
-      id="omdl_base" table_caption="Standard base includes"
-      columns="3" cell_texts="${omdl_base}"
-    )
+  The standard library includes are wrapped into a base include file,
+  omdl-base.scad. This base file contains only the minimal set of
+  commonly used library features to keep projects lightweight. Any
+  additional modules must be explicitly included before use, allowing
+  developers to selectively import functionality as needed.
 
-    To load the library base includes, use the wrapper as follows:
+  \amu_shell omdl_base    ( "grep include omdl-base.scad | awk -v FS='(<|>)' '{print $2}'" ++rmnl )
+  \amu_word omdl_base_cnt ( words="${omdl_base}" t=" " r="^" ++count)
+  \amu_word omdl_base     ( words="${omdl_base}" t=" " r="^" ++list)
+  \amu_table
+  (
+    id="omdl_base" table_caption="Standard base includes"
+    columns="3" cell_texts="${omdl_base}"
+  )
 
-    \code{.C}
-    include <omdl-base.scad>;
+  To load the library base includes, use the wrapper as follows:
 
-    ...
-    \endcode
+  \code{.C}
+  include <omdl-base.scad>;
 
-    This will read the \b \amu_eval(${omdl_base_cnt}) files listed in
-    table above. Library modules not listed above, must be explicitly
-    included prior to use. The include requirements are outlined at the
-    start of the detailed description for each module. See the example
-    script in \ref tools_drafting for more information.
+  ...
+  \endcode
+
+  This process reads the \b \amu_eval(${omdl_base_cnt}) files listed in
+  the table above. Modules not included in this base set must be
+  explicitly included before use. This design reflects omdl’s modular
+  architecture, where functionality is grouped by purpose (primitives,
+  mechanical features, assemblies, etc.) and only the essential
+  components are loaded by default.
+
+  Explicit inclusion ensures that:
+
+  - Projects remain lightweight, importing only the modules they need.
+
+  - Dependencies are clear, reducing the chance of runtime errors from
+    missing includes.
+
+  - Developers can maintain control over which features are integrated,
+    supporting flexible recomposition and integration with other
+    libraries.
+
+  For practical examples of how to include additional modules, see the
+  script in \ref tools_drafting.
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -126,9 +201,9 @@
   \tableofcontents
   +/
 
-    \li \subpage dt_base
-    \li \subpage dt_index
-    \li \subpage dt_euclidean
+    \li \subpage base_data_types
+    \li \subpage index_selection
+    \li \subpage euclidean_data_types
 *******************************************************************************/
 
 //
@@ -137,68 +212,75 @@
 
 // Base types and values
 /***************************************************************************//**
-  \page dt_base Base types and values
+  \page base_data_types Base types and values
 
-    OpenSCAD specifies a \em value to be either a number, a boolean, a
-    string, a range, a vector or or the undefined value. What is called
-    a vector in the [OpenSCAD types] documentation is refereed to as a
-    \em list here in order to distinguish between sequential lists of
-    general or compound-values and [Euclidean vectors] of numbers.
+  OpenSCAD defines a value as one of the following: a number, boolean,
+  string, range, vector, or the undefined value. Within omdl, what the
+  [OpenSCAD types] documentation calls a vector is referred to as a
+  \em list. This distinction helps differentiate between sequential
+  collections of general or compound values and [Euclidean vectors]
+  representing numeric coordinates.
 
-    | type      | description                                         |
-    |:---------:|:----------------------------------------------------|
-    | boolean   | a binary logic value (\b true or \b false)          |
-    | number    | a numerical value                                   |
-    | string    | an iterable sequence of of character values         |
-    | list      | an iterable sequential of arbitrary values          |
-    | range     | an arithmetic sequence                              |
-    | function  | a function literal or variable containing functions |
+  | type      | description                                         |
+  |:---------:|:----------------------------------------------------|
+  | boolean   | a binary logic value (\b true or \b false)          |
+  | number    | a numerical value                                   |
+  | string    | an iterable sequence of of character values         |
+  | list      | an iterable sequential of arbitrary values          |
+  | range     | an arithmetic sequence                              |
+  | function  | a function literal or variable containing functions |
 
-  \subsubsection dt_special Special values
+  \subsubsection special_values Special values
 
-    | value     | description                                         |
-    |:---------:|:----------------------------------------------------|
-    | undef     | a value with no definition                          |
-    | ""        | a string with no characters, the empty string       |
-    | []        | a list with no element-values, the empty list       |
-    | [nan]     | a numerical value which is not a number             |
-    | [inf]     | a numerical value which is infinite                 |
+  | value     | description                                         |
+  |:---------:|:----------------------------------------------------|
+  | undef     | a value with no definition                          |
+  | ""        | a string with no characters, the empty string       |
+  | []        | a list with no element-values, the empty list       |
+  | [nan]     | a numerical value which is not a number             |
+  | [inf]     | a numerical value which is infinite                 |
 
-  \subsubsection dt_convention Specification conventions
+  \subsubsection type_specification Specification conventions
 
-    For convenience,  the flowing naming conventions are used to
-    reference common [data types] used within the library.
+  For clarity and consistency, the following naming conventions are
+  used when referring to common [data types] within the library.
 
-    | name          | description                                       |
-    |:-------------:|:--------------------------------------------------|
-    | [value]       | any dataum that can be stored in OpenSCAD         |
-    | [scalar]      | a single non-iterable value                       |
-    | [iterable]    | any value with iterable elements                  |
-    | [empty]       | any iterable value with zero elements             |
-    | [bit]         | a binary numerical value (0 or 1)                 |
-    | [integer]     | a positive, negative, or zero whole number        |
-    | [even]        | an even integer                                   |
-    | [odd]         | an odd integer                                    |
-    | [decimal]     | integer numbers with a fractional part            |
-    | [index]       | a list index sequence                             |
-    | [datastruct]  | a defined data structure                          |
-    | [data]        | an arbitrary data structure                       |
-    | [map]         | data store of keys mapped to values               |
-    | [table]       | data store of values arranged in rows and columns |
+  | name          | description                                       |
+  |:-------------:|:--------------------------------------------------|
+  | [value]       | any dataum that can be stored in OpenSCAD         |
+  | [scalar]      | a single non-iterable value                       |
+  | [iterable]    | any value with iterable elements                  |
+  | [empty]       | any iterable value with zero elements             |
+  | [bit]         | a binary numerical value (0 or 1)                 |
+  | [integer]     | a positive, negative, or zero whole number        |
+  | [even]        | an even integer                                   |
+  | [odd]         | an odd integer                                    |
+  | [decimal]     | integer numbers with a fractional part            |
+  | [index]       | a list index sequence                             |
+  | [datastruct]  | a defined data structure                          |
+  | [data]        | an arbitrary data structure                       |
+  | [map]         | data store of keys mapped to values               |
+  | [table]       | data store of values arranged in rows and columns |
 
-    When a list has an expected number of elements '-n', the expected
-    number is appended. When there is a range of expected elements, the
-    lower and upper bounds are separated by a ':' and appended. When
-    the list elements values are of a specified data type, that \em
-    type is added before the name. See the following tables for a few
-    examples.
 
-    | name          | description                                       |
-    |:-------------:|:--------------------------------------------------|
-    | list-n        | a list of of n elements values                    |
-    | list-l:u      | a list of l to u elements values                  |
-    | type-list     | a list of elements with an expected type          |
-    | type-list-n   | a list of n elements with an expected type        |
+  When a list has an expected number of elements, the suffix '-n' is
+  appended to indicate the required element count. If a range of
+  acceptable element counts is allowed, the lower and upper bounds are
+  appended using the form l:u.
+
+  When list elements are expected to be of a specific data type, the
+  element type is prefixed to the list name. These conventions provide
+  a concise way to describe parameter contracts and expected data
+  structures throughout the documentation.
+
+  See the tables below for examples.
+
+  | name          | description                                       |
+  |:-------------:|:--------------------------------------------------|
+  | list-n        | a list of of n elements values                    |
+  | list-l:u      | a list of l to u elements values                  |
+  | type-list     | a list of elements with an expected type          |
+  | type-list-n   | a list of n elements with an expected type        |
 
   [OpenSCAD types]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Values_and_data_types
   [nan]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Infinities_and_NaNs
@@ -218,7 +300,7 @@
   [odd]: https://en.wikipedia.org/wiki/Parity_(mathematics)
 
   [decimal]: https://en.wikipedia.org/wiki/Decimal
-  [index]: \ref dt_index
+  [index]: \ref index_selection
   [datastruct]: https://en.wikipedia.org/wiki/Data_structure
   [data]: https://en.wikipedia.org/wiki/Data
 
@@ -230,178 +312,183 @@
 
 // Index sequence generation
 /***************************************************************************//**
-  \page dt_index Element index selection
+  \page index_selection Element index selection
 
-    The data type \p index is used to describe how one or more elements
-    of a list are selected by their index positions. Rather than
-    specifying indices explicitly in all cases, this data type allows
-    several convenient shorthand forms for common selection patterns.
+  The data type index describes how one or more elements of a list are
+  selected by their index positions. Rather than requiring indices to
+  be specified explicitly in every case, this data type supports
+  several convenient shorthand forms for common selection patterns.
 
-    An index selection may be specified using any of the following
-    forms:
+  An index selection may be expressed using any of the following forms:
 
-    | value / form    | description                                   |
-    |:---------------:|:----------------------------------------------|
-    | \b true         | All index positions of the list [0:size-1]    |
-    | \b false        | No index positions                            |
-    | "all"           | All index positions of the list [0:size-1]    |
-    | "none"          | No index positions                            |
-    | "rands"         | Random index selection of the list [0:size-1] |
-    | "even"          | The even index of the list [0:size-1]         |
-    | "odd"           | The odd index of the list [0:size-1]          |
-    | <integer>       | The single position given by an <integer>     |
-    | <range>         | The range of positions given by a <range>     |
-    | <integer-list>  | The list of positions give in <integer-list>  |
+  | value / form    | description                                   |
+  |:---------------:|:----------------------------------------------|
+  | \b true         | All index positions of the list [0:size-1]    |
+  | \b false        | No index positions                            |
+  | "all"           | All index positions of the list [0:size-1]    |
+  | "none"          | No index positions                            |
+  | "rands"         | Random index selection of the list [0:size-1] |
+  | "even"          | The even index of the list [0:size-1]         |
+  | "odd"           | The odd index of the list [0:size-1]          |
+  | <integer>       | The single position given by an <integer>     |
+  | <range>         | The range of positions given by a <range>     |
+  | <integer-list>  | The list of positions give in <integer-list>  |
 
-    To obtain the actual sequence of list element indices represented
-    by a value of this data type, the function index_sel() can be used.
-    This function expands the selection specification into an explicit
-    list of index positions.
+  To obtain the explicit sequence of list element indices represented
+  by a value of this data type, the function index_sel() may be used.
+  This function resolves an index specification into a concrete list of
+  index positions, translating shorthand or abstract selection patterns
+  into an explicit iterable form.
 
-    \b Example
+  Within omdl, index_sel() serves as the normalization step between
+  flexible input specifications and deterministic implementation
+  behavior, allowing modules to accept expressive selection syntax
+  while maintaining consistent parameter contracts during evaluation.
 
-    \code{.c}
-    // list
-    l1 = [a,b,c,d,e,f]
+  \b Example
 
-    // index sequence
-    index_sel(l1)          = [0,1,2,3,4,5]
-    index_sel(l1, "rands") = [0,2,5]
-    \endcode
+  \code{.c}
+  // list
+  l1 = [a,b,c,d,e,f]
+
+  // index sequence
+  index_sel(l1)          = [0,1,2,3,4,5]
+  index_sel(l1, "rands") = [0,2,5]
+  \endcode
 *******************************************************************************/
 
 // Euclidean space data types
 /***************************************************************************//**
-  \page dt_euclidean Euclidean space data types
+  \page euclidean_data_types Euclidean space data types
 
-    For [geometric] specifications and [geometric algebra], omdl adopts
-    the following type specifications and conventions.
+  For [geometric] specifications and [geometric algebra], omdl adopts
+  the following type definitions and conventions.
 
-    | name        | description                                       |
-    |:-----------:|:--------------------------------------------------|
-    | [point]     | a list of numbers to identify a location in space |
-    | [vector]    | a direction and magnitude in space                |
-    | [line]      | a start and end point in space ([line wiki])      |
-    | [normal]    | a vector that is perpendicular to a given object  |
-    | [pnorm]     | a vector that is perpendicular to a plane         |
-    | [plane]     | a flat 2d infinite surface ([plane wiki])         |
-    | [matrix]    | a rectangular array of values                     |
+  | name        | description                                       |
+  |:-----------:|:--------------------------------------------------|
+  | [point]     | a list of numbers to identify a location in space |
+  | [vector]    | a direction and magnitude in space                |
+  | [line]      | a start and end point in space ([line wiki])      |
+  | [normal]    | a vector that is perpendicular to a given object  |
+  | [pnorm]     | a vector that is perpendicular to a plane         |
+  | [plane]     | a flat 2d infinite surface ([plane wiki])         |
+  | [matrix]    | a rectangular array of values                     |
 
-    When a particular dimension is expected, the dimensional
-    expectation is appended to the end of the name after a '-' dash as
-    in the following table.
+  When a particular dimension is expected, the dimensional expectation
+  is appended to the end of the name after a '-' dash as in the
+  following table.
 
-    | name        | description                                       |
-    |:-----------:|:--------------------------------------------------|
-    | point-Nd    | a point in an 'N' dimensional space               |
-    | vector-Nd   | a vector in an 'N' dimensional space              |
-    | line-Nd     | a line in an 'N' dimensional space                |
-    | matrix-MxN  | a 'M' by 'N' matrix of values                     |
+  | name        | description                                       |
+  |:-----------:|:--------------------------------------------------|
+  | point-Nd    | a point in an 'N' dimensional space               |
+  | vector-Nd   | a vector in an 'N' dimensional space              |
+  | line-Nd     | a line in an 'N' dimensional space                |
+  | matrix-MxN  | a 'M' by 'N' matrix of values                     |
 
-    When a type is specified in the plural form, such as \b points, it
-    implies a list of the specified type. For example, \b points is the
-    same as a \b point-list.
+  When a type is specified in the plural form, such as \b points, it
+  implies a list of the specified type. For example, \b points is the
+  same as a \b point-list.
 
   \subsubsection dt_line Lines and vectors
 
-    A \b vector has a direction and magnitude in space. A \b line, too,
-    has direction and magnitude, but also has location, as it starts at
-    one point in space and ends at another. Although a line can be
-    specified in one dimension, most library functions operate on two
-    and/or three dimensional lines. Operators in omdl make use of a
-    common convention for specifying Euclidean vectors and straight
-    lines as summarized in the following table:
+  A \b vector has a direction and magnitude in space. A \b line, too,
+  has direction and magnitude, but also has location, as it starts at
+  one point in space and ends at another. Although a line can be
+  specified in one dimension, most library functions operate on two
+  and/or three dimensional lines. Operators in omdl make use of a
+  common convention for specifying Euclidean vectors and straight
+  lines as summarized in the following table:
 
-    Given two points \c 'p1' and \c 'p2', in space:
+  Given two points \c 'p1' and \c 'p2', in space:
 
-    | no. | form      | description                       |
-    |:---:|:---------:|:----------------------------------|
-    |  1  | p2        | a vector from the origin to 'p2'  |
-    |  2  | [p2]      | a vector from the origin to 'p2'  |
-    |  3  | [p1, p2]  | a line from 'p1' to 'p2'          |
+  | no. | form      | description                       |
+  |:---:|:---------:|:----------------------------------|
+  |  1  | p2        | a vector from the origin to 'p2'  |
+  |  2  | [p2]      | a vector from the origin to 'p2'  |
+  |  3  | [p1, p2]  | a line from 'p1' to 'p2'          |
 
-    The functions is_point(), is_vector(), is_line(), line_dim(),
-    line_tp(), line_ip(), vol_to_point(), and vol_to_origin(), are
-    available for type identification and convertion.
+  The functions is_point(), is_vector(), is_line(), line_dim(),
+  line_tp(), line_ip(), vol_to_point(), and vol_to_origin(), are
+  available for type identification and convertion.
 
-    \b Example
+  \b Example
 
-    \code{.c}
-    // points
-    p1 = [a,b,c]
-    p2 = [d,e,f]
+  \code{.c}
+  // points
+  p1 = [a,b,c]
+  p2 = [d,e,f]
 
-    // vectors
-    v1 = p2       = [d,e,f]
-    v2 = [p2]     = [[d,e,f]]
+  // vectors
+  v1 = p2       = [d,e,f]
+  v2 = [p2]     = [[d,e,f]]
 
-    // lines
-    v3 = [p1, p2] = [[a,b,c], [d,e,f]]
+  // lines
+  v3 = [p1, p2] = [[a,b,c], [d,e,f]]
 
-    v1 == v2
-    v1 == v2 == v3, iff p1 == origin3d
-    \endcode
+  v1 == v2
+  v1 == v2 == v3, iff p1 == origin3d
+  \endcode
 
   \subsubsection dt_plane Planes
 
-    Operators in omdl use a common convention for specifying planes.
-    A \b plane is identified by a [point] on its surface together with
-    its [normal] vector specified by [pnorm], which is discussed in the
-    following section. A list with a point and normal together specify
-    the plane as follows:
+  Operators in omdl use a common convention for specifying planes.
+  A \b plane is identified by a [point] on its surface together with
+  its [normal] vector specified by [pnorm], which is discussed in the
+  following section. A list with a point and normal together specify
+  the plane as follows:
 
-    | name    | form                |
-    |:-------:|:-------------------:|
-    | [plane] | [[point], [pnorm]]  |
+  | name    | form                |
+  |:-------:|:-------------------:|
+  | [plane] | [[point], [pnorm]]  |
 
   \subsubsection dt_pnorm Planes' normal
 
-    The data type \b pnorm refers to a convention for specifying a
-    direction vector that is perpendicular to a plane. Given three
-    points \c 'p1', \c 'p2', \c 'p3', and three vectors \c 'v1',
-    \c 'v2', \c 'vn', the planes' [normal] can be specified in any of
-    the following forms:
+  The data type \b pnorm refers to a convention for specifying a
+  direction vector that is perpendicular to a plane. Given three
+  points \c 'p1', \c 'p2', \c 'p3', and three vectors \c 'v1',
+  \c 'v2', \c 'vn', the planes' [normal] can be specified in any of
+  the following forms:
 
-    | no. | form          | description                                   |
-    |:---:|:-------------:|:----------------------------------------------|
-    |  1  | vn            | the predetermined normal vector to the plane  |
-    |  2  | [vn]          | the predetermined normal vector to the plane  |
-    |  3  | [v1, v2]      | two distinct but intersecting vectors         |
-    |  4  | [p1, p2, p3]  | three (or more) non-collinear coplanar points |
+  | no. | form          | description                                   |
+  |:---:|:-------------:|:----------------------------------------------|
+  |  1  | vn            | the predetermined normal vector to the plane  |
+  |  2  | [vn]          | the predetermined normal vector to the plane  |
+  |  3  | [v1, v2]      | two distinct but intersecting vectors         |
+  |  4  | [p1, p2, p3]  | three (or more) non-collinear coplanar points |
 
-    The functions is_plane() and plane_to_normal() are available for
-    type identification and convertion.
+  The functions is_plane() and plane_to_normal() are available for
+  type identification and convertion.
 
-    \b Example
+  \b Example
 
-    \code{.c}
-    // points
-    p1 = [a,b,c];
-    p2 = [d,e,f];
-    p3 = [g,h,i];
+  \code{.c}
+  // points
+  p1 = [a,b,c];
+  p2 = [d,e,f];
+  p3 = [g,h,i];
 
-    // lines and vectors
-    v1 = [p1, p2] = [[a,b,c], [d,e,f]]
-    v2 = [p1, p3] = [[a,b,c], [g,h,i]]
-    vn = cross_ll(v1, v2)
+  // lines and vectors
+  v1 = [p1, p2] = [[a,b,c], [d,e,f]]
+  v2 = [p1, p3] = [[a,b,c], [g,h,i]]
+  vn = cross_ll(v1, v2)
 
-    // planes' normal
-    n1 = vn           = cross_ll(v1, v2)
-    n2 = [vn]         = cross_ll(v1, v2)
-    n3 = [v1, v2]     = [[[a,b,c],[d,e,f]], [[a,b,c],[g,h,i]]]
-    n4 = [p1, p2, p3] = [[a,b,c], [d,e,f], [g,h,i]]
+  // planes' normal
+  n1 = vn           = cross_ll(v1, v2)
+  n2 = [vn]         = cross_ll(v1, v2)
+  n3 = [v1, v2]     = [[[a,b,c],[d,e,f]], [[a,b,c],[g,h,i]]]
+  n4 = [p1, p2, p3] = [[a,b,c], [d,e,f], [g,h,i]]
 
-    n1 || n2 || n3 || n4
+  n1 || n2 || n3 || n4
 
-    // planes
-    pn1 = [p1, n1]
-    pn2 = [p2, n2]
-    pn3 = [p3, n3]
-    pn4 = [n4[0], n4]
-    pn5 = [mean(n4), n4]
+  // planes
+  pn1 = [p1, n1]
+  pn2 = [p2, n2]
+  pn3 = [p3, n3]
+  pn4 = [n4[0], n4]
+  pn5 = [mean(n4), n4]
 
-    pn1 == pn4
-    \endcode
+  pn1 == pn4
+  \endcode
 
   [geometric]: https://en.wikipedia.org/wiki/Geometry
   [geometric algebra]: https://en.wikipedia.org/wiki/Geometric_algebra
@@ -426,19 +513,19 @@
 
   ### Scripts and Results ###
 
-    The documentation for [omdl] is produced by [openscad-amu]. An
-    integral part of building the library documentation is verifying
-    that the basic operations work as expected. As [OpenSCAD] evolves,
-    changes in the language and/or compiler may break basic library
-    behavior. These validations are performed to identify library
-    routines that require updating to conform to any such changes.
+  The documentation for [omdl] is produced by [openscad-amu]. An
+  integral part of building the library documentation is verifying
+  that the basic operations work as expected. As [OpenSCAD] evolves,
+  changes in the language and/or compiler may break basic library
+  behavior. These validations are performed to identify library
+  routines that require updating to conform to any such changes.
 
-    | format                  | description
-    |:-----------------------:|:------------------------------------------
-    | \subpage tv_tree "Tree" | Tree of all test scripts and test results.
-    | \subpage tv_list "List" | A flat list of all test results.
-    | \subpage tv_fail "Fail" | A flat list of current test failures.
-    | \subpage tv_warn "Warn" | A flat list of current test warnings.
+  | format                  | description
+  |:-----------------------:|:------------------------------------------
+  | \subpage tv_tree "Tree" | Tree of all test scripts and test results.
+  | \subpage tv_list "List" | A flat list of all test results.
+  | \subpage tv_fail "Fail" | A flat list of current test failures.
+  | \subpage tv_warn "Warn" | A flat list of current test warnings.
 
   #### Current Test Failures and Warnings ####
 
@@ -532,6 +619,10 @@
   )
 
 *******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// Copyright notice
+//----------------------------------------------------------------------------//
 
 /***************************************************************************//**
   \page Copyright Copyright notice
