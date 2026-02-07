@@ -9,17 +9,16 @@ omdl
 Setup
 -----
 
-To use [omdl], it must be installed to the OpenSCAD [library location].
-A setup script is available to simplify the setup and install process.
-This script can optionally install [openscad-amu], the the design-flow
-automation development framework used to test the library and build its
-documentation.
+To use [omdl], it must be installed in the OpenSCAD [library location].
+A setup script is provided to simplify the installation and
+configuration process. This script can optionally install
+[openscad-amu], the design-flow automation framework used to test the
+library and generate its documentation.
 
-The setup script is the recommended install method. However, on-line
-snapshots for manual installation are available at [omdl-snapshot].
-There you can review the latest release documentation prior to
-installing locally.
-
+The setup script is the recommended installation method. Alternatively,
+online snapshots are available for manual installation at
+[omdl-snapshot]. These snapshots also allow you to review the latest
+release documentation before installing the library locally.
 
 Installing
 ----------
@@ -39,12 +38,13 @@ wget https://git.io/setup-omdl.bash && chmod +x setup-omdl.bash
 ./setup-omdl.bash --branch-list tags1 --no-excludes --yes --install
 ```
 
-The option `--yes` can be omitted if you prefer to confirm the
-installation of the required packages. If you don't like shortened
-URLs, here is the full URL to [setup-omdl.bash] at the source
-repository. Once setup completes, the *cache* directory can be removed.
+The `--yes` option may be omitted if you prefer to manually confirm the
+installation of required packages. If shortened URLs are not preferred,
+the full URL to setup-omdl.bash is available in the source repository
+at [setup-omdl.bash]. After setup completes, the temporary cache
+directory may be safely removed.
 
-View the installed library documentation with:
+To view the installed library documentation, run:
 
 ```bash
 google-chrome ${HOME}/.local/share/OpenSCAD/docs/html/index.html
@@ -75,23 +75,25 @@ For a complete list of setup options, type;
 Contributing
 ------------
 
-[omdl] uses [git] for development tracking, and is hosted on [GitHub]
-following the usual practice of [forking] and submitting [pull requests]
-to the source [repository].
+[omdl] uses [git] for source control and development tracking, and is
+hosted on [GitHub]. Contributions follow the standard open-source
+workflow of creating a [fork] and submitting changes through [pull
+requests] to the main [repository].
 
-As it is released under the [GNU Lesser General Public License], any
-file you change should bear your copyright notice alongside the
-original authors' copyright notices typically located at the top of
-each file.
+Because the project is released under the [GNU Lesser General Public
+License (LGPL)], any modified file should retain the original copyright
+notices and include your own copyright statement alongside those of the
+original authors. These notices are typically located at the beginning
+of each source file.
 
-Ideas, requests, comments, contributions, and constructive criticism
-are welcome.
-
+Ideas, feature requests, feedback, contributions, and constructive
+criticism are always welcome and encouraged.
 
 Bug reporting
 -------------
 
-Please feel free to raise any problems, concerns, or [issues].
+Users and contributors are encouraged to report problems, concerns, or
+suggestions by submitting an [issue].
 
 
 [GNU Lesser General Public License]: https://www.gnu.org/licenses/lgpl.html
