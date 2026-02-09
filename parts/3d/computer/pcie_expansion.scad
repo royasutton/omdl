@@ -1249,7 +1249,7 @@ module pcie_expansion
           extrude_linear_uss(tab_tl)
           {
             pg_rectangle([tab_tw, tab_th]);
-            pg_trapezoid(b=[tab_tw, tab_bw], h=tab_th, a=145, o=[0, tab_th]);
+            pg_trapezoid(b=[tab_tw, tab_bw], h=tab_th, a=117.125, o=[0, tab_th]);
           }
 
       // remove wire clamp tunnels

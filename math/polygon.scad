@@ -343,10 +343,11 @@ function polygon_elliptical_sector_p
 
   \details
 
-    When both \p h and \p l are specified, \p h has precedence. The
-    function generates [parallelograms], rectangles, and squares with
-    the appropriate parameter assignments. See [Wikipedia] for more
-    general information on trapezoids.
+    When both \p h and \p l are specified, \p h takes precedence. The
+    function can generate parallelograms, rectangles, and squares
+    depending on the parameter values. See Wikipedia for more general
+    information on trapezoids. If \p h is specified, the angle \p a is
+    restricted to the range [45, 135].
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Trapezoid
   [parallelograms]: https://en.wikipedia.org/wiki/Parallelogram
@@ -367,7 +368,7 @@ function polygon_trapezoid_p
 
     // trapezoid vertices from origin
     p1 = o,
-    p2 = o  + (is_undef(h) ? l*[cos(a), sin(a)] : h*[cos(a), 1]),
+    p2 = o  + (is_undef(h) ? l*[cos(a), sin(a)] : h*[cos(2*a - 90), 1]),
     p3 = p2 + [b2, 0],
     p4 = o  + [b1, 0],
 
