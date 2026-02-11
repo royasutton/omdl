@@ -99,8 +99,8 @@
       1 | <decimal>         |  m                | \p s : female slot width
       2 | <decimal>         |  m/5              | \p f : tail fin width expansion
       3 | <decimal>         |  m/25             | \p g : joint gap (male and female)
-      4 | <decimal>         |  f/4              | \p er : external edge rounding
-      5 | <decimal>         |  f/4              | \p ir : internal edge rounding (minimum cut radius)
+      4 | <decimal>         |  m/20             | \p er : external edge rounding
+      5 | <decimal>         |  m/20             | \p ir : internal edge rounding (minimum cut radius)
 
     The parameter \p ir can be used to define an internal corner edge
     overcut, which helps accommodate the minimum cut radius required
@@ -135,8 +135,8 @@ module dovetail2d
   t2 = defined_e_or(t, 1, t1);        // female width
   te = defined_e_or(t, 2, t1/5);      // "engagement" width
   tg = defined_e_or(t, 3, t1/25);     // finger gap width
-  er = defined_e_or(t, 4, te/4);      // finger exterior edge rounding
-  ir = defined_e_or(t, 5, te/4);      // finger interior edge rounding
+  er = defined_e_or(t, 4, t1/20);     // finger exterior edge rounding
+  ir = defined_e_or(t, 5, t1/20);     // finger interior edge rounding
 
   tc = ceil(w / (t1 + t2));           // finger count
 
