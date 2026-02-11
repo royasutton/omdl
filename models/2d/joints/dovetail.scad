@@ -128,7 +128,7 @@ module joint_dovetail2d
   center = false,
 
   align,
-  mode = 1,
+  mode = 1
 )
 {
   t1 = defined_e_or(t, 0, t);         // male (tail) width
