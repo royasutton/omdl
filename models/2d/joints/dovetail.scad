@@ -116,7 +116,7 @@
     \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
 
-module joint_dovetail2d
+module joint2d_dovetail
 (
   t = 1,
   d = 1,
@@ -238,12 +238,12 @@ BEGIN_SCOPE example;
     c = true;
 
     // male section (lower)
-    joint_dovetail2d (w=w, t=t, d=d, mode=1, center=c );
-    difference() { translate([0, -d/2]) square([w, d/2]); joint_dovetail2d (w=w, t=t, d=d, mode=2, center=c ); }
+    joint2d_dovetail (w=w, t=t, d=d, mode=1, center=c );
+    difference() { translate([0, -d/2]) square([w, d/2]); joint2d_dovetail (w=w, t=t, d=d, mode=2, center=c ); }
 
     // female section (upper)
     translate([0, d*1.25])
-    difference() { square([w, d+d/2]); joint_dovetail2d (w=w, t=t, d=d, mode=0, center=c ); }
+    difference() { square([w, d+d/2]); joint2d_dovetail (w=w, t=t, d=d, mode=0, center=c ); }
 
     // end_include
   END_OPENSCAD;
