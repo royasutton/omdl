@@ -8,7 +8,7 @@ local_path        :=  models/3d/misc
 
 local_library     :=  docs_module \
                       \
-                      omdl_logo.scad
+                      omdl_logo
 
 local_release_add :=
 

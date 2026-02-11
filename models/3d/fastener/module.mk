@@ -8,7 +8,7 @@ local_path        :=  models/3d/fastener
 
 local_library     :=  docs_module \
                       \
-                      screws.scad
+                      screws
 
 local_release_add :=
 
