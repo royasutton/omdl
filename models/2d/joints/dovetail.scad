@@ -60,6 +60,9 @@
 
   \param  o       <decimal> tail initial width offset.
 
+  \param  type    <integer> construction type {0=female removals,
+                  1=male additions, 2=male removals}.
+
   \param  trim    <boolean> limit construction to within the total
                   joint width.
 
@@ -67,9 +70,6 @@
 
   \param  align   <integer-list-2> joint alignment; edge-1, center, and
                   edge-2 for both [x, y].
-
-  \param  type    <integer> construction type {0=female removals,
-                  1=male additions, 2=male removals}.
 
   \details
 
@@ -124,11 +124,12 @@ module joint2d_dovetail
   w = 10,
   o = 0,
 
+  type = 1,
+
   trim = true,
   center = false,
 
-  align,
-  type = 1
+  align
 )
 {
   t1 = defined_e_or(t, 0, t);         // male (tail) width
