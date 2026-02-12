@@ -109,7 +109,7 @@
     ensures proper clearance for mating joint members during assembly.
 
     \amu_define scope_id      (example)
-    \amu_define title         (Dovetail profiles example)
+    \amu_define title         (Dovetail profile example)
     \amu_define image_views   (top)
     \amu_define image_size    (sxga)
 
