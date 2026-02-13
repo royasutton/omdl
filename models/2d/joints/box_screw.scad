@@ -183,19 +183,19 @@ module joint2d_box_screw
     m4 = binary_bit_is(imode, 4, 1);        // male removal; add screw bore drill punch mark
 
     // decode ipin
-    t1 = defined_e_or(ipin, 0, ipin);       // male pin width
-    t2 = defined_e_or(ipin, 1, t1*5/2);     // screw section width
-    tg = defined_e_or(ipin, 2, t1/25);      // pin gap width
-    er = defined_e_or(ipin, 3, t1/20);      // pin exterior edge rounding
-    ir = defined_e_or(ipin, 4, t1/20);      // pin interior edge rounding
+    t1 = defined_fle_or([ipin, pin], 0, ipin);        // male pin width
+    t2 = defined_fle_or([ipin, pin], 1, t1*5/2);      // screw section width
+    tg = defined_fle_or([ipin, pin], 2, t1/25);       // pin gap width
+    er = defined_fle_or([ipin, pin], 3, t1/20);       // pin exterior edge rounding
+    ir = defined_fle_or([ipin, pin], 4, t1/20);       // pin interior edge rounding
 
     // decode iscrew
-    sd = defined_e_or(iscrew, 0, iscrew);   // screw diameter
-    sl = defined_e_or(iscrew, 1, depth);    // screw length
-    ns = defined_e_or(iscrew, 2, sd*2);     // nut size; flat-to-flat
-    nh = defined_e_or(iscrew, 3, sd);       // nut height
-    no = defined_e_or(iscrew, 4, sl/10);    // nut end offset
-    nr = defined_e_or(iscrew, 5, t1/20);    // nut interior edge rounding
+    sd = defined_fle_or([iscrew, screw], 0, iscrew);  // screw diameter
+    sl = defined_fle_or([iscrew, screw], 1, depth);   // screw length
+    ns = defined_fle_or([iscrew, screw], 2, sd*2);    // nut size; flat-to-flat
+    nh = defined_fle_or([iscrew, screw], 3, sd);      // nut height
+    no = defined_fle_or([iscrew, screw], 4, sl/10);   // nut end offset
+    nr = defined_fle_or([iscrew, screw], 5, t1/20);   // nut interior edge rounding
 
     fvrm = m0 ? [0,0,4,3] : [0,0,0,0];      // rounding mode selections
 
