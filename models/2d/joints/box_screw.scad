@@ -211,7 +211,7 @@ module joint2d_box_screw
     if (type == 0 || type == 1)
     for ( i = pins )
     translate ([(t1 + t2)/2*i, depth/2])
-      pg_rectangle([s1, depth], vr=er, vrm=type ? [1,1,0,0] : fvrm, center=true);
+      pg_rectangle([s1, depth], vr=er, vrm=(type == 0) ? fvrm : [1,1,0,0], center=true);
 
     // interior corner minimum cut radius; removal modes only
     if ( ir > 0 && (type == 0 || type == 2) )
@@ -220,25 +220,21 @@ module joint2d_box_screw
       i = pins,
 
       mcr_o =
-        type ?
-          // type=1; male
-          [
+        (type == 0) ?
+          m0 ?
+            [ // type=0, m0=1, m1=[0,1]; female with rounding at edge
+              for (j = [-1,1])
+                m1 ? [ j*(s1-ir)/2, depth ]
+                   : [ j*s1/2, depth-ir/2 ]
+            ]
+          : [ // type=0, m0=0, m1=[0,1]; female with rounding in field
+              for (j = [-1,1], k = [-1,1])
+                m1 ? [ j*(s1-ir)/2, depth/2 + k*depth/2 ]
+                   : [ j*s1/2, depth/2 + k*(depth-ir)/2 ]
+            ]
+      :   [ // type=1,2; male
             for (j = [-1,1])
               [ j*(s1+ir)/2, 0 ]
-          ]
-      :   m0 ?
-          // type=0, m0=1;  female with rounding at edge
-          [
-            for (j = [-1,1])
-              m1 ? [ j*(s1-ir)/2, depth ]
-                 : [ j*s1/2, depth-ir/2 ]
-          ]
-        :
-          // type=0, m0=0;  female with rounding in field
-          [
-            for (j = [-1,1], k = [-1,1])
-              m1 ? [ j*(s1-ir)/2, depth/2 + k*depth/2 ]
-                 : [ j*s1/2, depth/2 + k*(depth-ir)/2 ]
           ]
     )
     translate ([(t1 + t2)/2*i, 0] + mcr_o)
