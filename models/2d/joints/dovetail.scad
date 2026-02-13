@@ -141,14 +141,14 @@ module joint2d_dovetail
 
   tc = ceil(w / (t1 + t2));           // finger count
 
-  mr = (type == 1) ? er : 0;          // male exterior rounding
-  fr = (type == 0) ? er : 0;          // female exterior rounding
-  sg = (type == 0) ? -tg/2 : +tg/2;   // gap adjustment
+  mr = (type == 0) ?  0 : er;         // male exterior rounding
+  fr = (type == 0) ? er :  0;         // female exterior rounding
+  sg = (type == 0) ?  1 : -1;         // gap adjustment
 
-  s1 = t1 - sg;                       // finger sized for gap
+  s1 = t1 + sg * tg/2;                // finger sized for gap
 
   // joint initial offset
-  io = o + sg/2 + (center ? w/2 - (t1*tc + t2*(tc-1))/2 : 0);
+  io = o - sg * tg/4 + (center ? w/2 - (t1*tc + t2*(tc-1))/2 : 0);
 
   // align construction
   translate
