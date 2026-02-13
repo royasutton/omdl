@@ -8,7 +8,8 @@ local_path        :=  models/2d/joints
 
 local_library     :=  docs_module \
                       \
-                      dovetail
+                      dovetail \
+                      box_screw
 
 local_release_add :=
 
