@@ -207,9 +207,10 @@ module joint2d_dovetail
       i = [0 : tc-1],
 
       mcr_o =
+      let ( pe = max(te, 0) )
       [
-        [   - te/2, 0] + ((type == 2) ? [+ir/2, d] : [+(te-ir)/2, 0]),
-        [s1 + te/2, 0] + ((type == 2) ? [-ir/2, d] : [-(te-ir)/2, 0])
+        [   - pe/2, 0] + ((type == 2) ? [+ir/2, d] : [+(pe-ir)/2, 0]),
+        [s1 + pe/2, 0] + ((type == 2) ? [-ir/2, d] : [-(pe-ir)/2, 0])
       ]
     )
     translate([io + (t1 + t2)*i, 0] + mcr_o)
