@@ -100,6 +100,27 @@ function defined_eon_or
   : !is_undef( v[i] ) ? v[i]
   : d;
 
+//! Return the first defined specified element in a list of lists, otherwise returns the given default value.
+/***************************************************************************//**
+  \param    v \<value> A list of \p n elements lists.
+  \param    i <integer> The specified element index.
+  \param    d \<value> A default value.
+
+  \returns  (1) \<value> for the given \p v, a list of \p n lists,
+                return the first element v[j][i] that is defined where
+                j = [0 : n], otherwise the default value \p d.
+*******************************************************************************/
+function defined_fle_or
+(
+  v,
+  i,
+  d
+) = !is_iterable(v) ? d
+  : is_empty(v) ? d
+  : let ( w = first ( v ) )
+    !is_undef( w[i] ) ? w[i]
+  : defined_fle_or( v=tailn(v), i=i, d=d );
+
 //! Returns an element from an iterable if it exists and is a iterable, otherwise returns a default value.
 /***************************************************************************//**
   \param    v \<value> A value.
@@ -1557,7 +1578,8 @@ BEGIN_SCOPE validate;
 
     for (id=test_ids) table_validate( db, id, "defined_e_or_DE3", 1, defined_e_or( v1(db,id), 3, "default" ) );
     for (id=test_ids) table_validate( db, id, "defined_e_or_DE3", 1, defined_eon_or( v1(db,id), 3, "default" ) );
-    // defined_el_or()
+    // defined_fle_or()
+    // defined_ei_or()
     // find_all()
     for (id=test_ids) table_validate( db, id, "find_12", 1, find( [1,2], v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "count_S1", 1, count( 1, v1(db,id), true ) );
