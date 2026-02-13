@@ -176,11 +176,11 @@ module joint2d_box_screw
     */
 
     // decode imode
-    m0 = binary_bit_is(imode, 0, 0);        // female removal; interior vs exterior rounding
-    m1 = binary_bit_is(imode, 1, 0);        // female removal; interior corner over cut placement
-    m2 = binary_bit_is(imode, 2, 0);        // male removal; screw bore vs skip screw bore
-    m3 = binary_bit_is(imode, 3, 0);        // male removal; screw nut vs skip screw nut
-    m4 = binary_bit_is(imode, 4, 1);        // male removal; add screw bore drill punch mark
+    m0 = binary_bit_is(imode, 0, 0);                  // female removal; interior vs exterior rounding
+    m1 = binary_bit_is(imode, 1, 0);                  // female removal; interior corner over cut placement
+    m2 = binary_bit_is(imode, 2, 0);                  // male removal; screw bore vs skip screw bore
+    m3 = binary_bit_is(imode, 3, 0);                  // male removal; screw nut vs skip screw nut
+    m4 = binary_bit_is(imode, 4, 1);                  // male removal; add screw bore drill punch mark
 
     // decode ipin
     t1 = defined_fle_or([ipin, pin], 0, ipin);        // male pin width
@@ -197,10 +197,10 @@ module joint2d_box_screw
     no = defined_fle_or([iscrew, screw], 4, sl/10);   // nut end offset
     nr = defined_fle_or([iscrew, screw], 5, t1/20);   // nut interior edge rounding
 
-    fvrm = m0 ? [0,0,4,3] : [0,0,0,0];      // rounding mode selections
+    fvrm = m0 ? [0,0,4,3] : [0,0,0,0];                // rounding mode selections
 
-    sg = (type == 2) ?  1 : -1;             // gap adjustment
-    s1 = t1 + sg * tg/2;                    // pin sized for gap
+    sg = (type == 2) ?  1 : -1;                       // gap adjustment
+    s1 = t1 + sg * tg/2;                              // pin sized for gap
 
     // add enabled pins only
     pins =
