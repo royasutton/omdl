@@ -334,26 +334,28 @@ BEGIN_SCOPE example;
 
     insts =
     [
-      [-1, +3,   2+4, undef, [4, 3, 1/8, 1/3, 1/3]],
-      [+0, +0, 1+2+4, 4+16],
+      [-1, +3,   2+4],
+      [+0, +0, 1+2+4, 1+4+16],
       [+1, -3, 1  +4],
     ];
 
+    mode = 1 + 2;
+
     translate([0,-w.y])
     {
-      %joint2d_box_screw(conf=conf, insts=insts, type=0);
+      joint2d_box_screw(conf=conf, insts=insts, mode=mode, type=0);
       difference()
       {
         translate([0, -w.y*3/4]) square([w.x, w.y * 3/2], center=true);
-        #joint2d_box_screw(conf=conf, insts=insts, type=1);
+        joint2d_box_screw(conf=conf, insts=insts, mode=mode, type=1);
       }
     }
 
     translate([0,w.y/2])
     difference()
     {
-      translate([0, w.y/2]) square(w, center=true);
-      #joint2d_box_screw(conf=conf, insts=insts, type=2);
+      translate([0, w.y/2]) square([w.x, w.y*3/2], center=true);
+      joint2d_box_screw(conf=conf, insts=insts, mode=mode, type=2);
     }
 
     // end_include
