@@ -320,8 +320,41 @@ module joint2d_box_screw
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
-    include <models/2d/joints/sn_box_joint.scad>;
+    include <models/2d/joints/box_screw.scad>;
+
+    w = [50, 3];
+
+    conf =
+    [
+      w.x,
+      w.y,
+      [3, 6, 1/8, 1/3, 1/3],
+      [1/2, w.y, 1, 1/2]
+    ];
+
+    insts =
+    [
+      [-1, +3,   2+4, undef, [4, 3, 1/8, 1/3, 1/3]],
+      [+0, +0, 1+2+4, 4+16],
+      [+1, -3, 1  +4],
+    ];
+
+    translate([0,-w.y])
+    {
+      %joint2d_box_screw(conf=conf, insts=insts, type=0);
+      difference()
+      {
+        translate([0, -w.y*3/4]) square([w.x, w.y * 3/2], center=true);
+        #joint2d_box_screw(conf=conf, insts=insts, type=1);
+      }
+    }
+
+    translate([0,w.y/2])
+    difference()
+    {
+      translate([0, w.y/2]) square(w, center=true);
+      #joint2d_box_screw(conf=conf, insts=insts, type=2);
+    }
 
     // end_include
   END_OPENSCAD;
