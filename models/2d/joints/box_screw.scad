@@ -90,8 +90,8 @@
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | <decimal>         |  required         | \p l : joint length
       1 | <decimal>         |  l/10             | \p d : joint depth
-      2 | <datastruct \| decimal> |  d          | \p p : pin default configuration
-      3 | <datastruct \| decimal> |  d/6        | \p s : screw & nut default configuration
+      2 | <datastruct \| decimal> |  d          | pin default configuration
+      3 | <datastruct \| decimal> |  d/6        | screw & nut default configuration
 
     #### conf[2]: pin
 
