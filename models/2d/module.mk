@@ -12,7 +12,7 @@ local_release_add :=
 
 local_backup_add  :=
 
-local_submodules  :=  joints
+local_submodules  :=  joint
 
 #------------------------------------------------------------------------------#
 # add local module

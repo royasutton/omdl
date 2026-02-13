@@ -232,7 +232,7 @@ BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <tools/operation_cs.scad>;
-    include <models/2d/joints/dovetail.scad>;
+    include <models/2d/joint/dovetail.scad>;
 
     w = 20;
     t = [2, 3.25, 1, 1/20, 1/8, 1/4];

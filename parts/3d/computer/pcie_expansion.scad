@@ -40,7 +40,7 @@
   \amu_define includes_required_add
   (
     tools/operation_cs.scad
-    models/2d/joints/dovetail.scad
+    models/2d/joint/dovetail.scad
     parts/3d/fastener/clamps.scad
     parts/3d/enclosure/project_box_rectangle.scad
   )

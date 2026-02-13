@@ -320,7 +320,7 @@ module joint2d_box_screw
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <models/2d/joints/box_screw.scad>;
+    include <models/2d/joint/box_screw.scad>;
 
     w = [50, 3];
 
