@@ -2065,6 +2065,7 @@ BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <tools/operation_cs.scad>;
+    include <models/2d/joint/dovetail.scad>;
     include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/computer/pcie_expansion.scad>;
