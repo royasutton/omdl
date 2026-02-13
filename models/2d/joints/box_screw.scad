@@ -54,8 +54,8 @@
 
   \param  mode    <integer> global construction mode.
 
-  \param  type    <integer> construction type {0=female removals,
-                  1=male additions, 2=male removals}.
+  \param  type    <integer> construction type {0=male additions,
+                  1=male removals, 2=female removals}.
 
   \param  align   <integer-list-2> joint alignment; edge-1, center, and
                   edge-2 for both [x, y].
@@ -66,8 +66,8 @@
     pairs with a central screw and locking nut, as illustrated in the
     example below.
 
-    Set \p type = 1 to create the male finger profile, and set \p type
-    = 0 to generate the corresponding female slot profile. To ensure
+    Set \p type = 0 to create the male finger profile, and set \p type
+    = 2 to generate the corresponding female slot profile. To ensure
     proper alignment and fit, both components must be created using
     identical configuration parameters.
 
@@ -159,7 +159,7 @@ module joint2d_box_screw
   conf,
   insts,
   mode = 0,
-  type = 1,
+  type = 0,
   align
 )
 {
@@ -197,7 +197,7 @@ module joint2d_box_screw
 
     fvrm = m0 ? [0,0,4,3] : [0,0,0,0];      // rounding mode selections
 
-    sg = (type == 0) ?  1 : -1;             // gap adjustment
+    sg = (type == 2) ?  1 : -1;             // gap adjustment
     s1 = t1 + sg * tg/2;                    // pin sized for gap
 
     // add enabled pins only
@@ -208,19 +208,19 @@ module joint2d_box_screw
     ];
 
     // pin; female removal or male additions
-    if (type == 0 || type == 1)
+    if (type == 0 || type == 2)
     for ( i = pins )
     translate ([(t1 + t2)/2*i, depth/2])
-      pg_rectangle([s1, depth], vr=er, vrm=(type == 0) ? fvrm : [1,1,0,0], center=true);
+      pg_rectangle([s1, depth], vr=er, vrm=(type == 2) ? fvrm : [1,1,0,0], center=true);
 
     // interior corner minimum cut radius; removal modes only
-    if ( ir > 0 && (type == 0 || type == 2) )
+    if ( ir > 0 && (type == 1 || type == 2) )
     for
     (
       i = pins,
 
       mcr_o =
-        (type == 0) ?
+        (type == 2) ?
           m0 ?
             [ // type=0, m0=1, m1=[0,1]; female with rounding at edge
               for (j = [-1,1])
@@ -244,12 +244,12 @@ module joint2d_box_screw
     if ( binary_bit_is(iform, 2, 1) )
     {
       // screw hole; female removal
-      if (type == 0)
+      if (type == 2)
       translate ([0, depth/2])
       circle(d=sd);
 
       // screw and nut slot; male removal
-      if (type == 2)
+      if (type == 1)
       {
         // screw
         if ( m2 )
