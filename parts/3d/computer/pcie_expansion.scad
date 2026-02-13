@@ -1358,7 +1358,7 @@ module pcie_expansion
     (
       inplace = true,
       dovetail = false,
-      dovetail_type = 1
+      dovetail_type = 0
     )
     {
       // selective move to bottom of sides with y-offset by encl_wth
@@ -1716,14 +1716,14 @@ module pcie_expansion
 
       // remove bracket mount tab shelf dovetail slots
       if ( binary_bit_is(enable, 4, 1) && binary_bit_is(encl_mode_sides, 0, 1) )
-        bracket_mount_tab_shelf(inplace=true, dovetail=true, dovetail_type=0);
+        bracket_mount_tab_shelf(inplace=true, dovetail=true, dovetail_type=2);
     }
 
     //
     // separate bracket mount tab shelf with dovetail joint
     //
     if ( binary_bit_is(enable, 5, 1) && binary_bit_is(encl_mode_sides, 0, 1) )
-      bracket_mount_tab_shelf(inplace=false, dovetail=true, dovetail_type=1);
+      bracket_mount_tab_shelf(inplace=false, dovetail=true, dovetail_type=0);
   }
 
   //
@@ -1787,13 +1787,13 @@ module pcie_expansion
         translate([-x/2, +eps*2, -wth/2-eps*2])
         cube([w+x, d-eps*4, wth*3/2], center=false);
         extrude_linear_uss(wth, center=false)
-        joint2d_dovetail(t=dt, d=d, w=w, center=true, type=0);
+        joint2d_dovetail(t=dt, d=d, w=w, center=true, type=2);
       }
 
       #union()
       {
         extrude_linear_uss(wth, center=false)
-        joint2d_dovetail(t=dt, d=d, w=w, center=true, type=1);
+        joint2d_dovetail(t=dt, d=d, w=w, center=true, type=0);
         translate([-x/2, -d, 0])
         cube([w+x, d, wth], center=false);
       }
@@ -1810,7 +1810,7 @@ module pcie_expansion
         translate([-x/2, +eps*2, -wth/2-eps*2])
         cube([w+x, d-eps*4, wth*3/2], center=false);
         extrude_linear_uss(wth, center=false)
-        joint2d_dovetail(t=dt, d=d, w=w, center=true, type=0);
+        joint2d_dovetail(t=dt, d=d, w=w, center=true, type=2);
       }
 
       // female joint printed vertically
@@ -1820,7 +1820,7 @@ module pcie_expansion
         translate([-x/2, +eps*2, -wth/2-eps*2])
         cube([w+x, d-eps*4, wth*3/2], center=false);
         extrude_linear_uss(wth, center=false)
-        joint2d_dovetail(t=dt, d=d, w=w, center=true, type=0);
+        joint2d_dovetail(t=dt, d=d, w=w, center=true, type=2);
       }
 
       // male joint
@@ -1828,7 +1828,7 @@ module pcie_expansion
       union()
       {
         extrude_linear_uss(wth, center=false)
-        joint2d_dovetail(t=dt, d=d, w=w, center=true, type=1);
+        joint2d_dovetail(t=dt, d=d, w=w, center=true, type=0);
         translate([-x/2, -d, 0])
         cube([w+x, d, wth], center=false);
       }

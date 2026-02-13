@@ -60,8 +60,8 @@
 
   \param  o       <decimal> tail initial width offset.
 
-  \param  type    <integer> construction type {0=female removals,
-                  1=male additions, 2=male removals}.
+  \param  type    <integer> construction type {0=male additions,
+                  1=male removals, 2=female removals}.
 
   \param  trim    <boolean> limit construction to within the total
                   joint width.
@@ -74,8 +74,8 @@
   \details
 
     Use this module to generate a 2D profile for constructing dovetail
-    joints. Set \p type = 1 to create the male dovetail fingers, and
-    set \p type = 0 to create the corresponding female slots. Ensure
+    joints. Set \p type = 0 to create the male dovetail fingers, and
+    set \p type = 2 to create the corresponding female slots. Ensure
     that the same profile parameters are used for both components to
     achieve proper alignment and fit.
 
@@ -124,7 +124,7 @@ module joint2d_dovetail
   w = 10,
   o = 0,
 
-  type = 1,
+  type = 0,
 
   trim = true,
   center = false,
@@ -141,9 +141,9 @@ module joint2d_dovetail
 
   tc = ceil(w / (t1 + t2));           // finger count
 
-  mr = (type == 0) ?  0 : er;         // male exterior rounding
-  fr = (type == 0) ? er :  0;         // female exterior rounding
-  sg = (type == 0) ?  1 : -1;         // gap adjustment
+  mr = (type == 2) ?  0 : er;         // male exterior rounding
+  fr = (type == 2) ? er :  0;         // female exterior rounding
+  sg = (type == 2) ?  1 : -1;         // gap adjustment
 
   s1 = t1 + sg * tg/2;                // finger sized for gap
 
@@ -160,7 +160,7 @@ module joint2d_dovetail
   )
   {
     // male and female joint construction; female removal or male additions
-    if (type == 0 || type == 1)
+    if (type == 0 || type == 2)
     intersection_cs(trim, trim ? undef : 1)
     {
       // child-0: joint area = length x depth
@@ -195,21 +195,21 @@ module joint2d_dovetail
         }
         else
         { // straight finger / pin
-          pg_rectangle([s1, d], vr=er, vrm=(type == 0) ? [0,0,4,3] : [1,1,0,0]);
+          pg_rectangle([s1, d], vr=er, vrm=(type == 2) ? [0,0,4,3] : [1,1,0,0]);
         }
       }
     }
 
     // interior corner minimum cut radius; removal modes only
-    if ( ir > 0 && (type == 0 || type == 2))
+    if ( ir > 0 && (type == 1 || type == 2))
     for
     (
       i = [0 : tc-1],
 
       mcr_o =
       [
-        [   - te/2, 0] + ((type == 0) ? [+ir/2, d] : [+(te-ir)/2, 0]),
-        [s1 + te/2, 0] + ((type == 0) ? [-ir/2, d] : [-(te-ir)/2, 0])
+        [   - te/2, 0] + ((type == 2) ? [+ir/2, d] : [+(te-ir)/2, 0]),
+        [s1 + te/2, 0] + ((type == 2) ? [-ir/2, d] : [-(te-ir)/2, 0])
       ]
     )
     translate([io + (t1 + t2)*i, 0] + mcr_o)
@@ -239,12 +239,12 @@ BEGIN_SCOPE example;
     c = true;
 
     // male section (lower)
-    joint2d_dovetail (w=w, t=t, d=d, type=1, center=c );
-    difference() { translate([0, -d/2]) square([w, d/2]); joint2d_dovetail (w=w, t=t, d=d, type=2, center=c ); }
+    joint2d_dovetail (w=w, t=t, d=d, type=0, center=c );
+    difference() { translate([0, -d/2]) square([w, d/2]); joint2d_dovetail (w=w, t=t, d=d, type=1, center=c ); }
 
     // female section (upper)
     translate([0, d*1.25])
-    difference() { square([w, d+d/2]); joint2d_dovetail (w=w, t=t, d=d, type=0, center=c ); }
+    difference() { square([w, d+d/2]); joint2d_dovetail (w=w, t=t, d=d, type=2, center=c ); }
 
     // end_include
   END_OPENSCAD;
