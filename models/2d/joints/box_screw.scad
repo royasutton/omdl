@@ -145,6 +145,7 @@
       1 | female removal; interior corner over cut placement
       2 | male removal; screw bore vs skip screw bore
       3 | male removal; screw nut vs skip screw nut
+      4 | male removal; add screw bore drill punch mark
 
     \amu_define scope_id      (example)
     \amu_define title         (Box screw joint profile example)
@@ -179,6 +180,7 @@ module joint2d_box_screw
     m1 = binary_bit_is(imode, 1, 0);        // female removal; interior corner over cut placement
     m2 = binary_bit_is(imode, 2, 0);        // male removal; screw bore vs skip screw bore
     m3 = binary_bit_is(imode, 3, 0);        // male removal; screw nut vs skip screw nut
+    m4 = binary_bit_is(imode, 4, 1);        // male removal; add screw bore drill punch mark
 
     // decode ipin
     t1 = defined_e_or(ipin, 0, ipin);       // male pin width
@@ -268,6 +270,11 @@ module joint2d_box_screw
           translate([ns/2*x, (nh -nr)/2*y])
           circle(d=nr);
         }
+
+        // drill punch
+        if ( m4 )
+        rotate(45)
+        square([sd, sd]/2, center=true);
       }
     }
   }
