@@ -91,7 +91,7 @@
       0 | <decimal>         |  required         | \p l : joint length
       1 | <decimal>         |  l/10             | \p d : joint depth
       2 | <datastruct \| decimal> |  d          | \p p : pin default configuration
-      3 | <datastruct \| decimal> |  p/4        | \p s : screw & nut default configuration
+      3 | <datastruct \| decimal> |  d/6        | \p s : screw & nut default configuration
 
     #### conf[2]: pin
 
@@ -280,7 +280,7 @@ module joint2d_box_screw
   length  = defined_e_or(conf, 0, conf);
   depth   = defined_e_or(conf, 1, length/10);
   pin     = defined_e_or(conf, 2, depth);
-  screw   = defined_e_or(conf, 3, pin/4);
+  screw   = defined_e_or(conf, 3, depth/6);
 
   // align construction
   translate
