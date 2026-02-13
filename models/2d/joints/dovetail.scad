@@ -182,7 +182,7 @@ module joint2d_dovetail
                   )
                   polygon_round_eve_all_p(ppp, vr=mr, vrm=vrm);
 
-          // straight section rounder out at base (female type)
+          // straight section rounder out at base (female removal)
           pg_rectangle([s1, d], vr=fr, vrm=[0,0,4,3]);
 
           translate([-te/2,d])
@@ -195,7 +195,7 @@ module joint2d_dovetail
         }
         else
         { // straight finger / pin
-          pg_rectangle([s1, d], vr=er, vrm=type ? [1,1,0,0] : [0,0,4,3]);
+          pg_rectangle([s1, d], vr=er, vrm=(type == 0) ? [0,0,4,3] : [1,1,0,0]);
         }
       }
     }
@@ -208,8 +208,8 @@ module joint2d_dovetail
 
       mcr_o =
       [
-        [   - te/2, d] + (type ? [+(te-ir)/2, -d] : [+ir/2, 0]),
-        [s1 + te/2, d] + (type ? [-(te-ir)/2, -d] : [-ir/2, 0])
+        [   - te/2, 0] + ((type == 0) ? [+ir/2, d] : [+(te-ir)/2, 0]),
+        [s1 + te/2, 0] + ((type == 0) ? [-ir/2, d] : [-(te-ir)/2, 0])
       ]
     )
     translate([io + (t1 + t2)*i, 0] + mcr_o)
