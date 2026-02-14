@@ -180,7 +180,7 @@
     \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
 
-module joint3d_box_dovetail_screw
+module joint3d_dovetail_screw
 (
   h = 1,
   conf,
@@ -358,7 +358,7 @@ BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <models/3d/joint/box_dovetail_screw.scad>;
+    include <models/3d/joint/dovetail_screw.scad>;
 
     $fn = 36;
 
@@ -393,18 +393,18 @@ BEGIN_SCOPE example;
 
     translate([0, -w.y, 0]) union()
     {
-      joint3d_box_dovetail_screw(h=h, conf=conf, insts=insts, mode=mode, type=0);
+      joint3d_dovetail_screw(h=h, conf=conf, insts=insts, mode=mode, type=0);
       difference()
       {
         translate([0, -w.y*3/4]) cube([w.x, w.y * 3/2, h], center=true);
-        joint3d_box_dovetail_screw(h=h, conf=conf, insts=insts, mode=mode, type=1);
+        joint3d_dovetail_screw(h=h, conf=conf, insts=insts, mode=mode, type=1);
       }
     }
 
     translate([0, +w.y, 0]) difference()
     {
       translate([0, w.y, -h/2 ]) cube([w.x, w.y*2 -eps*4, h*2 -eps*4], center=true);
-      joint3d_box_dovetail_screw(h=h, conf=conf, insts=insts, mode=mode, type=2);
+      joint3d_dovetail_screw(h=h, conf=conf, insts=insts, mode=mode, type=2);
     }
 
     // end_include
