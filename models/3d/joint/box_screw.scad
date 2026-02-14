@@ -186,10 +186,6 @@ module joint3d_box_screw
         B2: center screw
     */
 
-    // decode imode
-    m0 = binary_bit_is(imode, 0, 0);                  // female removal; interior vs exterior rounding
-    m1 = binary_bit_is(imode, 1, 0);                  // female removal; interior corner over cut placement
-
     // decode ipin
     t1 = defined_fle_or([ipin, pin], 0, ipin);        // male pin width
     t2 = defined_fle_or([ipin, pin], 1, t1*5/2);      // screw section width
@@ -206,6 +202,10 @@ module joint3d_box_screw
     st = defined_fle_or([ibore, bore], 4, undef);
     ss = defined_fle_or([ibore, bore], 5, undef);
     sf = defined_fle_or([ibore, bore], 6, undef);
+
+    // decode imode
+    m0 = binary_bit_is(imode, 0, 0);                  // female removal; interior vs exterior rounding
+    m1 = binary_bit_is(imode, 1, 0);                  // female removal; interior corner over cut placement
 
     fvrm = m0 ? [0,0,4,3] : [0,0,0,0];                // rounding mode selections
 
