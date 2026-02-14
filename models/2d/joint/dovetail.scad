@@ -172,7 +172,7 @@ module joint2d_dovetail
       {
         // male and female finger construction
         if (te > 0)
-        { // finder tail with engagement
+        { // finger tail with engagement
           pg_te = let
                   (
                     sss = triangle_sas2sss( [d, 90, te/2] ),
