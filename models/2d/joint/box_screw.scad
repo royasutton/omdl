@@ -44,7 +44,7 @@
 
 //----------------------------------------------------------------------------//
 
-//! Create 2D edge profiles for screw and nut box joint construction.
+//! Create 2d edge profiles for screw and nut box joint construction.
 /***************************************************************************//**
 
   \param  conf    <datastruct> box joint length, depth, pin configuration
@@ -62,7 +62,7 @@
 
   \details
 
-    Use this module to generate a 2D profile for constructing box-joint
+    Use this module to generate a 2d profile for constructing box-joint
     pairs with a central screw and locking nut, as illustrated in the
     example below.
 
