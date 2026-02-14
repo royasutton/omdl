@@ -182,7 +182,7 @@ module joint2d_dovetail
                   )
                   polygon_round_eve_all_p(ppp, vr=mr, vrm=vrm);
 
-          // straight section rounder out at base (female removal)
+          // straight section round out at base (female removal)
           pg_rectangle([s1, d], vr=fr, vrm=[0,0,4,3]);
 
           translate([-te/2,d])
