@@ -172,8 +172,7 @@ module joint3d_box_screw
   insts,
   mode = 0,
   type = 0,
-  align,
-  center = false
+  align
 )
 {
   // construct 2d box joint at origin
@@ -223,7 +222,7 @@ module joint3d_box_screw
     // pin; female removal or male additions
     if (type == 0 || type == 2)
     for ( i = pins )
-    extrude_linear_uss(h=h, center=center)
+    extrude_linear_uss(h=h, center=true)
     translate ([(t1 + t2)/2*i, depth/2])
       pg_rectangle([s1, depth], vr=er, vrm=(type == 2) ? fvrm : [1,1,0,0], center=true);
 
@@ -252,7 +251,7 @@ module joint3d_box_screw
           ]
     )
     translate ([(t1 + t2)/2*i, 0] + mcr_o)
-    cylinder(d=ir, h=h, center=center);
+    cylinder(d=ir, h=h, center=true);
 
     // screw bore
     if ( binary_bit_is(iform, 2, 1) )
@@ -282,6 +281,7 @@ module joint3d_box_screw
     [
       select_ci( [ 0, +length/2, -length/2 ], defined_e_or(align, 0, 0), false ),
       select_ci( [ 0, -depth/2, -depth ], defined_e_or(align, 1, 0), false ),
+      select_ci( [ 0, +h/2, -h/2 ], defined_e_or(align, 2, 0), false )
     ]
   )
   for ( i = insts )
