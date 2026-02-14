@@ -39,10 +39,17 @@
 
   ## What Makes omdl Distinct from Other OpenSCAD Libraries
 
-  The OpenSCAD Mechanical Design Library ([omdl]) is intentionally
-  positioned differently from widely used OpenSCAD libraries such as
-  [MCAD] and [BOSL2]. While all three support parametric modeling, they
-  target different abstraction levels and workflows.
+  The OpenSCAD Mechanical Design Library ([omdl]) began as the work of
+  an electrical engineer without formal training in mechanical
+  engineering or graphical design. Its approach reflects patterns drawn
+  from electrical hardware description languages, which may feel
+  unconventional to designers accustomed to geometry-first or
+  graphics-driven workflows.
+
+  It is intentionally positioned differently from widely used OpenSCAD
+  libraries such as [MCAD] and [BOSL2]. While all three support
+  parametric modeling, they target different abstraction levels and
+  workflows.
 
   ### 1. Mechanical-Engineering-First Abstraction
 
