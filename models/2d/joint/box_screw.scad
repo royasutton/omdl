@@ -124,13 +124,13 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         |  0                | joint length zero reference; [-1, 0, +1]
-      1 | <decimal>         |  0                | length offset
+      0 | <decimal>         |  0                | zero reference; [-1, 0, +1]
+      1 | <decimal>         |  0                | length offset from reference
       2 | <integer>         |  7                | form (see below).
-      3 | <integer>         |                   | instance mode override (see below).
-      4 | <datastruct \| decimal> |             | instance pin override (see above).
-      5 | <datastruct \| decimal> |             | instance screw override (see above).
-      6 | <datastruct \| decimal> |             | instance nut override (see above).
+      3 | <integer>         |                   | mode override (see below).
+      4 | <datastruct \| decimal> |             | pin override (see above).
+      5 | <datastruct \| decimal> |             | screw override (see above).
+      6 | <datastruct \| decimal> |             | nut override (see above).
 
     #### insts[2]: form
 
@@ -138,8 +138,8 @@
 
       b | description
     ---:|:---------------------------------------
-      0 | construct left pin at negative side of instance length
-      1 | construct right pin at positive side of instance length
+      0 | construct left pin at negative side of instance
+      1 | construct right pin at positive side of instance
       2 | construct screw and nut section of instance
 
     ### mode
