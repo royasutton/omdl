@@ -158,8 +158,8 @@
       3 | male removal; screw nut vs skip screw nut
 
     \amu_define scope_id      (example)
-    \amu_define title         (Box screw joint profile example)
-    \amu_define image_views   (top)
+    \amu_define title         (Box screw joint example)
+    \amu_define image_views   (top diag)
     \amu_define image_size    (sxga)
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
@@ -315,6 +315,55 @@ BEGIN_SCOPE example;
     include <models/3d/fastener/screws.scad>;
     include <models/3d/joint/box_screw.scad>;
 
+    $fn = 36;
+
+    h = 3;
+    w = [50, 3];
+    c = true;
+
+    mode = 1 + 2;
+
+    pin = [5, 5, 1/4, 1/3, 1/3];
+
+    bore =
+    [
+      1,
+      5,
+      [2, 1/2, 1/2],
+      [2, 3/4, 0],
+      undef,
+      [0, [-2, +2]],
+      [1 + 10/100, 1]
+    ];
+
+    conf = [ w.x, w.y, pin, bore ];
+
+    insts =
+    [
+      [-1, +3,   2+4],
+      [+0, +0, 1+2+4, 1+4+16, [3]],
+      [+1, -3,   1+4],
+    ];
+
+    translate([0, -w.y])
+    rotate([90, 0, 0])
+    {
+      joint3d_box_screw(h=h, conf=conf, insts=insts, mode=mode, type=0, center=c);
+      difference()
+      {
+        translate([0, -w.y*3/4]) cube([w.x, w.y * 3/2, h], center=c);
+        joint3d_box_screw(h=h, conf=conf, insts=insts, mode=mode, type=1, center=c);
+      }
+    }
+
+    translate([0, w.y])
+    //rotate([-90, 0, 0]) translate([0, -w.y/2])
+    difference()
+    {
+      translate([0, w.y/2]) cube([w.x, w.y*3/2, h], center=c);
+      joint3d_box_screw(h=h+eps*8, conf=conf, insts=insts, mode=mode, type=2, center=c);
+    }
+
     // end_include
   END_OPENSCAD;
 
@@ -323,7 +372,7 @@ BEGIN_SCOPE example;
     table_unset_all sizes;
 
     images    name "sizes" types "sxga";
-    views     name "views" views "top";
+    views     name "views" views "top diag";
 
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter --view=axes";
