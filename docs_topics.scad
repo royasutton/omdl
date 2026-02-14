@@ -153,11 +153,11 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// Building and installing
+// Building and Installing
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page building_and_installing Building and installing
+  \page building_and_installing Building and Installing
 
   A script is provided to build the library documentation. If the setup
   script does not detect that [openscad-amu], the development environment
@@ -258,11 +258,11 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// Development conventions
+// Development Conventions
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page conventions Development conventions
+  \page conventions Development Conventions
 
   /+
     add to main conventions page until the section contents grows
@@ -282,9 +282,9 @@
 // Data types and values
 //----------------------------------------------------------------------------//
 
-// Base types and values
+// Base Types and Values
 /***************************************************************************//**
-  \page data_types_base Base types and values
+  \page data_types_base Base Types and Values
 
   OpenSCAD defines a value as one of the following: a number, boolean,
   string, range, vector, or the undefined value. Within omdl, what the
@@ -382,9 +382,9 @@
   [Euclidean vectors]: https://en.wikipedia.org/wiki/Euclidean_vector
 *******************************************************************************/
 
-// Index sequence generation
+// Element Index Selection
 /***************************************************************************//**
-  \page data_types_index Element index selection
+  \page data_types_index Element Index Selection
 
   The data type index describes how one or more elements of a list are
   selected by their index positions. Rather than requiring indices to
@@ -429,9 +429,9 @@
   \endcode
 *******************************************************************************/
 
-// Euclidean space data types
+// Euclidean Space Data Types
 /***************************************************************************//**
-  \page data_types_euclidean Euclidean space data types
+  \page data_types_euclidean Euclidean Space Data Types
 
   For [geometric] specifications and [geometric algebra], omdl adopts
   the following type definitions and conventions.
@@ -578,11 +578,11 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// Auto-tests and validation
+// Auto-tests and Validation
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page tv Auto-tests and validation
+  \page tv Auto-tests and Validation
 
   ### Scripts and Results ###
 
@@ -626,11 +626,11 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// Build versions
+// Build Information
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page build_information Build information
+  \page build_information Build Information
 
   \amu_file bi_general (file="${DOXYGEN_OUTPUT}buildinfo/general.amu" ++read)
   \amu_table
@@ -695,11 +695,11 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// Copyright notice
+// Copyright Notice
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page Copyright Copyright notice
+  \page Copyright Copyright Notice
 
   \verbatim
   \amu_include (gnu-lgpl-v2.1.txt)
