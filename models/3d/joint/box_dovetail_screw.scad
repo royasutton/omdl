@@ -1,4 +1,4 @@
-//! Models for constructing 3d box joints with optional screw and nut fastener.
+//! Models for constructing 3d dovetail joints with optional screw and nut fastener.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,9 @@
 
   \details
 
-    \amu_define group_name  (Box Screw)
-    \amu_define group_brief (Models for generating 3d box joints fastened with screw and nut.)
+    \amu_define group_name  (Dovetail Screw)
+    \amu_define group_brief (Models for constructing 3d dovetail joints
+                              with optional screw and nut fastener.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -48,15 +49,15 @@
 
 //----------------------------------------------------------------------------//
 
-//! Construct a 3d box joint with optional screw and nut fastener.
+//! Construct a 3d dovetail joint with optional screw and nut fastener.
 /***************************************************************************//**
 
-  \param  h       <decimal> box joint height.
+  \param  h       <decimal> joint height.
 
-  \param  conf    <datastruct> box joint length, depth, pin configuration
+  \param  conf    <datastruct> joint length, depth, pin configuration
                   and screw configuration (see below).
 
-  \param  insts   <datastruct> box joint instance list (see below).
+  \param  insts   <datastruct> joint instance list (see below).
 
   \param  mode    <integer> global construction mode.
 
@@ -68,8 +69,8 @@
 
   \details
 
-    Use this module to construct 3d box-joints with optional screw and
-    locking nut, as illustrated in the example below.
+    Use this module to construct 3d dovetail joints with optional screw
+    and locking nut, as illustrated in the example below.
 
     Set \p type = 0 to construct the male half, and set \p type = 2 to
     for the corresponding female half. To ensure proper alignment and
@@ -104,9 +105,10 @@
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | <decimal>         |  d                | \p m : male pin width
       1 | <decimal>         |  m * 5/2          | screw section width
-      2 | <decimal>         |  m / 25           | pin gap width
-      3 | <decimal>         |  m / 20           | pin exterior edge rounding
-      4 | <decimal>         |  m / 20           | pin interior edge rounding
+      2 | <decimal>         |  0                | pin tail expansion (dovetail)
+      3 | <decimal>         |  m / 25           | pin gap width
+      4 | <decimal>         |  m / 20           | pin exterior edge rounding
+      5 | <decimal>         |  m / 20           | pin interior edge rounding
 
     #### conf[3]: screw bore
 
@@ -114,19 +116,20 @@
 
     name            | schema
     ---------------:|:----------------------------------------------
-    screw bore      | [  d, l, h, n, t, s, f ]
+    screw bore      | [  sbo, d, l, h, n, t, s, f ]
 
     ##### Data structure fields: screw bore
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         |  d / 6            | \p d : bore diameter
-      1 | <decimal>         |  d * 3/2          | \p l : bore length
-      2 | <decimal-list-5>  |                   | \p h : fastener head
-      3 | <decimal-list-5>  |                   | \p n : fastener nut
-      4 | <decimal-list-2>  |                   | \p t : bore tolerance
-      5 | <decimal-list-list-3> |               | \p s : nut slot cutout
-      6 | <decimal-list-2 \| decimal> |         | \p f : bore scale factor
+      0 | <decimal>         |  0                | \p sbo : screw bore offset
+      1 | <decimal>         |  d / 6            | \p d : bore diameter
+      2 | <decimal>         |  d * 3/2          | \p l : bore length
+      3 | <decimal-list-5>  |                   | \p h : fastener head
+      4 | <decimal-list-5>  |                   | \p n : fastener nut
+      5 | <decimal-list-2>  |                   | \p t : bore tolerance
+      6 | <decimal-list-list-3> |               | \p s : nut slot cutout
+      7 | <decimal-list-2 \| decimal> |         | \p f : bore scale factor
 
     The screw bore is defined using the data structure described above.
     This structure includes seven parameters, all of which are
@@ -149,8 +152,7 @@
       2 | <integer>         |  7                | form (see below).
       3 | <integer>         |                   | mode override (see below).
       4 | <datastruct \| decimal> |             | pin override (see above).
-      5 | <datastruct \| decimal> |             | screw override (see above).
-      6 | <datastruct \| decimal> |             | nut override (see above).
+      5 | <datastruct \| decimal> |             | screw bore override (see above).
 
     #### insts[2]: form
 
@@ -160,7 +162,7 @@
     ---:|:---------------------------------------
       0 | construct left pin at negative side of instance
       1 | construct right pin at positive side of instance
-      2 | construct screw and nut section of instance
+      2 | construct screw bore for instance
 
     ### mode
 
@@ -168,8 +170,7 @@
 
       b | description
     ---:|:---------------------------------------
-      0 | female removal; interior vs exterior rounding
-      1 | female removal; interior corner over cut placement
+      0 | female removal; interior corner over cut placement
 
     \amu_define scope_id      (example)
     \amu_define title         (Box screw joint example)
@@ -179,7 +180,7 @@
     \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
 
-module joint3d_box_screw
+module joint3d_box_dovetail_screw
 (
   h = 1,
   conf,
@@ -189,7 +190,7 @@ module joint3d_box_screw
   align
 )
 {
-  // construct 2d box joint at origin
+  // construct 3d joint at origin
   module box_screw( iform=7, imode=mode, ipin=pin, ibore=ibore )
   {
     /*
@@ -203,27 +204,26 @@ module joint3d_box_screw
     // decode ipin
     t1 = defined_fle_or([ipin, pin], 0, ipin);        // male pin width
     t2 = defined_fle_or([ipin, pin], 1, t1*5/2);      // screw section width
-    tg = defined_fle_or([ipin, pin], 2, t1/25);       // pin gap width
-    er = defined_fle_or([ipin, pin], 3, t1/20);       // pin exterior edge rounding
-    ir = defined_fle_or([ipin, pin], 4, t1/20);       // pin interior edge rounding
+    te = defined_fle_or([ipin, pin], 2, 0);           // tail "engagement" width
+    tg = defined_fle_or([ipin, pin], 3, t1/25);       // pin gap width
+    er = defined_fle_or([ipin, pin], 4, t1/20);       // pin exterior edge rounding
+    ir = defined_fle_or([ipin, pin], 5, t1/20);       // pin interior edge rounding
 
     // decode ibore; screw bore parameters
-    //  see screw_bore() for details
-    sd = defined_fle_or([ibore, bore], 0, depth/6);
-    sl = defined_fle_or([ibore, bore], 1, depth*3/2);
-    sh = defined_fle_or([ibore, bore], 2, undef);
-    sn = defined_fle_or([ibore, bore], 3, undef);
-    st = defined_fle_or([ibore, bore], 4, undef);
-    ss = defined_fle_or([ibore, bore], 5, undef);
-    sf = defined_fle_or([ibore, bore], 6, undef);
+    //  see screw_bore() for details on following
+    so = defined_fle_or([ibore, bore], 0, 0);
+    sd = defined_fle_or([ibore, bore], 1, depth/6);
+    sl = defined_fle_or([ibore, bore], 2, depth*3/2);
+    sh = defined_fle_or([ibore, bore], 3, undef);
+    sn = defined_fle_or([ibore, bore], 4, undef);
+    st = defined_fle_or([ibore, bore], 5, undef);
+    ss = defined_fle_or([ibore, bore], 6, undef);
+    sf = defined_fle_or([ibore, bore], 7, undef);
 
     // decode imode
-    m0 = binary_bit_is(imode, 0, 0);                  // female removal; interior vs exterior rounding
-    m1 = binary_bit_is(imode, 1, 0);                  // female removal; interior corner over cut placement
+    m0 = binary_bit_is(imode, 1, 0);                  // female removal; interior corner over cut placement
 
-    fvrm = m0 ? [0,0,4,3] : [0,0,0,0];                // rounding mode selections
-
-    sg = (type == 2) ?  1 : -1;                       // gap adjustment
+    sg = (type == 2) ? +1 : -1;                       // gap adjustment
     s1 = t1 + sg * tg/2;                              // pin sized for gap
 
     // add enabled pins only
@@ -233,53 +233,85 @@ module joint3d_box_screw
       if( binary_bit_is(iform, 1, 1) ) +1
     ];
 
-    // pin; female removal or male additions
-    if (type == 0 || type == 2)
-    for ( i = pins )
-    extrude_linear_uss(h=h, center=true)
-    translate ([(t1 + t2)/2*i, depth/2])
-      pg_rectangle([s1, depth], vr=er, vrm=(type == 2) ? fvrm : [1,1,0,0], center=true);
-
-    // interior corner minimum cut radius; removal modes only
-    if ( ir > 0 && (type == 1 || type == 2) )
-    for
-    (
-      i = pins,
-
-      mcr_o =
-        (type == 2) ?
-          m0 ?
-            [ // type=0, m0=1, m1=[0,1]; female with rounding at edge
-              for (j = [-1,1])
-                m1 ? [ j*(s1-ir)/2, depth ]
-                   : [ j*s1/2, depth-ir/2 ]
-            ]
-          : [ // type=0, m0=0, m1=[0,1]; female with rounding in field
-              for (j = [-1,1], k = [-1,1])
-                m1 ? [ j*(s1-ir)/2, depth/2 + k*depth/2 ]
-                   : [ j*s1/2, depth/2 + k*(depth-ir)/2 ]
-            ]
-      :   [ // type=1,2; male
-            for (j = [-1,1])
-              [ j*(s1+ir)/2, 0 ]
-          ]
-    )
-    translate ([(t1 + t2)/2*i, 0] + mcr_o)
-    cylinder(d=ir, h=h, center=true);
-
-    // screw bore
-    if ( binary_bit_is(iform, 2, 1) )
+    // move to joint male / female interface
+    translate( [0, depth/2, 0] )
     {
-      // screw bore; female removal
-      if (type == 2)
-      translate ([0, depth/2, h/2])
-      screw_bore(d=sd, l=sl, h=sh, n=sn, t=st, s=ss, f=sf, a=1);
+      // pin; female removal or male additions
+      if (type == 0 || type == 2)
+      for ( i = pins )
+      extrude_linear_uss(h=h, center=true)
+      translate ([(t1 + t2)/2*i, 0])
+      {
+        if (te > 0)
+        { // finger tail with engagement
+          let
+          (
+            vr  = (type == 2) ? er : 0,
+            vrm = [0,0,4,3]
+          )
+          pg_rectangle([s1, depth], vr=vr, vrm=vrm, center=true);
 
-      // screw bore; male removal
-      if (type == 1)
-      translate([0, depth, 0])
-      rotate([270, 0, 0])
-      screw_bore(d=sd, l=sl, h=sh, n=sn, t=st, s=ss, f=sf, a=1);
+          pg_te =
+          let
+          (
+            sss = triangle_sas2sss( [depth, 90, te/2] ),
+            ppp = triangle2d_sss2ppp( sss ),
+
+            vr  = (type == 2) ? 0 : er,
+            vrm = [0,0,1]
+          )
+          polygon_round_eve_all_p(ppp, vr=vr, vrm=vrm);
+
+          translate([ -(s1+te)/2, depth/2])
+          rotate([180,0])
+          polygon(pg_te);
+
+          translate([ +(s1+te)/2, depth/2])
+          rotate([180,180])
+          polygon(pg_te);
+        }
+        else
+        { // straight box finger / pin
+          let
+          (
+            vr  = er,
+            vrm = (type == 2) ? [0,0,4,3] : [1,1,0,0]
+          )
+          pg_rectangle([s1, depth], vr=er, vrm=vrm, center=true);
+        }
+      }
+
+      // removal mode only
+      if (type == 1 || type == 2)
+      {
+        // interior corner minimum cut radius
+        if ( ir > 0 )
+        for
+        (
+          i = pins,
+
+          mcr_o =
+          let ( pe = max(te, 0) )
+            (type == 2) ?
+              [ // type=2; female
+                for (j = [-1,1])
+                  m0 ? [ j*(pe+s1-ir)/2, depth ]
+                     : [ j*(pe+s1)/2, depth-ir/2 ]
+              ]
+          :   [ // type=0,1; male
+                for (j = [-1,1])
+                  [ j*(s1+ir)/2, 0 ]
+              ]
+        )
+        translate ([(t1 + t2)/2*i, -depth/2] + mcr_o)
+        cylinder(d=ir, h=h, center=true);
+
+        // screw bore
+        if ( binary_bit_is(iform, 2, 1) )
+        translate ([0, depth/2 + so, 0])
+        rotate([270,0,0])
+        screw_bore(d=sd, l=sl, h=sh, n=sn, t=st, s=ss, f=sf, a=1);
+      }
     }
   }
 
@@ -303,7 +335,6 @@ module joint3d_box_screw
     zero    = defined_e_or(i, 0, 0);
     offset  = defined_e_or(i, 1, 0);
     iform   = defined_e_or(i, 2, 7);
-
     imode   = defined_e_or(i, 3, mode);
     ipin    = defined_e_or(i, 4, pin);
     ibore   = defined_e_or(i, 5, bore);
@@ -327,7 +358,7 @@ BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <models/3d/fastener/screws.scad>;
-    include <models/3d/joint/box_screw.scad>;
+    include <models/3d/joint/box_dovetail_screw.scad>;
 
     $fn = 36;
 
@@ -336,17 +367,19 @@ BEGIN_SCOPE example;
 
     mode = 1 + 2;
 
-    pin = [5, 5, 1/4, 1/3, 1/3];
+    pin = [5, 5, 2, 1, 1/3, 1/3];
 
     bore =
     [
+      3,
       1,
-      5,
+      5 + 3,
       [2, 1/2, 1/2],
       [2, 3/4, 0],
       undef,
       [0, [-2, +2]],
       [1 + 10/100, 1]
+
     ];
 
     conf = [ w.x, w.y, pin, bore ];
@@ -358,22 +391,20 @@ BEGIN_SCOPE example;
       [+1, -3,   1+4],
     ];
 
-    translate([0, -w.y])
-    rotate([90, 0, 0])
+    translate([0, -w.y, 0]) union()
     {
-      joint3d_box_screw(h=h, conf=conf, insts=insts, mode=mode, type=0);
+      joint3d_box_dovetail_screw(h=h, conf=conf, insts=insts, mode=mode, type=0);
       difference()
       {
         translate([0, -w.y*3/4]) cube([w.x, w.y * 3/2, h], center=true);
-        joint3d_box_screw(h=h, conf=conf, insts=insts, mode=mode, type=1);
+        joint3d_box_dovetail_screw(h=h, conf=conf, insts=insts, mode=mode, type=1);
       }
     }
 
-    translate([0, w.y])
-    difference()
+    translate([0, +w.y, 0]) difference()
     {
-      translate([0, w.y/2]) cube([w.x, w.y*3/2, h], center=true);
-      joint3d_box_screw(h=h+eps*8, conf=conf, insts=insts, mode=mode, type=2);
+      translate([0, w.y, -h/2 ]) cube([w.x, w.y*2 -eps*4, h*2 -eps*4], center=true);
+      joint3d_box_dovetail_screw(h=h, conf=conf, insts=insts, mode=mode, type=2);
     }
 
     // end_include
