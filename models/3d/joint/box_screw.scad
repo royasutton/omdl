@@ -319,7 +319,6 @@ BEGIN_SCOPE example;
 
     h = 3;
     w = [50, 3];
-    c = true;
 
     mode = 1 + 2;
 
@@ -348,11 +347,11 @@ BEGIN_SCOPE example;
     translate([0, -w.y])
     rotate([90, 0, 0])
     {
-      joint3d_box_screw(h=h, conf=conf, insts=insts, mode=mode, type=0, center=c);
+      joint3d_box_screw(h=h, conf=conf, insts=insts, mode=mode, type=0);
       difference()
       {
-        translate([0, -w.y*3/4]) cube([w.x, w.y * 3/2, h], center=c);
-        joint3d_box_screw(h=h, conf=conf, insts=insts, mode=mode, type=1, center=c);
+        translate([0, -w.y*3/4]) cube([w.x, w.y * 3/2, h], center=true);
+        joint3d_box_screw(h=h, conf=conf, insts=insts, mode=mode, type=1);
       }
     }
 
@@ -360,8 +359,8 @@ BEGIN_SCOPE example;
     //rotate([-90, 0, 0]) translate([0, -w.y/2])
     difference()
     {
-      translate([0, w.y/2]) cube([w.x, w.y*3/2, h], center=c);
-      joint3d_box_screw(h=h+eps*8, conf=conf, insts=insts, mode=mode, type=2, center=c);
+      translate([0, w.y/2]) cube([w.x, w.y*3/2, h], center=true);
+      joint3d_box_screw(h=h+eps*8, conf=conf, insts=insts, mode=mode, type=2);
     }
 
     // end_include
