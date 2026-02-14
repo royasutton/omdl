@@ -110,9 +110,23 @@
 
     #### conf[3]: screw bore
 
+    ##### Data structure schema: screw bore
+
     name            | schema
     ---------------:|:----------------------------------------------
     screw bore      | [  d, l, h, n, t, s, f ]
+
+    ##### Data structure fields: screw bore
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <decimal>         |  d / 6            | \p d : bore diameter
+      1 | <decimal>         |  d * 3/2          | \p l : bore length
+      2 | <decimal-list-5>  |                   | \p h : fastener head
+      3 | <decimal-list-5>  |                   | \p n : fastener nut
+      4 | <decimal-list-2>  |                   | \p t : bore tolerance
+      5 | <decimal-list-list-3> |               | \p s : nut slot cutout
+      6 | <decimal-list-2 \| decimal> |         | \p f : bore scale factor
 
     The screw bore is defined using the data structure described above.
     This structure includes seven parameters, all of which are
@@ -120,7 +134,7 @@
 
     ### insts
 
-    #### Data structure schema:
+    #### Data structure schema: insts
 
     name            | schema
     ---------------:|:----------------------------------------------
