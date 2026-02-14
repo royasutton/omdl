@@ -31,6 +31,160 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+// The omdl Distinctions
+//----------------------------------------------------------------------------//
+
+/***************************************************************************//**
+  \page omdl_distinctions Distinctions
+
+  ## What Makes omdl Distinct from Other OpenSCAD Libraries
+
+  The OpenSCAD Mechanical Design Library ([omdl]) is intentionally
+  positioned differently from widely used OpenSCAD libraries such as
+  [MCAD] and [BOSL2]. While all three support parametric modeling, they
+  target different abstraction levels and workflows.
+
+  ### 1. Mechanical-Engineering-First Abstraction
+
+  omdl is designed around mechanical design intent, not just
+  geometry creation.
+
+  - Parameters represent physical concepts (lengths, angles,
+    tolerances, fits)
+
+  - Modules reflect mechanical parts and operations, not just shapes
+
+  - Design choices emphasize manufacturability and assembly
+
+  In contrast:
+
+  - \b [MCAD] focuses on providing a catalog of reusable mechanical
+    parts
+
+  - \b [BOSL2] focuses on robust geometric primitives and utilities
+
+  omdl treats geometry as a consequence of mechanical decisions, not
+  the starting point.
+
+
+  ### 2. Emphasis on Structured Parameters
+
+  omdl encourages the use of structured, self-describing parameters
+  rather than long positional argument lists.
+
+  omdl takes the view that design application flexibility is increased
+  by providing detailed construction options through careful
+  parameterization and by managing those parameters as configurations
+  with defaults, inheritance, and instance-level control. Designers
+  should be able to create useful mechanical parts using defaults,
+  while still retaining the ability to drill down into low-level
+  geometric details when required.
+
+  This results in:
+
+  - More readable designs
+  - Fewer silent failures
+  - Easier long-term maintenance
+
+  By comparison:
+
+  - \b [MCAD] often relies on positional parameters
+
+  - \b [BOSL2] provides powerful helpers but leaves structure decisions
+    to the user
+
+
+  ### 3. Unit-Aware Design Philosophy
+
+  omdl natively supports unit-aware modeling, making mixed-unit
+  mechanical work safer and clearer.
+
+  Key ideas:
+
+  - Explicit unit conversion (`length()`, `angle()`)
+  - Reduced risk of inch/mm confusion
+  - Clear documentation of expected units
+
+  Most other libraries:
+
+  - Assume a single unit system (usually millimeters)
+  - Leave unit discipline entirely to user convention
+
+  For mechanical engineers working from drawings or standards, this is
+  a major differentiator.
+
+
+  ### 4. Workflow-Oriented Organization
+
+  omdl mirrors how mechanical designs evolve. This is reflected
+  directly in the library structure:
+
+  - Data
+  - Models
+  - Operations
+  - Parts
+  - Assemblies
+  - Drafting
+  - \e etc.
+
+  Other libraries are typically organized by shape type, not design
+  process.
+
+
+  ### 5. Documentation as a First-Class Feature
+
+  omdl is written to be self-documenting by design:
+
+  - Doxygen-style comments embedded in source
+  - Generated API documentation in multiple output formats (HTML, PDF, etc.)
+  - Parameters explained in engineering terms
+
+  The goal is that reading the documentation teaches mechanical design
+  usage, not just syntax.
+
+  By contrast:
+
+  - \b [MCAD] documentation is sparse and example-driven
+  - \b [BOSL2] documentation is extensive but geometry-centric
+
+
+  ### 6. Conservative, Predictable Behavior
+
+  omdl favors:
+
+  - Explicit behavior over “magic”
+  - Predictable defaults
+  - Minimal global state
+
+  This makes designs:
+
+  - Easier to audit
+  - Easier to debug
+  - More suitable for long-lived or shared projects
+
+
+  ## Differentiation Summary
+
+  Feature              | omdl                      | MCAD                      | BOSL2
+  -------------------- | ------------------------- | ------------------------- | ----------------------
+  Primary Focus        | Mechanical design intent  | Part catalog              | Geometric power tools
+  Units                | Explicit, unit-aware      | Implicit                  | Implicit
+  Parameter Style      | Structured & named        | Positional                | Mixed
+  Workflow Orientation | Yes                       | No                        | No
+  Documentation Depth  | High, engineering-centric | Minimal                   | High, geometry-centric
+  Target User          | Mechanical engineers      | Hobbyists & general users | Power users
+
+  omdl is not just a geometry library, it is a mechanical design
+  framework for OpenSCAD, built to reflect how engineers think,
+  document, and maintain real mechanical systems.**
+
+
+  [omdl]: https://royasutton.github.io/omdl
+  [MCAD]: https://github.com/openscad/MCAD
+  [BOSL2]: https://github.com/BelfrySCAD/BOSL2
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
 // Architecture Overview
 //----------------------------------------------------------------------------//
 
