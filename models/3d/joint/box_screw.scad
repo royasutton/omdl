@@ -356,7 +356,6 @@ BEGIN_SCOPE example;
     }
 
     translate([0, w.y])
-    //rotate([-90, 0, 0]) translate([0, -w.y/2])
     difference()
     {
       translate([0, w.y/2]) cube([w.x, w.y*3/2, h], center=true);
