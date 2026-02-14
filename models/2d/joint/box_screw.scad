@@ -91,28 +91,34 @@
       0 | <decimal>         |  required         | \p l : joint length
       1 | <decimal>         |  l/10             | \p d : joint depth
       2 | <datastruct \| decimal> |  d          | pin default configuration
-      3 | <datastruct \| decimal> |  d/6        | screw & nut default configuration
+      3 | <datastruct \| decimal> |  d/6        | screw default configuration
+      4 | <datastruct \| decimal> |  d/3        | nut default configuration
 
     #### conf[2]: pin
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         |  required         | \p m : male pin width
+      0 | <decimal>         |  d                | \p m : male pin width
       1 | <decimal>         |  m * 5/2          | screw section width
       2 | <decimal>         |  m / 25           | pin gap width
       3 | <decimal>         |  m / 20           | pin exterior edge rounding
       4 | <decimal>         |  m / 20           | pin interior edge rounding
 
-    #### conf[3]: screw & nut
+    #### conf[3]: screw
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         |  required         | \p sd : screw diameter
+      0 | <decimal>         |  d/6              | \p sd : screw diameter
       1 | <decimal>         |  d                | \p sl : screw length
-      2 | <decimal>         |  sd * 2           | nut size; flat-to-flat
-      3 | <decimal>         |  sd               | nut height
-      4 | <decimal>         |  sl / 10          | nut end offset
-      4 | <decimal>         |  m / 20           | nut interior edge rounding
+
+    #### conf[n]: nut
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | <decimal>         |  d/3              | nut size; flat-to-flat
+      1 | <decimal>         |  sd               | nut height
+      2 | <decimal>         |  sl / 10          | nut end offset
+      3 | <decimal>         |  m / 20           | nut interior edge rounding
 
     ### insts
 
@@ -121,9 +127,10 @@
       0 | <decimal>         |  0                | joint length zero reference; [-1, 0, +1]
       1 | <decimal>         |  0                | length offset
       2 | <integer>         |  7                | form (see below).
-      3 | <integer>         |  mode             | instance mode (see below).
-      4 | <datastruct \| decimal> |  p          | instance pin override (see above).
-      5 | <datastruct \| decimal> |  s          | instance screw & nut override (see above).
+      3 | <integer>         |                   | instance mode override (see below).
+      4 | <datastruct \| decimal> |             | instance pin override (see above).
+      5 | <datastruct \| decimal> |             | instance screw override (see above).
+      6 | <datastruct \| decimal> |             | instance nut override (see above).
 
     #### insts[2]: form
 
@@ -165,7 +172,7 @@ module joint2d_box_screw
 )
 {
   // construct 2d box joint at origin
-  module box_screw( iform=7, imode=mode, ipin=pin, iscrew=screw )
+  module box_screw( iform=7, imode=mode, ipin=pin, iscrew=screw, inut=nut )
   {
     /*
         iform
@@ -192,10 +199,12 @@ module joint2d_box_screw
     // decode iscrew
     sd = defined_fle_or([iscrew, screw], 0, iscrew);  // screw diameter
     sl = defined_fle_or([iscrew, screw], 1, depth);   // screw length
-    ns = defined_fle_or([iscrew, screw], 2, sd*2);    // nut size; flat-to-flat
-    nh = defined_fle_or([iscrew, screw], 3, sd);      // nut height
-    no = defined_fle_or([iscrew, screw], 4, sl/10);   // nut end offset
-    nr = defined_fle_or([iscrew, screw], 5, t1/20);   // nut interior edge rounding
+
+    // decode inut
+    ns = defined_fle_or([inut, nut], 0, inut);        // nut size; flat-to-flat
+    nh = defined_fle_or([inut, nut], 1, sd);          // nut height
+    no = defined_fle_or([inut, nut], 2, sl/10);       // nut end offset
+    nr = defined_fle_or([inut, nut], 3, t1/20);       // nut interior edge rounding
 
     fvrm = m0 ? [0,0,4,3] : [0,0,0,0];                // rounding mode selections
 
@@ -284,6 +293,7 @@ module joint2d_box_screw
   depth   = defined_e_or(conf, 1, length/10);
   pin     = defined_e_or(conf, 2, depth);
   screw   = defined_e_or(conf, 3, depth/6);
+  nut     = defined_e_or(conf, 4, depth/3);
 
   // align construction
   translate
@@ -298,12 +308,14 @@ module joint2d_box_screw
     zero    = defined_e_or(i, 0, 0);
     offset  = defined_e_or(i, 1, 0);
     iform   = defined_e_or(i, 2, 7);
+
     imode   = defined_e_or(i, 3, mode);
     ipin    = defined_e_or(i, 4, pin);
     iscrew  = defined_e_or(i, 5, screw);
+    inut    = defined_e_or(i, 6, nut);
 
     translate([ length/2 * zero + offset, 0 ])
-    box_screw( iform=iform, imode=imode, ipin=ipin, iscrew=iscrew );
+    box_screw( iform=iform, imode=imode, ipin=ipin, iscrew=iscrew, inut=inut );
   }
 }
 
