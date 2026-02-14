@@ -8,7 +8,7 @@ local_path        :=  models/3d/joint
 
 local_library     :=  docs_module \
                       \
-                      box_screw
+                      box_dovetail_screw
 
 local_release_add :=
 
