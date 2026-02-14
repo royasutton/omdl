@@ -1,4 +1,4 @@
-//! Models for generating 3d box joints fastened with screw and nut.
+//! Models for constructing 3d box joints with optional screw and nut fastener.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -48,8 +48,10 @@
 
 //----------------------------------------------------------------------------//
 
-//! Create 3d edge profiles for screw and nut box joint construction.
+//! Construct a 3d box joint with optional screw and nut fastener.
 /***************************************************************************//**
+
+  \param  h       <decimal> box joint height.
 
   \param  conf    <datastruct> box joint length, depth, pin configuration
                   and screw configuration (see below).
@@ -61,19 +63,18 @@
   \param  type    <integer> construction type {0=male additions,
                   1=male removals, 2=female removals}.
 
-  \param  align   <integer-list-2> joint alignment; edge-1, center, and
-                  edge-2 for both [x, y].
+  \param  align   <integer-list-3> joint alignment; center, edge-1, and
+                  edge-2 for [x, y, z].
 
   \details
 
-    Use this module to generate a 3d profile for constructing box-joint
-    pairs with a central screw and locking nut, as illustrated in the
-    example below.
+    Use this module to construct 3d box-joints with optional screw and
+    locking nut, as illustrated in the example below.
 
-    Set \p type = 0 to create the male finger profile, and set \p type
-    = 2 to generate the corresponding female slot profile. To ensure
-    proper alignment and fit, both components must be created using
-    identical configuration parameters.
+    Set \p type = 0 to construct the male half, and set \p type = 2 to
+    for the corresponding female half. To ensure proper alignment and
+    fit, both components must be constructed using identical
+    configuration parameters.
 
     When producing interlocking joints with 3D-printed plastics,
     carefully control the joint clearance. Most printed plastics are
@@ -95,8 +96,7 @@
       0 | <decimal>         |  required         | \p l : joint length
       1 | <decimal>         |  l/10             | \p d : joint depth
       2 | <datastruct \| decimal> |  d          | pin default configuration
-      3 | <datastruct \| decimal> |  d/6        | screw default configuration
-      4 | <datastruct \| decimal> |  d/3        | nut default configuration
+      3 | <datastruct>      |  undef            | screw bore default configuration
 
     #### conf[2]: pin
 
@@ -108,33 +108,35 @@
       3 | <decimal>         |  m / 20           | pin exterior edge rounding
       4 | <decimal>         |  m / 20           | pin interior edge rounding
 
-    #### conf[3]: screw
+    #### conf[3]: screw bore
 
-      e | data type         | default value     | parameter description
-    ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         |  d/6              | \p sd : screw diameter
-      1 | <decimal>         |  d                | \p sl : screw length
+    name            | schema
+    ---------------:|:----------------------------------------------
+    screw bore      | [  d, l, h, n, t, s, f ]
 
-    #### conf[n]: nut
-
-      e | data type         | default value     | parameter description
-    ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         |  d/3              | nut size; flat-to-flat
-      1 | <decimal>         |  sd               | nut height
-      2 | <decimal>         |  sl / 10          | nut end offset
-      3 | <decimal>         |  m / 20           | nut interior edge rounding
+    The screw bore is defined using the data structure described above.
+    This structure includes seven parameters, all of which are
+    documented in screw_bore().
 
     ### insts
 
+    #### Data structure schema:
+
+    name            | schema
+    ---------------:|:----------------------------------------------
+    insts           | [  inst, inst, ..., inst  ]
+
+    #### Data structure fields: inst
+
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         |  0                | joint length zero reference; [-1, 0, +1]
-      1 | <decimal>         |  0                | length offset
+      0 | <decimal>         |  0                | zero reference; [-1, 0, +1]
+      1 | <decimal>         |  0                | length offset from reference
       2 | <integer>         |  7                | form (see below).
-      3 | <integer>         |                   | instance mode override (see below).
-      4 | <datastruct \| decimal> |             | instance pin override (see above).
-      5 | <datastruct \| decimal> |             | instance screw override (see above).
-      6 | <datastruct \| decimal> |             | instance nut override (see above).
+      3 | <integer>         |                   | mode override (see below).
+      4 | <datastruct \| decimal> |             | pin override (see above).
+      5 | <datastruct \| decimal> |             | screw override (see above).
+      6 | <datastruct \| decimal> |             | nut override (see above).
 
     #### insts[2]: form
 
@@ -142,8 +144,8 @@
 
       b | description
     ---:|:---------------------------------------
-      0 | construct left pin at negative side of instance length
-      1 | construct right pin at positive side of instance length
+      0 | construct left pin at negative side of instance
+      1 | construct right pin at positive side of instance
       2 | construct screw and nut section of instance
 
     ### mode
@@ -154,8 +156,6 @@
     ---:|:---------------------------------------
       0 | female removal; interior vs exterior rounding
       1 | female removal; interior corner over cut placement
-      2 | male removal; screw bore vs skip screw bore
-      3 | male removal; screw nut vs skip screw nut
 
     \amu_define scope_id      (example)
     \amu_define title         (Box screw joint example)
