@@ -111,7 +111,7 @@
       0 | <decimal>         |  d/6              | \p sd : screw diameter
       1 | <decimal>         |  d                | \p sl : screw length
 
-    #### conf[n]: nut
+    #### conf[4]: nut
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
