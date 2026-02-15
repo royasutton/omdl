@@ -773,6 +773,30 @@ function permute_ns
       ]
     );
 
+//! Return all ordered n-size set permutations of iterable value with repetition allowed.
+/***************************************************************************//**
+  \param    v <iterable> An iterable value.
+  \param    n <integer> The set size size.
+
+  \returns  (1) <list-list> A list all ordered n-length permutations of
+                \p v with element repetition allowed.
+            (2) Returns \b empty_lst when \p v is not iterable.
+*******************************************************************************/
+function permute_ns_r
+(
+  v,
+  n
+) =
+    !is_iterable(v) ? empty_lst
+  : (n == 0) ? [empty_lst]
+  : concat
+    (
+      [
+        for ( i = v, p = permute_ns_r(v, n - 1) )
+          concat([i], p)
+      ]
+    );
+
 //! Append a value to each element of an iterable value.
 /***************************************************************************//**
   \param    nv \<value> A new value to append.
@@ -1671,6 +1695,7 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "sequence_ns_31", 1, sequence_ns( v1(db,id), n=3, s=1 ) );
     // combine_ns()
     // permute_ns()
+    // permute_ns_r()
     for (id=test_ids) table_validate( db, id, "append_e_T0", 1, append_e( 0, v1(db,id) ) );
     // append_v()
     for (id=test_ids) table_validate( db, id, "insert_T0", 1, insert( 0, v1(db,id), mv=["x","r","apple","s",[2,3],5] ) );
