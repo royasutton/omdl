@@ -299,7 +299,7 @@ module joint2d_box_screw
   translate
   (
     [
-      select_ci( [ 0, +length/2, -length/2 ], defined_e_or(align, 0, 0), false ),
+      select_ci( [ 0, -length/2, +length/2 ], defined_e_or(align, 0, 0), false ),
       select_ci( [ 0, -depth/2, -depth ], defined_e_or(align, 1, 0), false ),
     ]
   )
