@@ -365,8 +365,6 @@ BEGIN_SCOPE example;
     h = 3;
     w = [50, 3];
 
-    mode = 1 + 2;
-
     pin = [5, 5, 2, 1, 1/3, 1/3];
 
     bore =
@@ -387,24 +385,24 @@ BEGIN_SCOPE example;
     insts =
     [
       [-1, +3,   2+4],
-      [+0, +0, 1+2+4, 1+4+16, [3]],
-      [+1, -3,   1+4],
+      [+0, +0, 1+2+4, 1, [3]],
+      [+1, -3, 1  +4],
     ];
 
     translate([0, -w.y, 0]) union()
     {
-      joint3d_dovetail_screw(h=h, conf=conf, insts=insts, mode=mode, type=0);
+      joint3d_dovetail_screw(h=h, conf=conf, insts=insts, type=0);
       difference()
       {
         translate([0, -w.y*3/4]) cube([w.x, w.y * 3/2, h], center=true);
-        joint3d_dovetail_screw(h=h, conf=conf, insts=insts, mode=mode, type=1);
+        joint3d_dovetail_screw(h=h, conf=conf, insts=insts, type=1);
       }
     }
 
     translate([0, +w.y, 0]) difference()
     {
       translate([0, w.y, -h/2 ]) cube([w.x, w.y*2 -eps*4, h*2 -eps*4], center=true);
-      joint3d_dovetail_screw(h=h, conf=conf, insts=insts, mode=mode, type=2);
+      joint3d_dovetail_screw(h=h, conf=conf, insts=insts, type=2);
     }
 
     // end_include
