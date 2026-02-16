@@ -89,6 +89,13 @@
     allowing compensation for cutting tool diameter (commonly called
     dogbone corner relief).
 
+    \amu_define scope_id      (example)
+    \amu_define title         (2d box example)
+    \amu_define image_views   (top)
+    \amu_define image_size    (sxga)
+
+    \amu_include (include/amu/scope_diagrams_3d.amu)
+
   \todo
 
     (*) correct side-yz to side-xy interconnection
@@ -275,6 +282,19 @@ BEGIN_SCOPE example;
     include <models/2d/joint/box_screw.scad>;
     include <parts/2d/enclosure/box_finger_joint.scad>;
 
+    box2d_finger_joint
+    (
+      mth   = 2,
+      size  = [60, 30, 20],
+      pin   = [5, 10, 1/2, 1/2, 1/2],
+      screw = [3/2, 5],
+      nut   = [3, 3/2],
+
+      max_sets    = [3, 1, 1],
+      pin_spacing = 10,
+      closed      = false
+    );
+
     // end_include
   END_OPENSCAD;
 
@@ -283,7 +303,7 @@ BEGIN_SCOPE example;
     table_unset_all sizes;
 
     images    name "sizes" types "sxga";
-    views     name "views" views "front diag";
+    views     name "views" views "top";
 
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter --view=axes";
