@@ -67,12 +67,12 @@
 
   \todo
 
-    (1) add support for horizontal and vertical interior wall instances.
-    (2) support for individual wall output
-    (3) support for 3d assembly preview with colors
+    (1) Support horizontal and vertical interior wall instances.
+    (2) Support individual wall output.
+    (3) Support 3d assembly preview with colors.
 
 *******************************************************************************/
-module box_finger_joint
+module box2d_finger_joint
 (
   mth = 1,
   size,
