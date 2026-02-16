@@ -75,20 +75,20 @@
 module box_finger_joint
 (
   mth = 1,
-  box_size,
+  size,
 
-  pin_conf,
+  pin,
   pin_spacing,
   max_pins,
 
-  screw_conf,
-  nut_conf,
+  screw,
+  nut,
 
-  joint_form  = 7,
-  joint_mode  = 0,
+  joint_form = 7,
+  joint_mode = 0,
 
   side_spacing,
-  closed_box  = true
+  closed_box = true
 )
 {
   //
@@ -101,27 +101,27 @@ module box_finger_joint
     //
     module construct_joint( count, axis, sides, type )
     {
-      length = axis == 1 ? size.x : size.y;
-      offset = type == 2 ? -1 : +1;
+      side_length   = axis == 1 ? size.x : size.y;
+      side_offset   = type == 2 ? -1 : +1;
 
-      ps_length = first(pin) * 2 + second(pin) + pin_offset;
-      ps_cnt    = min(count, max(1, floor(length / ps_length)));
+      joint_length  = first(pin_conf) * 2 + second(pin_conf) + pin_offset;
+      joint_count   = min(count, max(1, floor(side_length / joint_length)));
 
       for (s = sides)
       translate
       (
         axis == 0 ?
-          [ s * (size.x/2 + mth/2 * offset), 0 ]
-        : [ 0, s * (size.y/2 + mth/2 * offset) ]
+          [ s * (size.x/2 + mth/2 * side_offset), 0 ]
+        : [ 0, s * (size.y/2 + mth/2 * side_offset) ]
       )
       rotate(axis == 0 ? -90 : 0)
-      translate([ps_length/2 - (ps_length * ps_cnt)/2, 0])
+      translate([joint_length/2 - (joint_length * joint_count)/2, 0])
       mirror(s < 0 ? [0, 1] : [0, 0])
       mirror(type == 2 ? [0, 1] : [0, 0])
       joint2d_box_screw
       (
-        conf = [ length, mth, pin, screw, nut ],
-        insts = [ for ( i = [0 : ps_cnt - 1] ) [0, ps_length * i, joint_form ] ],
+        conf = [ side_length, mth, pin_conf, screw_conf, nut_conf ],
+        insts = [ for ( i = [0 : joint_count - 1] ) [0, joint_length * i, joint_form ] ],
         mode = joint_mode,
         type = type,
         align = [0, 1]
@@ -166,19 +166,19 @@ module box_finger_joint
   // decode and assign defaults to undefined parameters
   //
 
-  box_x         = defined_eon_or(box_size, 0, mth*10);
-  box_y         = defined_e_or  (box_size, 1, box_x);
-  box_z         = defined_e_or  (box_size, 2, box_y);
+  box_x         = defined_eon_or(size, 0, mth*10);
+  box_y         = defined_e_or  (size, 1, box_x);
+  box_z         = defined_e_or  (size, 2, box_y);
 
-  pin           = defined_or(pin_conf,    [mth, mth * 5/2]);
-  pin_offset    = defined_or(pin_spacing, second(pin));
+  pin_conf      = defined_or(pin, [mth, mth * 5/2]);
+  pin_offset    = defined_or(pin_spacing, second(pin_conf));
 
   max_pins_x    = defined_eon_or(max_pins, 0, number_max);
   max_pins_y    = defined_e_or  (max_pins, 1, max_pins_x);
   max_pins_z    = defined_e_or  (max_pins, 2, max_pins_y);
 
-  screw         = defined_or(screw_conf,  mth/3);
-  nut           = defined_or(nut_conf,    mth*2/3);
+  screw_conf    = defined_or(screw, mth/3);
+  nut_conf      = defined_or(nut, mth*2/3);
 
   side_offset   = defined_or(side_spacing, mth * 3/2 );
 
@@ -186,12 +186,12 @@ module box_finger_joint
   // wall and joint instances
   //
 
-  wall_xy       = [ box_x, box_y ];
-  wall_xz       = [ box_x, box_z ];
-  wall_yz       = [ box_y, box_z ];
+  side_xy       = [ box_x, box_y ];
+  side_xz       = [ box_x, box_z ];
+  side_yz       = [ box_y, box_z ];
 
-  wall_offset_x = (wall_xy.x + wall_yz.x)/2 + side_offset;
-  wall_offset_y = (wall_xy.y + wall_xz.y)/2 + side_offset;
+  wall_offset_x = (side_xy.x + side_yz.x)/2 + side_offset;
+  wall_offset_y = (side_xy.y + side_xz.y)/2 + side_offset;
 
   insts_xy  =
   [
@@ -216,21 +216,21 @@ module box_finger_joint
   //
 
   translate([0, 0])
-  construct_wall( size=wall_xy, insts=insts_xy );
+  construct_wall( size=side_xy, insts=insts_xy );
 
   for (s = [-1, 1])
   translate([0, wall_offset_y * s])
   mirror(s > 0 ? [0, 0] : [0, 1])
-  construct_wall( size=wall_xz, insts=insts_xz );
+  construct_wall( size=side_xz, insts=insts_xz );
 
   for (s = [-1, 1])
   translate([wall_offset_x * s, wall_offset_y * s])
   mirror(s > 0 ? [0, 0] : [0, 1])
-  construct_wall( size=wall_yz, insts=insts_yz );
+  construct_wall( size=side_yz, insts=insts_yz );
 
   if ( closed_box )
   translate([0, wall_offset_y*2])
-  construct_wall( size=wall_xy, insts=insts_xy );
+  construct_wall( size=side_xy, insts=insts_xy );
 }
 
 
