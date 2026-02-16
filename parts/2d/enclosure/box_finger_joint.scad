@@ -132,6 +132,7 @@ module box2d_finger_joint
       joint_length  = first(pin_conf) * 2 + second(pin_conf) + pin_offset;
       joint_count   = min(count, max(1, floor(side_length / joint_length)));
 
+      if (joint_count > 0)
       for (s = sides)
       translate
       (
