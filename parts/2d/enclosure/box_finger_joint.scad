@@ -84,8 +84,8 @@ module box_finger_joint
   screw,
   nut,
 
-  joint_form = 7,
-  joint_mode = 0,
+  form = 7,
+  mode = 0,
 
   side_spacing,
   closed_box = true
@@ -121,8 +121,8 @@ module box_finger_joint
       joint2d_box_screw
       (
         conf = [ side_length, mth, pin_conf, screw_conf, nut_conf ],
-        insts = [ for ( i = [0 : joint_count - 1] ) [0, joint_length * i, joint_form ] ],
-        mode = joint_mode,
+        insts = [ for ( i = [0 : joint_count - 1] ) [0, joint_length * i, form ] ],
+        mode = mode,
         type = type,
         align = [0, 1]
       );
