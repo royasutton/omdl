@@ -4,16 +4,17 @@
 $(eval $(call clear-local-module))
 #------------------------------------------------------------------------------#
 
-local_path        :=  parts
+local_path        :=  parts/2d/enclosure
 
-local_library     :=  docs_module
+local_library     :=  docs_module \
+                      \
+                      box_finger_joint
 
 local_release_add :=
 
 local_backup_add  :=
 
-local_submodules  :=  2d \
-                      3d
+local_submodules  :=
 
 #------------------------------------------------------------------------------#
 # add local module
