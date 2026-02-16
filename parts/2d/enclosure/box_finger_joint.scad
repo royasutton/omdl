@@ -78,17 +78,16 @@ module box_finger_joint
   size,
 
   pin,
-  pin_spacing,
-  max_pins,
-
   screw,
   nut,
-
   form = 7,
   mode = 0,
 
+  max_pins,
+  pin_spacing,
   side_spacing,
-  closed_box = true
+
+  closed = true
 )
 {
   //
@@ -202,13 +201,13 @@ module box_finger_joint
   insts_xz  =
   [
     [max_pins_z, 0, 0, [-1, +1]],
-    [max_pins_x, 1, 0, closed_box ? [-1, +1] : [-1]]
+    [max_pins_x, 1, 0, closed ? [-1, +1] : [-1]]
   ];
 
   insts_yz  =
   [
     [max_pins_z, 0, 2, [-1, +1]],
-    [max_pins_y, 1, 2, closed_box ? [-1, +1] : [-1]]
+    [max_pins_y, 1, 2, closed ? [-1, +1] : [-1]]
   ];
 
   //
@@ -228,7 +227,7 @@ module box_finger_joint
   mirror(s > 0 ? [0, 0] : [0, 1])
   construct_side( size=side_yz, insts=insts_yz );
 
-  if ( closed_box )
+  if ( closed )
   translate([0, side_offset_y*2])
   construct_side( size=side_xy, insts=insts_xy );
 }
