@@ -73,7 +73,9 @@
   \param  max_sets  <integer-list-3 | integer> maximum pin set for sides
                     [x, y, z] or a single integer for (x=y=z).
 
-  \param  pin_spacing <decimal> minimum separation between joint pins.
+  \param  pin_spacing <decimal-list-3 | decimal> minimum separation
+                      between joint pins; a list [x, y, z] or a single
+                      decimal for (x=y=z).
 
   \param  side_spacing <decimal> separation between box sides.
 
@@ -98,12 +100,10 @@
 
   \todo
 
-    (*) correct side-yz to side-xy interconnection
-
     (1) Support horizontal and vertical interior wall instances.
     (2) Support individual wall output.
     (3) Support 3d assembly preview with colors.
-    (4) Support independent [x, y, z] pin spacing.
+    (4) Add 2d SVG/DFX output example.
 
 *******************************************************************************/
 module box2d_finger_joint
@@ -131,12 +131,12 @@ module box2d_finger_joint
     //
     // construct a side joint
     //
-    module construct_joint( count, axis, sides, type )
+    module construct_joint( count, offset, axis, sides, type )
     {
       side_length   = axis == 1 ? size.x : size.y;
       side_offset   = type == 2 ? -1 : +1;
 
-      joint_length  = first(pin_conf) * 2 + second(pin_conf) + pin_offset;
+      joint_length  = first(pin_conf) * 2 + second(pin_conf) + offset;
       joint_count   = min(count, max(1, floor(side_length / joint_length)));
 
       if (joint_count > 0)
@@ -167,30 +167,32 @@ module box2d_finger_joint
       // instance additions
       for (i = insts)
       {
-        count = i[0];
-        axis  = i[1];
-        type  = i[2];
-        sides = i[3];
+        count   = i[0];
+        offset  = i[1];
+        axis    = i[2];
+        sides   = i[3];
+        type    = i[4];
 
         square(size, center=true);
 
         if ( type == 0 )
-        construct_joint( count=count, axis=axis, sides=sides, type=0 );
+        construct_joint( count=count, offset=offset, axis=axis, sides=sides, type=0 );
       }
 
       // instance removals
       for (i = insts)
       {
-        count = i[0];
-        axis  = i[1];
-        type  = i[2];
-        sides = i[3];
+        count   = i[0];
+        offset  = i[1];
+        axis    = i[2];
+        sides   = i[3];
+        type    = i[4];
 
         if ( type == 0 )
-        construct_joint( count=count, axis=axis, sides=sides, type=1 );
+        construct_joint( count=count, offset=offset, axis=axis, sides=sides, type=1 );
 
         if ( type == 2 )
-        construct_joint( count=count, axis=axis, sides=sides, type=2 );
+        construct_joint( count=count, offset=offset, axis=axis, sides=sides, type=2 );
       }
     }
   }
@@ -204,7 +206,10 @@ module box2d_finger_joint
   box_z         = defined_e_or  (size, 2, box_y);
 
   pin_conf      = defined_or(pin, [mth, mth * 5/2]);
-  pin_offset    = defined_or(pin_spacing, second(pin_conf));
+
+  pin_offset_x  = defined_eon_or(pin_spacing, 0, second(pin_conf));
+  pin_offset_y  = defined_e_or  (pin_spacing, 1, pin_offset_x);
+  pin_offset_z  = defined_e_or  (pin_spacing, 2, pin_offset_y);
 
   max_sets_x    = defined_eon_or(max_sets, 0, number_max);
   max_sets_y    = defined_e_or  (max_sets, 1, max_sets_x);
@@ -228,20 +233,20 @@ module box2d_finger_joint
 
   insts_xy  =
   [
-    [max_sets_y, 0, 2, [-1, +1]],
-    [max_sets_x, 1, 2, [-1, +1]]
+    [max_sets_y, pin_offset_y, 0, [-1, +1], 2],
+    [max_sets_x, pin_offset_x, 1, [-1, +1], 2]
   ];
 
   insts_xz  =
   [
-    [max_sets_z, 0, 0, [-1, +1]],
-    [max_sets_x, 1, 0, closed ? [-1, +1] : [-1]]
+    [max_sets_z, pin_offset_z, 0, [-1, +1], 0],
+    [max_sets_x, pin_offset_x, 1, closed ? [-1, +1] : [-1], 0]
   ];
 
   insts_yz  =
   [
-    [max_sets_z, 0, 2, [-1, +1]],
-    [max_sets_y, 1, 0, closed ? [-1, +1] : [-1]]
+    [max_sets_z, pin_offset_z, 0, [-1, +1], 2],
+    [max_sets_y, pin_offset_y, 1, closed ? [-1, +1] : [-1], 0]
   ];
 
   //
