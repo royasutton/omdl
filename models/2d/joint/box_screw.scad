@@ -80,7 +80,7 @@
     radii can be adjusted to accommodate tooling limitations. This
     allows flat internal mating surfaces to be maintained while
     compensating for the minimum practical radius imposed by the cutter
-    diameter.
+    diameter (commonly called dogbone corner relief).
 
     ## Multi-value and structured parameters
 
