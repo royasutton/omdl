@@ -90,9 +90,9 @@
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | <decimal>         |  required         | \p l : joint length
       1 | <decimal>         |  l/10             | \p d : joint depth
-      2 | <datastruct \| decimal> |  d          | pin default configuration
-      3 | <datastruct \| decimal> |  d/6        | screw default configuration
-      4 | <datastruct \| decimal> |  d/3        | nut default configuration
+      2 | <decimal-list-5 \| decimal> |  d      | pin default configuration
+      3 | <decimal-list-2 \| decimal> |  d/6    | screw default configuration
+      4 | <decimal-list-4 \| decimal> |  d/3    | nut default configuration
 
     #### conf[2]: pin
 
@@ -128,9 +128,9 @@
       1 | <decimal>         |  0                | length offset from reference
       2 | <integer>         |  7                | form (see below).
       3 | <integer>         |                   | mode override (see below).
-      4 | <datastruct \| decimal> |             | pin override (see above).
-      5 | <datastruct \| decimal> |             | screw override (see above).
-      6 | <datastruct \| decimal> |             | nut override (see above).
+      4 | <decimal-list-5 \| decimal> |         | pin override (see above).
+      5 | <decimal-list-2 \| decimal> |         | screw override (see above).
+      6 | <decimal-list-4 \| decimal> |         | nut override (see above).
 
     #### insts[2]: form
 
