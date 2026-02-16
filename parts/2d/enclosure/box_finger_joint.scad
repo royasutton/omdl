@@ -91,6 +91,8 @@
 
   \todo
 
+    (*) correct side-yz to side-xy interconnection
+
     (1) Support horizontal and vertical interior wall instances.
     (2) Support individual wall output.
     (3) Support 3d assembly preview with colors.
