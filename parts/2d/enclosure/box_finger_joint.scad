@@ -83,10 +83,9 @@ module box_finger_joint
   form = 7,
   mode = 0,
 
-  max_pins,
+  max_sets,
   pin_spacing,
   side_spacing,
-
   closed = true
 )
 {
@@ -172,9 +171,9 @@ module box_finger_joint
   pin_conf      = defined_or(pin, [mth, mth * 5/2]);
   pin_offset    = defined_or(pin_spacing, second(pin_conf));
 
-  max_pins_x    = defined_eon_or(max_pins, 0, number_max);
-  max_pins_y    = defined_e_or  (max_pins, 1, max_pins_x);
-  max_pins_z    = defined_e_or  (max_pins, 2, max_pins_y);
+  max_sets_x    = defined_eon_or(max_sets, 0, number_max);
+  max_sets_y    = defined_e_or  (max_sets, 1, max_sets_x);
+  max_sets_z    = defined_e_or  (max_sets, 2, max_sets_y);
 
   screw_conf    = defined_or(screw, mth/3);
   nut_conf      = defined_or(nut, mth*2/3);
@@ -194,20 +193,20 @@ module box_finger_joint
 
   insts_xy  =
   [
-    [max_pins_y, 0, 0, [-1, +1]],
-    [max_pins_x, 1, 2, [-1, +1]]
+    [max_sets_y, 0, 0, [-1, +1]],
+    [max_sets_x, 1, 2, [-1, +1]]
   ];
 
   insts_xz  =
   [
-    [max_pins_z, 0, 0, [-1, +1]],
-    [max_pins_x, 1, 0, closed ? [-1, +1] : [-1]]
+    [max_sets_z, 0, 0, [-1, +1]],
+    [max_sets_x, 1, 0, closed ? [-1, +1] : [-1]]
   ];
 
   insts_yz  =
   [
-    [max_pins_z, 0, 2, [-1, +1]],
-    [max_pins_y, 1, 2, closed ? [-1, +1] : [-1]]
+    [max_sets_z, 0, 2, [-1, +1]],
+    [max_sets_y, 1, 2, closed ? [-1, +1] : [-1]]
   ];
 
   //
