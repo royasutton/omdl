@@ -167,7 +167,7 @@ module box2d_finger_joint
         square(size, center=true);
 
         if ( type == 0 )
-        construct_joint( count=count, axis=axis, sides=sides, 0 );
+        construct_joint( count=count, axis=axis, sides=sides, type=0 );
       }
 
       // instance removals
@@ -179,10 +179,10 @@ module box2d_finger_joint
         sides = i[3];
 
         if ( type == 0 )
-        construct_joint( count=count, axis=axis, sides=sides, 1 );
+        construct_joint( count=count, axis=axis, sides=sides, type=1 );
 
         if ( type == 2 )
-        construct_joint( count=count, axis=axis, sides=sides, 2 );
+        construct_joint( count=count, axis=axis, sides=sides, type=2 );
       }
     }
   }
