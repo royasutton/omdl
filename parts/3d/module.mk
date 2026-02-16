@@ -12,10 +12,10 @@ local_release_add :=
 
 local_backup_add  :=
 
-local_submodules  := computer \
-                     enclosure \
-                     fastener \
-                     motion
+local_submodules  :=  computer \
+                      enclosure \
+                      fastener \
+                      motion
 
 #------------------------------------------------------------------------------#
 # add local module
