@@ -92,12 +92,12 @@ module box_finger_joint
 )
 {
   //
-  // construct a box wall
+  // construct a side
   //
-  module construct_wall( size, insts )
+  module construct_side( size, insts )
   {
     //
-    // construct a box wall joint
+    // construct a side joint
     //
     module construct_joint( count, axis, sides, type )
     {
@@ -128,7 +128,7 @@ module box_finger_joint
       );
     }
 
-    // assemble wall with joint
+    // assemble side with joint
     difference()
     {
       // instance additions
@@ -183,15 +183,15 @@ module box_finger_joint
   side_offset   = defined_or(side_spacing, mth * 3/2 );
 
   //
-  // wall and joint instances
+  // side and joint instances
   //
 
   side_xy       = [ box_x, box_y ];
   side_xz       = [ box_x, box_z ];
   side_yz       = [ box_y, box_z ];
 
-  wall_offset_x = (side_xy.x + side_yz.x)/2 + side_offset;
-  wall_offset_y = (side_xy.y + side_xz.y)/2 + side_offset;
+  side_offset_x = (side_xy.x + side_yz.x)/2 + side_offset;
+  side_offset_y = (side_xy.y + side_xz.y)/2 + side_offset;
 
   insts_xy  =
   [
@@ -212,25 +212,25 @@ module box_finger_joint
   ];
 
   //
-  // construct walls
+  // construct sides
   //
 
   translate([0, 0])
-  construct_wall( size=side_xy, insts=insts_xy );
+  construct_side( size=side_xy, insts=insts_xy );
 
   for (s = [-1, 1])
-  translate([0, wall_offset_y * s])
+  translate([0, side_offset_y * s])
   mirror(s > 0 ? [0, 0] : [0, 1])
-  construct_wall( size=side_xz, insts=insts_xz );
+  construct_side( size=side_xz, insts=insts_xz );
 
   for (s = [-1, 1])
-  translate([wall_offset_x * s, wall_offset_y * s])
+  translate([side_offset_x * s, side_offset_y * s])
   mirror(s > 0 ? [0, 0] : [0, 1])
-  construct_wall( size=side_yz, insts=insts_yz );
+  construct_side( size=side_yz, insts=insts_yz );
 
   if ( closed_box )
-  translate([0, wall_offset_y*2])
-  construct_wall( size=side_xy, insts=insts_xy );
+  translate([0, side_offset_y*2])
+  construct_side( size=side_xy, insts=insts_xy );
 }
 
 
