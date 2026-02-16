@@ -50,10 +50,34 @@
 
 //! Generate a 2D box design using screw-based finger-joint (box-joint).
 /***************************************************************************//**
-  \param  wth   <decimal> wall thickness.
+  \param  mth     <decimal> material thickness.
 
-  \param  size  <decimal-list-2 | decimal> box base size; a list [x, y]
-                or a single decimal for (x=y).
+  \param  size    <decimal-list-3 | decimal> box size; a list [x, y, z]
+                  or a single decimal for (x=y=z).
+
+  \param  pin     <decimal-list-5 | decimal> joint pin configuration
+                  (see joint2d_box_screw()).
+
+  \param  screw   <decimal-list-2 | decimal> joint screw configuration
+                  (see joint2d_box_screw()).
+
+  \param  nut     <decimal-list-4 | decimal> joint nut configuration
+                  (see joint2d_box_screw()).
+
+  \param  form    <integer> joint form
+                  (see joint2d_box_screw()).
+
+  \param  mode    <integer> joint mode
+                  (see joint2d_box_screw()).
+
+  \param  max_sets  <integer-list-3 | integer> maximum pin set for sides
+                    [x, y, z] or a single integer for (x=y=z).
+
+  \param  pin_spacing <decimal> minimum separation between joint pins.
+
+  \param  side_spacing <decimal> separation between box sides.
+
+  \param  closed  <boolean> close top of box.
 
   \details
 
@@ -70,6 +94,7 @@
     (1) Support horizontal and vertical interior wall instances.
     (2) Support individual wall output.
     (3) Support 3d assembly preview with colors.
+    (4) Support independent [x, y, z] pin spacing.
 
 *******************************************************************************/
 module box2d_finger_joint
