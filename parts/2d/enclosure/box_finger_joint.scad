@@ -228,7 +228,7 @@ module box2d_finger_joint
 
   insts_xy  =
   [
-    [max_sets_y, 0, 0, [-1, +1]],
+    [max_sets_y, 0, 2, [-1, +1]],
     [max_sets_x, 1, 2, [-1, +1]]
   ];
 
@@ -241,7 +241,7 @@ module box2d_finger_joint
   insts_yz  =
   [
     [max_sets_z, 0, 2, [-1, +1]],
-    [max_sets_y, 1, 2, closed ? [-1, +1] : [-1]]
+    [max_sets_y, 1, 0, closed ? [-1, +1] : [-1]]
   ];
 
   //
