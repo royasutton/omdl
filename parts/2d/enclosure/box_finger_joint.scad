@@ -1,4 +1,4 @@
-//! A finger-joint (box-joint) box generator for CNC cut-based fabrication.
+//! A finger joint (box joint) box generator for CNC cut-based fabrication.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Finger-Joint Box Generator)
-    \amu_define group_brief (Finger-joint (box-joint) box generator.)
+    \amu_define group_name  (Finger Joint Box Generator)
+    \amu_define group_brief (Finger joint (box joint) box generator.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -49,7 +49,7 @@
 
 //----------------------------------------------------------------------------//
 
-//! Generate a 2D box design using screw-based finger-joint (box-joint).
+//! Generate a 2D box design using screw-based finger joint (box-joint).
 /***************************************************************************//**
   \param  mth           <decimal> material thickness.
 
@@ -223,7 +223,6 @@ module box2d_finger_joint
       }
     }
   }
-
 
   //
   // layout in 2d
