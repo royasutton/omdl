@@ -177,7 +177,7 @@ module joint2d_box_screw
   mode = 0,
   type = 0,
 
-  trim = true,
+  trim = false,
 
   align
 )

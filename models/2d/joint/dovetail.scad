@@ -126,7 +126,7 @@ module joint2d_dovetail
 
   type = 0,
 
-  trim = true,
+  trim = false,
   center = false,
 
   align
