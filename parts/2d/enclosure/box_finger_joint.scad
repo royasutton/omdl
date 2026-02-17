@@ -267,14 +267,14 @@ module box2d_finger_joint
     color("green")
     for (s = [-1, 1])
     translate([0, size.y/2 * s, 0])
-    rotate(s > 0 ? [90, 0, 0] : [-90, 0, 0])
+    rotate(s > 0 ? [90, 0, 0] : [90, 0, 180])
     extrude_linear_uss(mth)
     construct_side( size=side_xz, insts=insts_xz );
 
     color("gray")
     for (s = [-1, 1])
     translate([ (size.x/2 - mth) * s, 0, 0])
-    rotate(s > 0 ? [90, 0, 90] : [-90, 0, 90])
+    rotate(s > 0 ? [90, 0, 90] : [90, 0, 270])
     extrude_linear_uss(mth)
     construct_side( size=side_yz, insts=insts_yz );
   }
