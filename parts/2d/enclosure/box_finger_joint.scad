@@ -121,9 +121,9 @@
 
   \todo
 
-    (1) Support individual wall output.
-    (2) Support addition of horizontal and vertical interior walls.
-    (3) Support joint edge inset(s).
+    (1) Support side-wall joint edge inset(s).
+    (2) Support individual wall output in 2d layouts.
+    (3) Support addition of horizontal and vertical interior walls.
     (4) Support  addition of upper design areas for non-closed boxes
         (ie: for handle holes).
     (5) Support  hole instance specifications.
