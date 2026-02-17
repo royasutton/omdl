@@ -280,7 +280,8 @@ module box2d_finger_joint
   }
   else
   {
-    translate([0, 0])
+    for (s = close ? [0, 2] : [0])
+    translate([0, side_offset_y * s])
     construct_side( size=side_xy, insts=insts_xy );
 
     for (s = [-1, 1])
@@ -292,10 +293,6 @@ module box2d_finger_joint
     translate([side_offset_x * s, side_offset_y * s])
     mirror(s > 0 ? [0, 0] : [0, 1])
     construct_side( size=side_yz, insts=insts_yz );
-
-    if ( close )
-    translate([0, side_offset_y*2])
-    construct_side( size=side_xy, insts=insts_xy );
   }
 }
 
