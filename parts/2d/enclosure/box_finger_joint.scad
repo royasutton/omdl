@@ -349,12 +349,12 @@ BEGIN_SCOPE example;
     (
       mth   = 2,
       size  = [60, 30, 20],
-      pin   = [5, 10, 1/2, 1/2, 1/2],
+      pin   = [4, 6, 1/2, 1/2, 1/2],
       screw = [3/2, 5],
       nut   = [3, 3/2],
 
       max_sets    = [3, 1, 1],
-      pin_spacing = 5,
+      pin_spacing = 12,
       close       = false
     );
 
@@ -387,12 +387,12 @@ BEGIN_SCOPE example_assemled;
     (
       mth   = 2,
       size  = [60, 30, 20],
-      pin   = [5, 10, 1/2, 1/2, 1/2],
+      pin   = [4, 6, 1/2, 1/2, 1/2],
       screw = [3/2, 5],
       nut   = [3, 3/2],
 
       max_sets      = [3, 1, 1],
-      pin_spacing   = 5,
+      pin_spacing   = 12,
       side_spacing  = 1/2,
       close         = true,
       layout        = 2
