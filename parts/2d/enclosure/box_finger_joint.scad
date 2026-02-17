@@ -227,9 +227,9 @@ module box2d_finger_joint
   // side and joint instances
   //
 
-  side_xy       = [ box_x, box_y ];
-  side_xz       = [ box_x, box_z ];
-  side_yz       = [ box_y, box_z ];
+  side_xy       = [ box_x,                 box_y ];
+  side_xz       = [ box_x - mth*2, box_z - mth*2 ];
+  side_yz       = [ box_y,         box_z - mth*2 ];
 
   side_offset_x = (side_xy.x + side_yz.x)/2 + side_offset;
   side_offset_y = (side_xy.y + side_xz.y)/2 + side_offset;
