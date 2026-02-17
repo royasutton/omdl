@@ -79,7 +79,7 @@
 
   \param  side_spacing  <decimal> separation between box sides.
 
-  \param  closed        <boolean> add side to close top of box.
+  \param  close         <boolean> add side to close top of box.
 
   \param  assemble      <boolean> show preview of assembled box.
 
@@ -122,7 +122,7 @@ module box2d_finger_joint
   pin_spacing,
   side_spacing,
 
-  closed = true,
+  close = true,
   assemble = false
 )
 {
@@ -243,13 +243,13 @@ module box2d_finger_joint
   insts_xz  =
   [
     [max_sets_z, pin_offset_z, 0, [-1, +1], 0],
-    [max_sets_x, pin_offset_x, 1, closed ? [-1, +1] : [-1], 0]
+    [max_sets_x, pin_offset_x, 1, close ? [-1, +1] : [-1], 0]
   ];
 
   insts_yz  =
   [
     [max_sets_z, pin_offset_z, 0, [-1, +1], 2],
-    [max_sets_y, pin_offset_y, 1, closed ? [-1, +1] : [-1], 0]
+    [max_sets_y, pin_offset_y, 1, close ? [-1, +1] : [-1], 0]
   ];
 
   //
@@ -259,7 +259,7 @@ module box2d_finger_joint
   if ( assemble )
   {
     color("blue")
-    for (s = closed ? [-1, 1] : [-1])
+    for (s = close ? [-1, 1] : [-1])
     translate([0, 0, size.z/2 * s])
     extrude_linear_uss(mth)
     construct_side( size=side_xy, insts=insts_xy );
@@ -295,7 +295,7 @@ module box2d_finger_joint
     mirror(s > 0 ? [0, 0] : [0, 1])
     construct_side( size=side_yz, insts=insts_yz );
 
-    if ( closed )
+    if ( close )
     translate([0, side_offset_y*2])
     construct_side( size=side_xy, insts=insts_xy );
   }
@@ -327,7 +327,7 @@ BEGIN_SCOPE example;
 
       max_sets    = [3, 1, 1],
       pin_spacing = 10,
-      closed      = false
+      close       = false
     );
 
     // end_include
