@@ -134,7 +134,7 @@ module box2d_finger_joint
     //
     // construct a side joint
     //
-    module construct_joint( count, offset, axis, sides, type )
+    module construct_joint( size, count, offset, axis, sides, type )
     {
       side_length   = axis == 1 ? size.x : size.y;
       side_offset   = type == 2 ? -1 : +1;
@@ -179,7 +179,7 @@ module box2d_finger_joint
         square(size, center=true);
 
         if ( type == 0 )
-        construct_joint( count=count, offset=offset, axis=axis, sides=sides, type=0 );
+        construct_joint( size=size, count=count, offset=offset, axis=axis, sides=sides, type=0 );
       }
 
       // instance removals
@@ -191,11 +191,13 @@ module box2d_finger_joint
         sides   = i[3];
         type    = i[4];
 
+        size_ro = size + [eps, eps] * 8;
+
         if ( type == 0 )
-        construct_joint( count=count, offset=offset, axis=axis, sides=sides, type=1 );
+        construct_joint( size=size_ro, count=count, offset=offset, axis=axis, sides=sides, type=1 );
 
         if ( type == 2 )
-        construct_joint( count=count, offset=offset, axis=axis, sides=sides, type=2 );
+        construct_joint( size=size_ro, count=count, offset=offset, axis=axis, sides=sides, type=2 );
       }
     }
   }
