@@ -81,8 +81,7 @@
 
   \param  close         <boolean> add top side to close box.
 
-  \param  layout        <integer> layout selection; 2d when assigned 0,
-                        and assembled when assigned a positive value.
+  \param  layout        <integer> layout selection {0 | 1 | 2}.
 
   \details
 
@@ -268,9 +267,9 @@ module box2d_finger_joint
   // construct sides
   //
 
-  if ( layout > 0)
+  if ( layout > 1)
   {
-    gap = mth * (layout-1);
+    gap = side_offset;
 
     color("blue")
     for (s = close ? [-1, 1] : [-1])
@@ -294,18 +293,38 @@ module box2d_finger_joint
   }
   else
   {
-    for (s = close ? [0, 2] : [0])
-    translate([0, side_offset_y * s])
+    for (side = close ? [0, 2] : [0])
+    let
+    (
+      r = side > 0 ? 0 : 180,
+
+      t = [0, side_offset_y * side]
+    )
+    translate(t) rotate(r)
     construct_side( size=side_xy, insts=insts_xy );
 
-    for (s = [-1, 1])
-    translate([0, side_offset_y * s])
-    mirror(s > 0 ? [0, 0] : [0, 1])
+    for (side = [-1, 1])
+    let
+    (
+      r = side > 0 ? 0 : 180,
+
+      t = [0, side_offset_y * side]
+    )
+    translate(t) rotate(r)
     construct_side( size=side_xz, insts=insts_xz );
 
-    for (s = [-1, 1])
-    translate([side_offset_x * s, side_offset_y * s])
-    mirror(s > 0 ? [0, 0] : [0, 1])
+    for (side = [-1, 1])
+    let
+    (
+      r = (layout == 0) ?
+          side > 0 ? 0 : 180
+        : side > 0 ? 270 : 90,
+
+      t = (layout == 0) ?
+          [side_offset_x * side, side_offset_y * side]
+        : [side_offset_x * side, 0]
+    )
+    translate(t) rotate(r)
     construct_side( size=side_yz, insts=insts_yz );
   }
 }
@@ -372,10 +391,11 @@ BEGIN_SCOPE example_assemled;
       screw = [3/2, 5],
       nut   = [3, 3/2],
 
-      max_sets    = [3, 1, 1],
-      pin_spacing = 5,
-      close       = true,
-      layout      = 1
+      max_sets      = [3, 1, 1],
+      pin_spacing   = 5,
+      side_spacing  = 1/2,
+      close         = true,
+      layout        = 2
     );
 
     // end_include
