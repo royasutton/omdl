@@ -80,10 +80,7 @@
 
   \param  side_spacing  <decimal> separation between box sides.
 
-  \param  trim    <boolean> limit construction of each joint to within
-                  its width.
-
-  \param  close   <boolean> add top side to close box.
+  \param  mode    <integer> construction mode (see below).
 
   \param  layout  <integer> layout selection {0 | 1 | 2}.
 
@@ -96,6 +93,16 @@
     supports configurable interior and exterior corner rounding,
     allowing compensation for cutting tool diameter (commonly called
     dogbone corner relief).
+
+    ### mode
+
+    Integer value is binary encoded.
+
+      b | description
+    ---:|:---------------------------------------
+      0 | reserved
+      1 | add top side to close box
+      2 | trim each joint to within its width
 
     \amu_define scope_id      (example)
     \amu_define title         (2d box example)
@@ -135,8 +142,7 @@ module box2d_finger_joint
   pin_spacing,
   side_spacing,
 
-  trim = false,
-  close = true,
+  mode = 0,
 
   layout = 0
 )
@@ -221,6 +227,10 @@ module box2d_finger_joint
   //
   // decode and assign defaults to undefined parameters
   //
+
+  // decode mode configurations
+  close         = binary_bit_is(mode, 1, 1);
+  trim          = binary_bit_is(mode, 2, 1);
 
   box_x         = defined_eon_or(size, 0, mth*10);
   box_y         = defined_e_or  (size, 1, box_x);
