@@ -98,7 +98,7 @@
 
       b | description
     ---:|:---------------------------------------
-      0 | reserved
+      0 | size is specified for box interior
       1 | add top side to close box
       2 | trim each joint to within its width
 
@@ -228,12 +228,13 @@ module box2d_finger_joint
   //
 
   // decode mode configurations
+  inside        = binary_bit_is(mode, 0, 1);
   close         = binary_bit_is(mode, 1, 1);
   trim          = binary_bit_is(mode, 2, 1);
 
-  box_x         = defined_eon_or(size, 0, mth*10);
-  box_y         = defined_e_or  (size, 1, box_x);
-  box_z         = defined_e_or  (size, 2, box_y);
+  box_p_x       = defined_eon_or(size, 0, mth*10);
+  box_p_y       = defined_e_or  (size, 1, box_p_x);
+  box_p_z       = defined_e_or  (size, 2, box_p_y);
 
   pin_conf      = defined_or(joint_pin, [mth, mth * 5/2]);
 
@@ -253,6 +254,10 @@ module box2d_finger_joint
   //
   // side and joint instances
   //
+
+  box_x         = inside ? box_p_x + mth*2 : box_p_x;
+  box_y         = inside ? box_p_y + mth*2 : box_p_y;
+  box_z         = inside ? box_p_z + mth*2 : box_p_z;
 
   side_xy       = [ box_x,         box_y ];
   side_xz       = [ box_x - mth*2, box_z - (close ? mth*2 : mth) ];
@@ -282,30 +287,34 @@ module box2d_finger_joint
 
   if ( layout > 1)
   {
+    // assembled in 3d
+
     gap = side_offset;
 
     color("blue")
     for (s = close ? [-1, 1] : [-1])
-    translate([0, 0, (size.z/2 - mth/2 + gap) * s + (close ? 0 : -mth/2)])
+    translate([0, 0, (box_z/2 - mth/2 + gap) * s + (close ? 0 : -mth/2)])
     extrude_linear_uss(mth, center=true)
     construct_side( size=side_xy, insts=insts_xy );
 
     color("green")
     for (s = [-1, 1])
-    translate([0, (size.y/2 + gap) * s, 0])
+    translate([0, (box_y/2 + gap) * s, 0])
     rotate(s > 0 ? [90, 0, 0] : [90, 0, 180])
     extrude_linear_uss(mth)
     construct_side( size=side_xz, insts=insts_xz );
 
     color("gray")
     for (s = [-1, 1])
-    translate([ (size.x/2 - mth + gap) * s, 0, 0])
+    translate([ (box_x/2 - mth + gap) * s, 0, 0])
     rotate(s > 0 ? [90, 0, 90] : [90, 0, 270])
     extrude_linear_uss(mth)
     construct_side( size=side_yz, insts=insts_yz );
   }
   else
   {
+    // layout in 2d
+
     side_offset_x = (layout == 0) ?
                     (side_xy.x + side_yz.x)/2 + side_offset - mth
                   : (side_xy.x + side_yz.y)/2 + side_offset;
