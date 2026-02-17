@@ -238,7 +238,7 @@ module box2d_finger_joint
   screw_conf    = defined_or(screw, mth/3);
   nut_conf      = defined_or(nut, mth*2/3);
 
-  side_offset   = defined_or(side_spacing, mth * 3/2 );
+  side_offset   = defined_or(side_spacing, mth);
 
   //
   // side and joint instances
@@ -247,9 +247,6 @@ module box2d_finger_joint
   side_xy       = [ box_x,         box_y ];
   side_xz       = [ box_x - mth*2, box_z - (close ? mth*2 : mth) ];
   side_yz       = [ box_y,         box_z - (close ? mth*2 : mth) ];
-
-  side_offset_x = (side_xy.x + side_yz.x)/2 + side_offset;
-  side_offset_y = (side_xy.y + side_xz.y)/2 + side_offset;
 
   insts_xy  =
   [
@@ -299,6 +296,12 @@ module box2d_finger_joint
   }
   else
   {
+    side_offset_x = (layout == 0) ?
+                    (side_xy.x + side_yz.x)/2 + side_offset - mth
+                  : (side_xy.x + side_yz.y)/2 + side_offset;
+
+    side_offset_y = (side_xy.y + side_xz.y)/2 + side_offset;
+
     for (side = close ? [0, 2] : [0])
     let
     (
@@ -401,7 +404,6 @@ BEGIN_SCOPE example_assemled;
 
       max_sets      = [3, 1, 1],
       pin_spacing   = 12,
-      side_spacing  = 1/2,
       close         = true,
       layout        = 2
     );
