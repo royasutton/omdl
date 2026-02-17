@@ -79,9 +79,10 @@
 
   \param  side_spacing  <decimal> separation between box sides.
 
-  \param  close         <boolean> add side to close top of box.
+  \param  assembly      <integer> show assembled box; off when 0, and
+                        assembled when assigned a positive value.
 
-  \param  assemble      <boolean> show preview of assembled box.
+  \param  close         <boolean> add top side to close box.
 
   \details
 
@@ -130,8 +131,9 @@ module box2d_finger_joint
   pin_spacing,
   side_spacing,
 
-  close = true,
-  assemble = false
+  assembly = 0,
+
+  close = true
 )
 {
   //
@@ -266,24 +268,26 @@ module box2d_finger_joint
   // construct sides
   //
 
-  if ( assemble )
+  if ( assembly > 0)
   {
+    gap = mth * (assembly-1);
+
     color("blue")
     for (s = close ? [-1, 1] : [-1])
-    translate([0, 0, (size.z/2 - mth/2) * s + (close ? 0 : -mth/2)])
+    translate([0, 0, (size.z/2 - mth/2 + gap) * s + (close ? 0 : -mth/2)])
     extrude_linear_uss(mth, center=true)
     construct_side( size=side_xy, insts=insts_xy );
 
     color("green")
     for (s = [-1, 1])
-    translate([0, size.y/2 * s, 0])
+    translate([0, (size.y/2 + gap) * s, 0])
     rotate(s > 0 ? [90, 0, 0] : [90, 0, 180])
     extrude_linear_uss(mth)
     construct_side( size=side_xz, insts=insts_xz );
 
     color("gray")
     for (s = [-1, 1])
-    translate([ (size.x/2 - mth) * s, 0, 0])
+    translate([ (size.x/2 - mth + gap) * s, 0, 0])
     rotate(s > 0 ? [90, 0, 90] : [90, 0, 270])
     extrude_linear_uss(mth)
     construct_side( size=side_yz, insts=insts_yz );
@@ -371,7 +375,7 @@ BEGIN_SCOPE example_assemled;
       max_sets    = [3, 1, 1],
       pin_spacing = 5,
       close       = true,
-      assemble    = true
+      assembly    = 1
     );
 
     // end_include
