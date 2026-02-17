@@ -80,9 +80,12 @@
 
   \param  side_spacing  <decimal> separation between box sides.
 
-  \param  close         <boolean> add top side to close box.
+  \param  trim    <boolean> limit construction of each joint to within
+                  its width.
 
-  \param  layout        <integer> layout selection {0 | 1 | 2}.
+  \param  close   <boolean> add top side to close box.
+
+  \param  layout  <integer> layout selection {0 | 1 | 2}.
 
   \details
 
@@ -131,6 +134,7 @@ module box2d_finger_joint
   pin_spacing,
   side_spacing,
 
+  trim = false,
   close = true,
 
   layout = 0
@@ -170,7 +174,7 @@ module box2d_finger_joint
         insts = [ for ( i = [0 : joint_count - 1] ) [0, joint_length * i, form ] ],
         mode = mode,
         type = type,
-        trim = true,
+        trim = trim,
         align = [0, 1]
       );
     }
