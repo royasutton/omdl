@@ -159,14 +159,14 @@ module joint2d_dovetail
     ]
   )
   {
-    // male and female joint construction; female removal or male additions
+    // male and female joint construction; male additions or female removals
     if (type == 0 || type == 2)
     intersection_cs(trim, trim ? undef : 1)
     {
-      // child-0: joint area = length x depth
+      // child-0: joint trim area = length x depth
       square([w, d]);
 
-      // child-1: dovetails
+      // child-1: dovetails; male additions or female removals
       for ( i = [0 : tc-1] )
       translate ([io + (t1 + t2)*i, 0])
       {
