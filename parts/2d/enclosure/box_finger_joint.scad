@@ -223,6 +223,79 @@ module box2d_finger_joint
     }
   }
 
+
+  //
+  // layout in 2d
+  //
+  module layout_2d( gap, select )
+  {
+    side_offset_x = (select == 0) ?
+                    (side_xy.x + side_yz.x)/2 + gap - mth
+                  : (side_xy.x + side_yz.y)/2 + gap;
+
+    side_offset_y = (side_xy.y + side_xz.y)/2 + gap;
+
+    for (side = close ? [0, 2] : [0])
+    let
+    (
+      r = side > 0 ? 0 : 180,
+
+      t = [0, side_offset_y * side]
+    )
+    translate(t) rotate(r)
+    construct_side( size=side_xy, insts=insts_xy );
+
+    for (side = [-1, 1])
+    let
+    (
+      r = side > 0 ? 0 : 180,
+
+      t = [0, side_offset_y * side]
+    )
+    translate(t) rotate(r)
+    construct_side( size=side_xz, insts=insts_xz );
+
+    for (side = [-1, 1])
+    let
+    (
+      r = (select == 0) ?
+          side > 0 ? 0 : 180
+        : side > 0 ? 270 : 90,
+
+      t = (select == 0) ?
+          [side_offset_x * side, side_offset_y * side]
+        : [side_offset_x * side, 0]
+    )
+    translate(t) rotate(r)
+    construct_side( size=side_yz, insts=insts_yz );
+  }
+
+  //
+  // layout in 3d
+  //
+  module layout_3d( gap )
+  {
+    color("blue")
+    for (s = close ? [-1, 1] : [-1])
+    translate([0, 0, (box_z/2 - mth/2 + gap) * s + (close ? 0 : -mth/2)])
+    extrude_linear_uss(mth, center=true)
+    construct_side( size=side_xy, insts=insts_xy );
+
+    color("green")
+    for (s = [-1, 1])
+    translate([0, (box_y/2 + gap) * s, 0])
+    rotate(s > 0 ? [90, 0, 0] : [90, 0, 180])
+    extrude_linear_uss(mth)
+    construct_side( size=side_xz, insts=insts_xz );
+
+    color("gray")
+    for (s = [-1, 1])
+    translate([ (box_x/2 - mth + gap) * s, 0, 0])
+    rotate(s > 0 ? [90, 0, 90] : [90, 0, 270])
+    extrude_linear_uss(mth)
+    construct_side( size=side_yz, insts=insts_yz );
+  }
+
   //
   // decode and assign defaults to undefined parameters
   //
@@ -282,78 +355,16 @@ module box2d_finger_joint
   ];
 
   //
-  // construct sides
+  // construct box layout
   //
 
   if ( layout > 1)
   {
-    // assembled in 3d
-
-    gap = side_offset;
-
-    color("blue")
-    for (s = close ? [-1, 1] : [-1])
-    translate([0, 0, (box_z/2 - mth/2 + gap) * s + (close ? 0 : -mth/2)])
-    extrude_linear_uss(mth, center=true)
-    construct_side( size=side_xy, insts=insts_xy );
-
-    color("green")
-    for (s = [-1, 1])
-    translate([0, (box_y/2 + gap) * s, 0])
-    rotate(s > 0 ? [90, 0, 0] : [90, 0, 180])
-    extrude_linear_uss(mth)
-    construct_side( size=side_xz, insts=insts_xz );
-
-    color("gray")
-    for (s = [-1, 1])
-    translate([ (box_x/2 - mth + gap) * s, 0, 0])
-    rotate(s > 0 ? [90, 0, 90] : [90, 0, 270])
-    extrude_linear_uss(mth)
-    construct_side( size=side_yz, insts=insts_yz );
+    layout_3d( side_offset );
   }
   else
   {
-    // layout in 2d
-
-    side_offset_x = (layout == 0) ?
-                    (side_xy.x + side_yz.x)/2 + side_offset - mth
-                  : (side_xy.x + side_yz.y)/2 + side_offset;
-
-    side_offset_y = (side_xy.y + side_xz.y)/2 + side_offset;
-
-    for (side = close ? [0, 2] : [0])
-    let
-    (
-      r = side > 0 ? 0 : 180,
-
-      t = [0, side_offset_y * side]
-    )
-    translate(t) rotate(r)
-    construct_side( size=side_xy, insts=insts_xy );
-
-    for (side = [-1, 1])
-    let
-    (
-      r = side > 0 ? 0 : 180,
-
-      t = [0, side_offset_y * side]
-    )
-    translate(t) rotate(r)
-    construct_side( size=side_xz, insts=insts_xz );
-
-    for (side = [-1, 1])
-    let
-    (
-      r = (layout == 0) ?
-          side > 0 ? 0 : 180
-        : side > 0 ? 270 : 90,
-
-      t = (layout == 0) ?
-          [side_offset_x * side, side_offset_y * side]
-        : [side_offset_x * side, 0]
-    )
-    translate(t) rotate(r)
-    construct_side( size=side_yz, insts=insts_yz );
+    layout_2d( side_offset, layout );
   }
 }
 
