@@ -41,6 +41,7 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_define includes_required_add
   (
+    tools/operation_cs.scad
     models/2d/joint/box_screw.scad
   )
   \amu_include (include/amu/includes_required.amu)
@@ -169,6 +170,7 @@ module box2d_finger_joint
         insts = [ for ( i = [0 : joint_count - 1] ) [0, joint_length * i, form ] ],
         mode = mode,
         type = type,
+        trim = true,
         align = [0, 1]
       );
     }
@@ -342,6 +344,7 @@ module box2d_finger_joint
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <tools/operation_cs.scad>;
     include <models/2d/joint/box_screw.scad>;
     include <parts/2d/enclosure/box_finger_joint.scad>;
 
@@ -380,6 +383,7 @@ END_SCOPE;
 BEGIN_SCOPE example_assemled;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <tools/operation_cs.scad>;
     include <models/2d/joint/box_screw.scad>;
     include <parts/2d/enclosure/box_finger_joint.scad>;
 
