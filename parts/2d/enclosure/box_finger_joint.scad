@@ -73,13 +73,15 @@
   \param  max_sets  <integer-list-3 | integer> maximum pin set for sides
                     [x, y, z] or a single integer for (x=y=z).
 
-  \param  pin_spacing <decimal-list-3 | decimal> minimum separation
-                      between joint pins; a list [x, y, z] or a single
-                      decimal for (x=y=z).
+  \param  pin_spacing   <decimal-list-3 | decimal> minimum separation
+                        between joint pins; a list [x, y, z] or a
+                        single decimal for (x=y=z).
 
-  \param  side_spacing <decimal> separation between box sides.
+  \param  side_spacing  <decimal> separation between box sides.
 
-  \param  closed  <boolean> close top of box.
+  \param  closed        <boolean> add side to close top of box.
+
+  \param  assemble      <boolean> show preview of assembled box.
 
   \details
 
@@ -100,10 +102,9 @@
 
   \todo
 
-    (1) Support horizontal and vertical interior wall instances.
-    (2) Support individual wall output.
-    (3) Support 3d assembly preview with colors.
-    (4) Add 2d SVG/DFX output example.
+    (1) Support individual wall output.
+    (2) Add 2d SVG/DFX output example.
+    (3) Support horizontal and vertical interior wall instances.
 
 *******************************************************************************/
 module box2d_finger_joint
@@ -120,7 +121,9 @@ module box2d_finger_joint
   max_sets,
   pin_spacing,
   side_spacing,
-  closed = true
+
+  closed = true,
+  assemble = false
 )
 {
   //
@@ -253,22 +256,49 @@ module box2d_finger_joint
   // construct sides
   //
 
-  translate([0, 0])
-  construct_side( size=side_xy, insts=insts_xy );
+  if ( assemble )
+  {
+    color("blue")
+    for (s = closed ? [-1, 1] : [-1])
+    translate([0, 0, size.z/2 * s])
+    extrude_linear_uss(mth)
+    construct_side( size=side_xy, insts=insts_xy );
 
-  for (s = [-1, 1])
-  translate([0, side_offset_y * s])
-  mirror(s > 0 ? [0, 0] : [0, 1])
-  construct_side( size=side_xz, insts=insts_xz );
+    color("green")
+    for (s = [-1, 1])
+    translate([0, size.y/2 * s, mth])
+    rotate(s > 0 ? [90, 0, 0] : [-90, 0, 0])
+    mirror(s > 0 ? [0, 0, 0] : [0, 1, 0])
+    extrude_linear_uss(mth)
+    construct_side( size=side_xz, insts=insts_xz );
 
-  for (s = [-1, 1])
-  translate([side_offset_x * s, side_offset_y * s])
-  mirror(s > 0 ? [0, 0] : [0, 1])
-  construct_side( size=side_yz, insts=insts_yz );
+    color("gray")
+    for (s = [-1, 1])
+    translate([ size.x/2 * s, 0, mth])
+    rotate(s > 0 ? [90, 0, 90] : [-90, 0, 90])
+    mirror(s > 0 ? [0, 0] : [0, 1])
+    extrude_linear_uss(mth)
+    construct_side( size=side_yz, insts=insts_yz );
+  }
+  else
+  {
+    translate([0, 0])
+    construct_side( size=side_xy, insts=insts_xy );
 
-  if ( closed )
-  translate([0, side_offset_y*2])
-  construct_side( size=side_xy, insts=insts_xy );
+    for (s = [-1, 1])
+    translate([0, side_offset_y * s])
+    mirror(s > 0 ? [0, 0] : [0, 1])
+    construct_side( size=side_xz, insts=insts_xz );
+
+    for (s = [-1, 1])
+    translate([side_offset_x * s, side_offset_y * s])
+    mirror(s > 0 ? [0, 0] : [0, 1])
+    construct_side( size=side_yz, insts=insts_yz );
+
+    if ( closed )
+    translate([0, side_offset_y*2])
+    construct_side( size=side_xy, insts=insts_xy );
+  }
 }
 
 
