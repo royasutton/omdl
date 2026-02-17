@@ -100,11 +100,19 @@
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 
+    \amu_define scope_id      (example_assemled)
+    \amu_define title         (Assembled box example)
+    \amu_define image_views   (top front right diag)
+    \amu_define image_size    (sxga)
+    \amu_define image_columns (4)
+    \amu_define output_scad   (false)
+
+    \amu_include (include/amu/scope_diagrams_3d.amu)
+
   \todo
 
     (1) Support individual wall output.
-    (2) Add 2d SVG/DFX output example.
-    (3) Support horizontal and vertical interior wall instances.
+    (2) Support addition of horizontal and vertical interior walls.
 
 *******************************************************************************/
 module box2d_finger_joint
@@ -323,7 +331,7 @@ BEGIN_SCOPE example;
       nut   = [3, 3/2],
 
       max_sets    = [3, 1, 1],
-      pin_spacing = 10,
+      pin_spacing = 5,
       close       = false
     );
 
@@ -336,6 +344,45 @@ BEGIN_SCOPE example;
 
     images    name "sizes" types "sxga";
     views     name "views" views "top";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
+
+/*
+BEGIN_SCOPE example_assemled;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <models/2d/joint/box_screw.scad>;
+    include <parts/2d/enclosure/box_finger_joint.scad>;
+
+    box2d_finger_joint
+    (
+      mth   = 2,
+      size  = [60, 30, 20],
+      pin   = [5, 10, 1/2, 1/2, 1/2],
+      screw = [3/2, 5],
+      nut   = [3, 3/2],
+
+      max_sets    = [3, 1, 1],
+      pin_spacing = 5,
+      close       = true,
+      assemble    = true
+    );
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "top front right diag";
 
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter --view=axes";
