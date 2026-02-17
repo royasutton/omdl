@@ -39,6 +39,10 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_define includes_required_add
+  (
+    tools/operation_cs.scad
+  )
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
@@ -56,6 +60,9 @@
 
   \param  type    <integer> construction type {0=male additions,
                   1=male removals, 2=female removals}.
+
+  \param  trim    <boolean> limit construction to within the total
+                  joint width.
 
   \param  align   <integer-list-2> joint alignment; edge-1, center, and
                   edge-2 for both [x, y].
@@ -166,8 +173,12 @@ module joint2d_box_screw
 (
   conf,
   insts,
+
   mode = 0,
   type = 0,
+
+  trim = true,
+
   align
 )
 {
@@ -218,11 +229,19 @@ module joint2d_box_screw
       if( binary_bit_is(iform, 1, 1) ) +1
     ];
 
-    // pin; female removal or male additions
+    // male and female joint construction; male additions or female removals
     if (type == 0 || type == 2)
-    for ( i = pins )
-    translate ([(t1 + t2)/2*i, depth/2])
-      pg_rectangle([s1, depth], vr=er, vrm=(type == 2) ? fvrm : [1,1,0,0], center=true);
+    intersection_cs(trim, trim ? undef : 1)
+    {
+      // child-0: joint trim area = length x depth
+      translate ([0, depth/2])
+      square([length, depth], center=true);
+
+      // child-1: pin; male additions or female removals
+      for ( i = pins )
+      translate ([(t1 + t2)/2*i, depth/2])
+        pg_rectangle([s1, depth], vr=er, vrm=(type == 2) ? fvrm : [1,1,0,0], center=true);
+    }
 
     // interior corner minimum cut radius; removal modes only
     if ( ir > 0 && (type == 1 || type == 2) )
@@ -332,6 +351,7 @@ module joint2d_box_screw
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <tools/operation_cs.scad>;
     include <models/2d/joint/box_screw.scad>;
 
     w = [50, 3];
