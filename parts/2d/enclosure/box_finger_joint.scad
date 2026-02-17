@@ -79,10 +79,10 @@
 
   \param  side_spacing  <decimal> separation between box sides.
 
+  \param  close         <boolean> add top side to close box.
+
   \param  layout        <integer> layout selection; 2d when assigned 0,
                         and assembled when assigned a positive value.
-
-  \param  close         <boolean> add top side to close box.
 
   \details
 
@@ -131,9 +131,9 @@ module box2d_finger_joint
   pin_spacing,
   side_spacing,
 
-  layout = 0,
+  close = true,
 
-  close = true
+  layout = 0
 )
 {
   //
