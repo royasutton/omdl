@@ -101,6 +101,7 @@
       0 | size is specified for box interior
       1 | add top side to close box
       2 | trim each joint to within its width
+      3 | extrude 2d layout for 3d printing
 
     \amu_define scope_id      (example)
     \amu_define title         (2d box example)
@@ -304,6 +305,7 @@ module box2d_finger_joint
   inside        = binary_bit_is(mode, 0, 1);
   close         = binary_bit_is(mode, 1, 1);
   trim          = binary_bit_is(mode, 2, 1);
+  extrude       = binary_bit_is(mode, 3, 1);
 
   box_p_x       = defined_eon_or(size, 0, mth*10);
   box_p_y       = defined_e_or  (size, 1, box_p_x);
@@ -360,11 +362,19 @@ module box2d_finger_joint
 
   if ( layout > 1)
   {
-    layout_3d( side_offset );
+    layout_3d( gap=side_offset );
   }
   else
   {
-    layout_2d( side_offset, layout );
+    if ( extrude )
+    {
+      extrude_linear_uss( mth, center=false )
+      layout_2d( gap=side_offset, select=layout );
+    }
+    else
+    {
+      layout_2d( gap=side_offset, select=layout );
+    }
   }
 }
 
