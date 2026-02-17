@@ -65,11 +65,11 @@
   \param  nut     <decimal-list-4 | decimal> joint nut configuration
                   (see joint2d_box_screw()).
 
-  \param  form    <integer> joint form
-                  (see joint2d_box_screw()).
+  \param  joint_form  <integer> joint form
+                      (see joint2d_box_screw()).
 
-  \param  mode    <integer> joint mode
-                  (see joint2d_box_screw()).
+  \param  joint_mode  <integer> joint mode
+                      (see joint2d_box_screw()).
 
   \param  max_sets  <integer-list-3 | integer> maximum pin set for sides
                     [x, y, z] or a single integer for (x=y=z).
@@ -127,8 +127,9 @@ module box2d_finger_joint
   pin,
   screw,
   nut,
-  form = 7,
-  mode = 0,
+
+  joint_form = 7,
+  joint_mode = 0,
 
   max_sets,
   pin_spacing,
@@ -171,8 +172,8 @@ module box2d_finger_joint
       joint2d_box_screw
       (
         conf = [ side_length, mth, pin_conf, screw_conf, nut_conf ],
-        insts = [ for ( i = [0 : joint_count - 1] ) [0, joint_length * i, form ] ],
-        mode = mode,
+        insts = [ for ( i = [0 : joint_count - 1] ) [0, joint_length * i, joint_form ] ],
+        mode = joint_mode,
         type = type,
         trim = trim,
         align = [0, 1]
