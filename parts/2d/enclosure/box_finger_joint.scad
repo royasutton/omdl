@@ -227,9 +227,9 @@ module box2d_finger_joint
   // side and joint instances
   //
 
-  side_xy       = [ box_x,                 box_y ];
-  side_xz       = [ box_x - mth*2, box_z - mth*2 ];
-  side_yz       = [ box_y,         box_z - mth*2 ];
+  side_xy       = [ box_x,         box_y ];
+  side_xz       = [ box_x - mth*2, box_z - (close ? mth*2 : mth) ];
+  side_yz       = [ box_y,         box_z - (close ? mth*2 : mth) ];
 
   side_offset_x = (side_xy.x + side_yz.x)/2 + side_offset;
   side_offset_y = (side_xy.y + side_xz.y)/2 + side_offset;
@@ -260,7 +260,7 @@ module box2d_finger_joint
   {
     color("blue")
     for (s = close ? [-1, 1] : [-1])
-    translate([0, 0, (size.z/2 - mth/2) * s])
+    translate([0, 0, (size.z/2 - mth/2) * s + (close ? 0 : -mth/2)])
     extrude_linear_uss(mth, center=true)
     construct_side( size=side_xy, insts=insts_xy );
 
