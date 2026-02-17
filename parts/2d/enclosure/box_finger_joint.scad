@@ -79,8 +79,8 @@
 
   \param  side_spacing  <decimal> separation between box sides.
 
-  \param  assembly      <integer> show assembled box; off when 0, and
-                        assembled when assigned a positive value.
+  \param  layout        <integer> layout selection; 2d when assigned 0,
+                        and assembled when assigned a positive value.
 
   \param  close         <boolean> add top side to close box.
 
@@ -131,7 +131,7 @@ module box2d_finger_joint
   pin_spacing,
   side_spacing,
 
-  assembly = 0,
+  layout = 0,
 
   close = true
 )
@@ -268,9 +268,9 @@ module box2d_finger_joint
   // construct sides
   //
 
-  if ( assembly > 0)
+  if ( layout > 0)
   {
-    gap = mth * (assembly-1);
+    gap = mth * (layout-1);
 
     color("blue")
     for (s = close ? [-1, 1] : [-1])
@@ -375,7 +375,7 @@ BEGIN_SCOPE example_assemled;
       max_sets    = [3, 1, 1],
       pin_spacing = 5,
       close       = true,
-      assembly    = 1
+      layout      = 1
     );
 
     // end_include
