@@ -51,38 +51,36 @@
 
 //! Generate a 2D box design using screw-based finger-joint (box-joint).
 /***************************************************************************//**
-  \param  mth     <decimal> material thickness.
+  \param  mth           <decimal> material thickness.
 
-  \param  size    <decimal-list-3 | decimal> box size; a list [x, y, z]
-                  or a single decimal for (x=y=z).
+  \param  size          <decimal-list-3 | decimal> box size; a list
+                        [x, y, z] or a single decimal for (x=y=z).
 
-  \param  pin     <decimal-list-5 | decimal> joint pin configuration
-                  (see joint2d_box_screw()).
+  \param  joint_pin     <decimal-list-5 | decimal> joint pin
+                        configuration (see joint2d_box_screw()).
 
-  \param  screw   <decimal-list-2 | decimal> joint screw configuration
-                  (see joint2d_box_screw()).
+  \param  joint_screw   <decimal-list-2 | decimal> joint screw
+                        configuration (see joint2d_box_screw()).
 
-  \param  nut     <decimal-list-4 | decimal> joint nut configuration
-                  (see joint2d_box_screw()).
+  \param  joint_nut     <decimal-list-4 | decimal> joint nut
+                        configuration (see joint2d_box_screw()).
 
-  \param  joint_form  <integer> joint form
-                      (see joint2d_box_screw()).
-
-  \param  joint_mode  <integer> joint mode
-                      (see joint2d_box_screw()).
-
-  \param  max_sets  <integer-list-3 | integer> maximum pin set for sides
-                    [x, y, z] or a single integer for (x=y=z).
-
-  \param  pin_spacing   <decimal-list-3 | decimal> minimum separation
+  \param  joint_spacing <decimal-list-3 | decimal> minimum separation
                         between joint pins; a list [x, y, z] or a
                         single decimal for (x=y=z).
 
+  \param  joints_max    <integer-list-3 | integer> maximum pin sets for
+                        sides [x, y, z] or a single integer for (x=y=z).
+
+  \param  joint_form    <integer> joint form (see joint2d_box_screw()).
+
+  \param  joint_mode    <integer> joint mode (see joint2d_box_screw()).
+
   \param  side_spacing  <decimal> separation between box sides.
 
-  \param  mode    <integer> construction mode (see below).
+  \param  layout        <integer> layout selection {0 | 1 | 2}.
 
-  \param  layout  <integer> layout selection {0 | 1 | 2}.
+  \param  mode          <integer> construction mode (see below).
 
   \details
 
@@ -131,20 +129,18 @@ module box2d_finger_joint
   mth = 1,
   size,
 
-  pin,
-  screw,
-  nut,
-
+  joint_pin,
+  joint_screw,
+  joint_nut,
+  joint_spacing,
+  joints_max,
   joint_form = 7,
   joint_mode = 0,
 
-  max_sets,
-  pin_spacing,
   side_spacing,
+  layout = 0,
 
-  mode = 0,
-
-  layout = 0
+  mode = 0
 )
 {
   //
@@ -236,18 +232,18 @@ module box2d_finger_joint
   box_y         = defined_e_or  (size, 1, box_x);
   box_z         = defined_e_or  (size, 2, box_y);
 
-  pin_conf      = defined_or(pin, [mth, mth * 5/2]);
+  pin_conf      = defined_or(joint_pin, [mth, mth * 5/2]);
 
-  pin_offset_x  = defined_eon_or(pin_spacing, 0, second(pin_conf));
-  pin_offset_y  = defined_e_or  (pin_spacing, 1, pin_offset_x);
-  pin_offset_z  = defined_e_or  (pin_spacing, 2, pin_offset_y);
+  pin_offset_x  = defined_eon_or(joint_spacing, 0, second(pin_conf));
+  pin_offset_y  = defined_e_or  (joint_spacing, 1, pin_offset_x);
+  pin_offset_z  = defined_e_or  (joint_spacing, 2, pin_offset_y);
 
-  max_sets_x    = defined_eon_or(max_sets, 0, number_max);
-  max_sets_y    = defined_e_or  (max_sets, 1, max_sets_x);
-  max_sets_z    = defined_e_or  (max_sets, 2, max_sets_y);
+  max_sets_x    = defined_eon_or(joints_max, 0, number_max);
+  max_sets_y    = defined_e_or  (joints_max, 1, max_sets_x);
+  max_sets_z    = defined_e_or  (joints_max, 2, max_sets_y);
 
-  screw_conf    = defined_or(screw, mth/3);
-  nut_conf      = defined_or(nut, mth*2/3);
+  screw_conf    = defined_or(joint_screw, mth/3);
+  nut_conf      = defined_or(joint_nut, mth*2/3);
 
   side_offset   = defined_or(side_spacing, mth);
 
@@ -370,13 +366,12 @@ BEGIN_SCOPE example;
     (
       mth   = 2,
       size  = [60, 30, 20],
-      pin   = [4, 6, 1/2, 1/2, 1/2],
-      screw = [3/2, 5],
-      nut   = [3, 3/2],
 
-      max_sets    = [3, 1, 1],
-      pin_spacing = 12,
-      close       = false
+      joint_pin     = [4, 6, 1/2, 1/2, 1/2],
+      joint_screw   = [3/2, 5],
+      joint_nut     = [3, 3/2],
+      joint_spacing = 12,
+      joints_max    = [3, 1, 1]
     );
 
     // end_include
@@ -409,14 +404,15 @@ BEGIN_SCOPE example_assemled;
     (
       mth   = 2,
       size  = [60, 30, 20],
-      pin   = [4, 6, 1/2, 1/2, 1/2],
-      screw = [3/2, 5],
-      nut   = [3, 3/2],
 
-      max_sets      = [3, 1, 1],
-      pin_spacing   = 12,
-      close         = true,
-      layout        = 2
+      joint_pin     = [4, 6, 1/2, 1/2, 1/2],
+      joint_screw   = [3/2, 5],
+      joint_nut     = [3, 3/2],
+      joint_spacing = 12,
+      joints_max    = [3, 1, 1],
+
+      mode    = 2,
+      layout  = 2
     );
 
     // end_include
