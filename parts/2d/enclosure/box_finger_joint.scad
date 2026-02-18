@@ -213,7 +213,7 @@ module box2d_finger_joint
   //
   // construct a side
   //
-  module construct_side( size, insts, p, vr, vrm )
+  module construct_side( idx, size, insts, p, vr, vrm )
   {
     //
     // construct a side joint
@@ -252,7 +252,7 @@ module box2d_finger_joint
     // assemble side with joint
     difference()
     {
-      // instance additions
+      // joint instance additions
       for (i = insts)
       {
         count   = i[0];
@@ -285,7 +285,7 @@ module box2d_finger_joint
         construct_joint( size=size, count=count, offset=offset, axis=axis, sides=sides, type=0 );
       }
 
-      // instance removals
+      // joint instance removals
       for (i = insts)
       {
         count   = i[0];
@@ -321,6 +321,8 @@ module box2d_finger_joint
     for (side = close ? [0, 2] : [0])
     let
     (
+      i   = side > 0 ? 4 : 5,
+
       r   = side > 0 ? 0 : 180,
       t   = [0, side_offset_y * side],
 
@@ -329,11 +331,13 @@ module box2d_finger_joint
       vrm = side > 0 ? vrm_xy_1 : vrm_xy_2
     )
     translate(t) rotate(r)
-    construct_side( size=side_xy, insts=insts_xy, p=p, vr=vr, vrm=vrm );
+    construct_side( idx=i, size=side_xy, insts=insts_xy, p=p, vr=vr, vrm=vrm );
 
     for (side = [-1, 1])
     let
     (
+      i   = side > 0 ? 0 : 1,
+
       r   = side > 0 ? 0 : 180,
       t   = [0, side_offset_y * side],
 
@@ -342,11 +346,13 @@ module box2d_finger_joint
       vrm = side > 0 ? vrm_xz_1 : vrm_xz_2
     )
     translate(t) rotate(r)
-    construct_side( size=side_xz, insts=insts_xz, p=p, vr=vr, vrm=vrm );
+    construct_side( idx=i, size=side_xz, insts=insts_xz, p=p, vr=vr, vrm=vrm );
 
     for (side = [-1, 1])
     let
     (
+      i   = side > 0 ? 2 : 3,
+
       r   = (select == 0) ?
             side > 0 ? 0 : 180
           : side > 0 ? 270 : 90,
@@ -360,7 +366,7 @@ module box2d_finger_joint
       vrm = side > 0 ? vrm_yz_1 : vrm_yz_2
     )
     translate(t) rotate(r)
-    construct_side( size=side_yz, insts=insts_yz, p=p, vr=vr, vrm=vrm );
+    construct_side( idx=i, size=side_yz, insts=insts_yz, p=p, vr=vr, vrm=vrm );
   }
 
   //
@@ -372,6 +378,8 @@ module box2d_finger_joint
     for (side = close ? [-1, 1] : [-1])
     let
     (
+      i   = side > 0 ? 4 : 5,
+
       r   = 0,
       t   = [0, 0, (box_z/2 - mth/2 + gap) * side + (close ? 0 : -mth/2)],
 
@@ -381,12 +389,14 @@ module box2d_finger_joint
     )
     translate(t) rotate(r)
     extrude_linear_uss(mth, center=true)
-    construct_side( size=side_xy, insts=insts_xy, p=p, vr=vr, vrm=vrm );
+    construct_side( idx=i, size=side_xy, insts=insts_xy, p=p, vr=vr, vrm=vrm );
 
     color("green")
     for (side = [-1, 1])
     let
     (
+      i   = side > 0 ? 0 : 1,
+
       r   = side > 0 ? [90, 0, 0] : [90, 0, 180],
       t   = [0, (box_y/2 + gap) * side, 0],
 
@@ -396,12 +406,14 @@ module box2d_finger_joint
     )
     translate(t) rotate(r)
     extrude_linear_uss(mth)
-    construct_side( size=side_xz, insts=insts_xz, p=p, vr=vr, vrm=vrm );
+    construct_side( idx=i, size=side_xz, insts=insts_xz, p=p, vr=vr, vrm=vrm );
 
     color("gray")
     for (side = [-1, 1])
     let
     (
+      i   = side > 0 ? 2 : 3,
+
       r   = side > 0 ? [90, 0, 90] : [90, 0, 270],
       t   = [(box_x/2 - mth + gap) * side, 0, 0],
 
@@ -411,7 +423,7 @@ module box2d_finger_joint
     )
     translate(t) rotate(r)
     extrude_linear_uss(mth)
-    construct_side( size=side_yz, insts=insts_yz, p=p, vr=vr, vrm=vrm );
+    construct_side( idx=i, size=side_yz, insts=insts_yz, p=p, vr=vr, vrm=vrm );
   }
 
   //
