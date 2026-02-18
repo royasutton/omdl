@@ -37,7 +37,7 @@
 /***************************************************************************//**
   \page omdl_distinctions Distinctions
 
-  ## What Makes omdl Distinct from Other OpenSCAD Libraries
+  \section distinctions What Makes omdl Distinct from Other OpenSCAD Libraries
 
   The OpenSCAD Mechanical Design Library ([omdl]) began as the work of
   an electrical engineer without formal training in mechanical
@@ -51,7 +51,7 @@
   parametric modeling, they target different abstraction levels and
   workflows.
 
-  ### 1. Mechanical-Engineering-First Abstraction
+  \subsection engineering_first 1. Mechanical-Engineering-First Abstraction
 
   omdl is designed around mechanical design intent, not just
   geometry creation.
@@ -74,7 +74,7 @@
   the starting point.
 
 
-  ### 2. Emphasis on Structured Parameters
+  \subsection structured_parameters 2. Emphasis on Structured Parameters
 
   omdl encourages the use of structured, self-describing parameters
   rather than long positional argument lists.
@@ -101,7 +101,7 @@
     to the user
 
 
-  ### 3. Unit-Aware Design Philosophy
+  \subsection unit_aware_design 3. Unit-Aware Design Philosophy
 
   omdl natively supports unit-aware modeling, making mixed-unit
   mechanical work safer and clearer.
@@ -121,7 +121,7 @@
   a major differentiator.
 
 
-  ### 4. Workflow-Oriented Organization
+  \subsection workflow_oriented 4. Workflow-Oriented Organization
 
   omdl mirrors how mechanical designs evolve. This is reflected
   directly in the library structure:
@@ -138,7 +138,7 @@
   process.
 
 
-  ### 5. Documentation as a First-Class Feature
+  \subsection documentation_first_class 5. Documentation as a First-Class Feature
 
   omdl is written to be self-documenting by design:
 
@@ -155,7 +155,7 @@
   - \b [BOSL2] documentation is extensive but geometry-centric
 
 
-  ### 6. Conservative, Predictable Behavior
+  \subsection conservative_behavior 6. Conservative, Predictable Behavior
 
   omdl favors:
 
@@ -170,7 +170,7 @@
   - More suitable for long-lived or shared projects
 
 
-  ## Differentiation Summary
+  \section differentiation_summary Differentiation Summary
 
   Feature              | omdl                      | MCAD                      | BOSL2
   -------------------- | ------------------------- | ------------------------- | ----------------------
@@ -330,29 +330,32 @@
   Download the omdl setup script:
   \code{bash}
   $ mkdir tmp && cd tmp
+
   $ wget https://git.io/setup-omdl.bash
+
   $ chmod +x setup-omdl.bash
   \endcode
 
   Fetch and install the latest library distribution:
   \code{bash}
-  ./setup-omdl.bash --branch-list tags1 --yes --install
+  $ ./setup-omdl.bash --branch-list tags1 --yes --install
   \endcode
 
   or, a specific version, say v0.9.6, can be installed using:
   \code{bash}
-  ./setup-omdl.bash --branch v0.9.6 --yes --install
+  $ ./setup-omdl.bash --branch v0.9.6 --yes --install
   \endcode
 
   View documentation:
   \code{bash}
-  $ google-chrome .local/share/OpenSCAD/docs/html/index.html
+  $ google-chrome ~/.local/share/OpenSCAD/docs/html/index.html
   \endcode
 
   The generated HTML documentation will be installed to the OpenSCAD
-  user library path in a subfolder named 'docs/html'. The example above
-  assumes a Linux operating system; paths may differ on other
-  platforms.
+  user library path in a subfolder named 'docs/html'.
+
+  The example above assumes a Linux operating system; paths may differ
+  on other platforms.
 
   [omdl]: https://royasutton.github.io/omdl
   [repository]: https://github.com/royasutton/omdl
@@ -392,8 +395,11 @@
 
   \code{.C}
   include <omdl-base.scad>;
+  include <models/3d/misc/omdl_logo.scad>;
 
-  ...
+  $fn = 36;
+
+  omdl_logo(c=false, b=true, t=true);
   \endcode
 
   This process reads the \b \amu_eval(${omdl_base_cnt}) files listed in
