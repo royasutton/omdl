@@ -320,6 +320,8 @@
 /***************************************************************************//**
   \page building_and_installing Building and Installing
 
+  \section setup_script Setup Script
+
   A script is provided to build the library documentation. If the setup
   script does not detect that [openscad-amu], the development environment
   used by [omdl], is installed, it will automatically download and
@@ -370,7 +372,7 @@
 /***************************************************************************//**
   \page library_usage Library Usage
 
-  \section module_inclusion Module Inclusion Workflow
+  \section module_inclusion Module Inclusion
 
   he standard library includes are encapsulated within the base include
   file omdl-base.scad. This file provides only the minimal subset of
@@ -697,7 +699,7 @@
 /***************************************************************************//**
   \page tv Auto-tests and Validation
 
-  ### Scripts and Results ###
+  \section auto_test_results Library Build Test Results
 
   The documentation for [omdl] is generated using [openscad-amu].
   An integral part of the documentation build process is the validation
@@ -714,18 +716,19 @@
   | \subpage tv_fail "Fail" | A flat list of current test failures.
   | \subpage tv_warn "Warn" | A flat list of current test warnings.
 
-  #### Current Test Failures and Warnings ####
+  \section auto_test_issues Build Test Failures and Warnings
 
   [omdl]: https://royasutton.github.io/omdl
   [openscad-amu]: https://royasutton.github.io/openscad-amu
   [OpenSCAD]: http://www.openscad.org
 *******************************************************************************/
 
-// Validation Tests and Results
+// Tests and Results
 /***************************************************************************//**
   /+
       Define separate pages for validation results. Modules can
-      attached results to the related page reference.
+      attached results to the related page reference show below in this
+      section.
   +/
 
   \page tv_tree Validation Tests and Results
@@ -745,6 +748,8 @@
 /***************************************************************************//**
   \page build_information Build Information
 
+  \section build_general General
+
   \amu_file bi_general (file="${DOXYGEN_OUTPUT}buildinfo/general.amu" ++read)
   \amu_table
   (
@@ -754,6 +759,8 @@
     column_headings="name^value"
     cell_texts="${bi_general}"
   )
+
+  \section build_toolchain Toolchain
 
   \amu_file bi_toolchain (file="${DOXYGEN_OUTPUT}buildinfo/toolchain.amu" ++read)
   \amu_table
@@ -765,6 +772,8 @@
     cell_texts="${bi_toolchain}"
   )
 
+  \section build_components Components
+
   \amu_file bi_components (file="${DOXYGEN_OUTPUT}buildinfo/components.amu" ++read)
   \amu_table
   (
@@ -774,6 +783,8 @@
     column_headings="name^count^value"
     cell_texts="${bi_components}"
   )
+
+  \section build_scopes Scopes
 
   \amu_file bi_scopes (file="${DOXYGEN_OUTPUT}buildinfo/scopes.amu" ++read)
   \amu_table
@@ -785,6 +796,8 @@
     cell_texts="${bi_scopes}"
   )
 
+  \section build_modules Modules
+
   \amu_file bi_modules (file="${DOXYGEN_OUTPUT}buildinfo/modules.amu" ++read)
   \amu_table
   (
@@ -795,6 +808,8 @@
     cell_texts="${bi_modules}"
   )
 
+  \section build_sources Sources
+
   \amu_file bi_sources (file="${DOXYGEN_OUTPUT}buildinfo/sources.amu" ++read)
   \amu_table
   (
@@ -804,7 +819,6 @@
     column_headings="name^count^value"
     cell_texts="${bi_sources}"
   )
-
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -813,6 +827,8 @@
 
 /***************************************************************************//**
   \page Copyright Copyright Notice
+
+  \section copyright GNU Lesser General Public License
 
   \verbatim
   \amu_include (gnu-lgpl-v2.1.txt)
