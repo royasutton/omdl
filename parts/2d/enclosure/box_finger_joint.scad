@@ -323,22 +323,38 @@ module box2d_finger_joint
   module layout_3d( gap )
   {
     color("blue")
-    for (s = close ? [-1, 1] : [-1])
-    translate([0, 0, (box_z/2 - mth/2 + gap) * s + (close ? 0 : -mth/2)])
+    for (side = close ? [-1, 1] : [-1])
+    let
+    (
+      r = 0,
+
+      t = [0, 0, (box_z/2 - mth/2 + gap) * side + (close ? 0 : -mth/2)]
+    )
+    translate(t) rotate(r)
     extrude_linear_uss(mth, center=true)
     construct_side( size=side_xy, insts=insts_xy, vr=vr_xy, vrm=vrm_xy );
 
     color("green")
-    for (s = [-1, 1])
-    translate([0, (box_y/2 + gap) * s, 0])
-    rotate(s > 0 ? [90, 0, 0] : [90, 0, 180])
+    for (side = [-1, 1])
+    let
+    (
+      r = side > 0 ? [90, 0, 0] : [90, 0, 180],
+
+      t = [0, (box_y/2 + gap) * side, 0]
+    )
+    translate(t) rotate(r)
     extrude_linear_uss(mth)
     construct_side( size=side_xz, insts=insts_xz, vr=vr_xz, vrm=vrm_xz );
 
     color("gray")
-    for (s = [-1, 1])
-    translate([ (box_x/2 - mth + gap) * s, 0, 0])
-    rotate(s > 0 ? [90, 0, 90] : [90, 0, 270])
+    for (side = [-1, 1])
+    let
+    (
+      r = side > 0 ? [90, 0, 90] : [90, 0, 270],
+
+      t = [(box_x/2 - mth + gap) * side, 0, 0]
+    )
+    translate(t) rotate(r)
     extrude_linear_uss(mth)
     construct_side( size=side_yz, insts=insts_yz, vr=vr_yz, vrm=vrm_yz );
   }
