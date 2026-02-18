@@ -76,6 +76,12 @@
 
   \param  joint_mode    <integer> joint mode (see joint2d_box_screw()).
 
+  \param  vr            <decimal-list-3-list-4 | decimal> box rounding
+                        (see below).
+
+  \param  vrm           <integer-list-3-list-4 | integer> box rounding
+                        mode (see below).
+
   \param  side_spacing  <decimal> separation between box sides.
 
   \param  layout        <integer> layout selection {0 | 1 | 2}.
@@ -88,9 +94,27 @@
     joint2d_box_screw(). The resulting geometry can be rendered to SVG
     or DXF for CNC cutting, or extruded to a specified material
     thickness for fabrication using a 3D printer. The joint module
-    supports configurable interior and exterior corner rounding,
-    allowing compensation for cutting tool diameter (commonly called
-    dogbone corner relief).
+    supports configurable interior and exterior corner rounding to
+    compensate for cutting tool diameter, commonly referred to as
+    dogbone corner relief.
+
+    ### vr and vrm
+
+    The box sides can be rounded together or independently using the
+    parameters \p vr and \p vrm as show in the table below:
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | decimal-list-4 \| decimal | required  | \p vr_xy : side xy rounding
+      1 | decimal-list-4 \| decimal | vr_xy     | \p vr_xz : side xz rounding
+      2 | decimal-list-4 \| decimal | vr_xz     | \p vr_yz : side yz rounding
+
+    The vertices of each side can be rounded independently by assigning
+    values using a four-element list, or they can all be assigned the
+    same value by setting the side rounding to a single value.
+
+    The rounding mode follows the same scheme described above. For more
+    information on rounding options, see polygon_round_eve_all_p().
 
     ### mode
 
@@ -141,6 +165,9 @@ module box2d_finger_joint
   joint_form = 7,
   joint_mode = 0,
 
+  vr,
+  vrm,
+
   side_spacing,
   layout = 0,
 
@@ -150,7 +177,7 @@ module box2d_finger_joint
   //
   // construct a side
   //
-  module construct_side( size, insts )
+  module construct_side( size, insts, vr, vrm )
   {
     //
     // construct a side joint
@@ -198,7 +225,20 @@ module box2d_finger_joint
         sides   = i[3];
         type    = i[4];
 
-        square(size, center=true);
+        polygon
+        (
+          let
+          (
+            x = size.x/2, y = size.y/2,
+
+            // centered square
+            c = [[x, -y], [x, y], [-x, y], [-x, -y]],
+
+            // round if defined
+            p = is_undef( vr ) ? c : polygon_round_eve_all_p(c=c, vr=vr, vrm=vrm)
+          )
+          p
+        );
 
         if ( type == 0 )
         construct_joint( size=size, count=count, offset=offset, axis=axis, sides=sides, type=0 );
@@ -243,7 +283,7 @@ module box2d_finger_joint
       t = [0, side_offset_y * side]
     )
     translate(t) rotate(r)
-    construct_side( size=side_xy, insts=insts_xy );
+    construct_side( size=side_xy, insts=insts_xy, vr=vr_xy, vrm=vrm_xy );
 
     for (side = [-1, 1])
     let
@@ -253,7 +293,7 @@ module box2d_finger_joint
       t = [0, side_offset_y * side]
     )
     translate(t) rotate(r)
-    construct_side( size=side_xz, insts=insts_xz );
+    construct_side( size=side_xz, insts=insts_xz, vr=vr_xz, vrm=vrm_xz );
 
     for (side = [-1, 1])
     let
@@ -267,7 +307,7 @@ module box2d_finger_joint
         : [side_offset_x * side, 0]
     )
     translate(t) rotate(r)
-    construct_side( size=side_yz, insts=insts_yz );
+    construct_side( size=side_yz, insts=insts_yz, vr=vr_yz, vrm=vrm_yz );
   }
 
   //
@@ -279,21 +319,21 @@ module box2d_finger_joint
     for (s = close ? [-1, 1] : [-1])
     translate([0, 0, (box_z/2 - mth/2 + gap) * s + (close ? 0 : -mth/2)])
     extrude_linear_uss(mth, center=true)
-    construct_side( size=side_xy, insts=insts_xy );
+    construct_side( size=side_xy, insts=insts_xy, vr=vr_xy, vrm=vrm_xy );
 
     color("green")
     for (s = [-1, 1])
     translate([0, (box_y/2 + gap) * s, 0])
     rotate(s > 0 ? [90, 0, 0] : [90, 0, 180])
     extrude_linear_uss(mth)
-    construct_side( size=side_xz, insts=insts_xz );
+    construct_side( size=side_xz, insts=insts_xz, vr=vr_xz, vrm=vrm_xz );
 
     color("gray")
     for (s = [-1, 1])
     translate([ (box_x/2 - mth + gap) * s, 0, 0])
     rotate(s > 0 ? [90, 0, 90] : [90, 0, 270])
     extrude_linear_uss(mth)
-    construct_side( size=side_yz, insts=insts_yz );
+    construct_side( size=side_yz, insts=insts_yz, vr=vr_yz, vrm=vrm_yz );
   }
 
   //
@@ -324,6 +364,14 @@ module box2d_finger_joint
   nut_conf      = defined_or(joint_nut, mth*2/3);
 
   side_offset   = defined_or(side_spacing, mth);
+
+  vr_xy         = defined_eon_or(vr, 0, 0);
+  vr_xz         = defined_e_or  (vr, 1, vr_xy);
+  vr_yz         = defined_e_or  (vr, 2, vr_xz);
+
+  vrm_xy        = defined_eon_or(vrm, 0, 1);
+  vrm_xz        = defined_e_or  (vrm, 1, vrm_xy);
+  vrm_yz        = defined_e_or  (vrm, 2, vrm_xz);
 
   //
   // side and joint instances
@@ -403,7 +451,9 @@ BEGIN_SCOPE example;
       joint_screw   = [3/2, 5],
       joint_nut     = [3, 3/2],
       joint_spacing = 12,
-      joints_max    = [3, 1, 1]
+      joints_max    = [3, 1, 1],
+
+      vr            = 2
     );
 
     // end_include
@@ -442,6 +492,8 @@ BEGIN_SCOPE example_assemled;
       joint_nut     = [3, 3/2],
       joint_spacing = 12,
       joints_max    = [3, 1, 1],
+
+      vr            = 2,
 
       mode    = 2,
       layout  = 2
