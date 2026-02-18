@@ -65,16 +65,16 @@
   \param  joint_nut     <decimal-list-4 | decimal> joint nut
                         configuration.
 
+  \param  joint_form    <integer> joint form.
+
+  \param  joint_mode    <integer> joint mode.
+
   \param  joint_spacing <decimal-list-3 | decimal> minimum separation
                         between joint pins; a list [x, y, z] or a
                         single decimal for (x=y=z).
 
   \param  joints_max    <integer-list-3 | integer> maximum pin sets for
                         sides [x, y, z] or a single integer for (x=y=z).
-
-  \param  joint_form    <integer> joint form.
-
-  \param  joint_mode    <integer> joint mode.
 
   \param  vr            <decimal-list-3-list-4 | decimal> box rounding
                         (see below).
@@ -167,10 +167,10 @@ module box2d_finger_joint
   joint_pin,
   joint_screw,
   joint_nut,
-  joint_spacing,
-  joints_max,
   joint_form = 7,
   joint_mode = 0,
+  joint_spacing,
+  joints_max,
 
   vr,
   vrm,
