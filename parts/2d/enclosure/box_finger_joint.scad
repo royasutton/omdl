@@ -76,7 +76,7 @@
   \param  joints_max    <integer-list-3 | integer> maximum pin sets for
                         sides [x, y, z] or a single integer for (x=y=z).
 
-  \param  merge         <point-2d-list-4-list> coordinate points to
+  \param  side_add      <point-2d-list-4-list> coordinate points to
                         merge into the box xz and yz sides.
 
   \param  vr            <decimal-list-6-list-n | decimal> box rounding;
@@ -109,7 +109,7 @@
     the joint2d_box_screw() module documentation for detailed
     information on the expected data types and configuration scheme.
 
-    ### merge
+    ### side_add
 
     When the box is open (no top side) individual box sides can be
     customized by merging an additional list of coordinate points into
@@ -118,10 +118,10 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | point-2d-list     |                   | \p mp_xz_1 : side xz-1
-      1 | point-2d-list     |                   | \p mp_yz_1 : side yz-1
-      2 | point-2d-list     |  \p mp_xz_1       | \p mp_xz_2 : side xz-2
-      3 | point-2d-list     |  \p mp_yz_1       | \p mp_yz_2 : side yz-2
+      0 | point-2d-list     |                   | \p ap_xz_1 : side xz-1
+      1 | point-2d-list     |                   | \p ap_yz_1 : side yz-1
+      2 | point-2d-list     |  \p ap_xz_1       | \p ap_xz_2 : side xz-2
+      3 | point-2d-list     |  \p ap_yz_1       | \p ap_yz_2 : side yz-2
 
     The parameter \p p is ignored for closed boxes.
 
@@ -147,10 +147,10 @@
     information on rounding options, see polygon_round_eve_all_p().
 
     For rectangular sides \p n=4. However, when customized side points
-    are specified using the \p merge option, the corresponding rounding
-    lists size \p n must be extended to match the number of added
-    points for each customized side, if individual vertex treatment is
-    desired.
+    are specified using the \p side_add option, the corresponding
+    rounding lists size \p n must be extended to match the number of
+    added points for each customized side, if individual vertex
+    treatment is desired.
 
     ### mode
 
@@ -199,7 +199,7 @@ module box2d_finger_joint
   joint_spacing,
   joints_max,
 
-  merge,
+  side_add,
 
   vr,
   vrm,
@@ -334,7 +334,7 @@ module box2d_finger_joint
       r   = side > 0 ? 0 : 180,
       t   = [0, side_offset_y * side],
 
-      p   = side > 0 ? mp_xz_1  : mp_xz_2,
+      p   = side > 0 ? ap_xz_1  : ap_xz_2,
       vr  = side > 0 ? vr_xz_1  : vr_xz_2,
       vrm = side > 0 ? vrm_xz_1 : vrm_xz_2
     )
@@ -352,7 +352,7 @@ module box2d_finger_joint
             [side_offset_x * side, side_offset_y * side]
           : [side_offset_x * side, 0],
 
-      p   = side > 0 ? mp_yz_1  : mp_yz_2,
+      p   = side > 0 ? ap_yz_1  : ap_yz_2,
       vr  = side > 0 ? vr_yz_1  : vr_yz_2,
       vrm = side > 0 ? vrm_yz_1 : vrm_yz_2
     )
@@ -387,7 +387,7 @@ module box2d_finger_joint
       r   = side > 0 ? [90, 0, 0] : [90, 0, 180],
       t   = [0, (box_y/2 + gap) * side, 0],
 
-      p   = side > 0 ? mp_xz_1  : mp_xz_2,
+      p   = side > 0 ? ap_xz_1  : ap_xz_2,
       vr  = side > 0 ? vr_xz_1  : vr_xz_2,
       vrm = side > 0 ? vrm_xz_1 : vrm_xz_2
     )
@@ -402,7 +402,7 @@ module box2d_finger_joint
       r   = side > 0 ? [90, 0, 90] : [90, 0, 270],
       t   = [(box_x/2 - mth + gap) * side, 0, 0],
 
-      p   = side > 0 ? mp_yz_1  : mp_yz_2,
+      p   = side > 0 ? ap_yz_1  : ap_yz_2,
       vr  = side > 0 ? vr_yz_1  : vr_yz_2,
       vrm = side > 0 ? vrm_yz_1 : vrm_yz_2
     )
@@ -441,11 +441,11 @@ module box2d_finger_joint
   side_offset   = defined_or(side_spacing, mth);
 
   // side customization for open boxes only
-  mp_xz_1       = close ? undef : defined_e_or  (merge, 0, undef);
-  mp_yz_1       = close ? undef : defined_e_or  (merge, 1, undef);
+  ap_xz_1       = close ? undef : defined_e_or  (side_add, 0, undef);
+  ap_yz_1       = close ? undef : defined_e_or  (side_add, 1, undef);
 
-  mp_xz_2       = close ? undef : defined_e_or  (merge, 2, mp_xz_1);
-  mp_yz_2       = close ? undef : defined_e_or  (merge, 3, mp_yz_1);
+  ap_xz_2       = close ? undef : defined_e_or  (side_add, 2, ap_xz_1);
+  ap_yz_2       = close ? undef : defined_e_or  (side_add, 3, ap_yz_1);
 
   // side rounding
   vr_xy_1       = defined_eon_or(vr, 0, 0);
