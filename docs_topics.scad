@@ -433,7 +433,7 @@
 /***************************************************************************//**
   \page conventions Conventions
 
-  \section data_types_base Values and Types
+  \section value_types Value Types
 
   OpenSCAD defines a value as one of the following: a number, boolean,
   string, range, vector, or the undefined value. Within omdl, what the
@@ -486,28 +486,7 @@
   | [table]       | data store of values arranged in rows and columns |
 
 
-  When a list has an expected number of elements, the suffix '-n' is
-  appended to indicate the required element count. If a range of
-  acceptable element counts is allowed, the lower and upper bounds are
-  appended using the form l:u.
-
-  When list elements are expected to be of a specific data type, the
-  element type is prefixed to the list name. These conventions provide
-  a concise way to describe parameter contracts and expected data
-  structures throughout the documentation.
-
-  See the tables below for examples.
-
-  | name                | description                               |
-  |:-------------------:|:------------------------------------------|
-  | list-n              | a list of of \b n values                  |
-  | list-l:u            | a list of \b l to \b u values             |
-  | typed-list          | a list of \b typed values                 |
-  | typed-list-n        | a list of \b n \b typed values            |
-  | typed-list-m-list-n | \b m lists of \b n \b typed value lists   |
-
-
-  \section data_types_euclidean Euclidean Space Types
+  \section euclidean_types Euclidean Space Types
 
   For [geometric] specifications and [geometric algebra], omdl adopts
   the following type definitions and conventions.
@@ -590,7 +569,7 @@
   |:-------:|:-------------------:|
   | [plane] | [[point], [pnorm]]  |
 
-  \subsection data_types_planes_normal Planes' normal
+  \subsection data_types_normals Planes' normal
 
   The data type \b pnorm defines a convention for specifying a
   direction vector that is perpendicular to a plane. Given three points
@@ -640,9 +619,32 @@
   \endcode
 
 
+  \section value_lists Value Lists
+
+  When a values is a list and has an expected number of elements, the
+  suffix '-n' is appended to indicate the required element count. If a
+  range of acceptable elements is allowed, the lower and upper bounds
+  are appended using the form l:u.
+
+  When values list elements are expected to be of a specific data type,
+  the element type is prefixed to the value list name. These
+  conventions provide a concise way to describe parameter value
+  contracts and expected data structures throughout the documentation.
+
+  See the tables below for examples.
+
+  | name                | description                               |
+  |:-------------------:|:------------------------------------------|
+  | list-n              | a list of of \b n values                  |
+  | list-l:u            | a list of \b l to \b u values             |
+  | typed-list          | a list of \b typed values                 |
+  | typed-list-n        | a list of \b n \b typed values            |
+  | typed-list-m-list-n | \b m lists of \b n \b typed value lists   |
+
+
   /+
 
-    Values and Types References
+    References: Value Types
 
   +/
 
@@ -675,7 +677,7 @@
 
   /+
 
-    Euclidean Space Types References
+    References: Euclidean Space Types
 
   +/
 
