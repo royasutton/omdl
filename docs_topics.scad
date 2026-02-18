@@ -498,12 +498,13 @@
 
   See the tables below for examples.
 
-  | name          | description                                       |
-  |:-------------:|:--------------------------------------------------|
-  | list-n        | a list of of n elements values                    |
-  | list-l:u      | a list of l to u elements values                  |
-  | type-list     | a list of elements with an expected type          |
-  | type-list-n   | a list of n elements with an expected type        |
+  | name                | description                               |
+  |:-------------------:|:------------------------------------------|
+  | list-n              | a list of of \b n values                  |
+  | list-l:u            | a list of \b l to \b u values             |
+  | typed-list          | a list of \b typed values                 |
+  | typed-list-n        | a list of \b n \b typed values            |
+  | typed-list-m-list-n | \b m lists of \b n \b typed value lists   |
 
 
   \section data_types_euclidean Euclidean Space Types
