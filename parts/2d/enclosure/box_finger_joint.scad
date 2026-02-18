@@ -321,7 +321,7 @@ module box2d_finger_joint
     for (side = close ? [0, 2] : [0])
     let
     (
-      i   = side > 0 ? 4 : 5,
+      i   = side > 0 ? 5 : 4,
 
       r   = side > 0 ? 0 : 180,
       t   = [0, side_offset_y * side],
@@ -336,7 +336,7 @@ module box2d_finger_joint
     for (side = [-1, 1])
     let
     (
-      i   = side > 0 ? 0 : 1,
+      i   = side > 0 ? 1 : 0,
 
       r   = side > 0 ? 0 : 180,
       t   = [0, side_offset_y * side],
@@ -351,7 +351,7 @@ module box2d_finger_joint
     for (side = [-1, 1])
     let
     (
-      i   = side > 0 ? 2 : 3,
+      i   = side > 0 ? 3 : 2,
 
       r   = (select == 0) ?
             side > 0 ? 0 : 180
@@ -378,7 +378,7 @@ module box2d_finger_joint
     for (side = close ? [-1, 1] : [-1])
     let
     (
-      i   = side > 0 ? 4 : 5,
+      i   = side > 0 ? 5 : 4,
 
       r   = 0,
       t   = [0, 0, (box_z/2 - mth/2 + gap) * side + (close ? 0 : -mth/2)],
@@ -395,7 +395,7 @@ module box2d_finger_joint
     for (side = [-1, 1])
     let
     (
-      i   = side > 0 ? 0 : 1,
+      i   = side > 0 ? 1 : 0,
 
       r   = side > 0 ? [90, 0, 0] : [90, 0, 180],
       t   = [0, (box_y/2 + gap) * side, 0],
@@ -412,7 +412,7 @@ module box2d_finger_joint
     for (side = [-1, 1])
     let
     (
-      i   = side > 0 ? 2 : 3,
+      i   = side > 0 ? 3 : 2,
 
       r   = side > 0 ? [90, 0, 90] : [90, 0, 270],
       t   = [(box_x/2 - mth + gap) * side, 0, 0],
