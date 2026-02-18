@@ -280,6 +280,7 @@ module box2d_finger_joint
           p
         );
 
+        // male pins additions
         if ( type == 0 )
         construct_joint( size=size, count=count, offset=offset, axis=axis, sides=sides, type=0 );
       }
@@ -295,9 +296,11 @@ module box2d_finger_joint
 
         size_ro = size + [eps, eps] * 8;
 
+        // male pins removals
         if ( type == 0 )
         construct_joint( size=size_ro, count=count, offset=offset, axis=axis, sides=sides, type=1 );
 
+        // female pins removals
         if ( type == 2 )
         construct_joint( size=size_ro, count=count, offset=offset, axis=axis, sides=sides, type=2 );
       }
