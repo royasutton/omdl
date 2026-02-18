@@ -241,7 +241,40 @@ function consts
 
   \details
 
-    See \ref dt_index for argument specification and conventions.
+    This function provides a way to select one or more elements of a
+    list using a convenient shorthand forms for common selection
+    patterns.
+
+    An index selection may be expressed using any of the following
+    forms:
+
+    | value / form    | description                                   |
+    |:---------------:|:----------------------------------------------|
+    | \b true         | All index positions of the list [0:size-1]    |
+    | \b false        | No index positions                            |
+    | "all"           | All index positions of the list [0:size-1]    |
+    | "none"          | No index positions                            |
+    | "rands"         | Random index selection of the list [0:size-1] |
+    | "even"          | The even index of the list [0:size-1]         |
+    | "odd"           | The odd index of the list [0:size-1]          |
+    | <integer>       | The single position given by an <integer>     |
+    | <range>         | The range of positions given by a <range>     |
+    | <integer-list>  | The list of positions give in <integer-list>  |
+
+    This function resolves an index specification into a concrete list
+    of index positions, translating shorthand or abstract selection
+    patterns into an explicit iterable form.
+
+    \b Example
+
+    \code{.c}
+    // list
+    l1 = [a,b,c,d,e,f]
+
+    // index sequence
+    index_sel(l1)          = [0,1,2,3,4,5]
+    index_sel(l1, "rands") = [0,2,5]
+    \endcode
 *******************************************************************************/
 function index_sel
 (

@@ -425,33 +425,13 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// Development Conventions
+// Conventions
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page conventions Development Conventions
+  \page conventions Conventions
 
-  /+
-    add to main conventions page until the section contents grows
-
-    \li \subpage data_types
-
-  \page data_types Data types and values
-  \tableofcontents
-  +/
-
-    \li \subpage data_types_base
-    \li \subpage data_types_index
-    \li \subpage data_types_euclidean
-*******************************************************************************/
-
-//----------------------------------------------------------------------------//
-// Data types and values
-//----------------------------------------------------------------------------//
-
-// Base Types and Values
-/***************************************************************************//**
-  \page data_types_base Base Types and Values
+  \section data_types_base Values and Types
 
   OpenSCAD defines a value as one of the following: a number, boolean,
   string, range, vector, or the undefined value. Within omdl, what the
@@ -459,6 +439,8 @@
   \em list. This distinction helps differentiate between sequential
   collections of general or compound values and [Euclidean vectors]
   representing numeric coordinates.
+
+  \subsection base_values Base values
 
   | type      | description                                         |
   |:---------:|:----------------------------------------------------|
@@ -469,7 +451,7 @@
   | range     | an arithmetic sequence                              |
   | function  | a function literal or variable containing functions |
 
-  \subsubsection special_values Special values
+  \subsection special_values Special values
 
   | value     | description                                         |
   |:---------:|:----------------------------------------------------|
@@ -479,7 +461,7 @@
   | [nan]     | a numerical value which is not a number             |
   | [inf]     | a numerical value which is infinite                 |
 
-  \subsubsection data_types_conventions Specification conventions
+  \subsection data_types_naming Naming conventions
 
   For clarity and consistency, the following naming conventions are
   used when referring to common [data types] within the library.
@@ -521,84 +503,8 @@
   | type-list     | a list of elements with an expected type          |
   | type-list-n   | a list of n elements with an expected type        |
 
-  [OpenSCAD types]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Values_and_data_types
-  [nan]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Infinities_and_NaNs
-  [inf]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Infinities_and_NaNs
 
-  [data types]: https://en.wikipedia.org/wiki/Data_type
-
-  [value]: https://en.wikipedia.org/wiki/Value_(computer_science)
-  [scalar]: https://en.wikipedia.org/wiki/Variable_(computer_science)
-  [iterable]: https://en.wikipedia.org/wiki/Iterator
-  [empty]: https://en.wikipedia.org/wiki/Empty_set
-
-  [bit]: https://en.wikipedia.org/wiki/Bit
-
-  [integer]: https://en.wikipedia.org/wiki/Integer
-  [even]: https://en.wikipedia.org/wiki/Parity_(mathematics)
-  [odd]: https://en.wikipedia.org/wiki/Parity_(mathematics)
-
-  [decimal]: https://en.wikipedia.org/wiki/Decimal
-  [index]: \ref data_types_index
-  [datastruct]: https://en.wikipedia.org/wiki/Data_structure
-  [data]: https://en.wikipedia.org/wiki/Data
-
-  [map]: https://en.wikipedia.org/wiki/Associative_array
-  [table]: https://en.wikipedia.org/wiki/Table_(information)
-
-  [Euclidean vectors]: https://en.wikipedia.org/wiki/Euclidean_vector
-*******************************************************************************/
-
-// Element Index Selection
-/***************************************************************************//**
-  \page data_types_index Element Index Selection
-
-  The data type index describes how one or more elements of a list are
-  selected by their index positions. Rather than requiring indices to
-  be specified explicitly in every case, this data type supports
-  several convenient shorthand forms for common selection patterns.
-
-  An index selection may be expressed using any of the following forms:
-
-  | value / form    | description                                   |
-  |:---------------:|:----------------------------------------------|
-  | \b true         | All index positions of the list [0:size-1]    |
-  | \b false        | No index positions                            |
-  | "all"           | All index positions of the list [0:size-1]    |
-  | "none"          | No index positions                            |
-  | "rands"         | Random index selection of the list [0:size-1] |
-  | "even"          | The even index of the list [0:size-1]         |
-  | "odd"           | The odd index of the list [0:size-1]          |
-  | <integer>       | The single position given by an <integer>     |
-  | <range>         | The range of positions given by a <range>     |
-  | <integer-list>  | The list of positions give in <integer-list>  |
-
-  To obtain the explicit sequence of list element indices represented
-  by a value of this data type, the function index_sel() may be used.
-  This function resolves an index specification into a concrete list of
-  index positions, translating shorthand or abstract selection patterns
-  into an explicit iterable form.
-
-  Within omdl, index_sel() serves as the normalization step between
-  flexible input specifications and deterministic implementation
-  behavior, allowing modules to accept expressive selection syntax
-  while maintaining consistent parameter contracts during evaluation.
-
-  \b Example
-
-  \code{.c}
-  // list
-  l1 = [a,b,c,d,e,f]
-
-  // index sequence
-  index_sel(l1)          = [0,1,2,3,4,5]
-  index_sel(l1, "rands") = [0,2,5]
-  \endcode
-*******************************************************************************/
-
-// Euclidean Space Data Types
-/***************************************************************************//**
-  \page data_types_euclidean Euclidean Space Data Types
+  \section data_types_euclidean Euclidean Space Types
 
   For [geometric] specifications and [geometric algebra], omdl adopts
   the following type definitions and conventions.
@@ -628,7 +534,7 @@
   implies a list of the specified type. For example, \b points is
   equivalent to a \b point-list.
 
-  \subsubsection data_types_lines Lines and vectors
+  \subsection data_types_lines Lines and vectors
 
   A \b vector has both direction and magnitude in space. A \b line
   likewise has direction and magnitude, but also includes location, as
@@ -650,7 +556,7 @@
   line_tp(), line_ip(), vol_to_point(), and vol_to_origin(), are
   available for type identification and conversion.
 
-  \b Example
+  \b Examples
 
   \code{.c}
   // points
@@ -668,7 +574,7 @@
   v1 == v2 == v3, iff p1 == origin3d
   \endcode
 
-  \subsubsection data_types_planes Planes
+  \subsection data_types_planes Planes
 
   Operators in omdl follow a common convention for defining planes. A
   \b plane is specified by a [point] located on its surface together
@@ -681,7 +587,7 @@
   |:-------:|:-------------------:|
   | [plane] | [[point], [pnorm]]  |
 
-  \subsubsection data_types_planes_normal Planes' normal
+  \subsection data_types_planes_normal Planes' normal
 
   The data type \b pnorm defines a convention for specifying a
   direction vector that is perpendicular to a plane. Given three points
@@ -729,6 +635,46 @@
 
   pn1 == pn4
   \endcode
+
+
+  /+
+
+    Values and Types References
+
+  +/
+
+  [OpenSCAD types]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Values_and_data_types
+  [nan]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Infinities_and_NaNs
+  [inf]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Infinities_and_NaNs
+
+  [data types]: https://en.wikipedia.org/wiki/Data_type
+
+  [value]: https://en.wikipedia.org/wiki/Value_(computer_science)
+  [scalar]: https://en.wikipedia.org/wiki/Variable_(computer_science)
+  [iterable]: https://en.wikipedia.org/wiki/Iterator
+  [empty]: https://en.wikipedia.org/wiki/Empty_set
+
+  [bit]: https://en.wikipedia.org/wiki/Bit
+
+  [integer]: https://en.wikipedia.org/wiki/Integer
+  [even]: https://en.wikipedia.org/wiki/Parity_(mathematics)
+  [odd]: https://en.wikipedia.org/wiki/Parity_(mathematics)
+
+  [decimal]: https://en.wikipedia.org/wiki/Decimal
+  [index]: \ref index_sel()
+  [datastruct]: https://en.wikipedia.org/wiki/Data_structure
+  [data]: https://en.wikipedia.org/wiki/Data
+
+  [map]: https://en.wikipedia.org/wiki/Associative_array
+  [table]: https://en.wikipedia.org/wiki/Table_(information)
+
+  [Euclidean vectors]: https://en.wikipedia.org/wiki/Euclidean_vector
+
+  /+
+
+    Euclidean Space Types References
+
+  +/
 
   [geometric]: https://en.wikipedia.org/wiki/Geometry
   [geometric algebra]: https://en.wikipedia.org/wiki/Geometric_algebra
