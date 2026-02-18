@@ -92,6 +92,8 @@
 
   \param  mode          <integer> construction mode (see below).
 
+  \param  verb          <integer> output console verbosity.
+
   \details
 
     Creates a 2D box layout with straight finger joints and optional
@@ -207,7 +209,8 @@ module box2d_finger_joint
   side_spacing,
   layout = 0,
 
-  mode = 0
+  mode = 0,
+  verb = 0
 )
 {
   //
@@ -312,6 +315,9 @@ module box2d_finger_joint
   //
   module layout_2d( gap, select )
   {
+    if (verb > 0)
+      log_info(strl(["2d layout number ", select]));
+
     side_offset_x = (select == 0) ?
                     (side_xy.x + side_yz.x)/2 + gap - mth
                   : (side_xy.x + side_yz.y)/2 + gap;
@@ -374,6 +380,9 @@ module box2d_finger_joint
   //
   module layout_3d( gap )
   {
+    if (verb > 0)
+      log_info(strl(["3d layout"]));
+
     color("blue")
     for (side = close ? [-1, 1] : [-1])
     let
@@ -513,6 +522,15 @@ module box2d_finger_joint
   //
   // construct box layout
   //
+
+  if (verb > 0)
+  {
+    log_info(strl(["box exterior size = ", [box_x, box_y, box_z]]));
+
+    log_info(strl(["side_xy = ", side_xy]));
+    log_info(strl(["side_xz = ", side_xz]));
+    log_info(strl(["side_yz = ", side_yz]));
+  }
 
   if ( layout > 1)
   {
