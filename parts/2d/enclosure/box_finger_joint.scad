@@ -364,7 +364,12 @@ module box2d_finger_joint
 
         // male pins additions
         if ( type == 0 )
-        construct_joint( size=size, length=length, count=count, offset=offset, axis=axis, sides=sides, type=0 );
+        construct_joint
+        (
+          size=size, length=length, count=count,
+          offset=offset, axis=axis, sides=sides,
+          type=0
+        );
       }
 
       // joint instance removals
@@ -381,11 +386,21 @@ module box2d_finger_joint
 
         // male pins removals
         if ( type == 0 )
-        construct_joint( size=size_ro, length=length, count=count, offset=offset, axis=axis, sides=sides, type=1 );
+        construct_joint
+        (
+          size=size_ro, length=length, count=count,
+          offset=offset, axis=axis, sides=sides,
+          type=1
+        );
 
         // female pins removals
         if ( type == 2 )
-        construct_joint( size=size_ro, length=length, count=count, offset=offset, axis=axis, sides=sides, type=2 );
+        construct_joint
+        (
+          size=size_ro, length=length, count=count,
+          offset=offset, axis=axis, sides=sides,
+          type=2
+        );
       }
 
       // side hole instance removals
