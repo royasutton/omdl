@@ -1673,24 +1673,21 @@ module pcie_expansion
         q = defined_e_or (inst, 8, 0);                  // shape rotate
         h = defined_e_or (inst, 9, encl_wth*2+eps*4);   // shape extrusion height
 
-        m =                                             // group center offsets
-        [
-          (first(n)-1) * first(g)/2 * (defined_e_or(c, 0, false) ? 1 : 0),
-          (second(n)-1) * second(g)/2 * (defined_e_or(c, 1, false) ? 1 : 0)
-        ];
+        // group center offsets (move)
+        m = [ (n.x-1) * g.x/2 * (c.x ? 1 : 0), (n.y-1) * g.y/2 * (c.y ? 1 : 0) ];
 
         translate
         (
           [
-            first(encl_size_wlh) * first(s),
-            second(encl_size_wlh) * second(s),
-            third(encl_size_wlh) * (1/2 + third(s)),
+            encl_size_wlh.x * s.x,
+            encl_size_wlh.y * s.y,
+            encl_size_wlh.z * (1/2 + s.z),
           ]
         )
         rotate([90, 0, r])
         translate(o - m)
-        for (i = [0:first(n)-1], j = [0:second(n)-1])
-        translate([first(g) * i, second(g) * j, 0])
+        for (i = [0:n.x-1], j = [0:n.y-1])
+        translate( [g.x * i, g.y * j, 0] )
         rotate(q)
         if ( is_list(d) )
         {
