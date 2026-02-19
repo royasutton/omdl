@@ -95,6 +95,8 @@
 
   \param  mode          <integer> construction mode (see below).
 
+  \param  part          <integer> side output selection (see below).
+
   \param  verb          <integer> output console verbosity.
 
   \details
@@ -202,6 +204,18 @@
       2 | trim each joint to within its width
       3 | extrude 2d layout for 3d printing
 
+    ### part
+
+    Construction of each side of the box is controlled using the
+    binary-encoded integer parameter \p part. Each side corresponds to
+    a specific bit position according to the side index described
+    above. To enable or disable a side, adjust the \p part value by
+    setting or clearing the binary value associated with that side’s
+    index.
+
+    For example, to output only the bottom of the front and the bottom
+    of the box, set: \p part = (pow(2, 1) + pow(2, 5));
+
     \amu_define scope_id      (example)
     \amu_define title         (2d box example)
     \amu_define image_views   (top)
@@ -221,7 +235,6 @@
   \todo
 
     -# Support side-wall joint edge inset(s).
-    -# Support individual wall output in 2d layouts.
     -# Support addition of horizontal and vertical interior walls.
 *******************************************************************************/
 module box2d_finger_joint
@@ -247,6 +260,7 @@ module box2d_finger_joint
   layout = 0,
 
   mode = 0,
+  part = 63,
   verb = 0
 )
 {
@@ -441,6 +455,7 @@ module box2d_finger_joint
       vr  = side > 0 ? vr_xy_1  : vr_xy_2,
       vrm = side > 0 ? vrm_xy_1 : vrm_xy_2
     )
+    if (binary_bit_is(part, i, 1))
     translate(t) rotate(r)
     construct_side( idx=i, size=side_xy, insts=insts_xy, p=p, vr=vr, vrm=vrm );
 
@@ -456,6 +471,7 @@ module box2d_finger_joint
       vr  = side > 0 ? vr_xz_1  : vr_xz_2,
       vrm = side > 0 ? vrm_xz_1 : vrm_xz_2
     )
+    if (binary_bit_is(part, i, 1))
     translate(t) rotate(r)
     construct_side( idx=i, size=side_xz, insts=insts_xz, p=p, vr=vr, vrm=vrm );
 
@@ -476,6 +492,7 @@ module box2d_finger_joint
       vr  = side > 0 ? vr_yz_1  : vr_yz_2,
       vrm = side > 0 ? vrm_yz_1 : vrm_yz_2
     )
+    if (binary_bit_is(part, i, 1))
     translate(t) rotate(r)
     construct_side( idx=i, size=side_yz, insts=insts_yz, p=p, vr=vr, vrm=vrm );
   }
@@ -501,6 +518,7 @@ module box2d_finger_joint
       vr  = side > 0 ? vr_xy_1  : vr_xy_2,
       vrm = side > 0 ? vrm_xy_1 : vrm_xy_2
     )
+    if (binary_bit_is(part, i, 1))
     translate(t) rotate(r)
     extrude_linear_uss(mth, center=true)
     construct_side( idx=i, size=side_xy, insts=insts_xy, p=p, vr=vr, vrm=vrm );
@@ -518,6 +536,7 @@ module box2d_finger_joint
       vr  = side > 0 ? vr_xz_1  : vr_xz_2,
       vrm = side > 0 ? vrm_xz_1 : vrm_xz_2
     )
+    if (binary_bit_is(part, i, 1))
     translate(t) rotate(r)
     extrude_linear_uss(mth)
     construct_side( idx=i, size=side_xz, insts=insts_xz, p=p, vr=vr, vrm=vrm );
@@ -535,6 +554,7 @@ module box2d_finger_joint
       vr  = side > 0 ? vr_yz_1  : vr_yz_2,
       vrm = side > 0 ? vrm_yz_1 : vrm_yz_2
     )
+    if (binary_bit_is(part, i, 1))
     translate(t) rotate(r)
     extrude_linear_uss(mth)
     construct_side( idx=i, size=side_yz, insts=insts_yz, p=p, vr=vr, vrm=vrm );
