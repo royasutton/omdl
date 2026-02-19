@@ -1659,21 +1659,21 @@ module pcie_expansion
       // remove component/venting holes (n-gon and/or rectangular)
       for (inst = encl_holes_sides)
       {
-        s = defined_e_or(inst, 0, [0,0,0]);           // enclosure side [w, l, h]
-        r = defined_e_or(inst, 1, 0);                 // side-rotate
+        s = defined_ei_or(inst, 0, [0,0,0], 3);         // enclosure side [w, l, h]
+        r = defined_e_or (inst, 1, 0);                  // side-rotate
 
-        o = defined_e_or(inst, 2, [0,0]);             // offsets [w/l, h]
-        n = defined_e_or(inst, 3, [1,1]);             // shape counts [w/l, h]
-        g = defined_e_or(inst, 4, [0,0]);             // grid spacing [w/l, h]
-        c = defined_e_or(inst, 5, [false, false]);    // offset to center [w/l, h]
+        o = defined_ei_or(inst, 2, [0,0], 2);           // offsets [w/l, h]
+        n = defined_ei_or(inst, 3, [1,1], 2);           // shape counts [w/l, h]
+        g = defined_ei_or(inst, 4, [0,0], 2);           // grid spacing [w/l, h]
+        c = defined_ei_or(inst, 5, [false, false], 2);  // offset to center [w/l, h]
 
-        d = defined_e_or(inst, 6, 3);                 // shape diameter (or list)
-                                                      //  list: [size, vr, vrm, vfn]
-        f = defined_e_or(inst, 7, 6);                 // shape sides
-        q = defined_e_or(inst, 8, 0);                 // shape rotate
-        h = defined_e_or(inst, 9, encl_wth*2+eps*4);  // shape extrusion height
+        d = defined_e_or (inst, 6, 3);                  // shape diameter (or list)
+                                                        //  list: [size, vr, vrm, vfn]
+        f = defined_e_or (inst, 7, 6);                  // shape sides
+        q = defined_e_or (inst, 8, 0);                  // shape rotate
+        h = defined_e_or (inst, 9, encl_wth*2+eps*4);   // shape extrusion height
 
-        m =                                           // group center offsets
+        m =                                             // group center offsets
         [
           (first(n)-1) * first(g)/2 * (defined_e_or(c, 0, false) ? 1 : 0),
           (second(n)-1) * second(g)/2 * (defined_e_or(c, 1, false) ? 1 : 0)
