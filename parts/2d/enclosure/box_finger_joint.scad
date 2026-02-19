@@ -258,13 +258,12 @@ module box2d_finger_joint
     //
     // construct a side joint
     //
-    module construct_joint( size, count, offset, axis, sides, type )
+    module construct_joint( size, length, count, offset, axis, sides, type )
     {
-      side_length   = axis == 1 ? size.x : size.y;
       side_offset   = type == 2 ? -1 : +1;
 
       joint_length  = first(pin_conf) * 2 + second(pin_conf) + offset;
-      joint_count   = min(count, max(1, floor(side_length / joint_length)));
+      joint_count   = min(count, max(1, floor(length / joint_length)));
 
       if (joint_count > 0)
       for (s = sides)
@@ -280,7 +279,7 @@ module box2d_finger_joint
       mirror(type == 2 ? [0, 1] : [0, 0])
       joint2d_box_screw
       (
-        conf = [ side_length, mth, pin_conf, screw_conf, nut_conf ],
+        conf = [ length, mth, pin_conf, screw_conf, nut_conf ],
         insts = [ for ( i = [0 : joint_count - 1] ) [0, joint_length * i, joint_form ] ],
         mode = joint_mode,
         type = type,
@@ -337,11 +336,12 @@ module box2d_finger_joint
       // joint instance additions
       for (i = insts)
       {
-        count   = i[0];
-        offset  = i[1];
-        axis    = i[2];
-        sides   = i[3];
-        type    = i[4];
+        length  = i[0];
+        count   = i[1];
+        offset  = i[2];
+        axis    = i[3];
+        sides   = i[4];
+        type    = i[5];
 
         // rectangular side shape
         polygon
@@ -364,27 +364,28 @@ module box2d_finger_joint
 
         // male pins additions
         if ( type == 0 )
-        construct_joint( size=size, count=count, offset=offset, axis=axis, sides=sides, type=0 );
+        construct_joint( size=size, length=length, count=count, offset=offset, axis=axis, sides=sides, type=0 );
       }
 
       // joint instance removals
       for (i = insts)
       {
-        count   = i[0];
-        offset  = i[1];
-        axis    = i[2];
-        sides   = i[3];
-        type    = i[4];
+        length  = i[0];
+        count   = i[1];
+        offset  = i[2];
+        axis    = i[3];
+        sides   = i[4];
+        type    = i[5];
 
         size_ro = size + [eps, eps] * 8;
 
         // male pins removals
         if ( type == 0 )
-        construct_joint( size=size_ro, count=count, offset=offset, axis=axis, sides=sides, type=1 );
+        construct_joint( size=size_ro, length=length, count=count, offset=offset, axis=axis, sides=sides, type=1 );
 
         // female pins removals
         if ( type == 2 )
-        construct_joint( size=size_ro, count=count, offset=offset, axis=axis, sides=sides, type=2 );
+        construct_joint( size=size_ro, length=length, count=count, offset=offset, axis=axis, sides=sides, type=2 );
       }
 
       // side hole instance removals
@@ -579,33 +580,44 @@ module box2d_finger_joint
   vrm_yz_2      = defined_e_or  (vrm, 5, vrm_yz_1);
 
   //
-  // side and joint instances
+  // Calculate sizes and configuration
   //
 
+  // box size
   box_x         = inside ? box_p_x + mth*2 : box_p_x;
   box_y         = inside ? box_p_y + mth*2 : box_p_y;
   box_z         = inside ? box_p_z + mth*2 : box_p_z;
 
+  // box side dimensions
   side_xy       = [ box_x,         box_y ];
   side_xz       = [ box_x - mth*2, box_z - (close ? mth*2 : mth) ];
   side_yz       = [ box_y,         box_z - (close ? mth*2 : mth) ];
 
+  // joint lengths
+  joint_x       = min(side_xy.x, side_xz.x);
+  joint_y       = min(side_xy.y, side_yz.y);
+  joint_z       = min(side_xz.y, side_yz.y);
+
+  //
+  // joint instances
+  //
+
   insts_xy  =
   [
-    [max_sets_y, pin_offset_y, 0, [-1, +1], 2],
-    [max_sets_x, pin_offset_x, 1, [-1, +1], 2]
+    [joint_y, max_sets_y, pin_offset_y, 0, [-1, +1], 2],
+    [joint_x, max_sets_x, pin_offset_x, 1, [-1, +1], 2]
   ];
 
   insts_xz  =
   [
-    [max_sets_z, pin_offset_z, 0, [-1, +1], 0],
-    [max_sets_x, pin_offset_x, 1, close ? [-1, +1] : [-1], 0]
+    [joint_z, max_sets_z, pin_offset_z, 0, [-1, +1], 0],
+    [joint_x, max_sets_x, pin_offset_x, 1, close ? [-1, +1] : [-1], 0]
   ];
 
   insts_yz  =
   [
-    [max_sets_z, pin_offset_z, 0, [-1, +1], 2],
-    [max_sets_y, pin_offset_y, 1, close ? [-1, +1] : [-1], 0]
+    [joint_z, max_sets_z, pin_offset_z, 0, [-1, +1], 2],
+    [joint_y, max_sets_y, pin_offset_y, 1, close ? [-1, +1] : [-1], 0]
   ];
 
   //
