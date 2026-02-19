@@ -12,7 +12,9 @@ local_library     :=  docs_module \
                       basic_3d \
                       polygon \
                       revolved \
-                      polyhedron_db
+                      polyhedron_db \
+                      \
+                      shape2d_select
 
 local_release_add :=
 
