@@ -660,15 +660,40 @@ BEGIN_SCOPE example;
     box2d_finger_joint
     (
       mth   = 2,
-      size  = [60, 30, 20],
+      size  = [80, 40, 30],
 
       joint_pin     = [4, 6, 1/2, 1/2, 1/2],
       joint_screw   = [3/2, 5],
       joint_nut     = [3, 3/2],
-      joint_spacing = 12,
+      joint_spacing = 20,
       joints_max    = [3, 1, 1],
 
-      vr            = 2
+      side_add =
+      [
+        // lower mid-section
+        [[0, 5]],
+
+        // raise sides for handles
+        [[+10, 20], [-10, 20]]
+      ],
+
+      side_holes =
+      [
+        // stars
+        [ [0,1], [8, 2], 0, [0,0], [8,1], [8,1], [true, true] ],
+
+        // slots
+        [ [2,3], [2, [2, 10], 1, 5], 0, [0,0], [8,1], [4,1], [true, true] ],
+
+        // handles
+        [ [2,3], [5, [[10, 5], -x_axis2d_uv, +x_axis2d_uv]], 0, [0, 12] ],
+
+        // bottom
+        [ 4, [1, [1, 6]], 0, [0,0], [9,4], [8,8], [true, true] ],
+      ],
+
+      vr      = 2,
+      layout  = 1
     );
 
     // end_include
@@ -701,17 +726,39 @@ BEGIN_SCOPE example_assemled;
     box2d_finger_joint
     (
       mth   = 2,
-      size  = [60, 30, 20],
+      size  = [80, 40, 30],
 
       joint_pin     = [4, 6, 1/2, 1/2, 1/2],
       joint_screw   = [3/2, 5],
       joint_nut     = [3, 3/2],
-      joint_spacing = 12,
+      joint_spacing = 20,
       joints_max    = [3, 1, 1],
 
-      vr            = 2,
+      side_add =
+      [
+        // lower mid-section
+        [[0, 5]],
 
-      mode    = 2,
+        // raise sides for handles
+        [[+10, 20], [-10, 20]]
+      ],
+
+      side_holes =
+      [
+        // stars
+        [ [0,1], [8, 2], 0, [0,0], [8,1], [8,1], [true, true] ],
+
+        // slots
+        [ [2,3], [2, [2, 10], 1, 5], 0, [0,0], [8,1], [4,1], [true, true] ],
+
+        // handles
+        [ [2,3], [5, [[10, 5], -x_axis2d_uv, +x_axis2d_uv]], 0, [0, 12] ],
+
+        // bottom
+        [ 4, [1, [1, 6]], 0, [0,0], [9,4], [8,8], [true, true] ],
+      ],
+
+      vr      = 2,
       layout  = 2
     );
 
