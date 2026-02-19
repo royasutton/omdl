@@ -41,6 +41,7 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_define includes_required_add
   (
+    shapes/shape2d_select.scad
     tools/operation_cs.scad
     models/2d/joint/box_screw.scad
   )
@@ -76,6 +77,8 @@
   \param  joints_max    <integer-list-3 | integer> maximum pin sets for
                         sides [x, y, z] or a single integer for (x=y=z).
 
+  \param  side_holes    <datastruct> box side hole instances (see below).
+
   \param  side_add      <point-2d-list-4-list> coordinate points to
                         merge into the box xz and yz sides.
 
@@ -110,6 +113,40 @@
     technique commonly referred to as dogbone corner relief. Refer to
     the joint2d_box_screw() module documentation for detailed
     information on the expected data types and configuration scheme.
+
+    ### side_holes
+
+    #### Data structure schema:
+
+    name            | schema
+    ---------------:|:----------------------------------------------
+    side_holes      | [instances]
+    instances       | [instance, instance, ..., instance]
+
+    #### Data structure fields: instance
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | integer-list \| integer | required    | box side index or index list (see below)
+      1 | datastruct \| integer   | 0           | shape selections (see: shape2d_select())
+      2 | decimal           | 0                 | shape rotation
+      3 | decimal-list-2    | [0, 0]            | shape offset [x, y]
+      4 | integer-list-2    | [1, 1]            | shape counts [x, y]
+      5 | decimal-list-2    | [0, 0]            | shape grid spacing [x, y]
+      6 | boolean-list-2    | [false, false]    | group centering [x, y]
+      7 | decimal-list-2    | [0, 0]            | group side offset [x, y] (-1 \| 0 \| +1)
+      8 | decimal           | 0                 | group rotation
+
+    The box side are assigned the following indices:
+
+      v | side        | description
+    ---:|:-----------:|:--------------------
+      0 |  back       | side xz negative
+      1 |  front      | side xz positive
+      2 |  left       | side yz negative
+      3 |  right      | side yz positive
+      4 |  bottom     | side xy negative
+      5 |  top        | side xy positive
 
     ### side_add
 
@@ -186,7 +223,6 @@
     -# Support side-wall joint edge inset(s).
     -# Support individual wall output in 2d layouts.
     -# Support addition of horizontal and vertical interior walls.
-    -# Support  hole instance specifications.
 *******************************************************************************/
 module box2d_finger_joint
 (
@@ -201,6 +237,7 @@ module box2d_finger_joint
   joint_spacing,
   joints_max,
 
+  side_holes,
   side_add,
 
   vr,
@@ -250,6 +287,48 @@ module box2d_finger_joint
         trim = trim,
         align = [0, 1]
       );
+    }
+
+    //
+    // construct a side hole instance
+    //
+    module construct_hole_inst( inst )
+    {
+      d = defined_e_or (inst, 1, 0);                  // shape
+      q = defined_e_or (inst, 2, 0);                  // shape rotate
+      o = defined_ei_or(inst, 3, [0,0], 2);           // shape offset [w, h]
+      n = defined_ei_or(inst, 4, [1,1], 2);           // shape counts [w, h]
+      g = defined_ei_or(inst, 5, [0,0], 2);           // shape grid [w, h]
+
+      c = defined_ei_or(inst, 6, [false, false], 2);  // group center [w, h]
+
+      s = defined_ei_or(inst, 7, [0,0], 2);           // group side offset [w, l]
+      r = defined_e_or (inst, 8, 0);                  // group side rotate
+
+      // group center offsets (move)
+      m = [ (n.x-1) * g.x/2 * (c.x ? 1 : 0), (n.y-1) * g.y/2 * (c.y ? 1 : 0) ];
+
+      if (verb > 2)
+        echo(d=d, q=q, o=o, n=n, g=g, c=c, s=s, r=r);
+
+      translate ( [ size.x/2 * s.x, size.y/2 * s.y ] )
+      rotate( r )
+      translate( o - m )
+      for (i = [0:n.x-1], j = [0:n.y-1])
+      translate( [g.x * i, g.y * j, 0] )
+      rotate( q )
+      let
+      (
+        type = is_list(d) ? first(d) : d,
+        argv = is_list(d) ? tailn(d, 1) : undef
+      )
+      shape2d_select( type=type, argv=argv, center=true, verb=verb-1 );
+
+      if (verb > 1)
+      {
+        log_info(strl(["holes for side index = ", idx, ", conf = ", inst]));
+        log_echo(strl(["hole conf = ", inst]));
+      }
     }
 
     // assemble side with joint
@@ -306,6 +385,16 @@ module box2d_finger_joint
         // female pins removals
         if ( type == 2 )
         construct_joint( size=size_ro, count=count, offset=offset, axis=axis, sides=sides, type=2 );
+      }
+
+      // side hole instance removals
+      for (i = side_holes)
+      {
+        // get enabled side (or side list) for instance
+        e = defined_eon_or(i, 0, undef);
+
+        if ( !is_empty( search(idx, is_list(e) ? e : [e]) ) )
+          construct_hole_inst( i );
       }
     }
   }
@@ -563,6 +652,7 @@ module box2d_finger_joint
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <shapes/shape2d_select.scad>;
     include <tools/operation_cs.scad>;
     include <models/2d/joint/box_screw.scad>;
     include <parts/2d/enclosure/box_finger_joint.scad>;
@@ -603,6 +693,7 @@ END_SCOPE;
 BEGIN_SCOPE example_assemled;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <shapes/shape2d_select.scad>;
     include <tools/operation_cs.scad>;
     include <models/2d/joint/box_screw.scad>;
     include <parts/2d/enclosure/box_finger_joint.scad>;
