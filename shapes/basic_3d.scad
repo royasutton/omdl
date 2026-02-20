@@ -251,6 +251,8 @@ module ellipsoid
   \param    a1 <decimal> The start angle in degrees.
   \param    a2 <decimal> The stop angle in degrees.
 
+  \param    center <boolean> Center about origin.
+
   \details
 
     \amu_eval ( object=ellipsoid_s ${object_ex_diagram_3d} )
@@ -259,7 +261,8 @@ module ellipsoid_s
 (
   size,
   a1 = 0,
-  a2 = 0
+  a2 = 0,
+  center = false
 )
 {
   w = defined_e_or(size, 0, size);
@@ -278,9 +281,9 @@ module ellipsoid_s
   {
     intersection()
     {
-      ellipsoid(size);
+      ellipsoid(size, center);
 
-      translate([0,0,-h/2])
+      translate(center ? [0,0,-h/2] : origin3d)
       linear_extrude(height=h)
       polygon
       ([
@@ -296,7 +299,7 @@ module ellipsoid_s
   }
   else
   {
-    ellipsoid(size);
+    ellipsoid(size, center);
   }
 }
 
@@ -452,7 +455,7 @@ BEGIN_SCOPE diagram;
     else if (shape == "ellipsoid")
       ellipsoid( size=[40,25], center=true );
     else if (shape == "ellipsoid_s")
-      ellipsoid_s( size=[60,15], a1=0, a2=270 );
+      ellipsoid_s( size=[60,15], a1=0, a2=270, center=true );
     else if (shape == "pyramid_t")
       pyramid_t( size=20, center=true );
     else if (shape == "pyramid_q")
