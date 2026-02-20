@@ -84,7 +84,7 @@ module cone
   vr_b = defined_e_or(vr, 0, vr);
   vr_p = defined_e_or(vr, 1, vr_b);
 
-  translate( center ? [0, 0, -h/2] : origin3d )
+  translate( center==true ? [0, 0, -h/2] : origin3d )
   if ( is_undef(vr) )
   {
     cylinder(h=h, r1=cr, r2=0, center=false);
@@ -231,7 +231,7 @@ module ellipsoid
   w = defined_e_or(size, 0, size);
   h = defined_e_or(size, 1, w);
 
-  translate( center ? origin3d : [0, 0, h/2] )
+  translate( center==true ? origin3d : [0, 0, h/2] )
   if (w == h)
   {
     sphere( d=w );
@@ -283,7 +283,7 @@ module ellipsoid_s
     {
       ellipsoid(size, center);
 
-      translate(center ? [0,0,-h/2] : origin3d)
+      translate(center==true ? [0,0,-h/2] : origin3d)
       linear_extrude(height=h)
       polygon
       ([
