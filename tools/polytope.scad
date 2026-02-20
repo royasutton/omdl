@@ -425,11 +425,11 @@ BEGIN_SCOPE example_frame_b;
     {
       circle(r=2);
       color("grey") sphere(r=4);
-      color("red") star3d(20);
+      color("red") star3d(size=20, center=true);
     }
 
     polytope_frame(v, f, fi="odd", fc=0, vc=-1, ec=-1)
-    color("blue") star3d(20);
+    color("blue") star3d(size=20, center=true);
 
     %polyhedron(v, f);
 

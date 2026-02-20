@@ -394,6 +394,8 @@ module pyramid_q
 
   \param    half <boolean> Render upper half only.
 
+  \param    center <boolean> Center about origin.
+
   \details
 
     \amu_eval ( object=star3d ${object_ex_diagram_3d} )
@@ -402,13 +404,15 @@ module star3d
 (
   size,
   n = 5,
-  half = false
+  half = false,
+  center = false
 )
 {
   l = defined_e_or(size, 0, size);
   w = defined_e_or(size, 1, l/2);
   h = defined_e_or(size, 2, w/2);
 
+  translate( center==true ? origin3d : [0, 0, h/2] )
   if (half == true)
   {
     difference()
@@ -461,7 +465,7 @@ BEGIN_SCOPE diagram;
     else if (shape == "pyramid_q")
       pyramid_q( size=[35,20,5], center=true );
     else if (shape == "star3d")
-      star3d( size=40, n=5, half=true );
+      star3d( size=40, n=5, half=true, center=true );
   END_OPENSCAD;
 
   BEGIN_MFSCRIPT;
