@@ -216,18 +216,22 @@ module cuboid
   \param    size <decimal-list-2 | decimal> A list [w, h] of decimals or a
             single decimal for (w=h).
 
+  \param    center <boolean> Center about origin.
+
   \details
 
     \amu_eval ( object=ellipsoid ${object_ex_diagram_3d} )
 *******************************************************************************/
 module ellipsoid
 (
-  size
+  size,
+  center = false
 )
 {
   w = defined_e_or(size, 0, size);
   h = defined_e_or(size, 1, w);
 
+  translate( center ? origin3d : [0, 0, h/2] )
   if (w == h)
   {
     sphere( d=w );
@@ -446,7 +450,7 @@ BEGIN_SCOPE diagram;
     else if (shape == "cuboid")
       cuboid( size=[25,40,20], vr=5, center=true );
     else if (shape == "ellipsoid")
-      ellipsoid( size=[40,25] );
+      ellipsoid( size=[40,25], center=true );
     else if (shape == "ellipsoid_s")
       ellipsoid_s( size=[60,15], a1=0, a2=270 );
     else if (shape == "pyramid_t")

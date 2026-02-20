@@ -342,10 +342,10 @@ module pci_bracket
               extrude_linear_mss(h=col-brd)
               ellipse(size=[1,1/2]*brd);
               rotate([0,90,0])
-              ellipsoid([1,2]*brd);
+              ellipsoid([1,2]*brd, center=true);
               translate([0,0,col-brd])
               rotate([0,90,0])
-              ellipsoid([1,2]*brd);
+              ellipsoid([1,2]*brd, center=true);
             }
           }
 
