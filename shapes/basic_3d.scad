@@ -64,6 +64,8 @@
   \param    vr <decimal-list-2 | decimal> A list [rb, rp] of decimals or
             a single decimal for (rb=rp]. The corner rounding radius.
 
+  \param    center <boolean> Center about origin.
+
   \details
 
     \amu_eval ( object=cone ${object_ex_diagram_3d} )
@@ -73,7 +75,8 @@ module cone
   r = 1,
   h,
   d,
-  vr
+  vr,
+  center = false
 )
 {
   cr = is_defined(d) ? d/2 : r;
@@ -81,6 +84,7 @@ module cone
   vr_b = defined_e_or(vr, 0, vr);
   vr_p = defined_e_or(vr, 1, vr_b);
 
+  translate( center ? [0, 0, -h/2] : origin3d )
   if ( is_undef(vr) )
   {
     cylinder(h=h, r1=cr, r2=0, center=false);
@@ -438,7 +442,7 @@ BEGIN_SCOPE diagram;
     $fn = 36;
 
     if (shape == "cone")
-      cone( h=25, r=10, vr=2 );
+      cone( h=25, r=10, vr=2, center=true );
     else if (shape == "cuboid")
       cuboid( size=[25,40,20], vr=5, center=true );
     else if (shape == "ellipsoid")
