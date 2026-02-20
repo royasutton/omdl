@@ -430,7 +430,7 @@ module star3d
   else
   {
     repeat_radial(n=n, angle=true, move=false)
-    scale([1, 1, h/w])
+    scale([1, 1, h/w / 2*sqrt(2)])
     rotate([45, 0, 0])
     rotate([0, 90, 0])
     pyramid_q(size=[w, w, l], center=false);
