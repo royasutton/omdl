@@ -168,7 +168,7 @@ module ph_db_polyhedron
     sy = defined_e_or(size, 1, sx);
     sz = defined_e_or(size, 2, sy);
 
-    // resize iff size has be defined
+    // resize iff size has been defined
     s = is_undef(size) ? c : resize_p(c, [sx, sy, sz]);
 
     // get bounding box for alignment
@@ -178,9 +178,10 @@ module ph_db_polyhedron
     ay = defined_e_or(align, 1, 0);
     az = defined_e_or(align, 2, 0);
 
-    tx = defined_e_or(b[0], ax-1, 0);
-    ty = defined_e_or(b[1], ay-1, 0);
-    tz = defined_e_or(b[2], az-1, 0);
+    // bounding box list for each axis: [lower, upper]
+    tx = defined_e_or(b.x, ax-1, 0);
+    ty = defined_e_or(b.y, ay-1, 0);
+    tz = defined_e_or(b.z, az-1, 0);
 
     // translate to alignment location
     m = translate_p(s, [tx, ty, tz] );
