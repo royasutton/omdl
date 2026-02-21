@@ -135,7 +135,7 @@ module cone
 *******************************************************************************/
 module cuboid
 (
-  size,
+  size = 1,
   vr,
   vrm = 0,
   center = false
@@ -221,7 +221,7 @@ module cuboid
 *******************************************************************************/
 module ellipsoid
 (
-  size,
+  size = 1,
   center = false
 )
 {
@@ -256,7 +256,7 @@ module ellipsoid
 *******************************************************************************/
 module ellipsoid_s
 (
-  size,
+  size = 1,
   a1 = 0,
   a2 = 0,
   center = false
@@ -312,7 +312,7 @@ module ellipsoid_s
 *******************************************************************************/
 module pyramid_t
 (
-  size,
+  size = 1,
   center = false
 )
 {
@@ -352,7 +352,7 @@ module pyramid_t
 *******************************************************************************/
 module pyramid_q
 (
-  size,
+  size = 1,
   center = false
 )
 {
@@ -399,7 +399,7 @@ module pyramid_q
 *******************************************************************************/
 module star3d
 (
-  size,
+  size = 1,
   n = 5,
   half = false,
   center = false
