@@ -119,12 +119,12 @@ module cone
 
     \amu_eval ( object=cuboid ${object_ex_diagram_3d} )
 
-    | vrm | B1  | B0  | Description                                 |
-    |:---:|:---:|:---:|:--------------------------------------------|
-    |  0  |  0  |  0  | \em round edges with \em round vertexes     |
-    |  1  |  0  |  1  | \em chamfer edges with \em sphere vertexes  |
-    |  2  |  1  |  0  | \em round edges with \em chamfer vertexes   |
-    |  3  |  1  |  1  | \em chamfer edges with \em chamfer vertexes |
+     vrm | Description
+    :---:|:--------------------------------------------
+       0 | round edges with round vertexes
+       1 | chamfer edges with sphere vertexes
+       2 | round edges with chamfer vertexes
+       3 | chamfer edges with chamfer vertexes
 
   \note     Using \em round replaces all edges with a quarter circle
             of radius \p vr, inset <tt>[vr, vr]</tt> from the each edge.
