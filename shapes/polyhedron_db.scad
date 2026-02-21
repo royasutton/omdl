@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2024
+  \date   2024,2026
 
   \copyright
 
@@ -110,8 +110,6 @@ function ph_db_get_id
   \param    align <decimal-list-3 | decimal> A list [x, y, z] of decimals
             or a single decimal for (x=y=z).
 
-  \param    yz <boolean> An internal dataset rotation control variable.
-
   \param    tr \<table> The polyhedra data table rows.
   \param    tc <map> The polyhedra data table columns.
 
@@ -141,7 +139,6 @@ module ph_db_polyhedron
   id,
   size,
   align,
-  yz = true,
   tr = ph_db_dtr,
   tc = ph_db_dtc
 )
@@ -166,16 +163,13 @@ module ph_db_polyhedron
     c  = table_get_value(tr, tc, id, "c");
     f  = table_get_value(tr, tc, id, "f");
 
-    // data structured more for shape viewing; rotate y to z
-    r  = rotate_p(c, [yz ? 90 : 0, 0, 0]);
-
     // x, y, and z size
     sx = defined_e_or(size, 0, size);
     sy = defined_e_or(size, 1, sx);
     sz = defined_e_or(size, 2, sy);
 
     // resize iff size has be defined
-    s = is_undef(size) ? r : resize_p(r, [sx, sy, sz]);
+    s = is_undef(size) ? c : resize_p(c, [sx, sy, sz]);
 
     // get bounding box for alignment
     b = polytope_limits(s, f, s=false);
@@ -189,9 +183,7 @@ module ph_db_polyhedron
     tz = defined_e_or(b[2], az-1, 0);
 
     // translate to alignment location
-    m = yz
-      ? translate_p(s, [tx, ty, -tz] )
-      : translate_p(s, [tx, -ty, tz] );
+    m = translate_p(s, [tx, -ty, tz] );
 
     polyhedron(m, f);
   }
