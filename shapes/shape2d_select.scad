@@ -71,7 +71,7 @@
       0 | decimal-list-n \| decimal | 1         | \p d : shape dimensions
       1 | decimal-list-n \| decimal | undef     | \p vr (\p sr) : shape rounding
       2 | integer-list-n \| integer | 1         | \p vrm : shape rounding mode
-      3 | integer           |  3                | \p fn : shape rounding facets
+      3 | integer           |  5                | \p fn : shape rounding facets
 
     ### type
 
@@ -117,7 +117,7 @@ module shape2d_select
   d   = defined_eon_or(argv, 0, 1);       // dimensions (type dependent)
   vr  = defined_e_or  (argv, 1, undef);   // rounding
   vrm = defined_e_or  (argv, 2, 1);       // rounding mode
-  fn  = defined_e_or  (argv, 3, 3);       // facets
+  fn  = defined_e_or  (argv, 3, 5);       // facets
 
   if (verb > 0)
   {
