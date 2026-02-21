@@ -210,8 +210,8 @@ module cuboid
 
 //! An ellipsoid.
 /***************************************************************************//**
-  \param    size <decimal-list-2 | decimal> A list [w, h] of decimals or a
-            single decimal for (w=h).
+  \param    size <decimal-list-2 | decimal> A list [r, h] of decimals or a
+            single decimal for (2r=h).
 
   \param    center <boolean> Center about origin.
 
@@ -225,25 +225,26 @@ module ellipsoid
   center = false
 )
 {
-  w = defined_e_or(size, 0, size);
-  h = defined_e_or(size, 1, w);
+  r = defined_e_or(size, 0, size);
+  d = 2 * r;
+  h = defined_e_or(size, 1, d);
 
   translate( center==true ? origin3d : [0, 0, h/2] )
-  if (w == h)
+  if (d == h)
   {
-    sphere( d=w );
+    sphere( d=d );
   }
   else
   {
-    scale( [1, 1, h/w] )
-    sphere( r = w/2 );
+    scale( [1, 1, h/d] )
+    sphere( d=d );
   }
 }
 
 //! A sector of an ellipsoid.
 /***************************************************************************//**
-  \param    size <decimal-list-2 | decimal> A list [w, h] of decimals or a
-            single decimal for (w=h).
+  \param    size <decimal-list-2 | decimal> A list [r, h] of decimals or a
+            single decimal for (2r=h).
 
   \param    a1 <decimal> The start angle in degrees.
   \param    a2 <decimal> The stop angle in degrees.
@@ -262,11 +263,12 @@ module ellipsoid_s
   center = false
 )
 {
-  w = defined_e_or(size, 0, size);
-  h = defined_e_or(size, 1, w);
+  r = defined_e_or(size, 0, size);
+  d = 2 * r;
+  h = defined_e_or(size, 1, d);
 
-  trx = w/2 * sqrt(2) + 1;
-  try = w/2 * sqrt(2) + 1;
+  trx = d/2 * sqrt(2) + 1;
+  try = d/2 * sqrt(2) + 1;
 
   pa0 = (4 * a1 + 0 * a2) / 4;
   pa1 = (3 * a1 + 1 * a2) / 4;
