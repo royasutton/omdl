@@ -56,10 +56,8 @@
 
 //! A cone.
 /***************************************************************************//**
-  \param    r <decimal> The base radius.
-  \param    h <decimal> The height.
-
-  \param    d <decimal> The base diameter.
+  \param    size <decimal-list-2 | decimal> A list [r, h] of decimals
+            or a single decimal for (r=h).
 
   \param    vr <decimal-list-2 | decimal> A list [rb, rp] of decimals or
             a single decimal for (rb=rp]. The corner rounding radius.
@@ -72,35 +70,34 @@
 *******************************************************************************/
 module cone
 (
-  r = 1,
-  h,
-  d,
+  size = 1,
   vr,
   center = false
 )
 {
-  cr = is_defined(d) ? d/2 : r;
+  r     = defined_e_or(size, 0, size);
+  h     = defined_e_or(size, 1, r);
 
-  vr_b = defined_e_or(vr, 0, vr);
-  vr_p = defined_e_or(vr, 1, vr_b);
+  vr_b  = defined_e_or(vr, 0, vr);
+  vr_p  = defined_e_or(vr, 1, vr_b);
 
   translate( center==true ? [0, 0, -h/2] : origin3d )
   if ( is_undef(vr) )
   {
-    cylinder(h=h, r1=cr, r2=0, center=false);
+    cylinder(h=h, r1=r, r2=0, center=false);
   }
   else
   {
-    hl = sqrt(cr*cr + h*h);
+    hl = sqrt(r*r + h*h);
 
     rotate_extrude(angle=360)
-    translate([eps*2-cr, 0])
+    translate([eps*2-r, 0])
     difference()
     {
-      tp = triangle2d_sss2ppp([hl, cr*2, hl]);
+      tp = triangle2d_sss2ppp([hl, r*2, hl]);
 
       polygon( polygon_round_eve_all_p(tp, vr=[vr_p, vr_b, 0]) );
-      square( size=[cr, h], center=false );
+      square( size=[r, h], center=false );
     }
   }
 }
@@ -453,7 +450,7 @@ BEGIN_SCOPE diagram;
     $fn = 36;
 
     if (shape == "cone")
-      cone( h=25, r=10, vr=2, center=true );
+      cone( [10, 25], vr=2, center=true );
     else if (shape == "cuboid")
       cuboid( size=[25,40,20], vr=5, center=true );
     else if (shape == "ellipsoid")

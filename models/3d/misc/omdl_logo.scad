@@ -103,7 +103,7 @@ module omdl_logo
     // cone
     color(c?"slategray":undef)
     translate( [0, 0, -eps*2] )
-    cone( h=s, r=s, vr=v1 );
+    cone( [s, s], vr=v1 );
 
     // fins
     color(c?"gainsboro":undef)

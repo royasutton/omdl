@@ -293,7 +293,7 @@ module hinge_sf
         for ( i = fc_l )
         translate([0, 0, -l/2 * first(i) + third(i)])
         mirror([0, 0, second(i)])
-        cone(d=pd, h=ph, vr=[0, pvr]);
+        cone([pd/2, ph], vr=[0, pvr]);
 
         // pin thru-hole
         if ((ml == 4) || (mr == 4))
@@ -304,7 +304,7 @@ module hinge_sf
       for ( i = mc_l )
       translate([0, 0, -l/2 * first(i) + third(i)])
       mirror([0, 0, second(i)])
-      cone(d=pd, h=ph, vr=[0, pvr]);
+      cone([pd/2, ph], vr=[0, pvr]);
     }
   }
 
