@@ -316,18 +316,20 @@ module pyramid_t
   center = false
 )
 {
-  o = size/2;
-  a = size*sqrt(3)/2;
+  s = defined_e_or(size, 0, size);
+
+  o = s/2;
+  a = s*sqrt(3)/2;
 
   translate(center==true ? origin3d : [0,0,o])
   polyhedron
   (
     points =
     [
-      [-a,    -o,    -o],
-      [ a,    -o,    -o],
-      [ 0,  size,    -o],
-      [ 0,     0,  size]
+      [-a, -o, -o],
+      [ a, -o, -o],
+      [ 0,  s, -o],
+      [ 0,  0,  s]
     ],
     faces =
     [
