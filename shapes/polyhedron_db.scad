@@ -183,7 +183,7 @@ module ph_db_polyhedron
     tz = defined_e_or(b[2], az-1, 0);
 
     // translate to alignment location
-    m = translate_p(s, [tx, -ty, tz] );
+    m = translate_p(s, [tx, ty, tz] );
 
     polyhedron(m, f);
   }
