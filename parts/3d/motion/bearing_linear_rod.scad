@@ -411,7 +411,7 @@ BEGIN_SCOPE example;
     minkowski()
     {
       linear_extrude(h-ball, center=true)
-      rotate(a) ngon(n=c, r=r);
+      rotate(a) ngon([r, c]);
       sphere(r=ball/2);
     }
 

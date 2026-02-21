@@ -404,7 +404,7 @@ module pci_bracket
       {
         translate([sv05/2, vho + (y-1)*vhs, -mth/2-mth])
         extrude_linear_mss(h=mth*4)
-        ngon(n=6, r=vhr, vr=vhr/2);
+        ngon([vhr, 6], vr=vhr/2);
       }
     }
   }

@@ -339,8 +339,8 @@ module rhombus
 
 //! An n-sided equiangular/equilateral regular polygon.
 /***************************************************************************//**
-  \param    n <integer> The number of sides.
-  \param    r <decimal> The ngon vertex radius.
+  \param    size <decimal-list-2 | decimal> A list [r, n] of decimals
+            or a single decimal to specified \p r (default for \p n=5).
 
   \param    vr <decimal> The vertex rounding radius.
 
@@ -354,11 +354,13 @@ module rhombus
 *******************************************************************************/
 module ngon
 (
-  n,
-  r,
+  size,
   vr
 )
 {
+  r = defined_e_or(size, 0, size);
+  n = defined_e_or(size, 1, 5);
+
   if ( is_undef(vr) )
   {
     circle(r=r, $fn=n);
@@ -620,7 +622,7 @@ BEGIN_SCOPE diagram;
     else if (shape == "rhombus")
       rhombus( size=[40,25], vr=[2,4,2,4], center=true );
     else if (shape == "ngon")
-      ngon( n=6, r=25, vr=6 );
+      ngon( [25, 6], vr=6 );
     else if (shape == "ellipse")
       ellipse( size=[25, 40] );
     else if (shape == "ellipse_c")
