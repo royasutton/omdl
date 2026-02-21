@@ -82,16 +82,16 @@
 
       t | shapes            | (d) dimensions    | shape reference
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | circle            |  r                | [circle()]
-      1 | ngon              |  r, n             | pg_ngon()
-      2 | rectangle         |  size             | pg_rectangle()
-      3 | rectangle sr      |  size             | pg_rectangle_rs()
-      4 | rhombus           |  size             | pg_rhombus()
-      5 | elliptical sector |  r, v1, v2        | pg_elliptical_sector()
-      6 | triangle vertices |  v1, v2, v3       | pg_triangle_ppp()
-      7 | triangle sides    |  s1, s2, s3       | pg_triangle_sss()
-      8 | star              |  size, n          | star2d()
-      9 | corner round      |  r, m, v1, v2     | pg_corner_round()
+      1 | circle            |  r                | [circle()]
+      2 | ngon              |  r, n             | pg_ngon()
+      3 | rectangle         |  size             | pg_rectangle()
+      4 | rectangle sr      |  size             | pg_rectangle_rs()
+      5 | rhombus           |  size             | pg_rhombus()
+      6 | elliptical sector |  r, v1, v2        | pg_elliptical_sector()
+      7 | triangle vertices |  v1, v2, v3       | pg_triangle_ppp()
+      8 | triangle sides    |  s1, s2, s3       | pg_triangle_sss()
+      9 | star              |  size, n          | star2d()
+     10 | corner round      |  r, m, v1, v2     | pg_corner_round()
 
     \amu_define scope_id      (example)
     \amu_define title         (Selection example)
@@ -132,14 +132,14 @@ module shape2d_select
   //
 
   // circle
-  if      ( type == 0 )
+  if      ( type == 1 )
     circle
     (
            r = d
     );
 
   // ngon
-  else if ( type == 1 )
+  else if ( type == 2 )
     pg_ngon
     (
            r = defined_e_or(d, 0, d),
@@ -151,7 +151,7 @@ module shape2d_select
     );
 
   // rectangle
-  else if ( type == 2 )
+  else if ( type == 3 )
     pg_rectangle
     (
         size = d,
@@ -162,7 +162,7 @@ module shape2d_select
     );
 
   // rectangle_rs
-  else if ( type == 3 )
+  else if ( type == 4 )
     pg_rectangle_rs
     (
         size = d,
@@ -171,7 +171,7 @@ module shape2d_select
     );
 
   // rhombus
-  else if ( type == 4 )
+  else if ( type == 5 )
     pg_rhombus
     (
         size = d,
@@ -182,7 +182,7 @@ module shape2d_select
     );
 
   // elliptical sector
-  else if ( type == 5 )
+  else if ( type == 6 )
     pg_elliptical_sector
     (
            r = defined_e_or(d, 0, d),
@@ -191,7 +191,7 @@ module shape2d_select
     );
 
   // triangle_ppp
-  else if ( type == 6 )
+  else if ( type == 7 )
     let
     (
       v1 = defined_e_or(d, 0, d * origin2d),
@@ -208,7 +208,7 @@ module shape2d_select
     );
 
   // triangle_sss
-  else if ( type == 7 )
+  else if ( type == 8 )
     let
     (
       s1 = defined_e_or(d, 0, d),
@@ -225,7 +225,7 @@ module shape2d_select
     );
 
   // star2d
-  else if ( type == 8 )
+  else if ( type == 9 )
     star2d
     (
         size = defined_e_or(d, 0, d),
@@ -234,7 +234,7 @@ module shape2d_select
     );
 
   // corner_round
-  else if ( type == 9 )
+  else if ( type == 10 )
     pg_corner_round
     (
            r = defined_e_or(d, 0, d),
@@ -267,7 +267,7 @@ BEGIN_SCOPE example;
     vrm = [1, 1, 5];
     fn  = 9;
 
-    type = 7;
+    type = 8;
     argv = [d, vr, vrm, fn];
 
     shape2d_select(type=type, argv=argv, center=true);
