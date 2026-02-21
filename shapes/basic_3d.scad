@@ -411,13 +411,15 @@ module star3d
   w = defined_e_or(size, 1, l/2);
   h = defined_e_or(size, 2, w/2);
 
+  s = h/w / 2*sqrt(2);
+
   translate( center==true ? origin3d : [0, 0, h/2] )
   if (half == true)
   {
     difference()
     {
       repeat_radial(n=n, angle=true, move=false)
-      scale([1, 1, h/w])
+      scale([1, 1, s])
       rotate([45, 0, 0])
       rotate([0, 90, 0])
       pyramid_q(size=[w, w, l], center=false);
@@ -429,7 +431,7 @@ module star3d
   else
   {
     repeat_radial(n=n, angle=true, move=false)
-    scale([1, 1, h/w / 2*sqrt(2)])
+    scale([1, 1, s])
     rotate([45, 0, 0])
     rotate([0, 90, 0])
     pyramid_q(size=[w, w, l], center=false);
