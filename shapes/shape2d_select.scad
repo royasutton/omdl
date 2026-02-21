@@ -1,4 +1,4 @@
-//! A standard selection and configuration scheme for 2D shape construction.
+//! A standard selection and configuration scheme for common 2D shape construction.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Shape 2d Select)
-    \amu_define group_brief (Selection and configuration for 2D shape construction.)
+    \amu_define group_brief (Selection and configuration for common 2D shape construction.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -46,7 +46,7 @@
 
 //! Select configure and construct one of the available 2d shapes.
 /***************************************************************************//**
-  \param    type <integer> Shape type.
+  \param    type <integer> Shape type index.
 
   \param    argv <decimal-list | decimal> Shape dependent argument vector.
 
