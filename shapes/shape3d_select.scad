@@ -68,7 +68,7 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | decimal-list-n \| decimal | 1         | \p d : shape dimensions
+      0 | decimal-list-n \| decimal | 1         | \p size : shape size
       1 | decimal-list-n \| decimal | undef     | \p vr (\p sr) : shape rounding
       2 | integer-list-n \| integer | 0         | \p vrm : shape rounding mode
       3 | integer           |  5                | \p fn : shape rounding facets
@@ -80,7 +80,7 @@
     table. All supported shapes and their associated arguments are
     summarized in the following table:
 
-      t | shapes              | (d) dimensions    | shape reference
+      t | shapes              | size parameters   | shape reference
     ---:|:-------------------:|:-----------------:|:----------------------------------
       1 | cone                |  size             | cone()
       2 | cuboid              |  size             | cuboid()
@@ -110,17 +110,17 @@ module shape3d_select
   // common parameters
   //
 
-  d   = defined_eon_or(argv, 0, 1);       // dimensions (type dependent)
-  vr  = defined_e_or  (argv, 1, undef);   // rounding
-  vrm = defined_e_or  (argv, 2, 0);       // rounding mode
-  fn  = defined_e_or  (argv, 3, 5);       // facets
+  size  = defined_eon_or(argv, 0, 1);       // dimensions (type dependent)
+  vr    = defined_e_or  (argv, 1, undef);   // rounding
+  vrm   = defined_e_or  (argv, 2, 0);       // rounding mode
+  fn    = defined_e_or  (argv, 3, 5);       // facets
 
   if (verb > 0)
   {
     log_info(strl(["type=", type, ", argv=", argv, ", center=", center]));
 
     if (verb > 1)
-      echo(d=d, vr=vr, vrm=vrm, fn=fn);
+      echo(size=size, vr=vr, vrm=vrm, fn=fn);
   }
 
   //
@@ -131,7 +131,7 @@ module shape3d_select
       if ( type == 1 )
     cone
     (
-        size = d,
+        size = size,
           vr = vr,
       center = center
     );
@@ -140,7 +140,7 @@ module shape3d_select
   else if ( type == 2 )
     cuboid
     (
-        size = d,
+        size = size,
           vr = vr,
          vrm = vrm,
       center = center
@@ -150,7 +150,7 @@ module shape3d_select
   else if ( type == 3 )
     ellipsoid
     (
-        size = d,
+        size = size,
       center = center
     );
 
@@ -158,9 +158,9 @@ module shape3d_select
   else if ( type == 4 )
     let
     (
-      s  = defined_e_or(d, 0, d),
-      a1 = defined_e_or(d, 1, 0),
-      a2 = defined_e_or(d, 2, 0)
+      s  = defined_e_or(size, 0, size),
+      a1 = defined_e_or(size, 1, 0),
+      a2 = defined_e_or(size, 2, 0)
     )
     ellipsoid_s
     (
@@ -174,7 +174,7 @@ module shape3d_select
   else if ( type == 5 )
     pyramid_t
     (
-        size = d,
+        size = size,
       center = center
     );
 
@@ -182,7 +182,7 @@ module shape3d_select
   else if ( type == 6 )
     pyramid_q
     (
-        size = d,
+        size = size,
       center = center
     );
 
@@ -190,9 +190,9 @@ module shape3d_select
   else if ( type == 7 )
     let
     (
-      s  = defined_e_or(d, 0, d),
-      n  = defined_e_or(d, 1, 5),
-      h  = defined_e_or(d, 2, false)
+      s  = defined_e_or(size, 0, size),
+      n  = defined_e_or(size, 1, 5),
+      h  = defined_e_or(size, 2, false)
     )
     star3d
     (
@@ -217,15 +217,15 @@ BEGIN_SCOPE example;
     include <omdl-base.scad>;
     include <shapes/shape3d_select.scad>;
 
-    w = 50;
-    h = 25;
+    r     = 25;
+    h     = 25;
 
-    d   = [w, h];
-    a1  = 0;
-    a2 = 225;
+    size  = [r, h];
+    a1    = 0;
+    a2    = 225;
 
-    type = 4;
-    argv = [[d, a1, a2]];
+    type  = 4;
+    argv  = [[size, a1, a2]];
 
     shape3d_select(type=type, argv=argv, center=true);
 

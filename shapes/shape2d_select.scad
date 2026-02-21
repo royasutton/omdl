@@ -68,7 +68,7 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | decimal-list-n \| decimal | 1         | \p d : shape dimensions
+      0 | decimal-list-n \| decimal | 1         | \p size : shape size
       1 | decimal-list-n \| decimal | undef     | \p vr (\p sr) : shape rounding
       2 | integer-list-n \| integer | 1         | \p vrm : shape rounding mode
       3 | integer           |  5                | \p fn : shape rounding facets
@@ -80,7 +80,7 @@
     table. All supported shapes and their associated arguments are
     summarized in the following table:
 
-      t | shapes            | (d) dimensions    | shape reference
+      t | shapes            | size parameters   | shape reference
     ---:|:-----------------:|:-----------------:|:------------------------------------
       1 | circle            |  r                | [circle()]
       2 | ngon              |  r, n             | pg_ngon()
@@ -114,17 +114,17 @@ module shape2d_select
   // common parameters
   //
 
-  d   = defined_eon_or(argv, 0, 1);       // dimensions (type dependent)
-  vr  = defined_e_or  (argv, 1, undef);   // rounding
-  vrm = defined_e_or  (argv, 2, 1);       // rounding mode
-  fn  = defined_e_or  (argv, 3, 5);       // facets
+  size  = defined_eon_or(argv, 0, 1);       // dimensions (type dependent)
+  vr    = defined_e_or  (argv, 1, undef);   // rounding
+  vrm   = defined_e_or  (argv, 2, 1);       // rounding mode
+  fn    = defined_e_or  (argv, 3, 5);       // facets
 
   if (verb > 0)
   {
     log_info(strl(["type=", type, ", argv=", argv, ", center=", center]));
 
     if (verb > 1)
-      echo(d=d, vr=vr, vrm=vrm, fn=fn);
+      echo(size=size, vr=vr, vrm=vrm, fn=fn);
   }
 
   //
@@ -135,15 +135,15 @@ module shape2d_select
   if      ( type == 1 )
     circle
     (
-           r = d
+           r = size
     );
 
   // ngon
   else if ( type == 2 )
     pg_ngon
     (
-           r = defined_e_or(d, 0, d),
-           n = defined_e_or(d, 1, 3),
+           r = defined_e_or(size, 0, size),
+           n = defined_e_or(size, 1, 3),
           vr = vr,
          vrm = vrm,
          vfn = fn,
@@ -154,7 +154,7 @@ module shape2d_select
   else if ( type == 3 )
     pg_rectangle
     (
-        size = d,
+        size = size,
           vr = vr,
          vrm = vrm,
          vfn = fn,
@@ -165,7 +165,7 @@ module shape2d_select
   else if ( type == 4 )
     pg_rectangle_rs
     (
-        size = d,
+        size = size,
           sr = vr,
       center = center
     );
@@ -174,7 +174,7 @@ module shape2d_select
   else if ( type == 5 )
     pg_rhombus
     (
-        size = d,
+        size = size,
           vr = vr,
          vrm = vrm,
          vfn = fn,
@@ -185,18 +185,18 @@ module shape2d_select
   else if ( type == 6 )
     pg_elliptical_sector
     (
-           r = defined_e_or(d, 0, d),
-          v1 = defined_e_or(d, 1, x_axis2d_uv),
-          v2 = defined_e_or(d, 2, x_axis2d_uv)
+           r = defined_e_or(size, 0, size),
+          v1 = defined_e_or(size, 1, x_axis2d_uv),
+          v2 = defined_e_or(size, 2, x_axis2d_uv)
     );
 
   // triangle_ppp
   else if ( type == 7 )
     let
     (
-      v1 = defined_e_or(d, 0, d * origin2d),
-      v2 = defined_e_or(d, 1, d * y_axis2d_uv),
-      v3 = defined_e_or(d, 2, d * x_axis2d_uv)
+      v1 = defined_e_or(size, 0, size * origin2d),
+      v2 = defined_e_or(size, 1, size * y_axis2d_uv),
+      v3 = defined_e_or(size, 2, size * x_axis2d_uv)
     )
     pg_triangle_ppp
     (
@@ -211,9 +211,9 @@ module shape2d_select
   else if ( type == 8 )
     let
     (
-      s1 = defined_e_or(d, 0, d),
-      s2 = defined_e_or(d, 1, s1),
-      s3 = defined_e_or(d, 2, s2)
+      s1 = defined_e_or(size, 0, size),
+      s2 = defined_e_or(size, 1, s1),
+      s3 = defined_e_or(size, 2, s2)
     )
     pg_triangle_sss
     (
@@ -228,8 +228,8 @@ module shape2d_select
   else if ( type == 9 )
     star2d
     (
-        size = defined_e_or(d, 0, d),
-           n = defined_e_or(d, 1, 5),
+        size = defined_e_or(size, 0, size),
+           n = defined_e_or(size, 1, 5),
           vr = vr
     );
 
@@ -237,10 +237,10 @@ module shape2d_select
   else if ( type == 10 )
     pg_corner_round
     (
-           r = defined_e_or(d, 0, d),
-           m = defined_e_or(d, 1, 1),
-          v1 = defined_e_or(d, 2, x_axis2d_uv),
-          v2 = defined_e_or(d, 3, y_axis2d_uv)
+           r = defined_e_or(size, 0, size),
+           m = defined_e_or(size, 1, 1),
+          v1 = defined_e_or(size, 2, x_axis2d_uv),
+          v2 = defined_e_or(size, 3, y_axis2d_uv)
     );
 }
 
@@ -258,17 +258,13 @@ BEGIN_SCOPE example;
     include <omdl-base.scad>;
     include <shapes/shape2d_select.scad>;
 
-    s1 = 50;
-    s2 = 40;
-    s3 = 30;
+    size  = [50, 40, 30];
+    vr    = [1, 5, 5];
+    vrm   = [1, 1, 5];
+    fn    = 9;
 
-    d   = [s1, s2, s3];
-    vr  = [1, 5, 5];
-    vrm = [1, 1, 5];
-    fn  = 9;
-
-    type = 8;
-    argv = [d, vr, vrm, fn];
+    type  = 8;
+    argv  = [size, vr, vrm, fn];
 
     shape2d_select(type=type, argv=argv, center=true);
 
