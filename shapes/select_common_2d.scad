@@ -1,4 +1,4 @@
-//! A standard selection and configuration scheme for common 3D shape construction.
+//! A standard selection and configuration scheme for common 2D shape construction.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Shape 3d Select)
-    \amu_define group_brief (Selection and configuration for common 3D shape construction.)
+    \amu_define group_name  (Select 2d Shape)
+    \amu_define group_brief (Selection and configuration for common 2D shapes.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
@@ -44,7 +44,7 @@
 
 //----------------------------------------------------------------------------//
 
-//! Select configure and construct one of the available 3d shapes.
+//! Select configure and construct one of the available 2d shapes.
 /***************************************************************************//**
   \param    type <integer> Shape type index.
 
@@ -70,7 +70,7 @@
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | decimal-list-n \| decimal | 1         | \p size : shape size
       1 | decimal-list-n \| decimal | undef     | \p vr (\p sr) : shape rounding
-      2 | integer-list-n \| integer | 0         | \p vrm : shape rounding mode
+      2 | integer-list-n \| integer | 1         | \p vrm : shape rounding mode
       3 | integer           |  5                | \p fn : shape rounding facets
 
     ### type
@@ -80,50 +80,29 @@
     table. All supported shapes and their associated arguments are
     summarized in the following table:
 
-       t  | shapes                | size parameters | shape reference
-    :----:|:---------------------:|:---------------:|:----------------------------------
-        1 | cone                  |  size           | cone()
-        2 | cuboid                |  size           | cuboid()
-        3 | ellipsoid             |  size           | ellipsoid()
-        4 | ellipsoid section     |  size, a1, a2   | ellipsoid_s()
-        5 | quadratic pyramid     |  size           | pyramid_t()
-        6 | triangular pyramid    |  size           | pyramid_q()
-        7 | star 3d               |  size, n, half  | star3d()
-     100+ | Polyhedrons database  |  size           | (see below)
+      t | shapes            | size parameters   | shape reference
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      1 | circle            |  r                | [circle()]
+      2 | ngon              |  r, n             | pg_ngon()
+      3 | rectangle         |  size             | pg_rectangle()
+      4 | rectangle sr      |  size             | pg_rectangle_rs()
+      5 | rhombus           |  size             | pg_rhombus()
+      6 | elliptical sector |  r, v1, v2        | pg_elliptical_sector()
+      7 | triangle vertices |  v1, v2, v3       | pg_triangle_ppp()
+      8 | triangle sides    |  s1, s2, s3       | pg_triangle_sss()
+      9 | star              |  size, n          | star2d()
+     10 | corner round      |  r, m, v1, v2     | pg_corner_round()
 
     \amu_define scope_id      (example)
     \amu_define title         (Selection example)
-    \amu_define image_views   (top front diag)
+    \amu_define image_views   (top)
     \amu_define image_size    (sxga)
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 
-    ## Polyhedrons database inclusion
-
-    \amu_define includes_required_add
-    (
-      database/geometry/polyhedra/polyhedra_all.scad
-      shapes/polyhedron_db.scad
-    )
-    \amu_include (include/amu/includes_required.amu)
-
-    Polyhedra available through ph_db_polyhedron() may also be included
-    in the 3d shape selection options. These shapes are accessible when
-    the ph_db_polyhedron() module is included as shown under
-    `Requires:' above. As described in its documentation, a polyhedron
-    database must also be included. In this example below, the \p
-    polyhedra_all database is used; however, a smaller database may be
-    configured instead, as described in the ph_db_polyhedron()
-    documentation.
-
-    \amu_define scope_id      (example_ph_db)
-    \amu_define title         (Selection example)
-    \amu_define image_views   (top front diag)
-    \amu_define image_size    (sxga)
-
-    \amu_include (include/amu/scope_diagrams_3d.amu)
+  [circle()]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Using_the_2D_Subsystem#circle
 *******************************************************************************/
-module shape3d_select
+module select_common_2d_shape
 (
   type = 0,
   argv,
@@ -131,19 +110,13 @@ module shape3d_select
   verb = 0
 )
 {
-  // polyhedron database available when modules global data table is defined
-  pd_db_available   = !( is_undef(ph_db_dtc) || is_undef(ph_db_dtr) );
-
-  // polyhedron database type offset
-  pd_db_type_offset = 99;
-
   //
   // common parameters
   //
 
   size  = defined_eon_or(argv, 0, 1);       // dimensions (type dependent)
   vr    = defined_e_or  (argv, 1, undef);   // rounding
-  vrm   = defined_e_or  (argv, 2, 0);       // rounding mode
+  vrm   = defined_e_or  (argv, 2, 1);       // rounding mode
   fn    = defined_e_or  (argv, 3, 5);       // facets
 
   if (verb > 0)
@@ -158,108 +131,117 @@ module shape3d_select
   // shape construction
   //
 
-  // cone
-      if ( type == 1 )
-    cone
+  // circle
+  if      ( type == 1 )
+    circle
     (
-        size = size,
+           r = size
+    );
+
+  // ngon
+  else if ( type == 2 )
+    pg_ngon
+    (
+           r = defined_e_or(size, 0, size),
+           n = defined_e_or(size, 1, 3),
           vr = vr,
+         vrm = vrm,
+         vfn = fn,
       center = center
     );
 
-  // cuboid
-  else if ( type == 2 )
-    cuboid
+  // rectangle
+  else if ( type == 3 )
+    pg_rectangle
     (
         size = size,
           vr = vr,
          vrm = vrm,
+         vfn = fn,
       center = center
     );
 
-  // ellipsoid
-  else if ( type == 3 )
-    ellipsoid
-    (
-        size = size,
-      center = center
-    );
-
-  // ellipsoid_s
+  // rectangle_rs
   else if ( type == 4 )
-    let
+    pg_rectangle_rs
     (
-      s  = defined_e_or(size, 0, size),
-      a1 = defined_e_or(size, 1, 0),
-      a2 = defined_e_or(size, 2, 0)
-    )
-    ellipsoid_s
-    (
-        size = s,
-          a1 = a1,
-          a2 = a2,
+        size = size,
+          sr = vr,
       center = center
     );
 
-  // pyramid_t
+  // rhombus
   else if ( type == 5 )
-    pyramid_t
+    pg_rhombus
     (
         size = size,
+          vr = vr,
+         vrm = vrm,
+         vfn = fn,
       center = center
     );
 
-  // pyramid_q
+  // elliptical sector
   else if ( type == 6 )
-    pyramid_q
+    pg_elliptical_sector
     (
-        size = size,
-      center = center
+           r = defined_e_or(size, 0, size),
+          v1 = defined_e_or(size, 1, x_axis2d_uv),
+          v2 = defined_e_or(size, 2, x_axis2d_uv)
     );
 
-  // star3d
+  // triangle_ppp
   else if ( type == 7 )
     let
     (
-      s  = defined_e_or(size, 0, size),
-      n  = defined_e_or(size, 1, 5),
-      h  = defined_e_or(size, 2, false)
+      v1 = defined_e_or(size, 0, size * origin2d),
+      v2 = defined_e_or(size, 1, size * y_axis2d_uv),
+      v3 = defined_e_or(size, 2, size * x_axis2d_uv)
     )
-    star3d
+    pg_triangle_ppp
     (
-        size = s,
-           n = n,
-        half = h,
-      center = center
+          c = [v1, v2, v3],
+          vr = vr,
+         vrm = vrm,
+         vfn = fn,
+          cm = center ? 1 : 0
     );
 
-  // database polyhedron
-  else if ( type > pd_db_type_offset )
-  {
-    assert
+  // triangle_sss
+  else if ( type == 8 )
+    let
     (
-      pd_db_available,
-      "required module not loaded; please include polyhedrons db module."
+      s1 = defined_e_or(size, 0, size),
+      s2 = defined_e_or(size, 1, s1),
+      s3 = defined_e_or(size, 2, s2)
+    )
+    pg_triangle_sss
+    (
+          v = [s1, s2, s3],
+          vr = vr,
+         vrm = vrm,
+         vfn = fn,
+          cm = center ? 1 : 0
     );
 
-    id_number = type - pd_db_type_offset;
-    id_name   = ph_db_get_id(id_number);
-
-    if (verb > 1)
-    {
-      db_size = ph_db_get_size();
-
-      echo(strl(["polyhedrons db_size = ", db_size, ", id_offset = ", pd_db_type_offset]));
-      echo(strl(["id_number = ", id_number, ", id_name = ", id_name]));
-    }
-
-    ph_db_polyhedron
+  // star2d
+  else if ( type == 9 )
+    star2d
     (
-          id = id_name,
-        size = size,
-       align = (center==true) ? [0, 0, 0] : [1, 1, 1]
+        size = defined_e_or(size, 0, size),
+           n = defined_e_or(size, 1, 5),
+          vr = vr
     );
-  }
+
+  // corner_round
+  else if ( type == 10 )
+    pg_corner_round
+    (
+           r = defined_e_or(size, 0, size),
+           m = defined_e_or(size, 1, 1),
+          v1 = defined_e_or(size, 2, x_axis2d_uv),
+          v2 = defined_e_or(size, 3, y_axis2d_uv)
+    );
 }
 
 
@@ -274,19 +256,17 @@ module shape3d_select
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <shapes/shape3d_select.scad>;
+    include <shapes/select_common_2d.scad>;
 
-    r     = 25;
-    h     = 25;
+    size  = [50, 40, 30];
+    vr    = [1, 5, 5];
+    vrm   = [1, 1, 5];
+    fn    = 9;
 
-    size  = [r, h];
-    a1    = 0;
-    a2    = 225;
+    type  = 8;
+    argv  = [size, vr, vrm, fn];
 
-    type  = 4;
-    argv  = [[size, a1, a2]];
-
-    shape3d_select(type=type, argv=argv, center=true);
+    select_common_2d_shape(type=type, argv=argv, center=true);
 
     // end_include
   END_OPENSCAD;
@@ -296,39 +276,7 @@ BEGIN_SCOPE example;
     table_unset_all sizes;
 
     images    name "sizes" types "sxga";
-    views     name "views" views "top front diag";
-
-    variables set_opts_combine "sizes views";
-    variables add_opts "--viewall --autocenter --view=axes";
-
-    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
-  END_MFSCRIPT;
-END_SCOPE;
-*/
-
-/*
-BEGIN_SCOPE example_ph_db;
-  BEGIN_OPENSCAD;
-    include <omdl-base.scad>;
-    include <database/geometry/polyhedra/polyhedra_all.scad>;
-    include <shapes/polyhedron_db.scad>;
-    include <shapes/shape3d_select.scad>;
-
-    size  = [10, 20, 20];
-    type  = 122;
-    argv  = [size];
-
-    shape3d_select(type=type, argv=argv, center=true);
-
-    // end_include
-  END_OPENSCAD;
-
-  BEGIN_MFSCRIPT;
-    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
-    table_unset_all sizes;
-
-    images    name "sizes" types "sxga";
-    views     name "views" views "top front diag";
+    views     name "views" views "top";
 
     variables set_opts_combine "sizes views";
     variables add_opts "--viewall --autocenter --view=axes";

@@ -14,8 +14,8 @@ local_library     :=  docs_module \
                       revolved \
                       polyhedron_db \
                       \
-                      shape2d_select \
-                      shape3d_select
+                      select_common_2d \
+                      select_common_3d
 
 local_release_add :=
 

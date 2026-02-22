@@ -41,7 +41,7 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_define includes_required_add
   (
-    shapes/shape2d_select.scad
+    shapes/select_common_2d.scad
     tools/operation_cs.scad
     models/2d/joint/box_screw.scad
   )
@@ -130,7 +130,7 @@
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | integer-list \| integer | required    | box side index or index list (see below)
-      1 | datastruct \| integer   | 0           | shape selections (see: shape2d_select())
+      1 | datastruct \| integer   | 0           | shape selections (see: select_common_2d_shape())
       2 | decimal           | 0                 | shape rotation
       3 | decimal-list-2    | [0, 0]            | shape offset [x, y]
       4 | integer-list-2    | [1, 1]            | shape counts [x, y]
@@ -335,7 +335,7 @@ module box2d_finger_joint
         type = is_list(d) ? first(d) : d,
         argv = is_list(d) ? tailn(d, 1) : undef
       )
-      shape2d_select( type=type, argv=argv, center=true, verb=verb-1 );
+      select_common_2d_shape( type=type, argv=argv, center=true, verb=verb-1 );
 
       if (verb > 1)
       {
@@ -699,7 +699,7 @@ module box2d_finger_joint
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <shapes/shape2d_select.scad>;
+    include <shapes/select_common_2d.scad>;
     include <tools/operation_cs.scad>;
     include <models/2d/joint/box_screw.scad>;
     include <parts/2d/enclosure/box_finger_joint.scad>;
@@ -765,7 +765,7 @@ END_SCOPE;
 BEGIN_SCOPE example_assemled;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <shapes/shape2d_select.scad>;
+    include <shapes/select_common_2d.scad>;
     include <tools/operation_cs.scad>;
     include <models/2d/joint/box_screw.scad>;
     include <parts/2d/enclosure/box_finger_joint.scad>;
