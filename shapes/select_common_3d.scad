@@ -82,13 +82,14 @@
 
        t  | shapes                | size parameters | shape reference
     :----:|:---------------------:|:---------------:|:----------------------------------
-        1 | cone                  |  size           | cone()
-        2 | cuboid                |  size           | cuboid()
-        3 | ellipsoid             |  size           | ellipsoid()
-        4 | ellipsoid section     |  size, a1, a2   | ellipsoid_s()
-        5 | quadratic pyramid     |  size           | pyramid_t()
-        6 | triangular pyramid    |  size           | pyramid_q()
-        7 | star 3d               |  size, n, half  | star3d()
+        1 | cylinder              |  h, r1, r2      | [cylinder()]
+        2 | cone                  |  size           | cone()
+        3 | cuboid                |  size           | cuboid()
+        4 | ellipsoid             |  size           | ellipsoid()
+        5 | ellipsoid section     |  size, a1, a2   | ellipsoid_s()
+        6 | quadratic pyramid     |  size           | pyramid_t()
+        7 | triangular pyramid    |  size           | pyramid_q()
+        8 | star 3d               |  size, n, half  | star3d()
      100+ | Polyhedrons database  |  size           | (see below)
 
     \amu_define scope_id      (example)
@@ -122,6 +123,8 @@
     \amu_define image_size    (sxga)
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
+
+  [cylinder()]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Primitive_Solids#cylinder
 *******************************************************************************/
 module select_common_3d_shape
 (
@@ -158,8 +161,24 @@ module select_common_3d_shape
   // shape construction
   //
 
+  // cylinder
+  if      ( type == 1 )
+    let
+    (
+      h  = defined_e_or(size, 0, size),
+      r1 = defined_e_or(size, 1, h),
+      r2 = defined_e_or(size, 2, r1)
+    )
+    cylinder
+    (
+           h = h,
+          r1 = r1,
+          r2 = r2,
+      center = center
+    );
+
   // cone
-      if ( type == 1 )
+  else if ( type == 2 )
     cone
     (
         size = size,
@@ -168,7 +187,7 @@ module select_common_3d_shape
     );
 
   // cuboid
-  else if ( type == 2 )
+  else if ( type == 3 )
     cuboid
     (
         size = size,
@@ -178,7 +197,7 @@ module select_common_3d_shape
     );
 
   // ellipsoid
-  else if ( type == 3 )
+  else if ( type == 4 )
     ellipsoid
     (
         size = size,
@@ -186,7 +205,7 @@ module select_common_3d_shape
     );
 
   // ellipsoid_s
-  else if ( type == 4 )
+  else if ( type == 5 )
     let
     (
       s  = defined_e_or(size, 0, size),
@@ -202,7 +221,7 @@ module select_common_3d_shape
     );
 
   // pyramid_t
-  else if ( type == 5 )
+  else if ( type == 6 )
     pyramid_t
     (
         size = size,
@@ -210,7 +229,7 @@ module select_common_3d_shape
     );
 
   // pyramid_q
-  else if ( type == 6 )
+  else if ( type == 7 )
     pyramid_q
     (
         size = size,
@@ -218,7 +237,7 @@ module select_common_3d_shape
     );
 
   // star3d
-  else if ( type == 7 )
+  else if ( type == 8 )
     let
     (
       s  = defined_e_or(size, 0, size),
@@ -283,7 +302,7 @@ BEGIN_SCOPE example;
     a1    = 0;
     a2    = 225;
 
-    type  = 4;
+    type  = 5;
     argv  = [[size, a1, a2]];
 
     select_common_3d_shape(type=type, argv=argv, center=true);
