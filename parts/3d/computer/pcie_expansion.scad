@@ -1310,7 +1310,7 @@ module pcie_expansion
     encl_bracket_window_gap   = map_get_value(enclosure, "bracket_window_gap");
 
     // construct wire clamps and passage ways
-    module wire_clamps_passage(mode)
+    module wire_clamps_passage( mode )
     {
       for (clamp_sets = encl_clamps_base)
       {
@@ -1420,17 +1420,71 @@ module pcie_expansion
         }
     }
 
+    // hole construction (n-gon and/or rectangular)
+    module construct_side_holes( hole_insts )
+    {
+      for (inst = hole_insts)
+      {
+        s = defined_ei_or(inst, 0, [0,0,0], 3);         // enclosure side [w, l, h]
+        r = defined_e_or (inst, 1, 0);                  // side-rotate
+
+        o = defined_ei_or(inst, 2, [0,0], 2);           // offsets [w/l, h]
+        n = defined_ei_or(inst, 3, [1,1], 2);           // shape counts [w/l, h]
+        g = defined_ei_or(inst, 4, [0,0], 2);           // grid spacing [w/l, h]
+        c = defined_ei_or(inst, 5, [false, false], 2);  // offset to center [w/l, h]
+
+        d = defined_e_or (inst, 6, 3);                  // shape diameter (or list)
+                                                        //  list: [size, vr, vrm, vfn]
+        f = defined_e_or (inst, 7, 6);                  // shape sides
+        q = defined_e_or (inst, 8, 0);                  // shape rotate
+        h = defined_e_or (inst, 9, encl_wth*2+eps*4);   // shape extrusion height
+
+        // group center offsets (move)
+        m = [ (n.x-1) * g.x/2 * (c.x ? 1 : 0), (n.y-1) * g.y/2 * (c.y ? 1 : 0) ];
+
+        translate
+        (
+          [
+            encl_size_wlh.x * s.x,
+            encl_size_wlh.y * s.y,
+            encl_size_wlh.z * (1/2 + s.z),
+          ]
+        )
+        rotate([90, 0, r])
+        translate(o - m)
+        for (i = [0:n.x-1], j = [0:n.y-1])
+        translate( [g.x * i, g.y * j, 0] )
+        rotate(q)
+        if ( is_list(d) )
+        {
+          extrude_linear_uss(h=h, center=true)
+          pg_rectangle
+          (
+            size    = defined_e_or(d, 0, d),
+            vr      = defined_e_or(d, 1, undef),
+            vrm     = defined_e_or(d, 2, 1),
+            vfn     = f,
+            center  = true
+          );
+        }
+        else
+        {
+          cylinder(d=d, h=h, center=true, $fn=f);
+        }
+      }
+    }
+
     // cut enclosure sides
-    module cut_enclosure_sides()
+    module cut_enclosure_sides( cut_sides )
     {
       // external enclosure size (ignoring protrusions).
       es  = encl_size_wlh
           + [2, 2, 1] * encl_wth
           + [4, 4, 2] * eps;
 
-      sco = defined_e_or(encl_cut_sides, 0, es.y/10);
-      vr  = defined_e_or(encl_cut_sides, 1, 0);
-      vrm = defined_e_or(encl_cut_sides, 2, 0);
+      sco = defined_e_or(cut_sides, 0, es.y/10);
+      vr  = defined_e_or(cut_sides, 1, 0);
+      vrm = defined_e_or(cut_sides, 2, 0);
 
       bbo = defined_e_or(sco, 0, sco);
       bto = defined_e_or(sco, 1, bbo);
@@ -1656,60 +1710,12 @@ module pcie_expansion
       translate(wlh_s2b_ao)
       wire_clamps_passage(0);
 
-      // remove component/venting holes (n-gon and/or rectangular)
-      for (inst = encl_holes_sides)
-      {
-        s = defined_ei_or(inst, 0, [0,0,0], 3);         // enclosure side [w, l, h]
-        r = defined_e_or (inst, 1, 0);                  // side-rotate
-
-        o = defined_ei_or(inst, 2, [0,0], 2);           // offsets [w/l, h]
-        n = defined_ei_or(inst, 3, [1,1], 2);           // shape counts [w/l, h]
-        g = defined_ei_or(inst, 4, [0,0], 2);           // grid spacing [w/l, h]
-        c = defined_ei_or(inst, 5, [false, false], 2);  // offset to center [w/l, h]
-
-        d = defined_e_or (inst, 6, 3);                  // shape diameter (or list)
-                                                        //  list: [size, vr, vrm, vfn]
-        f = defined_e_or (inst, 7, 6);                  // shape sides
-        q = defined_e_or (inst, 8, 0);                  // shape rotate
-        h = defined_e_or (inst, 9, encl_wth*2+eps*4);   // shape extrusion height
-
-        // group center offsets (move)
-        m = [ (n.x-1) * g.x/2 * (c.x ? 1 : 0), (n.y-1) * g.y/2 * (c.y ? 1 : 0) ];
-
-        translate
-        (
-          [
-            encl_size_wlh.x * s.x,
-            encl_size_wlh.y * s.y,
-            encl_size_wlh.z * (1/2 + s.z),
-          ]
-        )
-        rotate([90, 0, r])
-        translate(o - m)
-        for (i = [0:n.x-1], j = [0:n.y-1])
-        translate( [g.x * i, g.y * j, 0] )
-        rotate(q)
-        if ( is_list(d) )
-        {
-          extrude_linear_uss(h=h, center=true)
-          pg_rectangle
-          (
-            size    = defined_e_or(d, 0, d),
-            vr      = defined_e_or(d, 1, undef),
-            vrm     = defined_e_or(d, 2, 1),
-            vfn     = f,
-            center  = true
-          );
-        }
-        else
-        {
-          cylinder(d=d, h=h, center=true, $fn=f);
-        }
-      }
+      // remove component/venting holes
+      construct_side_holes( encl_holes_sides );
 
       // mode_sides B5: cut sides for open enclosure modes
       if ( binary_bit_is(encl_mode_sides, 5, 1) )
-      cut_enclosure_sides();
+      cut_enclosure_sides( encl_cut_sides );
 
       // remove bracket mount tab shelf dovetail slots
       if ( binary_bit_is(enable, 4, 1) && binary_bit_is(encl_mode_sides, 0, 1) )
