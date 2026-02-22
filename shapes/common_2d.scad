@@ -1,4 +1,4 @@
-//! Basic 2D shapes.
+//! Common 2D shapes.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Basic 2d)
-    \amu_define group_brief (Basic 2D shape.)
+    \amu_define group_name  (Common 2d)
+    \amu_define group_brief (Common 2D shape.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/

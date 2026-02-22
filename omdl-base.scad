@@ -69,8 +69,8 @@ include <math/utility.scad>;
 //----------------------------------------------------------------------------//
 // shapes
 //----------------------------------------------------------------------------//
-include <shapes/basic_2d.scad>;
-include <shapes/basic_3d.scad>;
+include <shapes/common_2d.scad>;
+include <shapes/common_3d.scad>;
 include <shapes/polygon.scad>;
 
 //----------------------------------------------------------------------------//

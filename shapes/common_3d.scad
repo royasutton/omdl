@@ -1,4 +1,4 @@
-//! Basic 3D shapes.
+//! Common 3D shapes.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Basic 3d)
-    \amu_define group_brief (Basic 3D shapes.)
+    \amu_define group_name  (Common 3d)
+    \amu_define group_brief (Common 3D shapes.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/

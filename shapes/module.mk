@@ -8,8 +8,8 @@ local_path        :=  shapes
 
 local_library     :=  docs_module \
                       \
-                      basic_2d \
-                      basic_3d \
+                      common_2d \
+                      common_3d \
                       polygon \
                       revolved \
                       polyhedron_db \
