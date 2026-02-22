@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Select 2d Shape)
+    \amu_define group_name  (Select Common 2d)
     \amu_define group_brief (Selection and configuration for common 2D shapes.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)

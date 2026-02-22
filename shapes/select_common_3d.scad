@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Select 3d Shape)
+    \amu_define group_name  (Select Common 3d)
     \amu_define group_brief (Selection and configuration for common 3D shapes.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
@@ -118,7 +118,7 @@
     documentation.
 
     \amu_define scope_id      (example_ph_db)
-    \amu_define title         (Selection example)
+    \amu_define title         (Polyhedrons database selection example)
     \amu_define image_views   (top front diag)
     \amu_define image_size    (sxga)
 
