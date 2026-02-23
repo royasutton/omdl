@@ -8,7 +8,6 @@ local_path        :=  tools
 
 local_library     :=  docs_module \
                       \
-                      extrude \
                       polytope
 
 local_release_add :=

@@ -9,8 +9,9 @@ local_path        :=  tools/transform
 local_library     :=  docs_module \
                       \
                       align \
-                      repeat \
-                      base_cs
+                      base_cs \
+                      extrude \
+                      repeat
 
 local_release_add :=
 

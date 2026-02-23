@@ -78,8 +78,7 @@ include <shapes/polygon.scad>;
 //----------------------------------------------------------------------------//
 include <tools/transform/align.scad>;
 include <tools/transform/repeat.scad>;
-
-include <tools/extrude.scad>;
+include <tools/transform/extrude.scad>;
 
 //----------------------------------------------------------------------------//
 // units
