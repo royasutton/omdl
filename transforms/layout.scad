@@ -52,14 +52,14 @@
   \param  b       <decimal-list-2:3> The placement reference region
                   (bounding box).
 
-  \param  s       <integer | integer-list | range> The optional child
-                  object selection(s).
-
   \param center   <boolean-list-2:3 | boolean> Center the replication
                   group about the child objects' local origin.
 
   \param debug    <boolean> Highlight the objects for layout and
                   placement debugging.
+
+  \param  s       <integer | integer-list | range> The optional child
+                  object selection(s).
 
   \details
 
@@ -202,16 +202,13 @@ BEGIN_SCOPE example;
       [6,6,1],
       [3,3,6],
 
-      [0,-1/2,0],
-      [90,0,0],
-
       [0,0,0],
       [90,0,0]
     ];
 
     %cube(b, center=true);
     layout_grid_rp( v, b, true )
-    sphere(r=1);
+    cylinder(r=1, h=6, center=true, debug=true);
 
     // end_include
   END_OPENSCAD;
