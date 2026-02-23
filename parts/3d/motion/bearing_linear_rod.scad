@@ -103,7 +103,7 @@
     specifications for \p h:
 
      parameter h            | value description
-    :-----------------------|:--------------------------------------------------------
+    :----------------------:|:--------------------------------------------------------
      10.5                   | bearing block height, defaults for remaining
      [10.5]                 | same as above
      [10.5, 5]              | block height and end cap thickness
