@@ -55,6 +55,12 @@
   \param  s       <integer | integer-list | range> The optional child
                   object selection(s).
 
+  \param center   <boolean-list-2:3 | boolean> Center the replication
+                  group about the child objects' local origin.
+
+  \param debug    <boolean> Highlight the objects for layout and
+                  placement debugging.
+
   \details
 
   This module performs an ordered sequence of geometric transforms as a
@@ -71,23 +77,23 @@
 
   ### t
 
-  The transform sequence is specified as a configuration list with
-  the elements described below. The operation supports both 2D and 3D
+  The transform sequence is specified as a configuration list with the
+  elements described below. The operation supports both 2D and 3D
   modes. The configuration list does not need to be fully specified;
   any unspecified elements are automatically assigned the default
   values shown in the table.
 
-  e | data type         | 3D default value     | parameter description
----:|:-----------------:|:-----------------:|:------------------------------------
-  0 | decimal-list-2:3  | [1,1] \| [1,1,1]  | child replication
-  1 | decimal-list-2:3  | [1,1] \| [1,1,1]  | replication layout grid
-  2 | decimal-list-2:3  | [0,0] \| [0,0,0]  | layout placement
-  3 | decimal-list-2:3 \| decimal  | 0      | layout rotate
-  4 | decimal-list-2:3  | [0,0] \| [0,0,0]  | child mirror
-  5 | decimal-list-2:3 \| decimal  | 0      | child rotate
-  6 | decimal-list-2:3  | [0,0] \| [0,0,0]  | layout translate
-  7 | decimal-list-2:3  | [false,false] \| [false,false,false] | center replication
-  8 | boolean           | true              | highlight layout objects (debug)
+    e | data type         | 3D default | 2D default | parameter description
+  ---:|:-----------------:|:----------:|:----------:|:------------------------------------
+    0 | decimal-list-2:3  | [1,1,1]    | [1,1]      | child replication
+    1 | decimal-list-2:3  | [1,1,1]    | [1,1]      | replication layout grid
+    2 | decimal-list-2:3  | [0,0,0]    | [0,0]      | layout placement
+    3 | decimal-list-2:3 \|decimal | 0 | 0          | layout rotate
+    4 | decimal-list-2:3  | [0,0,0]    | [0,0]      | child mirror
+    5 | decimal-list-2:3 \|decimal | 0 | 0          | child rotate
+    6 | decimal-list-2:3  | [0,0,0]    | [0,0]      | layout translate
+    7 | decimal-list-2:3  | \p center  | \p center  | center replication
+    8 | boolean           | \p debug   | \p debug   | highlight layout objects (debug)
 
   \amu_define scope_id      (example)
   \amu_define title         (Transform example)
