@@ -4,20 +4,18 @@
 $(eval $(call clear-local-module))
 #------------------------------------------------------------------------------#
 
-local_path        :=  tools
+local_path        :=  tools/transform
 
 local_library     :=  docs_module \
                       \
-                      extrude \
-                      transformations_cs \
-                      polytope
+                      align \
+                      repeat
 
 local_release_add :=
 
 local_backup_add  :=
 
-local_submodules  :=  drafting \
-                      transform
+local_submodules  :=
 
 #------------------------------------------------------------------------------#
 # add local module
