@@ -899,7 +899,6 @@ BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <units/coordinate.scad>;
-    include <tools/align.scad>;
     include <tools/polytope.scad>;
     include <database/geometry/polyhedra/trapezohedron.scad>;
 

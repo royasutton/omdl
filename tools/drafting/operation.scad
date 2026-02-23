@@ -989,7 +989,6 @@ module draft_title_block
 BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/align.scad>;
     include <tools/operation_cs.scad>;
     include <tools/polytope.scad>;
     include <tools/drafting/draft-base.scad>;

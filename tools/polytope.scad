@@ -39,10 +39,6 @@
 
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
-  \amu_define includes_required_add
-  (
-    tools/align.scad
-  )
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
@@ -332,7 +328,6 @@ module polytope_bounding_box
 BEGIN_SCOPE example_number;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/align.scad>;
     include <units/coordinate.scad>;
     include <database/geometry/polyhedra/johnson.scad>;
     include <tools/polytope.scad>;
@@ -367,7 +362,6 @@ END_SCOPE;
 BEGIN_SCOPE example_frame_a;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/align.scad>;
     include <units/coordinate.scad>;
     include <database/geometry/polyhedra/cupolas.scad>;
     include <tools/polytope.scad>;
@@ -408,7 +402,6 @@ END_SCOPE;
 BEGIN_SCOPE example_frame_b;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/align.scad>;
     include <units/coordinate.scad>;
     include <database/geometry/polyhedra/archimedean.scad>;
     include <tools/polytope.scad>;

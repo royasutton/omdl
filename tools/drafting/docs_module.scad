@@ -46,7 +46,6 @@
   \amu_define FILE_NAME ()
   \amu_define includes_required_add
   (
-    tools/align.scad
     tools/operation_cs.scad
     tools/polytope.scad
     ${PATH_NAME}/draft-base.scad
@@ -88,7 +87,6 @@
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/align.scad>;
     include <tools/operation_cs.scad>;
     include <tools/drafting/draft-base.scad>;
 

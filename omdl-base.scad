@@ -77,6 +77,7 @@ include <shapes/polygon.scad>;
 // tools
 //----------------------------------------------------------------------------//
 include <tools/extrude.scad>;
+include <tools/align.scad>;
 include <tools/repeat.scad>;
 
 //----------------------------------------------------------------------------//
