@@ -1,4 +1,4 @@
-//! Module: Drafting and drawing tools.
+//! Module: 2D drafting and drawing tools for graphical design documentation.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Drafting)
-    \amu_define group_brief (Drafting and drawing tools.)
+    \amu_define group_brief (2D drafting and drawing tools for graphical design documentation.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

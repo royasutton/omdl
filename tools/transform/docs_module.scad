@@ -1,4 +1,4 @@
-//! Module: Operations to translate, rotate, mirror or replicate.
+//! Module: Geometric transformation and replication tools for shapes.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Transform)
-    \amu_define group_brief (Operations to translate, rotate, mirror or replicate.)
+    \amu_define group_brief (Geometric transformation and replication tools for shapes.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

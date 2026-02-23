@@ -1,4 +1,4 @@
-//! Shape extrusion tools.
+//! Shape extrusion operations.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Extrude)
-    \amu_define group_brief (Shape extrusion tools.)
+    \amu_define group_brief (Shape extrusion operations.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
