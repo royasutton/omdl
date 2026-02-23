@@ -11,6 +11,7 @@ local_library     :=  docs_module \
                       align \
                       base_cs \
                       extrude \
+                      layout \
                       repeat
 
 local_release_add :=
