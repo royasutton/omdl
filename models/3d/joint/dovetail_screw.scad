@@ -191,7 +191,7 @@ module joint3d_dovetail_screw
 )
 {
   // construct 3d joint at origin
-  module box_screw( iform=7, imode=mode, ipin=pin, ibore=ibore )
+  module box_screw( iform=7, imode=mode, ipin=pin, ibore=bore )
   {
     /*
         iform
