@@ -41,7 +41,7 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_define includes_required_add
   (
-    tools/operation_cs.scad
+    tools/transformations_cs.scad
   )
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
@@ -1990,7 +1990,7 @@ function project_box_rectangle_size
 BEGIN_SCOPE example_multiple;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <tools/transformations_cs.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
 
     wth = 2; h = 8; sx = 75; sy = 50; vr = 5; vrm = 2;
@@ -2026,7 +2026,7 @@ END_SCOPE;
 BEGIN_SCOPE example_bottom;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <tools/transformations_cs.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
 
     $fn = 18;
@@ -2090,7 +2090,7 @@ END_SCOPE;
 BEGIN_SCOPE example_lip;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <tools/transformations_cs.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
 
     wth  = 2;

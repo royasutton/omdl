@@ -41,7 +41,7 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_define includes_required_add
   (
-    tools/operation_cs.scad
+    tools/transformations_cs.scad
   )
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
@@ -390,7 +390,7 @@ module make_bearing_linear_rod
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <tools/transformations_cs.scad>;
     include <parts/3d/motion/bearing_linear_rod.scad>;
 
     emt  = [length(0.706, "in"), length(0.622, "in")];

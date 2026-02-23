@@ -41,7 +41,7 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_define includes_required_add
   (
-    tools/operation_cs.scad
+    tools/transformations_cs.scad
   )
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
@@ -231,7 +231,7 @@ module joint2d_dovetail
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <tools/transformations_cs.scad>;
     include <models/2d/joint/dovetail.scad>;
 
     w = 20;
