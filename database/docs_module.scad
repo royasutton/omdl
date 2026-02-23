@@ -1,4 +1,4 @@
-//! Module: Design data and specifications.
+//! Module: Design data storage, specifications, and metadata.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Database)
-    \amu_define group_brief (Design data and specifications.)
+    \amu_define group_brief (Design data storage, specifications, and metadata.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

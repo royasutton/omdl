@@ -1,4 +1,4 @@
-//! Module: Mathematical functions and operations.
+//! Module: Mathematical functions, utilities, and operations.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Math)
-    \amu_define group_brief (Mathematical functions and operations.)
+    \amu_define group_brief (Mathematical functions, utilities, and operations.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

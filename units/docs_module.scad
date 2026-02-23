@@ -1,4 +1,4 @@
-//! Module: Unit definitions and unit conversions.
+//! Module: Unit definitions, measurement systems, and conversions.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Units)
-    \amu_define group_brief (Unit definitions and unit conversions.)
+    \amu_define group_brief (Unit definitions, measurement systems, and conversions.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

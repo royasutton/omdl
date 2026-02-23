@@ -1,4 +1,4 @@
-//! Module: Black-box models of design components.
+//! Module: Black-box models representing design components.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Models)
-    \amu_define group_brief (Black-box models of design components.)
+    \amu_define group_brief (Black-box models representing design components.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

@@ -1,4 +1,4 @@
-//! Module: Tools and design components.
+//! Module: Design workflow tools and design utilities.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Tools)
-    \amu_define group_brief (Tools and design components.)
+    \amu_define group_brief (Design workflow tools and design utilities.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/

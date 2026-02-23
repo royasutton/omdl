@@ -1,4 +1,4 @@
-//! Module: Geometric shapes and basic constructs.
+//! Module: Geometric shapes and foundational constructs.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Shapes)
-    \amu_define group_brief (Geometric shapes and basic constructs.)
+    \amu_define group_brief (Geometric shapes and foundational constructs.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
