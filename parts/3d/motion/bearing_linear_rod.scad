@@ -154,7 +154,7 @@
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
-module make_bearing_linear_rod
+module bearing_linear_rod
 (
   pipe,
   ball,
@@ -398,7 +398,7 @@ BEGIN_SCOPE example;
 
     r = 21.5; h = ball*8; c = 6; a = 85;
 
-    make_bearing_linear_rod
+    bearing_linear_rod
     (
        pipe = emt,
        ball = ball,

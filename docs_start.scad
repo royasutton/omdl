@@ -176,7 +176,7 @@
   \amu_define scope_id      (quickstart)
 
   \amu_define notes_scad
-    ( In this example, make_bearing_linear_rod() is used to construct
+    ( In this example, bearing_linear_rod() is used to construct
       a custom linear bearing for fabrication on a 3D-printer. )
 
   \amu_define notes_diagrams
@@ -268,7 +268,7 @@ BEGIN_SCOPE quickstart;
 
     v = is_undef ( __mfs__diag ) ? 2: undef;
 
-    make_bearing_linear_rod(pipe=p, ball=b, count=c, angle=a, h=h, align=4, view=v)
+    bearing_linear_rod(pipe=p, ball=b, count=c, angle=a, h=h, align=4, view=v)
     minkowski() {cylinder(r=r-b*2/3, h=first(h)-b*3/2, center=true); sphere(r=r/5);};
 
     // end_include
