@@ -14,8 +14,7 @@ local_release_add :=
 
 local_backup_add  :=
 
-local_submodules  :=  drafting \
-                      transform
+local_submodules  :=  drafting
 
 #------------------------------------------------------------------------------#
 # add local module

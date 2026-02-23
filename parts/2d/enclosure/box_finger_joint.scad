@@ -42,7 +42,7 @@
   \amu_define includes_required_add
   (
     shapes/select_common_2d.scad
-    tools/transform/base_cs.scad
+    transforms/base_cs.scad
     models/2d/joint/box_screw.scad
   )
   \amu_include (include/amu/includes_required.amu)
@@ -700,7 +700,7 @@ BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <shapes/select_common_2d.scad>;
-    include <tools/transform/base_cs.scad>;
+    include <transforms/base_cs.scad>;
     include <models/2d/joint/box_screw.scad>;
     include <parts/2d/enclosure/box_finger_joint.scad>;
 
@@ -766,7 +766,7 @@ BEGIN_SCOPE example_assemled;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <shapes/select_common_2d.scad>;
-    include <tools/transform/base_cs.scad>;
+    include <transforms/base_cs.scad>;
     include <models/2d/joint/box_screw.scad>;
     include <parts/2d/enclosure/box_finger_joint.scad>;
 

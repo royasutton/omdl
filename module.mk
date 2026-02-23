@@ -22,6 +22,7 @@ local_submodules  :=  common \
                       parts \
                       shapes \
                       tools \
+                      transforms \
                       units \
                       \
                       database

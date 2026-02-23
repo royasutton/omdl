@@ -4,7 +4,7 @@
 $(eval $(call clear-local-module))
 #------------------------------------------------------------------------------#
 
-local_path        :=  tools/transform
+local_path        :=  transforms
 
 local_library     :=  docs_module \
                       \

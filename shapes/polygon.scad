@@ -625,7 +625,7 @@ END_SCOPE;
 BEGIN_SCOPE diagram_label;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/transform/base_cs.scad>;
+    include <transforms/base_cs.scad>;
     include <tools/drafting/draft-base.scad>;
 
     module dt (vl = empty_lst, al = empty_lst, sl = empty_lst)

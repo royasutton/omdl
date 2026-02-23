@@ -1,4 +1,4 @@
-//! Module: Geometric transformation and replication tools for shapes.
+//! Module: Geometric transformation and shape replication.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Transform)
-    \amu_define group_brief (Geometric transformation and replication tools for shapes.)
+    \amu_define group_brief (Geometric transformation and shape replication.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
