@@ -1,4 +1,4 @@
-//! Conditional version of standard transformations and operations.
+//! Conditional version of basic transformations.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Conditional Operations)
-    \amu_define group_brief (Conditional transformations and operations.)
+    \amu_define group_name  (Transformations cs)
+    \amu_define group_brief (Conditional version of basic transformations.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/
