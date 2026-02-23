@@ -1,4 +1,4 @@
-//! Conditional version of basic transformations.
+//! Conditional version of base transformations.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (Transformations cs)
-    \amu_define group_brief (Conditional version of basic transformations.)
+    \amu_define group_name  (Base cs)
+    \amu_define group_brief (Conditional version of base transformations.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/

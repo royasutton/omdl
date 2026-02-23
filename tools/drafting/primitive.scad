@@ -1348,7 +1348,7 @@ module draft_make_3d_if_configured
 BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/transformations_cs.scad>;
+    include <tools/transform/base_cs.scad>;
     include <tools/polytope.scad>;
     include <tools/drafting/draft-base.scad>;
 

@@ -9,7 +9,6 @@ local_path        :=  tools
 local_library     :=  docs_module \
                       \
                       extrude \
-                      transformations_cs \
                       polytope
 
 local_release_add :=

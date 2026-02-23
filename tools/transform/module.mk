@@ -9,7 +9,8 @@ local_path        :=  tools/transform
 local_library     :=  docs_module \
                       \
                       align \
-                      repeat
+                      repeat \
+                      base_cs
 
 local_release_add :=
 
