@@ -131,22 +131,22 @@ module layout_grid_rp
   //
 
   // rc: child replication; rg: replication layout grid
-  rc  = list_get_value(t, 0, ac, 0, 1, c1);
-  rg  = list_get_value(t, 1, ac, 0, 0, c0);
+  rc  = list_get_value(t, 0, c1, ac, 1);
+  rg  = list_get_value(t, 1, c0, ac, 0);
 
   // lP; layout placement; lr: layout rotate
-  lp  = list_get_value(t, 2, ac, 0, 0, c0);
+  lp  = list_get_value(t, 2, c0, ac, 0);
   lr  = defined_e_or  (t, 3, 0);
 
   // cm: child mirror; cr: child rotate
-  cm  = list_get_value(t, 4, ac, 0, 0, c0);
+  cm  = list_get_value(t, 4, c0, ac, 0);
   cr  = defined_e_or  (t, 5, 0);
 
   // lt: layout translate
-  lt  = list_get_value(t, 6, ac, 0, 0, c0);
+  lt  = list_get_value(t, 6, c0, ac, 0);
 
   // lc: center replication; lh: highlight layout objects
-  lc  = list_get_value(t, 7, ac, 0, center, cf);
+  lc  = list_get_value(t, 7, cf, ac, center);
   lh  = defined_e_or  (t, 8, debug);
 
   // z-axis object instances and grid spacing (2d and 3d)

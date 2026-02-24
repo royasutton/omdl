@@ -282,15 +282,15 @@ function compare
   \param    l <list> The input list.
   \param    i <integer> The input list element index.
 
-  \param    s <integer> The output list size.
+  \param    dv \<value> The default return value.
 
-  \param    di <integer> The default output element index for input
-            elements that are not a list.
+  \param    s <integer> The output list size.
 
   \param    de \<value> The default element value for output list
             composition.
 
-  \param    dv \<value> The default return value.
+  \param    di <integer> The default output element index for input
+            elements that are not a list.
 
   \returns  For the input list indexed element \p e=l[i];
             - When \p e is a list and \p s==0, returns (1) \p e[0] or
@@ -298,7 +298,7 @@ function compare
             - When \p e is a list and \p de or \p s is undefined,
               returns (3a) \p e.
             - When \p e is a list and \p de and \p s are defined with
-              \p s>0, (4) a list-s with each undefined element of \p e is
+              \p s>0, (4) a list-s with each undefined element of \p e
               assigned \p de.
             - When \p e is not a list and \p s==0, returns (2b) \p dv
               when \p e is undefined and (3b) \p e otherwise.
@@ -313,13 +313,11 @@ function list_get_value
 (
   l,
   i,
+  dv,
 
   s,
-
-  di,
   de,
-
-  dv,
+  di = 0
 ) = !is_list(l) ? undef
   : let( iev = l[i] )
     is_list( iev ) ?
