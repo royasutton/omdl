@@ -61,6 +61,8 @@
   \param  s       <integer | integer-list | range> The optional child
                   object selection(s).
 
+  \param  verb    <integer> output console verbosity.
+
   \details
 
   This module performs an ordered sequence of geometric transforms as a
@@ -108,7 +110,8 @@ module layout_grid_rp
   b = zero3d,
   center = false,
   debug = false,
-  s
+  s,
+  verb = 0
 )
 {
   cs = defined_or(s, [0:$children-1]);
@@ -162,6 +165,14 @@ module layout_grid_rp
   //
   // apply transform sequence
   //
+
+  if (verb > 0)
+  {
+    log_info(strl(["t = ", t, ", b = ", b, ", center = ", center, ", debug = ", debug]));
+
+    if (verb >1)
+      echo(rc=rc, rg=rg, lp=lp, lr=lr, cm=cm, cr=cr, lt=lt, lc=lc, lh=lh);
+  }
 
   // group placement
   translate( gt )
