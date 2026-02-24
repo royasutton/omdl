@@ -43,6 +43,7 @@
   (
     shapes/select_common_2d.scad
     transforms/base_cs.scad
+    transforms/layout.scad
     models/2d/joint/box_screw.scad
   )
   \amu_include (include/amu/includes_required.amu)
@@ -307,40 +308,22 @@ module box2d_finger_joint
     //
     module construct_hole_inst( inst )
     {
-      d = defined_e_or (inst, 1, 0);                  // shape
-      q = defined_e_or (inst, 2, 0);                  // shape rotate
-      o = defined_ei_or(inst, 3, [0,0], 2);           // shape offset [w, h]
-      n = defined_ei_or(inst, 4, [1,1], 2);           // shape counts [w, h]
-      g = defined_ei_or(inst, 5, [0,0], 2);           // shape grid [w, h]
+      shape       = defined_e_or (inst, 1, 0);
+      layout      = defined_e_or (inst, 2, [1]);
 
-      c = defined_ei_or(inst, 6, [false, false], 2);  // group center [w, h]
+      shape_type  = is_list(shape) ? first(shape) : shape;
+      shape_argv  = is_list(shape) ? tailn(shape, 1) : undef;
 
-      s = defined_ei_or(inst, 7, [0,0], 2);           // group side offset [w, l]
-      r = defined_e_or (inst, 8, 0);                  // group side rotate
-
-      // group center offsets (move)
-      m = [ (n.x-1) * g.x/2 * (c.x ? 1 : 0), (n.y-1) * g.y/2 * (c.y ? 1 : 0) ];
-
-      if (verb > 2)
-        echo(d=d, q=q, o=o, n=n, g=g, c=c, s=s, r=r);
-
-      translate ( [ size.x/2 * s.x, size.y/2 * s.y ] )
-      rotate( r )
-      translate( o - m )
-      for (i = [0:n.x-1], j = [0:n.y-1])
-      translate( [g.x * i, g.y * j, 0] )
-      rotate( q )
-      let
-      (
-        type = is_list(d) ? first(d) : d,
-        argv = is_list(d) ? tailn(d, 1) : undef
-      )
-      select_common_2d_shape( type=type, argv=argv, center=true, verb=verb-1 );
+      layout_grid_rp(t=layout, b=size, center=true, verb=verb-1)
+      select_common_2d_shape( type=shape_type, argv=shape_argv, center=true, verb=verb-1 );
 
       if (verb > 1)
       {
         log_info(strl(["holes for side index = ", idx, ", conf = ", inst]));
         log_echo(strl(["hole conf = ", inst]));
+
+        if (verb > 2)
+          echo(shape_type=shape_type, shape_argv=shape_argv, layout=layout);
       }
     }
 
@@ -701,6 +684,7 @@ BEGIN_SCOPE example;
     include <omdl-base.scad>;
     include <shapes/select_common_2d.scad>;
     include <transforms/base_cs.scad>;
+    include <transforms/layout.scad>;
     include <models/2d/joint/box_screw.scad>;
     include <parts/2d/enclosure/box_finger_joint.scad>;
 
@@ -727,16 +711,16 @@ BEGIN_SCOPE example;
       side_holes =
       [
         // stars
-        [ [0,1], [9, 2], 0, [0,0], [8,1], [8,1], [true, true] ],
+        [ [0,1], [9, 2], [8, 8] ],
 
         // slots
-        [ [2,3], [3, [2, 10], 1, 5], 0, [0,0], [8,1], [4,1], [true, true] ],
+        [ [2,3], [3, [2, 10], 1, 5], [8, 4] ],
 
         // handles
-        [ [2,3], [6, [[10, 5], -x_axis2d_uv, +x_axis2d_uv]], 0, [0, 12] ],
+        [ [2,3], [6, [[10, 5], -x_axis2d_uv, +x_axis2d_uv]], [1, 1, 0, 0, 0, 0, [0,12]] ],
 
         // bottom
-        [ 4, [1, [2, 6]], 0, [0,0], [9,4], [8,8], [true, true] ],
+        [ 4, [2, [1, 6]], [[9,4], [8,8]] ]
       ],
 
       vr      = 2,
@@ -767,6 +751,7 @@ BEGIN_SCOPE example_assemled;
     include <omdl-base.scad>;
     include <shapes/select_common_2d.scad>;
     include <transforms/base_cs.scad>;
+    include <transforms/layout.scad>;
     include <models/2d/joint/box_screw.scad>;
     include <parts/2d/enclosure/box_finger_joint.scad>;
 
@@ -793,16 +778,16 @@ BEGIN_SCOPE example_assemled;
       side_holes =
       [
         // stars
-        [ [0,1], [9, 2], 0, [0,0], [8,1], [8,1], [true, true] ],
+        [ [0,1], [9, 2], [8, 8] ],
 
         // slots
-        [ [2,3], [3, [2, 10], 1, 5], 0, [0,0], [8,1], [4,1], [true, true] ],
+        [ [2,3], [3, [2, 10], 1, 5], [8, 4] ],
 
         // handles
-        [ [2,3], [6, [[10, 5], -x_axis2d_uv, +x_axis2d_uv]], 0, [0, 12] ],
+        [ [2,3], [6, [[10, 5], -x_axis2d_uv, +x_axis2d_uv]], [1, 1, 0, 0, 0, 0, [0,12]] ],
 
         // bottom
-        [ 4, [1, [2, 6]], 0, [0,0], [9,4], [8,8], [true, true] ],
+        [ 4, [2, [1, 6]], [[9,4], [8,8]] ]
       ],
 
       vr      = 2,
