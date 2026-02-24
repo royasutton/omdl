@@ -277,6 +277,78 @@ function compare
 //! \name List
 //! @{
 
+//! Return the value of an indexed list element with output defaults and list composition.
+/***************************************************************************//**
+  \param    l <list> The input list.
+  \param    i <integer> The input list element index.
+
+  \param    s <integer> The output list size.
+
+  \param    dep <integer> The default output element position for an
+            input element that is not a list.
+
+  \param    dev \<value> The default element value for output list
+            composition.
+
+  \param    d \<value> The default output value.
+
+  \returns
+
+  For indexed element e=l[i];
+
+  When e is a list and s == 0, returns (1) e[0] or
+  (2a) d if e[0] is not defined.
+
+  When e is a list and dev or s is undefined
+
+*******************************************************************************/
+function list_get_value
+(
+  l,
+  i,
+
+  s,
+
+  dep,
+  dev,
+
+  d,
+) = !is_list(l) ? undef
+  : let( iev = l[i] )
+    is_list( iev ) ?
+      // indexed element is a list
+      (
+        (s == 0) ?
+          is_undef( iev[0] ) ? d                                          // 2a
+        : iev[0]                                                          // 1
+
+      : let
+        (
+          use_iev = !is_integer( s ) || (s<1) || is_undef( dev )
+        )
+        use_iev ? iev                                                     // 3a
+
+        // update output list
+      : [ for (j = [0:s-1]) if ( !is_undef( iev[j] ) ) iev[j] else dev ]  // 4
+      )
+      // indexed element is not a list
+    : (
+        (s == 0) ?
+          is_undef( iev ) ? d                                             // 2b
+        : iev                                                             // 3b
+
+      : let
+        (
+          use_d = !is_integer( s ) || (s<1) || !is_integer( dep )
+        )
+        use_d ? d                                                         // 2c
+
+        // create output list
+      : is_undef( iev ) ?
+          [for (j = [0:s-1]) dev]                                         // 5
+        : [for (j = [0:s-1]) if (j == dep) iev else dev]                  // 6
+      );
+
 //! @}
 
 //! @}
@@ -398,6 +470,7 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "almost_eq_nv_p2", 2, almost_eq_nv( v1(db,id), v2(db,id), 2) );
     for (id=test_ids) table_validate( db, id, "almost_eq_p2", 2, almost_eq( v1(db,id), v2(db,id), 2) );
     for (id=test_ids) table_validate( db, id, "compare", 2, compare( v1(db,id), v2(db,id) ) );
+    // list_get_value()
 
     // end_include
   END_OPENSCAD;
