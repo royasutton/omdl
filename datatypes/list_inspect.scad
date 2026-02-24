@@ -284,30 +284,30 @@ function compare
 
   \param    s <integer> The output list size.
 
-  \param    dep <integer> The default output element position for an
-            input element that is not a list.
+  \param    di <integer> The default output element index for input
+            elements that are not a list.
 
-  \param    dev \<value> The default element value for output list
+  \param    de \<value> The default element value for output list
             composition.
 
-  \param    d \<value> The default output value.
+  \param    dv \<value> The default return value.
 
   \returns  For the input list indexed element \p e=l[i];
             - When \p e is a list and \p s==0, returns (1) \p e[0] or
-              (2a) \p d if \p e[0] is not defined.
-            - When \p e is a list and \p dev or \p s is undefined,
+              (2a) \p dv if \p e[0] is not defined.
+            - When \p e is a list and \p de or \p s is undefined,
               returns (3a) \p e.
-            - When \p e is a list and \p dev and \p s are defined with
+            - When \p e is a list and \p de and \p s are defined with
               \p s>0, (4) a list-s with each undefined element of \p e is
-              assigned \p dev.
-            - When \p e is not a list and \p s==0, returns (2b) \p d
+              assigned \p de.
+            - When \p e is not a list and \p s==0, returns (2b) \p dv
               when \p e is undefined and (3b) \p e otherwise.
-            - When \p e is not a list and \p dep or \p s is undefined,
-              returns (2c) \p d.
-            - When \p e is not a list and \p dep and \p s are defined
+            - When \p e is not a list and \p di or \p s is undefined,
+              returns (2c) \p dv.
+            - When \p e is not a list and \p di and \p s are defined
               with \p s>0, returns (5) list-s with each element assigned
-              \p dev, when \p e is undefined, and (6) a list-s with \p
-              [dep] assigned \p e and the other elements assigned \p dev.
+              \p de, when \p e is undefined, and (6) a list-s with \p
+              [di] assigned \p e and the other elements assigned \p de.
 *******************************************************************************/
 function list_get_value
 (
@@ -316,44 +316,44 @@ function list_get_value
 
   s,
 
-  dep,
-  dev,
+  di,
+  de,
 
-  d,
+  dv,
 ) = !is_list(l) ? undef
   : let( iev = l[i] )
     is_list( iev ) ?
       // indexed element is a list
       (
         (s == 0) ?
-          is_undef( iev[0] ) ? d                                          // 2a
+          is_undef( iev[0] ) ? dv                                         // 2a
         : iev[0]                                                          // 1
 
       : let
         (
-          use_iev = !is_integer( s ) || (s<1) || is_undef( dev )
+          use_iev = !is_integer( s ) || (s<1) || is_undef( de )
         )
         use_iev ? iev                                                     // 3a
 
         // update output list
-      : [ for (j = [0:s-1]) if ( !is_undef( iev[j] ) ) iev[j] else dev ]  // 4
+      : [ for (j = [0:s-1]) if ( !is_undef( iev[j] ) ) iev[j] else de ]   // 4
       )
       // indexed element is not a list
     : (
         (s == 0) ?
-          is_undef( iev ) ? d                                             // 2b
+          is_undef( iev ) ? dv                                            // 2b
         : iev                                                             // 3b
 
       : let
         (
-          use_d = !is_integer( s ) || (s<1) || !is_integer( dep )
+          use_d = !is_integer( s ) || (s<1) || !is_integer( di )
         )
-        use_d ? d                                                         // 2c
+        use_d ? dv                                                        // 2c
 
         // create output list
       : is_undef( iev ) ?
-          [for (j = [0:s-1]) dev]                                         // 5
-        : [for (j = [0:s-1]) if (j == dep) iev else dev]                  // 6
+          [for (j = [0:s-1]) de]                                          // 5
+        : [for (j = [0:s-1]) if (j == di) iev else de]                    // 6
       );
 
 //! @}
