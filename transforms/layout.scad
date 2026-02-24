@@ -127,24 +127,29 @@ module layout_grid_rp
       : [for (i = [0:ac-1]) center];
 
   //
-  // decode layout configuration
+  // decode layout list
   //
 
-  rc  = defined_ei_or(t, 0, c1, ac);    // rc: child replication
-  rg  = defined_ei_or(t, 1, c0, ac);    // rg: replication layout grid
+  // rc: child replication; rg: replication layout grid
+  rc  = list_get_value(t, 0, ac, 0, 1, c1);
+  rg  = list_get_value(t, 1, ac, 0, 0, c0);
 
-  lp  = defined_ei_or(t, 2, c0, ac);    // lP; layout placement
-  lr  = defined_e_or (t, 3, 0);         // lr: layout rotate
+  // lP; layout placement; lr: layout rotate
+  lp  = list_get_value(t, 2, ac, 0, 0, c0);
+  lr  = defined_e_or  (t, 3, 0);
 
-  cm  = defined_e_or (t, 4, c0);        // cm: child mirror
-  cr  = defined_e_or (t, 5, 0);         // cr: child rotate
+  // cm: child mirror; cr: child rotate
+  cm  = list_get_value(t, 4, ac, 0, 0, c0);
+  cr  = defined_e_or  (t, 5, 0);
 
-  lt  = defined_ei_or(t, 6, c0, ac);    // lt: layout translate
+  // lt: layout translate
+  lt  = list_get_value(t, 6, ac, 0, 0, c0);
 
-  lc  = defined_ei_or(t, 7, cf, ac);    // lc: center replication
-  lh  = defined_e_or (t, 8, debug);     // lh: highlight layout objects
+  // lc: center replication; lh: highlight layout objects
+  lc  = list_get_value(t, 7, ac, 0, center, cf);
+  lh  = defined_e_or  (t, 8, debug);
 
- // z-axis object instances and grid spacing (2d and 3d)
+  // z-axis object instances and grid spacing (2d and 3d)
   rc_z = (ac == 2) ? 0 : [0:rc.z-1];
   rg_z = (ac == 2) ? 0 : rg.z;
 
