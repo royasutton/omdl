@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2023
+  \date   2015-2023,2026
 
   \copyright
 
@@ -215,12 +215,12 @@ function compare
       (
         let
         (
-          l1 = len(merge_s(v1, true)),              // get total element count
-          l2 = len(merge_s(v2, true))
+          n1 = len(merge_s(v1, true)),              // get total element count
+          n2 = len(merge_s(v2, true))
         )
-        (l1 > l2) ? -1                              // longest list is greater
-      : (l2 > l1) ? +1
-      : ((l1 == 0) && (l2 == 0)) ? 0                // reached end, are equal
+        (n1 > n2) ? -1                              // longest list is greater
+      : (n2 > n1) ? +1
+      : ((n1 == 0) && (n2 == 0)) ? 0                // reached end, are equal
       : let
         (
           cf = compare(first(v1), first(v2), s)     // compare first elements
