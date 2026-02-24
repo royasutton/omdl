@@ -57,11 +57,16 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+// Iterable
+//----------------------------------------------------------------------------//
+
+//! \name Iterable
+//! @{
 
 //! Test to see if two numerical vectors are sufficiently equal.
 /***************************************************************************//**
-  \param    v1 <vector-Nd> A vector 1 in an 'N' dimensional space.
-  \param    v2 <vector-Nd> A vector 2 in an 'N' dimensional space.
+  \param    v1 <vector-n> The n-length vector 1.
+  \param    v2 <vector-n> The n-length vector 2.
   \param    p <number> The numerical precision.
 
   \returns  (1) <boolean> \b true when the distance between \p v1 and
@@ -262,6 +267,17 @@ function compare
     )
   // v2 not a range so v1 > v2
   : -1;
+
+//! @}
+
+//----------------------------------------------------------------------------//
+// List
+//----------------------------------------------------------------------------//
+
+//! \name List
+//! @{
+
+//! @}
 
 //! @}
 //! @}
