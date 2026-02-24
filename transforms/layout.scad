@@ -207,8 +207,8 @@ BEGIN_SCOPE example;
     ];
 
     %cube(b, center=true);
-    layout_grid_rp( v, b, true )
-    cylinder(r=1, h=6, center=true, debug=true);
+    layout_grid_rp( t=v, b=b, center=true, debug=true )
+    cylinder( r=1, h=6, center=true );
 
     // end_include
   END_OPENSCAD;
