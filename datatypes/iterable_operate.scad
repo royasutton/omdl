@@ -139,7 +139,7 @@ function defined_ei_or
   d,
   n
 ) = !is_iterable(v) ? d
-  : !is_undef( v[i] ) && is_iterable( v[i] )
+  : is_iterable( v[i] )
     ? is_undef( n ) ? v[i]
     : (len( v[i] ) == n) ? v[i]
       : d
