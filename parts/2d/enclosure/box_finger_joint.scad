@@ -132,13 +132,7 @@
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | integer-list \| integer | required    | box side index or index list (see below)
       1 | datastruct \| integer   | 0           | shape selections (see: select_common_2d_shape())
-      2 | decimal           | 0                 | shape rotation
-      3 | decimal-list-2    | [0, 0]            | shape offset [x, y]
-      4 | integer-list-2    | [1, 1]            | shape counts [x, y]
-      5 | decimal-list-2    | [0, 0]            | shape grid spacing [x, y]
-      6 | boolean-list-2    | [false, false]    | group centering [x, y]
-      7 | decimal-list-2    | [0, 0]            | group side offset [x, y] (-1 \| 0 \| +1)
-      8 | decimal           | 0                 | group rotation
+      2 | datastruct              | [1]         | shape layout (see: layout_grid_rp()
 
     The box side are assigned the following indices:
 
