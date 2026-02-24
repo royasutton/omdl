@@ -292,15 +292,22 @@ function compare
 
   \param    d \<value> The default output value.
 
-  \returns
-
-  For indexed element e=l[i];
-
-  When e is a list and s == 0, returns (1) e[0] or
-  (2a) d if e[0] is not defined.
-
-  When e is a list and dev or s is undefined
-
+  \returns  For the input list indexed element \p e=l[i];
+            - When \p e is a list and \p s==0, returns (1) \p e[0] or
+              (2a) \p d if \p e[0] is not defined.
+            - When \p e is a list and \p dev or \p s is undefined,
+              returns (3a) \p e.
+            - When \p e is a list and \p dev and \p s are defined with
+              \p s>0, (4) a list-s with each undefined element of \p e is
+              assigned \p dev.
+            - When \p e is not a list and \p s==0, returns (2b) \p d
+              when \p e is undefined and (3b) \p e otherwise.
+            - When \p e is not a list and \p dep or \p s is undefined,
+              returns (2c) \p d.
+            - When \p e is not a list and \p dep and \p s are defined
+              with \p s>0, returns (5) list-s with each element assigned
+              \p dev, when \p e is undefined, and (6) a list-s with \p
+              [dep] assigned \p e and the other elements assigned \p dev.
 *******************************************************************************/
 function list_get_value
 (
