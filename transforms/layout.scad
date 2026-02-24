@@ -127,7 +127,7 @@ module layout_grid_rp
       : [for (i = [0:ac-1]) center];
 
   //
-  // decode instance
+  // decode layout configuration
   //
 
   rc  = defined_ei_or(t, 0, c1, ac);    // rc: child replication
@@ -145,8 +145,8 @@ module layout_grid_rp
   lh  = defined_e_or (t, 8, debug);     // lh: highlight layout objects
 
  // z-axis object instances and grid spacing (2d and 3d)
-  gi_z = (ac == 2) ? 0 : [0:rc.z-1];
-  gg_z = (ac == 2) ? 0 : rg.z;
+  rc_z = (ac == 2) ? 0 : [0:rc.z-1];
+  rg_z = (ac == 2) ? 0 : rg.z;
 
   // group translate
   gt  = [ for (i = [0:ac-1]) b[i] * lp[i] ];
@@ -166,8 +166,8 @@ module layout_grid_rp
   translate( lt - co )
 
   // group instances
-  for (i = [0:rc.x-1], j = [0:rc.y-1], k = gi_z)
-  translate( [rg.x * i, rg.y * j, gg_z * k] )
+  for (i = [0:rc.x-1], j = [0:rc.y-1], k = rc_z)
+  translate( [rg.x * i, rg.y * j, rg_z * k] )
 
   // object placement
   rotate( cr )
