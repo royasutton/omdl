@@ -323,37 +323,37 @@ function list_get_value
 ) = !is_list(l) ? undef
   : let( iev = l[i] )
     is_list( iev ) ?
-      // indexed element is a list
+      // indexed element is a list: (2a), (1), (3a)
       (
         (s == 0) ?
-          is_undef( iev[0] ) ? dv                                         // 2a
-        : iev[0]                                                          // 1
+          is_undef( iev[0] ) ? dv
+        : iev[0]
 
       : let
         (
           use_iev = !is_integer( s ) || (s<1) || is_undef( de )
         )
-        use_iev ? iev                                                     // 3a
+        use_iev ? iev
 
-        // update output list
-      : [ for (j = [0:s-1]) if ( !is_undef( iev[j] ) ) iev[j] else de ]   // 4
+        // update output list: (4)
+      : [ for (j = [0:s-1]) if ( !is_undef( iev[j] ) ) iev[j] else de ]
       )
-      // indexed element is not a list
+      // indexed element is not a list: (2b), (3b), (2c)
     : (
         (s == 0) ?
-          is_undef( iev ) ? dv                                            // 2b
-        : iev                                                             // 3b
+          is_undef( iev ) ? dv
+        : iev
 
       : let
         (
           use_d = !is_integer( s ) || (s<1) || !is_integer( di )
         )
-        use_d ? dv                                                        // 2c
+        use_d ? dv
 
-        // create output list
+        // create output list: (5), (6)
       : is_undef( iev ) ?
-          [for (j = [0:s-1]) de]                                          // 5
-        : [for (j = [0:s-1]) if (j == di) iev else de]                    // 6
+          [for (j = [0:s-1]) de]
+        : [for (j = [0:s-1]) if (j == di) iev else de]
       );
 
 //! @}
