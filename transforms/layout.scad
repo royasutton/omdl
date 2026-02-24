@@ -85,15 +85,15 @@
 
     e | data type         | 3D default | 2D default | parameter description
   ---:|:-----------------:|:----------:|:----------:|:------------------------------------
-    0 | integer-list-2:3  | [1,1,1]    | [1,1]      | child replication
-    1 | integer-list-2:3  | [1,1,1]    | [1,1]      | replication layout grid
-    2 | decimal-list-2:3  | [0,0,0]    | [0,0]      | layout placement
-    3 | decimal-list-2:3 \|decimal | 0 | 0          | layout rotate
-    4 | integer-list-2:3  | [0,0,0]    | [0,0]      | child mirror
-    5 | decimal-list-2:3 \|decimal | 0 | 0          | child rotate
-    6 | decimal-list-2:3  | [0,0,0]    | [0,0]      | layout translate
-    7 | boolean-list-2:3  | \p center  | \p center  | center replication
-    8 | boolean           | \p debug   | \p debug   | highlight layout objects (debug)
+    0 | integer-list-2:3 \| integer | [1,1,1]   | [1,1]      | child replication
+    1 | integer-list-2:3 \| integer | [1,1,1]   | [1,1]      | replication layout grid
+    2 | decimal-list-2:3 \| decimal | [0,0,0]   | [0,0]      | layout placement
+    3 | decimal-list-2:3 \| decimal | 0         | 0          | layout rotate
+    4 | integer-list-2:3 \| integer | [0,0,0]   | [0,0]      | child mirror
+    5 | decimal-list-2:3 \| decimal | 0         | 0          | child rotate
+    6 | decimal-list-2:3 \| decimal | [0,0,0]   | [0,0]      | layout translate
+    7 | boolean-list-2:3 \| boolean | \p center | \p center  | center replication
+    8 | boolean                     | \p debug  | \p debug   | highlight layout objects (debug)
 
   \amu_define scope_id      (example)
   \amu_define title         (Transform example)
