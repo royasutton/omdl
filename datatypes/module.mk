@@ -15,7 +15,7 @@ local_library     :=  docs_module \
                       iterable_operate \
                       \
                       list_operate \
-                      list_compare \
+                      list_inspect \
                       \
                       euclidean \
                       binary \

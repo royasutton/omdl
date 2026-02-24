@@ -1,4 +1,4 @@
-//! List data type comparision.
+//! List data type inspection.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,8 +27,8 @@
 
   \details
 
-    \amu_define group_name  (List Comparision)
-    \amu_define group_brief (List comparision operations.)
+    \amu_define group_name  (List Inspection)
+    \amu_define group_brief (List inspection operations.)
 
   \amu_include (include/amu/pgid_path_pstem_pg.amu)
 *******************************************************************************/

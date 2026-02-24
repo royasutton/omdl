@@ -46,7 +46,7 @@ include <datatypes/iterable_test.scad>;
 include <datatypes/iterable_operate.scad>;
 
 include <datatypes/list_operate.scad>;
-include <datatypes/list_compare.scad>;
+include <datatypes/list_inspect.scad>;
 
 include <datatypes/euclidean.scad>;
 include <datatypes/binary.scad>;
