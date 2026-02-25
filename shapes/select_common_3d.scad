@@ -57,9 +57,9 @@
   \details
 
     This module provides a standard scheme for selecting and
-    configuring the arguments of most 2D shapes available in the
+    configuring the arguments of most 3D shapes available in the
     library, offering a consistent and flexible way to include and
-    configure 2D shapes.
+    configure 3D shapes.
 
     ### argv
 
