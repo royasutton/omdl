@@ -289,8 +289,9 @@ function compare
   \param    de \<value> The default element value for output list
             composition.
 
-  \param    di <integer> The default output element index for input
-            elements that are not a list.
+  \param    di <integer> The default output element index used when
+            composing an output list from an input element that is not
+            a list. Use \p di = -1 to assign the value to all elements.
 
   \returns  For the input list indexed element \p e=l[i];
             - When \p e is a list and \p s==0, returns (1) \p e[0] or
@@ -351,7 +352,7 @@ function list_get_value
         // create output list: (5), (6)
       : is_undef( iev ) ?
           [for (j = [0:s-1]) de]
-        : [for (j = [0:s-1]) if (j == di) iev else de]
+        : [for (j = [0:s-1]) if (di == -1 || j == di) iev else de]
       );
 
 //! @}
