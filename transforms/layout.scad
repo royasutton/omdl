@@ -86,7 +86,7 @@
 
     e | data type         | 3D default | 2D default | scalar updates | parameter description
   ---:|:-----------------:|:----------:|:----------:|:-----------:|:------------------------------------
-    0 | integer                     | \p mode   | \p mode   | - | modifier mode
+    0 | integer                     | \p mode   | \p mode   | - | layout modifier mode
     1 | decimal-list-2:3 \| decimal | [0,0,0]   | [0,0]     | x | layout placement
     2 | decimal-list-2:3 \| decimal | 0         | 0         | z | layout rotate
     3 | integer-list-2:3 \| integer | [0,0,0]   | [0,0]     | x | child mirror
@@ -96,7 +96,7 @@
     7 | integer-list-2:3 \| integer | [1,1,1]   | [1,1]     | x | replication layout grid
     8 | boolean-list-2:3 \| boolean | \p center | \p center | [x, y, z] | center replication
 
-  #### t[0]: modifier mode
+  #### t[0]: layout modifier mode
 
     v | description
   ---:|:------------------------------------
