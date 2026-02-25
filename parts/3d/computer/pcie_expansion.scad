@@ -1426,9 +1426,9 @@ module pcie_expansion
     }
 
     // hole construction
-    module construct_side_holes( hole_insts )
+    module construct_side_holes( insts )
     {
-      for (inst = hole_insts)
+      for (inst = insts)
       {
         shape       = defined_e_or (inst, 0, 1);
         height_spec = defined_e_or (inst, 1, 0);
