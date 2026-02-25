@@ -39,7 +39,9 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_define includes_required_add
   (
+    shapes/select_common_2d.scad
     transforms/base_cs.scad
+    transforms/layout.scad
     models/2d/joint/dovetail.scad
     parts/3d/fastener/clamps.scad
     parts/3d/enclosure/project_box_rectangle.scad
@@ -602,31 +604,35 @@ enclosure_def =
   ["holes_sides",                         // enclosure side hole instances
     [                                     // instance list
       [
-        [0,0,+1/2],                       // 0: enclosure side [w, l, h]
-        90,                               // 1: side rotate (group)
-        [0, -10],                         // 2: offsets (group) [w/l, h]
-        [ 20,  3],                        // 3: shape counts [w/l, h]
-        [+10.75, -10.75],                 // 4: shape grid spacing [w/l, h]
-        [true, false],                    // 5: offset to group  center [w/l, h]
-        5,                                // 6: shape diameter (integer or list)
-                                          //    integer: n-gon
-                                          //       list: rectangle [size, vr, vrm, vfn]
-        6,                                // 7: shape facets ($fn) (integer or list)
-        30,                               // 8: shape rotate
-        500                               // 9: shape extrusion height
+        [2, [5/2, 6]],
+        -1,
+        [
+          false,
+          [0,0,1/2],
+          [90,0,90],
+          0,
+          30,
+          [0, -10],
+          [20, 3],
+          [+10.75, -10.75],
+          [true, false]
+        ]
       ],
       [
-        [0,0,-1/2],
-        90,
-        [0, +5],
-        [ 18,  1],
-        [+10.75, +10.75],
-        [true, false],
-        [[2.5,10], 1.5],
-        undef,
-        0,
-        500
-      ],
+        [3, [5/2,10], 1.5],
+        -1,
+        [
+          false,
+          [0,0,-1/2],
+          [90,0,90],
+          0,
+          0,
+          [0, +5.5],
+          18,
+          10.75,
+          true
+        ]
+      ]
     ]
   ],
 
@@ -1425,51 +1431,35 @@ module pcie_expansion
     {
       for (inst = hole_insts)
       {
-        s = defined_ei_or(inst, 0, [0,0,0], 3);         // enclosure side [w, l, h]
-        r = defined_e_or (inst, 1, 0);                  // side-rotate
+        shape       = defined_e_or (inst, 0, 0);
+        height_spec = defined_e_or (inst, 1, 0);
+        layout      = defined_e_or (inst, 2, [1]);
 
-        o = defined_ei_or(inst, 2, [0,0], 2);           // offsets [w/l, h]
-        n = defined_ei_or(inst, 3, [1,1], 2);           // shape counts [w/l, h]
-        g = defined_ei_or(inst, 4, [0,0], 2);           // grid spacing [w/l, h]
-        c = defined_ei_or(inst, 5, [false, false], 2);  // offset to center [w/l, h]
+        shape_type  = is_list(shape) ? first(shape) : shape;
+        shape_argv  = is_list(shape) ? tailn(shape, 1) : undef;
 
-        d = defined_e_or (inst, 6, 3);                  // shape diameter (or list)
-                                                        //  list: [size, vr, vrm, vfn]
-        f = defined_e_or (inst, 7, 6);                  // shape sides
-        q = defined_e_or (inst, 8, 0);                  // shape rotate
-        h = defined_e_or (inst, 9, encl_wth*2+eps*4);   // shape extrusion height
+        // allow user to select box size index for extrusion height
+        // 0=max(w,l,h), -1=w, -2=l, -3=h (plus wall thickness)
+        height      = (height_spec < 0)  ? encl_size_wlh[abs(height_spec+1)] + encl_wth*4
+                    : (height_spec == 0) ? max(encl_size_wlh) + encl_wth*4
+                    : height_spec;
 
-        // group center offsets (move)
-        m = [ (n.x-1) * g.x/2 * (c.x ? 1 : 0), (n.y-1) * g.y/2 * (c.y ? 1 : 0) ];
+        // move layout to enclosure center
+        translate([0, 0, encl_size_wlh.z/2])
+        layout_grid_rp(t=layout, b=encl_size_wlh, center=true, debug=true, verb=verb-1)
+        extrude_linear_uss(height, center=true)
+        select_common_2d_shape( type=shape_type, argv=shape_argv, center=true, verb=verb-1 );
 
-        translate
-        (
-          [
-            encl_size_wlh.x * s.x,
-            encl_size_wlh.y * s.y,
-            encl_size_wlh.z * (1/2 + s.z),
-          ]
-        )
-        rotate([90, 0, r])
-        translate(o - m)
-        for (i = [0:n.x-1], j = [0:n.y-1])
-        translate( [g.x * i, g.y * j, 0] )
-        rotate(q)
-        if ( is_list(d) )
+        if (verb > 1)
         {
-          extrude_linear_uss(h=h, center=true)
-          pg_rectangle
-          (
-            size    = defined_e_or(d, 0, d),
-            vr      = defined_e_or(d, 1, undef),
-            vrm     = defined_e_or(d, 2, 1),
-            vfn     = f,
-            center  = true
-          );
-        }
-        else
-        {
-          cylinder(d=d, h=h, center=true, $fn=f);
+          log_info(strl(["hole instance = ", inst]));
+
+          if (verb > 2)
+          {
+            echo(shape_type=shape_type, shape_argv=shape_argv);
+            echo(height=height);
+            echo(layout=layout);
+          }
         }
       }
     }
@@ -2067,7 +2057,9 @@ module pcie_expansion
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <shapes/select_common_2d.scad>;
     include <transforms/base_cs.scad>;
+    include <transforms/layout.scad>;
     include <models/2d/joint/dovetail.scad>;
     include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
