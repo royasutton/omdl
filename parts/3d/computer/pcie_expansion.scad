@@ -427,7 +427,7 @@ enclosure_map_doc =
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | datastruct \| integer | 1             | 2d shape selections (see: select_common_2d_shape())
       1 | <decimal>             | 0             | shape extrusion height (see note below)
-      2 | datastruct            | [true]        | shape layout (see: layout_grid_rp()
+      2 | datastruct            | [0]           | shape layout (see: layout_grid_rp()
 
     When the shape extrusion height is \p 0, the height is
     automatically set to the maximum enclosure dimension. When set to
@@ -448,7 +448,7 @@ enclosure_map_doc =
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | datastruct \| integer | 1             | 3d shape selections (see: select_common_3d_shape())
-      1 | datastruct            | [true]        | shape layout (see: layout_grid_rp()
+      1 | datastruct            | [0]           | shape layout (see: layout_grid_rp()
 
     ### posts
 
@@ -623,7 +623,7 @@ enclosure_def =
         [2, [5/2, 6]],
         -1,
         [
-          false,
+          0,
           [0,0,1/2],
           [90,0,90],
           0,
@@ -638,7 +638,7 @@ enclosure_def =
         [3, [5/2,10], 1.5],
         -1,
         [
-          false,
+          0,
           [0,0,-1/2],
           [90,0,90],
           0,
@@ -1454,7 +1454,7 @@ module pcie_expansion
       {
         shape       = defined_e_or (inst, 0, 1);
         height_spec = defined_e_or (inst, 1, 0);
-        layout      = defined_e_or (inst, 2, [true]);
+        layout      = defined_e_or (inst, 2, [0]);
 
         shape_type  = is_list(shape) ? first(shape) : shape;
         shape_argv  = is_list(shape) ? tailn(shape, 1) : undef;
@@ -1467,7 +1467,7 @@ module pcie_expansion
 
         // move layout to enclosure center
         translate([0, 0, encl_size_wlh.z/2])
-        layout_grid_rp(t=layout, b=encl_size_wlh, center=true, debug=true, verb=verb-1)
+        layout_grid_rp(t=layout, b=encl_size_wlh, center=true, verb=verb-1)
         extrude_linear_uss(height, center=true)
         select_common_2d_shape( type=shape_type, argv=shape_argv, center=true, verb=verb-1 );
 
@@ -1491,14 +1491,14 @@ module pcie_expansion
       for (inst = insts)
       {
         shape       = defined_e_or (inst, 0, 1);
-        layout      = defined_e_or (inst, 1, [true]);
+        layout      = defined_e_or (inst, 1, [0]);
 
         shape_type  = is_list(shape) ? first(shape) : shape;
         shape_argv  = is_list(shape) ? tailn(shape, 1) : undef;
 
         // move layout to enclosure center
         translate([0, 0, encl_size_wlh.z/2])
-        layout_grid_rp(t=layout, b=encl_size_wlh, center=true, debug=true, verb=verb-1)
+        layout_grid_rp(t=layout, b=encl_size_wlh, center=true, verb=verb-1)
         select_common_3d_shape( type=shape_type, argv=shape_argv, center=true, verb=verb-1 );
 
         if (verb > 1)

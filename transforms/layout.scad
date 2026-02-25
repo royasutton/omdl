@@ -49,17 +49,16 @@
   \param  t       <datastuct> The transform sequence configuration
                   (see below).
 
+  \param  s       <integer | integer-list | range> The optional child
+                  object selection(s).
+
   \param  b       <decimal-list-2:3> The placement reference region
                   (bounding box).
 
   \param center   <boolean-list-2:3 | boolean> Center the replication
                   group about the child objects' local origin.
 
-  \param debug    <boolean> Highlight the objects for layout and
-                  placement debugging.
-
-  \param  s       <integer | integer-list | range> The optional child
-                  object selection(s).
+  \param mode     <integer> Modifier mode.
 
   \param  verb    <integer> output console verbosity.
 
@@ -87,15 +86,25 @@
 
     e | data type         | 3D default | 2D default | scalar updates | parameter description
   ---:|:-----------------:|:----------:|:----------:|:-----------:|:------------------------------------
-    0 | boolean                     | \p debug  | \p debug   |   | highlight layout objects (debug)
-    1 | decimal-list-2:3 \| decimal | [0,0,0]   | [0,0]      | x | layout placement
-    2 | decimal-list-2:3 \| decimal | 0         | 0          | z | layout rotate
-    3 | integer-list-2:3 \| integer | [0,0,0]   | [0,0]      | x | child mirror
-    4 | decimal-list-2:3 \| decimal | 0         | 0          | z | child rotate
-    5 | decimal-list-2:3 \| decimal | [0,0,0]   | [0,0]      | x | layout translate
-    6 | integer-list-2:3 \| integer | [1,1,1]   | [1,1]      | x | child replication
-    7 | integer-list-2:3 \| integer | [1,1,1]   | [1,1]      | x | replication layout grid
-    8 | boolean-list-2:3 \| boolean | \p center | \p center  | [x, y, z] | center replication
+    0 | integer                     | \p mode   | \p mode   | - | modifier mode
+    1 | decimal-list-2:3 \| decimal | [0,0,0]   | [0,0]     | x | layout placement
+    2 | decimal-list-2:3 \| decimal | 0         | 0         | z | layout rotate
+    3 | integer-list-2:3 \| integer | [0,0,0]   | [0,0]     | x | child mirror
+    4 | decimal-list-2:3 \| decimal | 0         | 0         | z | child rotate
+    5 | decimal-list-2:3 \| decimal | [0,0,0]   | [0,0]     | x | layout translate
+    6 | integer-list-2:3 \| integer | [1,1,1]   | [1,1]     | x | child replication
+    7 | integer-list-2:3 \| integer | [1,1,1]   | [1,1]     | x | replication layout grid
+    8 | boolean-list-2:3 \| boolean | \p center | \p center | [x, y, z] | center replication
+
+  #### t[0]: modifier mode
+
+    v | description
+  ---:|:------------------------------------
+    0 | none
+    1 | disable
+    2 | show only
+    3 | highlight / debug
+    4 | transparent / background
 
   \amu_define scope_id      (example)
   \amu_define title         (Transform example)
@@ -107,10 +116,10 @@
 module layout_grid_rp
 (
   t,
+  s,
   b = zero3d,
   center = false,
-  debug = false,
-  s,
+  mode = 0,
   verb = 0
 )
 {
@@ -133,8 +142,8 @@ module layout_grid_rp
   // decode layout list
   //
 
-  // lh: highlight layout objects
-  lh  = defined_e_or  (t, 0, debug);
+  // lm: modifier mode
+  lm  = defined_e_or  (t, 0, mode);
 
   // lP; layout placement; lr: layout rotate
   lp  = list_get_value(t, 1, c0, ac, 0);
@@ -174,10 +183,10 @@ module layout_grid_rp
 
   if (verb > 0)
   {
-    log_info(strl(["t = ", t, ", b = ", b, ", center = ", center, ", debug = ", debug]));
+    log_info(strl(["t = ", t, ", b = ", b, ", center = ", center, ", mode = ", mode]));
 
     if (verb >1)
-      echo(rc=rc, rg=rg, lp=lp, lr=lr, cm=cm, cr=cr, lt=lt, lc=lc, lh=lh);
+      echo(lm=lm, lp=lp, lr=lr, cm=cm, cr=cr, lt=lt, rc=rc, rg=rg, lc=lc);
   }
 
   // group placement
@@ -194,16 +203,20 @@ module layout_grid_rp
   // object placement
   rotate( cr )
   mirror( cm )
-  if ( lh )
+
+  // modifier mode
+  if      ( lm == 0 )
+   children(cs);
+  else if ( lm == 2 )
+   !children(cs);
+  else if ( lm == 3 )
    #children(cs);
-  else
-    children(cs);
+  else if ( lm == 4 )
+   %children(cs);
 }
 
-
 //! @}
 //! @}
-
 
 //----------------------------------------------------------------------------//
 // openscad-amu auxiliary scripts
@@ -232,7 +245,7 @@ BEGIN_SCOPE example;
     ];
 
     %cube(b, center=true);
-    layout_grid_rp( t=v, b=b, center=true, debug=true )
+    layout_grid_rp( t=v, b=b, center=true, mode=3 )
     cylinder( r=1, h=6, center=true );
 
     // end_include
