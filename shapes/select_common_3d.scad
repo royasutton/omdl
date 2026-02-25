@@ -58,8 +58,8 @@
 
     This module provides a standard scheme for selecting and
     configuring the arguments of most 3D shapes available in the
-    library, offering a consistent and flexible way to include and
-    configure 3D shapes.
+    library, offering a consistent and flexible way to include,
+    configure, and modify 3D shapes.
 
     ### argv
 
@@ -72,6 +72,13 @@
       1 | decimal-list-n \| decimal | undef     | \p vr (\p sr) : shape rounding
       2 | integer-list-n \| integer | 0         | \p vrm : shape rounding mode
       3 | integer           |  5                | \p fn : shape rounding facets
+      4 | integer           |  0                | shape modifier
+
+    #### argv[4]: shape modifier
+
+       v  | modifier description
+    :----:|:------------------------------------
+        0 | none
 
     ### type
 
@@ -134,150 +141,152 @@ module select_common_3d_shape
   verb = 0
 )
 {
-  // polyhedron database available when modules global data table is defined
-  pd_db_available   = !( is_undef(ph_db_dtc) || is_undef(ph_db_dtr) );
+  module construct_shape()
+  {
+    // polyhedron database available when modules global data table is defined
+    pd_db_available   = !( is_undef(ph_db_dtc) || is_undef(ph_db_dtr) );
 
-  // polyhedron database type offset
-  pd_db_type_offset = 99;
+    // polyhedron database type offset
+    pd_db_type_offset = 99;
+
+    // cylinder
+    if      ( type == 1 )
+      let
+      (
+        h  = defined_e_or(size, 0, size),
+        r1 = defined_e_or(size, 1, h),
+        r2 = defined_e_or(size, 2, r1)
+      )
+      cylinder
+      (
+             h = h,
+            r1 = r1,
+            r2 = r2,
+        center = center
+      );
+
+    // cone
+    else if ( type == 2 )
+      cone
+      (
+          size = size,
+            vr = vr,
+        center = center
+      );
+
+    // cuboid
+    else if ( type == 3 )
+      cuboid
+      (
+          size = size,
+            vr = vr,
+           vrm = vrm,
+        center = center
+      );
+
+    // ellipsoid
+    else if ( type == 4 )
+      ellipsoid
+      (
+          size = size,
+        center = center
+      );
+
+    // ellipsoid_s
+    else if ( type == 5 )
+      let
+      (
+        s  = defined_e_or(size, 0, size),
+        a1 = defined_e_or(size, 1, 0),
+        a2 = defined_e_or(size, 2, 0)
+      )
+      ellipsoid_s
+      (
+          size = s,
+            a1 = a1,
+            a2 = a2,
+        center = center
+      );
+
+    // pyramid_t
+    else if ( type == 6 )
+      pyramid_t
+      (
+          size = size,
+        center = center
+      );
+
+    // pyramid_q
+    else if ( type == 7 )
+      pyramid_q
+      (
+          size = size,
+        center = center
+      );
+
+    // star3d
+    else if ( type == 8 )
+      let
+      (
+        s  = defined_e_or(size, 0, size),
+        n  = defined_e_or(size, 1, 5),
+        h  = defined_e_or(size, 2, false)
+      )
+      star3d
+      (
+          size = s,
+             n = n,
+          half = h,
+        center = center
+      );
+
+    // database polyhedron
+    else if ( type > pd_db_type_offset )
+    {
+      assert
+      (
+        pd_db_available,
+        "required module not loaded; please include polyhedrons db module."
+      );
+
+      id_number = type - pd_db_type_offset;
+      id_name   = ph_db_get_id(id_number);
+
+      if (verb > 1)
+      {
+        db_size = ph_db_get_size();
+
+        echo(strl(["polyhedrons db_size = ", db_size, ", id_offset = ", pd_db_type_offset]));
+        echo(strl(["id_number = ", id_number, ", id_name = ", id_name]));
+      }
+
+      ph_db_polyhedron
+      (
+            id = id_name,
+          size = size,
+         align = (center==true) ? [0, 0, 0] : [1, 1, 1]
+      );
+    }
+  }
 
   //
-  // common parameters
+  // decode parameters
   //
 
   size  = defined_eon_or(argv, 0, 1);       // dimensions (type dependent)
   vr    = defined_e_or  (argv, 1, undef);   // rounding
   vrm   = defined_e_or  (argv, 2, 0);       // rounding mode
   fn    = defined_e_or  (argv, 3, 5);       // facets
+  sm    = defined_e_or  (argv, 4, 0);       // shape modifier
+
+  construct_shape();
 
   if (verb > 0)
   {
     log_info(strl(["type=", type, ", argv=", argv, ", center=", center]));
 
     if (verb > 1)
-      echo(size=size, vr=vr, vrm=vrm, fn=fn);
-  }
-
-  //
-  // shape construction
-  //
-
-  // cylinder
-  if      ( type == 1 )
-    let
-    (
-      h  = defined_e_or(size, 0, size),
-      r1 = defined_e_or(size, 1, h),
-      r2 = defined_e_or(size, 2, r1)
-    )
-    cylinder
-    (
-           h = h,
-          r1 = r1,
-          r2 = r2,
-      center = center
-    );
-
-  // cone
-  else if ( type == 2 )
-    cone
-    (
-        size = size,
-          vr = vr,
-      center = center
-    );
-
-  // cuboid
-  else if ( type == 3 )
-    cuboid
-    (
-        size = size,
-          vr = vr,
-         vrm = vrm,
-      center = center
-    );
-
-  // ellipsoid
-  else if ( type == 4 )
-    ellipsoid
-    (
-        size = size,
-      center = center
-    );
-
-  // ellipsoid_s
-  else if ( type == 5 )
-    let
-    (
-      s  = defined_e_or(size, 0, size),
-      a1 = defined_e_or(size, 1, 0),
-      a2 = defined_e_or(size, 2, 0)
-    )
-    ellipsoid_s
-    (
-        size = s,
-          a1 = a1,
-          a2 = a2,
-      center = center
-    );
-
-  // pyramid_t
-  else if ( type == 6 )
-    pyramid_t
-    (
-        size = size,
-      center = center
-    );
-
-  // pyramid_q
-  else if ( type == 7 )
-    pyramid_q
-    (
-        size = size,
-      center = center
-    );
-
-  // star3d
-  else if ( type == 8 )
-    let
-    (
-      s  = defined_e_or(size, 0, size),
-      n  = defined_e_or(size, 1, 5),
-      h  = defined_e_or(size, 2, false)
-    )
-    star3d
-    (
-        size = s,
-           n = n,
-        half = h,
-      center = center
-    );
-
-  // database polyhedron
-  else if ( type > pd_db_type_offset )
-  {
-    assert
-    (
-      pd_db_available,
-      "required module not loaded; please include polyhedrons db module."
-    );
-
-    id_number = type - pd_db_type_offset;
-    id_name   = ph_db_get_id(id_number);
-
-    if (verb > 1)
-    {
-      db_size = ph_db_get_size();
-
-      echo(strl(["polyhedrons db_size = ", db_size, ", id_offset = ", pd_db_type_offset]));
-      echo(strl(["id_number = ", id_number, ", id_name = ", id_name]));
-    }
-
-    ph_db_polyhedron
-    (
-          id = id_name,
-        size = size,
-       align = (center==true) ? [0, 0, 0] : [1, 1, 1]
-    );
+      echo(size=size, vr=vr, vrm=vrm, fn=fn, sm=sm);
   }
 }
 
