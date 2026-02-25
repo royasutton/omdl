@@ -85,17 +85,17 @@
   any unspecified elements are automatically assigned the default
   values shown in the table.
 
-    e | data type         | 3D default | 2D default | parameter description
-  ---:|:-----------------:|:----------:|:----------:|:------------------------------------
-    0 | boolean                     | \p debug  | \p debug   | highlight layout objects (debug)
-    1 | decimal-list-2:3 \| decimal | [0,0,0]   | [0,0]      | layout placement
-    2 | decimal-list-2:3 \| decimal | 0         | 0          | layout rotate
-    3 | integer-list-2:3 \| integer | [0,0,0]   | [0,0]      | child mirror
-    4 | decimal-list-2:3 \| decimal | 0         | 0          | child rotate
-    5 | decimal-list-2:3 \| decimal | [0,0,0]   | [0,0]      | layout translate
-    6 | integer-list-2:3 \| integer | [1,1,1]   | [1,1]      | child replication
-    7 | integer-list-2:3 \| integer | [1,1,1]   | [1,1]      | replication layout grid
-    8 | boolean-list-2:3 \| boolean | \p center | \p center  | center replication
+    e | data type         | 3D default | 2D default | scalar updates | parameter description
+  ---:|:-----------------:|:----------:|:----------:|:-----------:|:------------------------------------
+    0 | boolean                     | \p debug  | \p debug   |   | highlight layout objects (debug)
+    1 | decimal-list-2:3 \| decimal | [0,0,0]   | [0,0]      | x | layout placement
+    2 | decimal-list-2:3 \| decimal | 0         | 0          | z | layout rotate
+    3 | integer-list-2:3 \| integer | [0,0,0]   | [0,0]      | x | child mirror
+    4 | decimal-list-2:3 \| decimal | 0         | 0          | z | child rotate
+    5 | decimal-list-2:3 \| decimal | [0,0,0]   | [0,0]      | x | layout translate
+    6 | integer-list-2:3 \| integer | [1,1,1]   | [1,1]      | x | child replication
+    7 | integer-list-2:3 \| integer | [1,1,1]   | [1,1]      | x | replication layout grid
+    8 | boolean-list-2:3 \| boolean | \p center | \p center  | [x, y, z] | center replication
 
   \amu_define scope_id      (example)
   \amu_define title         (Transform example)
