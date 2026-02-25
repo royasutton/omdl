@@ -143,7 +143,7 @@ module select_common_2d_shape
     pg_ngon
     (
            r = defined_e_or(size, 0, size),
-           n = defined_e_or(size, 1, 3),
+           n = defined_e_or(size, 1, 5),
           vr = vr,
          vrm = vrm,
          vfn = fn,
