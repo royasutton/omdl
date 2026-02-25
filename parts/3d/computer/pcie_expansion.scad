@@ -441,7 +441,7 @@ enclosure_map_doc =
 
     name            | schema
     ---------------:|:----------------------------------------------
-    holes_sides     | [instances]
+    shapes_sides    | [instances]
 
     #### Data structure fields: shapes_sides[*]: instances
 
