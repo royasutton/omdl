@@ -131,8 +131,8 @@
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | integer-list \| integer | required    | box side index or index list (see below)
-      1 | datastruct \| integer   | 0           | shape selections (see: select_common_2d_shape())
-      2 | datastruct              | [1]         | shape layout (see: layout_grid_rp()
+      1 | datastruct \| integer   | 1           | shape selections (see: select_common_2d_shape())
+      2 | datastruct              | [true]      | shape layout (see: layout_grid_rp()
 
     The box side are assigned the following indices:
 
@@ -302,8 +302,8 @@ module box2d_finger_joint
     //
     module construct_hole_inst( inst )
     {
-      shape       = defined_e_or (inst, 1, 0);
-      layout      = defined_e_or (inst, 2, [1]);
+      shape       = defined_e_or (inst, 1, 1);
+      layout      = defined_e_or (inst, 2, [true]);
 
       shape_type  = is_list(shape) ? first(shape) : shape;
       shape_argv  = is_list(shape) ? tailn(shape, 1) : undef;
