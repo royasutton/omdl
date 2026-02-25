@@ -293,22 +293,36 @@ function compare
             composing an output list from an input element that is not
             a list. Use \p di = -1 to assign the value to all elements.
 
-  \returns  For the input list indexed element \p e=l[i];
-            - When \p e is a list and \p s==0, returns (1) \p e[0] or
-              (2a) \p dv if \p e[0] is not defined.
-            - When \p e is a list and \p de or \p s is undefined,
-              returns (3a) \p e.
-            - When \p e is a list and \p de and \p s are defined with
-              \p s>0, (4) a list-s with each undefined element of \p e
-              assigned \p de.
-            - When \p e is not a list and \p s==0, returns (2b) \p dv
-              when \p e is undefined and (3b) \p e otherwise.
-            - When \p e is not a list and \p di or \p s is undefined,
-              returns (2c) \p dv.
-            - When \p e is not a list and \p di and \p s are defined
-              with \p s>0, returns (5) list-s with each element assigned
-              \p de, when \p e is undefined, and (6) a list-s with \p
-              [di] assigned \p e and the other elements assigned \p de.
+  \returns  For the input list element indexed as <tt>e = l[i]</tt>:
+            - <b>For \p e a list</b>:
+            -# When <tt>s == 0</tt>, returns (1) \p e[0], or (2a) \p dv
+              if \p e[0] is undefined.
+            -# When either \p de or \p s is undefined, returns (3a) \p e.
+            -# When both \p de and \p s are defined with <tt>s > 0</tt>,
+              returns (4) a list of size \p s in which any undefined
+              elements of \p e are assigned \p de.
+            - <b>For \p e not a list</b>:
+            -# When <tt>s == 0</tt>, returns (2b) \p dv if \p e is
+              undefined, and (3b) \p e otherwise.
+            -# When either \p di or \p s is undefined, returns (2c) \p dv.
+            -# When both \p di and \p s are defined with <tt>s >
+              0</tt>, returns (5) a list of size \p s with all elements
+              assigned \p de if \p e is undefined, or (6) a list of
+              size \p s with element \p [di] assigned \p e and all
+              other elements assigned \p de.
+
+  \details
+
+    #### Return conditions summary
+
+     no   | value     | description
+    :----:|:---------:|:---------------------------------------------------
+      1   | \p e[0]   | element 0 of the indexed element (remove from list)
+      2   | \p dv     | default value
+      3   | \p e      | the indexed element
+      4   | composed  | assign \p de to all undefined elements of \p e
+      5   | composed  | assign \p de to all elements of \p e
+      6   | composed  | assign \p e to element(s) \p di and \p de to all other element \p e
 *******************************************************************************/
 function list_get_value
 (
