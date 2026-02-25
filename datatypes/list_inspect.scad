@@ -334,28 +334,28 @@ function list_get_value
   de,
   di = 0
 ) = !is_list(l) ? undef
-  : let( iev = l[i] )
-    is_list( iev ) ?
+  : let( e = l[i] )
+    is_list( e ) ?
       // indexed element is a list: (2a), (1), (3a)
       (
         (s == 0) ?
-          is_undef( iev[0] ) ? dv
-        : iev[0]
+          is_undef( e[0] ) ? dv
+        : e[0]
 
       : let
         (
           use_iev = !is_integer( s ) || (s<1) || is_undef( de )
         )
-        use_iev ? iev
+        use_iev ? e
 
         // update output list: (4)
-      : [ for (j = [0:s-1]) if ( !is_undef( iev[j] ) ) iev[j] else de ]
+      : [ for (j = [0:s-1]) if ( !is_undef( e[j] ) ) e[j] else de ]
       )
       // indexed element is not a list: (2b), (3b), (2c)
     : (
         (s == 0) ?
-          is_undef( iev ) ? dv
-        : iev
+          is_undef( e ) ? dv
+        : e
 
       : let
         (
@@ -364,9 +364,9 @@ function list_get_value
         use_d ? dv
 
         // create output list: (5), (6)
-      : is_undef( iev ) ?
+      : is_undef( e ) ?
           [for (j = [0:s-1]) de]
-        : [for (j = [0:s-1]) if (di == -1 || j == di) iev else de]
+        : [for (j = [0:s-1]) if (di == -1 || j == di) e else de]
       );
 
 //! @}
