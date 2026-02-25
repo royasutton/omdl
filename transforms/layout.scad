@@ -123,6 +123,27 @@ module layout_grid_rp
   verb = 0
 )
 {
+  // apply transform on all children
+  module transform_all()
+  {
+    // group placement
+    translate( gt )
+    rotate( lr )
+
+    // center group + offsets
+    translate( lt - co )
+
+    // group instances
+    for (i = [0:rc.x-1], j = [0:rc.y-1], k = rc_z)
+    translate( [rg.x * i, rg.y * j, rg_z * k] )
+
+    // object placement
+    rotate( cr )
+    mirror( cm )
+
+    children();
+  }
+
   cs = defined_or(s, [0:$children-1]);
 
   ac  = is_list(b) ? len(b) : undef;
@@ -181,6 +202,16 @@ module layout_grid_rp
   // apply transform sequence
   //
 
+  // modifier mode
+  if      ( mm == 0 )
+    transform_all() children(cs);
+  else if ( mm == 2 )
+   !transform_all() children(cs);
+  else if ( mm == 3 )
+   #transform_all() children(cs);
+  else if ( mm == 4 )
+   %transform_all() children(cs);
+
   if (verb > 0)
   {
     log_info(strl(["t = ", t, ", b = ", b, ", center = ", center, ", mode = ", mode]));
@@ -188,31 +219,6 @@ module layout_grid_rp
     if (verb >1)
       echo(mm=mm, lp=lp, lr=lr, cm=cm, cr=cr, lt=lt, rc=rc, rg=rg, lc=lc);
   }
-
-  // group placement
-  translate( gt )
-  rotate( lr )
-
-  // center group + offsets
-  translate( lt - co )
-
-  // group instances
-  for (i = [0:rc.x-1], j = [0:rc.y-1], k = rc_z)
-  translate( [rg.x * i, rg.y * j, rg_z * k] )
-
-  // object placement
-  rotate( cr )
-  mirror( cm )
-
-  // modifier mode
-  if      ( mm == 0 )
-   children(cs);
-  else if ( mm == 2 )
-   !children(cs);
-  else if ( mm == 3 )
-   #children(cs);
-  else if ( mm == 4 )
-   %children(cs);
 }
 
 //! @}
