@@ -423,7 +423,7 @@ enclosure_map_doc =
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | datastruct \| integer | required      | 2d shape selections (see: select_common_2d_shape())
+      0 | datastruct \| integer | 1             | 2d shape selections (see: select_common_2d_shape())
       1 | <decimal>         |  0                | shape extrusion height (see note below)
       2 | datastruct        | [true]            | shape layout (see: layout_grid_rp()
 
@@ -1430,9 +1430,9 @@ module pcie_expansion
     {
       for (inst = hole_insts)
       {
-        shape       = defined_e_or (inst, 0, 0);
+        shape       = defined_e_or (inst, 0, 1);
         height_spec = defined_e_or (inst, 1, 0);
-        layout      = defined_e_or (inst, 2, [1]);
+        layout      = defined_e_or (inst, 2, [true]);
 
         shape_type  = is_list(shape) ? first(shape) : shape;
         shape_argv  = is_list(shape) ? tailn(shape, 1) : undef;
