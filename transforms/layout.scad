@@ -152,7 +152,7 @@ module layout_grid_rp
   rg  = list_get_value(t, 7, c0, ac, 0);
 
   // lc: center replication
-  lc  = list_get_value(t, 8, cf, ac, center);
+  lc  = list_get_value(t, 8, cf, ac, center, -1);
 
   //
   // transform calculations
