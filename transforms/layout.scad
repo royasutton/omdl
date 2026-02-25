@@ -87,15 +87,15 @@
 
     e | data type         | 3D default | 2D default | parameter description
   ---:|:-----------------:|:----------:|:----------:|:------------------------------------
-    0 | integer-list-2:3 \| integer | [1,1,1]   | [1,1]      | child replication
-    1 | integer-list-2:3 \| integer | [1,1,1]   | [1,1]      | replication layout grid
-    2 | decimal-list-2:3 \| decimal | [0,0,0]   | [0,0]      | layout placement
-    3 | decimal-list-2:3 \| decimal | 0         | 0          | layout rotate
-    4 | integer-list-2:3 \| integer | [0,0,0]   | [0,0]      | child mirror
-    5 | decimal-list-2:3 \| decimal | 0         | 0          | child rotate
-    6 | decimal-list-2:3 \| decimal | [0,0,0]   | [0,0]      | layout translate
-    7 | boolean-list-2:3 \| boolean | \p center | \p center  | center replication
-    8 | boolean                     | \p debug  | \p debug   | highlight layout objects (debug)
+    0 | boolean                     | \p debug  | \p debug   | highlight layout objects (debug)
+    1 | decimal-list-2:3 \| decimal | [0,0,0]   | [0,0]      | layout placement
+    2 | decimal-list-2:3 \| decimal | 0         | 0          | layout rotate
+    3 | integer-list-2:3 \| integer | [0,0,0]   | [0,0]      | child mirror
+    4 | decimal-list-2:3 \| decimal | 0         | 0          | child rotate
+    5 | decimal-list-2:3 \| decimal | [0,0,0]   | [0,0]      | layout translate
+    6 | integer-list-2:3 \| integer | [1,1,1]   | [1,1]      | child replication
+    7 | integer-list-2:3 \| integer | [1,1,1]   | [1,1]      | replication layout grid
+    8 | boolean-list-2:3 \| boolean | \p center | \p center  | center replication
 
   \amu_define scope_id      (example)
   \amu_define title         (Transform example)
@@ -133,24 +133,30 @@ module layout_grid_rp
   // decode layout list
   //
 
-  // rc: child replication; rg: replication layout grid
-  rc  = list_get_value(t, 0, c1, ac, 1);
-  rg  = list_get_value(t, 1, c0, ac, 0);
+  // lh: highlight layout objects
+  lh  = defined_e_or  (t, 0, debug);
 
   // lP; layout placement; lr: layout rotate
-  lp  = list_get_value(t, 2, c0, ac, 0);
-  lr  = defined_e_or  (t, 3, 0);
+  lp  = list_get_value(t, 1, c0, ac, 0);
+  lr  = defined_e_or  (t, 2, 0);
 
   // cm: child mirror; cr: child rotate
-  cm  = list_get_value(t, 4, c0, ac, 0);
-  cr  = defined_e_or  (t, 5, 0);
+  cm  = list_get_value(t, 3, c0, ac, 0);
+  cr  = defined_e_or  (t, 4, 0);
 
   // lt: layout translate
-  lt  = list_get_value(t, 6, c0, ac, 0);
+  lt  = list_get_value(t, 5, c0, ac, 0);
 
-  // lc: center replication; lh: highlight layout objects
-  lc  = list_get_value(t, 7, cf, ac, center);
-  lh  = defined_e_or  (t, 8, debug);
+  // rc: child replication; rg: replication layout grid
+  rc  = list_get_value(t, 6, c1, ac, 1);
+  rg  = list_get_value(t, 7, c0, ac, 0);
+
+  // lc: center replication
+  lc  = list_get_value(t, 8, cf, ac, center);
+
+  //
+  // transform calculations
+  //
 
   // z-axis object instances and grid spacing (2d and 3d)
   rc_z = (ac == 2) ? 0 : [0:rc.z-1];
@@ -215,11 +221,14 @@ BEGIN_SCOPE example;
 
     v =
     [
+      true,
+      0,
+      [90,0,0],
+      0,
+      0,
+      0,
       [6,6,1],
-      [3,3,6],
-
-      [0,0,0],
-      [90,0,0]
+      [3,3,6]
     ];
 
     %cube(b, center=true);
