@@ -40,6 +40,7 @@
   \amu_define includes_required_add
   (
     shapes/select_common_2d.scad
+    shapes/select_common_3d.scad
     transforms/base_cs.scad
     transforms/layout.scad
     models/2d/joint/dovetail.scad
@@ -328,6 +329,7 @@ enclosure_map_doc =
   ["posts",               "Post instances for sides, base and cover: see project_box_rectangle()"],
   ["clamps_base",         "Enclosure base clamps: see clamp_zt_1p()"],
   ["holes_sides",         "Enclosure side hole instances"],
+  ["shapes_sides",        "Enclosure side shapes instances"],
   ["bracket_window_gap",  "Bracket connector window gap [w]"],
   ["bracket_shoe_gap_p",  "Bracket shoe gap% [w, l, h]"],
   ["bracket_shoe_offset", "Bracket shoe vertical offset [h]"],
@@ -424,14 +426,29 @@ enclosure_map_doc =
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | datastruct \| integer | 1             | 2d shape selections (see: select_common_2d_shape())
-      1 | <decimal>         |  0                | shape extrusion height (see note below)
-      2 | datastruct        | [true]            | shape layout (see: layout_grid_rp()
+      1 | <decimal>             | 0             | shape extrusion height (see note below)
+      2 | datastruct            | [true]        | shape layout (see: layout_grid_rp()
 
     When the shape extrusion height is \p 0, the height is
     automatically set to the maximum enclosure dimension. When set to
     \p −1, \p −2, or \p −3, the height is derived from the width,
     length, or height dimension, respectively. Any other positive value
     explicitly sets the extrusion height.
+
+    ### shapes_sides
+
+    #### Data structure schema:
+
+    name            | schema
+    ---------------:|:----------------------------------------------
+    holes_sides     | [instances]
+
+    #### Data structure fields: shapes_sides[*]: instances
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | datastruct \| integer | 1             | 3d shape selections (see: select_common_3d_shape())
+      1 | datastruct            | [true]        | shape layout (see: layout_grid_rp()
 
     ### posts
 
@@ -633,6 +650,10 @@ enclosure_def =
         ]
       ]
     ]
+  ],
+
+  ["shapes_sides",                        // enclosure side shape instances
+    undef
   ],
 
   ["bracket_window_gap",        2.00],    // bracket connector window gap [w]
@@ -1308,6 +1329,7 @@ module pcie_expansion
     encl_mode_sides           = map_get_value(enclosure, "mode_sides");
     encl_cut_sides            = map_get_value(enclosure, "cut_sides");
     encl_holes_sides          = map_get_value(enclosure, "holes_sides");
+    encl_shapes_sides         = map_get_value(enclosure, "shapes_sides");
     encl_bracket_mount_tab    = map_get_value(enclosure, "bracket_mount_tab");
 
     // sides and base
@@ -1463,6 +1485,35 @@ module pcie_expansion
       }
     }
 
+    // shape construction
+    module construct_side_shapes( insts )
+    {
+      for (inst = insts)
+      {
+        shape       = defined_e_or (inst, 0, 1);
+        layout      = defined_e_or (inst, 1, [true]);
+
+        shape_type  = is_list(shape) ? first(shape) : shape;
+        shape_argv  = is_list(shape) ? tailn(shape, 1) : undef;
+
+        // move layout to enclosure center
+        translate([0, 0, encl_size_wlh.z/2])
+        layout_grid_rp(t=layout, b=encl_size_wlh, center=true, debug=true, verb=verb-1)
+        select_common_3d_shape( type=shape_type, argv=shape_argv, center=true, verb=verb-1 );
+
+        if (verb > 1)
+        {
+          log_info(strl(["shape instance = ", inst]));
+
+          if (verb > 2)
+          {
+            echo(shape_type=shape_type, shape_argv=shape_argv);
+            echo(layout=layout);
+          }
+        }
+      }
+    }
+
     // cut enclosure sides
     module cut_enclosure_sides( cut_sides )
     {
@@ -1577,6 +1628,9 @@ module pcie_expansion
         // mode_sides B0: add bracket mount tab shelf and mount screw-hole(s)
         if ( binary_bit_is(enable, 3, 1) && binary_bit_is(encl_mode_sides, 0, 1) )
         bracket_mount_tab_shelf(inplace=true, dovetail=false);
+
+        // add shapes
+        construct_side_shapes( encl_shapes_sides );
       }
 
       // project_box_rectangle() default rib height = encl_wth
@@ -2057,6 +2111,7 @@ BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <shapes/select_common_2d.scad>;
+    include <shapes/select_common_3d.scad>;
     include <transforms/base_cs.scad>;
     include <transforms/layout.scad>;
     include <models/2d/joint/dovetail.scad>;
