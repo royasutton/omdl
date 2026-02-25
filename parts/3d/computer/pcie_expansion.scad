@@ -423,16 +423,15 @@ enclosure_map_doc =
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <integer-list-3>  |                   | enclosure side [w, l, h]
-      1 | <decimal>         |                   | side rotate (group)
-      2 | <decimal-list-2>  |                   | offsets (group) [w/l, h]
-      3 | <integer-list-2>  |                   | shape counts [w/l, h]
-      4 | <decimal-list-2>  |                   | shape grid spacing [w/l, h]
-      5 | <decimal-list-2>  |                   | offset to group  center [w/l, h]
-      6 | <decimal-list-2\|decimal> |           | shape diameter (integer or list)
-      7 | <integer>         |                   | shape facets ($fn)
-      8 | <decimal>         |                   | shape rotate
-      9 | <decimal>         |                   | shape extrusion height
+      0 | datastruct \| integer | required      | 2d shape selections (see: select_common_2d_shape())
+      1 | <decimal>         |  0                | shape extrusion height (see note below)
+      2 | datastruct        | [true]            | shape layout (see: layout_grid_rp()
+
+    When the shape extrusion height is \p 0, the height is
+    automatically set to the maximum enclosure dimension. When set to
+    \p −1, \p −2, or \p −3, the height is derived from the width,
+    length, or height dimension, respectively. Any other positive value
+    explicitly sets the extrusion height.
 
     ### posts
 
@@ -1426,7 +1425,7 @@ module pcie_expansion
         }
     }
 
-    // hole construction (n-gon and/or rectangular)
+    // hole construction
     module construct_side_holes( hole_insts )
     {
       for (inst = hole_insts)
