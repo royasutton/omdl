@@ -142,8 +142,8 @@ module layout_grid_rp
   // decode layout list
   //
 
-  // lm: modifier mode
-  lm  = defined_e_or  (t, 0, mode);
+  // mm: modifier mode
+  mm  = defined_e_or  (t, 0, mode);
 
   // lP; layout placement; lr: layout rotate
   lp  = list_get_value(t, 1, c0, ac, 0);
@@ -186,7 +186,7 @@ module layout_grid_rp
     log_info(strl(["t = ", t, ", b = ", b, ", center = ", center, ", mode = ", mode]));
 
     if (verb >1)
-      echo(lm=lm, lp=lp, lr=lr, cm=cm, cr=cr, lt=lt, rc=rc, rg=rg, lc=lc);
+      echo(mm=mm, lp=lp, lr=lr, cm=cm, cr=cr, lt=lt, rc=rc, rg=rg, lc=lc);
   }
 
   // group placement
@@ -205,13 +205,13 @@ module layout_grid_rp
   mirror( cm )
 
   // modifier mode
-  if      ( lm == 0 )
+  if      ( mm == 0 )
    children(cs);
-  else if ( lm == 2 )
+  else if ( mm == 2 )
    !children(cs);
-  else if ( lm == 3 )
+  else if ( mm == 3 )
    #children(cs);
-  else if ( lm == 4 )
+  else if ( mm == 4 )
    %children(cs);
 }
 
