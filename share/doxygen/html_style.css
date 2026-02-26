@@ -1,23 +1,51 @@
 /*
 
-    html_styles.css
+    HTML Style Sheet
 
 */
 
-table.doxtable {
-  border-collapse:collapse;
-  /* margin-left:auto; */
-  margin-right:auto;
-  margin-top: 4px;
-  margin-bottom: 4px;
+
+/*
+
+  emphasize contents code
+
+*/
+
+
+div.contents code
+{
+  font-weight: bold;
+  font-size: 1.10em;
 }
 
-table.doxtable td, table.doxtable th {
+
+/*
+
+  table
+
+*/
+
+table.doxtable,
+table.markdownTable
+{
+  border-collapse:collapse;
+  margin-right:auto;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+table.doxtable td,
+table.doxtable th,
+table.markdownTable td,
+table.markdownTable th
+{
   border: 1px solid #2D4068;
   padding: 3px 7px 2px;
 }
 
-table.doxtable th {
+table.doxtable th,
+table.markdownTable th
+{
   background-color: #374F7F;
   color: #FFFFFF;
   font-size: 110%;
@@ -25,18 +53,41 @@ table.doxtable th {
   padding-top: 5px;
 }
 
-/* table link styling */
-table.doxtable th a         { color: white; }
-table.doxtable th a:visited { color: lightgray; }
-table.doxtable th a:hover   { color: gray; }
-table.doxtable th a:active  { color: black; }
-
-table.doxtable tr:nth-child(odd) td {
-  background-color: #F7F8FB;
-}
 
 /*
-table.doxtable tr:nth-child(even) td {
+
+  table link
+
+*/
+
+table.doxtable th a,
+table.markdownTable th a
+{ color: white; }
+
+table.doxtable th a:visited,
+table.markdownTable th a:visited
+{ color: lightgray; }
+
+table.doxtable th a:hover,
+table.markdownTable th a:hover
+{ color: gray; }
+
+table.doxtable th a:active,
+table.markdownTable th a:active
+{ color: black; }
+
+
+/*
+
+  table styling
+
+*/
+
+table.doxtable tr:nth-child(odd) td,
+table.markdownTable tr:nth-child(odd) td
+{
   background-color: #F7F8FB;
 }
-*/
+
+
+/* eof */
