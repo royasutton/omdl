@@ -160,17 +160,17 @@ riser_map_doc =
 riser_PCE164P_NO3_VER_007 =
 [
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
-  ["bottom_clearance",        3],         // riser bottom electronics h-clearance
-  ["slot_count",              1],         // riser physical slot count
-  ["vslot_count",             0],         // riser virtual slot count
-  ["multi_slot_offset",   20.32],         // standard pcie multi-slot spacing
-  ["slot1_to_edge1",         15],         // riser slot-1 to pcb adjacent dimension
-  ["slotn_to_edgen",         28],         // riser slot-n to pcb adjacent dimension
-  ["slot_key_to_edgef",  113.25],         // riser key to pcb length to front
-  ["slot_link_width",        16],         // slot connector link width {1, 4, 8, or 16}
-  ["pcb_length",         127.75],         // riser board pcb length rear to front
-  ["pcb_th",               1.75],         // riser pcb thickness
-  ["mount_holes",                         // riser mount holes; ref = slot-1 key
+  ["bottom_clearance",        3],
+  ["slot_count",              1],
+  ["vslot_count",             0],
+  ["multi_slot_offset",   20.32],
+  ["slot1_to_edge1",         15],
+  ["slotn_to_edgen",         28],
+  ["slot_key_to_edgef",  113.25],
+  ["slot_link_width",        16],
+  ["pcb_length",         127.75],
+  ["pcb_th",               1.75],
+  ["mount_holes",
     let
     (
       w1 = 36.00,
@@ -184,11 +184,11 @@ riser_PCE164P_NO3_VER_007 =
       [w1, l1] + ko
     ]
   ],
-  ["mount_holes_add",     undef],         // riser mount holes additions
-  ["post_rotate",            45],         // mount post rotation
-  ["post_fins",             [4]],         // mount post fin configuration
-  ["post_hole_d",          3.00],         // mount post hole diameter
-  ["post_pad_d",    2.75 * 3.00]          // mount post diameter
+  ["mount_holes_add",     undef],
+  ["post_rotate",            45],
+  ["post_fins",             [4]],
+  ["post_hole_d",          3.00],
+  ["post_pad_d",    2.75 * 3.00]
   //! \endcond
 ];
 
@@ -210,17 +210,17 @@ riser_PCE164P_NO3_VER_007 =
 riser_AAAPCIE4HUB =
 [
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
-  ["bottom_clearance",        3],         // riser bottom electronics h-clearance
-  ["slot_count",              4],         // riser physical slot count
-  ["vslot_count",             0],         // riser virtual slot count
-  ["multi_slot_offset",   20.32],         // standard pcie multi-slot spacing
-  ["slot1_to_edge1",         12],         // riser slot-1 to pcb adjacent dimension
-  ["slotn_to_edgen",         12],         // riser slot-n to pcb adjacent dimension
-  ["slot_key_to_edgef",      74],         // riser key to pcb length to front
-  ["slot_link_width",         1],         // slot connector link width {1, 4, 8, or 16}
-  ["pcb_length",             99],         // riser board pcb length rear to front
-  ["pcb_th",                1.5],         // riser pcb thickness
-  ["mount_holes",                         // riser mount holes; ref = slot-1 key
+  ["bottom_clearance",        3],
+  ["slot_count",              4],
+  ["vslot_count",             0],
+  ["multi_slot_offset",   20.32],
+  ["slot1_to_edge1",         12],
+  ["slotn_to_edgen",         12],
+  ["slot_key_to_edgef",      74],
+  ["slot_link_width",         1],
+  ["pcb_length",             99],
+  ["pcb_th",                1.5],
+  ["mount_holes",
     let
     (
       w1 = 20.00,
@@ -237,11 +237,11 @@ riser_AAAPCIE4HUB =
       [w2, l1] + ko
     ]
   ],
-  ["mount_holes_add",     undef],         // riser mount holes additions
-  ["post_rotate",            45],         // mount post rotation
-  ["post_fins",             [4]],         // mount post fin configuration
-  ["post_hole_d",          3.00],         // mount post hole diameter
-  ["post_pad_d",    2.75 * 3.00]          // mount post diameter
+  ["mount_holes_add",     undef],
+  ["post_rotate",            45],
+  ["post_fins",             [4]],
+  ["post_hole_d",          3.00],
+  ["post_pad_d",    2.75 * 3.00]
   //! \endcond
 ];
 
@@ -263,17 +263,17 @@ riser_AAAPCIE4HUB =
 riser_SFF_8612_4X_to_PCI_E_16X =
 [
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
-  ["bottom_clearance",        0],         // riser bottom electronics h-clearance
-  ["slot_count",              1],         // riser physical slot count
-  ["vslot_count",             0],         // riser virtual slot count
-  ["multi_slot_offset",   20.32],         // standard pcie multi-slot spacing
-  ["slot1_to_edge1",       5.75],         // riser slot-1 to pcb adjacent dimension
-  ["slotn_to_edgen",      37.00],         // riser slot-n to pcb adjacent dimension
-  ["slot_key_to_edgef",   89.50],         // riser key to pcb length to front
-  ["slot_link_width",        16],         // slot connector link width {1, 4, 8, or 16}
-  ["pcb_length",         122.00],         // riser board pcb length rear to front
-  ["pcb_th",               1.75],         // riser pcb thickness
-  ["mount_holes",                         // riser mount holes; ref = slot-1 key
+  ["bottom_clearance",        0],
+  ["slot_count",              1],
+  ["vslot_count",             0],
+  ["multi_slot_offset",   20.32],
+  ["slot1_to_edge1",       5.75],
+  ["slotn_to_edgen",      37.00],
+  ["slot_key_to_edgef",   89.50],
+  ["slot_link_width",        16],
+  ["pcb_length",         122.00],
+  ["pcb_th",               1.75],
+  ["mount_holes",
     let
     (
       w1 =  37.00,
@@ -287,11 +287,11 @@ riser_SFF_8612_4X_to_PCI_E_16X =
       [w1, l1] + ko
     ]
   ],
-  ["mount_holes_add",     undef],         // riser mount holes additions
-  ["post_rotate",            45],         // mount post rotation
-  ["post_fins",             [4]],         // mount post fin configuration
-  ["post_hole_d",          2.75],         // mount post hole diameter
-  ["post_pad_d",    2.75 * 2.75]          // mount post diameter
+  ["mount_holes_add",     undef],
+  ["post_rotate",            45],
+  ["post_fins",             [4]],
+  ["post_hole_d",          2.75],
+  ["post_pad_d",    2.75 * 2.75]
   //! \endcond
 ];
 
@@ -454,35 +454,35 @@ enclosure_map_doc =
 enclosure_def =
 [
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
-  ["rounding",                  6.75],    // corner rounding radius
-  ["wth",                        2.0],    // minimum wall thickness
+  ["rounding",                  6.75],
+  ["wth",                        2.0],
 
-  ["board_count",                  1],    // riser board count
-  ["multi_board_offset",           0],    // multi-riser inter board offset
+  ["board_count",                  1],
+  ["multi_board_offset",           0],
 
-  ["space_add_edge1",              0],    // add space to riser edge-1
-  ["space_add_edgen",              0],    // add space to riser edge-n
-  ["space_add_length",             0],    // add space to riser end length
-  ["space_add_height",             0],    // add space to enclosure height
+  ["space_add_edge1",              0],
+  ["space_add_edgen",              0],
+  ["space_add_length",             0],
+  ["space_add_height",             0],
 
-  ["space_min_length",             0],    // enclosure minimum interior length
-  ["space_min_height",             0],    // enclosure minimum interior height
+  ["space_min_length",             0],
+  ["space_min_height",             0],
 
-  ["rb_min_clearance",             0],    // riser board minimum bottom clearance
+  ["rb_min_clearance",             0],
 
-  ["rib_pcb_gap",                1/2],    // rib removal gap for pcie and riser board pcb
+  ["rib_pcb_gap",                1/2],
 
-  ["lips_sides",               1 + 8],    // sides lips specification (top and bottom)
-  ["lips_base",                    1],    // base lips specification
-  ["lips_cover",                   2],    // cover lips specification
+  ["lips_sides",               1 + 8],
+  ["lips_base",                    1],
+  ["lips_cover",                   2],
 
-  ["walls",                               // enclosure walls
+  ["walls",
     undef
   ],
 
-  ["ribs",                         0],    // rib specification
+  ["ribs",                         0],
 
-  ["posts_sides_conf",                    // post configuration sides: [mode, default]
+  ["posts_sides_conf",
     [
       0,                                  //  mode (binary encoded integer)
       [                                   //  defaults
@@ -497,7 +497,7 @@ enclosure_def =
       ]
     ]
   ],
-  ["posts_base_conf",                     // post configuration base: [mode, default]
+  ["posts_base_conf",
     [
       0,                                  //  mode (binary encoded integer)
       [                                   //  defaults
@@ -512,7 +512,7 @@ enclosure_def =
       ]
     ]
   ],
-  ["posts_cover_conf",                    // post configuration cover: [mode, default]
+  ["posts_cover_conf",
     [
       0,                                  //  mode (binary encoded integer)
       [                                   //  defaults
@@ -527,7 +527,7 @@ enclosure_def =
       ]
     ]
   ],
-  ["posts_sides",                         // post instances sides only
+  ["posts_sides",
     let(u=undef, t=2, o=7.5, f=[4, 120, u, 1/6])
     [
       [t, [-1,-1], [+o,+o], 180, u, u, u, f],
@@ -536,7 +536,7 @@ enclosure_def =
       [t, [+1,+1], [-o,-o], 000, u, u, u, f]
     ]
   ],
-  ["posts_base",                          // post instances base only
+  ["posts_base",
     let(u=undef, t=3, o=7.5, f=[2, 180, u, 1/6])
     [
       [t, [-1,-1], [+o,+o], 000, u, u, u, f],
@@ -545,7 +545,7 @@ enclosure_def =
       [t, [+1,+1], [-o,-o], 180, u, u, u, f]
     ]
   ],
-  ["posts_cover",                         // post instances cover only
+  ["posts_cover",
     let(u=undef, t=3, o=7.5, f=[2, 180, u, 1/6])
     [
       [t, [-1,-1], [+o,+o], 000, u, u, u, f],
@@ -554,11 +554,11 @@ enclosure_def =
       [t, [+1,+1], [-o,-o], 180, u, u, u, f]
     ]
   ],
-  ["posts",                               // post instances for sides, base and cover
+  ["posts",
     undef
   ],
 
-  ["clamps_base",                         // base clamps
+  ["clamps_base",
     [                                     // clamp set list [[conf, inst]]
       [                                   // set-0: [conf, inst]
         [                                 // set-0, 0: configuration
@@ -594,8 +594,8 @@ enclosure_def =
     ]
   ],
 
-  ["holes_sides",                         // enclosure side hole instances
-    [                                     // instance list
+  ["holes_sides",
+    [
       [
         [2, [5/2, 6]],
         -1,
@@ -628,27 +628,27 @@ enclosure_def =
       ]
     ]
   ],
-  ["holes_base",                          // enclosure base hole instances
+  ["holes_base",
     undef
   ],
-  ["holes_cover",                         // enclosure cover hole instances
-    undef
-  ],
-
-  ["shapes_sides",                        // enclosure side shape instances
-    undef
-  ],
-  ["shapes_base",                         // enclosure base shape instances
-    undef
-  ],
-  ["shapes_cover",                        // enclosure cover shape instances
+  ["holes_cover",
     undef
   ],
 
-  ["bracket_window_gap",        2.00],    // bracket connector window gap [w]
-  ["bracket_shoe_gap_p",      25/100],    // bracket shoe gap% [w, l, h]
-  ["bracket_shoe_offset",      -2.00],    // bracket shoe vertical offset [h]
-  ["bracket_mount_tab",                   // bracket mount tab
+  ["shapes_sides",
+    undef
+  ],
+  ["shapes_base",
+    undef
+  ],
+  ["shapes_cover",
+    undef
+  ],
+
+  ["bracket_window_gap",        2.00],
+  ["bracket_shoe_gap_p",      25/100],
+  ["bracket_shoe_offset",      -2.00],
+  ["bracket_mount_tab",
     [
       3.25,                               // thickness
       4.00,                               // tab-boarders (width addition)
@@ -659,7 +659,7 @@ enclosure_def =
     ]
   ],
 
-  ["cut_sides",                           // enclosure sides cut [insets, vr, vrm]
+  ["cut_sides",
     [
       [18, 12, 10, 10],                   // edge cut insets: [bb, bt, ft, fb]
       [10, 15, 0, 0],                     // cut rounding: [bb, bt, ft, fb]
@@ -667,10 +667,10 @@ enclosure_def =
     ]
   ],
 
-  ["mode_rounding",                2],    // rounding mode: 0, 1, 2
-  ["mode_sides",                   0],    // enclosure sides mode
-  ["mode_proj_box",                0],    // project_box_rectangle() mode
-  ["verb_proj_box",                0]     // project_box_rectangle() verbosity
+  ["mode_rounding",                2],
+  ["mode_sides",                   0],
+  ["mode_proj_box",                0],
+  ["verb_proj_box",                0]
   //! \endcond
 ];
 
