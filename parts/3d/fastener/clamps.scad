@@ -85,11 +85,11 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <integer-list-2 \| integer> | required    | wall side
-      1 | <decimal>                   | h           | base height
-      2 | <datastruct \| decimal>     | (see below) | screw bore
-      3 | <decimal>                   | d*3         | clamp depth
-      4 | <decimal-list-2 \| decimal> | 15          | pinch bar size
+      0 | integer-list-2 \| integer   | required    | wall side
+      1 | decimal                     | h           | base height
+      2 | datastruct \| decimal       | (see below) | screw bore
+      3 | decimal                     | d*3         | clamp depth
+      4 | decimal-list-2 \| decimal   | 15          | pinch bar size
 
     ##### clamp[0]: wall side
 
@@ -101,8 +101,8 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | max(size)/4       | \p d : bore diameter
-      1 | <decimal>         | h                 | \p l : bore length
+      0 | decimal           | max(size)/4       | \p d : bore diameter
+      1 | decimal           | h                 | \p l : bore length
       2 | (see below)       | [d*2, d/3, d/3]   | \p h : screw head
       3 | (see below)       | \b undef          | \p n : screw nut
       4 | (see below)       | \b undef          | \p s : nut slot cutout
@@ -120,10 +120,10 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <integer-list-2 \| integer> | required| wall side
-      1 | <decimal>         | max(size)/2       | cone base width
-      2 | <decimal>         | max(size)/3       | cone height
-      3 | <decimal>         | 255               | extrude mode
+      0 | integer-list-2 \| integer | required  | wall side
+      1 | decimal           | max(size)/2       | cone base width
+      2 | decimal           | max(size)/3       | cone height
+      3 | decimal           | 255               | extrude mode
 
     The extrusion mode controls which sections of the cone are rendered.
     For more information see the mode parameter for extrude_rotate_trl().
@@ -138,15 +138,15 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <integer-list-2 \| integer> | required| wall side
-      1 | <decimal>         | max(size)/2       | zip tie width
-      2 | <decimal>         | max(size)/6       | zip tie height
-      3 | <decimal>         | max(size)*3/7     | grip base width
-      4 | <decimal>         | max(size)*3/2     | grip height
-      5 | <integer>         | 4                 | cut count
-      6 | <decimal>         | 4/5               | cut height fraction
-      7 | <decimal>         | min(size)/5       | cut width
-      8 | <decimal>         | 0                 | cut rotational offset
+      0 | integer-list-2 \| integer | required  | wall side
+      1 | decimal           | max(size)/2       | zip tie width
+      2 | decimal           | max(size)/6       | zip tie height
+      3 | decimal           | max(size)*3/7     | grip base width
+      4 | decimal           | max(size)*3/2     | grip height
+      5 | integer           | 4                 | cut count
+      6 | decimal           | 4/5               | cut height fraction
+      7 | decimal           | min(size)/5       | cut width
+      8 | decimal           | 0                 | cut rotational offset
 
     ##### grip[0]: wall side
 
@@ -486,18 +486,18 @@ module clamp_cg
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>                   |  w *2   | clamp width
-      1 | <decimal>                   |  h *2   | clamp height
-      2 | <decimal>                   | zw *2   | clamp depth
-      3 | <decimal-list-3 \| decimal> | zw /3   | pinch bar [pw, ph, po]
+      0 | decimal                     |  w *2   | clamp width
+      1 | decimal                     |  h *2   | clamp height
+      2 | decimal                     | zw *2   | clamp depth
+      3 | decimal-list-3 \| decimal   | zw /3   | pinch bar [pw, ph, po]
 
     ##### clamp[3]: pinch bar
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | required          | bar width
-      1 | <decimal>         | pw /3             | bar height
-      2 | <decimal>         | zw *3/2           | bar center offset
+      0 | decimal           | required          | bar width
+      1 | decimal           | pw /3             | bar height
+      2 | decimal           | zw *3/2           | bar center offset
 
     ### tunnel
 
@@ -505,11 +505,11 @@ module clamp_cg
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>                   | 1       | corner radius
-      1 | <decimal-list-n \| decimal> | 0       | list of center offsets
-      2 | <integer>                   | 0       | tunnel mode
-      3 | <decimal-list-2>            | [0, 0]  | radial adjustment [w, h]
-      4 | <decimal-list-2>            | [0, 0]  | center offset [w, h]
+      0 | decimal                     | 1       | corner radius
+      1 | decimal-list-n \| decimal   | 0       | list of center offsets
+      2 | integer                     | 0       | tunnel mode
+      3 | decimal-list-2              | [0, 0]  | radial adjustment [w, h]
+      4 | decimal-list-2              | [0, 0]  | center offset [w, h]
 
     ###### tunnel[2]: tunnel mode
 
@@ -527,9 +527,9 @@ module clamp_cg
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal-list-4 \| decimal> | required| clamp rounding radii
-      1 | <decimal-list-4 \| decimal> | 0       | seat rounding radii
-      2 | <decimal-list-4 \| decimal> | 0       | tunnel rounding radii
+      0 | decimal-list-4 \| decimal  | required | clamp rounding radii
+      1 | decimal-list-4 \| decimal  | 0        | seat rounding radii
+      2 | decimal-list-4 \| decimal  | 0        | tunnel rounding radii
 
     ### vrm
 
@@ -537,9 +537,9 @@ module clamp_cg
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal-list-4 \| decimal> | [1, 1, 4, 3] | clamp rounding radii
-      1 | <decimal-list-4 \| decimal> | [4, 3, 1, 1] | seat rounding radii
-      2 | <decimal-list-4 \| decimal> | 1            | tunnel rounding radii
+      0 | decimal-list-4 \| decimal | [1, 1, 4, 3] | clamp rounding radii
+      1 | decimal-list-4 \| decimal | [4, 3, 1, 1] | seat rounding radii
+      2 | decimal-list-4 \| decimal | 1            | tunnel rounding radii
 
     \amu_define scope_id      (example_clamp_zt_1p)
     \amu_define title         (Zip tie clamp example)

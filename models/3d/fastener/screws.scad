@@ -253,13 +253,13 @@ module screw_bore
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | 5                 | radial engagement percentage
-      1 | <decimal>         | 5                 | radial gap percentage
-      2 | <decimal>         | 0                 | rotational offset
-      3 | <decimal>         | 0                 | radial offset
-      4 | <integer>         | 3                 | cylinder count
-      5 | <decimal-list-2 \| decimal> | [8/10, 10] | cylinder upper taper: [f, h%]
-      6 | <decimal-list-2 \| decimal> | [   0, 10] | cylinder lower taper: [f, h%]
+      0 | decimal           | 5                 | radial engagement percentage
+      1 | decimal           | 5                 | radial gap percentage
+      2 | decimal           | 0                 | rotational offset
+      3 | decimal           | 0                 | radial offset
+      4 | integer           | 3                 | cylinder count
+      5 | decimal-list-2 \| decimal | [8/10, 10] | cylinder upper taper: [f, h%]
+      6 | decimal-list-2 \| decimal | [   0, 10] | cylinder lower taper: [f, h%]
 
     #### Data structure fields: t[5-6]: cylinder upper and lower taper
 

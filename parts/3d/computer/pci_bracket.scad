@@ -76,33 +76,33 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <integer>         | 0                 | vent hole count
-      1 | <decimal>         | 3.0               | vent hole radius
+      0 | integer           | 0                 | vent hole count
+      1 | decimal           | 3.0               | vent hole radius
 
     \b ribs
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <integer>         | 3                 | location (0=top, 1=none, 2=bottom, 3=both)
-      1 | <integer>         | 1                 | shape (0=cylinder, 1=ellipse)
-      2 | <integer>         | 10                | number of divisions
-      3 | <decimal-list-n>  | [3, 7]            | division positions list [p1, p2, ..., pn]
+      0 | integer           | 3                 | location (0=top, 1=none, 2=bottom, 3=both)
+      1 | integer           | 1                 | shape (0=cylinder, 1=ellipse)
+      2 | integer           | 10                | number of divisions
+      3 | decimal-list-n    | [3, 7]            | division positions list [p1, p2, ..., pn]
 
     \b tabs
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal-list-3>  |                   | tab-0: [offset-y, offset-x, hole-diameter]
+      0 | decimal-list-3    |                   | tab-0: [offset-y, offset-x, hole-diameter]
      ...| ...               |                   | ...
-      n | <decimal-list-3>  |                   | tab-n: [offset-y, offset-x, hole-diameter]
+      n | decimal-list-3    |                   | tab-n: [offset-y, offset-x, hole-diameter]
 
     \b align
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <integer>         | 0                 | align-x
-      1 | <integer>         | 0                 | align-y
-      2 | <integer>         | 0                 | align-z
+      0 | integer           | 0                 | align-x
+      1 | integer           | 0                 | align-y
+      2 | integer           | 0                 | align-z
 
     The possible x, y, and z alignment locations and configuration
     values are described in the following table:

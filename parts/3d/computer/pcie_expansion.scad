@@ -368,9 +368,9 @@ enclosure_map_doc =
       0 | decimal           |                   | thickness
       1 | decimal           |                   | tab-boarders (width addition)
       2 | decimal           |                   | screw hole diameter
-      3 | <decimal-list-4\|decimal> |           | tab rounding
-      4 | <decimal-list-4\|decimal> |           | tab rounding modes
-      4 | <decimal-list-5\|decimal> |           | dovetail configuration: see joint2d_dovetail() \p t
+      3 | decimal-list-4 \| decimal |           | tab rounding
+      4 | decimal-list-4 \| decimal |           | tab rounding modes
+      4 | decimal-list-5 \| decimal |           | dovetail configuration: see joint2d_dovetail() \p t
 
     ### clamps_base
 
@@ -384,38 +384,38 @@ enclosure_map_doc =
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal-list-2>        |                   | wire hole size [w, h]
-      1 | <decimal-list-2>        |                   | zip-tie hole size [w, h]
-      2 | <decimal-list-3>        |                   | clamp envelope size [w, h, d]
-      3 | <datastruct>            |                   | tunnel configuration: see clamp_zt_1p() \p tunnel
-      4 | <decimal-list3-list-4>  |                   | vr [clamp, wire, tunnel]
-      5 | <integer-list3-list-4>  |                   | vrm [clamp, wire, tunnel]
+      0 | decimal-list-2       |                | wire hole size [w, h]
+      1 | decimal-list-2       |                | zip-tie hole size [w, h]
+      2 | decimal-list-3       |                | clamp envelope size [w, h, d]
+      3 | datastruct           |                | tunnel configuration: see clamp_zt_1p() \p tunnel
+      4 | decimal-list3-list-4 |                | vr [clamp, wire, tunnel]
+      5 | integer-list3-list-4 |                | vrm [clamp, wire, tunnel]
 
     #### Data structure fields: clamps_base[1]: instances
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <integer-list-2>  |                   | enclosure side [w, l]
-      1 | <decimal>         |                   | clamp rotate [z]
-      2 | <integer>         |                   | clamp align [d]
-      3 | <decimal-list-2>  |                   | clamp move [w, l]
-      4 | <datastruct>      |                   | side passage hole
+      0 | integer-list-2    |                   | enclosure side [w, l]
+      1 | decimal           |                   | clamp rotate [z]
+      2 | integer           |                   | clamp align [d]
+      3 | decimal-list-2    |                   | clamp move [w, l]
+      4 | datastruct        |                   | side passage hole
 
     #### Data structure fields: clamps_base[1]: instances[4]: side passage hole
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <binary>          |                   | enabled
-      1 | <decimal>         |                   | vertical cut extension
-      2 | <datastruct>      |                   | wall cone: see clamp_cg() \p cone
+      0 | binary            |                   | enabled
+      1 | decimal           |                   | vertical cut extension
+      2 | datastruct        |                   | wall cone: see clamp_cg() \p cone
 
     ### cut_sides
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal-list-4>  |                   | edge cut insets: [bb, bt, ft, fb]
-      1 | <decimal-list-4>  |                   | cut rounding: [bb, bt, ft, fb]
-      2 | <integer-list-4>  |                   | cut rounding mode: [bb, bt, ft, fb]
+      0 | decimal-list-4    |                   | edge cut insets: [bb, bt, ft, fb]
+      1 | decimal-list-4    |                   | cut rounding: [bb, bt, ft, fb]
+      2 | integer-list-4    |                   | cut rounding mode: [bb, bt, ft, fb]
 
     ### holes_sides
 

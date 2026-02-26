@@ -95,12 +95,12 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         |  required         | \p m : male tail width
-      1 | <decimal>         |  m                | \p s : female slot width
-      2 | <decimal>         |  m/5              | \p f : tail fin width expansion
-      3 | <decimal>         |  m/25             | \p g : joint gap (male and female)
-      4 | <decimal>         |  m/20             | \p er : external edge rounding
-      5 | <decimal>         |  m/20             | \p ir : internal edge rounding (minimum cut radius)
+      0 | decimal           |  required         | \p m : male tail width
+      1 | decimal           |  m                | \p s : female slot width
+      2 | decimal           |  m/5              | \p f : tail fin width expansion
+      3 | decimal           |  m/25             | \p g : joint gap (male and female)
+      4 | decimal           |  m/20             | \p er : external edge rounding
+      5 | decimal           |  m/20             | \p ir : internal edge rounding (minimum cut radius)
 
     The parameter \p ir can be used to define an internal corner edge
     overcut, which helps accommodate the minimum cut radius required

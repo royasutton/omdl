@@ -143,13 +143,13 @@ function almost_eq
 
      order | type       | \p s      | intra-type ordering
     :-----:|:----------:|:---------:|:--------------------------------------
-      1    | \c undef   |           | (singular)
-      2    | \c number  |           | numerical comparison
-      3    | \c boolean |           | \c false \< \c true
-      4    | \c string  |           | lexical comparison
-      5    | \c list    |           | compare (1) lengths, then (2) element-wise
-      6    | \c range   | \c true   | compare sum of range elements
-      6    | \c range   | \c false  | compare (1) lengths, then (2) element-wise
+      1    | undef      |           | (singular)
+      2    | number     |           | numerical comparison
+      3    | boolean    |           | false \< true
+      4    | string     |           | lexical comparison
+      5    | list       |           | compare (1) lengths, then (2) element-wise
+      6    | range      | true      | compare sum of range elements
+      6    | range      | false     | compare (1) lengths, then (2) element-wise
 
     When comparing two lists of equal length, the comparison continues
     with successive elements until an ordering can be determined. Two

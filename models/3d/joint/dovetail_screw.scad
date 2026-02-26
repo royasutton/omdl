@@ -94,21 +94,21 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         |  required         | \p l : joint length
-      1 | <decimal>         |  l/10             | \p d : joint depth
-      2 | <datastruct \| decimal> |  d          | pin default configuration
-      3 | <datastruct>      |  undef            | screw bore default configuration
+      0 | decimal           |  required         | \p l : joint length
+      1 | decimal           |  l/10             | \p d : joint depth
+      2 | datastruct \| decimal |  d            | pin default configuration
+      3 | datastruct        |  undef            | screw bore default configuration
 
     #### conf[2]: pin
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         |  d                | \p m : male pin width
-      1 | <decimal>         |  m * 5/2          | screw section width
-      2 | <decimal>         |  0                | pin tail expansion (dovetail)
-      3 | <decimal>         |  m / 25           | pin gap width
-      4 | <decimal>         |  m / 20           | pin exterior edge rounding
-      5 | <decimal>         |  m / 20           | pin interior edge rounding
+      0 | decimal           |  d                | \p m : male pin width
+      1 | decimal           |  m * 5/2          | screw section width
+      2 | decimal           |  0                | pin tail expansion (dovetail)
+      3 | decimal           |  m / 25           | pin gap width
+      4 | decimal           |  m / 20           | pin exterior edge rounding
+      5 | decimal           |  m / 20           | pin interior edge rounding
 
     #### conf[3]: screw bore
 
@@ -122,14 +122,14 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         |  0                | \p sbo : screw bore offset
-      1 | <decimal>         |  d / 6            | \p d : bore diameter
-      2 | <decimal>         |  d * 3/2          | \p l : bore length
-      3 | <decimal-list-5>  |                   | \p h : fastener head
-      4 | <decimal-list-5>  |                   | \p n : fastener nut
-      5 | <decimal-list-2>  |                   | \p t : bore tolerance
-      6 | <decimal-list-list-3> |               | \p s : nut slot cutout
-      7 | <decimal-list-2 \| decimal> |         | \p f : bore scale factor
+      0 | decimal           |  0                | \p sbo : screw bore offset
+      1 | decimal           |  d / 6            | \p d : bore diameter
+      2 | decimal           |  d * 3/2          | \p l : bore length
+      3 | decimal-list-5    |                   | \p h : fastener head
+      4 | decimal-list-5    |                   | \p n : fastener nut
+      5 | decimal-list-2    |                   | \p t : bore tolerance
+      6 | decimal-list-list-3 |                 | \p s : nut slot cutout
+      7 | decimal-list-2 \| decimal |           | \p f : bore scale factor
 
     The screw bore is defined using the data structure described above.
     This structure includes seven parameters, all of which are
@@ -147,12 +147,12 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         |  0                | zero reference; [-1, 0, +1]
-      1 | <decimal>         |  0                | length offset from reference
-      2 | <integer>         |  7                | form (see below).
-      3 | <integer>         |                   | mode override (see below).
-      4 | <datastruct \| decimal> |             | pin override (see above).
-      5 | <datastruct \| decimal> |             | screw bore override (see above).
+      0 | decimal           |  0                | zero reference; [-1, 0, +1]
+      1 | decimal           |  0                | length offset from reference
+      2 | integer           |  7                | form (see below).
+      3 | integer           |                   | mode override (see below).
+      4 | datastruct \| decimal |               | pin override (see above).
+      5 | datastruct \| decimal |               | screw bore override (see above).
 
     #### insts[2]: form
 

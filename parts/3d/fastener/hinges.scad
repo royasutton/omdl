@@ -125,11 +125,11 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | wth               | \p kd: diameter
-      1 | <integer>         | 2                 | count
-      2 | <decimal>         | 1/2               | gap
-      3 | <integer>         | 0                 | mode
-      4 | <datastruct>      | 4                 | pin
+      0 | decimal           | wth               | \p kd: diameter
+      1 | integer           | 2                 | count
+      2 | decimal           | 1/2               | gap
+      3 | integer           | 0                 | mode
+      4 | datastruct        | 4                 | pin
 
 
     ##### Data structure fields: knuckle[3]: mode
@@ -147,9 +147,9 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | kd*3/4            | \p pd: cone base diameter
-      1 | <decimal>         | pd/2              | cone height
-      2 | <decimal>         | pd/3              | point rounding radius
+      0 | decimal           | kd*3/4            | \p pd: cone base diameter
+      1 | decimal           | pd/2              | cone height
+      2 | decimal           | pd/3              | point rounding radius
 
     ### pbore, mbore
 
@@ -161,10 +161,10 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | 0                 | \p bd: bore diameter
-      1 | <datastruct>      | undef             | \p bh: bore head
-      2 | <datastruct>      | undef             | \p bn: bore nut
-      3 | <datastruct>      | 1                 | \p bf: bore scale factor
+      0 | decimal           | 0                 | \p bd: bore diameter
+      1 | datastruct        | undef             | \p bh: bore head
+      2 | datastruct        | undef             | \p bn: bore nut
+      3 | datastruct        | 1                 | \p bf: bore scale factor
 
       The documentation of the bore parameters \p bh, \p bn and \p bf
       can be found in the screw_bore().
@@ -182,13 +182,13 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <datastruct-list> | undef             | instance list
+      0 | datastruct-list   | undef             | instance list
 
     ##### Data structure fields: mbores[0]: instance
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal-list-2 \| decimal> | required | bore center offset [x, y]
+      0 | decimal-list-2 \| decimal  | required | bore center offset [x, y]
 
       For an instance with a single decimal, the supplied value
       controls the bore instance \p x-offset (with y=0).
@@ -635,11 +635,11 @@ module hinge_sf
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | wth               | \p kd: diameter
-      1 | <integer>         | 2                 | count
-      2 | <decimal>         | 1/4               | gap
-      3 | <integer>         | 0                 | mode
-      4 | <datastruct>      | 4                 | pin
+      0 | decimal           | wth               | \p kd: diameter
+      1 | integer           | 2                 | count
+      2 | decimal           | 1/4               | gap
+      3 | integer           | 0                 | mode
+      4 | datastruct        | 4                 | pin
 
 
     ##### Data structure fields: knuckle[3]: mode
@@ -657,9 +657,9 @@ module hinge_sf
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | kd*3/4            | \p pd: cone base diameter
-      1 | <decimal>         | pd/2              | cone height
-      2 | <decimal>         | pd/3              | point rounding radius
+      0 | decimal           | kd*3/4            | \p pd: cone base diameter
+      1 | decimal           | pd/2              | cone height
+      2 | decimal           | pd/3              | point rounding radius
 
     ### pbore, mbore
 
@@ -671,10 +671,10 @@ module hinge_sf
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | 0                 | \p bd: bore diameter
-      1 | <datastruct>      | undef             | \p bh: bore head
-      2 | <datastruct>      | undef             | \p bn: bore nut
-      3 | <datastruct>      | 1                 | \p bf: bore scale factor
+      0 | decimal           | 0                 | \p bd: bore diameter
+      1 | datastruct        | undef             | \p bh: bore head
+      2 | datastruct        | undef             | \p bn: bore nut
+      3 | datastruct        | 1                 | \p bf: bore scale factor
 
       The documentation of the bore parameters \p bh, \p bn and \p bf
       can be found in the screw_bore().
@@ -690,12 +690,12 @@ module hinge_sf
 
     #### Data structure fields: mbores
 
-      e | data type         | default value     | parameter description
-    ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <datastruct-list> | undef             | instance list left plate
-      1 | <datastruct-list> | undef             | instance list right plate
-      2 | <datastruct-list> | undef             | instance list left-middle plate
-      3 | <datastruct-list> | undef             | instance list right-middle plate
+      e | data type     | default value | parameter description
+    ---:|:-------------:|:-------------:|:------------------------------------
+      0 | instances-l   | undef         | left plate instance list
+      1 | instances-r   | undef         | right plate instance list
+      2 | instances-lm  | undef         | left-middle plate instance list
+      3 | instances-rm  | undef         | right-middle plate instance list
 
       The left- and right-middle plate bores can be specified together
       or separately as configured by a mode bit described below.
@@ -704,7 +704,7 @@ module hinge_sf
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal-list-2 \| decimal> | required | bore center offset [x, y]
+      0 | decimal-list-2 \| decimal  | required | bore center offset [x, y]
 
       For an instance with a single decimal, the supplied value
       controls the bore instance \p x-offset (with y=0).

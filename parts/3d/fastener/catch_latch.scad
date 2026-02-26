@@ -94,9 +94,9 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal-list-3>  | [0, 0, 0]         | \p bevel; [f, v, h]
-      1 | <decimal-list-3>  | [60, 100, 10]     | \p width; [t, c, h]
-      2 | <decimal-list-3>  | [20, 40, 60]      | \p length; [t, s, e]
+      0 | decimal-list-3    | [0, 0, 0]         | \p bevel; [f, v, h]
+      1 | decimal-list-3    | [60, 100, 10]     | \p width; [t, c, h]
+      2 | decimal-list-3    | [20, 40, 60]      | \p length; [t, s, e]
 
       \p bevel: a list [f, v, h], the flat-height, bevel-height,
       bevel-width, specified as a percentage of the latch height.

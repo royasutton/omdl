@@ -95,49 +95,49 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         |  required         | \p l : joint length
-      1 | <decimal>         |  l/10             | \p d : joint depth
-      2 | <decimal-list-5 \| decimal> |  d      | pin default configuration
-      3 | <decimal-list-2 \| decimal> |  d/6    | screw default configuration
-      4 | <decimal-list-4 \| decimal> |  d/3    | nut default configuration
+      0 | decimal           |  required         | \p l : joint length
+      1 | decimal           |  l/10             | \p d : joint depth
+      2 | decimal-list-5 \| decimal   |  d      | pin default configuration
+      3 | decimal-list-2 \| decimal   |  d/6    | screw default configuration
+      4 | decimal-list-4 \| decimal   |  d/3    | nut default configuration
 
     #### conf[2]: pin
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         |  d                | \p m : male pin width
-      1 | <decimal>         |  m * 5/2          | screw section width
-      2 | <decimal>         |  m / 25           | pin gap width
-      3 | <decimal>         |  m / 20           | pin exterior edge rounding
-      4 | <decimal>         |  m / 20           | pin interior edge rounding
+      0 | decimal           |  d                | \p m : male pin width
+      1 | decimal           |  m * 5/2          | screw section width
+      2 | decimal           |  m / 25           | pin gap width
+      3 | decimal           |  m / 20           | pin exterior edge rounding
+      4 | decimal           |  m / 20           | pin interior edge rounding
 
     #### conf[3]: screw
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         |  d/6              | \p sd : screw diameter
-      1 | <decimal>         |  d                | \p sl : screw length
+      0 | decimal           |  d/6              | \p sd : screw diameter
+      1 | decimal           |  d                | \p sl : screw length
 
     #### conf[4]: nut
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         |  d/3              | nut size; flat-to-flat
-      1 | <decimal>         |  sd               | nut height
-      2 | <decimal>         |  sl / 10          | nut end offset
-      3 | <decimal>         |  m / 20           | nut interior edge rounding
+      0 | decimal           |  d/3              | nut size; flat-to-flat
+      1 | decimal           |  sd               | nut height
+      2 | decimal           |  sl / 10          | nut end offset
+      3 | decimal           |  m / 20           | nut interior edge rounding
 
     ### insts
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         |  0                | zero reference; [-1, 0, +1]
-      1 | <decimal>         |  0                | length offset from reference
-      2 | <integer>         |  7                | form (see below).
-      3 | <integer>         |                   | mode override (see below).
-      4 | <decimal-list-5 \| decimal> |         | pin override (see above).
-      5 | <decimal-list-2 \| decimal> |         | screw override (see above).
-      6 | <decimal-list-4 \| decimal> |         | nut override (see above).
+      0 | decimal           |  0                | zero reference; [-1, 0, +1]
+      1 | decimal           |  0                | length offset from reference
+      2 | integer           |  7                | form (see below).
+      3 | integer           |                   | mode override (see below).
+      4 | decimal-list-5 \| decimal |           | pin override (see above).
+      5 | decimal-list-2 \| decimal |           | screw override (see above).
+      6 | decimal-list-4 \| decimal |           | nut override (see above).
 
     #### insts[2]: form
 

@@ -236,8 +236,8 @@ module extrude_rotate_trl
 
      h[n] | type              | description
     :----:|:-----------------:|:---------------------------------------
-      0   | <decimal>         | total extrusion height
-      1   | <decimal-list-n>  | list of one or more scale factors
+      0   | decimal           | total extrusion height
+      1   | decimal-list-n    | list of one or more scale factors
 
     Each scale factor can be either a single decimal or a list of two
     decimals to scale \b x and \b y independently. When the scale

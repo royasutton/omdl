@@ -209,7 +209,7 @@ function strl_html
   \param    u <boolean> Element values are \b undef.
 
   \returns  (1) \<list> A list of \p l of constand or incrementing
-            sequential elements.
+                sequential elements.
             (2) Returns \b empty_lst when \p l is not a positive number.
 
   \details
@@ -231,13 +231,12 @@ function consts
 //! Selected element indices of a given list according to a selection scheme.
 /***************************************************************************//**
   \param    l \<list> The list.
-  \param    s <index> The index sequence \ref dt_index "specification".
+  \param    s <index> The index selection.
   \param    rs <number> A random number sequence seed.
 
-  \returns  (1) <list-l> The element indices per the specified selection scheme.
-            (2) Returns \b empty_lst when \p l is not a list or for any
-                \p v that does not fall into one of the specification
-                forms.
+  \returns  (1) <list> The selected element indices.
+            (2) Returns \b empty_lst when \p l is not a list or when
+                the selection does not exists.
 
   \details
 
@@ -250,20 +249,20 @@ function consts
 
     | value / form    | description                                   |
     |:---------------:|:----------------------------------------------|
-    | \b true         | All index positions of the list [0:size-1]    |
-    | \b false        | No index positions                            |
+    | true            | All index positions of the list [0:size-1]    |
+    | false           | No index positions                            |
     | "all"           | All index positions of the list [0:size-1]    |
     | "none"          | No index positions                            |
     | "rands"         | Random index selection of the list [0:size-1] |
     | "even"          | The even index of the list [0:size-1]         |
     | "odd"           | The odd index of the list [0:size-1]          |
-    | <integer>       | The single position given by an <integer>     |
-    | <range>         | The range of positions given by a <range>     |
-    | <integer-list>  | The list of positions give in <integer-list>  |
+    | integer         | The single position given by an <integer>     |
+    | range           | The range of positions given by a <range>     |
+    | integer-list    | The list of positions give in <integer-list>  |
 
     This function resolves an index specification into a concrete list
-    of index positions, translating shorthand or abstract selection
-    patterns into an explicit iterable form.
+    of index positions, converting shorthand or abstract selection
+    patterns into an explicit, iterable list.
 
     \b Example
 

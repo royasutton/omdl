@@ -69,14 +69,14 @@
 
      input value | function return
     :-----------:|:-----------------:
-     \em number  | \b  false
-     \em boolean | \b  false
-     \em string  | \b  true
-     \em list    | \b  true
-     \em range   | \b  false
-     \b  undef   | \b  false
-     \b  inf     | \b  false
-     \b  nan     | \b  false
+     number      | false
+     boolean     | false
+     string      | true
+     list        | true
+     range       | false
+     undef       | false
+     inf         | false
+     nan         | false
 
   \note     The empty list and empty string return \b true.
 *******************************************************************************/

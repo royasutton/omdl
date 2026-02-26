@@ -67,11 +67,11 @@ validation_skip = [number_min, number_max, number_inf];
 
      validation types             | pass if (else fail)
     :----------------------------:|:----------------------------:
-     "ae" \| "almost"             | \p cv almost equals \p ev
-     "eq" \| "equals"             | \p cv equals \p ev
-     "ne" \|    "not"             | \p cv not equal to \p ev
-      "t" \|   "true" \| \b true  | \p cv is \b true
-      "f" \|  "false" \| \b false | \p cv is \b false
+     "ae" \| "almost"             | cv almost equals ev
+     "eq" \| "equals"             | cv equals ev
+     "ne" \|    "not"             | cv not equal to ev
+      "t" \|   "true" \| true     | cv is true
+      "f" \|  "false" \| false    | cv is false
 
   \note     When performing an \b "almost" equal validation, the
             comparison precision is controlled by \p p. This specifies

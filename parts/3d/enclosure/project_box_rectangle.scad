@@ -306,10 +306,10 @@
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | decimal           | wth               | rib base width
-      1 | decimal-list-2    |[[wth, \em rib_edx]]| x-axis oriented rib height extrusion
-      2 | decimal-list-2    |[[wth, \em rib_edy]]| y-axis oriented rib height extrusion
+      1 | decimal-list-2    |[[wth, rib_edx]]   | x-axis oriented rib height extrusion
+      2 | decimal-list-2    |[[wth, rib_edy]]   | y-axis oriented rib height extrusion
 
-    The constants \em rib_edx and \em rib_edy are defaults that
+    The constants \c rib_edx and \c rib_edy are defaults that
     approximates a half-ellipse rib-like shape. To specify alternative
     custom extrusions, see the documentation for the extrusion function
     extrude_linear_mss().
@@ -379,32 +379,32 @@
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | decimal           | wth               | width
-      1 | datastruct        | \em cfg_he        | extrusion
+      1 | datastruct        | cfg_he            | extrusion
       2 | decimal-list-4 \| decimal | wth       | rounding radius
-      3 | integer-list-4 \| integer |\em cfg_vrm| rounding mode
+      3 | integer-list-4 \| integer | cfg_vrm   | rounding mode
 
-    The constants \em cfg_he and \em cfg_vrm define defaults that may
+    The constants \c cfg_he and \c cfg_vrm define defaults that may
     be used to round the top, base, and edges of a wall.
 
     ##### wall[1]: instance
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | integer                     | required      | type {0: x-axis, 1:y-axis}
-      1 | decimal-list-3:2 \| decimal | [0, 0, 0]     | move
-      2 | decimal-list-3:2 \| decimal | [1, 1, 1]     | scale
-      3 | decimal-list-3:1 \| decimal | [0, 0, 0]     | rotate
-      4 | decimal-list-2              | \em tdef_s    | size
-      5 | decimal-list-2              | \em tdef_he   | extrusion
-      6 | decimal-list-4   \| decimal | \em tdef_vr   | rounding radius
-      7 | integer-list-4   \| integer | \em tdef_vrm  | rounding mode
+      0 | integer                     | required   | type {0: x-axis, 1:y-axis}
+      1 | decimal-list-3:2 \| decimal | [0, 0, 0]  | move
+      2 | decimal-list-3:2 \| decimal | [1, 1, 1]  | scale
+      3 | decimal-list-3:1 \| decimal | [0, 0, 0]  | rotate
+      4 | decimal-list-2              | tdef_s     | size
+      5 | decimal-list-2              | tdef_he    | extrusion
+      6 | decimal-list-4   \| decimal | tdef_vr    | rounding radius
+      7 | integer-list-4   \| integer | tdef_vrm   | rounding mode
 
-    The constants \em tdef_s, \em tdef_he, \em tdef_vr, and \em
-    tdef_vrm are default values that depend on the wall type being
-    constructed. For example, \em tdef_s = [max_x, wth] for wall type 0
-    and \em tdef_s = [wth, max_y] for wall type 1. These default may be
-    overridden to provide custom wall sizes, wall rounding and/or
-    height extrusions for each wall instance.
+    The constants \c tdef_s, \c tdef_he, \c tdef_vr, and \c tdef_vrm
+    are default values that depend on the wall type being constructed.
+    For example, `tdef_s = [max_x, wth]` for wall type \c 0 and `tdef_s
+    = [wth, max_y]` for wall type \c 1. These default may be overridden
+    to provide custom wall sizes, wall rounding and/or height
+    extrusions for each wall instance.
 
     ### post
 
@@ -531,8 +531,8 @@
       2 | decimal           | wth               | width
       3 | decimal           | 1/5               | post diameter fraction
       4 | decimal           | 5/8               | post height fraction
-      5 | decimal-list-3 \| decimal | \em def_f0_vr  | rounding radius
-      6 | integer-list-3 \| integer | \em def_f0_vrm | rounding mode
+      5 | decimal-list-3 \| decimal | def_f0_vr  | rounding radius
+      6 | integer-list-3 \| integer | def_f0_vrm | rounding mode
 
     The constants \em def_f0_vr and \em def_f0_vrm define defaults for
     fin rounding and may be overridden if needed. See the source code
@@ -547,8 +547,8 @@
       2 | decimal           | wth               | width
       3 | decimal           | 1/2               | post diameter fraction
       4 | decimal           | 1                 | post height fraction
-      5 | decimal-list-4 \| decimal | \em def_f1_vr  | rounding radius
-      6 | integer-list-4 \| integer | \em def_f1_vrm | rounding mode
+      5 | decimal-list-4 \| decimal | def_f1_vr  | rounding radius
+      6 | integer-list-4 \| integer | def_f1_vrm | rounding mode
 
     The constants \em def_f1_vr and \em def_f1_vrm define defaults for
     fin rounding and may be overridden if needed. See the source code
@@ -643,7 +643,7 @@
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | datastruct \| integer | 1             | 2d shape selections (see: select_common_2d_shape())
-      1 | <decimal>             | 0             | shape extrusion height (see note below)
+      1 | decimal               | 0             | shape extrusion height (see note below)
       2 | datastruct            | [0]           | shape layout (see: layout_grid_rp()
 
     When the shape extrusion height is \p 0, the height is

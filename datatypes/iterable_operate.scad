@@ -69,7 +69,7 @@
   \param    i <integer> An element index.
   \param    d \<value> A default value.
 
-  \returns  (1) <value> <tt>v[i]</tt> if it is defined, or \p d otherwise.
+  \returns  (1) <value> \c v[i] if it is defined, or \p d otherwise.
 *******************************************************************************/
 function defined_e_or
 (
@@ -86,8 +86,8 @@ function defined_e_or
   \param    i <integer> An element index.
   \param    d \<value> A default value.
 
-  \returns  (1) <number> <tt>v</tt> if it is a scalar numeric value;
-            (2) <value> <tt>v[i]</tt> if it is defined, otherwise the
+  \returns  (1) <number> \c v if it is a scalar numeric value;
+            (2) <value> \c v[i] if it is defined, otherwise the
                 default value \p d.
 *******************************************************************************/
 function defined_eon_or
@@ -128,7 +128,7 @@ function defined_fle_or
   \param    d \<value> A default value.
   \param    n <integer> The optional expected element length.
 
-  \returns  (1) <tt>v[i]</tt>, a <list-n> if the element is iterable of
+  \returns  (1) \c v[i], a <list-n> if the element is iterable of
                 length \p n (or \<list> if \p n is unspecified),
             (2) or the default value \p d if the element is not defined.
 *******************************************************************************/
@@ -166,8 +166,8 @@ function find_all
   \param    mv \<value> A match value.
   \param    v <iterable> An iterable value.
   \param    c <integer> A match count.
-              For <tt>(c>=1)</tt>, return the first \p c matches.
-              For <tt>(c<=0)</tt>, return all matches.
+              For `(c >= 1)`, return the first \p c matches.
+              For `(c <= 0)`, return all matches.
   \param    i <integer> The secondary element index to match for when
               the elements of \p v are themselves iterable elements.
 
@@ -186,7 +186,7 @@ function find_all
     \b Find:
 
     | mv / v              | string | list of scalars   | list of iterables   |
-    |---------------------|:------:|:-----------------:|:-------------------:|
+    |:-------------------:|:------:|:-----------------:|:-------------------:|
     | scalar              |        | (a)               | (b) see note 1      |
     | string              | (c)    |                   | (b) see note 1      |
     | list of scalars     |        |                   | (b) see note 1      |
@@ -195,7 +195,7 @@ function find_all
     \b Search:
 
     | mv / v              | string | list of scalars   | list of iterables   |
-    |---------------------|:------:|:-----------------:|:-------------------:|
+    |:-------------------:|:------:|:-----------------:|:-------------------:|
     | scalar              |        | (a)               | (b)                 |
     | string              | (d)    | invalid           | (e) see note 2      |
     | list of scalars     |        | (f)               | (g)                 |
@@ -288,8 +288,8 @@ function count
 
   \details
 
-    When \p s == \b true, [search]\() is used to match elements. When
-    \p s == false, find() is used.
+    When `s == true`, [search]\() is used to match elements. When `s ==
+    false`, find() is used.
 
   \amu_eval (${group_references})
 *******************************************************************************/
@@ -812,11 +812,11 @@ function permute_ns_r
 
   \details
 
-    Appending with \p r == \b true causes each element of \p nv to be
-    appended to the elements of each iterable value. When \p r == \b
-    false, each element of \p nv is appended to the iterable value
-    itself. To append a list of elements together as a list to \p v,
-    enclose the elements of \p nv with a second set of brackets.
+    Appending with `r == true` causes each element of \p nv to be
+    appended to the elements of each iterable value. When `r == false`,
+    each element of \p nv is appended to the iterable value itself. To
+    append a list of elements together as a list to \p v, enclose the
+    elements of \p nv with a second set of brackets.
 
     \b Example
     \code{.C}
@@ -912,14 +912,14 @@ function append_v
   \returns  (1) \<list> The list with \p nv inserted into \p v at the
                 specified position.
             (2) Returns \b undef when no value of \p mv exists in
-                \p v, when <tt>(mi + 1)</tt> exceeds the matched
-                element count, when \p i does not map to an element of
-                \p v, or when \p v is not defined or is not iterable.
+                \p v, when `(mi + 1)` exceeds the matched element
+                count, when \p i does not map to an element of \p v, or
+                when \p v is not defined or is not iterable.
 
   \details
 
-    When \p s == \b true, [search]\() is used to match elements. When
-    \p s == false, find() is used.
+    When `s == true`, [search]\() is used to match elements. When `s ==
+    false`, find() is used.
 
     The insert position can be specified by an index, an element match
     value, or list of potential match values. When multiple matches
@@ -969,8 +969,8 @@ function insert
   \param    mv \<value> The match value.
 
   \param    mc <integer> A match count.
-            For <tt>(mc>=1)</tt>, remove the first \p mc matches.
-            For <tt>(mc=0)</tt>, remove all matches.
+            For `(mc >= 1)`, remove the first \p mc matches.
+            For `(mc = 0)`, remove all matches.
 
   \returns  (1) \<list> The list with the first \p mc occurrences of the
                 match value removed.
@@ -1018,8 +1018,8 @@ function delete_each
 
   \param    mv <list | string | value> Match value candidates.
   \param    mc <integer> A match count.
-            For <tt>(mc>=1)</tt>, remove the first \p mc matches.
-            For <tt>(mc<=0)</tt>, remove all matches.
+            For `(mc >= 1)`, remove the first \p mc matches.
+            For `(mc <= 0)`, remove all matches.
 
   \param    s <boolean> Element matching search method.
   \param    si <integer> The element column index when matching.
@@ -1031,8 +1031,8 @@ function delete_each
 
   \details
 
-    When \p s == \b true, [search]\() is used to match elements. When
-    \p s == false, find() is used.
+    When `s == true`, [search]\() is used to match elements. When `s ==
+    false`, find() is used.
 
     The elements to delete can be specified by an index position, a
     list of index positions, an index range, an element match value, or
@@ -1087,8 +1087,8 @@ function delete
   \param    nv \<value> The new value.
 
   \param    mc <integer> A match count.
-            For <tt>(mc>=1)</tt>, replaces the first \p mc matches.
-            For <tt>(mc=0)</tt>, replaces all matches.
+            For `(mc >= 1)`, replaces the first \p mc matches.
+            For `(mc = 0)`, replaces all matches.
 
   \returns  (1) \<list> The list with the first \mc occurrences of the
                 match value replaced by \p nv.
