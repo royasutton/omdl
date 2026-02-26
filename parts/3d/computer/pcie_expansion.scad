@@ -329,7 +329,11 @@ enclosure_map_doc =
   ["posts",               "Post instances for sides, base and cover: see project_box_rectangle()"],
   ["clamps_base",         "Enclosure base clamps: see clamp_zt_1p()"],
   ["holes_sides",         "Enclosure side hole instances: see project_box_rectangle()"],
+  ["holes_base",          "Enclosure base hole instances: see project_box_rectangle()"],
+  ["holes_cover",         "Enclosure cover hole instances: see project_box_rectangle()"],
   ["shapes_sides",        "Enclosure side shapes instances: see project_box_rectangle()"],
+  ["shapes_base",         "Enclosure base shapes instances: see project_box_rectangle()"],
+  ["shapes_cover",        "Enclosure cover shapes instances: see project_box_rectangle()"],
   ["bracket_window_gap",  "Bracket connector window gap [w]"],
   ["bracket_shoe_gap_p",  "Bracket shoe gap% [w, l, h]"],
   ["bracket_shoe_offset", "Bracket shoe vertical offset [h]"],
@@ -624,8 +628,20 @@ enclosure_def =
       ]
     ]
   ],
+  ["holes_base",                          // enclosure base hole instances
+    undef
+  ],
+  ["holes_cover",                         // enclosure cover hole instances
+    undef
+  ],
 
   ["shapes_sides",                        // enclosure side shape instances
+    undef
+  ],
+  ["shapes_base",                         // enclosure base shape instances
+    undef
+  ],
+  ["shapes_cover",                        // enclosure cover shape instances
     undef
   ],
 
@@ -1031,6 +1047,8 @@ module pcie_expansion
 
     // base
     encl_bracket_shoe_offset  = map_get_value(enclosure, "bracket_shoe_offset");
+    encl_holes_base           = map_get_value(enclosure, "holes_base");
+    encl_shapes_base          = map_get_value(enclosure, "shapes_base");
 
     // sides and base
     encl_clamps_base          = map_get_value(enclosure, "clamps_base");
@@ -1216,6 +1234,8 @@ module pcie_expansion
           rib   = encl_ribs,
           wall  = encl_walls,
           post  = encl_posts_base_all,
+          hole  = encl_holes_base,
+          shape = encl_shapes_base,
           vr    = encl_rounding,
           vrm   = encl_mode_rounding,
           align = [0, 0, 0],
@@ -1681,6 +1701,10 @@ module pcie_expansion
   {
     // enable: B0: base
 
+    // cover
+    encl_holes_cover          = map_get_value(enclosure, "holes_cover");
+    encl_shapes_cover         = map_get_value(enclosure, "shapes_cover");
+
     // merge all posts
     encl_posts_cover_all =
       merge_post_inst_sets
@@ -1705,6 +1729,8 @@ module pcie_expansion
       rib   = encl_ribs,
       wall  = encl_walls,
       post  = encl_posts_cover_all,
+      hole  = encl_holes_cover,
+      shape = encl_shapes_cover,
       vr    = encl_rounding,
       vrm   = encl_mode_rounding,
       align = [0, 0, 0],
