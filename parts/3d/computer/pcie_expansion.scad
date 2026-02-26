@@ -328,8 +328,8 @@ enclosure_map_doc =
   ["posts_cover",         "Post instances cover only: see project_box_rectangle()"],
   ["posts",               "Post instances for sides, base and cover: see project_box_rectangle()"],
   ["clamps_base",         "Enclosure base clamps: see clamp_zt_1p()"],
-  ["holes_sides",         "Enclosure side hole instances"],
-  ["shapes_sides",        "Enclosure side shapes instances"],
+  ["holes_sides",         "Enclosure side hole instances: see project_box_rectangle()"],
+  ["shapes_sides",        "Enclosure side shapes instances: see project_box_rectangle()"],
   ["bracket_window_gap",  "Bracket connector window gap [w]"],
   ["bracket_shoe_gap_p",  "Bracket shoe gap% [w, l, h]"],
   ["bracket_shoe_offset", "Bracket shoe vertical offset [h]"],
@@ -415,45 +415,18 @@ enclosure_map_doc =
 
     ### holes_sides
 
-    #### Data structure schema:
-
-    name            | schema
-    ---------------:|:----------------------------------------------
-    holes_sides     | [instances]
-
-    #### Data structure fields: holes_sides[*]: instances
-
-      e | data type         | default value     | parameter description
-    ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | datastruct \| integer | 1             | 2d shape selections (see: select_common_2d_shape())
-      1 | <decimal>             | 0             | shape extrusion height (see note below)
-      2 | datastruct            | [0]           | shape layout (see: layout_grid_rp()
-
-    When the shape extrusion height is \p 0, the height is
-    automatically set to the maximum enclosure dimension. When set to
-    \p −1, \p −2, or \p −3, the height is derived from the width,
-    length, or height dimension, respectively. Any other positive value
-    explicitly sets the extrusion height.
+    See the documentation for project_box_rectangle() under the section
+    for \p hole configuration for more details on hole specification.
 
     ### shapes_sides
 
-    #### Data structure schema:
-
-    name            | schema
-    ---------------:|:----------------------------------------------
-    shapes_sides    | [instances]
-
-    #### Data structure fields: shapes_sides[*]: instances
-
-      e | data type         | default value     | parameter description
-    ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | datastruct \| integer | 1             | 3d shape selections (see: select_common_3d_shape())
-      1 | datastruct            | [0]           | shape layout (see: layout_grid_rp()
+    See the documentation for project_box_rectangle() under the section
+    for \p shape configuration for more details on shape specification.
 
     ### posts
 
-    See project_box_rectangle() on \p post configuration for
-    documentation on the post defaults and post instances.
+    See the documentation for project_box_rectangle() under the section
+    for \p post configuration for more details on post specification.
 
     ### mode_sides
 
@@ -1447,73 +1420,6 @@ module pcie_expansion
         }
     }
 
-    // hole construction
-    module construct_side_holes( insts )
-    {
-      for (inst = insts)
-      {
-        shape       = defined_e_or (inst, 0, 1);
-        height_spec = defined_e_or (inst, 1, 0);
-        layout      = defined_e_or (inst, 2, [0]);
-
-        shape_type  = is_list(shape) ? first(shape) : shape;
-        shape_argv  = is_list(shape) ? tailn(shape, 1) : undef;
-
-        // allow user to select box size index for extrusion height
-        // 0=max(w,l,h), -1=w, -2=l, -3=h (plus wall thickness)
-        height      = (height_spec < 0)  ? encl_size_wlh[abs(height_spec+1)] + encl_wth*4
-                    : (height_spec == 0) ? max(encl_size_wlh) + encl_wth*4
-                    : height_spec;
-
-        // move layout to enclosure center
-        translate([0, 0, encl_size_wlh.z/2])
-        layout_grid_rp(t=layout, b=encl_size_wlh, center=true, verb=verb-1)
-        extrude_linear_uss(height, center=true)
-        select_common_2d_shape( type=shape_type, argv=shape_argv, center=true, verb=verb-1 );
-
-        if (verb > 1)
-        {
-          log_info(strl(["hole instance = ", inst]));
-
-          if (verb > 2)
-          {
-            echo(shape_type=shape_type, shape_argv=shape_argv);
-            echo(height=height);
-            echo(layout=layout);
-          }
-        }
-      }
-    }
-
-    // shape construction
-    module construct_side_shapes( insts )
-    {
-      for (inst = insts)
-      {
-        shape       = defined_e_or (inst, 0, 1);
-        layout      = defined_e_or (inst, 1, [0]);
-
-        shape_type  = is_list(shape) ? first(shape) : shape;
-        shape_argv  = is_list(shape) ? tailn(shape, 1) : undef;
-
-        // move layout to enclosure center
-        translate([0, 0, encl_size_wlh.z/2])
-        layout_grid_rp(t=layout, b=encl_size_wlh, center=true, verb=verb-1)
-        select_common_3d_shape( type=shape_type, argv=shape_argv, center=true, verb=verb-1 );
-
-        if (verb > 1)
-        {
-          log_info(strl(["shape instance = ", inst]));
-
-          if (verb > 2)
-          {
-            echo(shape_type=shape_type, shape_argv=shape_argv);
-            echo(layout=layout);
-          }
-        }
-      }
-    }
-
     // cut enclosure sides
     module cut_enclosure_sides( cut_sides )
     {
@@ -1613,6 +1519,8 @@ module pcie_expansion
           rib   = encode_ribs,
           wall  = encl_walls,
           post  = encl_posts_sides_all,
+          hole  = encl_holes_sides,
+          shape = encl_shapes_sides,
           vr    = encl_rounding,
           vrm   = encl_mode_rounding,
           align = [0, 0, 0],
@@ -1628,9 +1536,6 @@ module pcie_expansion
         // mode_sides B0: add bracket mount tab shelf and mount screw-hole(s)
         if ( binary_bit_is(enable, 3, 1) && binary_bit_is(encl_mode_sides, 0, 1) )
         bracket_mount_tab_shelf(inplace=true, dovetail=false);
-
-        // add shapes
-        construct_side_shapes( encl_shapes_sides );
       }
 
       // project_box_rectangle() default rib height = encl_wth
@@ -1752,9 +1657,6 @@ module pcie_expansion
       if ( binary_bit_is(enable, 1, 1) )
       translate(wlh_s2b_ao)
       wire_clamps_passage(0);
-
-      // remove component/venting holes
-      construct_side_holes( encl_holes_sides );
 
       // mode_sides B5: cut sides for open enclosure modes
       if ( binary_bit_is(encl_mode_sides, 5, 1) )
