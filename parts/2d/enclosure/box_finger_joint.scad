@@ -84,10 +84,10 @@
                         merge into the box xz and yz sides.
 
   \param  vr            <decimal-list-6-list-n | decimal> box rounding;
-                        where \p n=4 for rectangular sides. (see below).
+                        where `n = 4` for rectangular sides. (see below).
 
   \param  vrm           <integer-list-6-list-n | integer> box rounding
-                        mode where \p n=4 for rectangular sides. (see
+                        mode where `n = 4` for rectangular sides. (see
                         below).
 
   \param  side_spacing  <decimal> separation between box sides.
@@ -166,14 +166,14 @@
     The box sides can be rounded together or independently using the
     parameters \p vr and \p vrm as show in the table below:
 
-      e | data type         | default value     | parameter description
-    ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | decimal-list-n \| decimal | required  | \p vr_xy_1 : side xy-1 rounding
-      1 | decimal-list-n \| decimal | vr_xy_1   | \p vr_xz_1 : side xz-1 rounding
-      2 | decimal-list-n \| decimal | vr_xz_1   | \p vr_yz_1 : side yz-1 rounding
-      3 | decimal-list-n \| decimal | vr_xy_1   | \p vr_xy_2 : side xy-2 rounding
-      4 | decimal-list-n \| decimal | vr_xz_1   | \p vr_xz_2 : side xz-2 rounding
-      5 | decimal-list-n \| decimal | vr_yz_1   | \p vr_yz_2 : side yz-2 rounding
+      e | data type         | default value       | parameter description
+    ---:|:-----------------:|:-------------------:|:------------------------------------
+      0 | decimal-list-n \| decimal | required    | \p vr_xy_1 : side xy-1 rounding
+      1 | decimal-list-n \| decimal | \p vr_xy_1  | \p vr_xz_1 : side xz-1 rounding
+      2 | decimal-list-n \| decimal | \p vr_xz_1  | \p vr_yz_1 : side yz-1 rounding
+      3 | decimal-list-n \| decimal | \p vr_xy_1  | \p vr_xy_2 : side xy-2 rounding
+      4 | decimal-list-n \| decimal | \p vr_xz_1  | \p vr_xz_2 : side xz-2 rounding
+      5 | decimal-list-n \| decimal | \p vr_yz_1  | \p vr_yz_2 : side yz-2 rounding
 
     The vertices of each side can be rounded independently by assigning
     values using a four-element list, or they can all be assigned the
@@ -182,9 +182,9 @@
     The rounding mode follows the same scheme described above. For more
     information on rounding options, see polygon_round_eve_all_p().
 
-    For rectangular sides \p n=4. However, when customized side points
+    For rectangular sides `n = 4`. However, when customized side points
     are specified using the \p side_add option, the corresponding
-    rounding lists size \p n must be extended to match the number of
+    rounding lists size `n` must be extended to match the number of
     added points for each customized side, if individual vertex
     treatment is desired.
 
@@ -209,7 +209,7 @@
     index.
 
     For example, to output only the bottom of the front and the bottom
-    of the box, set: \p part = (pow(2, 1) + pow(2, 5));
+    of the box, set: `part = (pow(2, 1) + pow(2, 5));`
 
     \amu_define scope_id      (example)
     \amu_define title         (2d box example)
