@@ -240,7 +240,7 @@ BEGIN_SCOPE example;
 
     v =
     [
-      true,
+      3,
       0,
       [90,0,0],
       0,
