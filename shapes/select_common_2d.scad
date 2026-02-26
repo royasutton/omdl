@@ -87,7 +87,9 @@
     table. All supported shapes and their associated arguments are
     summarized in the following table:
 
-       t  | shapes                | size parameters | shape reference
+    #### standard shape types
+
+       t  | shapes                | parameters      | shape reference
     :----:|:---------------------:|:---------------:|:----------------------------
         1 | circle                |  r              | [circle()]
         2 | ngon                  |  r, n           | pg_ngon()
@@ -102,6 +104,31 @@
 
     \amu_define scope_id      (example)
     \amu_define title         (Selection example)
+    \amu_define image_views   (top)
+    \amu_define image_size    (sxga)
+
+    \amu_include (include/amu/scope_diagrams_3d.amu)
+
+    #### custom shape types
+
+       t  | shapes                | parameters      | function invocation name
+    :----:|:---------------------:|:---------------:|:----------------------------
+       50 | custom shape 1        |  size           | \p select_common_2d_shape_50()
+       51 | custom shape 2        |  size           | \p select_common_2d_shape_51()
+       52 | custom shape 3        |  size           | \p select_common_2d_shape_52()
+       53 | custom shape 4        |  size           | \p select_common_2d_shape_53()
+       54 | custom shape 5        |  size           | \p select_common_2d_shape_54()
+
+    User-defined custom shape functions can be selected by defining a
+    shape function using one of the reserved custom shape function
+    names, and then referencing the corresponding shape type listed in
+    the table above. The custom function prototype and an example is
+    provided below.
+
+    <b>prototype:</b> <tt>select_common_2d_shape_50(size, vr, vrm, fn, center);</tt>
+
+    \amu_define scope_id      (example_custom)
+    \amu_define title         (Custom shape example)
     \amu_define image_views   (top)
     \amu_define image_size    (sxga)
 
@@ -230,6 +257,20 @@ module select_common_2d_shape
             v1 = defined_e_or(size, 2, x_axis2d_uv),
             v2 = defined_e_or(size, 3, y_axis2d_uv)
       );
+
+    //
+    // custom shapes
+    //
+    else if ( type == 50 )
+      select_common_2d_shape_50(size=size, vr=vr, vrm=vrm, fn=fn, center=center);
+    else if ( type == 51 )
+      select_common_2d_shape_51(size=size, vr=vr, vrm=vrm, fn=fn, center=center);
+    else if ( type == 52 )
+      select_common_2d_shape_52(size=size, vr=vr, vrm=vrm, fn=fn, center=center);
+    else if ( type == 53 )
+      select_common_2d_shape_53(size=size, vr=vr, vrm=vrm, fn=fn, center=center);
+    else if ( type == 54 )
+      select_common_2d_shape_54(size=size, vr=vr, vrm=vrm, fn=fn, center=center);
   }
 
   //
@@ -273,6 +314,45 @@ BEGIN_SCOPE example;
     fn    = 9;
 
     type  = 8;
+    argv  = [size, vr, vrm, fn];
+
+    select_common_2d_shape(type=type, argv=argv, center=true);
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_png2eps}.mfs;
+    table_unset_all sizes;
+
+    images    name "sizes" types "sxga";
+    views     name "views" views "top";
+
+    variables set_opts_combine "sizes views";
+    variables add_opts "--viewall --autocenter --view=axes";
+
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
+
+/*
+BEGIN_SCOPE example_custom;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <shapes/select_common_2d.scad>;
+
+    module select_common_2d_shape_50(size, vr, vrm, fn, center)
+    {
+      square(size, center=center);
+    }
+
+    size  = [50, 40];
+    vr    = undef;
+    vrm   = undef;
+    fn    = undef;
+
+    type  = 50;
     argv  = [size, vr, vrm, fn];
 
     select_common_2d_shape(type=type, argv=argv, center=true);
