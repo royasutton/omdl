@@ -125,7 +125,16 @@
     the table above. The custom function prototype and an example is
     provided below.
 
-    <b>prototype:</b> <tt>select_common_2d_shape_50(size, vr, vrm, fn, center);</tt>
+    <b>Prototype:</b>
+
+    \code{.C}
+    // custom shape module, type 50
+
+    module select_common_2d_shape_50(size, vr, vrm, fn, center)
+    {
+
+    };
+    \endcode
 
     \amu_define scope_id      (example_custom)
     \amu_define title         (Custom shape example)

@@ -1006,7 +1006,7 @@ if ( pcie_expansion_debug )
     Before fabricating a design that includes a dovetailed bracket
     mount tab, create and assemble a dovetail test joint to verify
     proper fit. Enable the test joint by setting part bit 6 to 1 (for
-    example, \p part = pow(2, 6)). To refine or evaluate the dovetail
+    example, `part = pow(2, 6))`. To refine or evaluate the dovetail
     configuration, model an assembled test joint by enabling \p part
     bit 5.
 

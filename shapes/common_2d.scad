@@ -192,8 +192,8 @@ module rectangle
   \details
 
     Thickness \p t
-    \li <tt>core = size - t</tt>; when \p t and \p size are given.
-    \li <tt>size = core + t</tt>; when \p t and \p core are given.
+    \li `core = size - t`; when \p t and \p size are given.
+    \li `size = core + t`; when \p t and \p core are given.
 
     \amu_eval ( object=rectangle_c ${object_ex_diagram_3d} )
 *******************************************************************************/
@@ -422,8 +422,8 @@ module ellipse
   \details
 
     Thickness \p t
-    \li <tt>core = size - t</tt>; when \p t and \p size are given.
-    \li <tt>size = core + t</tt>; when \p t and \p core are given.
+    \li `core = size - t`; when \p t and \p size are given.
+    \li `size = core + t`; when \p t and \p core are given.
 
     \amu_eval ( object=ellipse_c ${object_ex_diagram_3d} )
 *******************************************************************************/
@@ -530,8 +530,8 @@ module ellipse_s
   \details
 
     Thickness \p t
-    \li <tt>core = size - t</tt>; when \p t and \p size are given.
-    \li <tt>size = core + t</tt>; when \p t and \p core are given.
+    \li `core = size - t`; when \p t and \p size are given.
+    \li `size = core + t`; when \p t and \p core are given.
 
     \amu_eval ( object=ellipse_cs ${object_ex_diagram_3d} )
 *******************************************************************************/

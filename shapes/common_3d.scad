@@ -127,11 +127,11 @@ module cone
        3 | chamfer edges with chamfer vertexes
 
   \note     Using \em round replaces all edges with a quarter circle
-            of radius \p vr, inset <tt>[vr, vr]</tt> from the each edge.
+            of radius \p vr, inset `[vr, vr]` from the each edge.
   \note     Using \em chamfer replaces all edges with isosceles right
             triangles with side lengths equal to the corner rounding
             radius \p vr. Therefore the chamfer length will be
-            <tt>vr*sqrt(2)</tt> at 45 degree angles.
+            `vr * sqrt(2)` at 45 degree angles.
 *******************************************************************************/
 module cuboid
 (

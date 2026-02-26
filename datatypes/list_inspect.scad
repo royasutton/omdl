@@ -135,9 +135,9 @@ function almost_eq
 
      rv      | order of values
     :-------:|:-------------------
-      \c -1  | <tt>(v2 < v1)</tt>
-      \c  0  | <tt>(v2 == v1)</tt>
-      \c +1  | <tt>(v2 > v1)</tt>
+      \c -1  | `(v2 < v1)`
+      \c  0  | `(v2 == v1)`
+      \c +1  | `(v2 > v1)`
 
     The following table summarizes how data type values are ordered.
 
@@ -291,23 +291,22 @@ function compare
 
   \param    di <integer> The default output element index used when
             composing an output list from an input element that is not
-            a list. Use <tt>di = -1</tt> to assign the value to all
-            elements.
+            a list. Use `di = -1` to assign the value to all elements.
 
-  \returns  For the input list element indexed as <tt>e = l[i]</tt>:
+  \returns  For the input list element indexed as `e = l[i]`:
             - <b>For \p e a list</b>:
-            -# When <tt>s == 0</tt>, returns (1) \p e[0], or (2a) \p dv
-              if \p e[0] is undefined.
+            -# When `s == 0`, returns (1) \p e[0], or (2a) \p dv if
+              \p e[0] is undefined.
             -# When either \p de or \p s is undefined, returns (3a) \p e.
-            -# When both \p de and \p s are defined with <tt>s > 0</tt>,
+            -# When both \p de and \p s are defined with `s > 0`,
               returns (4) a list of size \p s in which any undefined
               elements of \p e are assigned \p de.
             - <b>For \p e not a list</b>:
-            -# When <tt>s == 0</tt>, returns (2b) \p dv if \p e is
-              undefined, and (3b) \p e otherwise.
+            -# When `s == 0`, returns (2b) \p dv if \p e is undefined,
+              and (3b) \p e otherwise.
             -# When either \p di or \p s is undefined, returns (2c) \p dv.
-            -# When both \p di and \p s are defined with <tt>s >
-              0</tt>, returns (5) a list of size \p s with all elements
+            -# When both \p di and \p s are defined with `s > 0`,
+              returns (5) a list of size \p s with all elements
               assigned \p de if \p e is undefined, or (6) a list of
               size \p s with element \p [di] assigned \p e and all
               other elements assigned \p de.
