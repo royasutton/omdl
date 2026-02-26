@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2024
+  \date   2024,2026
 
   \copyright
 
@@ -41,7 +41,10 @@
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_define includes_required_add
   (
+    shapes/select_common_2d.scad
+    shapes/select_common_3d.scad
     transforms/base_cs.scad
+    transforms/layout.scad
   )
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
@@ -83,6 +86,10 @@
   \param  wall  <datastruct> interior walls; structured data.
 
   \param  post  <datastruct> posts; structured data.
+
+  \param  hole  <datastruct> holes; structured data.
+
+  \param  shape <datastruct> shapes; structured data.
 
   \param  align <integer-list-3> box alignment; a list [x, y, z].
 
@@ -613,6 +620,63 @@
     value in the interval (-1, 0), to set the post zero alignment
     position along the enclosure lid height.
 
+    ### hole
+
+    #### Data structure schema:
+
+    This parameter can be used to create holes in the enclosure using
+    common or user-defined 2D shapes. Typical applications include
+    openings for vent holes, LEDs, switches, and fans. For more
+    information on defining and using custom shapes, see
+    select_common_2d_shape(). Hole placement is performed using
+    layout_grid_rp(); refer to its documentation for details on usage
+    and configuration options. The layout bounding box is the center of
+    the enclosure walls.
+
+    name            | schema
+    ---------------:|:----------------------------------------------
+    hole            | [instances]
+    instances       | [instance, instance, ..., instance ]
+
+    #### Data structure fields: instance
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | datastruct \| integer | 1             | 2d shape selections (see: select_common_2d_shape())
+      1 | <decimal>             | 0             | shape extrusion height (see note below)
+      2 | datastruct            | [0]           | shape layout (see: layout_grid_rp()
+
+    When the shape extrusion height is \p 0, the height is
+    automatically derived from the maximum enclosure dimension. When
+    set to \p −1, \p −2, or \p −3, the height is derived from the
+    width, length, or height dimension, respectively. Any other
+    positive value explicitly sets the extrusion height.
+
+    ### shape
+
+    This parameter can be used to add features to the enclosure design
+    using common or user-defined 3D shapes. Typical applications
+    include standoffs, feet, handles, and cosmetic detailing. For more
+    information on defining and using custom shapes, see
+    select_common_3d_shape(). Shape placement is performed using
+    layout_grid_rp(); refer to its documentation for details on usage
+    and configuration options. The layout bounding box is the center of
+    the enclosure walls.
+
+    #### Data structure schema:
+
+    name            | schema
+    ---------------:|:----------------------------------------------
+    shape           | [instances]
+    instances       | [instance, instance, ..., instance ]
+
+    #### Data structure fields: instance
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | datastruct \| integer | 1             | 3d shape selections (see: select_common_3d_shape())
+      1 | datastruct            | [0]           | shape layout (see: layout_grid_rp()
+
     ### align
 
     The x, y, and z axis of the box can be aligned independently using
@@ -663,6 +727,8 @@
       7 | do not construct ribs
       8 | do not construct interior walls
       9 | do not construct posts
+     10 | do not construct holes
+     11 | do not construct shapes
 
     (1) When rounding mode limiting is disabled, the rounding mode
     value, \p vrm, is no longer mapped to \em bevel or \em rounded and
@@ -699,6 +765,8 @@ module project_box_rectangle
   rib,
   wall,
   post,
+  hole,
+  shape,
 
   align,
   mode = 0,
@@ -710,6 +778,91 @@ module project_box_rectangle
   // helper modules and functions
   //
   //
+
+  // hole construction
+  module construct_holes()
+  {
+    insts = defined_or(hole, empty_lst);
+
+    // use center of enclosure walls
+    bsize = [szint_x, szint_y, szint_z] + [wth, wth, wth];
+
+    for (inst = insts)
+    {
+      shape   = defined_e_or (inst, 0, 1);
+      h_p     = defined_e_or (inst, 1, 0);
+      layout  = defined_e_or (inst, 2, [0]);
+
+      s_type  = is_list(shape) ? first(shape) : shape;
+      s_argv  = is_list(shape) ? tailn(shape, 1) : undef;
+
+      /*
+
+        auto-extrusion calculation: add wall thickness
+
+           0 = max(w,l,h)
+          -1 = w, -2 = l, -3 = h
+          >0 = supplied value
+
+      */
+
+      h       = (h_p < 0)  ? bsize[abs(h_p+1)] + wth + eps*8
+              : (h_p == 0) ? max(bsize) + wth + eps*8
+              : h_p;
+
+      // move layout to enclosure center
+      translate([0, 0, bsize.z/2])
+      layout_grid_rp(t=layout, b=bsize, center=true, verb=verb-1)
+      extrude_linear_uss(h, center=true)
+      select_common_2d_shape(type=s_type, argv=s_argv, center=true, verb=verb-1);
+
+      if (verb > 1)
+      {
+        echo(shape=shape, type=s_type, argv=s_argv);
+        echo(height=h);
+        echo(layout=layout);
+      }
+    }
+
+    if (verb > 0)
+    {
+      echo(strl(["hole: instances = ", insts]));
+    }
+  }
+
+  // shape construction
+  module construct_shapes()
+  {
+    insts = defined_or(shape, empty_lst);
+
+    // use center of enclosure walls
+    bsize = [szint_x, szint_y, szint_z] + [wth, wth, wth];
+
+    for (inst = insts)
+    {
+      shape   = defined_e_or (inst, 0, 1);
+      layout  = defined_e_or (inst, 1, [0]);
+
+      s_type  = is_list(shape) ? first(shape) : shape;
+      s_argv  = is_list(shape) ? tailn(shape, 1) : undef;
+
+      // move layout to enclosure center
+      translate([0, 0, bsize.z/2])
+      layout_grid_rp(t=layout, b=bsize, center=true, verb=verb-1)
+      select_common_3d_shape(type=s_type, argv=s_argv, center=true, verb=verb-1);
+
+      if (verb > 1)
+      {
+        echo(shape=shape, type=s_type, argv=s_argv);
+        echo(layout=layout);
+      }
+    }
+
+    if (verb > 0)
+    {
+      echo(strl(["shape: instances = ", insts]));
+    }
+  }
 
   // exterior walls
   module construct_exterior_walls( envelop=false )
@@ -1805,7 +1958,13 @@ module project_box_rectangle
     if ( is_defined( post ) && binary_bit_is(mode, 9, 0) )
     {
       envelop_assembly( mode_int_mask == true )
-      construct_posts( add=true);
+      construct_posts( add=true );
+    }
+
+    if ( is_defined( shape ) && binary_bit_is(mode, 11, 0) )
+    {
+      // should not be enclosure envelope limited
+      construct_shapes();
     }
   }
 
@@ -1814,7 +1973,12 @@ module project_box_rectangle
   {
     if ( is_defined( post ) && binary_bit_is(mode, 9, 0) )
     {
-      construct_posts( remove=true);
+      construct_posts( remove=true );
+    }
+
+    if ( is_defined( hole ) && binary_bit_is(mode, 10, 0) )
+    {
+      construct_holes();
     }
   }
 
@@ -1990,7 +2154,10 @@ function project_box_rectangle_size
 BEGIN_SCOPE example_multiple;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <shapes/select_common_2d.scad>;
+    include <shapes/select_common_3d.scad>;
     include <transforms/base_cs.scad>;
+    include <transforms/layout.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
 
     wth = 2; h = 8; sx = 75; sy = 50; vr = 5; vrm = 2;
@@ -2026,7 +2193,10 @@ END_SCOPE;
 BEGIN_SCOPE example_bottom;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <shapes/select_common_2d.scad>;
+    include <shapes/select_common_3d.scad>;
     include <transforms/base_cs.scad>;
+    include <transforms/layout.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
 
     $fn = 18;
@@ -2090,7 +2260,10 @@ END_SCOPE;
 BEGIN_SCOPE example_lip;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
+    include <shapes/select_common_2d.scad>;
+    include <shapes/select_common_3d.scad>;
     include <transforms/base_cs.scad>;
+    include <transforms/layout.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
 
     wth  = 2;
