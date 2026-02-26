@@ -87,18 +87,18 @@
     table. All supported shapes and their associated arguments are
     summarized in the following table:
 
-      t | shapes            | size parameters   | shape reference
-    ---:|:-----------------:|:-----------------:|:------------------------------------
-      1 | circle            |  r                | [circle()]
-      2 | ngon              |  r, n             | pg_ngon()
-      3 | rectangle         |  size             | pg_rectangle()
-      4 | rectangle sr      |  size             | pg_rectangle_rs()
-      5 | rhombus           |  size             | pg_rhombus()
-      6 | elliptical sector |  r, v1, v2        | pg_elliptical_sector()
-      7 | triangle vertices |  v1, v2, v3       | pg_triangle_ppp()
-      8 | triangle sides    |  s1, s2, s3       | pg_triangle_sss()
-      9 | star              |  size, n          | star2d()
-     10 | corner round      |  r, m, v1, v2     | pg_corner_round()
+       t  | shapes                | size parameters | shape reference
+    :----:|:---------------------:|:---------------:|:----------------------------
+        1 | circle                |  r              | [circle()]
+        2 | ngon                  |  r, n           | pg_ngon()
+        3 | rectangle             |  size           | pg_rectangle()
+        4 | rectangle sr          |  size           | pg_rectangle_rs()
+        5 | rhombus               |  size           | pg_rhombus()
+        6 | elliptical sector     |  r, v1, v2      | pg_elliptical_sector()
+        7 | triangle vertices     |  v1, v2, v3     | pg_triangle_ppp()
+        8 | triangle sides        |  s1, s2, s3     | pg_triangle_sss()
+        9 | star                  |  size, n        | star2d()
+       10 | corner round          |  r, m, v1, v2   | pg_corner_round()
 
     \amu_define scope_id      (example)
     \amu_define title         (Selection example)

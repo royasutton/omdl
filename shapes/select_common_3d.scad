@@ -88,7 +88,7 @@
     summarized in the following table:
 
        t  | shapes                | size parameters | shape reference
-    :----:|:---------------------:|:---------------:|:----------------------------------
+    :----:|:---------------------:|:---------------:|:----------------------------
         1 | cylinder              |  h, r1, r2      | [cylinder()]
         2 | cone                  |  size           | cone()
         3 | cuboid                |  size           | cuboid()
