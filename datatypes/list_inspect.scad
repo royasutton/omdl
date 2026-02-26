@@ -69,9 +69,9 @@
   \param    v2 <vector-n> The n-length vector 2.
   \param    p <number> The numerical precision.
 
-  \returns  (1) <boolean> \b true when the distance between \p v1 and
-                \p v2 is less than \p d and \b false otherwise.
-            (2) Returns \b false when either \p v1 or \p v2 are not
+  \returns  (1) <boolean> \c true when the distance between \p v1 and
+                \p v2 is less than \p d and \c false otherwise.
+            (2) Returns \c false when either \p v1 or \p v2 are not
                 numerical vectors of the same length.
 
   \details
@@ -97,8 +97,8 @@ function almost_eq_nv
   \param    v2 <iterable> An iterable data type value 2.
   \param    p <number> The precision for numerical comparisons.
 
-  \returns  (1) <boolean> \b true when all elements of each iterable
-                value are \em sufficiently equal and \b false
+  \returns  (1) <boolean> \c true when all elements of each iterable
+                value are \em sufficiently equal and \c false
                 otherwise.
 
   \details
@@ -135,21 +135,21 @@ function almost_eq
 
      rv      | order of values
     :-------:|:-------------------
-      \b -1  | <tt>(v2 < v1)</tt>
-      \b  0  | <tt>(v2 == v1)</tt>
-      \b +1  | <tt>(v2 > v1)</tt>
+      \c -1  | <tt>(v2 < v1)</tt>
+      \c  0  | <tt>(v2 == v1)</tt>
+      \c +1  | <tt>(v2 > v1)</tt>
 
     The following table summarizes how data type values are ordered.
 
-     order | type     | \p s      | intra-type ordering
-    :-----:|:--------:|:---------:|:--------------------------------------
-      1    | \b undef |           | (singular)
-      2    | number   |           | numerical comparison
-      3    | boolean  |           | \b false \< \b true
-      4    | string   |           | lexical comparison
-      5    | list     |           | compare (1) lengths, then (2) element-wise
-      6    | range    | \b true   | compare sum of range elements
-      6    | range    | \b false  | compare (1) lengths, then (2) element-wise
+     order | type       | \p s      | intra-type ordering
+    :-----:|:----------:|:---------:|:--------------------------------------
+      1    | \c undef   |           | (singular)
+      2    | \c number  |           | numerical comparison
+      3    | \c boolean |           | \c false \< \c true
+      4    | \c string  |           | lexical comparison
+      5    | \c list    |           | compare (1) lengths, then (2) element-wise
+      6    | \c range   | \c true   | compare sum of range elements
+      6    | \c range   | \c false  | compare (1) lengths, then (2) element-wise
 
     When comparing two lists of equal length, the comparison continues
     with successive elements until an ordering can be determined. Two
@@ -291,7 +291,8 @@ function compare
 
   \param    di <integer> The default output element index used when
             composing an output list from an input element that is not
-            a list. Use \p di = -1 to assign the value to all elements.
+            a list. Use <tt>di = -1</tt> to assign the value to all
+            elements.
 
   \returns  For the input list element indexed as <tt>e = l[i]</tt>:
             - <b>For \p e a list</b>:
