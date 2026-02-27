@@ -60,7 +60,7 @@
 
   \param mode     <integer> Modifier mode.
 
-  \param  verb    <integer> output console verbosity.
+  \param  verb    <integer> Console output verbosity.
 
   \details
 
@@ -126,6 +126,16 @@ module layout_grid_rp
   // apply transform on all children
   module transform_all()
   {
+    // z-axis object instances and grid spacing (2d and 3d)
+    rc_z = (ac == 2) ? 0 : [0:rc.z-1];
+    rg_z = (ac == 2) ? 0 : rg.z;
+
+    // group translate
+    gt  = [ for (i = [0:ac-1]) b[i] * lp[i] ];
+
+    // re-center object group offset
+    co  = [ for (i = [0:ac-1]) (rg[i] * (rc[i]-1))/2 * (lc[i] == true ? 1 : 0) ];
+
     // group placement
     translate( gt )
     rotate( lr )
@@ -185,24 +195,9 @@ module layout_grid_rp
   lc  = list_get_value(t, 8, cf, ac, center, -1);
 
   //
-  // transform calculations
+  // apply transform sequence with modifier
   //
 
-  // z-axis object instances and grid spacing (2d and 3d)
-  rc_z = (ac == 2) ? 0 : [0:rc.z-1];
-  rg_z = (ac == 2) ? 0 : rg.z;
-
-  // group translate
-  gt  = [ for (i = [0:ac-1]) b[i] * lp[i] ];
-
-  // re-center object group offset
-  co  = [ for (i = [0:ac-1]) (rg[i] * (rc[i]-1))/2 * (lc[i] == true ? 1 : 0) ];
-
-  //
-  // apply transform sequence
-  //
-
-  // modifier mode
   if      ( mm == 0 )
     transform_all() children(cs);
   else if ( mm == 2 )
@@ -214,7 +209,7 @@ module layout_grid_rp
 
   if (verb > 0)
   {
-    log_info(strl(["t = ", t, ", b = ", b, ", center = ", center, ", mode = ", mode]));
+    log_info(strl(["t = ", t, ", s = ", cs, ", b = ", b, ", center = ", center, ", mode = ", mode]));
 
     if (verb >1)
       echo(mm=mm, lp=lp, lr=lr, cm=cm, cr=cr, lt=lt, rc=rc, rg=rg, lc=lc);
