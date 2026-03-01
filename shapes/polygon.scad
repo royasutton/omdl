@@ -138,6 +138,14 @@ module pg_rectangle_rs
   center = false
 )
 {
+  function pg_rectangle_rs_helper_r ( s, i ) =
+    let
+    (
+      a = first( s ), a1 = a[0], a2 = a[1], a3 = a[2],
+      p = polygon_arc_p( r=distance_pp(i, a1), c=a1, v1=[a1, i], v2=[a1, a2], cw=a3 )
+    )
+    ( len( s ) == 1 ) ? p : concat( p, pg_rectangle_rs_helper_r( tailn(s), last( p ) ) );
+
   sx = defined_e_or(size, 0, size);
   sy = defined_e_or(size, 1, sx);
 
@@ -153,13 +161,13 @@ module pg_rectangle_rs
 
   ts =
   [ // centered around origin
-    ["arc_pv", [[  0, +ry], [-sx, +sy]/2, cwx]],
-    ["arc_pv", [[-rx,   0], [-sx, -sy]/2, cwy]],
-    ["arc_pv", [[  0, -ry], [+sx, -sy]/2, cwx]],
-    ["arc_pv", [[+rx,   0], [+sx, +sy]/2, cwy]]
+    [[  0, +ry], [-sx, +sy]/2, cwx],
+    [[-rx,   0], [-sx, -sy]/2, cwy],
+    [[  0, -ry], [+sx, -sy]/2, cwx],
+    [[+rx,   0], [+sx, +sy]/2, cwy]
   ];
 
-  c = polygon_turtle_p( ts, i=[sx,sy]/2 );
+  c = pg_rectangle_rs_helper_r( ts, i=[sx,sy]/2 );
 
   p = (center == true)  &&  is_undef( o ) ? c
     : (center == true)  && !is_undef( o ) ? translate_p(c, o)
