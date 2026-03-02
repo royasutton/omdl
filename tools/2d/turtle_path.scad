@@ -155,6 +155,8 @@ function turtle_path_2d_p
       // get operation and argument vector
       opr = first( stp ),
       arv = second( stp ),
+
+      // get argument count
       arc = is_undef( arv ) ? 0 : is_list( arv ) ? len( arv ) : 1,
 
       // assign arguments
@@ -163,21 +165,21 @@ function turtle_path_2d_p
       a3  = defined_e_or( arv, 2, undef ),
       a4  = defined_e_or( arv, 3, undef ),
 
-      // compute coordinate point(s) for current operation
-      p = (opr == "mxy" || opr == "move_xy"  ) && (arc == 2) ? [a1, a2]
+      // compute the coordinate point list for this operation step
+      p = (opr == "mxy" || opr == "move_xy"  ) && (arc == 2) ? [[a1, a2]]
 
-        : (opr == "mx"  || opr == "move_x"   ) && (arc == 1) ? [a1, i.y]
-        : (opr == "my"  || opr == "move_y"   ) && (arc == 1) ? [i.x, a1]
+        : (opr == "mx"  || opr == "move_x"   ) && (arc == 1) ? [[a1, i.y]]
+        : (opr == "my"  || opr == "move_y"   ) && (arc == 1) ? [[i.x, a1]]
 
-        : (opr == "dxy" || opr == "delta_xy" ) && (arc == 2) ? i + [a1, a2]
+        : (opr == "dxy" || opr == "delta_xy" ) && (arc == 2) ? [i + [a1, a2]]
 
-        : (opr == "dx"  || opr == "delta_x"  ) && (arc == 1) ? i + [a1, 0]
-        : (opr == "dy"  || opr == "delta_y"  ) && (arc == 1) ? i + [0, a1]
+        : (opr == "dx"  || opr == "delta_x"  ) && (arc == 1) ? [i + [a1, 0]]
+        : (opr == "dy"  || opr == "delta_y"  ) && (arc == 1) ? [i + [0, a1]]
 
-        : (opr == "dxa" || opr == "delta_xa" ) && (arc == 2) ? i + [a1, a1 * tan(a2)]
-        : (opr == "dya" || opr == "delta_ya" ) && (arc == 2) ? i + [a1 / tan(a2), a1]
+        : (opr == "dxa" || opr == "delta_xa" ) && (arc == 2) ? [i + [a1, a1 * tan(a2)]]
+        : (opr == "dya" || opr == "delta_ya" ) && (arc == 2) ? [i + [a1 / tan(a2), a1]]
 
-        : (opr == "dv"  || opr == "delta_v"  ) && (arc == 2) ? line_tp( line2d_new(m=a1, a=a2, p1=i) )
+        : (opr == "dv"  || opr == "delta_v"  ) && (arc == 2) ? [line_tp( line2d_new(m=a1, a=a2, p1=i) )]
 
         : (opr == "apv" || opr == "arc_pv"   ) && ((arc == 3) || (arc == 4)) ?
           let
@@ -198,13 +200,9 @@ function turtle_path_2d_p
           ( false,
             str ( "ERROR at '", stp, "', num='", c, "', operation='", opr
                   , "', argc='", arc, "', argv='", arv,"'" )
-          ),
-
-      lp  = len( p ),               // points count in current step
-      cp  = (lp > 2) ? p : [p],     // point-list for current step
-      ni  = (lp > 2) ? last(p) : p  // initial point for next step
+          )
     )
-    ( len( s ) == 1 ) ? cp : concat( cp, turtle_path_2d_p( tailn(s), ni, c+1 ) );
+    ( len( s ) == 1 ) ? p : concat( p, turtle_path_2d_p( tailn(s), last(p), c+1 ) );
 
 //! @}
 //! @}
