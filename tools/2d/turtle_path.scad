@@ -200,15 +200,11 @@ function turtle_path_2d_p
                   , "', argc='", arc, "', argv='", arv,"'" )
           ),
 
-      ls  = len( s ),               // current step count
       lp  = len( p ),               // points count in current step
       cp  = (lp > 2) ? p : [p],     // point-list for current step
       ni  = (lp > 2) ? last(p) : p  // initial point for next step
     )
-    // check if have reached last step (ls == 1)?
-    //  yes : terminate recursion
-    //   no : pop current step and process remaining
-    ( ls == 1 ) ? cp : concat( cp, turtle_path_2d_p( tailn(s), ni, c+1 ) );
+    ( len( s ) == 1 ) ? cp : concat( cp, turtle_path_2d_p( tailn(s), ni, c+1 ) );
 
 //! @}
 //! @}
