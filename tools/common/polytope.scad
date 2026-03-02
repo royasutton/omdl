@@ -330,7 +330,7 @@ BEGIN_SCOPE example_number;
     include <omdl-base.scad>;
     include <units/coordinate.scad>;
     include <database/geometry/polyhedra/johnson.scad>;
-    include <tools/polytope.scad>;
+    include <tools/common/polytope.scad>;
 
     tc = dtc_polyhedra_johnson;
     tr = dtr_polyhedra_johnson;
@@ -364,7 +364,7 @@ BEGIN_SCOPE example_frame_a;
     include <omdl-base.scad>;
     include <units/coordinate.scad>;
     include <database/geometry/polyhedra/cupolas.scad>;
-    include <tools/polytope.scad>;
+    include <tools/common/polytope.scad>;
 
     tc = dtc_polyhedra_cupolas;
     tr = dtr_polyhedra_cupolas;
@@ -404,7 +404,7 @@ BEGIN_SCOPE example_frame_b;
     include <omdl-base.scad>;
     include <units/coordinate.scad>;
     include <database/geometry/polyhedra/archimedean.scad>;
-    include <tools/polytope.scad>;
+    include <tools/common/polytope.scad>;
 
     tc = dtc_polyhedra_archimedean;
     tr = dtr_polyhedra_archimedean;
@@ -447,7 +447,7 @@ BEGIN_SCOPE example_bbox;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <database/geometry/polyhedra/archimedean.scad>;
-    include <tools/polytope.scad>;
+    include <tools/common/polytope.scad>;
 
     tc = dtc_polyhedra_archimedean;
     tr = dtr_polyhedra_archimedean;

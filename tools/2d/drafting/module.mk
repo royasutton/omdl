@@ -4,16 +4,22 @@
 $(eval $(call clear-local-module))
 #------------------------------------------------------------------------------#
 
-local_path        :=  tools
+local_path        :=  tools/2d/drafting
 
-local_library     :=  docs_module
+local_library     :=  docs_module \
+                      \
+                      config \
+                      primitive \
+                      operation \
+                      dimension \
+                      \
+                      draft-base
 
 local_release_add :=
 
 local_backup_add  :=
 
-local_submodules  :=  common \
-                      2d
+local_submodules  :=
 
 #------------------------------------------------------------------------------#
 # add local module

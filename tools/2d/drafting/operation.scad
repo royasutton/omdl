@@ -990,8 +990,8 @@ BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <transforms/base_cs.scad>;
-    include <tools/polytope.scad>;
-    include <tools/drafting/draft-base.scad>;
+    include <tools/common/polytope.scad>;
+    include <tools/2d/drafting/draft-base.scad>;
 
     object = "draft_move";
 

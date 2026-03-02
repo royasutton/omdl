@@ -4,7 +4,7 @@
 $(eval $(call clear-local-module))
 #------------------------------------------------------------------------------#
 
-local_path        :=  tools
+local_path        :=  tools/3d
 
 local_library     :=  docs_module
 
@@ -12,8 +12,7 @@ local_release_add :=
 
 local_backup_add  :=
 
-local_submodules  :=  common \
-                      2d
+local_submodules  :=
 
 #------------------------------------------------------------------------------#
 # add local module

@@ -47,7 +47,7 @@
   \amu_define includes_required_add
   (
     transforms/base_cs.scad
-    tools/polytope.scad
+    tools/common/polytope.scad
     ${PATH_NAME}/draft-base.scad
   )
   \amu_include (include/amu/includes_required.amu)
@@ -88,7 +88,7 @@ BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <transforms/base_cs.scad>;
-    include <tools/drafting/draft-base.scad>;
+    include <tools/2d/drafting/draft-base.scad>;
 
     length_unit_base = "mm";
     length_unit_default = "mm";

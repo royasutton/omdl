@@ -804,7 +804,7 @@ concat
 BEGIN_SCOPE dfraft_style1;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/drafting/draft-base.scad>;
+    include <tools/2d/drafting/draft-base.scad>;
     length_unit_base = "mm";
 
     map_write( draft_config_map_style1 );
@@ -819,7 +819,7 @@ END_SCOPE;
 BEGIN_SCOPE sheet_sizes;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/drafting/draft-base.scad>;
+    include <tools/2d/drafting/draft-base.scad>;
     length_unit_base = "in";
 
     table_write( draft_sheet_size_tr, draft_sheet_size_tc, heading_text=true );
@@ -838,7 +838,7 @@ END_SCOPE;
 BEGIN_SCOPE sheet_config;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/drafting/draft-base.scad>;
+    include <tools/2d/drafting/draft-base.scad>;
     length_unit_base = "mm";
 
     table_write ( r=draft_sheet_config_tr, c=draft_sheet_config_tc,
@@ -854,7 +854,7 @@ END_SCOPE;
 BEGIN_SCOPE sheet_config_keys;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/drafting/draft-base.scad>;
+    include <tools/2d/drafting/draft-base.scad>;
     length_unit_base = "mm";
 
     map_write( draft_sheet_config_tc );

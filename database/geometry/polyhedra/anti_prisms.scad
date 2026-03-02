@@ -689,7 +689,7 @@ BEGIN_SCOPE dim;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <units/coordinate.scad>;
-    include <tools/polytope.scad>;
+    include <tools/common/polytope.scad>;
     include <database/geometry/polyhedra/anti_prisms.scad>;
 
     config = 0;
