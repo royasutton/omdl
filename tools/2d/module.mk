@@ -6,7 +6,9 @@ $(eval $(call clear-local-module))
 
 local_path        :=  tools/2d
 
-local_library     :=  docs_module
+local_library     :=  docs_module \
+                      \
+                      turtle_path
 
 local_release_add :=
 
