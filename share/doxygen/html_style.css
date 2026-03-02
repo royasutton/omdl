@@ -25,6 +25,14 @@ div.contents code
 
 */
 
+table.amuBuildInfo
+{
+  table-layout: auto;
+  width: 75%;
+}
+
+table.amuValidate,
+table.amuBuildInfo,
 table.doxtable,
 table.markdownTable
 {
@@ -34,6 +42,10 @@ table.markdownTable
   margin-bottom: auto;
 }
 
+table.amuValidate td,
+table.amuValidate th,
+table.amuBuildInfo td,
+table.amuBuildInfo th,
 table.doxtable td,
 table.doxtable th,
 table.markdownTable td,
@@ -43,6 +55,8 @@ table.markdownTable th
   padding: 3px 7px 2px;
 }
 
+table.amuValidate th,
+table.amuBuildInfo th,
 table.doxtable th,
 table.markdownTable th
 {
@@ -88,6 +102,13 @@ table.markdownTable tr:nth-child(odd) td
 {
   background-color: #F7F8FB;
 }
+
+table.amuBuildInfo td:nth-child(2),
+table.amuBuildInfo td:nth-child(3)
+{
+  text-align: center;
+}
+
 
 
 /* eof */

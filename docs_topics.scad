@@ -759,6 +759,7 @@
     id="bi_general"
     table_caption="General"
     columns="2"
+    table_class="amuBuildInfo"
     column_headings="name^value"
     cell_texts="${bi_general}"
   )
@@ -771,6 +772,7 @@
     id="bi_toolchain"
     table_caption="Toolchain"
     columns="3"
+    table_class="amuBuildInfo"
     column_headings="name^version^path"
     cell_texts="${bi_toolchain}"
   )
@@ -783,6 +785,7 @@
     id="bi_components"
     table_caption="Components"
     columns="3"
+    table_class="amuBuildInfo"
     column_headings="name^count^value"
     cell_texts="${bi_components}"
   )
@@ -795,6 +798,7 @@
     id="bi_scopes"
     table_caption="Scopes"
     columns="3"
+    table_class="amuBuildInfo"
     column_headings="name^count^value"
     cell_texts="${bi_scopes}"
   )
@@ -807,6 +811,7 @@
     id="bi_modules"
     table_caption="Modules"
     columns="3"
+    table_class="amuBuildInfo"
     column_headings="name^count^value"
     cell_texts="${bi_modules}"
   )
@@ -819,6 +824,7 @@
     id="bi_sources"
     table_caption="Sources"
     columns="3"
+    table_class="amuBuildInfo"
     column_headings="name^count^value"
     cell_texts="${bi_sources}"
   )
