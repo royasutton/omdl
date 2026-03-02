@@ -221,7 +221,7 @@ function turtle_path_2d_p
 BEGIN_SCOPE turtle_path_2d_p;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/2d/turtle.scad>;
+    include <tools/2d/turtle_path.scad>;
 
     $fn=36;
 
