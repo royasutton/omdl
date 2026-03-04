@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Common Tools)
+    \amu_define group_name  (Common)
     \amu_define group_brief (Common design tools and workflow utilities.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
