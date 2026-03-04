@@ -73,7 +73,7 @@
   semantics.
 
    operation  | short | arguments         | output coordinate point
-  :-----------|:-----:|:-----------------:|:-----------------------
+  :----------:|:-----:|:-----------------:|:-----------------------:
    move_xy    | mxy   | [x, y]            | [x, y]
    move_x     | mx    | x                 | [x, i.y]
    move_y     | my    | y                 | [i.x, y]
@@ -94,7 +94,7 @@
   ### arc_pv
 
     e | data type                             | parameter description
-  ---:|:-------------------------------------:|:------------------------------------
+  :--:|:-------------------------------------:|:------------------------------------
     c | <point-2d>                            | arc center point [x, y]
     v | <point-2d> \| <decimal>               | arc stop angle [x, y] or a
    cw | <boolean>                             | arc sweep direction
@@ -113,7 +113,7 @@
   ### arc_vv
 
     e | data type                             | parameter description
-  ---:|:-------------------------------------:|:------------------------------------
+  :--:|:-------------------------------------:|:------------------------------------
     c | <decimal-list-2>                      | arc center point [m, a]
     v | <point-2d> \| <decimal>               | arc stop angle [x, y] or a
    cw | <boolean>                             | arc sweep direction
