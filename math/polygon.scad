@@ -431,6 +431,8 @@ function polygon_trapezoid_p
     each index corresponds to a sub-parameter as described in the
     sections below.
 
+    ## Multi-value and structured parameters
+
     ### a
 
       e | data type | default value | parameter description
@@ -619,7 +621,7 @@ function polygon_line_wave_p
 
     // sampling rage start and end
     t_min   = defined_eon_or(t, 0, 0),
-    t_max   = defined_e_or  (t, 1, t_min+1),
+    t_max   = defined_e_or  (t, 1, t_min + 1),
 
     // waveform period fragments
     line_fn = defined_or(fn, get_fn( ma )),
