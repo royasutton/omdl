@@ -566,7 +566,7 @@ function polygon_trapezoid_p
     ### fn
 
     When undefined, the fragment count is derived from \p get_fn(\p
-    ma). See get_fn(\p ma) for more information.
+    ma). See get_fn() for more information.
 
     The total number of sampled points is:
 
