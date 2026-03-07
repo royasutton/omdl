@@ -95,10 +95,10 @@
 
     e | data type                             | parameter description
   :--:|:-------------------------------------:|:------------------------------------
-    c | <point-2d>                            | arc center point [x, y]
-    v | <point-2d> \| <decimal>               | arc stop angle [x, y] or a
-   cw | <boolean>                             | arc sweep direction
-   fn | <integer>                             | the number of [facets] \(optional\)
+    c | point-2d                              | arc center point [x, y]
+    v | point-2d \| decimal                   | arc stop angle [x, y] or a
+   cw | boolean                               | arc sweep direction
+   fn | integer                               | the number of [facets] \(optional\)
 
   This operation constructs an arc about a center point specified as a
   coordinate. The arc begins at the angle defined by the vector `[c,
@@ -109,15 +109,14 @@
   specifies the number of facets and, when omitted, is determined
   automatically by get_fn().
 
-
   ### arc_vv
 
     e | data type                             | parameter description
   :--:|:-------------------------------------:|:------------------------------------
-    c | <decimal-list-2>                      | arc center point [m, a]
-    v | <point-2d> \| <decimal>               | arc stop angle [x, y] or a
-   cw | <boolean>                             | arc sweep direction
-   fn | <integer>                             | the number of [facets] \(optional\)
+    c | decimal-list-2                        | arc center point [m, a]
+    v | point-2d \| decimal                   | arc stop angle [x, y] or a
+   cw | boolean                               | arc sweep direction
+   fn | integer                               | the number of [facets] \(optional\)
 
   This operation constructs an arc about a center point specified as a
   vector `[m, a]` originating from the current position. The arc begins
