@@ -93,12 +93,12 @@
 
   ### arc_pv
 
-    e | data type                             | parameter description
-  :--:|:-------------------------------------:|:------------------------------------
-    c | point-2d                              | arc center point [x, y]
-    v | point-2d \| decimal                   | arc stop angle [x, y] or a
-   cw | boolean                               | arc sweep direction
-   fn | integer                               | the number of [facets] \(optional\)
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | point-2d              | required      | \p c : arc center point [x, y]
+    1 | point-2d \| decimal   | required      | \p v : arc stop angle [x, y] or a
+    2 | boolean               | required      | \p cw : arc sweep direction
+    3 | integer               |               | \p fn : the number of [facets]; optional
 
   This operation constructs an arc about a center point specified as a
   coordinate. The arc begins at the angle defined by the vector `[c,
@@ -111,12 +111,12 @@
 
   ### arc_vv
 
-    e | data type                             | parameter description
-  :--:|:-------------------------------------:|:------------------------------------
-    c | decimal-list-2                        | arc center point [m, a]
-    v | point-2d \| decimal                   | arc stop angle [x, y] or a
-   cw | boolean                               | arc sweep direction
-   fn | integer                               | the number of [facets] \(optional\)
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | decimal-list-2        | required      | \p c : arc center point [m, a]
+    1 | point-2d \| decimal   | required      | \p v : arc stop angle [x, y] or a
+    2 | boolean               | required      | \p cw : arc sweep direction
+    3 | integer               |               | \p fn : the number of [facets]; optional
 
   This operation constructs an arc about a center point specified as a
   vector `[m, a]` originating from the current position. The arc begins
