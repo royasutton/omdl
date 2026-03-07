@@ -185,16 +185,16 @@ function polygon_turtle_path_2d_p
       step = first( s ),
 
       // get operation, argument vector, and argument count
-      opr = first( step ),
-      arv = tailn( step ),
+      oper = first( step ),
+      argv = tailn( step ),
 
-      arc = is_undef( arv ) ? 0 : is_list( arv ) ? len( arv ) : 1,
+      argc = is_undef( argv ) ? 0 : is_list( argv ) ? len( argv ) : 1,
 
       // assign arguments
-      a1  = arv[ 0 ],
-      a2  = arv[ 1 ],
-      a3  = arv[ 2 ],
-      a4  = arv[ 3 ],
+      a1  = argv[ 0 ],
+      a2  = argv[ 1 ],
+      a3  = argv[ 2 ],
+      a4  = argv[ 3 ],
 
       //
       // compute the coordinate point(s) list for this operation step
@@ -203,118 +203,118 @@ function polygon_turtle_path_2d_p
           //
           // lines; move
           //
-          (opr == "mxy" || opr == "move_xy") && (arc > 1) ?
+          (oper == "mxy" || oper == "move_xy") && (argc > 1) ?
             let
             (
               t  = [a1, a2],
               wc = a3,
               fn = a4
             )
-            (arc == 2) ?
+            (argc == 2) ?
               [t]
             : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
-        : (opr == "mx"  || opr == "move_x") && (arc > 0) ?
+        : (oper == "mx"  || oper == "move_x") && (argc > 0) ?
             let
             (
               t  = [a1, i.y],
               wc = a2,
               fn = a3
             )
-            (arc == 1) ?
+            (argc == 1) ?
               [t]
             : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
-        : (opr == "my"  || opr == "move_y") && (arc > 0) ?
+        : (oper == "my"  || oper == "move_y") && (argc > 0) ?
             let
             (
               t  = [i.x, a1],
               wc = a2,
               fn = a3
             )
-            (arc == 1) ?
+            (argc == 1) ?
               [t]
             : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
           //
           // lines; delta
           //
-        : (opr == "dxy" || opr == "delta_xy") && (arc > 1) ?
+        : (oper == "dxy" || oper == "delta_xy") && (argc > 1) ?
             let
             (
               t  = i + [a1, a2],
               wc = a3,
               fn = a4
             )
-            (arc == 2) ?
+            (argc == 2) ?
               [t]
             : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
-        : (opr == "dx"  || opr == "delta_x"  ) && (arc > 0) ?
+        : (oper == "dx"  || oper == "delta_x"  ) && (argc > 0) ?
             let
             (
               t  = i + [a1, 0],
               wc = a2,
               fn = a3
             )
-            (arc == 1) ?
+            (argc == 1) ?
               [t]
             : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
-        : (opr == "dy"  || opr == "delta_y"  ) && (arc > 0) ?
+        : (oper == "dy"  || oper == "delta_y"  ) && (argc > 0) ?
             let
             (
               t  = i + [0, a1],
               wc = a2,
               fn = a3
             )
-            (arc == 1) ?
+            (argc == 1) ?
               [t]
             : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
           //
           // lines; delta angle
           //
-        : (opr == "dxa" || opr == "delta_xa" ) && (arc > 1) ?
+        : (oper == "dxa" || oper == "delta_xa" ) && (argc > 1) ?
             let
             (
               t  = i + [a1, a1 * tan(a2)],
               wc = a3,
               fn = a4
             )
-            (arc == 2) ?
+            (argc == 2) ?
               [t]
             : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
-        : (opr == "dya" || opr == "delta_ya" ) && (arc > 1) ?
+        : (oper == "dya" || oper == "delta_ya" ) && (argc > 1) ?
             let
             (
               t  = i + [a1 / tan(a2), a1],
               wc = a3,
               fn = a4
             )
-            (arc == 2) ?
+            (argc == 2) ?
               [t]
             : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
           //
           // lines; delta vector
           //
-        : (opr == "dv"  || opr == "delta_v"  ) && (arc > 1) ?
+        : (oper == "dv"  || oper == "delta_v"  ) && (argc > 1) ?
             let
             (
               t  = line_tp( line2d_new(m=a1, a=a2, p1=i) ),
               wc = a3,
               fn = a4
             )
-            (arc == 2) ?
+            (argc == 2) ?
               [t]
             : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
           //
           // arc; center point
           //
-        : (opr == "apv" || opr == "arc_pv"   ) && ((arc == 3) || (arc == 4)) ?
+        : (oper == "apv" || oper == "arc_pv"   ) && ((argc == 3) || (argc == 4)) ?
           let
           ( // handle scalar angle or compute angle from vector
             v2  = is_list(a2) ? [a1, a2] : a2
@@ -324,7 +324,7 @@ function polygon_turtle_path_2d_p
           //
           // arc; center vector
           //
-        : (opr == "avv" || opr == "arc_vv"   ) && ((arc == 3) || (arc == 4)) ?
+        : (oper == "avv" || oper == "arc_vv"   ) && ((argc == 3) || (argc == 4)) ?
           let
           ( // calculate center point 'b1' from given vector [m, a] in 'a1'
             b1 = line_tp( line2d_new(m=first(a1), a=second(a1), p1=i) ),
@@ -335,7 +335,7 @@ function polygon_turtle_path_2d_p
           //
           // points
           //
-        : (opr == "pp" || opr == "path_p"   ) && (arc == 1) ?
+        : (oper == "pp" || oper == "path_p"   ) && (argc == 1) ?
           let
           (
             point_list = a1
@@ -348,8 +348,8 @@ function polygon_turtle_path_2d_p
         : assert
           (
             false,
-            str ( "ERROR at '", step, "', step='", step_n, "', operation='", opr
-                  , "', argc='", arc, "', argv='", arv,"'" )
+            str ( "ERROR at '", step, "', step='", step_n, "', operation='", oper
+                  , "', argc='", argc, "', argv='", argv,"'" )
           )
     )
     ( len( s ) == 1 ) ? p : concat( p, polygon_turtle_path_2d_p( tailn(s), last(p), step_n+1 ) );
