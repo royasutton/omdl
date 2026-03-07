@@ -48,7 +48,7 @@
 /***************************************************************************//**
   \param    s <datastruct> The list of steps.
   \param    i <point-2d> The initial coordinate [x, y].
-  \param    c <integer> (an internal recursion step count)
+  \param    step_n <integer> (an internal recursion step count)
 
   \returns  <point-2d-list> The list of coordinate points.
 
@@ -178,7 +178,7 @@ function polygon_turtle_path_2d_p
 (
   s,
   i = origin2d,
-  c = 0
+  step_n = 0
 ) = ! is_list( s ) ? empty_lst
   : let
     ( // get current step
@@ -348,11 +348,11 @@ function polygon_turtle_path_2d_p
         : assert
           (
             false,
-            str ( "ERROR at '", step, "', num='", c, "', operation='", opr
+            str ( "ERROR at '", step, "', step='", step_n, "', operation='", opr
                   , "', argc='", arc, "', argv='", arv,"'" )
           )
     )
-    ( len( s ) == 1 ) ? p : concat( p, polygon_turtle_path_2d_p( tailn(s), last(p), c+1 ) );
+    ( len( s ) == 1 ) ? p : concat( p, polygon_turtle_path_2d_p( tailn(s), last(p), step_n+1 ) );
 
 //! @}
 //! @}
