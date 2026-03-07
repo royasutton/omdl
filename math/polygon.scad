@@ -603,7 +603,7 @@ function polygon_line_wave_p
   w = 1,
   m = 0,
 
-  t = 0,
+  t,
 
   fn
 ) =
