@@ -610,7 +610,12 @@ function polygon_line_wave_p
 ) =
   let
   (
-    // decode parameters; max amplitude, nonlinear amplitude
+    // decode/unpack parameters
+
+    // wave period
+    wp      = defined_or(p, 1),
+
+    // max amplitude, nonlinear amplitude
     ma      = defined_eon_or(a, 0, 1),
     na      = defined_e_or  (a, 1, 1),
     oa      = defined_e_or  (a, 2, 0),
@@ -634,7 +639,7 @@ function polygon_line_wave_p
     len     = sqrt(dx*dx + dy*dy),
 
     // line steps; cycles * fragments per cycle
-    steps   = ceil( (len * (t_max - t_min) / p) * line_fn ),
+    steps   = ceil( (len * (t_max - t_min) / wp) * line_fn ),
 
     // unit tangent (along the line)
     tx      = dx / len,
@@ -657,7 +662,7 @@ function polygon_line_wave_p
         // arc length along the line
         arc     = tp * len,
 
-        u_raw   = (arc / p) - floor(arc / p),
+        u_raw   = (arc / wp) - floor(arc / wp),
         u       = u_raw < 0 ? u_raw + 1 : u_raw,
 
         // time axis remap
