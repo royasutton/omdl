@@ -386,8 +386,8 @@ function polygon_trapezoid_p
   \param    p <decimal> Period length; One full waveform cycle spans
             this distance along the line arc length.
 
-  \param    a <decimal-list-2 | decimal> Amplitude configuration;
-            a list [\p ma, \p na] or a single decimal for (\p ma)
+  \param    a <decimal-list-3 | decimal> Amplitude configuration; a
+            list [\p ma, \p na, \p oa] or a single decimal for (\p ma)
             (see below).
 
   \param    w <datastruct | integer> Waveform shape configuration;
@@ -439,6 +439,7 @@ function polygon_trapezoid_p
     ---:|:---------:|:-------------:|:------------------------------------
       0 | decimal   | 1             | \p ma : maximum amplitude; peak perpendicular displacement from the line
       1 | decimal   | 1             | \p na : nonlinear amplitude exponent; applied after waveform evaluation
+      2 | decimal   | 0             | \p oa : perpendicular offset; shifts the entire waveform baseline
 
     #### a[1]:na
 
@@ -612,6 +613,7 @@ function polygon_line_wave_p
     // decode parameters; max amplitude, nonlinear amplitude
     ma      = defined_eon_or(a, 0, 1),
     na      = defined_e_or  (a, 1, 1),
+    oa      = defined_e_or  (a, 2, 0),
 
     // waveform shape
     shape   = defined_eon_or(w, 0, 1),
@@ -759,7 +761,7 @@ function polygon_line_wave_p
             : 0,
 
         signv   = wave < 0 ? -1 : (wave > 0 ? 1 : 0),
-        offset  = ma * signv * pow(abs(wave), 1 / safe_n)
+        offset  = oa + ma * signv * pow(abs(wave), 1 / safe_n)
       )
       [ p1.x + arc * tx + offset * nx, p1.y + arc * ty + offset * ny ]
   ];
