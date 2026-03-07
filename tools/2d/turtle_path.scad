@@ -172,18 +172,17 @@ function turtle_path_2d_p
     ( // get current step
       step = first( s ),
 
-      // get operation and argument vector
+      // get operation, argument vector, and argument count
       opr = first( step ),
       arv = tailn( step ),
 
-      // get argument count
       arc = is_undef( arv ) ? 0 : is_list( arv ) ? len( arv ) : 1,
 
       // assign arguments
-      a1  = defined_e_or( arv, 0, undef ),
-      a2  = defined_e_or( arv, 1, undef ),
-      a3  = defined_e_or( arv, 2, undef ),
-      a4  = defined_e_or( arv, 3, undef ),
+      a1  = arv[ 0 ],
+      a2  = arv[ 1 ],
+      a3  = arv[ 2 ],
+      a4  = arv[ 3 ],
 
       //
       // compute the coordinate point(s) list for this operation step
