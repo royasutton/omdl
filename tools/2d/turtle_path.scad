@@ -73,7 +73,7 @@
   The following table summarizes the supported operations, arguments,
   and their semantics.
 
-   operation    | short   | arguments (line)      | arguments (wave-line) | output coordinate point
+   operation    | short   | arguments (line)      | arguments (wave-line) | output coordinate point(s)
   :------------:|:-------:|:---------------------:|:---------------------:|:-----------------------:
    move_xy      | mxy     | x, y                  | x, y, wc, fn          | [x, y]
    move_x       | mx      | x                     | x, wc, fn             | [x, i.y]
@@ -86,6 +86,7 @@
    delta_v      | dv      | m, a                  | m, a, wc, fn          | i + line(m, a)
    arc_pv       | apv     | c, v, cw, fn          | -                     | (see below)
    arc_vv       | avv     | v, v, cw, fn          | -                     | (see below)
+   path_p       | pp      | [p1, p2, ..., pn]     | -                     | (see below)
 
   Some operations may generate either straight or periodic waveform
   lines. When a periodic waveform line is desired, additional
@@ -147,6 +148,17 @@
   set to \p true, the arc is swept clockwise from the start angle to
   the stop angle. The optional parameter \p fn specifies the number of
   facets and, when omitted, is determined automatically by get_fn().
+
+  ### path_p
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | point-2d-list         | required      | path list of 2d points
+
+  Inserts a list of 2D points `[x, y]` into the output at the current
+  step, specified as a single argument containing the point list. Care
+  should be taken to ensure a smooth transition between the end of the
+  previous step and the start of the inserted points.
 
   \amu_define title           (Motor mount plate design example)
   \amu_define image_views     (top diag)
@@ -319,6 +331,16 @@ function turtle_path_2d_p
             v2 = is_list(a2) ? [b1, a2] : a2
           )
           polygon_arc_p( r=distance_pp(i, b1), c=b1, v1=[b1, i], v2=v2, cw=a3, fn=a4 )
+
+          //
+          // points
+          //
+        : (opr == "pp" || opr == "path_p"   ) && (arc == 1) ?
+          let
+          (
+            point_list = a1
+          )
+          point_list
 
           //
           // assert error
