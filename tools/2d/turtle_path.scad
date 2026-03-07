@@ -149,11 +149,11 @@ function turtle_path_2d_p
 ) = ! is_list( s ) ? empty_lst
   : let
     ( // get current step
-      stp = first( s ),
+      step = first( s ),
 
       // get operation and argument vector
-      opr = first( stp ),
-      arv = second( stp ),
+      opr = first( step ),
+      arv = tailn( step ),
 
       // get argument count
       arc = is_undef( arv ) ? 0 : is_list( arv ) ? len( arv ) : 1,
@@ -201,11 +201,13 @@ function turtle_path_2d_p
           )
           polygon_arc_p( r=distance_pp(i, b1), c=b1, v1=[b1, i], v2=v2, cw=a3, fn=a4 )
 
+          //
           // assert error
+          //
         : assert
           (
             false,
-            str ( "ERROR at '", stp, "', num='", c, "', operation='", opr
+            str ( "ERROR at '", step, "', num='", c, "', operation='", opr
                   , "', argc='", arc, "', argv='", arv,"'" )
           )
     )
@@ -235,9 +237,9 @@ BEGIN_SCOPE turtle_path_2d_p;
       ["delta_y",  h1],
       ["delta_x",  w1],
       ["delta_y",  h2],
-      ["delta_xy", [w3, h3]],
+      ["delta_xy", w3, h3],
       ["delta_x",  w1+w2-w3*2],
-      ["delta_xy", [w3, -h3]],
+      ["delta_xy", w3, -h3],
       ["move_y",   0],
       ["move_x",   0],
     ];
