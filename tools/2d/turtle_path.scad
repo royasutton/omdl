@@ -163,7 +163,7 @@
   \amu_define title           (Motor mount plate design example)
   \amu_define image_views     (top diag)
   \amu_define image_size      (sxga)
-  \amu_define scope_id        (turtle_path_2d_p)
+  \amu_define scope_id        (polygon_turtle_path_2d_p)
   \amu_define output_scad     (true)
 
   \amu_include (include/amu/scope_diagrams_3d.amu)
@@ -174,7 +174,7 @@
   [facets]: \ref get_fn()
   [Turtle graphics]: https://en.wikipedia.org/wiki/Turtle_(robot)
 *******************************************************************************/
-function turtle_path_2d_p
+function polygon_turtle_path_2d_p
 (
   s,
   i = origin2d,
@@ -352,7 +352,7 @@ function turtle_path_2d_p
                   , "', argc='", arc, "', argv='", arv,"'" )
           )
     )
-    ( len( s ) == 1 ) ? p : concat( p, turtle_path_2d_p( tailn(s), last(p), c+1 ) );
+    ( len( s ) == 1 ) ? p : concat( p, polygon_turtle_path_2d_p( tailn(s), last(p), c+1 ) );
 
 //! @}
 //! @}
@@ -362,7 +362,7 @@ function turtle_path_2d_p
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE turtle_path_2d_p;
+BEGIN_SCOPE polygon_turtle_path_2d_p;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <tools/2d/turtle_path.scad>;
@@ -386,7 +386,7 @@ BEGIN_SCOPE turtle_path_2d_p;
     ];
 
     // convert the step moves into coordinates
-    pp = turtle_path_2d_p( sm );
+    pp = polygon_turtle_path_2d_p( sm );
 
     // round all of the vertices
     rp = polygon_round_eve_all_p( pp, rr );
