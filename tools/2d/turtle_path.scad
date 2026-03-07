@@ -63,28 +63,28 @@
 
   Data structure schema:
 
-  name            | schema
-  ---------------:|:----------------------------------------------
-  s               | [ step, step, ..., step ]
-  step            | [ operation, arguments ]
-  arguments       | [ arg, arg, ..., arg ]
+   name             | schema
+  -----------------:|:----------------------------------------------
+   s                | [ step, step, ..., step ]
+   step             | [ operation, arguments ]
+   arguments        | [ arg, arg, ..., arg ]
 
   The following table summarizes the supported operations and their
   semantics.
 
-   operation  | short | arguments         | output coordinate point
-  :----------:|:-----:|:-----------------:|:-----------------------:
-   move_xy    | mxy   | [x, y]            | [x, y]
-   move_x     | mx    | x                 | [x, i.y]
-   move_y     | my    | y                 | [i.x, y]
-   delta_xy   | dxy   | [x, y]            | i + [x, y]
-   delta_x    | dx    | x                 | i + [x, 0]
-   delta_y    | dy    | y                 | i + [0, y]
-   delta_xa   | dxa   | [x, a]            | i + [ x, x * tan(a) ]
-   delta_ya   | dya   | [y, a]            | i + l y / tan(a), y ]
-   delta_v    | dv    | [m, a]            | i + line(m, a)
-   arc_pv     | apv   | [c, v, cw, fn]    | (see below)
-   arc_vv     | avv   | [v, v, cw, fn]    | (see below)
+   operation        | short   | arguments           | output coordinate point
+  :----------------:|:-------:|:-------------------:|:-----------------------:
+   move_xy          | mxy     | [x, y]              | [x, y]
+   move_x           | mx      | x                   | [x, i.y]
+   move_y           | my      | y                   | [i.x, y]
+   delta_xy         | dxy     | [x, y]              | i + [x, y]
+   delta_x          | dx      | x                   | i + [x, 0]
+   delta_y          | dy      | y                   | i + [0, y]
+   delta_xa         | dxa     | [x, a]              | i + [ x, x * tan(a) ]
+   delta_ya         | dya     | [y, a]              | i + l y / tan(a), y ]
+   delta_v          | dv      | [m, a]              | i + line(m, a)
+   arc_pv           | apv     | [c, v, cw, fn]      | (see below)
+   arc_vv           | avv     | [v, v, cw, fn]      | (see below)
 
   When an operation requires only a single argument, the argument may
   be specified either as a scalar value or as a single-element list.
