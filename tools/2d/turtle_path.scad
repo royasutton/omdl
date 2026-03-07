@@ -84,9 +84,9 @@
    delta_xa     | dxa     | x, a                  | x, a, wc, fn          | i + [ x, x * tan(a) ]
    delta_ya     | dya     | y, a                  | y, a, wc, fn          | i + l y / tan(a), y ]
    delta_v      | dv      | m, a                  | m, a, wc, fn          | i + line(m, a)
-   arc_pv       | apv     | c, v, cw, fn          | -                     | (see below)
-   arc_vv       | avv     | v, v, cw, fn          | -                     | (see below)
-   path_p       | pp      | [p1, p2, ..., pn]     | -                     | (see below)
+   arc_pv       | apv     | c, v, cw, fn          | (not supported)       | (see below)
+   arc_vv       | avv     | v, v, cw, fn          | (not supported)       | (see below)
+   path_p       | pp      | [p1, p2, ..., pn]     | (not supported)       | (see below)
 
   Some operations may generate either straight or periodic waveform
   lines. When a periodic waveform line is desired, additional
