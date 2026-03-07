@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2024
+  \date   2024,2026
 
   \copyright
 
@@ -165,21 +165,26 @@ function turtle_path_2d_p
       a4  = defined_e_or( arv, 3, undef ),
 
       // compute the coordinate point list for this operation step
-      p = (opr == "mxy" || opr == "move_xy"  ) && (arc == 2) ? [[a1, a2]]
+      p = // lines; move
+          (opr == "mxy" || opr == "move_xy"  ) && (arc == 2) ? [[a1, a2]]
 
         : (opr == "mx"  || opr == "move_x"   ) && (arc == 1) ? [[a1, i.y]]
         : (opr == "my"  || opr == "move_y"   ) && (arc == 1) ? [[i.x, a1]]
 
+          // lines; delta
         : (opr == "dxy" || opr == "delta_xy" ) && (arc == 2) ? [i + [a1, a2]]
 
         : (opr == "dx"  || opr == "delta_x"  ) && (arc == 1) ? [i + [a1, 0]]
         : (opr == "dy"  || opr == "delta_y"  ) && (arc == 1) ? [i + [0, a1]]
 
+          // lines; delta angle
         : (opr == "dxa" || opr == "delta_xa" ) && (arc == 2) ? [i + [a1, a1 * tan(a2)]]
         : (opr == "dya" || opr == "delta_ya" ) && (arc == 2) ? [i + [a1 / tan(a2), a1]]
 
+          // lines; delta vector
         : (opr == "dv"  || opr == "delta_v"  ) && (arc == 2) ? [line_tp( line2d_new(m=a1, a=a2, p1=i) )]
 
+          // arc; center point
         : (opr == "apv" || opr == "arc_pv"   ) && ((arc == 3) || (arc == 4)) ?
           let
           ( // handle scalar angle or compute angle from vector
@@ -187,6 +192,7 @@ function turtle_path_2d_p
           )
           polygon_arc_p( r=distance_pp(i, a1), c=a1, v1=[a1, i], v2=v2, cw=a3, fn=a4 )
 
+          // arc; center vector
         : (opr == "avv" || opr == "arc_vv"   ) && ((arc == 3) || (arc == 4)) ?
           let
           ( // calculate center point 'b1' from given vector [m, a] in 'a1'
@@ -195,8 +201,10 @@ function turtle_path_2d_p
           )
           polygon_arc_p( r=distance_pp(i, b1), c=b1, v1=[b1, i], v2=v2, cw=a3, fn=a4 )
 
+          // assert error
         : assert
-          ( false,
+          (
+            false,
             str ( "ERROR at '", stp, "', num='", c, "', operation='", opr
                   , "', argc='", arc, "', argv='", arv,"'" )
           )
