@@ -116,7 +116,7 @@
     0 | decimal-list-2        | required      | \p c : arc center point [m, a]
     1 | point-2d \| decimal   | required      | \p v : arc stop angle [x, y] or a
     2 | boolean               | required      | \p cw : arc sweep direction
-    3 | integer               |               | \p fn : the number of [facets]; optional
+    3 | integer               |               | \p fn : number of [facets]; optional
 
   This operation constructs an arc about a center point specified as a
   vector `[m, a]` originating from the current position. The arc begins
