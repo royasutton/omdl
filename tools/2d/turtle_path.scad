@@ -66,30 +66,51 @@
    name             | schema
   -----------------:|:----------------------------------------------
    s                | [ step, step, ..., step ]
-   step             | [ operation, arguments ]
-   arguments        | [ arg, arg, ..., arg ]
-
-  The following table summarizes the supported operations and their
-  semantics.
-
-   operation        | short   | arguments           | output coordinate point
-  :----------------:|:-------:|:-------------------:|:-----------------------:
-   move_xy          | mxy     | [x, y]              | [x, y]
-   move_x           | mx      | x                   | [x, i.y]
-   move_y           | my      | y                   | [i.x, y]
-   delta_xy         | dxy     | [x, y]              | i + [x, y]
-   delta_x          | dx      | x                   | i + [x, 0]
-   delta_y          | dy      | y                   | i + [0, y]
-   delta_xa         | dxa     | [x, a]              | i + [ x, x * tan(a) ]
-   delta_ya         | dya     | [y, a]              | i + l y / tan(a), y ]
-   delta_v          | dv      | [m, a]              | i + line(m, a)
-   arc_pv           | apv     | [c, v, cw, fn]      | (see below)
-   arc_vv           | avv     | [v, v, cw, fn]      | (see below)
-
-  When an operation requires only a single argument, the argument may
-  be specified either as a scalar value or as a single-element list.
+   step             | [ operation, arg1, arg2, arg3, arg4 ]
 
   ## Operations
+
+  The following table summarizes the supported operations, arguments,
+  and their semantics.
+
+   operation    | short   | arguments (line)      | arguments (wave-line) | output coordinate point
+  :------------:|:-------:|:---------------------:|:---------------------:|:-----------------------:
+   move_xy      | mxy     | x, y                  | x, y, wc, fn          | [x, y]
+   move_x       | mx      | x                     | x, wc, fn             | [x, i.y]
+   move_y       | my      | y                     | y, wc, fn             | [i.x, y]
+   delta_xy     | dxy     | x, y                  | x, y, wc, fn          | i + [x, y]
+   delta_x      | dx      | x                     | x, wc, fn             | i + [x, 0]
+   delta_y      | dy      | y                     | y, wc, fn             | i + [0, y]
+   delta_xa     | dxa     | x, a                  | x, a, wc, fn          | i + [ x, x * tan(a) ]
+   delta_ya     | dya     | y, a                  | y, a, wc, fn          | i + l y / tan(a), y ]
+   delta_v      | dv      | m, a                  | m, a, wc, fn          | i + line(m, a)
+   arc_pv       | apv     | c, v, cw, fn          | -                     | (see below)
+   arc_vv       | avv     | v, v, cw, fn          | -                     | (see below)
+
+  Some operations may generate either straight or periodic waveform
+  lines. When a periodic waveform line is desired, additional
+  parameters specify the waveform configuration and period fragment
+  count as shown in the table above.
+
+  ### Wave-line waveform configuration
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+   \* | datastruct            | required      | \p wc : waveform configuration `[p, a, w, m]`
+   \* | integer               |               | \p fn : number of [facets]; optional
+
+  #### wc
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | decimal               | see below     | \p p : period length
+    1 | decimal-list-3 \| decimal | see below | \p a : amplitude configuration
+    2 | datastruct \| integer | see below     | \p w : waveform shape configuration
+    3 | datastruct \| integer | see below     | \p m : time-axis remapping mode configuration
+
+  Wave-line constructs a line with periodic waveform lateral
+  displacement to the next point using \p polygon_line_wave_p(). See
+  its documentation for more details and default value.
 
   ### arc_pv
 
@@ -159,32 +180,84 @@ function turtle_path_2d_p
       arc = is_undef( arv ) ? 0 : is_list( arv ) ? len( arv ) : 1,
 
       // assign arguments
-      a1  = defined_e_or( arv, 0, arv ),
+      a1  = defined_e_or( arv, 0, undef ),
       a2  = defined_e_or( arv, 1, undef ),
       a3  = defined_e_or( arv, 2, undef ),
       a4  = defined_e_or( arv, 3, undef ),
 
-      // compute the coordinate point list for this operation step
-      p = // lines; move
-          (opr == "mxy" || opr == "move_xy"  ) && (arc == 2) ? [[a1, a2]]
+      //
+      // compute the coordinate point(s) list for this operation step
+      //
+      p =
+          //
+          // lines; move
+          //
+          (opr == "mxy" || opr == "move_xy") && (arc > 1) ?
+            let ( t = [a1, a2] )
+            (arc == 2) ?
+              [t]
+            : polygon_line_wave_p( p1=i, p2=t, p=a3[0], a=a3[1], w=a3[2], m=a3[3], fn=a4 )
 
-        : (opr == "mx"  || opr == "move_x"   ) && (arc == 1) ? [[a1, i.y]]
-        : (opr == "my"  || opr == "move_y"   ) && (arc == 1) ? [[i.x, a1]]
+        : (opr == "mx"  || opr == "move_x") && (arc > 0) ?
+            let ( t = [a1, i.y] )
+            (arc == 1) ?
+              [t]
+            : polygon_line_wave_p( p1=i, p2=t, p=a3[0], a=a3[1], w=a3[2], m=a3[3], fn=a4 )
 
+        : (opr == "my"  || opr == "move_y") && (arc > 0) ?
+            let ( t = [i.x, a1] )
+            (arc == 1) ?
+              [t]
+            : polygon_line_wave_p( p1=i, p2=t, p=a3[0], a=a3[1], w=a3[2], m=a3[3], fn=a4 )
+
+          //
           // lines; delta
-        : (opr == "dxy" || opr == "delta_xy" ) && (arc == 2) ? [i + [a1, a2]]
+          //
+        : (opr == "dxy" || opr == "delta_xy") && (arc > 1) ?
+            let ( t = i + [a1, a2] )
+            (arc == 2) ?
+              [t]
+            : polygon_line_wave_p( p1=i, p2=t, p=a3[0], a=a3[1], w=a3[2], m=a3[3], fn=a4 )
 
-        : (opr == "dx"  || opr == "delta_x"  ) && (arc == 1) ? [i + [a1, 0]]
-        : (opr == "dy"  || opr == "delta_y"  ) && (arc == 1) ? [i + [0, a1]]
+        : (opr == "dx"  || opr == "delta_x"  ) && (arc > 0) ?
+            let ( t = i + [a1, 0] )
+            (arc == 1) ?
+              [t]
+            : polygon_line_wave_p( p1=i, p2=t, p=a3[0], a=a3[1], w=a3[2], m=a3[3], fn=a4 )
 
+        : (opr == "dy"  || opr == "delta_y"  ) && (arc > 0) ?
+            let ( t = i + [0, a1] )
+            (arc == 1) ?
+              [t]
+            : polygon_line_wave_p( p1=i, p2=t, p=a3[0], a=a3[1], w=a3[2], m=a3[3], fn=a4 )
+
+          //
           // lines; delta angle
-        : (opr == "dxa" || opr == "delta_xa" ) && (arc == 2) ? [i + [a1, a1 * tan(a2)]]
-        : (opr == "dya" || opr == "delta_ya" ) && (arc == 2) ? [i + [a1 / tan(a2), a1]]
+          //
+        : (opr == "dxa" || opr == "delta_xa" ) && (arc > 1) ?
+            let ( t = i + [a1, a1 * tan(a2)] )
+            (arc == 2) ?
+              [t]
+            : polygon_line_wave_p( p1=i, p2=t, p=a3[0], a=a3[1], w=a3[2], m=a3[3], fn=a4 )
 
+        : (opr == "dya" || opr == "delta_ya" ) && (arc > 1) ?
+            let ( t = i + [a1 / tan(a2), a1] )
+            (arc == 2) ?
+              [t]
+            : polygon_line_wave_p( p1=i, p2=t, p=a3[0], a=a3[1], w=a3[2], m=a3[3], fn=a4 )
+
+          //
           // lines; delta vector
-        : (opr == "dv"  || opr == "delta_v"  ) && (arc == 2) ? [line_tp( line2d_new(m=a1, a=a2, p1=i) )]
+          //
+        : (opr == "dv"  || opr == "delta_v"  ) && (arc > 1) ?
+            let ( t = line_tp( line2d_new(m=a1, a=a2, p1=i) ) )
+            (arc == 2) ?
+              [t]
+            : polygon_line_wave_p( p1=i, p2=t, p=a3[0], a=a3[1], w=a3[2], m=a3[3], fn=a4 )
 
+          //
           // arc; center point
+          //
         : (opr == "apv" || opr == "arc_pv"   ) && ((arc == 3) || (arc == 4)) ?
           let
           ( // handle scalar angle or compute angle from vector
@@ -192,7 +265,9 @@ function turtle_path_2d_p
           )
           polygon_arc_p( r=distance_pp(i, a1), c=a1, v1=[a1, i], v2=v2, cw=a3, fn=a4 )
 
+          //
           // arc; center vector
+          //
         : (opr == "avv" || opr == "arc_vv"   ) && ((arc == 3) || (arc == 4)) ?
           let
           ( // calculate center point 'b1' from given vector [m, a] in 'a1'
