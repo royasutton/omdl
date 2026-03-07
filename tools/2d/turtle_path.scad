@@ -192,67 +192,112 @@ function turtle_path_2d_p
           // lines; move
           //
           (opr == "mxy" || opr == "move_xy") && (arc > 1) ?
-            let ( t = [a1, a2] )
+            let
+            (
+              t  = [a1, a2],
+              wc = a3,
+              fn = a4
+            )
             (arc == 2) ?
               [t]
-            : polygon_line_wave_p( p1=i, p2=t, p=a3[0], a=a3[1], w=a3[2], m=a3[3], fn=a4 )
+            : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
         : (opr == "mx"  || opr == "move_x") && (arc > 0) ?
-            let ( t = [a1, i.y] )
+            let
+            (
+              t  = [a1, i.y],
+              wc = a2,
+              fn = a3
+            )
             (arc == 1) ?
               [t]
-            : polygon_line_wave_p( p1=i, p2=t, p=a3[0], a=a3[1], w=a3[2], m=a3[3], fn=a4 )
+            : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
         : (opr == "my"  || opr == "move_y") && (arc > 0) ?
-            let ( t = [i.x, a1] )
+            let
+            (
+              t  = [i.x, a1],
+              wc = a2,
+              fn = a3
+            )
             (arc == 1) ?
               [t]
-            : polygon_line_wave_p( p1=i, p2=t, p=a3[0], a=a3[1], w=a3[2], m=a3[3], fn=a4 )
+            : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
           //
           // lines; delta
           //
         : (opr == "dxy" || opr == "delta_xy") && (arc > 1) ?
-            let ( t = i + [a1, a2] )
+            let
+            (
+              t  = i + [a1, a2],
+              wc = a3,
+              fn = a4
+            )
             (arc == 2) ?
               [t]
-            : polygon_line_wave_p( p1=i, p2=t, p=a3[0], a=a3[1], w=a3[2], m=a3[3], fn=a4 )
+            : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
         : (opr == "dx"  || opr == "delta_x"  ) && (arc > 0) ?
-            let ( t = i + [a1, 0] )
+            let
+            (
+              t  = i + [a1, 0],
+              wc = a2,
+              fn = a3
+            )
             (arc == 1) ?
               [t]
-            : polygon_line_wave_p( p1=i, p2=t, p=a3[0], a=a3[1], w=a3[2], m=a3[3], fn=a4 )
+            : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
         : (opr == "dy"  || opr == "delta_y"  ) && (arc > 0) ?
-            let ( t = i + [0, a1] )
+            let
+            (
+              t  = i + [0, a1],
+              wc = a2,
+              fn = a3
+            )
             (arc == 1) ?
               [t]
-            : polygon_line_wave_p( p1=i, p2=t, p=a3[0], a=a3[1], w=a3[2], m=a3[3], fn=a4 )
+            : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
           //
           // lines; delta angle
           //
         : (opr == "dxa" || opr == "delta_xa" ) && (arc > 1) ?
-            let ( t = i + [a1, a1 * tan(a2)] )
+            let
+            (
+              t  = i + [a1, a1 * tan(a2)],
+              wc = a3,
+              fn = a4
+            )
             (arc == 2) ?
               [t]
-            : polygon_line_wave_p( p1=i, p2=t, p=a3[0], a=a3[1], w=a3[2], m=a3[3], fn=a4 )
+            : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
         : (opr == "dya" || opr == "delta_ya" ) && (arc > 1) ?
-            let ( t = i + [a1 / tan(a2), a1] )
+            let
+            (
+              t  = i + [a1 / tan(a2), a1],
+              wc = a3,
+              fn = a4
+            )
             (arc == 2) ?
               [t]
-            : polygon_line_wave_p( p1=i, p2=t, p=a3[0], a=a3[1], w=a3[2], m=a3[3], fn=a4 )
+            : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
           //
           // lines; delta vector
           //
         : (opr == "dv"  || opr == "delta_v"  ) && (arc > 1) ?
-            let ( t = line_tp( line2d_new(m=a1, a=a2, p1=i) ) )
+            let
+            (
+              t  = line_tp( line2d_new(m=a1, a=a2, p1=i) ),
+              wc = a3,
+              fn = a4
+            )
             (arc == 2) ?
               [t]
-            : polygon_line_wave_p( p1=i, p2=t, p=a3[0], a=a3[1], w=a3[2], m=a3[3], fn=a4 )
+            : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
           //
           // arc; center point
