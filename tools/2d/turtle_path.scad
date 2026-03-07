@@ -348,8 +348,11 @@ function polygon_turtle_path_2d_p
         : assert
           (
             false,
-            str ( "ERROR at '", step, "', step='", step_n, "', operation='", oper
-                  , "', argc='", argc, "', argv='", argv,"'" )
+            strl
+            ([
+                "ERROR: i=", i, ", step_n=", step_n, ", operation=", oper,
+                  ", argv=", argv, ", argc=", argc
+            ])
           )
     )
     ( len( s ) == 1 ) ? p : concat( p, polygon_turtle_path_2d_p( tailn(s), last(p), step_n+1 ) );
