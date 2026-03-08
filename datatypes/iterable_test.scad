@@ -378,7 +378,7 @@ BEGIN_SCOPE validate;
       ["any_equal_T",         f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, t],
       ["any_equal_F",         f, f, f, t, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, f, t, t, f],
       ["any_equal_U",         t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
-      ["all_oneof_S1",        t, t, t, t, f, f, f, t, f, f, t, t, t, f, f, f, f, t, t, f, t, t, t],
+      ["all_oneof_S1",        t, t, t, t, f, f, t, t, f, f, t, t, t, f, f, f, f, t, t, f, t, t, t],
       ["all_defined",         f, t, t, t, t, t, t, t, t, t, f, t, t, t, t, t, t, f, f, t, t, t, t],
       ["any_defined",         f, t, t, t, t, t, f, f, t, t, f, t, t, t, t, t, t, t, f, t, t, t, t],
       ["any_undefined",       t, f, f, f, f, f, f, f, f, f, t, f, f, f, f, f, f, t, t, f, f, f, f],
