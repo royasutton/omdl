@@ -120,9 +120,9 @@ function _polygon_turtle_path_2d_p_line_p
    operation    | short   | arguments (line)      | arguments (wave-line) | output coordinate point(s)
   :------------:|:-------:|:---------------------:|:---------------------:|:-----------------------:
    close        | cl      | (none)                | wc, fn                | p0_g
-   move_xy      | mxy     | x, y                  | x, y, wc, fn          | [x, y]
-   move_x       | mx      | x                     | x, wc, fn             | [x, p0.y]
-   move_y       | my      | y                     | y, wc, fn             | [p0.x, y]
+   goto_xy      | gxy     | x, y                  | x, y, wc, fn          | [x, y]
+   goto_x       | gx      | x                     | x, wc, fn             | [x, p0.y]
+   goto_y       | gy      | y                     | y, wc, fn             | [p0.x, y]
    delta_xy     | dxy     | x, y                  | x, y, wc, fn          | p0 + [x, y]
    delta_x      | dx      | x                     | x, wc, fn             | p0 + [x, 0]
    delta_y      | dy      | y                     | y, wc, fn             | p0 + [0, y]
@@ -130,9 +130,9 @@ function _polygon_turtle_path_2d_p_line_p
    delta_ya     | dya     | y, a                  | y, a, wc, fn          | p0 + [ y / tan(a), y ]
    delta_xy_mx  | dxymx   | x, y                  | x, y, wc, fn          | p0 + [x, y], p0 + [x, -y]
    delta_xy_my  | dxymy   | x, y                  | x, y, wc, fn          | p0 + [x, y], p0 + [-x, y]
-   delta_ar     | dar     | m, a                  | m, a, wc, fn          | p0 + line(m, a)
-   delta_rr     | drr     | m, a                  | m, a, wc, fn          | p0 + line(m, h+a)
-   forward      | fw      | m                     | m, wc, fn             | p0 + line(m, h)
+   move_ar      | mar     | m, a                  | m, a, wc, fn          | p0 + line(m, a)
+   move_rr      | mrr     | m, a                  | m, a, wc, fn          | p0 + line(m, h+a)
+   move_fw      | mfw     | m                     | m, wc, fn             | p0 + line(m, h)
    turn_left    | tl      | a                     | (not applicable)      | (none)
    turn_right   | tr      | a                     | (not applicable)      | (none)
    arc_pv       | apv     | c, v, cw, fn          | (not applicable)      | (see below)
@@ -178,6 +178,43 @@ function _polygon_turtle_path_2d_p_line_p
   automatically on the first step and remains fixed for the lifetime of
   the recursion.
 
+  ### goto_xy
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | decimal               | required      | \p x : x-axis coordinate
+    1 | decimal               | required      | \p y : y-axis coordinate
+    2 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
+    3 | integer               |               | \p fn : number of [facets]; optional
+
+  Moves to the absolute coordinate `[x, y]`, ignoring the current
+  position. Supports straight and wave-line variants using the same
+  \p wc and \p fn parameters as other line operations.
+
+  ### goto_x
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | decimal               | required      | \p x : x-axis coordinate
+    1 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
+    2 | integer               |               | \p fn : number of [facets]; optional
+
+  Moves to the absolute x-axis coordinate \p x, retaining the current
+  y-axis coordinate. Supports straight and wave-line variants using the
+  same \p wc and \p fn parameters as other line operations.
+
+  ### goto_y
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | decimal               | required      | \p y : y-axis coordinate
+    1 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
+    2 | integer               |               | \p fn : number of [facets]; optional
+
+  Moves to the absolute y-axis coordinate \p y, retaining the current
+  x-axis coordinate. Supports straight and wave-line variants using the
+  same \p wc and \p fn parameters as other line operations.
+
   ### delta_xy_mx
 
     e | data type             | default value | parameter description
@@ -212,7 +249,7 @@ function _polygon_turtle_path_2d_p_line_p
   profiles in a single step. Both segments support wave-line generation
   when \p wc is provided.
 
-  ### delta_ar
+  ### move_ar
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
@@ -226,7 +263,7 @@ function _polygon_turtle_path_2d_p_line_p
   consulted. Supports straight and wave-line variants using the same
   \p wc and \p fn parameters as other line operations.
 
-  ### delta_rr
+  ### move_rr
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
@@ -237,11 +274,11 @@ function _polygon_turtle_path_2d_p_line_p
 
   Moves from the current position by distance \p m at an angle of
   `h + a`, where \p h is the current heading. When \p a is zero this
-  operation is equivalent to \p forward. Supports straight and wave-line
+  operation is equivalent to \p move_fw. Supports straight and wave-line
   variants using the same \p wc and \p fn parameters as other line
   operations.
 
-  ### forward
+  ### move_fw
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
@@ -250,7 +287,7 @@ function _polygon_turtle_path_2d_p_line_p
     2 | integer               |               | \p fn : number of [facets]; optional
 
   Moves forward from the current position by distance \p m along the
-  current heading \p h. Equivalent to \p delta_rr with \p a set to zero.
+  current heading \p h. Equivalent to \p move_rr with \p a set to zero.
   Supports straight and wave-line variants using the same \p wc and \p fn
   parameters as other line operations.
 
@@ -365,9 +402,9 @@ function polygon_turtle_path_2d_p
       //
       p =
           //
-          // lines; move
+          // lines; goto (absolute position)
           //
-          (oper == "move_xy" || oper == "mxy") && (argc > 1) ?
+          (oper == "goto_xy" || oper == "gxy") && (argc > 1) ?
             let
             (
               t  = [a1, a2],
@@ -376,7 +413,7 @@ function polygon_turtle_path_2d_p
             )
             _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
 
-        : (oper == "move_x" || oper == "mx") && (argc > 0) ?
+        : (oper == "goto_x" || oper == "gx") && (argc > 0) ?
             let
             (
               t  = [a1, p0.y],
@@ -385,7 +422,7 @@ function polygon_turtle_path_2d_p
             )
             _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
 
-        : (oper == "move_y" || oper == "my") && (argc > 0) ?
+        : (oper == "goto_y" || oper == "gy") && (argc > 0) ?
             let
             (
               t  = [p0.x, a1],
@@ -477,9 +514,9 @@ function polygon_turtle_path_2d_p
             )
 
           //
-          // lines; delta radial absolute
+          // lines; move radial absolute
           //
-        : (oper == "delta_ar" || oper == "dar") && (argc > 1) ?
+        : (oper == "move_ar" || oper == "mar") && (argc > 1) ?
             let
             (
               t  = line_tp( line2d_new(m=a1, a=a2, p1=p0) ),
@@ -489,9 +526,9 @@ function polygon_turtle_path_2d_p
             _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
 
           //
-          // lines; delta radial relative (to current heading)
+          // lines; move radial relative (to current heading)
           //
-        : (oper == "delta_rr" || oper == "drr") && (argc > 1) ?
+        : (oper == "move_rr" || oper == "mrr") && (argc > 1) ?
             let
             (
               t  = line_tp( line2d_new(m=a1, a=h+a2, p1=p0) ),
@@ -501,9 +538,9 @@ function polygon_turtle_path_2d_p
             _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
 
           //
-          // lines; forward (along current heading)
+          // lines; move forward (along current heading)
           //
-        : (oper == "forward" || oper == "fw") && (argc > 0) ?
+        : (oper == "move_fw" || oper == "mfw") && (argc > 0) ?
             let
             (
               t  = line_tp( line2d_new(m=a1, a=h, p1=p0) ),
@@ -627,8 +664,8 @@ BEGIN_SCOPE polygon_turtle_path_2d_p;
       ["delta_xy", w3, h3],
       ["delta_x",  w1+w2-w3*2],
       ["delta_xy", w3, -h3],
-      ["move_y",   0],
-      ["move_x",   0],
+      ["goto_y",   0],
+      ["goto_x",   0],
     ];
 
     // convert the step moves into coordinates
