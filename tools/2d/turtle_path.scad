@@ -119,6 +119,7 @@ function _polygon_turtle_path_2d_p_line_p
 
    operation    | short   | arguments (line)      | arguments (wave-line) | output coordinate point(s)
   :------------:|:-------:|:---------------------:|:---------------------:|:-----------------------:
+   close        | cl      | (none)                | wc, fn                | p0_g
    move_xy      | mxy     | x, y                  | x, y, wc, fn          | [x, y]
    move_x       | mx      | x                     | x, wc, fn             | [x, p0.y]
    move_y       | my      | y                     | y, wc, fn             | [p0.x, y]
@@ -159,6 +160,20 @@ function _polygon_turtle_path_2d_p_line_p
   Wave-line constructs a line with periodic waveform lateral
   displacement to the next point using \p polygon_line_wave_p(). See
   its documentation for more details and default value.
+
+  ### close
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
+    1 | integer               |               | \p fn : number of [facets]; optional
+
+  Closes the path by returning to the global origin \p p0_g with a
+  straight or wave-line segment. When no arguments are given, a straight
+  line is drawn. When \p wc is provided, the segment is constructed as a
+  wave-line using \p polygon_line_wave_p(). The global origin is set
+  automatically on the first step and remains fixed for the lifetime of
+  the recursion.
 
   ### forward
 
@@ -430,6 +445,18 @@ function polygon_turtle_path_2d_p
             point_list = a1
           )
           point_list
+
+          //
+          // close path; return to global origin
+          //
+        : (oper == "close" || oper == "cl") ?
+          let
+          (
+            g  = is_undef( p0_g ) ? p0 : p0_g,  // step-1 guard
+            wc = a1,
+            fn = a2
+          )
+          _polygon_turtle_path_2d_p_line_p( p0=p0, t=g, wc=wc, fn=fn )
 
           //
           // assert error
