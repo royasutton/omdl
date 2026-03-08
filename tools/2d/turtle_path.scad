@@ -235,14 +235,13 @@ function polygon_turtle_path_2d_p
       // get operation, argument vector, and argument count
       oper = first( step ),
       argv = tailn( step ),
-
       argc = is_undef( argv ) ? 0 : is_list( argv ) ? len( argv ) : 1,
 
       // assign arguments
-      a1  = argv[ 0 ],
-      a2  = argv[ 1 ],
-      a3  = argv[ 2 ],
-      a4  = argv[ 3 ],
+      a1 = argv[0],
+      a2 = argv[1],
+      a3 = argv[2],
+      a4 = argv[3],
 
       //
       // compute the coordinate point(s) list for this operation step
