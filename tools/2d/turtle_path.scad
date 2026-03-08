@@ -47,8 +47,15 @@
 //! Interprets a turtle-style step language to generate coordinate points for polygon construction.
 /***************************************************************************//**
   \param    s <datastruct> The list of steps.
+
   \param    i <point-2d> The initial coordinate [x, y].
+
+  \param    h <decimal> The current heading in degrees; 0 = positive
+            x-axis, positive angles rotate counter-clockwise
+
   \param    step_n <integer> (an internal recursion step count)
+
+  \param    i_g <<point-2d> The global origin coordinate [x, y].
 
   \returns  <point-2d-list> The list of coordinate points.
 
@@ -178,10 +185,17 @@ function polygon_turtle_path_2d_p
 (
   s,
   i = origin2d,
-  step_n = 0
-) = ! is_list( s ) ? empty_lst
+  h = 0,
+  step_n = 0,
+  i_g
+) =
+  ! is_list( s ) ? empty_lst
   : let
-    ( // get current step
+    (
+      // record global origin if needed
+      origin = is_undef( i_g ) ? i : i_g,
+
+      // get current step
       step = first( s ),
 
       // get operation, argument vector, and argument count
@@ -355,7 +369,13 @@ function polygon_turtle_path_2d_p
             ])
           )
     )
-    ( len( s ) == 1 ) ? p : concat( p, polygon_turtle_path_2d_p( tailn(s), last(p), step_n+1 ) );
+    ( len( s ) == 1 ) ?
+      p
+    : concat
+      (
+        p,
+        polygon_turtle_path_2d_p( tailn(s), last(p), h, step_n+1, origin )
+      );
 
 //! @}
 //! @}
