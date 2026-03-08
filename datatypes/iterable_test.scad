@@ -161,7 +161,7 @@ function all_oneof
   : ( v_i && !cv_i) ? all_equal(v, cv)
   : (!v_i &&  cv_i) ? any_equal(cv, v)
     // v_i && cv_i: case 'v' is a string and 'cv' is not a string
-  : (is_string(v) && !is_string(cv)) ? false
+  : (is_string(v) && !is_string(cv)) ? is_empty(v)
     // v_i && cv_i: remaining three cases
   : !any_equal(search(v, cv, 0, 0), empty_lst);
 
