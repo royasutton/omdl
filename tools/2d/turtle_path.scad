@@ -215,6 +215,76 @@ function _polygon_turtle_path_2d_p_line_p
   x-axis coordinate. Supports straight and wave-line variants using the
   same \p wc and \p fn parameters as other line operations.
 
+  ### delta_xy
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | decimal               | required      | \p x : x-axis displacement
+    1 | decimal               | required      | \p y : y-axis displacement
+    2 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
+    3 | integer               |               | \p fn : number of [facets]; optional
+
+  Moves from the current position by the relative offset `[x, y]`.
+  Supports straight and wave-line variants using the same \p wc and \p fn
+  parameters as other line operations.
+
+  ### delta_x
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | decimal               | required      | \p x : x-axis displacement
+    1 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
+    2 | integer               |               | \p fn : number of [facets]; optional
+
+  Moves from the current position by the relative x-axis offset \p x,
+  with no y-axis displacement. Supports straight and wave-line variants
+  using the same \p wc and \p fn parameters as other line operations.
+
+  ### delta_y
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | decimal               | required      | \p y : y-axis displacement
+    1 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
+    2 | integer               |               | \p fn : number of [facets]; optional
+
+  Moves from the current position by the relative y-axis offset \p y,
+  with no x-axis displacement. Supports straight and wave-line variants
+  using the same \p wc and \p fn parameters as other line operations.
+
+  ### delta_xa
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | decimal               | required      | \p x : x-axis displacement
+    1 | decimal               | required      | \p a : angle in degrees from the x-axis
+    2 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
+    3 | integer               |               | \p fn : number of [facets]; optional
+
+  Moves from the current position by the relative offset `[x, x * tan(a)]`,
+  where the y-axis displacement is derived from the x-axis displacement
+  \p x and the angle \p a. This is convenient when the horizontal extent
+  of a step is known and the slope angle is the natural constraint.
+  Supports straight and wave-line variants using the same \p wc and \p fn
+  parameters as other line operations.
+
+  ### delta_ya
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | decimal               | required      | \p y : y-axis displacement
+    1 | decimal               | required      | \p a : angle in degrees from the x-axis
+    2 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
+    3 | integer               |               | \p fn : number of [facets]; optional
+
+  Moves from the current position by the relative offset `[y / tan(a), y]`,
+  where the x-axis displacement is derived from the y-axis displacement
+  \p y and the angle \p a. This is the complement of \p delta_xa and is
+  convenient when the vertical extent of a step is known and the slope
+  angle is the natural constraint. Supports straight and wave-line
+  variants using the same \p wc and \p fn parameters as other line
+  operations.
+
   ### delta_xy_mx
 
     e | data type             | default value | parameter description
