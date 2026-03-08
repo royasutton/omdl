@@ -128,7 +128,10 @@ function _polygon_turtle_path_2d_p_line_p
    delta_y      | dy      | y                     | y, wc, fn             | p0 + [0, y]
    delta_xa     | dxa     | x, a                  | x, a, wc, fn          | p0 + [ x, x * tan(a) ]
    delta_ya     | dya     | y, a                  | y, a, wc, fn          | p0 + [ y / tan(a), y ]
-   delta_v      | dv      | m, a                  | m, a, wc, fn          | p0 + line(m, a)
+   delta_xy_mx  | dxymx   | x, y                  | x, y, wc, fn          | p0 + [x, y], p0 + [x, -y]
+   delta_xy_my  | dxymy   | x, y                  | x, y, wc, fn          | p0 + [x, y], p0 + [-x, y]
+   delta_ar     | dar     | m, a                  | m, a, wc, fn          | p0 + line(m, a)
+   delta_rr     | drr     | m, a                  | m, a, wc, fn          | p0 + line(m, h+a)
    forward      | fw      | m                     | m, wc, fn             | p0 + line(m, h)
    turn_left    | tl      | a                     | (not applicable)      | (none)
    turn_right   | tr      | a                     | (not applicable)      | (none)
@@ -175,6 +178,69 @@ function _polygon_turtle_path_2d_p_line_p
   automatically on the first step and remains fixed for the lifetime of
   the recursion.
 
+  ### delta_xy_mx
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | decimal               | required      | \p x : x-axis displacement
+    1 | decimal               | required      | \p y : y-axis displacement
+    2 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
+    3 | integer               |               | \p fn : number of [facets]; optional
+
+  Produces two sequential output points by applying the displacement
+  `[x, y]` and then its x-axis mirror `[x, -y]`, both relative to the
+  current position \p p0. The first segment travels from \p p0 to
+  `p0 + [x, y]` and the second from there to `p0 + [x, -y]`. This
+  operation is intended for constructing top-bottom symmetric polygon
+  profiles in a single step. Both segments support wave-line generation
+  when \p wc is provided.
+
+  ### delta_xy_my
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | decimal               | required      | \p x : x-axis displacement
+    1 | decimal               | required      | \p y : y-axis displacement
+    2 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
+    3 | integer               |               | \p fn : number of [facets]; optional
+
+  Produces two sequential output points by applying the displacement
+  `[x, y]` and then its y-axis mirror `[-x, y]`, both relative to the
+  current position \p p0. The first segment travels from \p p0 to
+  `p0 + [x, y]` and the second from there to `p0 + [-x, y]`. This
+  operation is intended for constructing left-right symmetric polygon
+  profiles in a single step. Both segments support wave-line generation
+  when \p wc is provided.
+
+  ### delta_ar
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | decimal               | required      | \p m : radial distance
+    1 | decimal               | required      | \p a : absolute angle in degrees
+    2 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
+    3 | integer               |               | \p fn : number of [facets]; optional
+
+  Moves from the current position by distance \p m at the absolute angle
+  \p a, measured from the positive x-axis. The heading \p h is not
+  consulted. Supports straight and wave-line variants using the same
+  \p wc and \p fn parameters as other line operations.
+
+  ### delta_rr
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | decimal               | required      | \p m : radial distance
+    1 | decimal               | required      | \p a : angle offset in degrees relative to current heading
+    2 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
+    3 | integer               |               | \p fn : number of [facets]; optional
+
+  Moves from the current position by distance \p m at an angle of
+  `h + a`, where \p h is the current heading. When \p a is zero this
+  operation is equivalent to \p forward. Supports straight and wave-line
+  variants using the same \p wc and \p fn parameters as other line
+  operations.
+
   ### forward
 
     e | data type             | default value | parameter description
@@ -184,9 +250,9 @@ function _polygon_turtle_path_2d_p_line_p
     2 | integer               |               | \p fn : number of [facets]; optional
 
   Moves forward from the current position by distance \p m along the
-  current heading \p h. Equivalent to \p delta_v with the heading angle
-  supplied automatically. Supports straight and wave-line variants using
-  the same \p wc and \p fn parameters as other line operations.
+  current heading \p h. Equivalent to \p delta_rr with \p a set to zero.
+  Supports straight and wave-line variants using the same \p wc and \p fn
+  parameters as other line operations.
 
   ### turn_left
 
@@ -380,12 +446,55 @@ function polygon_turtle_path_2d_p
             _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
 
           //
-          // lines; delta vector
+          // lines; delta mirror
           //
-        : (oper == "delta_v" || oper == "dv") && (argc > 1) ?
+        : (oper == "delta_xy_mx" || oper == "dxymx") && (argc > 1) ?
+            let
+            (
+              t1 = p0 + [ a1,  a2],
+              t2 = p0 + [ a1, -a2],
+              wc = a3,
+              fn = a4
+            )
+            concat
+            (
+              _polygon_turtle_path_2d_p_line_p( p0=p0, t=t1, wc=wc, fn=fn ),
+              _polygon_turtle_path_2d_p_line_p( p0=t1,  t=t2, wc=wc, fn=fn )
+            )
+
+        : (oper == "delta_xy_my" || oper == "dxymy") && (argc > 1) ?
+            let
+            (
+              t1 = p0 + [ a1,  a2],
+              t2 = p0 + [-a1,  a2],
+              wc = a3,
+              fn = a4
+            )
+            concat
+            (
+              _polygon_turtle_path_2d_p_line_p( p0=p0, t=t1, wc=wc, fn=fn ),
+              _polygon_turtle_path_2d_p_line_p( p0=t1,  t=t2, wc=wc, fn=fn )
+            )
+
+          //
+          // lines; delta radial absolute
+          //
+        : (oper == "delta_ar" || oper == "dar") && (argc > 1) ?
             let
             (
               t  = line_tp( line2d_new(m=a1, a=a2, p1=p0) ),
+              wc = a3,
+              fn = a4
+            )
+            _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
+
+          //
+          // lines; delta radial relative (to current heading)
+          //
+        : (oper == "delta_rr" || oper == "drr") && (argc > 1) ?
+            let
+            (
+              t  = line_tp( line2d_new(m=a1, a=h+a2, p1=p0) ),
               wc = a3,
               fn = a4
             )
