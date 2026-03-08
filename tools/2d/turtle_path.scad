@@ -195,7 +195,7 @@ function polygon_turtle_path_2d_p
   : let
     (
       // record global origin if needed
-      origin = is_undef( p0_g ) ? p0 : p0_g,
+      go   = is_undef( p0_g ) ? p0 : p0_g,
 
       // get current step
       step = first( s ),
@@ -376,7 +376,7 @@ function polygon_turtle_path_2d_p
     : concat
       (
         p,
-        polygon_turtle_path_2d_p( tailn(s), last(p), h, s_n+1, origin )
+        polygon_turtle_path_2d_p( tailn(s), last(p), h, s_n+1, go )
       );
 
 //! @}
