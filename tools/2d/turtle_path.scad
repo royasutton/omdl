@@ -203,7 +203,7 @@ function polygon_turtle_path_2d_p
           //
           // lines; move
           //
-          (oper == "mxy" || oper == "move_xy") && (argc > 1) ?
+          (oper == "move_xy" || oper == "mxy") && (argc > 1) ?
             let
             (
               t  = [a1, a2],
@@ -214,7 +214,7 @@ function polygon_turtle_path_2d_p
               [t]
             : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
-        : (oper == "mx"  || oper == "move_x") && (argc > 0) ?
+        : (oper == "move_x" || oper == "mx") && (argc > 0) ?
             let
             (
               t  = [a1, i.y],
@@ -225,7 +225,7 @@ function polygon_turtle_path_2d_p
               [t]
             : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
-        : (oper == "my"  || oper == "move_y") && (argc > 0) ?
+        : (oper == "move_y" || oper == "my") && (argc > 0) ?
             let
             (
               t  = [i.x, a1],
@@ -239,7 +239,7 @@ function polygon_turtle_path_2d_p
           //
           // lines; delta
           //
-        : (oper == "dxy" || oper == "delta_xy") && (argc > 1) ?
+        : (oper == "delta_xy" || oper == "dxy") && (argc > 1) ?
             let
             (
               t  = i + [a1, a2],
@@ -250,7 +250,7 @@ function polygon_turtle_path_2d_p
               [t]
             : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
-        : (oper == "dx"  || oper == "delta_x"  ) && (argc > 0) ?
+        : (oper == "delta_x" || oper == "dx") && (argc > 0) ?
             let
             (
               t  = i + [a1, 0],
@@ -261,7 +261,7 @@ function polygon_turtle_path_2d_p
               [t]
             : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
-        : (oper == "dy"  || oper == "delta_y"  ) && (argc > 0) ?
+        : (oper == "delta_y" || oper == "dy") && (argc > 0) ?
             let
             (
               t  = i + [0, a1],
@@ -275,7 +275,7 @@ function polygon_turtle_path_2d_p
           //
           // lines; delta angle
           //
-        : (oper == "dxa" || oper == "delta_xa" ) && (argc > 1) ?
+        : (oper == "delta_xa" || oper == "dxa") && (argc > 1) ?
             let
             (
               t  = i + [a1, a1 * tan(a2)],
@@ -286,7 +286,7 @@ function polygon_turtle_path_2d_p
               [t]
             : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
-        : (oper == "dya" || oper == "delta_ya" ) && (argc > 1) ?
+        : (oper == "delta_ya" || oper == "dya") && (argc > 1) ?
             let
             (
               t  = i + [a1 / tan(a2), a1],
@@ -300,7 +300,7 @@ function polygon_turtle_path_2d_p
           //
           // lines; delta vector
           //
-        : (oper == "dv"  || oper == "delta_v"  ) && (argc > 1) ?
+        : (oper == "delta_v" || oper == "dv") && (argc > 1) ?
             let
             (
               t  = line_tp( line2d_new(m=a1, a=a2, p1=i) ),
@@ -314,7 +314,7 @@ function polygon_turtle_path_2d_p
           //
           // arc; center point
           //
-        : (oper == "apv" || oper == "arc_pv"   ) && ((argc == 3) || (argc == 4)) ?
+        : (oper == "arc_pv" || oper == "apv") && ((argc == 3) || (argc == 4)) ?
           let
           ( // handle scalar angle or compute angle from vector
             v2  = is_list(a2) ? [a1, a2] : a2
@@ -324,7 +324,7 @@ function polygon_turtle_path_2d_p
           //
           // arc; center vector
           //
-        : (oper == "avv" || oper == "arc_vv"   ) && ((argc == 3) || (argc == 4)) ?
+        : (oper == "arc_vv" || oper == "avv") && ((argc == 3) || (argc == 4)) ?
           let
           ( // calculate center point 'b1' from given vector [m, a] in 'a1'
             b1 = line_tp( line2d_new(m=first(a1), a=second(a1), p1=i) ),
@@ -335,7 +335,7 @@ function polygon_turtle_path_2d_p
           //
           // points
           //
-        : (oper == "pp" || oper == "path_p"   ) && (argc == 1) ?
+        : (oper == "path_p" || oper == "pp") && (argc == 1) ?
           let
           (
             point_list = a1
