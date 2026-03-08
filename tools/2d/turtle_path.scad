@@ -162,95 +162,45 @@ function _polygon_turtle_path_2d_p_line_p
 
   Wave-line constructs a line with periodic waveform lateral
   displacement to the next point using \p polygon_line_wave_p(). See
-  its documentation for more details and default value.
+  its documentation for more details and default value. All line
+  operations accept the optional \p wc and \p fn parameters to produce
+  a wave-line in place of a straight segment.
 
   ### close
 
-    e | data type             | default value | parameter description
-  :--:|:---------------------:|:-------------:|:------------------------------------
-    0 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
-    1 | integer               |               | \p fn : number of [facets]; optional
-
   Closes the path by returning to the global origin \p p0_g with a
   straight or wave-line segment. When no arguments are given, a straight
-  line is drawn. When \p wc is provided, the segment is constructed as a
-  wave-line using \p polygon_line_wave_p(). The global origin is set
-  automatically on the first step and remains fixed for the lifetime of
-  the recursion.
+  line is drawn. The global origin is set automatically on the first step
+  and remains fixed for the lifetime of the recursion.
 
   ### goto_xy
 
-    e | data type             | default value | parameter description
-  :--:|:---------------------:|:-------------:|:------------------------------------
-    0 | decimal               | required      | \p x : x-axis coordinate
-    1 | decimal               | required      | \p y : y-axis coordinate
-    2 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
-    3 | integer               |               | \p fn : number of [facets]; optional
-
   Moves to the absolute coordinate `[x, y]`, ignoring the current
-  position. Supports straight and wave-line variants using the same
-  \p wc and \p fn parameters as other line operations.
+  position.
 
   ### goto_x
 
-    e | data type             | default value | parameter description
-  :--:|:---------------------:|:-------------:|:------------------------------------
-    0 | decimal               | required      | \p x : x-axis coordinate
-    1 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
-    2 | integer               |               | \p fn : number of [facets]; optional
-
   Moves to the absolute x-axis coordinate \p x, retaining the current
-  y-axis coordinate. Supports straight and wave-line variants using the
-  same \p wc and \p fn parameters as other line operations.
+  y-axis coordinate.
 
   ### goto_y
 
-    e | data type             | default value | parameter description
-  :--:|:---------------------:|:-------------:|:------------------------------------
-    0 | decimal               | required      | \p y : y-axis coordinate
-    1 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
-    2 | integer               |               | \p fn : number of [facets]; optional
-
   Moves to the absolute y-axis coordinate \p y, retaining the current
-  x-axis coordinate. Supports straight and wave-line variants using the
-  same \p wc and \p fn parameters as other line operations.
+  x-axis coordinate.
 
   ### delta_xy
 
-    e | data type             | default value | parameter description
-  :--:|:---------------------:|:-------------:|:------------------------------------
-    0 | decimal               | required      | \p x : x-axis displacement
-    1 | decimal               | required      | \p y : y-axis displacement
-    2 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
-    3 | integer               |               | \p fn : number of [facets]; optional
-
   Moves from the current position by the relative offset `[x, y]`.
-  Supports straight and wave-line variants using the same \p wc and \p fn
-  parameters as other line operations.
 
   ### delta_x
 
-    e | data type             | default value | parameter description
-  :--:|:---------------------:|:-------------:|:------------------------------------
-    0 | decimal               | required      | \p x : x-axis displacement
-    1 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
-    2 | integer               |               | \p fn : number of [facets]; optional
-
   Moves from the current position by the relative x-axis offset \p x,
-  with no y-axis displacement. Supports straight and wave-line variants
-  using the same \p wc and \p fn parameters as other line operations.
+  with no y-axis displacement.
 
   ### delta_y
 
-    e | data type             | default value | parameter description
-  :--:|:---------------------:|:-------------:|:------------------------------------
-    0 | decimal               | required      | \p y : y-axis displacement
-    1 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
-    2 | integer               |               | \p fn : number of [facets]; optional
-
   Moves from the current position by the relative y-axis offset \p y,
-  with no x-axis displacement. Supports straight and wave-line variants
-  using the same \p wc and \p fn parameters as other line operations.
+  with no x-axis displacement.
 
   ### delta_xa
 
@@ -258,15 +208,11 @@ function _polygon_turtle_path_2d_p_line_p
   :--:|:---------------------:|:-------------:|:------------------------------------
     0 | decimal               | required      | \p x : x-axis displacement
     1 | decimal               | required      | \p a : angle in degrees from the x-axis
-    2 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
-    3 | integer               |               | \p fn : number of [facets]; optional
 
   Moves from the current position by the relative offset `[x, x * tan(a)]`,
   where the y-axis displacement is derived from the x-axis displacement
   \p x and the angle \p a. This is convenient when the horizontal extent
   of a step is known and the slope angle is the natural constraint.
-  Supports straight and wave-line variants using the same \p wc and \p fn
-  parameters as other line operations.
 
   ### delta_ya
 
@@ -274,16 +220,12 @@ function _polygon_turtle_path_2d_p_line_p
   :--:|:---------------------:|:-------------:|:------------------------------------
     0 | decimal               | required      | \p y : y-axis displacement
     1 | decimal               | required      | \p a : angle in degrees from the x-axis
-    2 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
-    3 | integer               |               | \p fn : number of [facets]; optional
 
   Moves from the current position by the relative offset `[y / tan(a), y]`,
   where the x-axis displacement is derived from the y-axis displacement
   \p y and the angle \p a. This is the complement of \p delta_xa and is
   convenient when the vertical extent of a step is known and the slope
-  angle is the natural constraint. Supports straight and wave-line
-  variants using the same \p wc and \p fn parameters as other line
-  operations.
+  angle is the natural constraint.
 
   ### delta_xy_mx
 
@@ -291,16 +233,13 @@ function _polygon_turtle_path_2d_p_line_p
   :--:|:---------------------:|:-------------:|:------------------------------------
     0 | decimal               | required      | \p x : x-axis displacement
     1 | decimal               | required      | \p y : y-axis displacement
-    2 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
-    3 | integer               |               | \p fn : number of [facets]; optional
 
   Produces two sequential output points by applying the displacement
   `[x, y]` and then its x-axis mirror `[x, -y]`, both relative to the
   current position \p p0. The first segment travels from \p p0 to
   `p0 + [x, y]` and the second from there to `p0 + [x, -y]`. This
   operation is intended for constructing top-bottom symmetric polygon
-  profiles in a single step. Both segments support wave-line generation
-  when \p wc is provided.
+  profiles in a single step.
 
   ### delta_xy_my
 
@@ -308,16 +247,13 @@ function _polygon_turtle_path_2d_p_line_p
   :--:|:---------------------:|:-------------:|:------------------------------------
     0 | decimal               | required      | \p x : x-axis displacement
     1 | decimal               | required      | \p y : y-axis displacement
-    2 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
-    3 | integer               |               | \p fn : number of [facets]; optional
 
   Produces two sequential output points by applying the displacement
   `[x, y]` and then its y-axis mirror `[-x, y]`, both relative to the
   current position \p p0. The first segment travels from \p p0 to
   `p0 + [x, y]` and the second from there to `p0 + [-x, y]`. This
   operation is intended for constructing left-right symmetric polygon
-  profiles in a single step. Both segments support wave-line generation
-  when \p wc is provided.
+  profiles in a single step.
 
   ### move_ar
 
@@ -325,13 +261,10 @@ function _polygon_turtle_path_2d_p_line_p
   :--:|:---------------------:|:-------------:|:------------------------------------
     0 | decimal               | required      | \p m : radial distance
     1 | decimal               | required      | \p a : absolute angle in degrees
-    2 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
-    3 | integer               |               | \p fn : number of [facets]; optional
 
   Moves from the current position by distance \p m at the absolute angle
   \p a, measured from the positive x-axis. The heading \p h is not
-  consulted. Supports straight and wave-line variants using the same
-  \p wc and \p fn parameters as other line operations.
+  consulted.
 
   ### move_rr
 
@@ -339,43 +272,23 @@ function _polygon_turtle_path_2d_p_line_p
   :--:|:---------------------:|:-------------:|:------------------------------------
     0 | decimal               | required      | \p m : radial distance
     1 | decimal               | required      | \p a : angle offset in degrees relative to current heading
-    2 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
-    3 | integer               |               | \p fn : number of [facets]; optional
 
   Moves from the current position by distance \p m at an angle of
   `h + a`, where \p h is the current heading. When \p a is zero this
-  operation is equivalent to \p move_fw. Supports straight and wave-line
-  variants using the same \p wc and \p fn parameters as other line
-  operations.
+  operation is equivalent to \p move_fw.
 
   ### move_fw
 
-    e | data type             | default value | parameter description
-  :--:|:---------------------:|:-------------:|:------------------------------------
-    0 | decimal               | required      | \p m : distance to travel
-    1 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
-    2 | integer               |               | \p fn : number of [facets]; optional
-
   Moves forward from the current position by distance \p m along the
   current heading \p h. Equivalent to \p move_rr with \p a set to zero.
-  Supports straight and wave-line variants using the same \p wc and \p fn
-  parameters as other line operations.
 
   ### turn_left
-
-    e | data type             | default value | parameter description
-  :--:|:---------------------:|:-------------:|:------------------------------------
-    0 | decimal               | required      | \p a : angle to turn in degrees
 
   Rotates the current heading counter-clockwise by \p a degrees. Produces
   no output coordinate points; only the heading \p h is updated for
   subsequent steps.
 
   ### turn_right
-
-    e | data type             | default value | parameter description
-  :--:|:---------------------:|:-------------:|:------------------------------------
-    0 | decimal               | required      | \p a : angle to turn in degrees
 
   Rotates the current heading clockwise by \p a degrees. Produces no
   output coordinate points; only the heading \p h is updated for
