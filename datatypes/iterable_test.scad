@@ -135,6 +135,20 @@ function any_equal
   : (first(v) == cv) ? true
   : any_equal(tailn(v), cv);
 
+//! Test if a value equals one of the comparison values.
+/***************************************************************************//**
+  \param    v \<value> A value.
+  \param    cv \<iterable> An iterable of one or more comparison values.
+
+  \returns  <boolean> \b true when \p v equals any one of the values in
+            \p cv and \b false otherwise.
+*******************************************************************************/
+function is_oneof
+(
+  v,
+  cv
+) = any_equal(cv, v);
+
 //! Test if all elements of an iterable value equal one of the comparison values.
 /***************************************************************************//**
   \param    v <iterable> An iterable data type value.
@@ -405,6 +419,7 @@ BEGIN_SCOPE validate;
     for (id=test_ids) table_validate( db, id, "any_equal_T", 1, any_equal( v1(db,id), t ) );
     for (id=test_ids) table_validate( db, id, "any_equal_F", 1, any_equal( v1(db,id), f ) );
     for (id=test_ids) table_validate( db, id, "any_equal_U", 1, any_equal( v1(db,id), u ) );
+    // is_oneof()
     for (id=test_ids) table_validate( db, id, "all_oneof_S1", 1, all_oneof( v1(db,id), [undef, 1, 2, 3, true, false] ) );
     for (id=test_ids) table_validate( db, id, "all_defined", 1, all_defined( v1(db,id) ) );
     for (id=test_ids) table_validate( db, id, "any_defined", 1, any_defined( v1(db,id) ) );
