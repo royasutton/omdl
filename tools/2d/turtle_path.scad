@@ -43,6 +43,41 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+// private helper functions
+//----------------------------------------------------------------------------//
+
+//! Dispatches a line segment to a straight or wave-line constructor.
+/***************************************************************************//**
+  \param    p0 <point-2d> The line start coordinate [x, y].
+  \param    t <point-2d> The line end coordinate [x, y].
+  \param    wc <datastruct> The waveform configuration `[p, a, w, m]`; undef for straight line.
+  \param    fn <integer> The number of [facets]; optional.
+
+  \returns  <point-2d-list> The list of coordinate points.
+
+  \details
+
+  Dispatches to either a straight line or a wave-line based on whether
+  \p wc is defined. When \p wc is undef, returns `[t]` as a
+  single-element point list. When \p wc is defined, delegates to
+  polygon_line_wave_p() using the waveform configuration parameters.
+
+  [facets]: \ref get_fn()
+
+  \private
+*******************************************************************************/
+function _polygon_turtle_path_2d_p_line_p
+(
+  p0,
+  t,
+  wc,
+  fn
+) = is_undef( wc ) ? [t]
+  : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn );
+
+//----------------------------------------------------------------------------//
+// interpreter
+//----------------------------------------------------------------------------//
 
 //! Interprets a turtle-style step language to generate coordinate points for polygon construction.
 /***************************************************************************//**
@@ -223,9 +258,7 @@ function polygon_turtle_path_2d_p
               wc = a3,
               fn = a4
             )
-            (argc == 2) ?
-              [t]
-            : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
+            _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
 
         : (oper == "move_x" || oper == "mx") && (argc > 0) ?
             let
@@ -234,9 +267,7 @@ function polygon_turtle_path_2d_p
               wc = a2,
               fn = a3
             )
-            (argc == 1) ?
-              [t]
-            : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
+            _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
 
         : (oper == "move_y" || oper == "my") && (argc > 0) ?
             let
@@ -245,9 +276,7 @@ function polygon_turtle_path_2d_p
               wc = a2,
               fn = a3
             )
-            (argc == 1) ?
-              [t]
-            : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
+            _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
 
           //
           // lines; delta
@@ -259,70 +288,58 @@ function polygon_turtle_path_2d_p
               wc = a3,
               fn = a4
             )
-            (argc == 2) ?
-              [t]
-            : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
+            _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
 
-        : (oper == "delta_x" || oper == "dx") && (argc > 0) ?
+        : (oper == "delta_x"   || oper == "dx") && (argc > 0) ?
             let
             (
               t  = p0 + [a1, 0],
               wc = a2,
               fn = a3
             )
-            (argc == 1) ?
-              [t]
-            : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
+            _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
 
-        : (oper == "delta_y" || oper == "dy") && (argc > 0) ?
+        : (oper == "delta_y"   || oper == "dy") && (argc > 0) ?
             let
             (
               t  = p0 + [0, a1],
               wc = a2,
               fn = a3
             )
-            (argc == 1) ?
-              [t]
-            : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
+            _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
 
           //
           // lines; delta angle
           //
-        : (oper == "delta_xa" || oper == "dxa") && (argc > 1) ?
+        : (oper == "delta_xa"  || oper == "dxa") && (argc > 1) ?
             let
             (
               t  = p0 + [a1, a1 * tan(a2)],
               wc = a3,
               fn = a4
             )
-            (argc == 2) ?
-              [t]
-            : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
+            _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
 
-        : (oper == "delta_ya" || oper == "dya") && (argc > 1) ?
+        : (oper == "delta_ya"  || oper == "dya") && (argc > 1) ?
             let
             (
               t  = p0 + [a1 / tan(a2), a1],
               wc = a3,
               fn = a4
             )
-            (argc == 2) ?
-              [t]
-            : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
+            _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
 
           //
           // lines; delta vector
           //
-        : (oper == "delta_v" || oper == "dv") && (argc > 1) ?
+        : (oper == "delta_v"   || oper == "dv") && (argc > 1) ?
             let
             (
               t  = line_tp( line2d_new(m=a1, a=a2, p1=p0) ),
               wc = a3,
               fn = a4
             )
-            (argc == 2) ?
-              [t]
-            : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
+            _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
 
           //
           // arc; center point
