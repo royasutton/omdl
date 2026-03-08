@@ -163,6 +163,7 @@ function all_oneof
     // v_i && cv_i: case 'v' is a string and 'cv' is not a string
   : (is_string(v) && !is_string(cv)) ? is_empty(v)
     // v_i && cv_i: remaining three cases
+    // search returns [] for any unmatched element; true only if none are unmatched
   : !any_equal(search(v, cv, 0, 0), empty_lst);
 
 //! Test if no element of an iterable value has an undefined value.
