@@ -46,18 +46,20 @@
 
 //! Interprets a turtle-style step language to generate coordinate points for polygon construction.
 /***************************************************************************//**
-  \param    s <datastruct> The list of steps.
+  \param    s     <datastruct> The list of steps.
 
-  \param    i <point-2d> The initial coordinate [x, y].
+  \param    p0    <point-2d> The initial coordinate [x, y].
 
-  \param    h <decimal> The current heading in degrees; 0 = positive
-            x-axis, positive angles rotate counter-clockwise
+  \param    h     <decimal> The current heading in degrees; 0 = positive
+                  x-axis, positive angles rotate counter-clockwise
 
-  \param    step_n <integer> (an internal recursion step count)
+  \param    s_n   <integer> The current step number.
 
-  \param    i_g <<point-2d> The global origin coordinate [x, y].
+  \param    p0_g  <<point-2d> The global origin coordinate [x, y].
 
-  \returns  <point-2d-list> The list of coordinate points.
+
+  \returns  <point-2d-list> The list of coordinate points of the path
+            described in the list of steps \p s.
 
   \details
 
@@ -83,14 +85,14 @@
    operation    | short   | arguments (line)      | arguments (wave-line) | output coordinate point(s)
   :------------:|:-------:|:---------------------:|:---------------------:|:-----------------------:
    move_xy      | mxy     | x, y                  | x, y, wc, fn          | [x, y]
-   move_x       | mx      | x                     | x, wc, fn             | [x, i.y]
-   move_y       | my      | y                     | y, wc, fn             | [i.x, y]
-   delta_xy     | dxy     | x, y                  | x, y, wc, fn          | i + [x, y]
-   delta_x      | dx      | x                     | x, wc, fn             | i + [x, 0]
-   delta_y      | dy      | y                     | y, wc, fn             | i + [0, y]
-   delta_xa     | dxa     | x, a                  | x, a, wc, fn          | i + [ x, x * tan(a) ]
-   delta_ya     | dya     | y, a                  | y, a, wc, fn          | i + l y / tan(a), y ]
-   delta_v      | dv      | m, a                  | m, a, wc, fn          | i + line(m, a)
+   move_x       | mx      | x                     | x, wc, fn             | [x, p0.y]
+   move_y       | my      | y                     | y, wc, fn             | [p0.x, y]
+   delta_xy     | dxy     | x, y                  | x, y, wc, fn          | p0 + [x, y]
+   delta_x      | dx      | x                     | x, wc, fn             | p0 + [x, 0]
+   delta_y      | dy      | y                     | y, wc, fn             | p0 + [0, y]
+   delta_xa     | dxa     | x, a                  | x, a, wc, fn          | p0 + [ x, x * tan(a) ]
+   delta_ya     | dya     | y, a                  | y, a, wc, fn          | p0 + l y / tan(a), y ]
+   delta_v      | dv      | m, a                  | m, a, wc, fn          | p0 + line(m, a)
    arc_pv       | apv     | c, v, cw, fn          | (not supported)       | (see below)
    arc_vv       | avv     | v, v, cw, fn          | (not supported)       | (see below)
    path_p       | pp      | [p1, p2, ..., pn]     | (not supported)       | (see below)
@@ -131,7 +133,7 @@
 
   This operation constructs an arc about a center point specified as a
   coordinate. The arc begins at the angle defined by the vector `[c,
-  i]` and ends at the angle defined by either the vector `[c, v]` or by
+  p0]` and ends at the angle defined by either the vector `[c, v]` or by
   the scalar angle \p v (in degrees). The sweep direction is controlled
   by \p cw; when \p cw is set to \p true, the arc is swept clockwise
   from the start angle to the stop angle. The optional parameter \p fn
@@ -149,7 +151,7 @@
 
   This operation constructs an arc about a center point specified as a
   vector `[m, a]` originating from the current position. The arc begins
-  at the angle defined by the vector `[c, i]` and ends at the angle
+  at the angle defined by the vector `[c, p0]` and ends at the angle
   defined by either the vector `[c, v]` or by the scalar angle \p v (in
   degrees). The sweep direction is controlled by \p cw; when \p cw is
   set to \p true, the arc is swept clockwise from the start angle to
@@ -184,16 +186,16 @@
 function polygon_turtle_path_2d_p
 (
   s,
-  i = origin2d,
+  p0 = origin2d,
   h = 0,
-  step_n = 0,
-  i_g
+  s_n = 0,
+  p0_g
 ) =
   ! is_list( s ) ? empty_lst
   : let
     (
       // record global origin if needed
-      origin = is_undef( i_g ) ? i : i_g,
+      origin = is_undef( p0_g ) ? p0 : p0_g,
 
       // get current step
       step = first( s ),
@@ -226,29 +228,29 @@ function polygon_turtle_path_2d_p
             )
             (argc == 2) ?
               [t]
-            : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
+            : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
         : (oper == "move_x" || oper == "mx") && (argc > 0) ?
             let
             (
-              t  = [a1, i.y],
+              t  = [a1, p0.y],
               wc = a2,
               fn = a3
             )
             (argc == 1) ?
               [t]
-            : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
+            : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
         : (oper == "move_y" || oper == "my") && (argc > 0) ?
             let
             (
-              t  = [i.x, a1],
+              t  = [p0.x, a1],
               wc = a2,
               fn = a3
             )
             (argc == 1) ?
               [t]
-            : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
+            : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
           //
           // lines; delta
@@ -256,35 +258,35 @@ function polygon_turtle_path_2d_p
         : (oper == "delta_xy" || oper == "dxy") && (argc > 1) ?
             let
             (
-              t  = i + [a1, a2],
+              t  = p0 + [a1, a2],
               wc = a3,
               fn = a4
             )
             (argc == 2) ?
               [t]
-            : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
+            : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
         : (oper == "delta_x" || oper == "dx") && (argc > 0) ?
             let
             (
-              t  = i + [a1, 0],
+              t  = p0 + [a1, 0],
               wc = a2,
               fn = a3
             )
             (argc == 1) ?
               [t]
-            : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
+            : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
         : (oper == "delta_y" || oper == "dy") && (argc > 0) ?
             let
             (
-              t  = i + [0, a1],
+              t  = p0 + [0, a1],
               wc = a2,
               fn = a3
             )
             (argc == 1) ?
               [t]
-            : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
+            : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
           //
           // lines; delta angle
@@ -292,24 +294,24 @@ function polygon_turtle_path_2d_p
         : (oper == "delta_xa" || oper == "dxa") && (argc > 1) ?
             let
             (
-              t  = i + [a1, a1 * tan(a2)],
+              t  = p0 + [a1, a1 * tan(a2)],
               wc = a3,
               fn = a4
             )
             (argc == 2) ?
               [t]
-            : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
+            : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
         : (oper == "delta_ya" || oper == "dya") && (argc > 1) ?
             let
             (
-              t  = i + [a1 / tan(a2), a1],
+              t  = p0 + [a1 / tan(a2), a1],
               wc = a3,
               fn = a4
             )
             (argc == 2) ?
               [t]
-            : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
+            : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
           //
           // lines; delta vector
@@ -317,13 +319,13 @@ function polygon_turtle_path_2d_p
         : (oper == "delta_v" || oper == "dv") && (argc > 1) ?
             let
             (
-              t  = line_tp( line2d_new(m=a1, a=a2, p1=i) ),
+              t  = line_tp( line2d_new(m=a1, a=a2, p1=p0) ),
               wc = a3,
               fn = a4
             )
             (argc == 2) ?
               [t]
-            : polygon_line_wave_p( p1=i, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
+            : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn )
 
           //
           // arc; center point
@@ -333,7 +335,7 @@ function polygon_turtle_path_2d_p
           ( // handle scalar angle or compute angle from vector
             v2  = is_list(a2) ? [a1, a2] : a2
           )
-          polygon_arc_p( r=distance_pp(i, a1), c=a1, v1=[a1, i], v2=v2, cw=a3, fn=a4 )
+          polygon_arc_p( r=distance_pp(p0, a1), c=a1, v1=[a1, p0], v2=v2, cw=a3, fn=a4 )
 
           //
           // arc; center vector
@@ -341,10 +343,10 @@ function polygon_turtle_path_2d_p
         : (oper == "arc_vv" || oper == "avv") && ((argc == 3) || (argc == 4)) ?
           let
           ( // calculate center point 'b1' from given vector [m, a] in 'a1'
-            b1 = line_tp( line2d_new(m=first(a1), a=second(a1), p1=i) ),
+            b1 = line_tp( line2d_new(m=first(a1), a=second(a1), p1=p0) ),
             v2 = is_list(a2) ? [b1, a2] : a2
           )
-          polygon_arc_p( r=distance_pp(i, b1), c=b1, v1=[b1, i], v2=v2, cw=a3, fn=a4 )
+          polygon_arc_p( r=distance_pp(p0, b1), c=b1, v1=[b1, p0], v2=v2, cw=a3, fn=a4 )
 
           //
           // points
@@ -364,7 +366,7 @@ function polygon_turtle_path_2d_p
             false,
             strl
             ([
-                "ERROR: i=", i, ", step_n=", step_n, ", operation=", oper,
+                "ERROR: p0=", p0, ", s_n=", s_n, ", operation=", oper,
                   ", argv=", argv, ", argc=", argc
             ])
           )
@@ -374,7 +376,7 @@ function polygon_turtle_path_2d_p
     : concat
       (
         p,
-        polygon_turtle_path_2d_p( tailn(s), last(p), h, step_n+1, origin )
+        polygon_turtle_path_2d_p( tailn(s), last(p), h, s_n+1, origin )
       );
 
 //! @}
