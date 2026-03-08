@@ -126,11 +126,14 @@ function _polygon_turtle_path_2d_p_line_p
    delta_x      | dx      | x                     | x, wc, fn             | p0 + [x, 0]
    delta_y      | dy      | y                     | y, wc, fn             | p0 + [0, y]
    delta_xa     | dxa     | x, a                  | x, a, wc, fn          | p0 + [ x, x * tan(a) ]
-   delta_ya     | dya     | y, a                  | y, a, wc, fn          | p0 + l y / tan(a), y ]
+   delta_ya     | dya     | y, a                  | y, a, wc, fn          | p0 + [ y / tan(a), y ]
    delta_v      | dv      | m, a                  | m, a, wc, fn          | p0 + line(m, a)
-   arc_pv       | apv     | c, v, cw, fn          | (not supported)       | (see below)
-   arc_vv       | avv     | v, v, cw, fn          | (not supported)       | (see below)
-   path_p       | pp      | [p1, p2, ..., pn]     | (not supported)       | (see below)
+   forward      | fw      | m                     | m, wc, fn             | p0 + line(m, h)
+   turn_left    | tl      | a                     | (not applicable)      | (none)
+   turn_right   | tr      | a                     | (not applicable)      | (none)
+   arc_pv       | apv     | c, v, cw, fn          | (not applicable)      | (see below)
+   arc_vv       | avv     | v, v, cw, fn          | (not applicable)      | (see below)
+   path_p       | pp      | [p1, p2, ..., pn]     | (not applicable)      | (see below)
 
   Some operations may generate either straight or periodic waveform
   lines. When a periodic waveform line is desired, additional
@@ -156,6 +159,39 @@ function _polygon_turtle_path_2d_p_line_p
   Wave-line constructs a line with periodic waveform lateral
   displacement to the next point using \p polygon_line_wave_p(). See
   its documentation for more details and default value.
+
+  ### forward
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | decimal               | required      | \p m : distance to travel
+    1 | datastruct            |               | \p wc : waveform configuration `[p, a, w, m]`; optional
+    2 | integer               |               | \p fn : number of [facets]; optional
+
+  Moves forward from the current position by distance \p m along the
+  current heading \p h. Equivalent to \p delta_v with the heading angle
+  supplied automatically. Supports straight and wave-line variants using
+  the same \p wc and \p fn parameters as other line operations.
+
+  ### turn_left
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | decimal               | required      | \p a : angle to turn in degrees
+
+  Rotates the current heading counter-clockwise by \p a degrees. Produces
+  no output coordinate points; only the heading \p h is updated for
+  subsequent steps.
+
+  ### turn_right
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | decimal               | required      | \p a : angle to turn in degrees
+
+  Rotates the current heading clockwise by \p a degrees. Produces no
+  output coordinate points; only the heading \p h is updated for
+  subsequent steps.
 
   ### arc_pv
 
@@ -341,6 +377,30 @@ function polygon_turtle_path_2d_p
             _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
 
           //
+          // lines; forward (along current heading)
+          //
+        : (oper == "forward" || oper == "fw") && (argc > 0) ?
+            let
+            (
+              t  = line_tp( line2d_new(m=a1, a=h, p1=p0) ),
+              wc = a2,
+              fn = a3
+            )
+            _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
+
+          //
+          // heading; turn left (counter-clockwise, next step heading update below)
+          //
+        : (oper == "turn_left" || oper == "tl") && (argc > 0) ?
+            empty_lst
+
+          //
+          // heading; turn right (clockwise, next step heading update below)
+          //
+        : (oper == "turn_right" || oper == "tr") && (argc > 0) ?
+            empty_lst
+
+          //
           // arc; center point
           //
         : (oper == "arc_pv" || oper == "apv") && (argc > 2) ?
@@ -387,9 +447,12 @@ function polygon_turtle_path_2d_p
       //
       // updates for next recursion step
       //
+
       next_s    = tailn(s),
       next_p0   = is_empty( p ) ? p0 : last( p ),
-      next_h    = h,
+      next_h    = (oper == "turn_left"  || oper == "tl") ? h + a1
+                : (oper == "turn_right" || oper == "tr") ? h - a1
+                : h,
       next_s_n  = s_n + 1,
       next_p0_g = is_undef( p0_g ) ? p0 : p0_g
     )
