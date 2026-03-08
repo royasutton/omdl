@@ -380,8 +380,8 @@ function polygon_turtle_path_2d_p
             false,
             strl
             ([
-                "ERROR: p0=", p0, ", s_n=", s_n, ", operation=", oper,
-                  ", argv=", argv, ", argc=", argc
+                "ERROR: p0=", p0, ", h=", h, ", s_n=", s_n, ", p0_g=", p0_g,
+                ", operation=", oper, ", argv=", argv, ", argc=", argc
             ])
           ),
 
