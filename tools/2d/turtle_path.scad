@@ -340,7 +340,7 @@ function polygon_turtle_path_2d_p
             )
             _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
 
-        : (oper == "delta_x"   || oper == "dx") && (argc > 0) ?
+        : (oper == "delta_x" || oper == "dx") && (argc > 0) ?
             let
             (
               t  = p0 + [a1, 0],
@@ -349,7 +349,7 @@ function polygon_turtle_path_2d_p
             )
             _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
 
-        : (oper == "delta_y"   || oper == "dy") && (argc > 0) ?
+        : (oper == "delta_y" || oper == "dy") && (argc > 0) ?
             let
             (
               t  = p0 + [0, a1],
@@ -361,7 +361,7 @@ function polygon_turtle_path_2d_p
           //
           // lines; delta angle
           //
-        : (oper == "delta_xa"  || oper == "dxa") && (argc > 1) ?
+        : (oper == "delta_xa" || oper == "dxa") && (argc > 1) ?
             let
             (
               t  = p0 + [a1, a1 * tan(a2)],
@@ -370,7 +370,7 @@ function polygon_turtle_path_2d_p
             )
             _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn )
 
-        : (oper == "delta_ya"  || oper == "dya") && (argc > 1) ?
+        : (oper == "delta_ya" || oper == "dya") && (argc > 1) ?
             let
             (
               t  = p0 + [a1 / tan(a2), a1],
@@ -382,7 +382,7 @@ function polygon_turtle_path_2d_p
           //
           // lines; delta vector
           //
-        : (oper == "delta_v"   || oper == "dv") && (argc > 1) ?
+        : (oper == "delta_v" || oper == "dv") && (argc > 1) ?
             let
             (
               t  = line_tp( line2d_new(m=a1, a=a2, p1=p0) ),
