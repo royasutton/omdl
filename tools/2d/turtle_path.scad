@@ -344,7 +344,7 @@ function polygon_turtle_path_2d_p
           //
           // arc; center point
           //
-        : (oper == "arc_pv" || oper == "apv") && ((argc == 3) || (argc == 4)) ?
+        : (oper == "arc_pv" || oper == "apv") && (argc > 2) ?
           let
           ( // handle scalar angle or compute angle from vector
             v2  = is_list(a2) ? [a1, a2] : a2
@@ -354,7 +354,7 @@ function polygon_turtle_path_2d_p
           //
           // arc; center vector
           //
-        : (oper == "arc_vv" || oper == "avv") && ((argc == 3) || (argc == 4)) ?
+        : (oper == "arc_vv" || oper == "avv") && (argc > 2) ?
           let
           ( // calculate center point 'b1' from given vector [m, a] in 'a1'
             b1 = line_tp( line2d_new(m=first(a1), a=second(a1), p1=p0) ),
@@ -365,7 +365,7 @@ function polygon_turtle_path_2d_p
           //
           // points
           //
-        : (oper == "path_p" || oper == "pp") && (argc == 1) ?
+        : (oper == "path_p" || oper == "pp") && (argc > 0) ?
           let
           (
             point_list = a1
