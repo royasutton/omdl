@@ -194,9 +194,6 @@ function polygon_turtle_path_2d_p
   ! is_list( s ) ? empty_lst
   : let
     (
-      // record global origin if needed
-      go   = is_undef( p0_g ) ? p0 : p0_g,
-
       // get current step
       step = first( s ),
 
@@ -369,14 +366,23 @@ function polygon_turtle_path_2d_p
                 "ERROR: p0=", p0, ", s_n=", s_n, ", operation=", oper,
                   ", argv=", argv, ", argc=", argc
             ])
-          )
+          ),
+
+      //
+      // updates for next recursion step
+      //
+      next_s    = tailn(s),
+      next_p0   = is_empty( p ) ? p0 : last( p ),
+      next_h    = h,
+      next_s_n  = s_n + 1,
+      next_p0_g = is_undef( p0_g ) ? p0 : p0_g
     )
     ( len( s ) == 1 ) ?
       p
     : concat
       (
         p,
-        polygon_turtle_path_2d_p( tailn(s), last(p), h, s_n+1, go )
+        polygon_turtle_path_2d_p( next_s, next_p0, next_h, next_s_n, next_p0_g )
       );
 
 //! @}
