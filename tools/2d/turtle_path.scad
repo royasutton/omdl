@@ -524,81 +524,81 @@ function polygon_turtle_path_2d_p
           //
           // lines; goto (absolute position)
           //
-          (oper == "goto_xy" || oper == "gxy") && (argc > 1) ?
+          is_oneof( oper, ["goto_xy", "gxy"] ) && (argc > 1) ?
             let( t = [a1, a2], wc = a3, fn = a4 )
             [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
-        : (oper == "goto_x" || oper == "gx") && (argc > 0) ?
+        : is_oneof( oper, ["goto_x", "gx"] ) && (argc > 0) ?
             let( t = [a1, p0.y], wc = a2, fn = a3 )
             [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
-        : (oper == "goto_y" || oper == "gy") && (argc > 0) ?
+        : is_oneof( oper, ["goto_y", "gy"] ) && (argc > 0) ?
             let( t = [p0.x, a1], wc = a2, fn = a3 )
             [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
           //
           // lines; delta
           //
-        : (oper == "delta_xy" || oper == "dxy") && (argc > 1) ?
+        : is_oneof( oper, ["delta_xy", "dxy"] ) && (argc > 1) ?
             let( t = p0 + [a1, a2], wc = a3, fn = a4 )
             [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
-        : (oper == "delta_x" || oper == "dx") && (argc > 0) ?
+        : is_oneof( oper, ["delta_x", "dx"] ) && (argc > 0) ?
             let( t = p0 + [a1, 0], wc = a2, fn = a3 )
             [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
-        : (oper == "delta_y" || oper == "dy") && (argc > 0) ?
+        : is_oneof( oper, ["delta_y", "dy"] ) && (argc > 0) ?
             let( t = p0 + [0, a1], wc = a2, fn = a3 )
             [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
           //
           // lines; delta angle
           //
-        : (oper == "delta_xa" || oper == "dxa") && (argc > 1) ?
+        : is_oneof( oper, ["delta_xa", "dxa"] ) && (argc > 1) ?
             let( t = p0 + [a1, a1 * tan(a2)], wc = a3, fn = a4 )
             [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
-        : (oper == "delta_ya" || oper == "dya") && (argc > 1) ?
+        : is_oneof( oper, ["delta_ya", "dya"] ) && (argc > 1) ?
             let( t = p0 + [a1 / tan(a2), a1], wc = a3, fn = a4 )
             [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
           //
           // lines; move radial absolute
           //
-        : (oper == "move_ar" || oper == "mar") && (argc > 1) ?
+        : is_oneof( oper, ["move_ar", "mar"] ) && (argc > 1) ?
             let( t = line_tp( line2d_new(m=a1, a=a2, p1=p0) ), wc = a3, fn = a4 )
             [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
           //
           // lines; move radial relative (to current heading)
           //
-        : (oper == "move_rr" || oper == "mrr") && (argc > 1) ?
+        : is_oneof( oper, ["move_rr", "mrr"] ) && (argc > 1) ?
             let( t = line_tp( line2d_new(m=a1, a=h+a2, p1=p0) ), wc = a3, fn = a4 )
             [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
           //
           // lines; move forward (along current heading)
           //
-        : (oper == "move_fw" || oper == "mfw") && (argc > 0) ?
+        : is_oneof( oper, ["move_fw", "mfw"] ) && (argc > 0) ?
             let( t = line_tp( line2d_new(m=a1, a=h, p1=p0) ), wc = a2, fn = a3 )
             [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
           //
           // heading; turn left (counter-clockwise)
           //
-        : (oper == "turn_left" || oper == "tl") && (argc > 0) ?
+        : is_oneof( oper, ["turn_left", "tl"] ) && (argc > 0) ?
             [ empty_lst, h + a1 ]
 
           //
           // heading; turn right (clockwise)
           //
-        : (oper == "turn_right" || oper == "tr") && (argc > 0) ?
+        : is_oneof( oper, ["turn_right", "tr"] ) && (argc > 0) ?
             [ empty_lst, h - a1 ]
 
           //
           // sub-steps; repeat
           //
-        : (oper == "repeat" || oper == "rpt") && (argc > 0) ?
+        : is_oneof( oper, ["repeat", "rpt"] ) && (argc > 0) ?
             let
             (
               sub_s  = a1,
@@ -610,7 +610,7 @@ function polygon_turtle_path_2d_p
           //
           // sub-steps; repeat mirror-x (about horizontal axis)
           //
-        : (oper == "repeat_mx" || oper == "rptmx") && (argc > 0) ?
+        : is_oneof( oper, ["repeat_mx", "rptmx"] ) && (argc > 0) ?
             let
             (
               sub_s = a1,
@@ -648,7 +648,7 @@ function polygon_turtle_path_2d_p
           //
           // sub-steps; repeat mirror-y (about vertical axis)
           //
-        : (oper == "repeat_my" || oper == "rptmy") && (argc > 0) ?
+        : is_oneof( oper, ["repeat_my", "rptmy"] ) && (argc > 0) ?
             let
             (
               sub_s = a1,
@@ -686,7 +686,7 @@ function polygon_turtle_path_2d_p
           //
           // sub-steps; transform (rotate then translate)
           //
-        : (oper == "transform" || oper == "xfrm") && (argc > 1) ?
+        : is_oneof( oper, ["transform", "xfrm"] ) && (argc > 1) ?
             let
             (
               sub_s = a1,
@@ -711,7 +711,7 @@ function polygon_turtle_path_2d_p
           //
           // arc; center point
           //
-        : (oper == "arc_pv" || oper == "apv") && (argc > 2) ?
+        : is_oneof( oper, ["arc_pv", "apv"] ) && (argc > 2) ?
             let( v2 = is_list(a2) ? [a1, a2] : a2 )
             [
               polygon_arc_p( r=distance_pp(p0, a1), c=a1, v1=[a1, p0], v2=v2, cw=a3, fn=a4 ),
@@ -721,7 +721,7 @@ function polygon_turtle_path_2d_p
           //
           // arc; center vector
           //
-        : (oper == "arc_vv" || oper == "avv") && (argc > 2) ?
+        : is_oneof( oper, ["arc_vv", "avv"] ) && (argc > 2) ?
             let
             (
               b1 = line_tp( line2d_new(m=first(a1), a=second(a1), p1=p0) ),
@@ -735,13 +735,13 @@ function polygon_turtle_path_2d_p
           //
           // points
           //
-        : (oper == "path_p" || oper == "pp") && (argc > 0) ?
+        : is_oneof( oper, ["path_p", "pp"] ) && (argc > 0) ?
             [ a1, h ]
 
           //
           // close path; return to global origin
           //
-        : (oper == "close" || oper == "cl") ?
+        : is_oneof( oper, ["close", "cl"] ) ?
             let
             (
               g  = defined_or( p0_g, p0 ),  // step-1 guard
@@ -778,13 +778,13 @@ function polygon_turtle_path_2d_p
       // transform: advance only when upd=true, else restore entry position
       // repeat, repeat_mx, repeat_my: always advance to end of combined output
       next_p0   = let ( end_p = is_empty(p) ? p0 : last(p) )
-                  (oper == "transform" || oper == "xfrm") ?
+                  is_oneof( oper, ["transform", "xfrm"] ) ?
                   let ( upd = defined_e_or( a4, 0, false ) )
                   upd ? end_p : p0
                 : end_p,
 
       // transform: only update when upd=true, heading already encoded in step_h
-      next_h    = (oper == "transform" || oper == "xfrm") ?
+      next_h    = is_oneof( oper, ["transform", "xfrm"] ) ?
                   let ( upd = defined_e_or( a4, 0, false ) )
                   upd ? step_h : h
                 : step_h,
