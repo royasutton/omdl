@@ -356,7 +356,7 @@ module pg_ngon
 {
   z = (center == true) ? origin2d : [r, r];
 
-  c = polygon_regular_p(n=n, r=r, c=z);
+  c = polygon_regular_p(n=n, r=r, o=z);
 
   m = is_undef(  o ) ? c : translate_p(c, o);
   p = is_undef( vr ) ? m : polygon_round_eve_all_p(c=m, vr=vr, vrm=vrm, vfn=vfn);

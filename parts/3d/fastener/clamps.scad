@@ -430,7 +430,7 @@ module clamp_cg
         cw = wmax/2 + w*2;
         ch = h*cf;
 
-        repeat_radial(cn, o=co)
+        repeat_radial(cn, ao=co)
         translate([cw/2, 0, wth/2 + h - ch/2])
         cube([cw, ct, ch + eps*4], center=true);
       }
