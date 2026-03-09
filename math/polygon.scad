@@ -197,10 +197,6 @@ function polygon_line_p
     ip  = is_defined(l) ? line_ip(l) : p1,
     tp  = is_defined(l) ? line_tp(l) : p2,
 
- //
- // zdx = (tp[0] == ip[0]),                                   // is delta-x zero
- // zdy = (tp[1] == ip[1]),                                   // is delta-y zero
- //
     zdx = almost_eq_nv(tp[0], ip[0]),                         // is delta-x zero
     zdy = almost_eq_nv(tp[1], ip[1]),                         // is delta-y zero
 
@@ -302,9 +298,9 @@ function polygon_arc_p
     // arc positive start angle
     iap = angle_ll(x_axis2d_uv, va1, false),
 
-    // positive arc sweep angle
+    // positive arc sweep angle; treat near-zero as full circle
     vas = angle_ll(va2, va1, false),
-    vap = (vas == 0) ? 360 : vas,
+    vap = almost_eq_nv(vas, 0) ? 360 : vas,
 
     // arc cw and ccw signed sweep step
     sas = (((cw == true) ? 0 : 360) - vap)/naf
