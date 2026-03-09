@@ -649,7 +649,14 @@ function polygon_line_wave_p
     nx      = -ty,
     ny      =  tx,
 
-    safe_n  = max(na, grid_fine)
+    safe_n  = max(na, grid_fine),
+
+    // hoist skew log constants (used in remap branches)
+    safe_s  = (remap == 2 || remap == 3) ?
+                let( s = defined_e_or(m, 1, 1/2) ) max(min(s, 1 - grid_fine), grid_fine)
+              : 0,
+    log_s   = (remap == 2) ? log(0.5) / log(safe_s) : 0,
+    log_1ms = (remap == 2) ? log(0.5) / log(1 - safe_s) : 0
   )
   // return coordinate points: base point + lateral displacement
   [
@@ -676,15 +683,9 @@ function polygon_line_wave_p
               (u + m_shift) - floor(u + m_shift)
             // skew
           : remap == 2 ?
-              let
-              (
-                m_shift = defined_e_or(m, 1, 1/2),
-
-                safe_s  = max(min(m_shift, 1 - grid_fine), grid_fine)
-              )
               u < safe_s ?
-                  0.5 * pow(u / safe_s, log(0.5) / log(safe_s))
-                : 0.5 + 0.5 * pow((u - safe_s) / (1 - safe_s), log(0.5) / log(1 - safe_s))
+                  0.5 * pow(u / safe_s, log_s)
+                : 0.5 + 0.5 * pow((u - safe_s) / (1 - safe_s), log_1ms)
             // blend
           : remap == 3 ?
               let
