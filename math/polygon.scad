@@ -1478,15 +1478,22 @@ function polygon_linear_extrude_pf
 
     cw = polygon_is_clockwise (c, p),
 
+    // per-path starting flat index within the z0 layer
+    po_offsets = [for (i = [0 : len(pm)-1])
+                   len([for (j = [0 : i-1]) for (ci = pm[j]) 1])],
+
     pp = [for (zi = zr) for (pi = pm) for (ci = pi) concat(c[ci] - po, zi)],
     pf =
     [
       [for (pi = pm) for (ci = pi) ci],
       [for (pi = pm) for (cn = [len(pi)-1 : -1 : 0]) pi[cn] + pn],
-      for (pi = pm) for (ci = pi)
-        (cw == true)
-        ? [ci, ci+pn, (ci+1)%pn+pn, (ci+1)%pn]
-        : [ci, (ci+1)%pn, (ci+1)%pn+pn, ci+pn]
+      for (k = [0 : len(pm)-1])
+        let( pi = pm[k], pl = len(pi), base = po_offsets[k] )
+        for (li = [0 : pl-1])
+          let( ci = base + li, ni = base + (li+1)%pl )
+          (cw == true)
+          ? [ci, ci+pn, ni+pn, ni]
+          : [ci, ni, ni+pn, ci+pn]
     ]
   )
   [pp, pf];
