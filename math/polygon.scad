@@ -56,6 +56,196 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+// helper functions
+//----------------------------------------------------------------------------//
+
+//! Test whether vertex \p i of a polygon path forms a valid ear.
+/***************************************************************************//**
+  \param    c     <points-2d> A list of 2d cartesian coordinates [[x, y], ...].
+
+  \param    path  <integer-list> An ordered list of coordinate indexes
+                  defining the current (possibly reduced) polygon path.
+
+  \param    i     <integer> The index into \p path of the candidate ear tip.
+
+  \returns  <boolean> \b true if vertex \p path[\p i] is a valid ear tip,
+            \b false otherwise.
+
+  \details
+
+    A vertex is a valid ear when two conditions both hold: the triangle
+    formed by the previous, current, and next vertices is wound
+    counter-clockwise (i.e. the tip is a convex vertex), and no other
+    vertex remaining in \p path lies strictly inside that triangle.
+
+    Assumes the path is wound counter-clockwise. If the input was
+    clockwise it must be reversed before calling this function. The
+    point-in-triangle test uses polygon_wn_is_p_inside() on the
+    three-vertex triangle. Uses any_equal() to test whether any
+    interior-point test returned \b true.
+
+  \private
+*******************************************************************************/
+function _polygon_is_ear
+(
+  c,
+  path,
+  i
+) =
+  let
+  (
+    n   = len(path),
+    ip  = (i == 0)   ? n-1 : i-1,
+    in_ = (i == n-1) ? 0   : i+1,
+
+    vp  = c[path[ip]],
+    vc  = c[path[i]],
+    vn  = c[path[in_]],
+
+    // ear tip must be a convex vertex in CCW winding: vc is left of vp→vn
+    convex = (is_left_ppp(vp, vn, vc) > 0),
+
+    // triangle as a 3-point coordinate list for inclusion test
+    tri = [vp, vc, vn],
+
+    // no other path vertex may lie strictly inside the ear triangle
+    no_interior =
+      convex &&
+      !any_equal
+      (
+        [for (j = [0 : n-1])
+          if (j != ip && j != i && j != in_)
+            polygon_wn_is_p_inside(c=tri, t=c[path[j]])
+        ],
+        true
+      )
+  )
+  convex && no_interior;
+
+//! Recursively triangulate a simple polygon path by ear clipping.
+/***************************************************************************//**
+  \param    c       <points-2d> A list of 2d cartesian coordinates
+                    [[x, y], ...].
+
+  \param    path    <integer-list> An ordered list of coordinate indexes
+                    defining the current (possibly reduced) polygon path.
+                    Must be wound counter-clockwise.
+
+  \param    tris    <integer-list-list> Accumulated triangle list; pass
+                    \b empty_lst on the initial call. Defaults to
+                    \b empty_lst.
+
+  \returns  <integer-list-list> A list of triangles [[i0, i1, i2], ...]
+            where each entry is a CCW-wound triple of coordinate indexes
+            into \p c.
+
+  \details
+
+    Implements the ear-clipping triangulation algorithm. At each step
+    the first valid ear found in \p path is clipped: its triangle is
+    appended to \p tris and its tip vertex is removed from \p path.
+    Recursion continues until \p path is reduced to 3 vertices, at
+    which point the final triangle is appended and the accumulated list
+    is returned.
+
+    Assumes \p path is wound counter-clockwise. The caller is
+    responsible for normalizing winding before the initial call (see
+    _polygon_cap_triangles()).
+
+    In the degenerate case where no ear is found in a pass over all
+    remaining vertices (which can occur for self-intersecting or
+    otherwise malformed paths), a \b echo warning is emitted and the
+    accumulated triangles so far are returned. This prevents infinite
+    recursion at the cost of an incomplete triangulation.
+
+  \private
+*******************************************************************************/
+function _polygon_clip_ears
+(
+  c,
+  path,
+  tris = empty_lst
+) =
+  let ( n = len(path) )
+  (n == 3)
+  ? concat(tris, [[path[0], path[1], path[2]]])
+  : let
+    (
+      ear_i = first
+              (
+                [for (i = [0 : n-1]) if (_polygon_is_ear(c, path, i)) i]
+              )
+    )
+    is_undef(ear_i)
+    ? let( _ = echo("WARNING: _polygon_clip_ears: no ear found — path may be self-intersecting or degenerate. Triangulation is incomplete.") )
+      tris
+    : let
+      (
+        ip  = (ear_i == 0)   ? n-1 : ear_i-1,
+        in_ = (ear_i == n-1) ? 0   : ear_i+1,
+
+        tri      = [path[ip], path[ear_i], path[in_]],
+        new_path = [for (j = [0 : n-1]) if (j != ear_i) path[j]]
+      )
+      _polygon_clip_ears(c, new_path, concat(tris, [tri]));
+
+//! Triangulate one cap face of a polygon path for use with polyhedron().
+/***************************************************************************//**
+  \param    c      <points-2d> A list of 2d cartesian coordinates [[x, y], ...].
+
+  \param    path   <integer-list> An ordered list of coordinate indexes
+                   defining the polygon path to triangulate.
+
+  \param    cw     <boolean> \b true if \p path is wound clockwise,
+                   \b false if counter-clockwise.
+
+  \param    flip   <boolean> When \b true each output triangle's vertex
+                   order is reversed. Used to produce the top cap with
+                   outward-pointing normals. Default \b false.
+
+  \param    offset <integer> Added to every index in the output triangles.
+                   Used to shift top cap indices into the upper z-layer.
+                   Default \b 0.
+
+  \returns  <integer-list-list> A list of triangles [[i0, i1, i2], ...]
+            with \p offset applied to all indices, and winding reversed
+            when \p flip is \b true. Returns \b empty_lst when
+            triangulation fails (see _polygon_clip_ears()).
+
+  \details
+
+    Normalizes the path to CCW winding before ear clipping so that
+    _polygon_clip_ears() and _polygon_is_ear() can assume a fixed
+    winding. If the original path was CW the path is reversed prior to
+    clipping. After clipping, each triangle's index order is reversed
+    if \p flip is \b true, and \p offset is added to all indices to map
+    into the correct z-layer of the polyhedron point list.
+
+  \private
+*******************************************************************************/
+function _polygon_cap_triangles
+(
+  c,
+  path,
+  cw,
+  flip   = false,
+  offset = 0
+) =
+  let
+  (
+    norm_path = (cw == true) ? reverse(path) : path,
+
+    raw_tris  = _polygon_clip_ears(c, norm_path),
+
+    out_tris  =
+      [for (tri = raw_tris)
+        let (t = flip ? [tri[2], tri[1], tri[0]] : tri)
+        [t[0] + offset, t[1] + offset, t[2] + offset]
+      ]
+  )
+  (len(raw_tris) == 0) ? empty_lst : out_tris;
+
+//----------------------------------------------------------------------------//
 // shape generation
 //----------------------------------------------------------------------------//
 
@@ -1053,18 +1243,23 @@ function polygon_as_is_p_inside
     the coordinate list at two z-levels and constructing bottom, top,
     and side faces.
 
-    Each path in \p p produces its own pair of cap faces (bottom and
-    top). The hole paths must have opposite vertex winding to the
-    primary path, matching the convention used by \c polygon() and
-    \c linear_extrude(). Bottom cap faces follow each path's own
-    vertex order; top cap faces are reversed so all normals point
-    outward. Side faces are generated per-path with no cross-path
-    index bleed.
+    Each path in \p p produces its own set of triangulated cap faces
+    (bottom and top) via ear-clipping triangulation, and its own band
+    of quad side faces. This correctly handles multi-path polygons with
+    holes, provided hole paths carry winding opposite to the primary
+    path, matching the convention used by \c polygon() and
+    \c linear_extrude().
 
-    \warning  Cap faces (top and bottom) are not triangulated. For
-              non-planar or non-convex paths this may produce invalid
-              geometry in some renderers. Triangulate the input paths
-              before calling this function if that is a concern.
+    Bottom cap triangles follow each path's own vertex winding; top cap
+    triangles are reversed so that all face normals point outward.
+    Side face quad winding is determined per-path from each path's own
+    signed area.
+
+    \warning  Triangulation uses ear clipping, which is correct for
+              simple (non-self-intersecting) polygons only. If a path
+              is self-intersecting, a warning is emitted via \b echo
+              and the triangulation for that path will be incomplete,
+              producing a non-manifold solid.
 
     \note     Hole correctness depends on the caller providing hole
               paths with winding opposite to the primary path, matching
@@ -1100,8 +1295,7 @@ function polygon_linear_extrude_pf
       [for (i = [0 : len(pm)-1])
         len([for (j = [0 : i-1]) for (ci = pm[j]) 1])],
 
-    // per-path signed-area winding: true = clockwise
-    // computed per-path so hole paths (opposite winding) are handled correctly
+    // per-path winding: true = clockwise, derived from each path's own signed area
     cw_per_path =
       [for (pi = pm)
         let
@@ -1121,17 +1315,31 @@ function polygon_linear_extrude_pf
 
     pf =
     [
-      // bottom cap: one face per path, in computed vertex order
+      // bottom cap: ear-clipped triangles per path, base winding
       for (k = [0 : len(pm)-1])
-        let (pi = pm[k], pl = len(pi), base = po_offsets[k])
-        [for (li = [0 : pl-1]) base + li],
+        for (tri = _polygon_cap_triangles
+                   (
+                     c      = c,
+                     path   = pm[k],
+                     cw     = cw_per_path[k],
+                     flip   = false,
+                     offset = po_offsets[k]
+                   ))
+        tri,
 
-      // top cap: one face per path, reversed so normals point outward
+      // top cap: ear-clipped triangles per path, winding reversed for outward normals
       for (k = [0 : len(pm)-1])
-        let (pi = pm[k], pl = len(pi), base = po_offsets[k])
-        [for (li = [pl-1 : -1 : 0]) base + li + pn],
+        for (tri = _polygon_cap_triangles
+                   (
+                     c      = c,
+                     path   = pm[k],
+                     cw     = cw_per_path[k],
+                     flip   = true,
+                     offset = po_offsets[k] + pn
+                   ))
+        tri,
 
-      // side faces: one quad per edge, per path, no cross-path bleed
+      // side faces: one quad per edge, per path, no cross-path index bleed
       for (k = [0 : len(pm)-1])
         let (pi = pm[k], pl = len(pi), base = po_offsets[k])
         for (li = [0 : pl-1])
