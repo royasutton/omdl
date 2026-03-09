@@ -1506,10 +1506,10 @@ function polygon_linear_extrude_pf
 //! @}
 
 //----------------------------------------------------------------------------//
-// shape rounding
+// profiles
 //----------------------------------------------------------------------------//
 
-//! \name Rounding
+//! \name Profiles
 //! @{
 
 //! Compute coordinates for a constant radius vertex round between two edge vectors in 2D.
