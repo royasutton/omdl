@@ -1051,14 +1051,24 @@ function polygon_as_is_p_inside
 
     Extrudes the 2D polygon into a closed 3D polyhedron by duplicating
     the coordinate list at two z-levels and constructing bottom, top,
-    and side faces. Bottom face winding follows the input vertex order;
-    top face winding is reversed to produce outward-facing normals.
+    and side faces.
 
-    Side faces are generated per-path, with next-vertex wrapping
-    performed within each path independently. Multi-path inputs
-    (polygons with holes defined by secondary paths) are therefore
-    handled correctly; each path contributes its own closed band of
-    side faces with no cross-path index bleed.
+    Each path in \p p produces its own pair of cap faces (bottom and
+    top). The hole paths must have opposite vertex winding to the
+    primary path, matching the convention used by \c polygon() and
+    \c linear_extrude(). Bottom cap faces follow each path's own
+    vertex order; top cap faces are reversed so all normals point
+    outward. Side faces are generated per-path with no cross-path
+    index bleed.
+
+    \warning  Cap faces (top and bottom) are not triangulated. For
+              non-planar or non-convex paths this may produce invalid
+              geometry in some renderers. Triangulate the input paths
+              before calling this function if that is a concern.
+
+    \note     Hole correctness depends on the caller providing hole
+              paths with winding opposite to the primary path, matching
+              the \c polygon() convention.
 
     When \p centroid is \b true, the polygon centroid is computed and
     subtracted from all x/y coordinates before extrusion, centering the
@@ -1079,28 +1089,54 @@ function polygon_linear_extrude_pf
 ) =
   let
   (
-    pm = defined_or(p, [consts(len(c))]),
-    pn = len([for (pi = pm) for (ci = pi) 1]),
+    pm  = defined_or(p, [consts(len(c))]),
+    pn  = len([for (pi = pm) for (ci = pi) 1]),   // total vertex count across all paths
 
-    po = (centroid == true) ? polygon_centroid(c, p) : origin2d,
-    zr = (center == true) ? [-h/2, h/2] : [0, h],
+    po  = (centroid == true) ? polygon_centroid(c, p) : origin2d,
+    zr  = (center == true) ? [-h/2, h/2] : [0, h],
 
-    cw = polygon_is_clockwise (c, p),
+    // per-path flat index base within one z-layer
+    po_offsets =
+      [for (i = [0 : len(pm)-1])
+        len([for (j = [0 : i-1]) for (ci = pm[j]) 1])],
 
-    // per-path starting flat index within the z0 layer
-    po_offsets = [for (i = [0 : len(pm)-1])
-                   len([for (j = [0 : i-1]) for (ci = pm[j]) 1])],
+    // per-path signed-area winding: true = clockwise
+    // computed per-path so hole paths (opposite winding) are handled correctly
+    cw_per_path =
+      [for (pi = pm)
+        let
+        (
+          n  = len(pi),
+          av = [for (i = [0 : n-1])
+                  let (j = (i == 0) ? n-1 : i-1)
+                  (c[pi[j]][0] + c[pi[i]][0]) * (c[pi[i]][1] - c[pi[j]][1])],
+          sa = sum(av) / 2
+        )
+        (sa < 0)
+      ],
 
-    pp = [for (zi = zr) for (pi = pm) for (ci = pi) concat(c[ci] - po, zi)],
+    // points: z=zr[0] layer followed by z=zr[1] layer, preserving path order
+    pp =
+      [for (zi = zr) for (pi = pm) for (ci = pi) concat(c[ci] - po, zi)],
+
     pf =
     [
-      [for (pi = pm) for (ci = pi) ci],
-      [for (pi = pm) for (cn = [len(pi)-1 : -1 : 0]) pi[cn] + pn],
+      // bottom cap: one face per path, in computed vertex order
       for (k = [0 : len(pm)-1])
-        let( pi = pm[k], pl = len(pi), base = po_offsets[k] )
+        let (pi = pm[k], pl = len(pi), base = po_offsets[k])
+        [for (li = [0 : pl-1]) base + li],
+
+      // top cap: one face per path, reversed so normals point outward
+      for (k = [0 : len(pm)-1])
+        let (pi = pm[k], pl = len(pi), base = po_offsets[k])
+        [for (li = [pl-1 : -1 : 0]) base + li + pn],
+
+      // side faces: one quad per edge, per path, no cross-path bleed
+      for (k = [0 : len(pm)-1])
+        let (pi = pm[k], pl = len(pi), base = po_offsets[k])
         for (li = [0 : pl-1])
-          let( ci = base + li, ni = base + (li+1)%pl )
-          (cw == true)
+          let (ci = base + li, ni = base + (li+1)%pl)
+          (cw_per_path[k] == true)
           ? [ci, ci+pn, ni+pn, ni]
           : [ci, ni, ni+pn, ci+pn]
     ]
