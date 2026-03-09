@@ -197,13 +197,13 @@ module pg_rectangle_rs
 module pg_elliptical_sector
 (
   r = 1,
-  c = origin2d,
+  o = origin2d,
   v1 = x_axis2d_uv,
   v2 = x_axis2d_uv,
   s = true
 )
 {
-  p = polygon_elliptical_sector_p(r=r, c=c, v1=v1, v2=v2, s=s);
+  p = polygon_elliptical_sector_p(r=r, o=o, v1=v1, v2=v2, s=s);
 
   polygon(p);
 }

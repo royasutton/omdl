@@ -263,14 +263,14 @@ function polygon_arc_p
   [
     for (as = [0 : naf])
       let (aa = iap + as * sas)
-      c + r * [cos(aa), sin(aa)]
+      o + r * [cos(aa), sin(aa)]
   ];
 
 //! Compute coordinates for an elliptical sector in 2D.
 /***************************************************************************//**
   \param    r <decimal-list-2 | decimal> The elliptical radius. A list
             [rx, ry] of decimals or a single decimal for (rx=ry).
-  \param    c <point-2d> The center coordinate [x, y].
+  \param    o <point-2d> The center coordinate [x, y].
   \param    v1 <line-2d | decimal> The sector angle 1.
             A 2d line, vector, or decimal.
   \param    v2 <line-2d | decimal> The sector angle 2.
@@ -294,7 +294,7 @@ function polygon_arc_p
 function polygon_elliptical_sector_p
 (
   r = 1,
-  c = origin2d,
+  o = origin2d,
   v1 = x_axis2d_uv,
   v2 = x_axis2d_uv,
   s = true,
@@ -321,10 +321,10 @@ function polygon_elliptical_sector_p
     // cw ordering
     pp =
     [
-      if (va1 != va2) c,
+      if (va1 != va2) o,
       for (i = as)
         let (pa = ((af-i)*va1 + i*va3) / af)
-        c + [rx*cos(pa), ry*sin(pa)]
+        o + [rx*cos(pa), ry*sin(pa)]
     ]
   )
   (cw == true) ? pp : reverse(pp);
