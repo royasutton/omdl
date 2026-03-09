@@ -309,10 +309,6 @@ function transform_p
     )
     rc;
 
-//! \copydoc transform_p
-//! \deprecated Use transform_p() instead.
-function rotate_p( c, a, v, o=origin3d, t ) = transform_p( c=c, a=a, v=v, o=o, t=t );
-
 //! Scale all coordinates dimensions.
 /***************************************************************************//**
   \param    c <points-nd> A list of nd coordinate points.
