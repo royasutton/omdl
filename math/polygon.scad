@@ -420,7 +420,7 @@ function polygon_trapezoid_p
     The displacement formula applied at each point is:
 
     \code
-      offset = ma × sign(wave) × |wave|^(1/na)
+      offset = oa + ma × sign(wave) × |wave|^(1/na)
     \endcode
 
     where \c wave is the waveform value at the remapped period position
@@ -1389,6 +1389,11 @@ function polygon_round_eve_p
             A list [v1fn, v2fn, v3fn, ... vnfn] of \em n integers or a
             single integer for (v1fn=v2fn=v3fn= ... =vnfn).
   \param    w <boolean> Wrap-at-end during 3-point coordinate selection.
+            When \b true (default), the first and last vertices are
+            included in the rounding sequence, connecting the polygon
+            end back to its start. When \b false, the first and last
+            vertices are returned unmodified, which is useful for open
+            paths where the endpoints should remain fixed.
   \param    cw <boolean> Polygon vertex ordering.
 
   \returns  <points-2d> A new list of coordinates points [[x, y], ...]
