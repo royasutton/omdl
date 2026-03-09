@@ -961,7 +961,7 @@ module draft_arrow
     else if ( s1 == 5 )
     { // circle
       hull_cs( !s2 )
-      for ( ls = sequence_ns( polygon_arc_p( r=al/3, c=pah, fn=$draft_arrow_fn ), 2, 1 ) )
+      for ( ls = sequence_ns( polygon_arc_p( r=al/3, o=pah, fn=$draft_arrow_fn ), 2, 1 ) )
         draft_line_pp(ls[0], ls[1], w=w);
     }
   }
@@ -1175,7 +1175,7 @@ module draft_line
 module draft_arc
 (
   r  = 1,
-  c  = origin2d,
+  o  = origin2d,
   v1 = x_axis2d_uv,
   v2 = x_axis2d_uv,
   fn,
@@ -1191,7 +1191,7 @@ module draft_arc
 
   if ( !all_equal([s1, a1, a2], 0) )
   {
-    pp = polygon_arc_p( r=r, c=c, v1=v1, v2=v2, fn=fn, cw=cw );
+    pp = polygon_arc_p( r=r, o=o, v1=v1, v2=v2, fn=fn, cw=cw );
 
     if ( s1 == 1 )
     { // solid line
@@ -1216,7 +1216,7 @@ module draft_arc
 /***************************************************************************//**
   \param    d <decimal-list-2 | decimal> A list [x, y] of decimals
             or a single decimal for (x=y).
-  \param    c <point-2d> The center coordinate [x, y].
+  \param    o <point-2d> The center coordinate [x, y].
   \param    w <decimal> The line weight.
   \param    s <integer | integer-list> The line style.
 
@@ -1229,7 +1229,7 @@ module draft_arc
 module draft_rectangle
 (
   d = 1,
-  c = origin2d,
+  o = origin2d,
   w = 1,
   s = 1
 )
@@ -1242,10 +1242,10 @@ module draft_rectangle
 
   pl =
   [
-    [-mx, -my] + c,
-    [-mx,  my] + c,
-    [ mx,  my] + c,
-    [ mx, -my] + c
+    [-mx, -my] + o,
+    [-mx,  my] + o,
+    [ mx,  my] + o,
+    [ mx, -my] + o
   ];
 
   // draft each edge

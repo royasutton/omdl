@@ -209,7 +209,7 @@ function polygon_line_p
 //! Compute coordinates of an arc with constant radius between two vectors in 2D.
 /***************************************************************************//**
   \param    r <decimal> The arc radius.
-  \param    c <point-2d> The arc center coordinate [x, y].
+  \param    o <point-2d> The arc center coordinate [x, y].
   \param    v1 <line-2d | decimal> The arc start angle.
             A 2d line, vector, or decimal angle 1.
   \param    v2 <line-2d | decimal> The arc end angle.
@@ -223,7 +223,7 @@ function polygon_line_p
 
   \details
 
-    The arc coordinates will have radius \p r centered about \p c
+    The arc coordinates will have radius \p r centered about \p o
     contained within the heads of vectors \p v1 and \p v2. The arc will
     start at the point coincident to \p v1 and will end at the point
     coincident to \p v2. When vectors \p v1 and \p v2 are parallel, the
@@ -235,7 +235,7 @@ function polygon_line_p
 function polygon_arc_p
 (
   r  = 1,
-  c  = origin2d,
+  o  = origin2d,
   v1 = x_axis2d_uv,
   v2 = x_axis2d_uv,
   fn,
@@ -1363,8 +1363,8 @@ function polygon_round_eve_p
     tc2 = c + vim*unit_l(va2),
 
     // vertex rounding coordinate point list
-    vpl = (m == 1) ? polygon_arc_p(r=r, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=true)
-        : (m == 2) ? polygon_arc_p(r=r, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=false)
+    vpl = (m == 1) ? polygon_arc_p(r=r, o=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=true)
+        : (m == 2) ? polygon_arc_p(r=r, o=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=false)
         : empty_lst,
 
     // cw ordering
@@ -1536,11 +1536,11 @@ function polygon_round_eve_all_p
         // vertex rounding coordinate point list
         vpl = (rm == 0 || rm > 10) ? [vc]
             : (rm == 1) ?
-              polygon_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=!ras)
+              polygon_arc_p(r=rr, o=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=!ras)
             : (rm == 2 || rm == 3 || rm == 4) ?
-              polygon_arc_p(r=rr, c=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=ras)
+              polygon_arc_p(r=rr, o=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=ras)
             : (rm == 6 || rm == 7 || rm == 8) ?
-              polygon_arc_p(r=rr, c=vc, v1=[vc, tc1], v2=[vc, tc2], fn=fn, cw=!ras)
+              polygon_arc_p(r=rr, o=vc, v1=[vc, tc1], v2=[vc, tc2], fn=fn, cw=!ras)
             : [tc1, tc2]
       )
       vpl
