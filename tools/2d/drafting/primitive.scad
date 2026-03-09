@@ -1121,8 +1121,8 @@ module draft_line
         let
         (
           mp = bp[i],                         // mid, cross, & line points
-          xp = polygon_regular_p(n=2, r=s4, o=la+s5, o=mp),
-          lp = polygon_regular_p(n=2, r=s3, o=la, o=mp)
+          xp = polygon_regular_p(n=2, r=s4, ao=la+s5, o=mp),
+          lp = polygon_regular_p(n=2, r=s3, ao=la, o=mp)
         )
         [ lp[1], xp[0], xp[1], lp[0] ]
       ];

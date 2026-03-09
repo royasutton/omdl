@@ -638,6 +638,9 @@ module draft_dim_radius
   [arrow]: \ref draft_arrow()
   [round_d]: \ref round_d()
   [round_s]: \ref round_s()
+
+  \todo parameter o reserved for origin. rename c to o and assign new
+        name to existing o.
 *******************************************************************************/
 module draft_dim_angle
 (
@@ -740,7 +743,7 @@ module draft_dim_angle
     difference()
     {
       // remove window from dimension line for text
-      draft_arc(r=r-o, c=c, v1=[c, pe1], v2=[c, pe2], fn=fn, cw=cw, w=w, s=s, a1=da1, a2=da2);
+      draft_arc(r=r-o, o=c, v1=[c, pe1], v2=[c, pe2], fn=fn, cw=cw, w=w, s=s, a1=da1, a2=da2);
 
       translate( dtp )
       rotate( [0, 0, dta + defined_or(tp[3], 0)] )
@@ -760,7 +763,7 @@ module draft_dim_angle
     }
     else
     {
-      draft_arc(r=r-o, c=c, v1=[c, pe1], v2=[c, pe2], fn=fn, cw=cw, w=w, s=s, a1=da1, a2=da2);
+      draft_arc(r=r-o, o=c, v1=[c, pe1], v2=[c, pe2], fn=fn, cw=cw, w=w, s=s, a1=da1, a2=da2);
     }
 
     if ( !is_empty(dt)  )

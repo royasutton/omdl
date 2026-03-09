@@ -76,6 +76,8 @@
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 
+  \todo parameter o reserved for origin. rename c to o and assign new
+
   [LibreCAD]: https://librecad.org
 *******************************************************************************/
 
@@ -212,7 +214,7 @@ BEGIN_SCOPE example;
           draft_arc(r=r1-o1, s=2, v1=360/t1*8, v2=360/t1*5);
           draft_arc(r=o2, s=2, fn=72);
 
-          draft_arc(c=[o1-r1, 0], r=r3, s=2, fn=72);
+          draft_arc(o=[o1-r1, 0], r=r3, s=2, fn=72);
         }
 
         draft_dim_center(r=r2);
