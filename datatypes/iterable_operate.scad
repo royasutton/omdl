@@ -100,6 +100,26 @@ function defined_eon_or
   : !is_undef( v[i] ) ? v[i]
   : d;
 
+//! Returns the list element or scalar numeric or boolean value if defined, otherwise returns the default value.
+/***************************************************************************//**
+  \param    v \<value> A value.
+  \param    i <integer> An element index.
+  \param    d \<value> A default value.
+
+  \returns  (1) <value> \c v if it is a scalar numeric or boolean value;
+            (2) <value> \c v[i] if it is defined, otherwise the
+                default value \p d.
+*******************************************************************************/
+function defined_eonb_or
+(
+  v,
+  i,
+  d
+) = (is_num(v) || is_bool(v)) ? v
+  : !is_iterable(v) ? d
+  : !is_undef( v[i] ) ? v[i]
+  : d;
+
 //! Return the first defined specified element in a list of lists, otherwise returns the given default value.
 /***************************************************************************//**
   \param    v \<value> A list of \p n elements lists.
@@ -1667,6 +1687,7 @@ BEGIN_SCOPE validate;
 
     for (id=test_ids) table_validate( db, id, "defined_e_or_DE3", 1, defined_e_or( v1(db,id), 3, "default" ) );
     for (id=test_ids) table_validate( db, id, "defined_e_or_DE3", 1, defined_eon_or( v1(db,id), 3, "default" ) );
+    // defined_eonb_or()
     // defined_fle_or()
     // defined_ei_or()
     // find_all()
