@@ -177,7 +177,10 @@ function _polygon_clip_ears
               )
     )
     is_undef(ear_i)
-    ? let( _ = echo("WARNING: _polygon_clip_ears: no ear found — path may be self-intersecting or degenerate. Triangulation is incomplete.") )
+    ? let
+      (
+        _ = echo("WARNING: _polygon_clip_ears: no ear found — path may be self-intersecting or degenerate. Triangulation is incomplete.")
+      )
       tris
     : let
       (
@@ -238,12 +241,95 @@ function _polygon_cap_triangles
     raw_tris  = _polygon_clip_ears(c, norm_path),
 
     out_tris  =
-      [for (tri = raw_tris)
-        let (t = flip ? [tri[2], tri[1], tri[0]] : tri)
-        [t[0] + offset, t[1] + offset, t[2] + offset]
+      [
+        for (tri = raw_tris)
+          let (t = flip ? [tri[2], tri[1], tri[0]] : tri)
+          [t[0] + offset, t[1] + offset, t[2] + offset]
       ]
   )
   (len(raw_tris) == 0) ? empty_lst : out_tris;
+
+//! Compute the sequential edge index pairs for one or more polygon paths.
+/***************************************************************************//**
+  \param    pm <integer-list-list> A list of paths where each path is an
+               ordered list of coordinate indexes into a coordinate array.
+
+  \returns  <integer-list-list> A flat list of index pairs [[j, i], ...]
+            where for each path of length \p n, \p j and \p i are
+            consecutive coordinate indexes with wrap-around: the pair
+            [n-1, 0] closes the polygon. The returned list is flat
+            across all paths with no per-path grouping.
+
+  \details
+
+    Yields one index pair per vertex per path, representing the edge
+    from vertex \p j (previous) to vertex \p i (current). The closing
+    edge from the last vertex back to the first is always included.
+    Callers dereference into their coordinate array as needed: \c
+    c[pair[0]] and \c c[pair[1]].
+
+    This helper contains no reference to a coordinate array; it
+    operates purely on path index lists. It is the caller's
+    responsibility to pass the correct \p pm, including any
+    default-path construction via \c defined_or().
+
+  \private
+*******************************************************************************/
+function _polygon_edge_indices
+(
+  pm
+) =
+  [
+    for (k = pm)
+      let (n = len(k))
+      for (i = [0 : n-1])
+        let (j = (i == 0) ? n-1 : i-1)
+        [k[j], k[i]]
+  ];
+
+//! Compute the sequential vertex index triples for one or more polygon paths.
+/***************************************************************************//**
+  \param    pm <integer-list-list> A list of paths where each path is an
+               ordered list of coordinate indexes into a coordinate array.
+
+  \returns  <integer-list-list> A flat list of index triples
+            [[prev, curr, next], ...] where for each path of length
+            \p n, \p prev, \p curr, and \p next are consecutive
+            coordinate indexes with wrap-around at both ends. The
+            returned list is flat across all paths with no per-path
+            grouping.
+
+  \details
+
+    Yields one index triple per vertex per path, representing the
+    vertex neighborhood of \p curr: the preceding vertex \p prev and
+    the following vertex \p next. Both ends wrap: at \p i=0, \p prev =
+    \p n-1; at \p i = \p n-1, \p next = 0. Callers dereference into
+    their coordinate array as needed: \c c[triple[0]], \c c[triple[1]],
+    \c c[triple[2]].
+
+    This helper contains no reference to a coordinate array; it
+    operates purely on path index lists. It is the caller's
+    responsibility to pass the correct \p pm, including any
+    default-path construction via \c defined_or().
+
+  \private
+*******************************************************************************/
+function _polygon_vertex_indices
+(
+  pm
+) =
+  [
+    for (k = pm)
+      let (n = len(k))
+      for (i = [0 : n-1])
+        let
+        (
+          prev = (i == 0)   ? n-1 : i-1,
+          next = (i == n-1) ? 0   : i+1
+        )
+        [k[prev], k[i], k[next]]
+  ];
 
 //----------------------------------------------------------------------------//
 // shape generation
@@ -768,7 +854,8 @@ function polygon_regular_area
 
     Computes the total perimeter by summing the Euclidean distance
     between each consecutive pair of vertices in every path, including
-    the closing edge from the last vertex back to the first.
+    the closing edge from the last vertex back to the first. Uses
+    _polygon_edge_indices() to enumerate edge pairs.
 
   \amu_eval (${note_p_not_defined})
 *******************************************************************************/
@@ -780,15 +867,9 @@ function polygon_perimeter
   let
   (
     pm = defined_or(p, [consts(len(c))]),
-
-    lv =
-    [
-      for (k = pm) let (n = len(k))
-        for (i=[0 : n-1]) let (j = (i == 0) ? n-1 : i-1)
-          distance_pp(c[k[j]], c[k[i]])
-    ]
+    ei = _polygon_edge_indices(pm)
   )
-  sum(lv);
+  sum([for (e = ei) distance_pp(c[e[0]], c[e[1]])]);
 
 //! Compute the signed area of a polygon in a Euclidean 2d-space.
 /***************************************************************************//**
@@ -808,7 +889,8 @@ function polygon_perimeter
 
   \details
 
-    See [Wikipedia] for more information.
+    Uses the shoelace formula applied to all edge pairs enumerated by
+    _polygon_edge_indices(). See [Wikipedia] for more information.
 
   \amu_eval (${note_p_not_defined})
 
@@ -825,15 +907,14 @@ function polygon_area
   let
   (
     pm = defined_or(p, [consts(len(c))]),
-
-    av =
-    [
-      for (k = pm) let (n = len(k))
-        for (i=[0 : n-1]) let (j = (i == 0) ? n-1 : i-1)
-          (c[k[j]][0] + c[k[i]][0]) * (c[k[i]][1] - c[k[j]][1])
-    ],
-
-    sa = sum(av)/2
+    ei = _polygon_edge_indices(pm),
+    sa =  sum
+          (
+            [
+              for (e = ei)
+               (c[e[0]][0] + c[e[1]][0]) * (c[e[1]][1] - c[e[0]][1])
+            ]
+          ) / 2
   )
   (s == false) ? abs(sa) : sa;
 
@@ -905,8 +986,9 @@ function polygon3d_area
 
   \details
 
-    Uses the shoelace-derived centroid formula. See [Wikipedia] for
-    more information.
+    Uses the shoelace-derived centroid formula applied to all edge pairs
+    enumerated by _polygon_edge_indices(). See [Wikipedia] for more
+    information.
 
   \amu_eval (${note_p_not_defined})
 
@@ -926,31 +1008,22 @@ function polygon_centroid
 ) =
   let
   (
-    pm = defined_or(p, [consts(len(c))]),
-
-    cv =
-    [
-      for (k = pm) let (n = len(k))
-        for (i=[0 : n-1])
-        let
-        (
-          j  = (i == 0) ? n-1 : i-1,
-
-          xc = c[k[j]][0],
-          yc = c[k[j]][1],
-
-          xn = c[k[i]][0],
-          yn = c[k[i]][1],
-
-          cd = (xc*yn - xn*yc)
-        )
-          [(xc + xn) * cd, (yc + yn) * cd]
-    ],
-
-    sc = sum(cv),
-    sa = polygon_area(c, pm, true)
+    pm  = defined_or(p, [consts(len(c))]),
+    ei  = _polygon_edge_indices(pm),
+    cv  = [
+            for (e = ei)
+              let
+               (
+                 xc = c[e[0]][0],  yc = c[e[0]][1],
+                 xn = c[e[1]][0],  yn = c[e[1]][1],
+                 cd = xc*yn - xn*yc
+               )
+               [(xc + xn) * cd, (yc + yn) * cd]
+          ],
+    sc  = sum(cv),
+    sa  = polygon_area(c, pm, true)
   )
-  sc/(6*sa);
+  sc / (6 * sa);
 
 //! Compute the winding number of a polygon about a point in a Euclidean 2d-space.
 /***************************************************************************//**
@@ -974,8 +1047,8 @@ function polygon_centroid
     turns that the polygon paths makes around the test point in a
     Euclidean 2d-space. Will be 0 \em iff the point is outside of the
     polygon. The result for a test point exactly on a polygon edge is
-    implementation-defined. Function patterned after [Dan Sunday,
-    2012].
+    implementation-defined. Uses _polygon_edge_indices() to enumerate
+    edge pairs. Function patterned after [Dan Sunday, 2012].
 
   \note
 
@@ -1003,27 +1076,13 @@ function polygon_winding
   let
   (
     pm = defined_or(p, [consts(len(c))]),
-
-    wv =
-    [
-      for (k = pm) let (n = len(k))
-        for (i=[0 : n-1])
-        let
-        (
-          j = (i == 0) ? n-1 : i-1,
-
-          wn = (
-                (c[k[j]][1] <= t[1]) && (c[k[i]][1] >  t[1])
-                && (is_left_ppp(c[k[j]], c[k[i]], t) > 0)
-              ) ? +1
-            : (
-                (c[k[j]][1] >  t[1]) && (c[k[i]][1] <= t[1])
-                && (is_left_ppp(c[k[j]], c[k[i]], t) < 0)
-              ) ? -1
+    ei = _polygon_edge_indices(pm),
+    wv =  [
+            for (e = ei)
+              (c[e[0]][1] <= t[1] && c[e[1]][1] >  t[1] && is_left_ppp(c[e[0]], c[e[1]], t) > 0) ?  1
+            : (c[e[0]][1] >  t[1] && c[e[1]][1] <= t[1] && is_left_ppp(c[e[0]], c[e[1]], t) < 0) ? -1
             : 0
-        )
-          wn
-    ]
+          ]
   )
   sum(wv);
 
@@ -1087,10 +1146,11 @@ function polygon_is_clockwise
   \details
 
     Tests convexity by computing the cross product sign of each
-    consecutive edge pair. A polygon is convex when all cross products
-    have the same sign (all left-turns or all right-turns). Collinear
-    edges produce a cross product of zero, which counts as a distinct
-    sign value and will cause the function to return \b false even for
+    consecutive edge pair using _polygon_vertex_indices() to enumerate
+    vertex triples. A polygon is convex when all cross products have
+    the same sign (all left-turns or all right-turns). Collinear edges
+    produce a cross product of zero, which counts as a distinct sign
+    value and will cause the function to return \b false even for
     otherwise convex polygons with collinear points on an edge. Returns
     \b undef when \p c is undefined, has fewer than 3 points, or
     contains non-2d coordinates.
@@ -1102,19 +1162,23 @@ function polygon_is_convex
   c,
   p
 ) = is_undef(c) ? undef
-  : len(c) < 3 ? undef
+  : len(c) < 3  ? undef
   : !all_len(c, 2) ? undef
   : let
     (
       pm = defined_or(p, [consts(len(c))]),
-
-      sv =
-      [
-        for (k = pm) let (n = len(k))
-          for (i=[0 : n-1])
-            sign(cross_ll([c[k[i]], c[k[(i+1)%n]]], [c[k[(i+1)%n]], c[k[(i+2)%n]]]))
-      ],
-
+      vi = _polygon_vertex_indices(pm),
+      sv =  [
+              for (triple = vi)
+                sign
+                (
+                  cross_ll
+                  (
+                    [c[triple[0]], c[triple[1]]],
+                    [c[triple[1]], c[triple[2]]]
+                  )
+                )
+            ],
       us = unique(sv)
     )
     (len(us) == 1);
