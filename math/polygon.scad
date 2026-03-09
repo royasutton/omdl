@@ -959,6 +959,20 @@ function polygon3d_area
     pm = defined_or(p, [consts(len(c))]),
     nv = defined_or(n, cross_ll([c[pm[0][0]], c[pm[0][1]]], [c[pm[0][0]], c[pm[0][2]]])),
 
+    // planarity guard: the first three vertices must not be collinear when
+    // n is derived automatically; a zero normal makes the projection axis
+    // undefined and causes a division-by-zero in sf below.
+    _check_planar =
+    assert
+    (
+      distance_pp(nv) > 0,
+      strl
+      ([
+        "polygon3d_area: first three vertices are collinear;",
+        " cannot determine polygon plane. Supply an explicit normal n."
+      ])
+    ),
+
     ac = [abs(nv[0]), abs(nv[1]), abs(nv[2])],
     am = max(ac),
     ai = (am == ac[2]) ? 2 : (am == ac[1]) ? 1 : 0,
@@ -1325,6 +1339,13 @@ function polygon_as_is_p_inside
               and the triangulation for that path will be incomplete,
               producing a non-manifold solid.
 
+    \warning  An assertion is raised if any path is degenerate (zero
+              signed area), because the winding direction cannot be
+              determined and the resulting polyhedron faces would be
+              incorrect. Degenerate paths include collinear vertex sets
+              and self-intersecting shapes whose positive and negative
+              areas cancel exactly.
+
     \note     Hole correctness depends on the caller providing hole
               paths with winding opposite to the primary path, matching
               the \c polygon() convention.
@@ -1356,26 +1377,33 @@ function polygon_linear_extrude_pf
 
     // per-path flat index base within one z-layer
     po_offsets =
-      [for (i = [0 : len(pm)-1])
-        len([for (j = [0 : i-1]) for (ci = pm[j]) 1])],
+      [
+        for (i = [0 : len(pm)-1])
+          len([for (j = [0 : i-1]) for (ci = pm[j]) 1])
+      ],
 
-    // per-path winding: true = clockwise, derived from each path's own signed area
+    // per-path winding: true = clockwise, determined via polygon_is_clockwise()
+    // so that this function stays consistent with the public API.  An explicit
+    // assert guards the undef case (degenerate / zero-area path) so that the
+    // silent (undef < 0) == false fallback can never produce wrong face winding.
     cw_per_path =
-      [for (pi = pm)
-        let
+      [
+        for (pi = pm)
+        let (cw = polygon_is_clockwise(c, [pi]))
+        assert
         (
-          n  = len(pi),
-          av = [for (i = [0 : n-1])
-                  let (j = (i == 0) ? n-1 : i-1)
-                  (c[pi[j]][0] + c[pi[i]][0]) * (c[pi[i]][1] - c[pi[j]][1])],
-          sa = sum(av) / 2
+          !is_undef(cw),
+          "degenerate path (zero signed area) — winding cannot be determined."
         )
-        (sa < 0)
+        cw
       ],
 
     // points: z=zr[0] layer followed by z=zr[1] layer, preserving path order
     pp =
-      [for (zi = zr) for (pi = pm) for (ci = pi) concat(c[ci] - po, zi)],
+      [
+        for (zi = zr) for (pi = pm)
+          for (ci = pi) concat(c[ci] - po, zi)
+      ],
 
     pf =
     [
@@ -1408,8 +1436,8 @@ function polygon_linear_extrude_pf
         let (pi = pm[k], pl = len(pi), base = po_offsets[k])
         for (li = [0 : pl-1])
           let (ci = base + li, ni = base + (li+1)%pl)
-          (cw_per_path[k] == true)
-          ? [ci, ci+pn, ni+pn, ni]
+          (cw_per_path[k] == true) ?
+            [ci, ci+pn, ni+pn, ni]
           : [ci, ni, ni+pn, ci+pn]
     ]
   )
@@ -1986,7 +2014,18 @@ function polygon_line_wave_p
                 let( s = defined_e_or(m, 1, 1/2) ) max(min(s, 1 - grid_fine), grid_fine)
               : 0,
     log_s   = (remap == 2) ? log(0.5) / log(safe_s) : 0,
-    log_1ms = (remap == 2) ? log(0.5) / log(1 - safe_s) : 0
+    log_1ms = (remap == 2) ? log(0.5) / log(1 - safe_s) : 0,
+
+    // hoist blend log constants (remap == 3); computed once here rather than
+    // repeating log() calls on every loop iteration.
+    blend_m_phase   = (remap == 3) ? defined_e_or(m, 1, 1/2) : 0,
+    blend_m_skew    = (remap == 3) ? defined_e_or(m, 2, 1/2) : 0,
+    blend_m_blend   = (remap == 3) ? defined_e_or(m, 3, 1/2) : 0,
+    blend_safe_skew = (remap == 3) ?
+                        max(min(blend_m_skew, 1 - grid_fine), grid_fine)
+                      : 0,
+    blend_log_s     = (remap == 3) ? log(0.5) / log(blend_safe_skew)       : 0,
+    blend_log_1ms   = (remap == 3) ? log(0.5) / log(1 - blend_safe_skew)   : 0
   )
   // return coordinate points: base point + lateral displacement
   [
@@ -2020,17 +2059,12 @@ function polygon_line_wave_p
           : remap == 3 ?
               let
               (
-                m_phase = defined_e_or(m, 1, 1/2),
-                m_skew  = defined_e_or(m, 2, 1/2),
-                m_blend = defined_e_or(m, 3, 1/2),
-
-                safe_skew = max(min(m_skew, 1 - grid_fine), grid_fine),
-                u_phase   = (u + m_phase) - floor(u + m_phase),
-                u_skew    = u < safe_skew ?
-                    0.5 * pow(u / safe_skew, log(0.5) / log(safe_skew))
-                  : 0.5 + 0.5 * pow((u - safe_skew) / (1 - safe_skew), log(0.5) / log(1 - safe_skew))
+                u_phase = (u + blend_m_phase) - floor(u + blend_m_phase),
+                u_skew  = u < blend_safe_skew ?
+                    0.5 * pow(u / blend_safe_skew,              blend_log_s)
+                  : 0.5 + 0.5 * pow((u - blend_safe_skew) / (1 - blend_safe_skew), blend_log_1ms)
               )
-              (1 - m_blend) * u_phase + m_blend * u_skew
+              (1 - blend_m_blend) * u_phase + blend_m_blend * u_skew
             // default is no remapping
           : u,
 
