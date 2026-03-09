@@ -40,6 +40,19 @@
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_include (include/amu/includes_required.amu)
+
+  \amu_define note_p_not_defined
+  (
+    \note When \p p is not defined, the listed order of the coordinates
+          will be used.
+  )
+
+  \amu_define warning_secondary_shapes
+  (
+    \warning  This function does not track secondary shapes subtraction
+              as implemented by the polygon() function.
+  )
+
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -459,7 +472,7 @@ function polygon_trapezoid_p
 ) =
   assert
   (
-    !( is_defined(h) && !is_between(a, 45, 135) ),
+    !( !is_undef(h) && !is_between(a, 45, 135) ),
     "given h, the angle a is restricted to the range [45, 135]."
   )
   let
@@ -567,8 +580,7 @@ function polygon_regular_area
     between each consecutive pair of vertices in every path, including
     the closing edge from the last vertex back to the first.
 
-    When \p p is not defined, the listed order of the coordinates will
-    be used.
+  \amu_eval (${note_p_not_defined})
 *******************************************************************************/
 function polygon_perimeter
 (
@@ -608,11 +620,9 @@ function polygon_perimeter
 
     See [Wikipedia] for more information.
 
-    When \p p is not defined, the listed order of the coordinates will
-    be used.
+  \amu_eval (${note_p_not_defined})
 
-  \warning  This function does not track secondary shapes subtraction as
-            implemented by the polygon() function.
+  \amu_eval (${warning_secondary_shapes})
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Shoelace_formula
 *******************************************************************************/
@@ -661,11 +671,9 @@ function polygon_area
     is applied with a correction factor derived from the normal vector
     magnitude. Function patterned after [Dan Sunday, 2012].
 
-    When \p p is not defined, the listed order of the coordinates will
-    be used.
+  \amu_eval (${note_p_not_defined})
 
-  \warning  This function does not track secondary shapes subtraction as
-            implemented by the polygon() function.
+  \amu_eval (${warning_secondary_shapes})
 
   [Dan Sunday, 2012]: http://geomalgorithms.com/a01-_area.html
 *******************************************************************************/
@@ -710,11 +718,9 @@ function polygon3d_area
     Uses the shoelace-derived centroid formula. See [Wikipedia] for
     more information.
 
-    When \p p is not defined, the listed order of the coordinates will
-    be used.
+  \amu_eval (${note_p_not_defined})
 
-  \warning  This function does not track secondary shapes subtraction as
-            implemented by the polygon() function.
+  \amu_eval (${warning_secondary_shapes})
 
   \warning  Returns \b undef (division by zero) for degenerate polygons
             with zero signed area, such as collinear point sets or
@@ -781,7 +787,7 @@ function polygon_centroid
     implementation-defined. Function patterned after [Dan Sunday,
     2012].
 
-  \copyright
+  \note
 
     Copyright 2000 softSurfer, 2012 Dan Sunday This code may be freely
     used and modified for any purpose providing that this copyright
@@ -793,8 +799,7 @@ function polygon_centroid
     [Dan Sunday, 2012]: http://geomalgorithms.com/a03-_inclusion.html
     [winding number]: https://en.wikipedia.org/wiki/Winding_number
 
-    When \p p is not defined, the listed order of the coordinates will
-    be used.
+  \amu_eval (${note_p_not_defined})
 
   \warning  Where there are secondary paths, the vertex ordering of each
              must be the same as the primary path.
@@ -862,8 +867,7 @@ function polygon_winding
     degenerate polygons with zero signed area (e.g. collinear
     vertices).
 
-    When \p p is not defined, the listed order of the coordinates will
-    be used.
+  \amu_eval (${note_p_not_defined})
 *******************************************************************************/
 function polygon_is_clockwise
 (
@@ -901,8 +905,7 @@ function polygon_is_clockwise
     \b undef when \p c is undefined, has fewer than 3 points, or
     contains non-2d coordinates.
 
-    When \p p is not defined, the listed order of the coordinates will
-    be used.
+  \amu_eval (${note_p_not_defined})
 *******************************************************************************/
 function polygon_is_convex
 (
@@ -948,10 +951,9 @@ function polygon_is_convex
     on a polygon edge is implementation-defined (see
     polygon_winding()).
 
-    When \p p is not defined, the listed order of the coordinates will
-    be used.
+  \amu_eval (${note_p_not_defined})
 
-    \sa polygon_winding for warning about secondary shapes.
+  \sa polygon_winding for warning about secondary shapes.
 *******************************************************************************/
 function polygon_wn_is_p_inside
 (
@@ -986,11 +988,9 @@ function polygon_wn_is_p_inside
 
     See [Wikipedia] for more information.
 
-    When \p p is not defined, the listed order of the coordinates will
-    be used.
+  \amu_eval (${note_p_not_defined})
 
-  \warning  This function does not track secondary shapes subtraction as
-            implemented by the polygon() function.
+  \amu_eval (${warning_secondary_shapes})
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Point_in_polygon
 *******************************************************************************/
@@ -1067,8 +1067,7 @@ function polygon_as_is_p_inside
     When \p center is \b true the z-range is [-h/2, h/2]; otherwise it
     is [0, h].
 
-    When \p p is not defined, the listed order of the coordinates will
-    be used.
+  \amu_eval (${note_p_not_defined})
 *******************************************************************************/
 function polygon_linear_extrude_pf
 (
