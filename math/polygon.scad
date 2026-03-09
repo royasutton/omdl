@@ -942,6 +942,13 @@ function polygon_area
     is applied with a correction factor derived from the normal vector
     magnitude. Function patterned after [Dan Sunday, 2012].
 
+    When \p n is not supplied the normal is derived from the first three
+    vertices of the primary path. An assertion is raised if those three
+    vertices are collinear (i.e. the derived normal is the zero vector),
+    because no valid projection axis exists in that case. Supply an
+    explicit \p n to override when the first three vertices are known to
+    be collinear but the polygon as a whole is non-degenerate.
+
   \amu_eval (${note_p_not_defined})
 
   \amu_eval (${warning_secondary_shapes})
@@ -1129,6 +1136,19 @@ function polygon_winding
     standard 2d coordinate system (y-up). Returns \b undef for
     degenerate polygons with zero signed area (e.g. collinear
     vertices).
+
+    \note  Two separate winding conventions coexist in this library.
+           Shape-generation functions (polygon_regular_p(),
+           polygon_trapezoid_p(), polygon_elliptical_sector_p(), etc.)
+           all default to \p cw = \b true, producing clockwise output.
+           OpenSCAD's \c polygon() and \c linear_extrude() treat the
+           primary path as counter-clockwise and hole paths as clockwise.
+           Callers that bridge the two layers must reverse the coordinate
+           list (or pass \p cw = \b false) as appropriate. Functions in
+           this library that require a specific winding — such as
+           polygon_linear_extrude_pf() — call polygon_is_clockwise()
+           and normalise internally; callers are not required to
+           pre-normalise their input.
 
   \amu_eval (${note_p_not_defined})
 *******************************************************************************/
@@ -1330,8 +1350,8 @@ function polygon_as_is_p_inside
 
     Bottom cap triangles follow each path's own vertex winding; top cap
     triangles are reversed so that all face normals point outward.
-    Side face quad winding is determined per-path from each path's own
-    signed area.
+    Side face quad winding is determined per-path by calling
+    polygon_is_clockwise() on each path's coordinates and signed area.
 
     \warning  Triangulation uses ear clipping, which is correct for
               simple (non-self-intersecting) polygons only. If a path
