@@ -478,401 +478,6 @@ function polygon_trapezoid_p
   )
   (cw == true) ? pp : reverse(pp);
 
-//! Generate 2D coordinate points along a line with periodic waveform lateral displacement.
-/***************************************************************************//**
-  \param    p1  <point-2d> The line initial coordinate [x, y].
-
-  \param    p2  <point-2d> The line terminal coordinate [x, y].
-
-  \param    p <decimal> Period length; One full waveform cycle spans
-              this distance along the line arc length.
-
-  \param    a <decimal-list-3 | decimal> Amplitude configuration; a
-              list [\p ma, \p na, \p oa] or a single decimal for (\p
-              ma) (see below).
-
-  \param    w <datastruct | integer> Waveform shape configuration;
-              a list [\p shape, ...] or a single integer for (\p shape)
-              (see below).
-
-  \param    m <datastruct | integer> Time-axis remapping mode
-              configuration; a list [\p remap, ...] or a single integer
-              for (\p remap) (see below).
-
-  \param    t <decimal-list-2 | decimal> Sampling range configuration;
-              a list [\p t_min, \p t_max] or a single decimal for (\p
-              t_min) (see below).
-
-  \param    fn  <integer> Period fragment count; overrides the
-                automatically computed step count (see below).
-
-  \returns  <points-2d> A list of coordinate points [[x, y], ...]
-            representing the waveform-displaced line, suitable for
-            direct use with \c polygon().
-
-  \details
-
-    Computes a sequence of 2D points by walking arc-length steps along
-    the line defined by \p p1 and \p p2, displacing each point
-    laterally (perpendicular to the line direction) by a shaped
-    periodic waveform. The unit normal direction is 90° CCW from the
-    line tangent.
-
-    The displacement formula applied at each point is:
-
-    \code
-      offset = oa + ma × sign(wave) × |wave|^(1/na)
-    \endcode
-
-    where \c wave is the waveform value at the remapped period position
-    \c u ∈ [0, 1).
-
-    Packed parameters \p a, \p w, \p m, and \p t each accept either a
-    single scalar (selecting only the primary value) or a list where
-    each index corresponds to a sub-parameter as described in the
-    sections below.
-
-    ## Multi-value and structured parameters
-
-    ### a
-
-      e | data type | default value | parameter description
-    ---:|:---------:|:-------------:|:------------------------------------
-      0 | decimal   | 1             | \p ma : maximum amplitude; peak perpendicular displacement from the line
-      1 | decimal   | 1             | \p na : nonlinear amplitude exponent; applied after waveform evaluation
-      2 | decimal   | 0             | \p oa : perpendicular offset; shifts the entire waveform baseline
-
-    #### a[1]:na
-
-      v | description
-    ---:|:---------------------------------------
-     <1 | peaks flatten, waveform widens
-     =1 | linear, no reshaping
-     >1 | peaks sharpen, waveform narrows
-
-    ### w
-
-    #### Shape selection
-
-      v | shape            | sub-parameters
-    ---:|:----------------:|:-------------------:
-      0 | none             | (no displacement)
-      1 | sine             | -
-      2 | triangle         | -
-      3 | square           | -
-      4 | sawtooth         | -
-      5 | sawtooth reverse | -
-      6 | pulse            | \p duty
-      7 | trapezoid        | \p rise, \p hold, \p fall
-      8 | sine abs         | -
-      9 | sine half        | -
-     10 | lookup table     | \p lut
-
-    All waveforms are normalized to [-1, 1] before amplitude scaling,
-    so \p ma always represents the true peak displacement regardless of
-    shape.
-
-    #### Sub-parameters: pulse (shape=6)
-
-      e | data type | default value | parameter description
-    ---:|:---------:|:-------------:|:------------------------------------
-      1 | decimal   | 1/2           | \p duty : fraction of the period spent at +1; range (0, 1)
-
-    #### Sub-parameters: trapezoid (shape=7)
-
-      e | data type | default value | parameter description
-    ---:|:---------:|:-------------:|:------------------------------------
-      1 | decimal   | 1/4           | \p rise : fraction of the period ramping from -1 to +1
-      2 | decimal   | \p rise       | \p hold : fraction of the period at +1 (top hold)
-      3 | decimal   | \p hold       | \p fall : fraction of the period ramping from +1 to -1
-
-    \warning  \p w_rise + \p w_hold + \p w_fall must be <= 1.0. The
-              remainder is the implicit bottom-hold duration.
-
-    #### Sub-parameters: lookup table (shape=10)
-
-      e | data type    | default value | parameter description
-    ---:|:------------:|:-------------:|:------------------------------------
-      1 | decimal-list | [0, 1]        | \p lut : list of amplitude values defining one period
-
-    The values should be in [-1, 1] with a minimum 2 entries. The table
-    is treated as periodic with interpolation between the last and
-    first entry handles smooth looping
-
-    ### m
-
-    #### Mode selection
-
-      v | mode  | description                                                               | sub-parameters
-    ---:|:-----:|:-------------------------------------------------------------------------:|:---------------
-      0 | none  | no remapping; waveform evaluated at natural u                             | -
-      1 | phase | shifts peak and zero-crossings by a period fraction                       | \p shift
-      2 | skew  | warps time axis; peak repositioned, zero-crossings fixed at boundaries    | \p shift
-      3 | blend | interpolates in u-space between phase and skew before waveform evaluation | \p phase, \p skew, \p blend
-
-    #### Sub-parameters: phase (mode=1)
-
-      e | data type | default value | parameter description
-    ---:|:---------:|:-------------:|:------------------------------------
-      1 | decimal   | 1/2           | \p shift : fraction of the period to shift
-
-    The range is [0, 1] where \b 0.0 = no shift, \b 0.5 = half-period
-    shift (waveform inverts), \b 1.0 = full shift identical to \b 0.0.
-
-    #### Sub-parameters: skew (mode=2)
-
-      e | data type | default value | parameter description
-    ---:|:---------:|:-------------:|:------------------------------------
-      1 | decimal   | 1/2           | \p shift : fractional position within the period where the peak lands
-
-    The range is (0, 1), clamped internally at \p grid_fine with \b
-    0.25 = fast rise / slow fall, \b 0.5 = symmetric no skew, \b 0.75 =
-    slow rise / fast fall.
-
-    #### Sub-parameters: blend (mode=3)
-
-      e | data type | default value | parameter description
-    ---:|:---------:|:-------------:|:------------------------------------
-      1 | decimal   | 1/2           | \p phase : phase-shift amount
-      2 | decimal   | 1/2           | \p skew : skew target position
-      3 | decimal   | 1/2           | \p blend : interpolation weight
-
-    In blend mode, three sub-parameters work together to shape the
-    waveform. \p phase shifts the peak and zero-crossings together by a
-    fraction of the period, range [0, 1]. \p skew warps the time axis
-    to reposition the peak at a fractional position within the period
-    while the zero-crossings remain fixed at the period boundaries,
-    range (0, 1). \p blend controls the interpolation weight between
-    the two axes; \b 0.0 yields pure phase shift, \b 1.0 yields pure
-    skew, and \b 0.5 applies an equal mix of both.
-
-    ### t
-
-      e | data type | default value | parameter description
-    ---:|:---------:|:-------------:|:------------------------------------
-      0 | decimal   | 0             | \p t_min : start of the sampling range;
-      1 | decimal   | \p t_min + 1  | \p t_max : end of the sampling range;
-
-    The arc length at \p t_min = \p t_min × \|p2 - p1\|; \b 0.0 =
-    starts at \p p1; negative values extend behind \p p1. The arc
-    length at \p t_max = \p t_max × \|p2 - p1\|; \b 1.0 = ends at \p
-    p2; values above \b 1.0 extend beyond \p p2.
-
-    The waveform phase is continuous across both boundaries. Period
-    counting begins at \p p1 (t=0) and extends in both directions.
-    Setting \p t_min < 0 or \p t_max > 1 does not clamp; the line
-    direction and waveform extend naturally and indefinitely in either
-    direction. The segment \p p1 to \p p2 defines orientation and scale
-    only; it is not a hard boundary.
-
-    ### fn
-
-    When undefined, the fragment count is derived from \p get_fn(\p
-    ma). See get_fn() for more information.
-
-    The total number of sampled points is:
-
-    \code
-      steps = ceil( (len × (t_max - t_min) / p) × fn ) + 1
-    \endcode
-
-    where \p len = \|p2 - p1\|. Choosing an appropriate value:
-
-    - \b Period: at minimum 20 fragments per period for smooth sine
-      curves; sawtooth and triangle need fewer.
-    - \b Nonlinearity: for \p na > 3, consider doubling the base
-      fragment count to resolve sharp peaks.
-    - \b Waveform: square and pulse have hard transitions that no
-      fragment count can perfectly resolve; fragment count affects
-      only the flat regions for these shapes.
-
-    \amu_define title           (Line wave example)
-    \amu_define image_views     (top)
-    \amu_define image_size      (sxga)
-    \amu_define scope_id        (polygon_line_wave_p)
-    \amu_define output_scad     (true)
-
-    \amu_include (include/amu/scope_diagrams_3d.amu)
-*******************************************************************************/
-function polygon_line_wave_p
-(
-  p1 = origin2d,
-  p2 = x_axis2d_uv,
-
-  p = 1,
-  a = 1,
-
-  w = 1,
-  m = 0,
-
-  t,
-
-  fn
-) =
-  let
-  (
-    // decode/unpack parameters
-
-    // wave period
-    wp      = defined_or(p, 1),
-
-    // max amplitude, nonlinear amplitude
-    ma      = defined_eon_or(a, 0, 1),
-    na      = defined_e_or  (a, 1, 1),
-    oa      = defined_e_or  (a, 2, 0),
-
-    // waveform shape
-    shape   = defined_eon_or(w, 0, 1),
-
-    // remapping mode
-    remap   = defined_eon_or(m, 0, 0),
-
-    // sampling rage start and end
-    t_min   = defined_eon_or(t, 0, 0),
-    t_max   = defined_e_or  (t, 1, t_min + 1),
-
-    // waveform period fragments
-    line_fn = defined_or(fn, get_fn( ma )),
-
-    // line basis vectors
-    dx      = p2[0] - p1[0],
-    dy      = p2[1] - p1[1],
-    len     = sqrt(dx*dx + dy*dy),
-
-    // line steps; cycles * fragments per cycle
-    steps   = ceil( (len * (t_max - t_min) / wp) * line_fn ),
-
-    // unit tangent (along the line)
-    tx      = dx / len,
-    ty      = dy / len,
-
-    // unit normal (perpendicular, 90° CCW)
-    nx      = -ty,
-    ny      =  tx,
-
-    safe_n  = max(na, grid_fine),
-
-    // hoist skew log constants (used in remap branches)
-    safe_s  = (remap == 2 || remap == 3) ?
-                let( s = defined_e_or(m, 1, 1/2) ) max(min(s, 1 - grid_fine), grid_fine)
-              : 0,
-    log_s   = (remap == 2) ? log(0.5) / log(safe_s) : 0,
-    log_1ms = (remap == 2) ? log(0.5) / log(1 - safe_s) : 0
-  )
-  // return coordinate points: base point + lateral displacement
-  [
-    for (i = [0 : steps])
-      let
-      (
-        // line point
-        tp      = t_min + (t_max - t_min) * (i / steps),
-
-        // arc length along the line
-        arc     = tp * len,
-
-        u_raw   = (arc / wp) - floor(arc / wp),
-        u       = u_raw < 0 ? u_raw + 1 : u_raw,
-
-        // time axis remap
-        u_remapped =
-            // phase
-            remap == 1 ?
-              let
-              (
-                m_shift = defined_e_or(m, 1, 1/2)
-              )
-              (u + m_shift) - floor(u + m_shift)
-            // skew
-          : remap == 2 ?
-              u < safe_s ?
-                  0.5 * pow(u / safe_s, log_s)
-                : 0.5 + 0.5 * pow((u - safe_s) / (1 - safe_s), log_1ms)
-            // blend
-          : remap == 3 ?
-              let
-              (
-                m_phase = defined_e_or(m, 1, 1/2),
-                m_skew  = defined_e_or(m, 2, 1/2),
-                m_blend = defined_e_or(m, 3, 1/2),
-
-                safe_skew = max(min(m_skew, 1 - grid_fine), grid_fine),
-                u_phase   = (u + m_phase) - floor(u + m_phase),
-                u_skew    = u < safe_skew ?
-                    0.5 * pow(u / safe_skew, log(0.5) / log(safe_skew))
-                  : 0.5 + 0.5 * pow((u - safe_skew) / (1 - safe_skew), log(0.5) / log(1 - safe_skew))
-              )
-              (1 - m_blend) * u_phase + m_blend * u_skew
-            // default is no remapping
-          : u,
-
-        // raw waveform; all accept u in [0,1) and return a value in [-1, 1]
-        wave =
-          let ( v = u_remapped )
-            // sine
-            shape == 1 ?
-              sin(360 * v)
-            // triangle
-          : shape == 2 ?
-              v < 0.25 ?  4 * v : v < 0.75 ?  2 - 4 * v : 4 * v - 4
-            // square
-          : shape == 3 ?
-              v < 0.5 ? 1 : -1
-            // sawtooth
-          : shape == 4 ?
-              2 * v - 1
-            // sawtooth_reverse
-          : shape == 5 ?
-              1 - 2 * v
-            // pulse
-          : shape == 6 ?
-              let
-              (
-                w_duty = defined_e_or(w, 1, 1/2)
-              )
-              v < w_duty ? 1 : -1
-            // trapezoid
-          : shape == 7 ?
-              let
-              (
-                w_rise = defined_e_or(w, 1, 1/4),
-                w_hold = defined_e_or(w, 2, w_rise),
-                w_fall = defined_e_or(w, 3, w_hold)
-              )
-              v < w_rise                   ? -1 + 2 * (v / w_rise)
-            : v < w_rise + w_hold          ?  1
-            : v < w_rise + w_hold + w_fall ?  1 - 2 * ((v - w_rise - w_hold) / w_fall)
-            :                                -1
-            // sine_abs
-          : shape == 8 ?
-              2 * abs(sin(180 * v)) - 1
-            // sine_half
-          : shape == 9 ?
-            v < 0.5 ? 2 * sin(360 * v) - 1 : -1
-            // lookup table
-          : shape == 10 ?
-              let
-              (
-                w_lut  = defined_e_or(w, 1, [0, 1]),
-
-                count  = len(w_lut),
-                scaled = v * count,
-
-                i0     = floor(scaled) % count,
-                i1     = (i0 + 1) % count,        // wraps for smooth looping
-                sf     = scaled - floor(scaled),
-                v0     = w_lut[i0],
-                v1     = w_lut[i1]
-              )
-              v0 + sf * (v1 - v0)
-            // default is no waveform
-            : 0,
-
-        signv   = wave < 0 ? -1 : (wave > 0 ? 1 : 0),
-        offset  = oa + ma * signv * pow(abs(wave), 1 / safe_n)
-      )
-      [ p1.x + arc * tx + offset * nx, p1.y + arc * ty + offset * ny ]
-  ];
-
 //! @}
 
 //----------------------------------------------------------------------------//
@@ -1794,6 +1399,401 @@ function polygon_round_eve_all_p
     pp = merge_s( ppl )
   )
   (cw == true) ? pp : reverse(pp);
+
+//! Generate 2D coordinate points along a line with periodic waveform lateral displacement.
+/***************************************************************************//**
+  \param    p1  <point-2d> The line initial coordinate [x, y].
+
+  \param    p2  <point-2d> The line terminal coordinate [x, y].
+
+  \param    p <decimal> Period length; One full waveform cycle spans
+              this distance along the line arc length.
+
+  \param    a <decimal-list-3 | decimal> Amplitude configuration; a
+              list [\p ma, \p na, \p oa] or a single decimal for (\p
+              ma) (see below).
+
+  \param    w <datastruct | integer> Waveform shape configuration;
+              a list [\p shape, ...] or a single integer for (\p shape)
+              (see below).
+
+  \param    m <datastruct | integer> Time-axis remapping mode
+              configuration; a list [\p remap, ...] or a single integer
+              for (\p remap) (see below).
+
+  \param    t <decimal-list-2 | decimal> Sampling range configuration;
+              a list [\p t_min, \p t_max] or a single decimal for (\p
+              t_min) (see below).
+
+  \param    fn  <integer> Period fragment count; overrides the
+                automatically computed step count (see below).
+
+  \returns  <points-2d> A list of coordinate points [[x, y], ...]
+            representing the waveform-displaced line, suitable for
+            direct use with \c polygon().
+
+  \details
+
+    Computes a sequence of 2D points by walking arc-length steps along
+    the line defined by \p p1 and \p p2, displacing each point
+    laterally (perpendicular to the line direction) by a shaped
+    periodic waveform. The unit normal direction is 90° CCW from the
+    line tangent.
+
+    The displacement formula applied at each point is:
+
+    \code
+      offset = oa + ma × sign(wave) × |wave|^(1/na)
+    \endcode
+
+    where \c wave is the waveform value at the remapped period position
+    \c u ∈ [0, 1).
+
+    Packed parameters \p a, \p w, \p m, and \p t each accept either a
+    single scalar (selecting only the primary value) or a list where
+    each index corresponds to a sub-parameter as described in the
+    sections below.
+
+    ## Multi-value and structured parameters
+
+    ### a
+
+      e | data type | default value | parameter description
+    ---:|:---------:|:-------------:|:------------------------------------
+      0 | decimal   | 1             | \p ma : maximum amplitude; peak perpendicular displacement from the line
+      1 | decimal   | 1             | \p na : nonlinear amplitude exponent; applied after waveform evaluation
+      2 | decimal   | 0             | \p oa : perpendicular offset; shifts the entire waveform baseline
+
+    #### a[1]:na
+
+      v | description
+    ---:|:---------------------------------------
+     <1 | peaks flatten, waveform widens
+     =1 | linear, no reshaping
+     >1 | peaks sharpen, waveform narrows
+
+    ### w
+
+    #### Shape selection
+
+      v | shape            | sub-parameters
+    ---:|:----------------:|:-------------------:
+      0 | none             | (no displacement)
+      1 | sine             | -
+      2 | triangle         | -
+      3 | square           | -
+      4 | sawtooth         | -
+      5 | sawtooth reverse | -
+      6 | pulse            | \p duty
+      7 | trapezoid        | \p rise, \p hold, \p fall
+      8 | sine abs         | -
+      9 | sine half        | -
+     10 | lookup table     | \p lut
+
+    All waveforms are normalized to [-1, 1] before amplitude scaling,
+    so \p ma always represents the true peak displacement regardless of
+    shape.
+
+    #### Sub-parameters: pulse (shape=6)
+
+      e | data type | default value | parameter description
+    ---:|:---------:|:-------------:|:------------------------------------
+      1 | decimal   | 1/2           | \p duty : fraction of the period spent at +1; range (0, 1)
+
+    #### Sub-parameters: trapezoid (shape=7)
+
+      e | data type | default value | parameter description
+    ---:|:---------:|:-------------:|:------------------------------------
+      1 | decimal   | 1/4           | \p rise : fraction of the period ramping from -1 to +1
+      2 | decimal   | \p rise       | \p hold : fraction of the period at +1 (top hold)
+      3 | decimal   | \p hold       | \p fall : fraction of the period ramping from +1 to -1
+
+    \warning  \p w_rise + \p w_hold + \p w_fall must be <= 1.0. The
+              remainder is the implicit bottom-hold duration.
+
+    #### Sub-parameters: lookup table (shape=10)
+
+      e | data type    | default value | parameter description
+    ---:|:------------:|:-------------:|:------------------------------------
+      1 | decimal-list | [0, 1]        | \p lut : list of amplitude values defining one period
+
+    The values should be in [-1, 1] with a minimum 2 entries. The table
+    is treated as periodic with interpolation between the last and
+    first entry handles smooth looping
+
+    ### m
+
+    #### Mode selection
+
+      v | mode  | description                                                               | sub-parameters
+    ---:|:-----:|:-------------------------------------------------------------------------:|:---------------
+      0 | none  | no remapping; waveform evaluated at natural u                             | -
+      1 | phase | shifts peak and zero-crossings by a period fraction                       | \p shift
+      2 | skew  | warps time axis; peak repositioned, zero-crossings fixed at boundaries    | \p shift
+      3 | blend | interpolates in u-space between phase and skew before waveform evaluation | \p phase, \p skew, \p blend
+
+    #### Sub-parameters: phase (mode=1)
+
+      e | data type | default value | parameter description
+    ---:|:---------:|:-------------:|:------------------------------------
+      1 | decimal   | 1/2           | \p shift : fraction of the period to shift
+
+    The range is [0, 1] where \b 0.0 = no shift, \b 0.5 = half-period
+    shift (waveform inverts), \b 1.0 = full shift identical to \b 0.0.
+
+    #### Sub-parameters: skew (mode=2)
+
+      e | data type | default value | parameter description
+    ---:|:---------:|:-------------:|:------------------------------------
+      1 | decimal   | 1/2           | \p shift : fractional position within the period where the peak lands
+
+    The range is (0, 1), clamped internally at \p grid_fine with \b
+    0.25 = fast rise / slow fall, \b 0.5 = symmetric no skew, \b 0.75 =
+    slow rise / fast fall.
+
+    #### Sub-parameters: blend (mode=3)
+
+      e | data type | default value | parameter description
+    ---:|:---------:|:-------------:|:------------------------------------
+      1 | decimal   | 1/2           | \p phase : phase-shift amount
+      2 | decimal   | 1/2           | \p skew : skew target position
+      3 | decimal   | 1/2           | \p blend : interpolation weight
+
+    In blend mode, three sub-parameters work together to shape the
+    waveform. \p phase shifts the peak and zero-crossings together by a
+    fraction of the period, range [0, 1]. \p skew warps the time axis
+    to reposition the peak at a fractional position within the period
+    while the zero-crossings remain fixed at the period boundaries,
+    range (0, 1). \p blend controls the interpolation weight between
+    the two axes; \b 0.0 yields pure phase shift, \b 1.0 yields pure
+    skew, and \b 0.5 applies an equal mix of both.
+
+    ### t
+
+      e | data type | default value | parameter description
+    ---:|:---------:|:-------------:|:------------------------------------
+      0 | decimal   | 0             | \p t_min : start of the sampling range;
+      1 | decimal   | \p t_min + 1  | \p t_max : end of the sampling range;
+
+    The arc length at \p t_min = \p t_min × \|p2 - p1\|; \b 0.0 =
+    starts at \p p1; negative values extend behind \p p1. The arc
+    length at \p t_max = \p t_max × \|p2 - p1\|; \b 1.0 = ends at \p
+    p2; values above \b 1.0 extend beyond \p p2.
+
+    The waveform phase is continuous across both boundaries. Period
+    counting begins at \p p1 (t=0) and extends in both directions.
+    Setting \p t_min < 0 or \p t_max > 1 does not clamp; the line
+    direction and waveform extend naturally and indefinitely in either
+    direction. The segment \p p1 to \p p2 defines orientation and scale
+    only; it is not a hard boundary.
+
+    ### fn
+
+    When undefined, the fragment count is derived from \p get_fn(\p
+    ma). See get_fn() for more information.
+
+    The total number of sampled points is:
+
+    \code
+      steps = ceil( (len × (t_max - t_min) / p) × fn ) + 1
+    \endcode
+
+    where \p len = \|p2 - p1\|. Choosing an appropriate value:
+
+    - \b Period: at minimum 20 fragments per period for smooth sine
+      curves; sawtooth and triangle need fewer.
+    - \b Nonlinearity: for \p na > 3, consider doubling the base
+      fragment count to resolve sharp peaks.
+    - \b Waveform: square and pulse have hard transitions that no
+      fragment count can perfectly resolve; fragment count affects
+      only the flat regions for these shapes.
+
+    \amu_define title           (Line wave example)
+    \amu_define image_views     (top)
+    \amu_define image_size      (sxga)
+    \amu_define scope_id        (polygon_line_wave_p)
+    \amu_define output_scad     (true)
+
+    \amu_include (include/amu/scope_diagrams_3d.amu)
+*******************************************************************************/
+function polygon_line_wave_p
+(
+  p1 = origin2d,
+  p2 = x_axis2d_uv,
+
+  p = 1,
+  a = 1,
+
+  w = 1,
+  m = 0,
+
+  t,
+
+  fn
+) =
+  let
+  (
+    // decode/unpack parameters
+
+    // wave period
+    wp      = defined_or(p, 1),
+
+    // max amplitude, nonlinear amplitude
+    ma      = defined_eon_or(a, 0, 1),
+    na      = defined_e_or  (a, 1, 1),
+    oa      = defined_e_or  (a, 2, 0),
+
+    // waveform shape
+    shape   = defined_eon_or(w, 0, 1),
+
+    // remapping mode
+    remap   = defined_eon_or(m, 0, 0),
+
+    // sampling rage start and end
+    t_min   = defined_eon_or(t, 0, 0),
+    t_max   = defined_e_or  (t, 1, t_min + 1),
+
+    // waveform period fragments
+    line_fn = defined_or(fn, get_fn( ma )),
+
+    // line basis vectors
+    dx      = p2[0] - p1[0],
+    dy      = p2[1] - p1[1],
+    len     = sqrt(dx*dx + dy*dy),
+
+    // line steps; cycles * fragments per cycle
+    steps   = ceil( (len * (t_max - t_min) / wp) * line_fn ),
+
+    // unit tangent (along the line)
+    tx      = dx / len,
+    ty      = dy / len,
+
+    // unit normal (perpendicular, 90° CCW)
+    nx      = -ty,
+    ny      =  tx,
+
+    safe_n  = max(na, grid_fine),
+
+    // hoist skew log constants (used in remap branches)
+    safe_s  = (remap == 2 || remap == 3) ?
+                let( s = defined_e_or(m, 1, 1/2) ) max(min(s, 1 - grid_fine), grid_fine)
+              : 0,
+    log_s   = (remap == 2) ? log(0.5) / log(safe_s) : 0,
+    log_1ms = (remap == 2) ? log(0.5) / log(1 - safe_s) : 0
+  )
+  // return coordinate points: base point + lateral displacement
+  [
+    for (i = [0 : steps])
+      let
+      (
+        // line point
+        tp      = t_min + (t_max - t_min) * (i / steps),
+
+        // arc length along the line
+        arc     = tp * len,
+
+        u_raw   = (arc / wp) - floor(arc / wp),
+        u       = u_raw < 0 ? u_raw + 1 : u_raw,
+
+        // time axis remap
+        u_remapped =
+            // phase
+            remap == 1 ?
+              let
+              (
+                m_shift = defined_e_or(m, 1, 1/2)
+              )
+              (u + m_shift) - floor(u + m_shift)
+            // skew
+          : remap == 2 ?
+              u < safe_s ?
+                  0.5 * pow(u / safe_s, log_s)
+                : 0.5 + 0.5 * pow((u - safe_s) / (1 - safe_s), log_1ms)
+            // blend
+          : remap == 3 ?
+              let
+              (
+                m_phase = defined_e_or(m, 1, 1/2),
+                m_skew  = defined_e_or(m, 2, 1/2),
+                m_blend = defined_e_or(m, 3, 1/2),
+
+                safe_skew = max(min(m_skew, 1 - grid_fine), grid_fine),
+                u_phase   = (u + m_phase) - floor(u + m_phase),
+                u_skew    = u < safe_skew ?
+                    0.5 * pow(u / safe_skew, log(0.5) / log(safe_skew))
+                  : 0.5 + 0.5 * pow((u - safe_skew) / (1 - safe_skew), log(0.5) / log(1 - safe_skew))
+              )
+              (1 - m_blend) * u_phase + m_blend * u_skew
+            // default is no remapping
+          : u,
+
+        // raw waveform; all accept u in [0,1) and return a value in [-1, 1]
+        wave =
+          let ( v = u_remapped )
+            // sine
+            shape == 1 ?
+              sin(360 * v)
+            // triangle
+          : shape == 2 ?
+              v < 0.25 ?  4 * v : v < 0.75 ?  2 - 4 * v : 4 * v - 4
+            // square
+          : shape == 3 ?
+              v < 0.5 ? 1 : -1
+            // sawtooth
+          : shape == 4 ?
+              2 * v - 1
+            // sawtooth_reverse
+          : shape == 5 ?
+              1 - 2 * v
+            // pulse
+          : shape == 6 ?
+              let
+              (
+                w_duty = defined_e_or(w, 1, 1/2)
+              )
+              v < w_duty ? 1 : -1
+            // trapezoid
+          : shape == 7 ?
+              let
+              (
+                w_rise = defined_e_or(w, 1, 1/4),
+                w_hold = defined_e_or(w, 2, w_rise),
+                w_fall = defined_e_or(w, 3, w_hold)
+              )
+              v < w_rise                   ? -1 + 2 * (v / w_rise)
+            : v < w_rise + w_hold          ?  1
+            : v < w_rise + w_hold + w_fall ?  1 - 2 * ((v - w_rise - w_hold) / w_fall)
+            :                                -1
+            // sine_abs
+          : shape == 8 ?
+              2 * abs(sin(180 * v)) - 1
+            // sine_half
+          : shape == 9 ?
+            v < 0.5 ? 2 * sin(360 * v) - 1 : -1
+            // lookup table
+          : shape == 10 ?
+              let
+              (
+                w_lut  = defined_e_or(w, 1, [0, 1]),
+
+                count  = len(w_lut),
+                scaled = v * count,
+
+                i0     = floor(scaled) % count,
+                i1     = (i0 + 1) % count,        // wraps for smooth looping
+                sf     = scaled - floor(scaled),
+                v0     = w_lut[i0],
+                v1     = w_lut[i1]
+              )
+              v0 + sf * (v1 - v0)
+            // default is no waveform
+            : 0,
+
+        signv   = wave < 0 ? -1 : (wave > 0 ? 1 : 0),
+        offset  = oa + ma * signv * pow(abs(wave), 1 / safe_n)
+      )
+      [ p1.x + arc * tx + offset * nx, p1.y + arc * ty + offset * ny ]
+  ];
 
 //! @}
 
