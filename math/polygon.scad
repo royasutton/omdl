@@ -457,6 +457,11 @@ function polygon_trapezoid_p
   o = origin2d,
   cw = true
 ) =
+  assert
+  (
+    !( is_defined(h) && !is_between(a, 45, 135) ),
+    "given h, the angle a is restricted to the range [45, 135]."
+  )
   let
   (
     b1 = defined_e_or(b, 0, b),
