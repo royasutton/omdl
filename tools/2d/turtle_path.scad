@@ -616,9 +616,9 @@ function polygon_turtle_path_2d_p
               sub_s = a1,
               axis  = defined_or( a2, 0 ),
               o     = a3,
-              rev   = defined_e_or( o, 0, true ),
-              kh    = defined_e_or( o, 1, true ),
-              ms    = defined_e_or( o, 2, true ),
+              rev   = defined_eonb_or( o, 0, true ),
+              kh    = defined_e_or   ( o, 1, true ),
+              ms    = defined_e_or   ( o, 2, true ),
 
               // forward pass — recover points and final heading
               fwd_r      = polygon_turtle_path_2d_p( sub_s, p0, h, s_n, p0_g, 1 ),
@@ -654,9 +654,9 @@ function polygon_turtle_path_2d_p
               sub_s = a1,
               axis  = defined_or( a2, 0 ),
               o     = a3,
-              rev   = defined_e_or( o, 0, true ),
-              kh    = defined_e_or( o, 1, true ),
-              ms    = defined_e_or( o, 2, true ),
+              rev   = defined_eonb_or( o, 0, true ),
+              kh    = defined_e_or   ( o, 1, true ),
+              ms    = defined_e_or   ( o, 2, true ),
 
               // forward pass — recover points and final heading
               fwd_r      = polygon_turtle_path_2d_p( sub_s, p0, h, s_n, p0_g, 1 ),
@@ -693,7 +693,7 @@ function polygon_turtle_path_2d_p
               r     = a2,
               t     = defined_or( a3, [0,0] ),
               o     = a4,
-              upd   = defined_e_or( o, 0, false ),
+              upd   = defined_eonb_or( o, 0, false ),
 
               // evaluate sub-steps — recover points and final heading
               sub_r = polygon_turtle_path_2d_p( sub_s, p0, h, s_n, p0_g, 1 ),
@@ -779,13 +779,13 @@ function polygon_turtle_path_2d_p
       // repeat, repeat_mx, repeat_my: always advance to end of combined output
       next_p0   = let ( end_p = is_empty(p) ? p0 : last(p) )
                   is_oneof( oper, ["transform", "xfrm"] ) ?
-                  let ( upd = defined_e_or( a4, 0, false ) )
+                  let ( upd = defined_eonb_or( a4, 0, false ) )
                   upd ? end_p : p0
                 : end_p,
 
       // transform: only update when upd=true, heading already encoded in step_h
       next_h    = is_oneof( oper, ["transform", "xfrm"] ) ?
-                  let ( upd = defined_e_or( a4, 0, false ) )
+                  let ( upd = defined_eonb_or( a4, 0, false ) )
                   upd ? step_h : h
                 : step_h,
 
