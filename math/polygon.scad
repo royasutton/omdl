@@ -1061,7 +1061,7 @@ function polygon_winding
         (
           j = (i == 0) ? n-1 : i-1,
 
-          t = (
+          wn = (
                 (c[k[j]][1] <= t[1]) && (c[k[i]][1] >  t[1])
                 && (is_left_ppp(c[k[j]], c[k[i]], t) > 0)
               ) ? +1
@@ -1071,7 +1071,7 @@ function polygon_winding
               ) ? -1
             : 0
         )
-          t
+          wn
     ]
   )
   sum(wv);
