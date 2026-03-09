@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2024
+  \date   2015-2024,2026
 
   \copyright
 
@@ -51,20 +51,43 @@
 
 //! Compute coordinates for an n-sided regular polygon in 2D.
 /***************************************************************************//**
-  \param    n <integer> The number of sides.
-  \param    r <decimal> The circumradius of the circumcircle.
-  \param    a <decimal> The inradius of the incircle.
-  \param    o <point-2d> The center coordinate [x, y].
-  \param    ao <decimal> The rotational angular offset in degrees.
-  \param    vr <decimal> The vertex rounding radius.
-  \param    cw <boolean> Use clockwise point ordering.
+  \param    n   <integer> The number of sides.
 
-  \returns  <points-2d> A list of coordinates points [[x, y], ...].
+  \param    r   <decimal> The circumradius of the circumcircle.
+
+  \param    a   <decimal> The inradius of the incircle.
+
+  \param    o   <point-2d> The center coordinate [x, y].
+
+  \param    ao  <decimal> The rotational angular offset in degrees.
+
+  \param    vr  <decimal> The vertex rounding radius. Each computed
+                vertex is offset inward by \p vr / cos(180/\p n) along
+                the radial direction from \p o to the vertex. This is
+                correct for any value of \p o.
+
+  \param    cw  <boolean> Vertex ordering. When \b true vertices are
+                generated clockwise (decreasing angle from \p ao); when
+                \b false they are generated counter-clockwise
+                (increasing angle from \p ao). Always produces exactly
+                \p n vertices.
+
+  \returns  <points-2d> A list of exactly \p n coordinate points
+            [[x, y], ...], one per polygon vertex.
 
   \details
 
+    Both \p n and at least one of \p r or \p a must be provided. When
+    neither \p r nor \p a is defined, the circumradius defaults to 0
+    and an \em n-pointed degenerate polygon at \p o is returned.
+
     The radius can be specified by either the circumradius \p r or the
     inradius \p a. If both are specified, \p r is used.
+
+    Vertex angles are computed as \p ao ± \p i × (360/\p n) for \p i in
+    [0, n-1], giving exact uniform angular spacing with no
+    floating-point accumulation across the range. The closing vertex at
+    0° is always included.
 
     \b Example
     \code{.C}
@@ -98,38 +121,49 @@ function polygon_regular_p
       : is_defined(a) ? a / cos(180/n)
       : 0,
 
-    b = (cw == true) ? [360:-(360/n):1] : [0:(360/n):359]
+    step = 360/n
   )
   [
-    for (a = b)
-      let( v = [s*cos(a+ao), s*sin(a+ao)] + o )
-      is_undef(vr) ? v : v - vr/cos(180/n) * unit_l(v)
+    for (i = [0 : n-1])
+      let
+      (
+        ai = (cw == true) ? ao - i*step : ao + i*step,
+        v  = o + s * [cos(ai), sin(ai)]
+      )
+      is_undef(vr) ? v : v - vr/cos(180/n) * unit_l(v - o)
   ];
 
 //! Compute coordinates along a line in 2D.
 /***************************************************************************//**
   \param    p1 <point-2d> The line initial coordinate [x, y].
+
   \param    p2 <point-2d> The line terminal coordinate [x, y].
+
   \param    l <line-2d> The line or vector.
 
   \param    x <decimal-list | decimal> A list of \p x coordinates
-            [\p x1, \p x2, ...] or a single \p x coordinate at which to
-            interpolate along the line.
+              [\p x1, \p x2, ...] or a single \p x coordinate at which
+              to interpolate along the line.
+
   \param    y <decimal-list | decimal> A list of \p y coordinates
-            [\p y1, \p y2, ...] or a single \p y coordinate at which to
-            interpolate along the line.
+              [\p y1, \p y2, ...] or a single \p y coordinate at which
+              to interpolate along the line.
 
   \param    r <decimal-list | decimal> A list of ratios
-            [\p r1, \p r2, ...] or a single ratio \p r. The position
-            ratio along line \p p1 (\p r=\b 0) to \p p2 (\p r=\b 1).
+              [\p r1, \p r2, ...] or a single ratio \p r. The position
+              ratio along line \p p1 (\p r=\b 0) to \p p2 (\p r=\b 1).
 
-  \param    fs <decimal> A fixed segment size between each point along
-            the line.
-  \param    ft <decimal> A fixed segment size between each point,
-            centered, beginning at \p p1 and terminating at \p p2.
-  \param    fn <integer> A fixed number of equally spaced points.
+  \param    fs  <decimal> A fixed segment size between each point along
+                the line.
+
+  \param    ft  <decimal> A fixed segment size between each point,
+                centered, beginning at \p p1 and terminating at \p p2.
+
+  \param    fn  <integer> A fixed number of equally spaced points.
 
   \returns  <points-2d> A list of coordinates points [[x, y], ...].
+            Returns \b undef when the requested interpolation axis is
+            degenerate for the given line orientation (see \details).
 
   \details
 
@@ -137,6 +171,12 @@ function polygon_regular_p
     The order of precedence for line specification is: \p l then \p p1
     and \p p2. The order of precedence for interpolation is: \p x, \p
     y, \p r, \p fs, \p ft, \p fn.
+
+    When the line is vertical (delta-x ≈ 0), the interpolation axis
+    switches to \em y. Querying by \p x on a vertical line returns \b
+    undef. Querying by \p y on a horizontal line (zero delta-y) also
+    returns \b undef. In all other cases a list of interpolated
+    coordinates is returned.
 *******************************************************************************/
 function polygon_line_p
 (
@@ -209,15 +249,22 @@ function polygon_line_p
 //! Compute coordinates of an arc with constant radius between two vectors in 2D.
 /***************************************************************************//**
   \param    r <decimal> The arc radius.
+
   \param    o <point-2d> The arc center coordinate [x, y].
-  \param    v1 <line-2d | decimal> The arc start angle.
-            A 2d line, vector, or decimal angle 1.
-  \param    v2 <line-2d | decimal> The arc end angle.
-            A 2d line, vector, or decimal angle 2.
-  \param    fn <integer> The number of [facets] \(optional\).
-  \param    cw <boolean> Sweep clockwise along arc from the head of
-            vector \p v1 to the head of vector \p v2 when \p cw =
-            \b true, and counter clockwise when \p cw = \b false.
+
+  \param    v1  <line-2d | decimal> The arc start angle.
+                A 2d line, vector, or decimal angle 1.
+
+  \param    v2  <line-2d | decimal> The arc end angle.
+                A 2d line, vector, or decimal angle 2.
+
+  \param    fn  <integer> The number of [facets] \(optional\).
+
+  \param    cw  <boolean> Sweep direction. When \b true the arc sweeps
+                clockwise from the head of \p v1 to the head of \p v2;
+                when \b false it sweeps counter-clockwise. The returned
+                list always contains \p fn + 1 points (both endpoints
+                included).
 
   \returns  <points-2d> A list of coordinates points [[x, y], ...].
 
@@ -226,9 +273,11 @@ function polygon_line_p
     The arc coordinates will have radius \p r centered about \p o
     contained within the heads of vectors \p v1 and \p v2. The arc will
     start at the point coincident to \p v1 and will end at the point
-    coincident to \p v2. When vectors \p v1 and \p v2 are parallel, the
-    arc will be a complete circle. When \p fn is undefined, its value
-    is determined by get_fn().
+    coincident to \p v2. When vectors \p v1 and \p v2 are parallel, or
+    when the positive sweep angle is within the almost_eq_nv() tolerance
+    of zero (nearly parallel), the sweep angle is forced to 360° and a
+    full circle is returned. When \p fn is undefined, its value is
+    determined by get_fn().
 
   [facets]: \ref get_fn()
 *******************************************************************************/
@@ -269,25 +318,51 @@ function polygon_arc_p
 //! Compute coordinates for an elliptical sector in 2D.
 /***************************************************************************//**
   \param    r <decimal-list-2 | decimal> The elliptical radius. A list
-            [rx, ry] of decimals or a single decimal for (rx=ry).
+              [rx, ry] of decimals where \p rx is the x-axis radius and
+              \p ry is the y-axis radius, or a single decimal for
+              (rx=ry).
+
   \param    o <point-2d> The center coordinate [x, y].
-  \param    v1 <line-2d | decimal> The sector angle 1.
-            A 2d line, vector, or decimal.
-  \param    v2 <line-2d | decimal> The sector angle 2.
-            A 2d line, vector, or decimal.
+
+  \param    v1  <line-2d | decimal> The sector angle 1.
+                A 2d line, vector, or decimal.
+
+  \param    v2  <line-2d | decimal> The sector angle 2.
+                A 2d line, vector, or decimal.
+
   \param    s <boolean> Use signed vector angle conversions. When
-            \b false, positive angle conversion will be used.
-  \param    fn <integer> The number of [facets] \(optional\).
-  \param    cw <boolean> The coordinate point ordering.
+              \b false, positive angle conversion will be used.
+
+  \param    fn  <integer> The number of [facets] \(optional\).
+
+  \param    cw  <boolean> Coordinate point ordering. When \b true the
+                returned list is in the natural computed order; when \b
+                false the list is reversed.
 
   \returns  <points-2d> A list of coordinates points [[x, y], ...].
 
   \details
 
-    The coordinates will be between angle 1 and angle 2 and will be
-    ordered clockwise. The sector sweep direction can be controlled by
-    the sign of the angles. When \p fn is undefined, its value is
-    determined by get_fn().
+    The coordinates sweep from angle \p v1 to angle \p v2. When \p v1
+    and \p v2 are equal, a full ellipse is returned. The sweep
+    direction is determined by the signs of the angles; a positive
+    delta sweeps counter-clockwise and a negative delta sweeps
+    clockwise, regardless of the \p cw ordering parameter (which only
+    controls whether the returned list is reversed).
+
+    When \p v1 and \p v2 are not equal, the origin point \p o is
+    prepended to the coordinate list, forming a closed pie-sector shape
+    when passed directly to \c polygon(). For a full ellipse, \p o is
+    omitted and the result is a closed ring of perimeter points.
+
+    The parameter \p s controls how vector angles are converted to
+    decimal degrees. When \p s = \b true (default), signed angle
+    conversion is used, so vectors below the x-axis yield negative
+    angles. When \p s = \b false, all angles are mapped to [0, 360).
+    This affects sector orientation when \p v1 or \p v2 are given as 2d
+    lines or vectors rather than explicit decimal angles.
+
+    When \p fn is undefined, its value is determined by get_fn().
 
   [facets]: \ref get_fn()
 *******************************************************************************/
@@ -331,23 +406,48 @@ function polygon_elliptical_sector_p
 
 //! Compute the coordinates for a rounded trapezoid in 2D space.
 /***************************************************************************//**
-  \param    b <decimal-list-2 | decimal> The base lengths. A list [b1, b2]
-            of 2 decimals or a single decimal for (b1=b2).
-  \param    h <decimal> The perpendicular height between bases.
-  \param    l <decimal> The left side leg length.
-  \param    a <decimal> The angle between the lower base and left leg.
-  \param    o <point-2d> The origin offset coordinate [x, y].
-  \param    cw <boolean> Polygon vertex ordering.
+  \param    b <decimal-list-2 | decimal> The base lengths. A list [b1,
+              b2] of 2 decimals or a single decimal for (b1=b2).
 
-  \returns  <points-2d> A list of coordinates points [[x, y], ...].
+  \param    h <decimal> The perpendicular height between bases. Takes
+              precedence over \p l when both are specified. When
+              neither \p h nor \p l is specified, \p l defaults to 1.
+
+  \param    l <decimal> The left side leg length. Used only when \p h
+              is not specified; the resulting height is \p l × sin(\p
+              a).
+
+  \param    a <decimal> The angle in degrees between the lower base and
+              the left leg. When \p h is specified, restricted to [45,
+              135] to keep the upper-left vertex above the lower base.
+
+  \param    o <point-2d> The origin offset coordinate [x, y].
+
+  \param    cw  <boolean> Polygon vertex ordering.
+
+  \returns  <points-2d> A list of exactly 4 coordinate points
+            [[x, y], ...] defining the trapezoid vertices.
 
   \details
 
-    When both \p h and \p l are specified, \p h takes precedence. The
-    function can generate parallelograms, rectangles, and squares
-    depending on the parameter values. See Wikipedia for more general
-    information on trapezoids. If \p h is specified, the angle \p a is
-    restricted to the range [45, 135].
+    The four vertices are computed from the origin \p o as follows: \p
+    p1 = \p o (lower-left), \p p2 = upper-left leg endpoint, \p p3 = \p
+    p2 + [\p b2, 0] (upper-right), \p p4 = \p o + [\p b1, 0]
+    (lower-right). The lower base has length \p b1 and the upper base
+    has length \p b2.
+
+    When both \p h and \p l are specified, \p h takes precedence and
+    the actual leg length is derived from \p h and \p a. When only \p l
+    is given, the perpendicular height is \p l × sin(\p a). If \p h is
+    specified, the angle \p a is restricted to the range [45, 135] to
+    keep the upper-left vertex above the lower base.
+
+    Special cases: when \p b is a single decimal (\p b1 = \p b2) and \p
+    a = 90 the result is a rectangle; when additionally \p b1 = \p h
+    the result is a square. When \p a ≠ 90 and \p b1 = \p b2 the result
+    is a parallelogram.
+
+    See [Wikipedia] for more general information on trapezoids.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Trapezoid
   [parallelograms]: https://en.wikipedia.org/wiki/Parallelogram
@@ -379,33 +479,33 @@ function polygon_trapezoid_p
 
 //! Generate 2D coordinate points along a line with periodic waveform lateral displacement.
 /***************************************************************************//**
-  \param    p1 <point-2d> The line initial coordinate [x, y].
+  \param    p1  <point-2d> The line initial coordinate [x, y].
 
-  \param    p2 <point-2d> The line terminal coordinate [x, y].
+  \param    p2  <point-2d> The line terminal coordinate [x, y].
 
   \param    p <decimal> Period length; One full waveform cycle spans
-            this distance along the line arc length.
+              this distance along the line arc length.
 
   \param    a <decimal-list-3 | decimal> Amplitude configuration; a
-            list [\p ma, \p na, \p oa] or a single decimal for (\p ma)
-            (see below).
+              list [\p ma, \p na, \p oa] or a single decimal for (\p
+              ma) (see below).
 
   \param    w <datastruct | integer> Waveform shape configuration;
-            a list [\p shape, ...] or a single integer for (\p shape)
-            (see below).
+              a list [\p shape, ...] or a single integer for (\p shape)
+              (see below).
 
   \param    m <datastruct | integer> Time-axis remapping mode
-            configuration; a list [\p remap, ...] or a single integer
-            for (\p remap) (see below).
+              configuration; a list [\p remap, ...] or a single integer
+              for (\p remap) (see below).
 
   \param    t <decimal-list-2 | decimal> Sampling range configuration;
-            a list [\p t_min, \p t_max] or a single decimal for
-            (\p t_min) (see below).
+              a list [\p t_min, \p t_max] or a single decimal for (\p
+              t_min) (see below).
 
-  \param    fn <integer> Period fragment count; overrides the
-            automatically computed step count (see below).
+  \param    fn  <integer> Period fragment count; overrides the
+                automatically computed step count (see below).
 
-  \returns  (1) <points-2d> A list of coordinate points [[x, y], ...]
+  \returns  <points-2d> A list of coordinate points [[x, y], ...]
             representing the waveform-displaced line, suitable for
             direct use with \c polygon().
 
@@ -784,7 +884,9 @@ function polygon_line_wave_p
 //! Compute the perimeter of an n-sided regular polygon in 2D.
 /***************************************************************************//**
   \param    n <integer> The number of sides.
+
   \param    r <decimal> The vertex circumradius of the circumcircle.
+
   \param    a <decimal> The inradius of the incircle.
 
   \returns  <decimal> Perimeter length of the n-sided regular polygon.
@@ -792,7 +894,14 @@ function polygon_line_wave_p
   \details
 
     The radius can be specified by either the circumradius \p r or the
-    inradius \p a. If both are specified, \p r is used.
+    inradius \p a. If both are specified, \p r is used. Returns 0 when
+    neither is defined.
+
+    Formulae used:
+    \code
+      P = 2 × n × r × sin(180/n)   (from circumradius r)
+      P = 2 × n × a × tan(180/n)   (from inradius a)
+    \endcode
 *******************************************************************************/
 function polygon_regular_perimeter
 (
@@ -806,7 +915,9 @@ function polygon_regular_perimeter
 //! Compute the area of an n-sided regular polygon in 2D.
 /***************************************************************************//**
   \param    n <integer> The number of sides.
+
   \param    r <decimal> The vertex circumradius of the circumcircle.
+
   \param    a <decimal> The inradius of the incircle.
 
   \returns  <decimal> Area of the n-sided regular polygon.
@@ -814,7 +925,14 @@ function polygon_regular_perimeter
   \details
 
     The radius can be specified by either the circumradius \p r or the
-    inradius \p a. If both are specified, \p r is used.
+    inradius \p a. If both are specified, \p r is used. Returns 0 when
+    neither is defined.
+
+    Formulae used:
+    \code
+      A = r² × n × sin(360/n) / 2   (from circumradius r)
+      A = a² × n × tan(180/n)       (from inradius a)
+    \endcode
 *******************************************************************************/
 function polygon_regular_area
 (
@@ -828,15 +946,20 @@ function polygon_regular_area
 //! Calculate the perimeter length of a polygon in 2d.
 /***************************************************************************//**
   \param    c <points-2d> A list of 2d cartesian coordinates
-            [[x, y], ...].
+              [[x, y], ...].
+
   \param    p <integer-list-list> An \em optional list of paths that
-            define one or more closed shapes where each is a list of
-            coordinate indexes.
+              define one or more closed shapes where each is a list of
+              coordinate indexes.
 
   \returns  <decimal> The sum of all polygon primary and secondary
             perimeter lengths.
 
   \details
+
+    Computes the total perimeter by summing the Euclidean distance
+    between each consecutive pair of vertices in every path, including
+    the closing edge from the last vertex back to the first.
 
     When \p p is not defined, the listed order of the coordinates will
     be used.
@@ -862,11 +985,16 @@ function polygon_perimeter
 //! Compute the signed area of a polygon in a Euclidean 2d-space.
 /***************************************************************************//**
   \param    c <points-2d> A list of 2d cartesian coordinates
-            [[x, y], ...].
+              [[x, y], ...].
+
   \param    p <integer-list-list> An \em optional list of paths that
-            define one or more closed shapes where each is a list of
-            coordinate indexes.
-  \param    s <boolean> Return the vertex ordering sign.
+              define one or more closed shapes where each is a list of
+              coordinate indexes.
+
+  \param    s <boolean> Return the signed area. When \b true the raw
+              signed value is returned: negative for clockwise vertex
+              ordering and positive for counter-clockwise. When \b
+              false (default) the absolute area is returned.
 
   \returns  <decimal> The area of the given polygon.
 
@@ -906,19 +1034,26 @@ function polygon_area
 //! Compute the area of a polygon in a Euclidean 3d-space.
 /***************************************************************************//**
   \param    c <points-3d> A list of 3d cartesian coordinates
-            [[x, y, z], ...].
+              [[x, y, z], ...].
+
   \param    p <integer-list-list> An \em optional list of paths that
-            define one or more closed shapes where each is a list of
-            coordinate indexes.
+              define one or more closed shapes where each is a list of
+              coordinate indexes.
+
   \param    n <vector-3d> An \em optional normal vector, [x, y, z],
-            to the polygon plane. When not given, a normal vector is
-            constructed from the first three points of the primary path.
+              to the polygon plane. When not given, a normal vector is
+              constructed from the first three points of the primary
+              path.
 
   \returns  <decimal> The area of the given polygon.
 
   \details
 
-    Function patterned after [Dan Sunday, 2012].
+    Computes the area using a coordinate-projection method: the dominant
+    axis of the polygon's normal vector is identified, the polygon is
+    projected onto the perpendicular plane, and the 2D shoelace formula
+    is applied with a correction factor derived from the normal vector
+    magnitude. Function patterned after [Dan Sunday, 2012].
 
     When \p p is not defined, the listed order of the coordinates will
     be used.
@@ -956,22 +1091,29 @@ function polygon3d_area
 //! Compute the center of mass of a polygon in a Euclidean 2d-space.
 /***************************************************************************//**
   \param    c <points-2d> A list of 2d cartesian coordinates
-            [[x, y], ...].
+              [[x, y], ...].
+
   \param    p <integer-list-list> An \em optional list of paths that
-            define one or more closed shapes where each is a list of
-            coordinate indexes.
+              define one or more closed shapes where each is a list of
+              coordinate indexes.
 
   \returns  <point-2d> The center of mass of the given polygon.
 
   \details
 
-    See [Wikipedia] for more information.
+    Uses the shoelace-derived centroid formula. See [Wikipedia] for
+    more information.
 
     When \p p is not defined, the listed order of the coordinates will
     be used.
 
   \warning  This function does not track secondary shapes subtraction as
             implemented by the polygon() function.
+
+  \warning  Returns \b undef (division by zero) for degenerate polygons
+            with zero signed area, such as collinear point sets or
+            self-intersecting shapes whose positive and negative areas
+            cancel.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Centroid#Centroid_of_polygon
 *******************************************************************************/
@@ -1011,29 +1153,36 @@ function polygon_centroid
 //! Compute the winding number of a polygon about a point in a Euclidean 2d-space.
 /***************************************************************************//**
   \param    c <points-2d> A list of 2d cartesian coordinates
-            [[x, y], ...].
+              [[x, y], ...].
+
   \param    p <integer-list-list> An \em optional list of paths that
-            define one or more closed shapes where each is a list of
-            coordinate indexes.
+              define one or more closed shapes where each is a list of
+              coordinate indexes.
+
   \param    t <point-2d> A test point coordinate [x, y].
 
-  \returns  <integer> The winding number.
+  \returns  <integer> The winding number. Positive values indicate the
+            point is enclosed by net counter-clockwise turns; negative
+            values indicate net clockwise turns; zero means the point
+            is outside the polygon.
 
   \details
 
     Computes the [winding number], the total number of counterclockwise
     turns that the polygon paths makes around the test point in a
     Euclidean 2d-space. Will be 0 \em iff the point is outside of the
-    polygon. Function patterned after [Dan Sunday, 2012].
+    polygon. The result for a test point exactly on a polygon edge is
+    implementation-defined. Function patterned after [Dan Sunday,
+    2012].
 
   \copyright
 
-    Copyright 2000 softSurfer, 2012 Dan Sunday
-    This code may be freely used and modified for any purpose
-    providing that this copyright notice is included with it.
-    iSurfer.org makes no warranty for this code, and cannot be held
-    liable for any real or imagined damage resulting from its use.
-    Users of this code must verify correctness for their application.
+    Copyright 2000 softSurfer, 2012 Dan Sunday This code may be freely
+    used and modified for any purpose providing that this copyright
+    notice is included with it. iSurfer.org makes no warranty for this
+    code, and cannot be held liable for any real or imagined damage
+    resulting from its use. Users of this code must verify correctness
+    for their application.
 
     [Dan Sunday, 2012]: http://geomalgorithms.com/a03-_inclusion.html
     [winding number]: https://en.wikipedia.org/wiki/Winding_number
@@ -1089,16 +1238,23 @@ function polygon_winding
 //! Test the vertex ordering of a polygon in a Euclidean 2d-space.
 /***************************************************************************//**
   \param    c <points-2d> A list of 2d cartesian coordinates
-            [[x, y], ...].
+              [[x, y], ...].
+
   \param    p <integer-list-list> An \em optional list of paths that
-            define one or more closed shapes where each is a list of
-            coordinate indexes.
+              define one or more closed shapes where each is a list of
+              coordinate indexes.
 
   \returns  <boolean> \b true if the vertex are ordered \em clockwise,
             \b false if the vertex are \em counterclockwise ordered, and
             \b undef if the ordering can not be determined.
 
   \details
+
+    Uses the sign of the polygon's signed area (shoelace formula). A
+    negative signed area indicates clockwise vertex ordering in the
+    standard 2d coordinate system (y-up). Returns \b undef for
+    degenerate polygons with zero signed area (e.g. collinear
+    vertices).
 
     When \p p is not defined, the listed order of the coordinates will
     be used.
@@ -1119,15 +1275,25 @@ function polygon_is_clockwise
 //! Test the convexity of a polygon in a Euclidean 2d-space.
 /***************************************************************************//**
   \param    c <points-2d> A list of 2d cartesian coordinates
-            [[x, y], ...].
+              [[x, y], ...].
+
   \param    p <integer-list-list> An \em optional list of paths that
-            define one or more closed shapes where each is a list of
-            coordinate indexes.
+              define one or more closed shapes where each is a list of
+              coordinate indexes.
 
   \returns  <boolean> \b true if the polygon is \em convex, \b false
             otherwise.
 
   \details
+
+    Tests convexity by computing the cross product sign of each
+    consecutive edge pair. A polygon is convex when all cross products
+    have the same sign (all left-turns or all right-turns). Collinear
+    edges produce a cross product of zero, which counts as a distinct
+    sign value and will cause the function to return \b false even for
+    otherwise convex polygons with collinear points on an edge. Returns
+    \b undef when \p c is undefined, has fewer than 3 points, or
+    contains non-2d coordinates.
 
     When \p p is not defined, the listed order of the coordinates will
     be used.
@@ -1157,16 +1323,24 @@ function polygon_is_convex
 //! Test if a point is inside a polygon in a Euclidean 2d-space using winding number.
 /***************************************************************************//**
   \param    c <points-2d> A list of 2d cartesian coordinates
-            [[x, y], ...].
+              [[x, y], ...].
+
   \param    p <integer-list-list> An \em optional list of paths that
-            define one or more closed shapes where each is a list of
-            coordinate indexes.
+              define one or more closed shapes where each is a list of
+              coordinate indexes.
+
   \param    t <point-2d> A test point coordinate [x, y].
 
   \returns  <boolean> \b true when the point is \em inside the polygon and
             \b false otherwise.
 
   \details
+
+    Delegates to polygon_winding() and returns \b true when the winding
+    number is non-zero. A winding number of zero indicates the point is
+    outside all enclosed regions. The result for a test point exactly
+    on a polygon edge is implementation-defined (see
+    polygon_winding()).
 
     When \p p is not defined, the listed order of the coordinates will
     be used.
@@ -1183,16 +1357,26 @@ function polygon_wn_is_p_inside
 //! Test if a point is inside a polygon in a Euclidean 2d-space using angle summation.
 /***************************************************************************//**
   \param    c <points-2d> A list of 2d cartesian coordinates
-            [[x, y], ...].
+              [[x, y], ...].
+
   \param    p <integer-list-list> An \em optional list of paths that
-            define one or more closed shapes where each is a list of
-            coordinate indexes.
+              define one or more closed shapes where each is a list of
+              coordinate indexes.
+
   \param    t <point-2d> A test point coordinate [x, y].
 
   \returns  <boolean> \b true when the point is \em inside the polygon and
             \b false otherwise.
 
   \details
+
+    Tests point inclusion by summing the signed angles subtended by
+    each polygon edge as seen from the test point \p t. For a point
+    strictly inside a simple polygon the absolute sum approximates
+    360°; for a point outside it approximates 0°. The threshold used is
+    180° to distinguish the two cases, which is reliable for
+    non-degenerate simple polygons. Points exactly on an edge produce
+    an undefined result.
 
     See [Wikipedia] for more information.
 
@@ -1241,20 +1425,41 @@ function polygon_as_is_p_inside
 //! Convert a polygon in 2D to a polyhedron by adding a height dimension.
 /***************************************************************************//**
   \param    c <points-2d> A list of 2d cartesian coordinates
-            [[x, y], ...].
+              [[x, y], ...].
+
   \param    p <integer-list-list> An \em optional list of paths that
-            define one or more closed shapes where each is a list of
-            coordinate indexes.
+              define one or more closed shapes where each is a list of
+              coordinate indexes.
+
   \param    h <decimal> The polyhedron height.
-  \param    centroid <boolean> Center polygon centroid at z-axis.
-  \param    center <boolean> Center polyhedron height about xy-plane.
+
+  \param    centroid  <boolean> Center polygon centroid at z-axis.
+
+  \param    center  <boolean> Center polyhedron height about xy-plane.
 
   \returns  <datastruct> A structure <tt>[points, faces]</tt>, where
             \c points are <points-3d> and \c faces are a
-            <integer-list-list>, that define the bounding box of the
-            given polyhedron.
+            <integer-list-list>, suitable for use with \c polyhedron().
 
   \details
+
+    Extrudes the 2D polygon into a closed 3D polyhedron by duplicating
+    the coordinate list at two z-levels and constructing bottom, top,
+    and side faces. Bottom face winding follows the input vertex order;
+    top face winding is reversed to produce outward-facing normals.
+
+    Side faces are generated per-path, with next-vertex wrapping
+    performed within each path independently. Multi-path inputs
+    (polygons with holes defined by secondary paths) are therefore
+    handled correctly; each path contributes its own closed band of
+    side faces with no cross-path index bleed.
+
+    When \p centroid is \b true, the polygon centroid is computed and
+    subtracted from all x/y coordinates before extrusion, centering the
+    shape on the z-axis.
+
+    When \p center is \b true the z-range is [-h/2, h/2]; otherwise it
+    is [0, h].
 
     When \p p is not defined, the listed order of the coordinates will
     be used.
@@ -1302,32 +1507,44 @@ function polygon_linear_extrude_pf
 //! Compute coordinates for a constant radius vertex round between two edge vectors in 2D.
 /***************************************************************************//**
   \param    r <decimal> The round radius.
-  \param    m <integer> The round mode.
-  \param    o <point-2d> The round center coordinate [x, y].
-  \param    v1 <line-2d | decimal> The round start angle.
-            A 2d line, vector, or decimal angle 1.
-  \param    v2 <line-2d | decimal> The round end angle.
-            A 2d line, vector, or decimal angle 2.
-  \param    fn <integer> The number of [facets] \(optional\).
-  \param    cw <boolean> The coordinate point ordering.
 
-  \returns  <points-2d> A list of coordinates points [[x, y], ...].
+  \param    m <integer> The round mode.
+
+  \param    o <point-2d> The vertex coordinate [x, y] at which the two
+              edge vectors meet (the corner being rounded).
+
+  \param    v1  <line-2d | decimal> The first edge direction.
+                A 2d line, vector, or decimal angle.
+
+  \param    v2  <line-2d | decimal> The second edge direction.
+                A 2d line, vector, or decimal angle.
+
+  \param    fn  <integer> The number of [facets] \(optional\).
+
+  \param    cw  <boolean> Coordinate point ordering. When \b true the
+                list runs from the inflection point on edge 1 toward
+                the inflection point on edge 2; when \b false the order
+                is reversed.
+
+  \returns  <points-2d> A list of coordinates points [[x, y], ...]
+            beginning at the inflection point on \p v1, followed by the
+            arc (or chamfer) segment, and ending at the inflection point
+            on \p v2. These points replace the original corner vertex
+            in a polygon path.
 
   \details
 
-    Normally, angle 1 should be less than angle 2. The edge coordinates
-    will start at angle 1, end at angle 2, and will have radius \p r
-    along a rounded transition from edge 1 to 2. When \p cw = \b true
-    the coordinates will start at edge 1 and increase toward edge 2.
-    When \p cw = \b false this ordering is reversed.
+    Computes the replacement coordinate sequence for a single polygon
+    corner at \p o between edges \p v1 and \p v2. Normally, edge angle
+    1 should be less than edge angle 2.
 
     The round mode may be one of the following:
 
      mode | name        | description
      :---:|:-----------:|:--------------------------------
-       1  | fillet      | fillet from one edge to the next
-       2  | round       | round from one edge to the next
-       3  | chamfer     | bevel from one edge to the next
+       1  | fillet      | concave arc (inward, tangent to both edges)
+       2  | round       | convex arc (outward, tangent to both edges)
+       3  | chamfer     | straight bevel between the two inflection points
 
   [facets]: \ref get_fn()
 *******************************************************************************/
@@ -1376,25 +1593,35 @@ function polygon_round_eve_p
 //! Compute coordinates that round all of the vertices between each adjacent edges in 2D.
 /***************************************************************************//**
   \param    c <points-2d> A list of \em n 2d cartesian coordinates
-            [[x1, y1], [x2, y2], ..., [xn, yn]].
-  \param    vr <decimal-list-n | decimal> The vertices rounding radius.
-            A list [v1r, v2r, v3r, ... vnr] of \em n decimals or a
-            single decimal for (v1r=v2r=v3r= ... =vnr). Undefined
-            vertices are not rounded.
+              [[x1, y1], [x2, y2], ..., [xn, yn]].
+
+  \param    vr  <decimal-list-n | decimal> The vertices rounding radius.
+                A list [v1r, v2r, v3r, ... vnr] of \em n decimals or a
+                single decimal for (v1r=v2r=v3r= ... =vnr). Undefined
+                vertices are not rounded.
+
   \param    vrm <integer-list-n | integer> The vertices rounding mode.
-            A list [v1rm, v2rm, v3rm, ... vnrm] of \em n integers or a
-            single integer for (v1rm=v2rm=v3rm= ... =vnrm). Undefined
-            vertices are not rounded.
+                A list [v1rm, v2rm, v3rm, ... vnrm] of \em n integers
+                or a single integer for (v1rm=v2rm=v3rm= ... =vnrm).
+                Mode 0 returns the vertex coordinate unchanged and
+                disables rounding for that vertex regardless of \p vr.
+                Undefined vertices are not rounded.
+
   \param    vfn <integer-list-n> The vertices arc fragment number.
-            A list [v1fn, v2fn, v3fn, ... vnfn] of \em n integers or a
-            single integer for (v1fn=v2fn=v3fn= ... =vnfn).
+                A list [v1fn, v2fn, v3fn, ... vnfn] of \em n integers
+                or a single integer for (v1fn=v2fn=v3fn= ... =vnfn).
+                When any \p vfn entry is \b undef, the special
+                variables \p $fa, \p $fs, and \p $fn control facet
+                generation for that vertex.
+
   \param    w <boolean> Wrap-at-end during 3-point coordinate selection.
-            When \b true (default), the first and last vertices are
-            included in the rounding sequence, connecting the polygon
-            end back to its start. When \b false, the first and last
-            vertices are returned unmodified, which is useful for open
-            paths where the endpoints should remain fixed.
-  \param    cw <boolean> Polygon vertex ordering.
+              When \b true (default), the first and last vertices are
+              included in the rounding sequence, connecting the polygon
+              end back to its start. When \b false, the first and last
+              vertices are returned unmodified, which is useful for
+              open paths where the endpoints should remain fixed.
+
+  \param    cw  <boolean> Polygon vertex ordering.
 
   \returns  <points-2d> A new list of coordinates points [[x, y], ...]
             that define the polygon with rounded vertices.
@@ -1439,10 +1666,13 @@ function polygon_round_eve_p
 
     \amu_undefine               (html_image_w image_columns)
 
-    Vertex arc fragments can be specified using \p vfn. When any \p
-    vnfn is \b undef, the special variables \p $fa, \p $fs, and \p $fn
+    Vertex arc fragments can be specified using \p vfn. When any \p vfn
+    entry is \b undef, the special variables \p $fa, \p $fs, and \p $fn
     control facet generation. Each vertex is processed using 3-point
-    (the previous and following vertex). The resulting triangle \ref
+    selection (the previous and following vertex). Collinear vertices
+    (where the previous, current, and next points are co-linear) are
+    automatically detected and returned unmodified regardless of the
+    specified \p vr and \p vrm values. The resulting triangle \ref
     triangle2d_incenter "incircles" and \ref triangle2d_excenter
     "excircles" are used to create the round and fillet \ref
     polygon_arc_p "arc" segments. All arcs and chamfers use constant
