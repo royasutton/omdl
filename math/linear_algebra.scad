@@ -48,7 +48,10 @@
 /***************************************************************************//**
   \param    c <points-3d> A list of 3d coordinate points.
 
-  \param    m <matrix-4x4> A 4x4 transformation matrix.
+  \param    m <matrix-4x4> A 4x4 transformation matrix. Only the first
+              three rows are used; the fourth row of the standard
+              homogeneous matrix `[0, 0, 0, 1]` is implicit and need
+              not be supplied, so a 3x4 matrix is sufficient.
 
   \returns  <points-3d> A list of 3d coordinate points multiplied by
             the transformation matrix.
@@ -57,8 +60,8 @@
 
     See [Wikipedia] and [multmatrix] for more information.
 
-    [Wikipedia]: https://en.wikipedia.org/wiki/Transformation_matrix
-    [multmatrix]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Transformations#multmatrix
+  [Wikipedia]: https://en.wikipedia.org/wiki/Transformation_matrix
+  [multmatrix]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Transformations#multmatrix
 *******************************************************************************/
 function multmatrix_p
 (
@@ -72,10 +75,10 @@ function multmatrix_p
     )
     [
       for (ci=c)
-      let
-      (
-        x = ci[0], y = ci[1], z = ci[2]
-      )
+        let
+        (
+          x = ci[0], y = ci[1], z = ci[2]
+        )
         [m11*x+m12*y+m13*z+m14, m21*x+m22*y+m23*z+m24, m31*x+m32*y+m33*z+m34]
     ];
 
@@ -83,16 +86,23 @@ function multmatrix_p
 /***************************************************************************//**
   \param    c <points-nd> A list of nd coordinate points.
 
-  \param    v <decimal-list-n> A list of translations for each dimension.
+  \param    v <decimal-list-n | decimal> A list of translations for
+              each dimension, or a single decimal to translate
+              uniformly across all dimensions.
 
   \returns  <points-nd> A list of translated coordinate points.
 
   \details
 
+    When \p v is a scalar, the same translation is applied to every
+    dimension. When \p v is a list shorter than the point dimensionality,
+    missing elements default to zero. When \p v is \b undef the point
+    list is returned unchanged.
+
     See [Wikipedia] for more information and [transformation matrix].
 
-    [Wikipedia]: https://en.wikipedia.org/wiki/Translation_(geometry)
-    [transformation matrix]: https://en.wikipedia.org/wiki/Transformation_matrix
+  [Wikipedia]: https://en.wikipedia.org/wiki/Translation_(geometry)
+  [transformation matrix]: https://en.wikipedia.org/wiki/Transformation_matrix
 *******************************************************************************/
 function translate_p
 (
@@ -103,21 +113,117 @@ function translate_p
     (
       d = len(first(c)),
       u = is_scalar(v) ? v : 0,
+
       w = [for (i=[0 : d-1]) defined_e_or(v, i, u)]
     )
     [for (ci=c) [for (di=[0 : d-1]) ci[di] + w[di]]];
 
-//! Apply an optional mirror, rotation, and translation to a list of 2D or 3D coordinates.
+//! Mirror all coordinates about a plane or line defined by a normal vector.
+/***************************************************************************//**
+  \param    c <points-3d | points-2d> A list of 3d or 2d coordinate
+            points.
+
+  \param    m <vector-3d | vector-2d> The normal vector of the mirror
+              plane or line. A 2D vector `[nx, ny]` defines the normal
+              to the mirror line; a 3D vector `[nx, ny, nz]` defines
+              the normal to the mirror plane. Follows the same
+              convention as OpenSCAD's built-in `mirror()` module.
+
+  \param    o <point-3d | point-2d> The point through which the mirror
+              plane or line passes. When \b undef (default), the origin
+              is set automatically to \p origin2d or \p origin3d based
+              on the dimensionality of \p c.
+
+  \returns  <points-3d | points-2d> A list of mirrored coordinate
+            points.
+
+  \details
+
+    Reflects points about the plane or line defined by the normal
+    vector \p m passing through \p o using the standard reflection
+    matrix `M = I - 2*(n*nT)/|n|^2`. When \p m is a zero vector or
+    \b undef the point list is returned unchanged.
+
+    See [Wikipedia] for more information on [reflection matrix].
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Transformation_matrix
+  [reflection matrix]: https://en.wikipedia.org/wiki/Transformation_matrix#Reflection
+*******************************************************************************/
+function mirror_p
+(
+  c,
+  m,
+  o
+) = is_undef(m) ? c
+  : let
+    (
+      d  = len(first(c)),
+      eo = defined_or( o, d == 2 ? origin2d : origin3d ),
+      ox = eo[0], oy = eo[1],
+      nx = m[0],  ny = m[1],
+      l2 = nx*nx + ny*ny
+    )
+    (l2 == 0) ? c
+    : (d == 2) ?
+      let
+      (
+        // 2D reflection matrix about line through o with normal [nx,ny]:
+        // M = I - 2*(n*nT)/|n|^2
+        f   = 2 / l2,
+
+        r11 = 1 - f*nx*nx,
+        r12 =   - f*nx*ny,
+        r21 =   - f*ny*nx,
+        r22 = 1 - f*ny*ny
+      )
+      [
+        for (ci=c)
+          let( dx = ci[0]-ox, dy = ci[1]-oy )
+          [
+            ox + r11*dx + r12*dy,
+            oy + r21*dx + r22*dy
+          ]
+      ]
+    : let
+      (
+        // 3D reflection matrix about plane through o with normal [nx,ny,nz]:
+        nz  = m[2],
+        l2b = l2 + nz*nz,
+        oz  = eo[2],
+        f   = 2 / l2b,
+
+        r11 = 1 - f*nx*nx,
+        r12 =   - f*nx*ny,
+        r13 =   - f*nx*nz,
+        r21 =   - f*ny*nx,
+        r22 = 1 - f*ny*ny,
+        r23 =   - f*ny*nz,
+        r31 =   - f*nz*nx,
+        r32 =   - f*nz*ny,
+        r33 = 1 - f*nz*nz
+      )
+      [
+        for (ci=c)
+          let( dx = ci[0]-ox, dy = ci[1]-oy, dz = ci[2]-oz )
+          [
+            ox + r11*dx + r12*dy + r13*dz,
+            oy + r21*dx + r22*dy + r23*dz,
+            oz + r31*dx + r32*dy + r33*dz
+          ]
+      ];
+
+//! Rotate all coordinates about one or more axes in 2D or 3D.
 /***************************************************************************//**
   \param    c <points-3d | points-2d> A list of 3d or 2d coordinate
               points.
 
   \param    a <decimal-list-3 | decimal> The axis rotation angle; A
               list [ax, ay, az] or a single decimal to specify az only.
+              When \b undef the point list is returned unchanged.
 
   \param    v <vector-3d> An arbitrary axis for the rotation. When
-              specified, the rotation angle will be \p a or az about the
-              line \p v that passes through point \p o.
+              specified, the rotation angle will be \p a or az about
+              the line \p v that passes through point \p o.
 
   \param    o <point-3d | point-2d> The origin for the rotation. In 2D,
               the center of rotation. In 3D, used only when \p v is
@@ -125,137 +231,44 @@ function translate_p
               automatically to \p origin2d or \p origin3d based on the
               dimensionality of \p c.
 
-  \param    t <point-3d | point-2d> A translation vector applied after
-              rotation. When \b undef (default), no translation is
-              applied.
-
-  \param    m <vector-3d | vector-2d> The normal vector of the mirror
-              plane or line. The mirror is applied about the plane or
-              line passing through \p o with the given normal. When \b
-              undef (default), no mirror is applied.
-
-  \returns  <points-3d | points-2d> A list of 3d or 2d transformed
-            coordinates. Operations are applied in order: mirror about
-            \p o, rotate about \p o, translate by \p t. Rotation order
-            is rz, ry, rx.
+  \returns  <points-3d | points-2d> A list of rotated coordinate
+            points. Rotation order is rz, ry, rx.
 
   \details
 
-  Applies a transformation to a list of coordinate points. The mirror
-  \p m, when specified, reflects points about the plane or line defined
-  by the normal vector \p m passing through \p o. Rotation \p a is then
-  applied about \p o, followed by the optional translation \p t. Any
-  combination of the three operations may be used independently.
-
-  The mirror normal \p m follows the same convention as OpenSCAD's
-  built-in `mirror()` module: a 2D vector `[nx, ny]` defines the normal
-  to the mirror line, and a 3D vector `[nx, ny, nz]` defines the normal
-  to the mirror plane.
-
-  When \p a is \b undef and \p m is \b undef the point list is returned
-  unchanged.
-
-  See [Wikipedia] for more information on [transformation matrix],
-  [axis rotation], and [reflection matrix].
+    See [Wikipedia] for more information on [transformation matrix]
+    and [axis rotation].
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Rotation_matrix
   [transformation matrix]: https://en.wikipedia.org/wiki/Transformation_matrix
   [axis rotation]: http://inside.mines.edu/fs_home/gmurray/ArbitraryAxisRotation
-  [reflection matrix]: https://en.wikipedia.org/wiki/Transformation_matrix#Reflection
 *******************************************************************************/
-function transform_p
+function rotate_p
 (
   c,
   a,
   v,
-  o,
-  t,
-  m
-) = let
+  o
+) = is_undef(a) ? c
+  : let
     (
       d  = len(first(c)),
       eo = defined_or( o, d == 2 ? origin2d : origin3d ),
-
-      // apply mirror first if requested
-      cm  = is_undef(m) ? c
-          : let
-            (
-              ox  = eo[0], oy = eo[1],
-              nx  = m[0],  ny = m[1],
-              l2  = nx*nx + ny*ny
-            )
-            (l2 == 0) ? c
-            : (d == 2) ?
-              let
-              (
-                // 2D reflection matrix about line through o with normal [nx,ny]:
-                // M = I - 2*(n*nT)/|n|^2
-                f   = 2 / l2,
-
-                r11 = 1 - f*nx*nx,
-                r12 =   - f*nx*ny,
-                r21 =   - f*ny*nx,
-                r22 = 1 - f*ny*ny
-              )
-              [
-                for (ci=c)
-                  let( dx = ci[0]-ox, dy = ci[1]-oy )
-                  [
-                    ox + r11*dx + r12*dy,
-                    oy + r21*dx + r22*dy
-                  ]
-              ]
-            : let
-              (
-                // 3D reflection matrix about plane through o with normal [nx,ny,nz]:
-                nz  = m[2],
-                l2b = l2 + nz*nz,
-                oz  = eo[2],
-                f   = 2 / l2b,
-
-                r11 = 1 - f*nx*nx,
-                r12 =   - f*nx*ny,
-                r13 =   - f*nx*nz,
-                r21 =   - f*ny*nx,
-                r22 = 1 - f*ny*ny,
-                r23 =   - f*ny*nz,
-                r31 =   - f*nz*nx,
-                r32 =   - f*nz*ny,
-                r33 = 1 - f*nz*nz
-              )
-              [
-                for (ci=c)
-                  let( dx = ci[0]-ox, dy = ci[1]-oy, dz = ci[2]-oz )
-                  [
-                    ox + r11*dx + r12*dy + r13*dz,
-                    oy + r21*dx + r22*dy + r23*dz,
-                    oz + r31*dx + r32*dy + r33*dz
-                  ]
-              ]
-    )
-    // then apply rotation + translation
-    is_undef(a) ? cm
-  : let
-    (
       az = defined_e_or(a, 2, is_scalar(a) ? a : 0),
       cg = cos(az), sg = sin(az),
-
-      tx = defined_e_or(t, 0, 0),
-      ty = defined_e_or(t, 1, 0),
-      tz = defined_e_or(t, 2, 0),
 
       rc = (d == 2) ?
             let( ox = eo[0], oy = eo[1] )
             [
-              for (ci=cm)
+              for (ci=c)
                 let( dx = ci[0]-ox, dy = ci[1]-oy )
                 [
-                  ox + cg*dx - sg*dy + tx,
-                  oy + sg*dx + cg*dy + ty
+                  ox + cg*dx - sg*dy,
+                  oy + sg*dx + cg*dy
                 ]
             ]
 
-         : (d != 3) ? cm
+         : (d != 3) ? c
 
          : (is_undef(v) || is_list(a)) ?
             let
@@ -276,7 +289,7 @@ function transform_p
               m32 = cb*sa,
               m33 = ca*cb
             )
-            multmatrix_p(cm, [[m11,m12,m13,tx], [m21,m22,m23,ty], [m31,m32,m33,tz]])
+            multmatrix_p(c, [[m11,m12,m13,0], [m21,m22,m23,0], [m31,m32,m33,0]])
 
          :  let
             (
@@ -284,7 +297,7 @@ function transform_p
               vx2 = vx*vx, vy2 = vy*vy, vz2 = vz*vz,
               l2  = vx2 + vy2 + vz2
             )
-            (l2 == 0) ? cm
+            (l2 == 0) ? c
 
          :  let
             (
@@ -305,54 +318,289 @@ function transform_p
               m33 = vz2+(vx2+vy2)*cg,
               m34 = (oz*(vx2+vy2)-vz*(ox*vx+oy*vy))*oc+(ox*vy-oy*vx)*ll*sg
             )
-            multmatrix_p(cm, [[m11,m12,m13,m14+tx], [m21,m22,m23,m24+ty], [m31,m32,m33,m34+tz]])/l2
+            multmatrix_p(c, [[m11,m12,m13,m14], [m21,m22,m23,m24], [m31,m32,m33,m34]])/l2
     )
     rc;
+
+//! Apply an optional mirror, rotation, and translation to a list of 2D or 3D coordinates.
+/***************************************************************************//**
+  \param    c <points-3d | points-2d> A list of 3d or 2d coordinate
+              points.
+
+  \param    m <vector-3d | vector-2d> The normal vector of the mirror
+              plane or line. The mirror is applied about the plane or
+              line passing through \p o with the given normal. When \b
+              undef (default), no mirror is applied.
+
+  \param    a <decimal-list-3 | decimal> The axis rotation angle; A
+              list [ax, ay, az] or a single decimal to specify az only.
+              When \b undef, no rotation is applied.
+
+  \param    t <point-3d | point-2d> A translation vector applied after
+              mirror and rotation. When \b undef (default), no
+              translation is applied. Translation is always applied
+              last regardless of whether \p a is defined.
+
+  \param    o <point-3d | point-2d> The origin for the rotation and
+              mirror. In 2D, the center of rotation. In 3D, used only
+              when \p v is specified. When \b undef (default), the
+              origin is set automatically to \p origin2d or \p origin3d
+              based on the dimensionality of \p c.
+
+  \param    v <vector-3d> An arbitrary axis for the rotation. When
+              specified, the rotation angle will be \p a or az about
+              the line \p v that passes through point \p o.
+
+  \returns  <points-3d | points-2d> A list of 3d or 2d transformed
+            coordinates. Operations are applied in order: mirror about
+            \p o, rotate about \p o, translate by \p t. Rotation order
+            is rz, ry, rx.
+
+  \details
+
+    Applies a transformation to a list of coordinate points by
+    composing mirror_p(), rotate_p(), and translate_p() in sequence.
+    The mirror \p m, when specified, reflects points about the plane or
+    line defined by the normal vector \p m passing through \p o.
+    Rotation \p a is then applied about \p o, followed by the optional
+    translation \p t. Any combination of the three operations may be
+    used independently — in particular, \p t may be used alone with \p
+    m and without \p a to mirror and then translate without rotation.
+
+    The mirror normal \p m follows the same convention as OpenSCAD's
+    built-in `mirror()` module: a 2D vector `[nx, ny]` defines the
+    normal to the mirror line, and a 3D vector `[nx, ny, nz]` defines
+    the normal to the mirror plane.
+
+    When \p a, \p m, and \p t are all \b undef the point list is
+    returned unchanged.
+
+    See [Wikipedia] for more information on [transformation matrix],
+    [axis rotation], and [reflection matrix].
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Rotation_matrix
+  [transformation matrix]: https://en.wikipedia.org/wiki/Transformation_matrix
+  [axis rotation]: http://inside.mines.edu/fs_home/gmurray/ArbitraryAxisRotation
+  [reflection matrix]: https://en.wikipedia.org/wiki/Transformation_matrix#Reflection
+*******************************************************************************/
+function transform_p
+(
+  c,
+  m,
+  a,
+  t,
+  o,
+  v
+) = translate_p( rotate_p( mirror_p( c, m, o ), a, v, o ), t );
+
+//! Shear all coordinates in 2D or 3D.
+/***************************************************************************//**
+  \param    c <points-3d | points-2d> A list of 3d or 2d coordinate
+              points.
+
+  \param    m <decimal-list> The shear factors. In 2D, a list
+              `[sxy, syx]` where \c sxy shifts x proportional to y and
+              \c syx shifts y proportional to x. In 3D, a list `[sxy,
+              sxz, syx, syz, szx, szy]` following the standard shear
+              matrix convention.
+
+  \param    o <point-3d | point-2d> The origin about which shearing is
+              applied. When \b undef (default), the origin is set
+              automatically to \p origin2d or \p origin3d based on the
+              dimensionality of \p c. Shearing about an explicit origin
+              is equivalent to translating by `-o`, shearing, then
+              translating back by `+o`.
+
+  \returns  <points-3d | points-2d> A list of sheared coordinate
+            points.
+
+  \details
+
+    Applies a shear transformation to a list of coordinate points.
+    Shearing displaces each coordinate in one axis proportionally to
+    its position along another axis, leaving the shear origin fixed.
+
+    The 2D shear matrix for factors `[sxy, syx]` is:
+    ```
+    | 1    sxy |
+    | syx  1   |
+    ```
+
+    The 3D shear matrix for factors `[sxy, sxz, syx, syz, szx, szy]` is:
+    ```
+    | 1    sxy  sxz |
+    | syx  1    syz |
+    | szx  szy  1   |
+    ```
+
+    Missing list elements default to \b 0 (no shear in that direction).
+    When \p m is \b undef the point list is returned unchanged.
+
+    See [Wikipedia] for more information on [shear mapping].
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Shear_mapping
+  [shear mapping]: https://en.wikipedia.org/wiki/Shear_mapping
+*******************************************************************************/
+function shear_p
+(
+  c,
+  m,
+  o
+) = is_undef(m) ? c
+  : let
+    (
+      d   = len(first(c)),
+      eo  = defined_or( o, d == 2 ? origin2d : origin3d )
+    )
+    (d == 2) ?
+      let
+      (
+        ox  = eo[0], oy = eo[1],
+        sxy = defined_e_or(m, 0, 0),
+        syx = defined_e_or(m, 1, 0)
+      )
+      [
+        for (ci=c)
+          let( dx = ci[0]-ox, dy = ci[1]-oy )
+          [
+            ox + dx + sxy*dy,
+            oy + syx*dx + dy
+          ]
+      ]
+    : (d == 3) ?
+      let
+      (
+        ox  = eo[0], oy = eo[1], oz = eo[2],
+        sxy = defined_e_or(m, 0, 0),
+        sxz = defined_e_or(m, 1, 0),
+        syx = defined_e_or(m, 2, 0),
+        syz = defined_e_or(m, 3, 0),
+        szx = defined_e_or(m, 4, 0),
+        szy = defined_e_or(m, 5, 0)
+      )
+      [
+        for (ci=c)
+          let( dx = ci[0]-ox, dy = ci[1]-oy, dz = ci[2]-oz )
+          [
+            ox + dx  + sxy*dy + sxz*dz,
+            oy + syx*dx + dy  + syz*dz,
+            oz + szx*dx + szy*dy + dz
+          ]
+      ]
+    : c;
 
 //! Scale all coordinates dimensions.
 /***************************************************************************//**
   \param    c <points-nd> A list of nd coordinate points.
 
-  \param    v <decimal-list-n> A list of scalers for each dimension.
+  \param    v <decimal-list-n | decimal> A list of scale factors for
+              each dimension, or a single decimal to scale uniformly
+              across all dimensions.
+
+  \param    o <point-nd> The origin about which scaling is applied.
+              When \b undef (default), the origin is set automatically
+              to \p origin2d or \p origin3d based on the dimensionality
+              of \p c. Scaling about an explicit origin is equivalent
+              to translating by `-o`, scaling, then translating back by
+              `+o`.
 
   \returns  <points-nd> A list of scaled coordinate points.
+
+  \details
+
+    When \p v is a scalar, the same scale factor is applied to every
+    dimension. When \p v is a list shorter than the point dimensionality,
+    missing elements default to \b 1 (no scaling). When \p o is the
+    origin the result is identical to scaling about the origin. When
+    \p v is \b undef the point list is returned unchanged.
+
+    See [Wikipedia] for more information on [transformation matrix].
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Scaling_(geometry)
+  [transformation matrix]: https://en.wikipedia.org/wiki/Transformation_matrix
 *******************************************************************************/
 function scale_p
 (
   c,
-  v
+  v,
+  o
 ) = is_undef(v) ? c
   : let
     (
-      d = len(first(c)),
-      u = is_scalar(v) ? v : 1,
-      w = [for (i=[0 : d-1]) defined_e_or(v, i, u)]
+      d  = len(first(c)),
+      eo = defined_or( o, d == 2 ? origin2d : origin3d ),
+
+      u  = is_scalar(v) ? v : 1,
+      w  = [for (i=[0 : d-1]) defined_e_or(v, i, u)]
     )
-    [for (ci=c) [for (di=[0 : d-1]) ci[di] * w[di]]];
+    [for (ci=c) [for (di=[0 : d-1]) eo[di] + (ci[di] - eo[di]) * w[di]]];
 
 //! Scale all coordinates dimensions proportionately to fit inside a region.
 /***************************************************************************//**
-  \param    c <points-nd> A list of nd coordinate points.
+  \param    c      <points-nd> A list of nd coordinate points.
 
-  \param    v <decimal-list-n> A list of bounds for each dimension.
+  \param    v      <decimal-list-n> A list of target extents for each
+                   dimension.
+
+  \param    center <boolean> When \b true, the scaled result is centred
+                   about the origin. When \b false (default), the
+                   bounding box minimum is placed at the origin before
+                   scaling so that the result spans `[0, v[i]]` in each
+                   dimension.
+
+  \param    o      <point-nd> The origin to which the bounding box
+                   minimum is aligned before scaling. When \b undef
+                   (default), the origin is set automatically to
+                   \p origin2d or \p origin3d based on the
+                   dimensionality of \p c. When \p center is \b true,
+                   \p o is ignored and the result is centred about the
+                   coordinate origin instead.
 
   \returns  <points-nd> A list of proportionately scaled coordinate
             points which exactly fit the region bounds \p v.
+
+  \details
+
+    Points are first translated so that the bounding box minimum of
+    each dimension is aligned to \p o, then scaled to fit \p v. This
+    ensures a consistent result regardless of where the input points
+    are positioned. When a dimension has zero extent (all points share
+    the same coordinate), that dimension is left unchanged to avoid
+    division by zero. When \p center is \b true, the result is centred
+    about the coordinate origin by applying an additional translation
+    of `-v[i] / 2` after scaling, and \p o is ignored. When \p v is
+    \b undef the point list is returned unchanged.
+
+    See [Wikipedia] for more information on [transformation matrix].
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Scaling_(geometry)
+  [transformation matrix]: https://en.wikipedia.org/wiki/Transformation_matrix
 *******************************************************************************/
 function resize_p
 (
   c,
-  v
+  v,
+  center = false,
+  o
 ) = is_undef(v) ? c
   : let
     (
-      d = len(first(c)),
-      u = is_scalar(v) ? v : 1,
-      w = [for (i=[0 : d-1]) defined_e_or(v, i, u)],
-      m = [for (i=[0 : d-1]) let (cv = [for (ci=c) (ci[i])]) [min(cv), max(cv)]],
-      s = [for (i=[0 : d-1]) second(m[i]) - first(m[i])]
+      d  = len(first(c)),
+      eo = defined_or( o, d == 2 ? origin2d : origin3d ),
+
+      u  = is_scalar(v) ? v : 1,
+      w  = [for (i=[0 : d-1]) defined_e_or(v, i, u)],
+
+      // per-dimension [min, max] bounding values
+      bv = [for (i=[0 : d-1]) let (cv = [for (ci=c) ci[i]]) [min(cv), max(cv)]],
+
+      // per-dimension extent; zero extent yields scale factor 1 (no change)
+      s  = [for (i=[0 : d-1]) let (e = bv[i][1] - bv[i][0]) e == 0 ? 1 : w[i]/e],
+
+      // per-dimension placement offset: centre about origin or align min to eo
+      co = [for (i=[0 : d-1]) center ? w[i]/2 : -eo[i]]
     )
-    [for (ci=c) [for (di=[0 : d-1]) ci[di]/s[di] * w[di]]];
+    [for (ci=c) [for (di=[0 : d-1]) (ci[di] - bv[di][0]) * s[di] - co[di]]];
 
 //! @}
 //! @}
