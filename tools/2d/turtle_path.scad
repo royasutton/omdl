@@ -76,30 +76,6 @@ function _polygon_turtle_path_2d_p_line_p
 ) = is_undef( wc ) ? [t]
   : polygon_line_wave_p( p1=p0, p2=t, p=wc[0], a=wc[1], w=wc[2], m=wc[3], fn=fn );
 
-//! Rotates a single 2D point about a center.
-/***************************************************************************//**
-  \param    pt  <point-2d> The point to rotate.
-  \param    c   <point-2d> The center of rotation.
-  \param    a   <decimal> The rotation angle in degrees; positive is
-                counter-clockwise.
-
-  \returns  <point-2d> The rotated point.
-
-  \private
-*******************************************************************************/
-function _polygon_turtle_path_2d_p_rotate_pt
-(
-  pt,
-  c,
-  a
-) = let
-    (
-      d  = pt - c,
-      rx = d.x * cos(a) - d.y * sin(a),
-      ry = d.x * sin(a) + d.y * cos(a)
-    )
-    c + [rx, ry];
-
 //! Recursively evaluates a sub-step list n times, threading state between iterations.
 /***************************************************************************//**
   \param    sub_s   <datastruct> The sub-step list to repeat.
@@ -207,7 +183,7 @@ function _polygon_turtle_path_2d_p_repeat
    repeat       | rpt     | steps \| steps, n                  | (see below)
    repeat_mx    | rptmx   | steps, axis \| steps, axis, [o]    | (see below)
    repeat_my    | rptmy   | steps, axis \| steps, axis, [o]    | (see below)
-   transform    | xfrm    | steps, r \| steps, r, t, [o]       | (see below)
+   transform    | xfrm    | steps, r \| steps, r, t, mn, [o]   | (see below)
    arc_pv       | apv     | c, v, cw, fn                       | (see below)
    arc_vv       | avv     | v, v, cw, fn                       | (see below)
    path_p       | pp      | [p1, p2, ..., pn]                  | (see below)
@@ -411,23 +387,25 @@ function _polygon_turtle_path_2d_p_repeat
     0 | datastruct            | required      | \p steps : sub-step list
     1 | decimal               | required      | \p r : rotation angle in degrees, applied about \p p0
     2 | point-2d              | [0, 0]        | \p t : translation vector `[x, y]`; optional
-    3 | datastruct            |               | \p o : options `[update]`; optional
+    3 | vector-2d             | undef         | \p mn : mirror normal vector `[nx, ny]`; applied before rotation; optional
+    4 | datastruct            |               | \p o : options `[update]`; optional
 
-  #### transform[3]: o
+  #### transform[4]: o
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
     0 | boolean               | false         | \p update : when true, update the parent \p p0 and \p h after the operation
 
   Evaluates \p steps to produce a point list, then applies a 2D affine
-  transformation to every output point. Rotation \p r is applied first
-  about the entry position \p p0, followed by translation \p t. When
-  \p update is false (the default) the parent \p p0 and \p h are
-  unchanged after the operation, making \p transform a pure geometric
-  post-processor. When \p update is true, \p p0 advances to the last
-  transformed point and \p h is updated to `h_final + r`, where
-  \p h_final is the heading at the end of the sub-step sequence.
-  Nesting is supported to arbitrary depth.
+  transformation to every output point via transform_p(). Mirror \p mn
+  is applied first about the entry position \p p0, followed by rotation
+  \p r about \p p0, then translation \p t. When \p mn is \b undef no
+  mirror is applied. When \p update is false (the default) the parent
+  \p p0 and \p h are unchanged after the operation, making \p transform
+  a pure geometric post-processor. When \p update is true, \p p0
+  advances to the last transformed point and \p h is updated to
+  `h_final + r`, where \p h_final is the heading at the end of the
+  sub-step sequence. Nesting is supported to arbitrary depth.
 
   ### arc_pv
 
@@ -515,6 +493,7 @@ function polygon_turtle_path_2d_p
       a2 = argv[1],
       a3 = argv[2],
       a4 = argv[3],
+      a5 = argv[4],
 
       //
       // compute the coordinate point(s) and heading for this operation step.
@@ -626,18 +605,18 @@ function polygon_turtle_path_2d_p
               fwd_h      = fwd_r[1],
               fwd_p0_end = is_empty(fwd) ? p0 : last(fwd),
 
-              // mirror axis y-coordinate
-              ax_y    = p0.y + axis,
+              // mirror axis origin: p0.y + axis offset
+              ax_o    = [ p0.x, p0.y + axis ],
 
               // start point for mirrored pass (reflected onto axis)
-              mir_p0  = ms ? [p0.x,         2*ax_y - p0.y        ]
-                           : [fwd_p0_end.x, 2*ax_y - fwd_p0_end.y],
+              mir_p0  = ms ? mirror_p( [p0],         [0,1], ax_o )[0]
+                           : mirror_p( [fwd_p0_end], [0,1], ax_o )[0],
 
               // mirrored pass: run sub-steps from reflected start
               mir_raw = polygon_turtle_path_2d_p( sub_s, mir_p0, h, s_n, p0_g, 1 ),
 
-              // reflect output points back about the axis
-              mir     = [ for (pt = mir_raw[0]) [pt.x, 2*ax_y - pt.y] ],
+              // reflect output points back about the axis using mirror_p
+              mir     = mirror_p( mir_raw[0], [0,1], ax_o ),
               mir_out = rev ? list_reverse(mir) : mir,
 
               // heading carried back: forward final heading or entry heading
@@ -664,18 +643,18 @@ function polygon_turtle_path_2d_p
               fwd_h      = fwd_r[1],
               fwd_p0_end = is_empty(fwd) ? p0 : last(fwd),
 
-              // mirror axis x-coordinate
-              ax_x    = p0.x + axis,
+              // mirror axis origin: p0.x + axis offset
+              ax_o    = [ p0.x + axis, p0.y ],
 
               // start point for mirrored pass (reflected onto axis)
-              mir_p0  = ms ? [2*ax_x - p0.x,         p0.y        ]
-                           : [2*ax_x - fwd_p0_end.x, fwd_p0_end.y],
+              mir_p0  = ms ? mirror_p( [p0],         [1,0], ax_o )[0]
+                           : mirror_p( [fwd_p0_end], [1,0], ax_o )[0],
 
               // mirrored pass: run sub-steps from reflected start
               mir_raw = polygon_turtle_path_2d_p( sub_s, mir_p0, h, s_n, p0_g, 1 ),
 
-              // reflect output points back about the axis
-              mir     = [ for (pt = mir_raw[0]) [2*ax_x - pt.x, pt.y] ],
+              // reflect output points back about the axis using mirror_p
+              mir     = mirror_p( mir_raw[0], [1,0], ax_o ),
               mir_out = rev ? list_reverse(mir) : mir,
 
               // heading carried back: forward final heading or entry heading
@@ -692,16 +671,16 @@ function polygon_turtle_path_2d_p
               sub_s = a1,
               r     = a2,
               t     = defined_or( a3, [0,0] ),
-              o     = a4,
+              mn    = a4,
+              o     = a5,
               upd   = defined_eonb_or( o, 0, false ),
 
               // evaluate sub-steps — recover points and final heading
               sub_r = polygon_turtle_path_2d_p( sub_s, p0, h, s_n, p0_g, 1 ),
               sub_h = sub_r[1],
 
-              // apply rotation about p0 then translation
-              xfmd  = [ for (pt = sub_r[0])
-                          _polygon_turtle_path_2d_p_rotate_pt( pt=pt, c=p0, a=r ) + t ],
+              // apply mirror about p0, rotation about p0, then translation
+              xfmd  = transform_p( c=sub_r[0], m=mn, a=r, t=t, o=p0 ),
 
               // heading: rotated sub-step final heading when updating, else entry heading
               out_h = upd ? sub_h + r : h
