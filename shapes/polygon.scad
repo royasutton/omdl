@@ -95,12 +95,12 @@ module pg_corner_round
 (
   r  = 1,
   m  = 1,
-  c  = origin2d,
+  o  = origin2d,
   v1 = x_axis2d_uv,
   v2 = y_axis2d_uv
 )
 {
-  p = concat([c], polygon_round_eve_p(r=r, m=m, c=c, v1=v1, v2=v2));
+  p = concat([o], polygon_round_eve_p(r=r, m=m, o=o, v1=v1, v2=v2));
 
   polygon(p);
 }

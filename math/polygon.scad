@@ -1302,7 +1302,7 @@ function polygon_linear_extrude_pf
 /***************************************************************************//**
   \param    r <decimal> The round radius.
   \param    m <integer> The round mode.
-  \param    c <point-2d> The round center coordinate [x, y].
+  \param    o <point-2d> The round center coordinate [x, y].
   \param    v1 <line-2d | decimal> The round start angle.
             A 2d line, vector, or decimal angle 1.
   \param    v2 <line-2d | decimal> The round end angle.
@@ -1334,7 +1334,7 @@ function polygon_round_eve_p
 (
   r  = 1,
   m  = 1,
-  c  = origin2d,
+  o  = origin2d,
   v1 = x_axis2d_uv,
   v2 = y_axis2d_uv,
   fn,
@@ -1347,20 +1347,20 @@ function polygon_round_eve_p
     va2 = is_number(v2) ? [cos(v2), sin(v2)] : v2,
 
     // triangle coordinates for edge corner in cw order
-    etc = [c + r*unit_l(va1), c, c + r*unit_l(va2)],
+    etc = [o + r*unit_l(va1), o, o + r*unit_l(va2)],
 
     // tangent circle radius
     tcr = (m == 1) ?triangle2d_exradius(etc, 2) : 0,
 
     // tangent circle center coordinate
-    tcc = (m == 1) ?(c-r/(r-tcr) * triangle2d_excenter(etc, 2)) * (tcr-r)/tcr : c,
+    tcc = (m == 1) ?(o-r/(r-tcr) * triangle2d_excenter(etc, 2)) * (tcr-r)/tcr : o,
 
     // distance from vertex to inflection points
-    vim = (m == 1) ? sqrt( pow(distance_pp(c, tcc),2) - pow(r,2) ) : r,
+    vim = (m == 1) ? sqrt( pow(distance_pp(o, tcc),2) - pow(r,2) ) : r,
 
     // inflection coordinates
-    tc1 = c + vim*unit_l(va1),
-    tc2 = c + vim*unit_l(va2),
+    tc1 = o + vim*unit_l(va1),
+    tc2 = o + vim*unit_l(va2),
 
     // vertex rounding coordinate point list
     vpl = (m == 1) ? polygon_arc_p(r=r, o=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=true)
