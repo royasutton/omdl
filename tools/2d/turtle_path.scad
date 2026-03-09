@@ -199,8 +199,6 @@ function _polygon_turtle_path_2d_p_repeat
    delta_y      | dy      | y \| y, wc, fn                     | p0 + [0, y]
    delta_xa     | dxa     | x, a \| x, a, wc, fn               | p0 + [ x, x * tan(a) ]
    delta_ya     | dya     | y, a \| y, a, wc, fn               | p0 + [ y / tan(a), y ]
-   delta_xy_mx  | dxymx   | x, y \| x, y, wc, fn               | p0 + [x, y], p0 + [x, -y]
-   delta_xy_my  | dxymy   | x, y \| x, y, wc, fn               | p0 + [x, y], p0 + [-x, y]
    move_ar      | mar     | m, a \| m, a, wc, fn               | p0 + line(m, a)
    move_rr      | mrr     | m, a \| m, a, wc, fn               | p0 + line(m, h+a)
    move_fw      | mfw     | m \| m, wc, fn                     | p0 + line(m, h)
@@ -305,34 +303,6 @@ function _polygon_turtle_path_2d_p_repeat
   \p y and the angle \p a. This is the complement of \p delta_xa and is
   convenient when the vertical extent of a step is known and the slope
   angle is the natural constraint.
-
-  ### delta_xy_mx
-
-    e | data type             | default value | parameter description
-  :--:|:---------------------:|:-------------:|:------------------------------------
-    0 | decimal               | required      | \p x : x-axis displacement
-    1 | decimal               | required      | \p y : y-axis displacement
-
-  Produces two sequential output points by applying the displacement
-  `[x, y]` and then its x-axis mirror `[x, -y]`, both relative to the
-  current position \p p0. The first segment travels from \p p0 to
-  `p0 + [x, y]` and the second from there to `p0 + [x, -y]`. This
-  operation is intended for constructing top-bottom symmetric polygon
-  profiles in a single step.
-
-  ### delta_xy_my
-
-    e | data type             | default value | parameter description
-  :--:|:---------------------:|:-------------:|:------------------------------------
-    0 | decimal               | required      | \p x : x-axis displacement
-    1 | decimal               | required      | \p y : y-axis displacement
-
-  Produces two sequential output points by applying the displacement
-  `[x, y]` and then its y-axis mirror `[-x, y]`, both relative to the
-  current position \p p0. The first segment travels from \p p0 to
-  `p0 + [x, y]` and the second from there to `p0 + [-x, y]`. This
-  operation is intended for constructing left-right symmetric polygon
-  profiles in a single step.
 
   ### move_ar
 
@@ -593,43 +563,6 @@ function polygon_turtle_path_2d_p
             [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
           //
-          // lines; delta mirror
-          //
-        : (oper == "delta_xy_mx" || oper == "dxymx") && (argc > 1) ?
-            let
-            (
-              t1 = p0 + [ a1,  a2],
-              t2 = p0 + [ a1, -a2],
-              wc = a3,
-              fn = a4
-            )
-            [
-              concat
-              (
-                _polygon_turtle_path_2d_p_line_p( p0=p0, t=t1, wc=wc, fn=fn ),
-                _polygon_turtle_path_2d_p_line_p( p0=t1,  t=t2, wc=wc, fn=fn )
-              ),
-              h
-            ]
-
-        : (oper == "delta_xy_my" || oper == "dxymy") && (argc > 1) ?
-            let
-            (
-              t1 = p0 + [ a1,  a2],
-              t2 = p0 + [-a1,  a2],
-              wc = a3,
-              fn = a4
-            )
-            [
-              concat
-              (
-                _polygon_turtle_path_2d_p_line_p( p0=p0, t=t1, wc=wc, fn=fn ),
-                _polygon_turtle_path_2d_p_line_p( p0=t1,  t=t2, wc=wc, fn=fn )
-              ),
-              h
-            ]
-
-          //
           // lines; move radial absolute
           //
         : (oper == "move_ar" || oper == "mar") && (argc > 1) ?
@@ -847,9 +780,8 @@ function polygon_turtle_path_2d_p
       next_p0   = let ( end_p = is_empty(p) ? p0 : last(p) )
                   (oper == "transform" || oper == "xfrm") ?
                   let ( upd = defined_e_or( a4, 0, false ) )
-                  upd ? ( end_p ) : p0
+                  upd ? end_p : p0
                 : end_p,
-
 
       // transform: only update when upd=true, heading already encoded in step_h
       next_h    = (oper == "transform" || oper == "xfrm") ?
@@ -865,7 +797,7 @@ function polygon_turtle_path_2d_p
       //
       term      = len(s) == 1,
 
-      rest      = term ? undef
+      rest      = term ? [empty_lst, next_h]
                 : polygon_turtle_path_2d_p( next_s, next_p0, next_h, next_s_n, next_p0_g, 1 ),
 
       result    = term ? p      : concat( p, rest[0] ),
