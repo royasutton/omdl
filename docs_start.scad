@@ -196,7 +196,7 @@
   \section intro_further Further Reading
 
   - \ref omdl_distinctions        "Distinctions:"
-    How omdl differs from MCAD and BOSL2.
+    How omdl differs from libraries like MCAD and BOSL2.
 
   - \ref architecture_overview    "Architecture Overview:"
     omdl's four-layer framework and module design guidelines.
