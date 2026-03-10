@@ -50,7 +50,7 @@ Overview
     directly in source using [Doxygen] and [openscad-amu].
 
   - **Validation-driven development:** automated scripts verify
-    functionality of core primities  across evolving OpenSCAD versions.
+    functionality of core primitives across evolving OpenSCAD versions.
 
   Instead of treating OpenSCAD purely as a shape generator, omdl
   introduces a structured mechanical design layer that helps bridge
@@ -59,27 +59,20 @@ Overview
 Design Philosophy
 -----------------
 
-  omdl is designed for users who want to create mechanically meaningful
-  models intended for CNC-based fabrication. The library emphasizes
-  reusable design patterns that reflect real engineering workflows,
-  including assemblies, components, fabrication tooling, and drafting
-  aids. By providing structured, parametric building blocks, omdl
-  enables designers to move beyond low-level geometry.
+  omdl is shaped by a set of design decisions that follow from its
+  engineering focus.
 
-  Key goals include:
+  Geometry is treated as a consequence of mechanical decisions, not
+  their starting point. Rather than exposing low-level shape primitives
+  as the primary interface, omdl encourages working at the level of
+  components, operations, and assemblies — describing what a part must
+  achieve before specifying how it is constructed.
 
-  - Provide higher-level abstractions built on standard OpenSCAD
-    primitives.
-
-  - Separate geometry construction from mechanical intent.
-
-  - Formalizes parameter communication and late-binding of
-    implementation details across modules.
-
-  - Encourage consistent dimensional practices through explicit unit
-    conversion.
-
-  - Maintain readable source code that doubles as its own documentation.
+  Modules are designed to be included individually as needed, helping
+  keep projects lightweight and reducing unnecessary dependencies. This
+  modular approach also supports interoperability, making it easier to
+  integrate omdl alongside other OpenSCAD design libraries without
+  imposing a rigid project structure.
 
   The library is organized into modular groups that represent distinct
   functional areas, including tooling utilities, drafting operations,
@@ -87,12 +80,6 @@ Design Philosophy
   mechanical components. This structure encourages separation of
   concerns while allowing developers to work at the appropriate level
   of abstraction for their design.
-
-  Modules are designed to be included individually as needed, helping
-  keep projects lightweight and reducing unnecessary dependencies. This
-  modular approach also supports interoperability, making it easier to
-  integrate omdl alongside other OpenSCAD design libraries without
-  imposing a rigid project structure.
 
 Documentation Approach
 ----------------------
@@ -167,7 +154,7 @@ Design Examples
   </center>
   </td>
   <td>
-  <a href="http://www.thingiverse.com/thing:2051608">
+  <a href="https://www.thingiverse.com/thing:2051608">
   A Portable solar panel tripod mount
   </a>: Designed in 48 hours from concept to assembly using omdl and openscad-amu.
   </td>
@@ -182,7 +169,7 @@ Design Examples
   </center>
   </td>
   <td>
-  <a href="http://www.thingiverse.com/thing:2836187">
+  <a href="https://www.thingiverse.com/thing:2836187">
   PCI Bracket Generator
   </a>
   </td>
@@ -197,7 +184,7 @@ Design Examples
   </center>
   </td>
   <td>
-  <a href="http://www.thingiverse.com/thing:2841089">
+  <a href="https://www.thingiverse.com/thing:2841089">
   PCI-E 1x Riser Card Bracket
   </a>
   </td>
@@ -212,7 +199,7 @@ Design Examples
   </center>
   </td>
   <td>
-  <a href="http://www.thingiverse.com/thing:2811619">
+  <a href="https://www.thingiverse.com/thing:2811619">
   Webcam tripod mount
   </a>
   </td>
@@ -228,5 +215,5 @@ Design Examples
 [omdl-snapshot]: https://royasutton.github.io/omdl-snapshot
 
 [openscad-amu]: https://royasutton.github.io/openscad-amu
-[Doxygen]: http://www.doxygen.nl
-[OpenSCAD]: http://www.openscad.org
+[Doxygen]: https://www.doxygen.nl
+[OpenSCAD]: https://www.openscad.org
