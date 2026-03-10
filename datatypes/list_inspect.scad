@@ -220,8 +220,8 @@ function compare
       (
         let
         (
-          n1 = len(merge_s(v1, true)),              // get total element count
-          n2 = len(merge_s(v2, true))
+          n1 = len(v1),                             // get element count
+          n2 = len(v2)
         )
         (n1 > n2) ? -1                              // longest list is greater
       : (n2 > n1) ? +1
