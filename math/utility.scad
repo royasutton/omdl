@@ -46,21 +46,37 @@
 
 //! Return facets number for the given arc radius.
 /***************************************************************************//**
-  \param    r <decimal> The arc radius.
+  \param    r <decimal> The arc radius. Must be >= 0.
 
   \returns  <integer> The number of facets.
 
   \details
 
     This function approximates the \c get_fragments_from_r() code that
-    is used by OpenSCAD to calculates the number of fragments in a
+    is used by OpenSCAD to calculate the number of fragments in a
     circle or arc. The arc facets are controlled by the special
-    variables \p $fa, \p $fs, and \p $fn.
+    variables \p $fa, \p $fs, and \p $fn. The three branches are:
+    - \p r < \c grid_fine: returns \b 3 (minimum). \c grid_fine is the
+      library-level constant for the minimum meaningful geometry size;
+      radii below it are treated as degenerate.
+    - \p $fn > 0: returns \p $fn clamped to a minimum of \b 3,
+      respecting the caller's explicit fragment count override.
+    - otherwise: returns \c ceil(max(min(360/\p $fa, r*tau/\p $fs), 5)),
+      where \c tau = 2*PI is an omdl library constant.
+
+    \note Passing a negative \p r is invalid and caught by an internal
+          assert. If \p $fa is 0, \c 360/$fa produces \c inf; \c min()
+          then selects the \c r*tau/$fs term, which is the correct
+          fallback behaviour.
 *******************************************************************************/
 function get_fn
 (
   r
-) = (r < grid_fine) ? 3
+) = let
+    (
+      _ = assert( r >= 0, "get_fn: r must be >= 0." )
+    )
+    (r < grid_fine) ? 3
   : ($fn > 0.0) ? ($fn >= 3) ? $fn : 3
   : ceil( max( min(360/$fa, r*tau/$fs), 5 ) );
 
@@ -69,8 +85,10 @@ function get_fn
   \param    v <data> A list of values.
   \param    m <integer> The output mode (a 5-bit encoded integer).
 
-  \param    cs <string-list-4> A list of strings [s1, s2, s3, fs]
-            (for custom field formatting).
+  \param    cs <string-list-4> A list of strings \c [cs[0], cs[1], cs[2], cs[3]]
+            used only with custom formatting (m = 15), mapping to
+            \c s1, \c s2, \c s3, and \c fs respectively in the output
+            template: \c s1, value, \c s2, frequency, \c s3, \c fs.
 
   \returns  <list | string> with the occurrence frequency of the elements
             of \p v.
@@ -97,12 +115,12 @@ function get_fn
 
     String output modes:
 
-    |     | B3  | B2  | B1  | B0  | Description       |
-    |:---:|:---:|:---:|:---:|:---:|:------------------|
-    |  1  |  0  |  0  |  0  |  1  | list of strings   |
-    |  3  |  0  |  0  |  1  |  1  | text format 1     |
-    |  9  |  1  |  0  |  0  |  1  | html format 1     |
-    | 15  |  1  |  1  |  1  |  1  | custom formating  |
+    |     | B3  | B2  | B1  | B0  | Description                              |
+    |:---:|:---:|:---:|:---:|:---:|:-----------------------------------------|
+    |  1  |  0  |  0  |  0  |  1  | list of bare strings, each "NxM"         |
+    |  3  |  0  |  0  |  1  |  1  | text format 1                            |
+    |  9  |  1  |  0  |  0  |  1  | html format 1                            |
+    | 15  |  1  |  1  |  1  |  1  | custom formatting (uses \p cs)           |
 
 *******************************************************************************/
 function histogram
@@ -130,16 +148,16 @@ function histogram
     (
       s1 = (sm==1) ? empty_str
          : (sm==4) ? empty_str
-         :           (len(cs) > 0 ? cs[0] : empty_str),
+         :           (is_list(cs) && len(cs) > 0 ? cs[0] : empty_str),
       s2 = (sm==1) ? "<"
          : (sm==4) ? "x"
-         :           (len(cs) > 1 ? cs[1] : empty_str),
+         :           (is_list(cs) && len(cs) > 1 ? cs[1] : empty_str),
       s3 = (sm==1) ? ">"
          : (sm==4) ? empty_str
-         :           (len(cs) > 2 ? cs[2] : empty_str),
+         :           (is_list(cs) && len(cs) > 2 ? cs[2] : empty_str),
       fs = (sm==1) ? " "
          : (sm==4) ? ", "
-         :           (len(cs) > 3 ? cs[3] : empty_str),
+         :           (is_list(cs) && len(cs) > 3 ? cs[3] : empty_str),
       fb = (sm==1) ? undef
          : (sm==4) ? undef
          :           cb,
