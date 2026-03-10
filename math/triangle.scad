@@ -139,8 +139,10 @@ function triangle_sas2sss
 
     \amu_eval ( object=triangle_asa2sss ${object_diagram_2d} )
 
-    No verification is performed to ensure that the given sides specify
-    a valid triangle. See [Wikipedia] for more information.
+    No validation is performed on the input values. If \p a1 and \p a2
+    sum to 180° or more, the derived angle a3 = 180 - a1 - a2 is zero
+    or negative and sin(a3) is zero or negative, causing division by
+    zero or producing negative side lengths without warning.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
 *******************************************************************************/
@@ -174,8 +176,10 @@ function triangle_asa2sss
 
     \amu_eval ( object=triangle_aas2sss ${object_diagram_2d} )
 
-    No verification is performed to ensure that the given sides specify
-    a valid triangle. See [Wikipedia] for more information.
+    No validation is performed on the input values. If \p a1 and \p a2
+    sum to 180° or more, sin(a3) is zero or negative and division by
+    zero or negative side lengths result without warning. If \p a1 is
+    zero, division by sin(a1) also produces inf or nan.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
 *******************************************************************************/
@@ -267,9 +271,18 @@ function triangle2d_sss2ppp
 //! Compute the area of a triangle given its vertex coordinates in 2D.
 /***************************************************************************//**
   \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
-  \param    s <boolean> Return the vertex ordering sign.
+  \param    s <boolean> When \b true, return the signed area; when
+            \b false (default), return the absolute area.
 
-  \returns  <decimal> The area of the given triangle.
+  \returns  <decimal> The area of the given triangle, signed when
+            \p s = \b true.
+
+  \details
+
+    When \p s = \b true the sign encodes vertex ordering: negative for
+    clockwise and positive for counter-clockwise, following the same
+    convention as polygon_area(). When \p s = \b false the absolute
+    value is returned regardless of vertex ordering.
 *******************************************************************************/
 function triangle2d_area
 (
@@ -382,23 +395,25 @@ function triangle2d_inradius
 //! Compute the center coordinate of a triangle's excircle in 2D.
 /***************************************************************************//**
   \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
-  \param    v <integer> Return coordinate opposite vertex \p v.
+  \param    vi <integer> The vertex index (1, 2, or 3). Returns the excircle
+            center opposite vertex \p vi.
 
   \returns  <point-2d> The excircle center coordinate [x, y].
 
   \details
 
     A circle outside of the triangle specified by \p v1, \p v2, and \p
-    v3, tangent to the side opposite \p v and tangent to the
-    extensions of the other two sides away from \p v. See [Wikipedia]
-    for more information.
+    v3, tangent to the side opposite vertex \p vi and tangent to the
+    extensions of the other two sides away from vertex \p vi. Returns
+    \b origin2d for any \p vi value other than 1, 2, or 3.
+    See [Wikipedia] for more information.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
 *******************************************************************************/
 function triangle2d_excenter
 (
   c,
-  v = 1
+  vi = 1
 ) =
   let
   (
@@ -410,31 +425,37 @@ function triangle2d_excenter
     d2 = distance_pp(v3, v1),
     d3 = distance_pp(v1, v2)
   )
-    (v == 1) ? [ ((-d1*v1[0]+d2*v2[0]+d3*v3[0])/(-d1+d2+d3)),
+    (vi == 1) ? [ ((-d1*v1[0]+d2*v2[0]+d3*v3[0])/(-d1+d2+d3)),
                   ((-d1*v1[1]+d2*v2[1]+d3*v3[1])/(-d1+d2+d3)) ]
-  : (v == 2) ? [ ((+d1*v1[0]-d2*v2[0]+d3*v3[0])/(+d1-d2+d3)),
+  : (vi == 2) ? [ ((+d1*v1[0]-d2*v2[0]+d3*v3[0])/(+d1-d2+d3)),
                   ((+d1*v1[1]-d2*v2[1]+d3*v3[1])/(+d1-d2+d3)) ]
-  : (v == 3) ? [ ((+d1*v1[0]+d2*v2[0]-d3*v3[0])/(+d1+d2-d3)),
+  : (vi == 3) ? [ ((+d1*v1[0]+d2*v2[0]-d3*v3[0])/(+d1+d2-d3)),
                   ((+d1*v1[1]+d2*v2[1]-d3*v3[1])/(+d1+d2-d3)) ]
   : origin2d;
 
 //! Compute the exradius of a triangle's excircle in 2D.
 /***************************************************************************//**
   \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
-  \param    v <integer> Return coordinate opposite vertex \p v.
+  \param    vi <integer> The vertex index (1, 2, or 3). Returns the exradius
+            of the excircle opposite vertex \p vi.
 
-  \returns  <decimal> The excircle radius of the excircle opposite \p v.
+  \returns  <decimal> The excircle radius opposite vertex \p vi, or
+            \b 0 for any \p vi value other than 1, 2, or 3.
 
   \details
 
-    See [Wikipedia] for more information.
+    The exradius opposite vertex \p vi is computed from the semi-perimeter
+    \em s and the three side lengths using the formula
+    r_i = sqrt(s * (s-s_j) * (s-s_k) / (s-s_i)), where s_i, s_j, s_k
+    are the sides opposite each vertex in order. See [Wikipedia] for
+    more information.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
 *******************************************************************************/
 function triangle2d_exradius
 (
   c,
-  v = 1
+  vi = 1
 ) =
   let
   (
@@ -447,9 +468,9 @@ function triangle2d_exradius
     d3 = distance_pp(v1, v2),
     s  = (+d1+d2+d3)/2
   )
-    (v == 1) ? sqrt(s * (s-d2) * (s-d3) / (s-d1))
-  : (v == 2) ? sqrt(s * (s-d1) * (s-d3) / (s-d2))
-  : (v == 3) ? sqrt(s * (s-d1) * (s-d2) / (s-d3))
+    (vi == 1) ? sqrt(s * (s-d2) * (s-d3) / (s-d1))
+  : (vi == 2) ? sqrt(s * (s-d1) * (s-d3) / (s-d2))
+  : (vi == 3) ? sqrt(s * (s-d1) * (s-d2) / (s-d3))
   : 0;
 
 //! Compute the coordinate of a triangle's circumcenter.
@@ -589,7 +610,21 @@ function triangle2d_is_pit
   \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
   \param    r <decimal> The vertex rounding radius.
 
-  \returns  <decimal> The rounding center coordinate.
+  \returns  <point-2d> The rounding arc center coordinate for vertex v2.
+
+  \details
+
+    Computes the center of the circular arc of radius \p r that rounds
+    the corner at vertex \b v2 (c[1]). The arc is tangent to both edges
+    meeting at v2.
+
+    \p r must satisfy \b 0 < r < ir, where \em ir is the triangle's
+    inradius (triangle2d_inradius()). Passing r >= ir causes division by
+    zero and is caught by an internal assert.
+
+    \note Only vertex v2 (c[1]) is supported. To round v1 or v3, rotate
+          the vertex list so that the target vertex is at c[1] before
+          calling.
 *******************************************************************************/
 function triangle2d_vround3_center
 (
@@ -611,7 +646,22 @@ function triangle2d_vround3_center
   \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
   \param    r <decimal> The vertex rounding radius.
 
-  \returns  <decimal> The rounding tangent coordinates [t1, t2].
+  \returns  <points-2d> A list [t1, t2] of the two tangent point
+            coordinates where the rounding arc meets the edges at v2.
+
+  \details
+
+    Computes the two points on the edges adjacent to vertex \b v2 (c[1])
+    at which a rounding arc of radius \p r is tangent. t1 lies on the
+    edge v2→v1 and t2 lies on the edge v2→v3.
+
+    \p r must satisfy \b 0 < r < ir (the triangle's inradius); this
+    constraint is enforced by triangle2d_vround3_center(), which is
+    called internally.
+
+    \note Only vertex v2 (c[1]) is supported. See
+          triangle2d_vround3_center() for the convention on rounding
+          other vertices.
 *******************************************************************************/
 function triangle2d_vround3_tangents
 (
