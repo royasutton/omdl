@@ -183,11 +183,13 @@ function table_get_columns
   \param    ci <string> The column identifier.
 
   \returns  (1) \<value> The value of the table cell <tt>[ri, ci]</tt>
-            when both \p ri and \p ci are defined. (2) The row <list-R>
-            when only \p ri is defined. (3) The column <list-C> when
-            only \p ci is defined. (4) Returns \b undef when the
-            specified row or column identifier is not present in the
-            table or when both are undefined.
+                when both \p ri and \p ci are defined.
+            (2) The row <list-R> when only \p ri is defined.
+            (3) The column <list-C> when only \p ci is defined.
+            (4) Returns \b undef when the specified row or column
+                identifier is not present in the table.
+            (5) Returns \b undef when both \p ri and \p ci are
+                undefined.
 
   \details
 

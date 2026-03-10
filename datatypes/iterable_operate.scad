@@ -376,7 +376,7 @@ function second( v ) = v[1];
 /***************************************************************************//**
   \param    v <iterable> An iterable value.
 
-  \returns  (1) \<value> The second element of \p v.
+  \returns  (1) \<value> The third element of \p v.
             (2) Returns \b undef when \p v is not defined, is not
                 iterable, or is empty.
 
@@ -1233,6 +1233,8 @@ function unique
   \returns  (1) \<list> The list of elements common to both iterable
                 values as list intersection with a one-to-one
                 correspondence among the elements.
+            (2) Returns \b empty_lst when either \p v1 or \p v2 is
+                empty.
 *******************************************************************************/
 function common
 (
@@ -1253,6 +1255,8 @@ function common
   \returns  (1) \<list> The list of elements that do not exists in both
                 iterable values as a list difference with a one-to-one
                 correspondence among the elements.
+            (2) Returns \b empty_lst when \p v1 and \p v2 are
+                identical, or when both are empty.
 *******************************************************************************/
 function not_common
 (

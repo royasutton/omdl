@@ -98,6 +98,11 @@ function binary_bit_is
     The bit-list will be the minimum required to represent the value. If
     \p w is greater than the minimum required bits, then the value will
     be padded with '0'.
+
+    Bits are ordered \em most-significant-bit first: index \c 0 holds
+    the most significant bit and the last index holds the least
+    significant bit. For example, <tt>binary_i2v(6)</tt> returns
+    <tt>[1,1,0]</tt>, where <tt>[0]</tt>=MSB and <tt>[2]</tt>=LSB.
 *******************************************************************************/
 function binary_i2v
 (

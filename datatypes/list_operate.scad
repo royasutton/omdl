@@ -380,7 +380,14 @@ function limit
                 index range.
             (2) Returns \b undef when list is empty, non-numeric, when
                  an index is specified and does not exists in the list
-                 \p v, or when \p i1 > \p i2.
+                 \p v, or when \p i1 > \\p i2.
+
+  \details
+
+    When the elements of \p v are themselves lists (e.g. 2d or 3d
+    vectors), the result is the element-wise sum across all vectors,
+    equivalent to component-wise vector addition. For example,
+    <tt>sum([[1,2],[3,4],[5,6]])</tt> returns <tt>[9,12]</tt>.
 *******************************************************************************/
 function sum
 (

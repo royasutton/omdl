@@ -133,6 +133,12 @@ function list_or
 
   \returns  <integer> The index position mapped into a circular list
             within the range <tt>[f : l+f-1]</tt>.
+
+  \details
+
+    Negative values of \p i wrap from the end of the range backwards.
+    For example, with \p l=5 and \p f=0, an index of \c -1 maps to
+    position \c 4, \c -2 maps to \c 3, and so on.
 *******************************************************************************/
 function index_c
 (

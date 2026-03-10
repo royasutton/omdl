@@ -100,8 +100,10 @@ function map_exists
   \param    m <map> A list of N key-value map pairs.
   \param    k \<value> A map key.
 
-  \returns  \<value> The value associated  with \p key.
-            Returns \b undef if \p key does not exists.
+  \returns  \<value> The value associated with \p key.
+            Returns \b undef if \p key does not exist and
+            \b $map_strict is \b false. Raises an assertion if
+            \p key does not exist and \b $map_strict is \b true.
 *******************************************************************************/
 function map_get_value
 (
