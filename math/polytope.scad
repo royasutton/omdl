@@ -119,8 +119,8 @@ function polytope_line
       sl = el[i]
     )
     (r == false)
-  ? [c[second(sl)], c[first(sl)]]
-  : [c[first(sl)], c[second(sl)]];
+  ? [c[first(sl)], c[second(sl)]]
+  : [c[second(sl)], c[first(sl)]];
 
 //! Determine the bounding limits of a polytope.
 /***************************************************************************//**
@@ -232,7 +232,7 @@ function polytope_bounding_box_pf
 ) = let
     (
       b = polytope_limits(c=c, f=f, a=a, s=false),
-      d  = len([for (i=b) if (i != [undef, undef]) i])
+      d  = len(b)
     )
     (d == 3) ?
       [ [for (x=b[0], y=b[1], z=b[2]) [x, y, z]],
@@ -460,7 +460,7 @@ function polytope_face_normal
 ) = let
     (
       ci = is_defined(l) ? l : defined_or(f, [consts(len(c))])[i],
-      pc = [for (i = [0:2]) let (p = c[ci[i]]) (len(p) == 3) ? p : [p[0], p[1], 0]]
+      pc = [for (vi = [0:2]) let (p = c[ci[vi]]) (len(p) == 3) ? p : [p[0], p[1], 0]]
     )
     cross(pc[0]-pc[1], pc[2]-pc[1]) * ((cw == true) ? 1 : -1);
 
