@@ -64,15 +64,7 @@
       to these functions. Passing a face with fewer or more than 3
       indices to a \c _tf_ function produces \c undef in the
       corresponding term and will silently corrupt the result.
-
-  \par Units
-
-    - Surface area is returned in square units of the input coordinate space.
-    - Volume is returned in cubic units of the input coordinate space.
-    - Centroid is returned as a point in the same coordinate space as \p c.
 *******************************************************************************/
-
-//----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
 // shape properties
