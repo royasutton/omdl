@@ -1208,21 +1208,26 @@ function mask
             (2) Returns \b undef when \p v is not defined or is not
                 iterable.
 
-  \warning  Any and all list elements of \p v that have the value of \b
-            undef are ignored and is not considered to be a unique.
+  \warning  All elements of \p v with the value \b undef are stripped
+            before deduplication and are never included in the result.
 *******************************************************************************/
 function unique
 (
   v
 ) = is_undef(v) ? empty_lst
   : !is_iterable(v) ? [v]
-    // handled empty list or empty string
+    // handle empty list or empty string
   : (len(v) == 0) ? empty_lst
-  // last element. filter case where first element of list is [undef]
-  : (len(v) == 1) ? (v == [undef]) ? empty_lst : headn(v, 0)
+  : let
+    ( // strip all undef elements before deduplication so that undef
+      // is uniformly ignored regardless of list length or position
+      sv = strip(v, undef)
+    )
+    (len(sv) == 0) ? empty_lst
+  : (len(sv) == 1) ? headn(sv, 0)
     // set s=false to use find() for single element matching
-  : exists(last(v), headn(v), s=false) ? unique(headn(v))
-  : concat(unique(headn(v)), lastn(v));
+  : exists(last(sv), headn(sv), s=false) ? unique(headn(sv))
+  : concat(unique(headn(sv)), lastn(sv));
 
 //! Return a list of the common elements of two iterable values.
 /***************************************************************************//**
