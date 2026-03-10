@@ -113,9 +113,7 @@ function all_equal
   v,
   cv
 ) = !is_iterable(v) ? (v == cv)
-  : is_empty(v) ? true
-  : (first(v) != cv) ? false
-  : all_equal(tailn(v), cv);
+  : (len([for (e = v) if (e != cv) true]) == 0);
 
 //! Test if any element of an iterable value equal a comparison value.
 /***************************************************************************//**
@@ -131,9 +129,7 @@ function any_equal
   v,
   cv
 ) = !is_iterable(v) ? (v == cv)
-  : is_empty(v) ? false
-  : (first(v) == cv) ? true
-  : any_equal(tailn(v), cv);
+  : (len([for (e = v) if (e == cv) true]) > 0);
 
 //! Test if a value equals one of the comparison values.
 /***************************************************************************//**
@@ -223,9 +219,7 @@ function all_scalars
 (
   v
 ) = !is_iterable(v) ? true
-  : is_empty(v) ? true
-  : !is_scalar(first(v)) ? false
-  : all_scalars(tailn(v));
+  : (len([for (e = v) if (!is_scalar(e)) true]) == 0);
 
 //! Test if all elements of an iterable value are iterable.
 /***************************************************************************//**
@@ -240,84 +234,52 @@ function all_iterables
 (
   v
 ) = !is_iterable(v) ? false
-  : is_empty(v) ? true
-  : !is_iterable(first(v)) ? false
-  : all_iterables(tailn(v));
+  : (len([for (e = v) if (!is_iterable(e)) true]) == 0);
 
 //! Test if all elements of an iterable value are lists.
 /***************************************************************************//**
   \param    v <iterable> An iterable data type value.
-  \param    c <integer> (\em internal) Count of passing comparisons.
 
   \returns  <boolean> \b true when all elements of \p v are lists
             and \b false otherwise. Returns \b true when \p v is a
             single iterable list.
-
-  \details
-
-  \note     The parameter \p c is an internal variable used to count
-            the number of successful comparisons performed while
-            traversing \p v. This parameter should not be initialized
-            under normal circumstances.
 *******************************************************************************/
 function all_lists
 (
-  v,
-  c = 0
+  v
 ) = !is_iterable(v) ? false
-  : is_empty(v) ? ((c>0) || is_list(v))
-  : !is_list(first(v)) ? false
-  : all_lists(tailn(v), c+1);
+  : is_empty(v) ? is_list(v)
+  : (len([for (e = v) if (!is_list(e)) true]) == 0);
 
 //! Test if all elements of an iterable value are strings.
 /***************************************************************************//**
   \param    v <iterable> An iterable data type value.
-  \param    c <integer> (\em internal) Count of passing comparisons.
 
   \returns  <boolean> \b true when all elements of \p v are strings
             and \b false otherwise. Returns \b true when \p v is a
             single string.
-
-  \details
-
-  \note     The parameter \p c is an internal variable used to count
-            the number of successful comparisons performed while
-            traversing \p v. This parameter should not be initialized
-            under normal circumstances.
 *******************************************************************************/
 function all_strings
 (
-  v,
-  c = 0
+  v
 ) = !is_iterable(v) ? false
-  : is_empty(v) ? ((c>0) || is_string(v))
-  : !is_string(first(v)) ? false
-  : all_strings(tailn(v), c+1);
+  : is_empty(v) ? is_string(v)
+  : (len([for (e = v) if (!is_string(e)) true]) == 0);
 
 //! Test if all elements of an iterable value are numbers.
 /***************************************************************************//**
   \param    v <iterable> An iterable data type value.
-  \param    c <integer> (\em internal) Count of passing comparisons.
 
   \returns  <boolean> \b true when all elements of \p v are numerical
             values and \b false otherwise. Returns \b true when \p v is
             a single numerical value.
-
-  \details
-
-  \note     The parameter \p c is an internal variable used to count
-            the number of successful comparisons performed while
-            traversing \p v. This parameter should not be initialized
-            under normal circumstances.
 *******************************************************************************/
 function all_numbers
 (
-  v,
-  c = 0
+  v
 ) = !is_iterable(v) ? is_number(v)
-  : is_empty(v) ? (c>0)
-  : !is_number(first(v)) ? false
-  : all_numbers(tailn(v), c+1);
+  : is_empty(v) ? false
+  : (len([for (e = v) if (!is_number(e)) true]) == 0);
 
 //! Test if all elements of an iterable value are iterable with a fixed length.
 /***************************************************************************//**
@@ -330,13 +292,10 @@ function all_numbers
 function all_len
 (
   v,
-  l,
-  c = 0
+  l
 ) = !is_iterable(v) ? false
-  : is_empty(v) ? (c>0)
-  : !is_iterable(first(v)) ? false
-  : (len(first(v)) != l) ? false
-  : all_len(tailn(v),l, c+1);
+  : is_empty(v) ? false
+  : (len([for (e = v) if (!is_iterable(e) || (len(e) != l)) true]) == 0);
 
 //! @}
 //! @}
