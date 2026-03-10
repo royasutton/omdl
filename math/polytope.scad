@@ -437,7 +437,11 @@ function polytope_edge_normal
   \param    l <integer-list> The face-plane specified as a list of three
             or more coordinate indexes that are a part of the face.
 
-  \param    cw <boolean> Face vertex ordering.
+  \param    cw <boolean> Face vertex ordering. When \b true the face
+            vertices are assumed to be wound \b clockwise when viewed
+            from outside the solid, and the returned normal points
+            outward (away from the interior). When \b false the vertices
+            are assumed counter-clockwise and the normal is negated.
 
   \returns  <vector-3d> The normal vector of a polytope face.
 
@@ -445,6 +449,13 @@ function polytope_edge_normal
 
     The face can be identified using either parameter \p i or \p l.
     When using \p l, the parameter \p f is not required.
+
+    The normal is computed from the first three vertices of the face
+    only. For triangulated faces this is exact. For higher-arity faces
+    (quads, n-gons) the first three vertices must not be collinear;
+    if they are, the returned vector will be a zero vector. Callers
+    working with untriangulated meshes should ensure the face is planar
+    and that \c ci[0], \c ci[1], \c ci[2] form a non-degenerate triangle.
 
   \note     Parameter \p f is optional for polygons. When it is not
             given, the listed order of the coordinates \p c establishes
@@ -572,31 +583,55 @@ function polytope_face_vertex_counts
             [[x, y, z], ...].
   \param    f <integer-list-list> A list of faces that enclose
             the shape where each face is a list of coordinate indexes.
+  \param    cw <boolean> Face vertex ordering. Passed directly to
+            polytope_face_normal(); see that function for the full
+            description. Default \b true (clockwise, outward normals).
 
-  \returns  <decimal-list> A list of the polyhedron adjacent face angles.
+  \returns  <decimal-list> A list of angles (in degrees) between the
+            normal vectors of every pair of adjacent faces. Each entry
+            is the angle between the outward normals of two faces that
+            share at least one vertex, which equals the supplement of
+            the interior dihedral angle (i.e. 180° minus the interior
+            dihedral angle for a convex edge).
 
   \details
+
+    For each face \p i, all faces that share at least one vertex are
+    found and the angle between their respective normal vectors is
+    computed via angle_ll(). Both normals are obtained by delegating
+    to polytope_face_normal() with the same \p cw convention, so the
+    result is consistent regardless of mesh winding.
+
+    The normal of each face is derived from its first three vertices
+    only; see polytope_face_normal() for the implications of this for
+    non-triangulated or degenerate faces.
 
     See [Wikipedia] for more information on dihedral angles.
 
     [Wikipedia]: https://en.wikipedia.org/wiki/Dihedral_angle
+
+  \warning  Each adjacent face pair appears twice in the output list
+            (once from face i's perspective and once from face u's),
+            so the list length equals twice the number of adjacent
+            face pairs.
 *******************************************************************************/
 function polytope_face_angles
 (
   c,
-  f
+  f,
+  cw = true
 ) =
   [
     for (i=[0 : len(f)-1])
     let
     (
-      n1 = cross_ll([c[f[i][0]], c[f[i][1]]], [c[f[i][0]], c[f[i][2]]]),
+      n1 = polytope_face_normal(c, f, i, cw=cw),
       af = [for (v=f[i]) for (j=[0 : len(f)-1]) if (j != i && exists(v, f[j])) j]
     )
       for (u=unique(af))
       let
       (
-        n2 = cross_ll([c[f[u][0]], c[f[u][1]]], [c[f[u][0]], c[f[u][2]]])
+        n2 = polytope_face_normal(c, f, u, cw=cw)
       )
         angle_ll(n1, n2)
   ];
