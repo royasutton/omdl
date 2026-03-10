@@ -183,7 +183,7 @@
 
   omdl is not just a geometry library, it is a mechanical design
   framework for OpenSCAD, built to reflect how engineers think,
-  document, and maintain real mechanical systems.**
+  document, and maintain real mechanical systems.
 
 
   [omdl]: https://royasutton.github.io/omdl
@@ -307,7 +307,7 @@
 
   - Separate intent from implementation: Modules should express what
     the design is supposed to do independently from how the geometry is
-    actually created/
+    actually created.
 
   - Thoughtful Parameter Contracts: Modules should define and enforce
     their inputs to ensure predictable, safe, and reusable designs.
@@ -374,7 +374,7 @@
 
   \section module_inclusion Module Inclusion
 
-  he standard library includes are encapsulated within the base include
+  The standard library includes are encapsulated within the base include
   file omdl-base.scad. This file provides only the minimal subset of
   commonly used functionality, consisting primarily of core utilities
   and geometric primitives, in order to maintain a lightweight
@@ -449,7 +449,7 @@
   | boolean   | a binary logic value (\b true or \b false)          |
   | number    | a numerical value                                   |
   | string    | an iterable sequence of of character values         |
-  | list      | an iterable sequential of arbitrary values          |
+  | list      | an iterable sequence of arbitrary values            |
   | range     | an arithmetic sequence                              |
   | function  | a function literal or variable containing functions |
 
@@ -470,7 +470,7 @@
 
   | name          | description                                       |
   |:-------------:|:--------------------------------------------------|
-  | [value]       | any dataum that can be stored in OpenSCAD         |
+  | [value]       | any datum that can be stored in OpenSCAD          |
   | [scalar]      | a single non-iterable value                       |
   | [iterable]    | any value with iterable elements                  |
   | [empty]       | any iterable value with zero elements             |
@@ -478,7 +478,7 @@
   | [integer]     | a positive, negative, or zero whole number        |
   | [even]        | an even integer                                   |
   | [odd]         | an odd integer                                    |
-  | [decimal]     | integer numbers with a fractional part            |
+  | [decimal]     | a real number with a fractional part              |
   | [index]       | a list index sequence                             |
   | [datastruct]  | a defined data structure                          |
   | [data]        | an arbitrary data structure                       |
@@ -488,7 +488,7 @@
 
   \subsection list_naming_conventions List naming conventions
 
-  When a values is a list and has an expected number of elements, the
+  When a value is a list and has an expected number of elements, the
   suffix '-n' is appended to indicate the required element count. If a
   range of acceptable elements is allowed, the lower and upper bounds
   are appended using the form l:u.
@@ -502,7 +502,7 @@
 
   | name                | description                               |
   |:-------------------:|:------------------------------------------|
-  | list-n              | a list of of \b n values                  |
+  | list-n              | a list of \b n values                     |
   | list-l:u            | a list of \b l to \b u values             |
   | typed-list          | a list of \b typed values                 |
   | typed-list-n        | a list of \b n \b typed values            |
@@ -530,10 +530,10 @@
 
   | name        | description                                       |
   |:-----------:|:--------------------------------------------------|
-  | point-Nd    | a point in an 'N' dimensional space               |
-  | vector-Nd   | a vector in an 'N' dimensional space              |
-  | line-Nd     | a line in an 'N' dimensional space                |
-  | matrix-MxN  | a 'M' by 'N' matrix of values                     |
+  | point-nd    | a point in an 'n' dimensional space               |
+  | vector-nd   | a vector in an 'n' dimensional space              |
+  | line-nd     | a line in an 'n' dimensional space                |
+  | matrix-mxn  | an 'm' by 'n' matrix of values                    |
 
   When a type is specified in plural form, such as \b points, it
   implies a list of the specified type. For example, \b points is
