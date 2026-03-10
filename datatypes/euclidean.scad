@@ -195,6 +195,7 @@ function distance_pp
   p2
 ) = !is_point(p1) ? undef
   : !is_undef(p2) && !is_point(p2) ? undef
+  : !is_undef(p2) && (len(p1) != len(p2)) ? undef
   :  is_undef(p2) ?
         sqrt(sum([for (i=[0:len(p1)-1]) p1[i]*p1[i]]))
       : sqrt(sum([for (i=[0:len(p1)-1]) (p1[i]-p2[i])*(p1[i]-p2[i])]));
@@ -360,8 +361,12 @@ function point_to_3d
               along the line.
 
   \returns  (1) <point-2d> The interpolated coordinates point [x, y].
-            (2) Returns \b undef when \p p1 or \p p2 is not a point or
-                when \p x or \p y are not numbers.
+            (2) Returns \b undef when \p p1 or \p p2 is not a point,
+                when \p x or \p y are not numbers, or when the two
+                points share the same coordinate along the interpolation
+                axis (p1[0] == p2[0] for x-interpolation, or
+                p1[1] == p2[1] for y-interpolation), as this would
+                require division by zero.
 
   \details
 
@@ -377,16 +382,18 @@ function interpolate2d_l_pp
   x,
   y
 ) = !is_point(p1) ? undef
-  : !is_point(p1) ? undef
+  : !is_point(p2) ? undef
 
     // 'y' is given, get 'lx' for given 'y'
   : !is_undef(y) && !is_number(y) ? undef
   : !is_undef(y) ?
-    let( lx = (p1[0]*(p2[1]-y) + p2[0]*(y-p1[1])) / (p2[1]-p1[1]) )
+    (p2[1] == p1[1]) ? undef
+  : let( lx = (p1[0]*(p2[1]-y) + p2[0]*(y-p1[1])) / (p2[1]-p1[1]) )
     [lx, y]
 
     // 'y' not given, get 'ly' for given 'x'
   : !is_number(x) ? undef
+  : (p2[0] == p1[0]) ? undef
   : let( ly = (p1[1]*(p2[0]-x) + p2[1]*(x-p1[0])) / (p2[0]-p1[0]) )
     [x, ly];
 
