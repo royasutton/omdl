@@ -46,7 +46,8 @@
 
 //! Return facets number for the given arc radius.
 /***************************************************************************//**
-  \param    r <decimal> The arc radius. Must be >= 0.
+  \param    r <decimal> The arc radius. Must be >= 0. Defaults to \b 0,
+            which returns \b 3 (the minimum facet count).
 
   \returns  <integer> The number of facets.
 
@@ -71,7 +72,7 @@
 *******************************************************************************/
 function get_fn
 (
-  r
+  r = 0
 ) = let
     (
       _ = assert( r >= 0, "get_fn: r must be >= 0." )
@@ -90,8 +91,26 @@ function get_fn
             \c s1, \c s2, \c s3, and \c fs respectively in the output
             template: \c s1, value, \c s2, frequency, \c s3, \c fs.
 
-  \returns  <list | string> with the occurrence frequency of the elements
-            of \p v.
+  \param    cb <string-list> Bold tag specifiers passed to strl_html().
+            Only used in html and custom string modes. See strl_html()
+            for type and semantics.
+  \param    cp <string-list> HTML tag-pair specifiers passed to strl_html().
+            Only used in html and custom string modes. See strl_html()
+            for type and semantics.
+  \param    ca <string-list> HTML attribute specifiers passed to strl_html().
+            Only used in html and custom string modes. See strl_html()
+            for type and semantics.
+  \param    cf <string-list> Font specifiers passed to strl_html().
+            Only used in html and custom string modes. See strl_html()
+            for type and semantics.
+  \param    d <boolean> When \b true, emit HTML debug output via
+            strl_html(). Default \b false.
+
+  \returns  <decimal-list | string> The occurrence frequencies of \p v.
+            When \p m bit 0 = \b 0 (numerical mode), returns a list of
+            \c [value, count] pairs. When \p m bit 0 = \b 1 (string
+            mode), returns a single concatenated string, except for
+            m = \b 1 which returns a list of bare \c "NxM" strings.
 
   \details
 
