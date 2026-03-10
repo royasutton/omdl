@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2015-2019
+  \date   2015-2019, 2026
 
   \copyright
 
@@ -51,6 +51,51 @@
     for more information.
 *******************************************************************************/
 
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+
+  \details
+
+  \anchor triangle_properties_conventions
+
+  \par Conventions
+
+    The following conventions apply to all functions in this group.
+    - \p c is always a list of three coordinate points \c [v1, v2, v3];
+      \p v is always a scalar input list (sides and/or angles), with
+      element order encoded in the function name
+      (e.g. triangle_sas2sss takes \c [s1, a3, s2]).
+    - Side lengths s1, s2, s3 are each \b opposite the corresponding
+      vertex; angles a1, a2, a3 are \b at the corresponding vertex,
+      in \b degrees.
+    - \p vi is the vertex-selector parameter (1-indexed: \b 1 = v1,
+      \b 2 = v2, \b 3 = v3); out-of-range values return a stated
+      fallback without error.
+    - \p d controls output dimensionality: \p d = \b 2 (default)
+      silently discards the z-component of 3d input; \p d = \b 3
+      preserves it; \p d = \b 0 auto-detects from the minimum
+      coordinate length of \p c.
+    - \p cw = \b true (default) orders output vertices \b clockwise;
+      \p s = \b true in triangle2d_area() returns a signed area --
+      \b negative for clockwise, \b positive for counter-clockwise --
+      matching polygon_area().
+    - No input validation is performed unless an explicit \c assert is
+      present; degenerate input (collinear vertices, zero sides,
+      angles >= 180 degrees) produces \b undef, \b nan, or \b inf silently.
+    - The rounding functions triangle2d_vround3_center() and
+      triangle2d_vround3_tangents() operate on vertex \b v2 (c[1])
+      only; rotate \p c to round a different vertex.
+    - Lengths are in the units of the input coordinate space; area in
+      square units; angles in degrees.
+
+  \amu_define note_no_validation
+  (
+    \note No validation is performed on the input values. Degenerate or
+          invalid input will produce undef, nan, or inf without warning
+          unless an assert is present.
+  )
+*******************************************************************************/
+
 //----------------------------------------------------------------------------//
 // shape generation
 //----------------------------------------------------------------------------//
@@ -60,8 +105,8 @@
 
 //! Compute the side lengths of a triangle given its vertex coordinates.
 /***************************************************************************//**
-  \param    c <points-3d | points-2d>  A list, [v1, v2, v3], the 3d or 2d
-            vertex coordinates.
+  \param    c <points-3d | points-2d>  A list, [v1, v2, v3], the 3d or
+              2d vertex coordinates.
 
   \returns  <decimal-list-3> A list of side lengths [s1, s2, s3].
 
@@ -71,10 +116,9 @@
 
     \amu_eval ( object=triangle_ppp2sss ${object_diagram_2d} )
 
-    No validation is performed on the input coordinates. Collinear or
-    coincident vertices produce zero-length sides without warning; the
-    caller is responsible for ensuring that \p c describes a
-    non-degenerate triangle. See [Wikipedia] for more information.
+    See [Wikipedia] for more information.
+
+  \amu_eval(${note_no_validation})
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
 *******************************************************************************/
@@ -97,7 +141,7 @@ function triangle_ppp2sss
 //! Compute the side lengths of a triangle given two sides and the included angle.
 /***************************************************************************//**
   \param    v <decimal-list-3> A list, [s1, a3, s2], the side lengths
-            and the included angle.
+              and the included angle.
 
   \returns  <decimal-list-3> A list of side lengths [s1, s2, s3].
 
@@ -107,8 +151,9 @@ function triangle_ppp2sss
 
     \amu_eval ( object=triangle_sas2sss ${object_diagram_2d} )
 
-    No verification is performed to ensure that the given sides specify
-    a valid triangle. See [Wikipedia] for more information.
+    See [Wikipedia] for more information.
+
+  \amu_eval(${note_no_validation})
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
 *******************************************************************************/
@@ -129,7 +174,7 @@ function triangle_sas2sss
 //! Compute the side lengths of a triangle given a side and two adjacent angles.
 /***************************************************************************//**
   \param    v <decimal-list-3> A list, [a1, s3, a2], the side length
-            and two adjacent angles.
+              and two adjacent angles.
 
   \returns  <decimal-list-3> A list of side lengths [s1, s2, s3].
 
@@ -166,7 +211,7 @@ function triangle_asa2sss
 //! Compute the side lengths of a triangle given a side, one adjacent and the opposite angle.
 /***************************************************************************//**
   \param    v <decimal-list-3> A list, [a1, a2, s1], a side length,
-            one adjacent and the opposite angle.
+              one adjacent and the opposite angle.
 
   \returns  <decimal-list-3> A list of side lengths [s1, s2, s3].
 
@@ -203,8 +248,10 @@ function triangle_aas2sss
 //! Compute a set of vertex coordinates for a triangle given its side lengths in 2D.
 /***************************************************************************//**
   \param    v <decimal-list-3> A list, [s1, s2, s3], the side lengths.
+
   \param    a <integer> The axis alignment index
-            < \b x_axis_ci | \b y_axis_ci >.
+              < \b x_axis_ci | \b y_axis_ci >.
+
   \param    cw <boolean> Order vertices clockwise.
 
   \returns  <points-2d> A list of vertex coordinates [v1, v2, v3],
@@ -271,8 +318,9 @@ function triangle2d_sss2ppp
 //! Compute the area of a triangle given its vertex coordinates in 2D.
 /***************************************************************************//**
   \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
+
   \param    s <boolean> When \b true, return the signed area; when
-            \b false (default), return the absolute area.
+              \b false (default), return the absolute area.
 
   \returns  <decimal> The area of the given triangle, signed when
             \p s = \b true.
@@ -283,6 +331,8 @@ function triangle2d_sss2ppp
     clockwise and positive for counter-clockwise, following the same
     convention as polygon_area(). When \p s = \b false the absolute
     value is returned regardless of vertex ordering.
+
+  \amu_eval(${note_no_validation})
 *******************************************************************************/
 function triangle2d_area
 (
@@ -298,7 +348,8 @@ function triangle2d_area
 //! Compute the centroid of a triangle.
 /***************************************************************************//**
   \param    c <points-3d | points-2d>  A list of 3d or 2d vertex
-            coordinates [v1, v2, v3].
+              coordinates [v1, v2, v3].
+
   \param    d <integer> The number of dimensions [2:3].
 
   \returns  <point-3d | point-2d> The centroid coordinate.
@@ -314,6 +365,8 @@ function triangle2d_area
       length across all three vertices, useful for mixed-dimension input.
 
     See [Wikipedia] for more information.
+
+  \amu_eval(${note_no_validation})
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Centroid
 *******************************************************************************/
@@ -342,6 +395,8 @@ function triangle_centroid
 
     The interior point for which distances to the sides of the triangle
     are equal. See [Wikipedia] for more information.
+
+  \amu_eval(${note_no_validation})
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
 *******************************************************************************/
@@ -374,6 +429,8 @@ function triangle2d_incenter
 
     See [Wikipedia] for more information.
 
+  \amu_eval(${note_no_validation})
+
   [Wikipedia]: https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
 *******************************************************************************/
 function triangle2d_inradius
@@ -395,8 +452,9 @@ function triangle2d_inradius
 //! Compute the center coordinate of a triangle's excircle in 2D.
 /***************************************************************************//**
   \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
-  \param    vi <integer> The vertex index (1, 2, or 3). Returns the excircle
-            center opposite vertex \p vi.
+
+  \param    vi  <integer> The vertex index (1, 2, or 3). Returns the
+                excircle center opposite vertex \p vi.
 
   \returns  <point-2d> The excircle center coordinate [x, y].
 
@@ -407,6 +465,8 @@ function triangle2d_inradius
     extensions of the other two sides away from vertex \p vi. Returns
     \b origin2d for any \p vi value other than 1, 2, or 3.
     See [Wikipedia] for more information.
+
+  \amu_eval(${note_no_validation})
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
 *******************************************************************************/
@@ -436,8 +496,9 @@ function triangle2d_excenter
 //! Compute the exradius of a triangle's excircle in 2D.
 /***************************************************************************//**
   \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
-  \param    vi <integer> The vertex index (1, 2, or 3). Returns the exradius
-            of the excircle opposite vertex \p vi.
+
+  \param    vi  <integer> The vertex index (1, 2, or 3). Returns the
+                exradius of the excircle opposite vertex \p vi.
 
   \returns  <decimal> The excircle radius opposite vertex \p vi, or
             \b 0 for any \p vi value other than 1, 2, or 3.
@@ -449,6 +510,8 @@ function triangle2d_excenter
     r_i = sqrt(s * (s-s_j) * (s-s_k) / (s-s_i)), where s_i, s_j, s_k
     are the sides opposite each vertex in order. See [Wikipedia] for
     more information.
+
+  \amu_eval(${note_no_validation})
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
 *******************************************************************************/
@@ -476,7 +539,8 @@ function triangle2d_exradius
 //! Compute the coordinate of a triangle's circumcenter.
 /***************************************************************************//**
   \param    c <points-3d | points-2d>  A list of 3d or 2d vertex
-            coordinates [v1, v2, v3].
+              coordinates [v1, v2, v3].
+
   \param    d <integer> The number of dimensions [2:3].
 
   \returns  <point-3d | point-2d> The circumcenter coordinate.
@@ -496,6 +560,8 @@ function triangle2d_exradius
       length across all three vertices, useful for mixed-dimension input.
 
     See [Wikipedia] for more information.
+
+  \amu_eval(${note_no_validation})
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Circumscribed_circle
 *******************************************************************************/
@@ -550,6 +616,7 @@ function triangle2d_is_cw
 //! Test if a point is inside a triangle in 2d.
 /***************************************************************************//**
   \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
+
   \param    p <point-2d> A test point coordinate [x, y].
 
   \returns  <boolean> \b true when the point is strictly inside the
@@ -608,6 +675,7 @@ function triangle2d_is_pit
 //! Compute the rounding center coordinate for a given radius of a triangle vertex in 2D.
 /***************************************************************************//**
   \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
+
   \param    r <decimal> The vertex rounding radius.
 
   \returns  <point-2d> The rounding arc center coordinate for vertex v2.
@@ -644,6 +712,7 @@ function triangle2d_vround3_center
 //! Compute the rounding tangent coordinates for a given radius of a triangle vertex in 2D.
 /***************************************************************************//**
   \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
+
   \param    r <decimal> The vertex rounding radius.
 
   \returns  <points-2d> A list [t1, t2] of the two tangent point
