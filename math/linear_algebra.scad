@@ -44,6 +44,49 @@
 
 //----------------------------------------------------------------------------//
 
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+  \details
+  \anchor linear_algebra_conventions
+  \par Conventions
+
+    The following conventions apply to all functions in this group.
+    - The first parameter is always \p c — a list of nd coordinate
+      points. All functions return a list of the same length and
+      dimensionality as \p c.
+    - Dimensionality \p d is auto-detected from the first element of
+      \p c using \c len(first(c)). Passing an empty list always returns
+      an empty list. Mixing point dimensions within \p c is undefined
+      behaviour.
+    - The origin parameter \p o is optional in all spatial functions
+      that have a fixed point (mirror, rotate, scale, shear, resize).
+      When \b undef (default), \p o is set to \p origin2d or \p origin3d
+      based on \p d. Exception: in the 3D Euler rotation branch of
+      rotate_p(), \p o is silently ignored — see rotate_p() for details.
+    - When a transformation parameter (\p v, \p a, \p m, \p s, \p av)
+      is \b undef, that transformation is a no-op and \p c is returned
+      unchanged. This allows safe use in composed pipelines without
+      conditional wrappers at the call site.
+    - The parameter name \p m is overloaded by role across the group:
+      a 4x4 homogeneous matrix in multmatrix_p(); a mirror-plane or
+      mirror-line normal vector in mirror_p() and transform_p(); and a
+      shear-factor list in shear_p() (where the parameter has been
+      renamed \p s). The type is stated explicitly in each function's
+      \p m or \p s parameter entry.
+    - The parameter name \p v is overloaded by role across the group:
+      a per-dimension translation list or scalar in translate_p(); a
+      per-dimension scale list or scalar in scale_p(); and a
+      per-dimension target-extent list or scalar in resize_p(). In
+      rotate_p() and transform_p() the rotation axis vector uses the
+      distinct name \p av to avoid ambiguity.
+    - All angles are in \b degrees, following OpenSCAD convention.
+    - No input validation is performed unless an explicit \c assert is
+      present. Wrong-dimension inputs, non-numeric values, or zero
+      vectors produce \b undef, \b nan, or \b inf without warning.
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+
 //! Multiply all coordinates by a 4x4 transformation matrix in 3D.
 /***************************************************************************//**
   \param    c <points-3d> A list of 3d coordinate points.
@@ -57,6 +100,26 @@
             the transformation matrix.
 
   \details
+
+    Applies a homogeneous transformation matrix \p m to a list of 3D
+    coordinate points. Each input point `[x, y, z]` is treated as a
+    homogeneous vector `[x, y, z, 1]` (i.e. `w = 1` is implicit — no
+    perspective divide is performed). The output is the 3-component
+    result of multiplying the upper 3×4 block of \p m by each
+    homogeneous input vector:
+
+    ```
+    | m[0][0]  m[0][1]  m[0][2]  m[0][3] |   | x |   | x' |
+    | m[1][0]  m[1][1]  m[1][2]  m[1][3] | × | y | = | y' |
+    | m[2][0]  m[2][1]  m[2][2]  m[2][3] |   | z |   | z' |
+                                              | 1 |
+    ```
+
+    The fourth row of \p m (normally `[0, 0, 0, 1]` for affine
+    transforms) is never read, so a 3×4 matrix is sufficient.
+    Combined rotation and translation can be encoded as:
+    - Columns 0–2: the 3×3 rotation/scale/shear sub-matrix.
+    - Column 3: the translation vector `[tx, ty, tz]`.
 
     See [Wikipedia] and [multmatrix] for more information.
 
@@ -388,8 +451,9 @@ function rotate_p
 
   \returns  <points-3d | points-2d> A list of 3d or 2d transformed
             coordinates. Operations are applied in order: mirror about
-            \p o, rotate about \p o, translate by \p t. Rotation order
-            is rz, ry, rx.
+            \p o, rotate about \p o, translate by \p t. In 3D Euler
+            mode, rotation order is extrinsic Z, Y, X (equivalent to
+            OpenSCAD \c rotate([ax,ay,az])).
 
   \details
 
@@ -611,6 +675,12 @@ function scale_p
     about the coordinate origin by applying an additional translation
     of `-v[i] / 2` after scaling, and \p o is ignored. When \p v is
     \b undef the point list is returned unchanged.
+
+    \note The bounding box is computed by iterating \p c once per
+          dimension, giving O(n*d) total work where n = len(c) and
+          d = len(first(c)). For typical 2D or 3D inputs this is
+          negligible, but callers passing very large point lists should
+          be aware of the linear scaling with both n and d.
 
     See [Wikipedia] for more information on [transformation matrix].
 
