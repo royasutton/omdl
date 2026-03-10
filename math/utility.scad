@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2017-2019
+  \date   2017-2019, 2026
 
   \copyright
 
@@ -44,10 +44,41 @@
 
 //----------------------------------------------------------------------------//
 
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+
+  \details
+
+  \anchor utility_conventions
+
+  \par Conventions
+
+    The following conventions apply to all functions in this group.
+    - OpenSCAD special variables \p $fn, \p $fa, and \p $fs are read
+      directly at the call site and are never passed as parameters;
+      their values at the point of call control fragment counts.
+    - \c grid_fine is an omdl library-level constant defining the
+      minimum meaningful geometry size. Inputs below this threshold
+      are treated as degenerate and return safe fallback values.
+    - Bit-field parameters (e.g. \p m in histogram()) are documented
+      with an explicit bit-table in the function's \c \\details block.
+      Bit 0 always selects the primary output mode (0 = numerical,
+      1 = string). Higher bits select sub-modes within the string path.
+    - HTML passthrough parameters (\p cb, \p cp, \p ca, \p cf, \p d)
+      follow the interface of strl_html() exactly; see its documentation
+      for type and semantics. They are ignored in non-html modes.
+    - \c tau is an omdl library constant equal to 2*PI.
+    - No input validation is performed unless an explicit \c assert is
+      present. Out-of-range or wrongly-typed inputs produce \b undef,
+      \b nan, or \b inf without warning.
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+
 //! Return facets number for the given arc radius.
 /***************************************************************************//**
   \param    r <decimal> The arc radius. Must be >= 0. Defaults to \b 0,
-            which returns \b 3 (the minimum facet count).
+              which returns \b 3 (the minimum facet count).
 
   \returns  <integer> The number of facets.
 
@@ -65,10 +96,10 @@
     - otherwise: returns \c ceil(max(min(360/\p $fa, r*tau/\p $fs), 5)),
       where \c tau = 2*PI is an omdl library constant.
 
-    \note Passing a negative \p r is invalid and caught by an internal
-          assert. If \p $fa is 0, \c 360/$fa produces \c inf; \c min()
-          then selects the \c r*tau/$fs term, which is the correct
-          fallback behaviour.
+  \note Passing a negative \p r is invalid and caught by an internal
+        assert. If \p $fa is 0, \c 360/$fa produces \c inf; \c min()
+        then selects the \c r*tau/$fs term, which is the correct
+        fallback behaviour.
 *******************************************************************************/
 function get_fn
 (
@@ -86,31 +117,36 @@ function get_fn
   \param    v <data> A list of values.
   \param    m <integer> The output mode (a 5-bit encoded integer).
 
-  \param    cs <string-list-4> A list of strings \c [cs[0], cs[1], cs[2], cs[3]]
-            used only with custom formatting (m = 15), mapping to
-            \c s1, \c s2, \c s3, and \c fs respectively in the output
-            template: \c s1, value, \c s2, frequency, \c s3, \c fs.
+  \param    cs  <string-list-4> A list of strings \c [cs[0], cs[1],
+                cs[2], cs[3]] used only with custom formatting (m =
+                15), mapping to \c s1, \c s2, \c s3, and \c fs
+                respectively in the output template: \c s1, value, \c
+                s2, frequency, \c s3, \c fs.
 
-  \param    cb <string-list> Bold tag specifiers passed to strl_html().
-            Only used in html and custom string modes. See strl_html()
-            for type and semantics.
-  \param    cp <string-list> HTML tag-pair specifiers passed to strl_html().
-            Only used in html and custom string modes. See strl_html()
-            for type and semantics.
-  \param    ca <string-list> HTML attribute specifiers passed to strl_html().
-            Only used in html and custom string modes. See strl_html()
-            for type and semantics.
-  \param    cf <string-list> Font specifiers passed to strl_html().
-            Only used in html and custom string modes. See strl_html()
-            for type and semantics.
+  \param    cb  <string-list> Bold tag specifiers passed to
+                strl_html(). Only used in html and custom string modes.
+                See strl_html() for type and semantics.
+
+  \param    cp  <string-list> HTML tag-pair specifiers passed to
+                strl_html(). Only used in html and custom string modes.
+                See strl_html() for type and semantics.
+
+  \param    ca  <string-list> HTML attribute specifiers passed to
+                strl_html(). Only used in html and custom string modes.
+                See strl_html() for type and semantics.
+
+  \param    cf  <string-list> Font specifiers passed to strl_html().
+                Only used in html and custom string modes. See
+                strl_html() for type and semantics.
+
   \param    d <boolean> When \b true, emit HTML debug output via
-            strl_html(). Default \b false.
+              strl_html(). Default \b false.
 
   \returns  <decimal-list | string> The occurrence frequencies of \p v.
             When \p m bit 0 = \b 0 (numerical mode), returns a list of
             \c [value, count] pairs. When \p m bit 0 = \b 1 (string
-            mode), returns a single concatenated string, except for
-            m = \b 1 which returns a list of bare \c "NxM" strings.
+            mode), returns a single concatenated string, except for m =
+            \b 1 which returns a list of bare \c "NxM" strings.
 
   \details
 
@@ -147,11 +183,11 @@ function get_fn
     - \c m=3 (text format): \c "3<a> 2<b> 1<c>"
     - \c m=9 (html format): formatted as superscript-count + italic-value pairs
 
-    \note histogram() uses unique() followed by a find() scan per unique
-          value. Both are O(n) per call over the full list, making the
-          combined complexity O(n*k) where k is the number of unique
-          values — effectively O(n^2) in the worst case. Avoid passing
-          very large lists.
+  \note histogram() uses unique() followed by a find() scan per unique
+        value. Both are O(n) per call over the full list, making the
+        combined complexity O(n*k) where k is the number of unique
+        values — effectively O(n^2) in the worst case. Avoid passing
+        very large lists.
 *******************************************************************************/
 function histogram
 (
