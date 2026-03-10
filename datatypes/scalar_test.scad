@@ -179,6 +179,7 @@ function is_decimal
 (
   v
 ) = !is_num(v) ? false
+  : is_inf(v) ? false   // catch infinite numbers
   : ((v % 1) != 0);
 
 //! Test if a value is a range definition.
