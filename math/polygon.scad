@@ -46,6 +46,7 @@
   \addtogroup \amu_eval(${group})
 
   \details
+
   \anchor polygon_properties_conventions
 
   \par Coordinate and Winding Convention

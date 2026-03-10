@@ -42,6 +42,38 @@
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+
+  \details
+
+  \anchor polytope_properties_conventions
+
+    - Coordinates are given as \c [[x, y, z], ...] in 3d or \c [[x, y], ...]
+      in 2d. Each face in \p f is an ordered list of coordinate indexes
+      into \p c.
+    - For polygons \p f is optional; when omitted the listed order of \p c
+      forms the single implicit path.
+    - Face vertex indexes are ordered \b clockwise when viewed from
+      \b outside the solid (right-hand rule outward normal). The \p cw
+      parameter defaults to \b true (clockwise); set it to \b false to
+      negate the returned normal for counter-clockwise faces.
+    - Normals are derived from the \b first three vertices of a face only.
+      A collinear first triple produces a zero normal vector silently.
+      Normal vectors are \b not normalised to unit length unless stated.
+    - To identify a face, \p l (explicit index list) takes precedence over
+      \p i (index into \p f). Passing both is permitted; \p l wins silently.
+      Returns \b undef when a required identification is absent.
+    - Edges are represented as \c [[i0, i1], ...] sorted smallest-index-first.
+      The optional \p e parameter is computed on-demand when omitted; callers
+      iterating over edges \b must pre-compute and pass \p e explicitly.
+    - Functions whose names include the \c _ft_ infix use \b fan triangulation,
+      which is correct for \b convex faces only. Fan triangulation preserves
+      vertex winding; use an ear-clipping triangulator for concave faces.
+    - Lengths and bounding-box values are in the units of \p c. Angles are
+      in degrees.
+*******************************************************************************/
+
 //----------------------------------------------------------------------------//
 // General
 //----------------------------------------------------------------------------//
@@ -95,6 +127,17 @@ function polytope_faces2edges
   \returns  <line-3d | line-2d> The line as a pair of coordinates.
 
   \details
+
+    Two mutually exclusive methods identify the line:
+    - When \p l is defined it takes precedence over \p i. The line is
+      constructed directly from the two coordinate indexes in \p l and
+      neither \p f nor \p e is consulted. \p r has no effect in this path.
+    - When only \p i is given the edge list is used to look up the two
+      endpoint indexes. \p r reverses the returned point order: when
+      \b false (default) the line runs from \c el[i][0] to \c el[i][1];
+      when \b true it runs from \c el[i][1] to \c el[i][0].
+
+    Returns \b undef when neither \p l nor \p i is provided.
 
   \note     Parameter \p f is optional for polygons. When it is not
             given, the listed order of the coordinates \p c establishes
@@ -246,17 +289,26 @@ function polytope_bounding_box_pf
             the shape where each face is a list of coordinate indexes.
 
   \returns  <integer-list-3-list> A list of triangular faces that enclose
-            the polytope where each face is a list of three coordinate
-            indexes with vertex ordering is maintained.
+            the polytope, where each face is a list of exactly three
+            coordinate indexes.
 
   \details
+
+    Each n-vertex face produces n-2 triangles by fanning from its first
+    vertex: triangle k is \c [fi[0], fi[k], fi[k+1]] for k in [1, n-2].
+    Vertex winding is preserved: all output triangles inherit the winding
+    direction of their source face, so outward normals remain consistent
+    with the input. The total number of output triangles equals the sum
+    of (vertex_count - 2) over all input faces.
 
     See [Wikipedia] for more information on [fan triangulation].
 
     [Wikipedia]: https://en.wikipedia.org/wiki/Polygon_triangulation
     [fan triangulation]: https://en.wikipedia.org/wiki/Fan_triangulation
 
-  \warning  This method does not support concave polytopes.
+  \warning  Fan triangulation is only correct for convex faces. Concave
+            faces will produce overlapping or inverted triangles. For
+            concave polytopes use an ear-clipping triangulator instead.
 *******************************************************************************/
 function polytope_ft_triangulate
 (
@@ -450,12 +502,12 @@ function polytope_edge_normal
     The face can be identified using either parameter \p i or \p l.
     When using \p l, the parameter \p f is not required.
 
-    The normal is computed from the first three vertices of the face
-    only. For triangulated faces this is exact. For higher-arity faces
-    (quads, n-gons) the first three vertices must not be collinear;
+    The normal is computed from the first three vertices of the resolved
+    face only. For triangulated faces this is exact. For higher-arity
+    faces (quads, n-gons) the first three vertices must not be collinear;
     if they are, the returned vector will be a zero vector. Callers
     working with untriangulated meshes should ensure the face is planar
-    and that \c ci[0], \c ci[1], \c ci[2] form a non-degenerate triangle.
+    and that its first three vertices form a non-degenerate triangle.
 
   \note     Parameter \p f is optional for polygons. When it is not
             given, the listed order of the coordinates \p c establishes
@@ -720,13 +772,27 @@ function polytope_edge_angles
             the shape where each face is a list of coordinate indexes.
   \param    e <integer-list-2-list> A list of edges where each edge is
             a list of two coordinate indexes.
-  \param    d <integer> The number of significant figures used when
-            comparing lengths and angles.
+  \param    d <integer> The number of significant figures to retain when
+            rounding lengths and angles before comparing them for
+            uniqueness. Increase \p d to tighten the comparison tolerance;
+            decrease it to allow more floating-point variation. Default 6.
 
-  \returns  <boolean> \b true when there is both a single edge length
-            and a single edge angle and \b false otherwise.
+  \returns  <boolean> \b true when all edge lengths are equal and all
+            adjacent edge angles are equal (to \p d significant figures),
+            \b false otherwise.
 
   \details
+
+    All edge lengths are collected via polytope_edge_lengths() and all
+    adjacent edge angles via polytope_edge_angles(). Each list is rounded
+    to \p d significant figures with round_s() and then deduplicated with
+    unique(). The polytope is considered regular iff both deduplicated
+    lists contain exactly one distinct value.
+
+    Note that this tests geometric regularity of the edges and vertex
+    angles, not full face regularity. For a polyhedron with non-planar
+    or non-congruent faces, the test may return \b true even though the
+    faces are not regular polygons.
 
   \note     When \p e is not specified, it is computed from \p f using
             polytope_faces2edges().
