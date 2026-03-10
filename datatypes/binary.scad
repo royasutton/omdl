@@ -268,40 +268,30 @@ function binary_not
 
 //! Base-2 binary left-shift operation for an integer.
 /***************************************************************************//**
-  \param    v <integer> An integer value.
-  \param    s <integer> The number of bits to shift.
-  \param    bm (an internal recursion loop variable).
-  \param    bv (an internal recursion loop variable).
+  \param    v <integer> A non-negative integer value.
+  \param    s <integer> A non-negative number of bits to shift.
 
-  \returns  (1) <integer> the binary left-shift of \p v
-                by \p s bits.
-            (2) Returns \b undef when \p v or \p s is not an integer.
+  \returns  (1) <integer> the binary left-shift of \p v by \p s bits.
+            (2) Returns \b undef when \p v or \p s is not an integer
+                or when either is negative.
 *******************************************************************************/
 function binary_ishl
 (
   v,
-  s = 1,
-  bm = 1,
-  bv = 1
+  s = 1
 ) = !is_integer(v) ? undef
   : !is_integer(s) ? undef
-    // max bit position
-  : (bm < v) ? binary_ishl(v, s, bm*2, bv)
-    // shift value
-  : (s  > 0) ? binary_ishl(v*2, s-1, bm, bv)
-  : (bv > bm) ? 0
-    // encoded result
-  : ((v % 2) > 0) ? binary_ishl(floor(v/2), s, bm, bv*2) + bv
-                  : binary_ishl(floor(v/2), s, bm, bv*2);
+  : (v < 0 || s < 0) ? undef
+  : floor(v * pow(2, s));
 
 //! Base-2 binary right-shift operation for an integer.
 /***************************************************************************//**
-  \param    v <integer> An integer value.
+  \param    v <integer> A non-negative integer value.
   \param    s <integer> The number of bits to shift.
 
-  \returns  (1) <integer> the binary right-shift of \p v
-                by \p s bits.
-            (2) Returns \b undef when \p v or \p s is not an integer.
+  \returns  (1) <integer> the binary right-shift of \p v by \p s bits.
+            (2) Returns \b undef when \p v or \p s is not an integer
+                or when either is negative.
 *******************************************************************************/
 function binary_ishr
 (
@@ -309,8 +299,8 @@ function binary_ishr
   s = 1
 ) = !is_integer(v) ? undef
   : !is_integer(s) ? undef
-  : (s <= 0) ? v
-  : binary_ishr(floor(v/2), s-1);
+  : (v < 0 || s < 0) ? undef
+  : floor(v / pow(2, s));
 
 //! @}
 //! @}
