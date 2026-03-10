@@ -70,10 +70,10 @@ $map_strict = false;
 //! Return the index of a map key.
 /***************************************************************************//**
   \param    m <map> A list of N key-value map pairs.
-  \param    k <string> A map key.
+  \param    k \<value> A map key.
 
   \returns  <integer> The index of the map entry if it exists.
-            Returns \b undef if \p key is not a string or does not exists.
+            Returns \b undef if \p key does not exist.
 *******************************************************************************/
 function map_get_index
 (
@@ -85,7 +85,7 @@ function map_get_index
 //! Test if a key exists.
 /***************************************************************************//**
   \param    m <map> A list of N key-value map pairs.
-  \param    k <string> A map key.
+  \param    k \<value> A map key.
 
   \returns  <boolean> \b true when the key exists and \b false otherwise.
 *******************************************************************************/
@@ -98,7 +98,7 @@ function map_exists
 //! Get the map value associated with a key.
 /***************************************************************************//**
   \param    m <map> A list of N key-value map pairs.
-  \param    k <string> A map key.
+  \param    k \<value> A map key.
 
   \returns  \<value> The value associated  with \p key.
             Returns \b undef if \p key does not exists.
@@ -115,7 +115,7 @@ function map_get_value
 /***************************************************************************//**
   \param    m <map> A list of N key-value map pairs.
 
-  \returns  <string-list-N> A list of key strings for all N map entries.
+  \returns  <list-N> A list of keys for all N map entries.
 *******************************************************************************/
 function map_get_keys
 (
@@ -137,7 +137,7 @@ function map_get_values
 /***************************************************************************//**
   \param    m1 <map> A list of N key-value map pairs.
   \param    m2 <map> A list of N key-value map pairs.
-  \param    k <string> A map key.
+  \param    k \<value> A map key.
   \param    d \<value> A default return value.
 
   \returns  \<value> The first value associated with \p key that exists
@@ -207,7 +207,7 @@ function map_update
       mk = map_get_keys(m),
       uk = map_get_keys(u),
 
-      ak = common(uk, not_common(mk, uk)),
+      ak = [for (k = uk) if (!map_exists(m, k)) k],
 
       missing_keys = is_empty( ak ) || ignore
     )
@@ -329,9 +329,9 @@ function map_to_table
 
   \details
 
-    Check that: (1) each entry has key-value 2-tuple, (2) each key is a
-    string, and (3) key identifiers are unique. When there are no
-    errors, the \b empty_lst is returned.
+    Check that: (1) each entry has key-value 2-tuple and (2) key
+    identifiers are unique. When there are no errors, the \b empty_lst
+    is returned.
 *******************************************************************************/
 function map_errors
 (
@@ -376,8 +376,8 @@ function map_errors
 
   \details
 
-    Check that: (1) each entry has key-value 2-tuple, (2) each key is a
-    string, and (3) key identifiers are unique.
+    Check that: (1) each entry has key-value 2-tuple and (2) key
+    identifiers are unique.
 *******************************************************************************/
 module map_check
 (
