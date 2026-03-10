@@ -230,6 +230,13 @@ function triangle2d_sss2ppp
     s2  = v[1],
     s3  = v[2],
 
+    _   = assert
+          (
+            s1 > 0 && s2 > 0 && s3 > 0
+            && s1 < s2+s3 && s2 < s1+s3 && s3 < s1+s2,
+            "triangle2d_sss2ppp: sides must be positive and satisfy the triangle inequality."
+          ),
+
     v1  = origin2d,
 
     v2  = (a == x_axis_ci) ?
@@ -531,7 +538,7 @@ function triangle2d_is_pit
 
     d = ((v2[1]-v3[1]) * (v1[0]-v3[0]) + (v3[0]-v2[0]) * (v1[1]-v3[1]))
   )
-    (d == 0) ? true
+    (d == 0) ? undef
   : let
   (
     a = ((v2[1]-v3[1]) * ( p[0]-v3[0]) + (v3[0]-v2[0]) * ( p[1]-v3[1])) / d
@@ -564,7 +571,15 @@ function triangle2d_vround3_center
 (
   c,
   r
-) = let( ir = triangle2d_inradius(c) )
+) = let
+    (
+      ir = triangle2d_inradius(c),
+      _  = assert
+           (
+             r < ir,
+             "triangle2d_vround3_center: r must be less than the inradius ir; r >= ir causes division by zero."
+           )
+    )
     (c[1]-r/(r-ir) * triangle2d_incenter(c)) * (ir-r)/ir;
 
 //! Compute the rounding tangent coordinates for a given radius of a triangle vertex in 2D.

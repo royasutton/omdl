@@ -49,6 +49,8 @@
 
   \anchor polytope_properties_conventions
 
+  \par Coordinate and Winding Convention
+
     - Coordinates are given as \c [[x, y, z], ...] in 3d or \c [[x, y], ...]
       in 2d. Each face in \p f is an ordered list of coordinate indexes
       into \p c.
