@@ -71,8 +71,10 @@
 
     \amu_eval ( object=triangle_ppp2sss ${object_diagram_2d} )
 
-    No verification is performed to ensure that the given sides specify
-    a valid triangle. See [Wikipedia] for more information.
+    No validation is performed on the input coordinates. Collinear or
+    coincident vertices produce zero-length sides without warning; the
+    caller is responsible for ensuring that \p c describes a
+    non-degenerate triangle. See [Wikipedia] for more information.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Solution_of_triangles
 *******************************************************************************/
@@ -290,8 +292,13 @@ function triangle2d_area
 
   \details
 
-    When \p d is assigned \b 0, \p d is set to the minimun number of
-    coordinates of the vertices in \p c.
+    The output dimensionality is controlled by \p d:
+    - \p d = \b 2 (default): returns a 2d point using only the x and y
+      components of each vertex. When 3d coordinates are passed with the
+      default \p d = \b 2, the z-component is silently discarded.
+    - \p d = \b 3: returns a 3d point using x, y, and z components.
+    - \p d = \b 0: auto-detects dimensionality as the minimum coordinate
+      length across all three vertices, useful for mixed-dimension input.
 
     See [Wikipedia] for more information.
 
@@ -455,11 +462,19 @@ function triangle2d_exradius
 
   \details
 
-    A circle that passes through all of the vertices of the triangle.
-    The radius is the distance from the circumcenter to any of vertex.
-    When \p d is assigned \b 0, \p d is set to the minimun number of
-    coordinates of the vertices in \p c. See [Wikipedia] for more
-    information.
+    The circumcenter is the center of the circumscribed circle — the
+    circle that passes through all three vertices. The circumradius is
+    the distance from the circumcenter to any vertex.
+
+    The output dimensionality is controlled by \p d:
+    - \p d = \b 2 (default): returns a 2d point using only the x and y
+      components of each vertex. When 3d coordinates are passed with the
+      default \p d = \b 2, the z-component is silently discarded.
+    - \p d = \b 3: returns a 3d point using x, y, and z components.
+    - \p d = \b 0: auto-detects dimensionality as the minimum coordinate
+      length across all three vertices, useful for mixed-dimension input.
+
+    See [Wikipedia] for more information.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Circumscribed_circle
 *******************************************************************************/
@@ -516,10 +531,19 @@ function triangle2d_is_cw
   \param    c <points-2d> A list of vertex coordinates [v1, v2, v3].
   \param    p <point-2d> A test point coordinate [x, y].
 
-  \returns  <boolean> \b true when the point is inside the polygon and
-            \b false otherwise.
+  \returns  <boolean> \b true when the point is strictly inside the
+            triangle, \b false when it is strictly outside, and
+            \b undef when the triangle is degenerate (collinear vertices).
 
   \details
+
+    Uses barycentric coordinates to test point inclusion. Points that
+    lie exactly on an edge or vertex of the triangle are considered
+    \b outside (strict interior test); the boundary is excluded.
+
+    Returns \b undef when the three vertices are collinear (zero-area
+    triangle), matching the convention used by triangle2d_is_cw() and
+    triangle2d_area().
 
     See [Wikipedia] for more information.
 
