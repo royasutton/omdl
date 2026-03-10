@@ -40,6 +40,40 @@
 /***************************************************************************//**
   \amu_include (include/amu/group_in_parent_start.amu)
   \amu_include (include/amu/includes_required.amu)
+*******************************************************************************/
+
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+
+  \details
+  \anchor polygon_properties_conventions
+
+  \par Coordinate and Winding Convention
+
+    All functions in this group operate on polygons defined by a list
+    of 2d cartesian coordinates \p c and an optional list of paths \p p,
+    following OpenSCAD's native \c polygon() convention:
+
+    - Coordinates are given as \c [[x,y], ...].
+    - When \p p is not supplied, the listed order of the coordinates is
+      used as the single implicit path; see the \c note_p_not_defined
+      note attached to individual functions.
+    - The primary (outer boundary) path is ordered \b counter-clockwise
+      when viewed from above in the standard 2d coordinate system (y-up).
+      Secondary (hole) paths must use the \b opposite winding to the
+      primary path, matching the convention of OpenSCAD's \c polygon()
+      and \c linear_extrude().
+    - Shape-generation functions (polygon_regular_p(),
+      polygon_trapezoid_p(), polygon_arc_p(), polygon_elliptical_sector_p(),
+      etc.) default to \p cw = \b true and therefore produce
+      \b clockwise output.  Callers that pass generated coordinates
+      directly to \c polygon() or to property/test functions that assume
+      CCW winding must either pass \p cw = \b false to the generator, or
+      reverse the coordinate list after the fact.
+    - Functions in this library that require a specific winding — such as
+      polygon_linear_extrude_pf() — call polygon_is_clockwise() and
+      normalise the winding internally; callers are \em not required to
+      pre-normalise their input.
 
   \amu_define note_p_not_defined
   (
@@ -52,7 +86,6 @@
     \warning  This function does not track secondary shapes subtraction
               as implemented by the polygon() function.
   )
-
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
