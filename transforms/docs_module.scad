@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Transform)
+    \amu_define group_name  (Transforms)
     \amu_define group_brief (Geometric transformation and shape replication.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)

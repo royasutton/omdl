@@ -82,7 +82,7 @@
     directly in source using [Doxygen] and [openscad-amu].
 
   - **Validation-driven development:** automated scripts verify
-    functionality of core primities  across evolving OpenSCAD versions.
+    functionality of core primitives across evolving OpenSCAD versions.
 
   Instead of treating OpenSCAD purely as a shape generator, omdl
   introduces a structured mechanical design layer that helps bridge
@@ -90,27 +90,20 @@
 
   \section intro_philosophy Design Philosophy
 
-  omdl is designed for users who want to create mechanically meaningful
-  models intended for CNC-based fabrication. The library emphasizes
-  reusable design patterns that reflect real engineering workflows,
-  including assemblies, components, fabrication tooling, and drafting
-  aids. By providing structured, parametric building blocks, omdl
-  enables designers to move beyond low-level geometry.
+  omdl is shaped by a set of design decisions that follow from its
+  engineering focus.
 
-  Key goals include:
+  Geometry is treated as a consequence of mechanical decisions, not
+  their starting point. Rather than exposing low-level shape primitives
+  as the primary interface, omdl encourages working at the level of
+  components, operations, and assemblies — describing what a part must
+  achieve before specifying how it is constructed.
 
-  - Provide higher-level abstractions built on standard OpenSCAD
-    primitives.
-
-  - Separate geometry construction from mechanical intent.
-
-  - Formalizes parameter communication and late-binding of
-    implementation details across modules.
-
-  - Encourage consistent dimensional practices through explicit unit
-    conversion.
-
-  - Maintain readable source code that doubles as its own documentation.
+  Modules are designed to be included individually as needed, helping
+  keep projects lightweight and reducing unnecessary dependencies. This
+  modular approach also supports interoperability, making it easier to
+  integrate omdl alongside other OpenSCAD design libraries without
+  imposing a rigid project structure.
 
   The library is organized into modular groups that represent distinct
   functional areas, including tooling utilities, drafting operations,
@@ -118,12 +111,6 @@
   mechanical components. This structure encourages separation of
   concerns while allowing developers to work at the appropriate level
   of abstraction for their design.
-
-  Modules are designed to be included individually as needed, helping
-  keep projects lightweight and reducing unnecessary dependencies. This
-  modular approach also supports interoperability, making it easier to
-  integrate omdl alongside other OpenSCAD design libraries without
-  imposing a rigid project structure.
 
   \section intro_docs Documentation Approach
 
@@ -164,10 +151,15 @@
 
   \section intro_getting_started Getting Started
 
-  A minimal example below demonstrates how omdl modules can be combined
-  to construct a fabrication-oriented component. The example builds a
-  custom linear rod bearing using parametric dimensions and unit
-  conversion functions.
+  Before running examples, follow the [installing] instructions to set
+  up omdl and its build environment. For an introduction to the type
+  system and parameter conventions used throughout the library, see
+  [data types].
+
+  The minimal example below demonstrates how omdl modules can be
+  combined to construct a fabrication-oriented component. The example
+  builds a custom linear rod bearing using parametric dimensions and
+  unit conversion functions.
 
   \amu_define title         (Hello world)
   \amu_define image_views   (right top front diag)
@@ -177,7 +169,7 @@
 
   \amu_define notes_scad
     ( In this example, bearing_linear_rod() is used to construct
-      a custom linear bearing for fabrication on a 3D-printer. )
+      a custom linear bearing for fabrication on a 3D printer. )
 
   \amu_define notes_diagrams
     ( The dimension operations in the above example can be found near
@@ -188,10 +180,10 @@
   \section intro_contributing Contributing
 
   omdl is developed using [Git] and hosted on [GitHub]. Contributions
-  typically follow the standard fork-and-pull-request workflow. Because
-  the project is licensed under the GNU Lesser General Public License,
-  modified files should retain original copyright notices alongside any
-  new authorship.
+  typically follow the standard [forking] and [pull requests] workflow.
+  Because the project is licensed under the GNU Lesser General Public
+  License, modified files should retain original copyright notices
+  alongside any new authorship.
 
   Ideas, bug reports, feature requests, and improvements to
   documentation are encouraged.
@@ -199,7 +191,30 @@
   \section intro_support Support
 
   Questions, feature requests, or issues can be submitted through the
-  project’s [issue] tracker or by contacting the maintainer directly.
+  project’s [issue] tracker.
+
+  \section intro_further Further Reading
+
+  - \ref omdl_distinctions        "Distinctions:"
+    How omdl differs from MCAD and BOSL2.
+
+  - \ref architecture_overview    "Architecture Overview:"
+    omdl's four-layer framework and module design guidelines.
+
+  - \ref building_and_installing  "Building and Installing the Library:"
+    Setup script instructions for installing omdl locally.
+
+  - \ref library_usage            "Library Usage:"
+    How to include modules and use omdl-base.scad.
+
+  - \ref type_conventions         "Type Conventions:"
+    Naming conventions for all parameter and Euclidean types.
+
+  - \ref tv                       "Auto-tests and Validation:"
+    Automated test results across supported OpenSCAD versions.
+
+  - \ref build_information        "Build Information:"
+    Toolchain versions and component counts at build time.
 
 
   [GNU Lesser General Public License]: https://www.gnu.org/licenses/lgpl.html
@@ -208,20 +223,16 @@
   [omdl repository]: https://github.com/royasutton/omdl
   [issue]: https://github.com/royasutton/omdl/issues
 
-  [Validation]: \ref tv
-  [data types]: \ref dt
-  [installing]: \ref lb
-
   [openscad-amu]: https://royasutton.github.io/openscad-amu
 
-  [Doxygen]: http://www.doxygen.nl
-  [markups]: http://www.doxygen.nl/manual/commands.html
+  [Doxygen]: https://www.doxygen.nl
+  [markups]: https://www.doxygen.nl/manual/commands.html
 
-  [OpenSCAD]: http://www.openscad.org
+  [OpenSCAD]: https://www.openscad.org
 
-  [git]: http://git-scm.com
-  [GitHub]: http://github.com
-  [forking]: http://help.github.com/forking
+  [Git]: https://git-scm.com
+  [GitHub]: https://github.com
+  [forking]: https://help.github.com/forking
   [pull requests]: https://help.github.com/articles/about-pull-requests
 *******************************************************************************/
 
