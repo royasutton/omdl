@@ -141,6 +141,17 @@ function get_fn
     |  9  |  1  |  0  |  0  |  1  | html format 1                            |
     | 15  |  1  |  1  |  1  |  1  | custom formatting (uses \p cs)           |
 
+    Example outputs for \c v = ["a","b","a","c","a","b"]:
+    - \c m=0 (numerical): \c [["a",3],["b",2],["c",1]]
+    - \c m=1 (bare strings): \c ["3xa","2xb","1xc"]
+    - \c m=3 (text format): \c "3<a> 2<b> 1<c>"
+    - \c m=9 (html format): formatted as superscript-count + italic-value pairs
+
+    \note histogram() uses unique() followed by a find() scan per unique
+          value. Both are O(n) per call over the full list, making the
+          combined complexity O(n*k) where k is the number of unique
+          values — effectively O(n^2) in the worst case. Avoid passing
+          very large lists.
 *******************************************************************************/
 function histogram
 (
@@ -188,14 +199,15 @@ function histogram
          :           ca,
       ff = (sm==1) ? undef
          : (sm==4) ? undef
-         :           cf
+         :           cf,
+      n  = len(hv)
     )
     strl
     ([
-      for (i=[0:len(hv)-1])
+      for (i=[0:n-1])
         strl_html
         (
-          [s1, first(hv[i]), s2, second(hv[i]), s3, if ((i<(len(hv)-1)) || fm) fs],
+          [s1, first(hv[i]), s2, second(hv[i]), s3, if ((i<(n-1)) || fm) fs],
           b=fb, p=fp, a=fa, f=ff, d=d
         ),
     ]);
