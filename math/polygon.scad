@@ -44,12 +44,9 @@
 
 /***************************************************************************//**
   \addtogroup \amu_eval(${group})
-
   \details
-
   \anchor polygon_properties_conventions
-
-  \par Coordinate and Winding Convention
+  \par Convention
 
     All functions in this group operate on polygons defined by a list
     of 2d cartesian coordinates \p c and an optional list of paths \p p,

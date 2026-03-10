@@ -44,12 +44,9 @@
 
 /***************************************************************************//**
   \addtogroup \amu_eval(${group})
-
   \details
-
   \anchor polyhedron_properties_conventions
-
-  \par Coordinate and Winding Convention
+  \par Convention
 
     All functions in this group operate on polyhedra defined by a list
     of 3d cartesian coordinates \p c and a list of faces \p f,

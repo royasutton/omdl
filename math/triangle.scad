@@ -53,11 +53,8 @@
 
 /***************************************************************************//**
   \addtogroup \amu_eval(${group})
-
   \details
-
   \anchor triangle_properties_conventions
-
   \par Conventions
 
     The following conventions apply to all functions in this group.

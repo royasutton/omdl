@@ -46,11 +46,8 @@
 
 /***************************************************************************//**
   \addtogroup \amu_eval(${group})
-
   \details
-
   \anchor utility_conventions
-
   \par Conventions
 
     The following conventions apply to all functions in this group.

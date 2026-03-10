@@ -431,9 +431,9 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page conventions Conventions
+  \page type_value_conventions Type and Value Conventions
 
-  \section value_types Value Types
+  \section types_values Types and Values
 
   OpenSCAD defines a value as one of the following: a number, boolean,
   string, range, vector, or the undefined value. Within omdl, what the
@@ -442,7 +442,7 @@
   collections of general or compound values and [Euclidean vectors]
   representing numeric coordinates.
 
-  \subsection base_values Base values
+  \subsection base_types Base types
 
   | type      | description                                         |
   |:---------:|:----------------------------------------------------|
@@ -463,7 +463,7 @@
   | [nan]     | a numerical value which is not a number             |
   | [inf]     | a numerical value which is infinite                 |
 
-  \subsection data_types_naming Naming conventions
+  \subsection type_naming_conventions Type naming conventions
 
   For clarity and consistency, the following naming conventions are
   used when referring to common [data types] within the library.
@@ -484,6 +484,29 @@
   | [data]        | an arbitrary data structure                       |
   | [map]         | data store of keys mapped to values               |
   | [table]       | data store of values arranged in rows and columns |
+
+
+  \subsection list_naming_conventions List naming conventions
+
+  When a values is a list and has an expected number of elements, the
+  suffix '-n' is appended to indicate the required element count. If a
+  range of acceptable elements is allowed, the lower and upper bounds
+  are appended using the form l:u.
+
+  When values list elements are expected to be of a specific data type,
+  the element type is prefixed to the value list name. These
+  conventions provide a concise way to describe parameter value
+  contracts and expected data structures throughout the documentation.
+
+  See the tables below for examples.
+
+  | name                | description                               |
+  |:-------------------:|:------------------------------------------|
+  | list-n              | a list of of \b n values                  |
+  | list-l:u            | a list of \b l to \b u values             |
+  | typed-list          | a list of \b typed values                 |
+  | typed-list-n        | a list of \b n \b typed values            |
+  | typed-list-m-list-n | \b m lists of \b n \b typed value lists   |
 
 
   \section euclidean_types Euclidean Space Types
@@ -617,29 +640,6 @@
 
   pn1 == pn4
   \endcode
-
-
-  \section value_lists Value Lists
-
-  When a values is a list and has an expected number of elements, the
-  suffix '-n' is appended to indicate the required element count. If a
-  range of acceptable elements is allowed, the lower and upper bounds
-  are appended using the form l:u.
-
-  When values list elements are expected to be of a specific data type,
-  the element type is prefixed to the value list name. These
-  conventions provide a concise way to describe parameter value
-  contracts and expected data structures throughout the documentation.
-
-  See the tables below for examples.
-
-  | name                | description                               |
-  |:-------------------:|:------------------------------------------|
-  | list-n              | a list of of \b n values                  |
-  | list-l:u            | a list of \b l to \b u values             |
-  | typed-list          | a list of \b typed values                 |
-  | typed-list-n        | a list of \b n \b typed values            |
-  | typed-list-m-list-n | \b m lists of \b n \b typed value lists   |
 
 
   /+
