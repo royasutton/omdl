@@ -60,6 +60,12 @@
 
     See [Wikipedia] and [multmatrix] for more information.
 
+    \note Unlike the other spatial functions in this group, multmatrix_p()
+          takes no \p o origin parameter. Any origin offset for the
+          transformation is encoded directly in the fourth column of \p m
+          (i.e. `m[0][3]`, `m[1][3]`, `m[2][3]`), as is standard for
+          homogeneous transformation matrices.
+
   [Wikipedia]: https://en.wikipedia.org/wiki/Transformation_matrix
   [multmatrix]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Transformations#multmatrix
 *******************************************************************************/
@@ -98,6 +104,11 @@ function multmatrix_p
     dimension. When \p v is a list shorter than the point dimensionality,
     missing elements default to zero. When \p v is \b undef the point
     list is returned unchanged.
+
+    \note Unlike the other spatial functions in this group, translate_p()
+          takes no \p o origin parameter. Translation has no fixed point —
+          every point moves by the same vector \p v regardless of position,
+          so an origin offset would have no effect.
 
     See [Wikipedia] for more information and [transformation matrix].
 
@@ -221,12 +232,12 @@ function mirror_p
               list [ax, ay, az] or a single decimal to specify az only.
               When \b undef the point list is returned unchanged.
 
-  \param    v <vector-3d> An arbitrary axis for the rotation. When
+  \param    av <vector-3d> An arbitrary axis for the rotation. When
               specified, the rotation angle will be \p a or az about
-              the line \p v that passes through point \p o.
+              the line \p av that passes through point \p o.
 
   \param    o <point-3d | point-2d> The origin for the rotation. In 2D,
-              the center of rotation. In 3D, used only when \p v is
+              the center of rotation. In 3D, used only when \p av is
               specified. When \b undef (default), the origin is set
               automatically to \p origin2d or \p origin3d based on the
               dimensionality of \p c.
@@ -247,7 +258,7 @@ function rotate_p
 (
   c,
   a,
-  v,
+  av,
   o
 ) = is_undef(a) ? c
   : let
@@ -270,7 +281,7 @@ function rotate_p
 
          : (d != 3) ? c
 
-         : (is_undef(v) || is_list(a)) ?
+         : (is_undef(av) || is_list(a)) ?
             let
             (
               ax  = defined_e_or(a, 0, 0),
@@ -293,7 +304,7 @@ function rotate_p
 
          :  let
             (
-              vx  = v[0],  vy  = v[1],  vz  = v[2],
+              vx  = av[0], vy  = av[1], vz  = av[2],
               vx2 = vx*vx, vy2 = vy*vy, vz2 = vz*vz,
               l2  = vx2 + vy2 + vz2
             )
@@ -336,20 +347,20 @@ function rotate_p
               list [ax, ay, az] or a single decimal to specify az only.
               When \b undef, no rotation is applied.
 
+  \param    av <vector-3d> An arbitrary axis for the rotation. When
+              specified, the rotation angle will be \p a or az about
+              the line \p av that passes through point \p o.
+
+  \param    o <point-3d | point-2d> The origin for the rotation and
+              mirror. In 2D, the center of rotation. In 3D, used only
+              when \p av is specified. When \b undef (default), the
+              origin is set automatically to \p origin2d or \p origin3d
+              based on the dimensionality of \p c.
+
   \param    t <point-3d | point-2d> A translation vector applied after
               mirror and rotation. When \b undef (default), no
               translation is applied. Translation is always applied
               last regardless of whether \p a is defined.
-
-  \param    o <point-3d | point-2d> The origin for the rotation and
-              mirror. In 2D, the center of rotation. In 3D, used only
-              when \p v is specified. When \b undef (default), the
-              origin is set automatically to \p origin2d or \p origin3d
-              based on the dimensionality of \p c.
-
-  \param    v <vector-3d> An arbitrary axis for the rotation. When
-              specified, the rotation angle will be \p a or az about
-              the line \p v that passes through point \p o.
 
   \returns  <points-3d | points-2d> A list of 3d or 2d transformed
             coordinates. Operations are applied in order: mirror about
@@ -364,8 +375,8 @@ function rotate_p
     line defined by the normal vector \p m passing through \p o.
     Rotation \p a is then applied about \p o, followed by the optional
     translation \p t. Any combination of the three operations may be
-    used independently — in particular, \p t may be used alone with \p
-    m and without \p a to mirror and then translate without rotation.
+    used independently — in particular, \p m and \p t may be specified
+    without \p a to mirror and then translate without rotation.
 
     The mirror normal \p m follows the same convention as OpenSCAD's
     built-in `mirror()` module: a 2D vector `[nx, ny]` defines the
@@ -388,17 +399,17 @@ function transform_p
   c,
   m,
   a,
-  t,
+  av,
   o,
-  v
-) = translate_p( rotate_p( mirror_p( c, m, o ), a, v, o ), t );
+  t
+) = translate_p( rotate_p( mirror_p( c, m, o ), a, av, o ), t );
 
 //! Shear all coordinates in 2D or 3D.
 /***************************************************************************//**
   \param    c <points-3d | points-2d> A list of 3d or 2d coordinate
               points.
 
-  \param    m <decimal-list> The shear factors. In 2D, a list
+  \param    s <decimal-list> The shear factors. In 2D, a list
               `[sxy, syx]` where \c sxy shifts x proportional to y and
               \c syx shifts y proportional to x. In 3D, a list `[sxy,
               sxz, syx, syz, szx, szy]` following the standard shear
@@ -434,7 +445,7 @@ function transform_p
     ```
 
     Missing list elements default to \b 0 (no shear in that direction).
-    When \p m is \b undef the point list is returned unchanged.
+    When \p s is \b undef the point list is returned unchanged.
 
     See [Wikipedia] for more information on [shear mapping].
 
@@ -444,9 +455,9 @@ function transform_p
 function shear_p
 (
   c,
-  m,
+  s,
   o
-) = is_undef(m) ? c
+) = is_undef(s) ? c
   : let
     (
       d   = len(first(c)),
@@ -456,8 +467,8 @@ function shear_p
       let
       (
         ox  = eo[0], oy = eo[1],
-        sxy = defined_e_or(m, 0, 0),
-        syx = defined_e_or(m, 1, 0)
+        sxy = defined_e_or(s, 0, 0),
+        syx = defined_e_or(s, 1, 0)
       )
       [
         for (ci=c)
@@ -471,12 +482,12 @@ function shear_p
       let
       (
         ox  = eo[0], oy = eo[1], oz = eo[2],
-        sxy = defined_e_or(m, 0, 0),
-        sxz = defined_e_or(m, 1, 0),
-        syx = defined_e_or(m, 2, 0),
-        syz = defined_e_or(m, 3, 0),
-        szx = defined_e_or(m, 4, 0),
-        szy = defined_e_or(m, 5, 0)
+        sxy = defined_e_or(s, 0, 0),
+        sxz = defined_e_or(s, 1, 0),
+        syx = defined_e_or(s, 2, 0),
+        syz = defined_e_or(s, 3, 0),
+        szx = defined_e_or(s, 4, 0),
+        szy = defined_e_or(s, 5, 0)
       )
       [
         for (ci=c)
