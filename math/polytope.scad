@@ -289,11 +289,11 @@ function polytope_ft_triangulate
   \details
 
     The adjacent vertices are those neighboring vertices that are
-    directly connected to the given vertex by a common edge.
-
-  \note     Parameter \p f is optional for polygons. When it is not
-            given, the listed order of the coordinates \p c establishes
-            the polygon path.
+    directly connected to the given vertex by a common edge. The
+    returned list contains coordinate indexes, not coordinates; pass
+    them into \p c to obtain the actual points. The result is
+    deduplicated so each adjacent vertex index appears exactly once,
+    even when it is shared by multiple faces.
 *******************************************************************************/
 function polytope_vertex_adjacent_vertices
 (
@@ -484,6 +484,20 @@ function polytope_face_normal
 //! \name Faces
 //! @{
 
+/***************************************************************************//**
+  \par Face Identification Convention
+    Several functions in this group accept two mutually exclusive parameters
+    for identifying a face:
+    - \p i <integer> selects the face by its index into \p f.
+    - \p l <integer-list> provides the face directly as an explicit list of
+      coordinate indexes (e.g. a single face from \p f, or a custom subset).
+
+    When \p l is defined it takes precedence over \p i and \p f is not
+    consulted. When only \p i is given, \p f must be provided (except for
+    polygons, where the implicit single-path default applies). Passing both
+    \p l and \p i is permitted; \p l wins silently.
+*******************************************************************************/
+
 //! Get the mean coordinate of all vertices of a polytope face.
 /***************************************************************************//**
   \param    c <points-3d | points-2d> A list of 3d or 2d coordinate points.
@@ -514,34 +528,17 @@ function polytope_face_mean
 ) = let
     (
       ci = is_defined(l) ? l : defined_or(f, [consts(len(c))])[i],
-      pc = [for (i = ci) c[i]]
+      pc = [for (ci_idx = ci) c[ci_idx]]
     )
     mean(pc);
 
 //! Get the mean coordinate and normal vector of a polytope face.
 /***************************************************************************//**
-  \param    c <points-3d | points-2d> A list of 3d or 2d coordinate points.
-  \param    f <integer-list-list> A list of faces (or paths) that enclose
-            the shape where each face is a list of coordinate indexes.
+  \copydetails polytope_face_plane()
 
-  \param    i <integer> The face specified as an face index.
-  \param    l <integer-list> The face specified as a list of all the
-            coordinate indexes that define it.
-
-  \param    cw <boolean> Face vertex ordering.
-
-  \returns  <plane> <tt>[mp, nv]</tt>, where \c mp is \c points-3d, the
-            mean coordinate, and \c nv is \c vector-3d, the normal
-            vector, of the polytope face-plane.
-
-  \details
-
-    The face can be identified using either parameter \p i or \p l.
-    When using \p l, the parameter \p f is not required.
-
-  \note     Parameter \p f is optional for polygons. When it is not
-            given, the listed order of the coordinates \p c establishes
-            the polygon path.
+  \note     This function is an alias for polytope_face_plane(). It is
+            retained for compatibility with existing call sites. Prefer
+            polytope_face_plane() in new code.
 *******************************************************************************/
 function polytope_face_mean_normal
 (
@@ -550,11 +547,38 @@ function polytope_face_mean_normal
   i,
   l,
   cw = true
-) = [polytope_face_mean(c, f, i, l), polytope_face_normal(c, f, i, l, cw)];
+) = polytope_face_plane(c, f, i, l, cw);
 
-//! Get a plane for a polytope face.
+//! Get a plane defined by the mean coordinate and normal vector of a polytope face.
 /***************************************************************************//**
-  \copydetails polytope_face_mean_normal()
+  \param    c <points-3d | points-2d> A list of 3d or 2d coordinate points.
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+
+  \param    i <integer> The face specified as a face index.
+  \param    l <integer-list> The face specified as a list of all the
+            coordinate indexes that define it.
+
+  \param    cw <boolean> Face vertex ordering. Passed directly to
+            polytope_face_normal(); see that function for the full
+            description. Default \b true (clockwise, outward normals).
+
+  \returns  <plane> <tt>[mp, nv]</tt>, where \c mp is a \c point-3d
+            giving the mean of all face vertices, and \c nv is a
+            \c vector-3d giving the face normal. Together they fully
+            define the face-plane and can be passed directly to any
+            function that expects a \c plane argument.
+
+  \details
+
+    Combines polytope_face_mean() and polytope_face_normal() into a
+    single call. The face can be identified using either \p i or \p l;
+    see the \ref Faces "Face Identification Convention" for the
+    precedence rule.
+
+  \note     Parameter \p f is optional for polygons. When it is not
+            given, the listed order of the coordinates \p c establishes
+            the polygon path.
 *******************************************************************************/
 function polytope_face_plane
 (
@@ -562,8 +586,8 @@ function polytope_face_plane
   f,
   i,
   l,
-  cw=true
-) = polytope_face_mean_normal(c, f, i, l, cw);
+  cw = true
+) = [polytope_face_mean(c, f, i, l), polytope_face_normal(c, f, i, l, cw)];
 
 //! List the vertex counts for all polytope faces.
 /***************************************************************************//**
