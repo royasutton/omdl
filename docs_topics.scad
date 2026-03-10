@@ -449,7 +449,7 @@
 
   | type      | description                                         |
   |:---------:|:----------------------------------------------------|
-  | boolean   | a binary logic value (\b true or \b false)          |
+  | boolean   | a binary logic value (\c true or \c false)          |
   | number    | a numerical value                                   |
   | string    | an iterable sequence of of character values         |
   | list      | an iterable sequence of arbitrary values            |
@@ -477,7 +477,7 @@
   | [scalar]      | a single non-iterable value                       |
   | [iterable]    | any value with iterable elements                  |
   | [empty]       | any iterable value with zero elements             |
-  | [bit]         | a binary numerical value (0 or 1)                 |
+  | [bit]         | a binary numerical value ( \c 0 or \c 1 )         |
   | [integer]     | a positive, negative, or zero whole number        |
   | [even]        | an even integer                                   |
   | [odd]         | an odd integer                                    |
@@ -492,9 +492,9 @@
   \subsection list_naming_conventions List naming conventions
 
   When a value is a list and has an expected number of elements, the
-  suffix '-n' is appended to indicate the required element count. If a
+  suffix \c -n is appended to indicate the required element count. If a
   range of acceptable elements is allowed, the lower and upper bounds
-  are appended using the form l:u.
+  are appended using the form \c l:u.
 
   When values list elements are expected to be of a specific data type,
   the element type is prefixed to the value list name. These
@@ -505,11 +505,11 @@
 
   | name                | description                               |
   |:-------------------:|:------------------------------------------|
-  | list-n              | a list of \b n values                     |
-  | list-l:u            | a list of \b l to \b u values             |
-  | typed-list          | a list of \b typed values                 |
-  | typed-list-n        | a list of \b n \b typed values            |
-  | typed-list-m-list-n | \b m lists of \b n \b typed value lists   |
+  | list-n              | a list of \c n values                     |
+  | list-l:u            | a list of \c l to \c u values             |
+  | typed-list          | a list of \c typed values                 |
+  | typed-list-n        | a list of \c n \c typed values            |
+  | typed-list-m-list-n | \c m lists of \c n \c typed value lists   |
 
 
   \section euclidean_types Euclidean Space Types
@@ -528,23 +528,23 @@
   | [matrix]    | a rectangular array of values                     |
 
   When a particular dimension is expected, the dimensional expectation
-  is appended to the end of the name after a '-' dash as in the
+  is appended to the end of the name after a \c '-' dash as in the
   following table.
 
   | name        | description                                       |
   |:-----------:|:--------------------------------------------------|
-  | point-nd    | a point in an 'n' dimensional space               |
-  | vector-nd   | a vector in an 'n' dimensional space              |
-  | line-nd     | a line in an 'n' dimensional space                |
-  | matrix-mxn  | an 'm' by 'n' matrix of values                    |
+  | point-nd    | a point in an \c n dimensional space              |
+  | vector-nd   | a vector in an \c n dimensional space             |
+  | line-nd     | a line in an \c n dimensional space               |
+  | matrix-mxn  | an \c m by \c n matrix of values                  |
 
-  When a type is specified in plural form, such as \b points, it
-  implies a list of the specified type. For example, \b points is
-  equivalent to a \b point-list.
+  When a type is specified in plural form, such as \c points, it
+  implies a list of the specified type. For example, \c points is
+  equivalent to a \c point-list.
 
   \subsection data_types_lines Lines and vectors
 
-  A \b vector has both direction and magnitude in space. A \b line
+  A \c vector has both direction and magnitude in space. A \c line
   likewise has direction and magnitude, but also includes location, as
   it begins at one point in space and ends at another. Although a line
   may be defined in one dimension, most library functions operate on
@@ -552,13 +552,13 @@
   common convention for representing Euclidean vectors and straight
   lines, as summarized in the following table:
 
-  Given two points \c 'p1' and \c 'p2', in space:
+  Given two points \c p1 and \c p2, in space:
 
   | no. | form      | description                       |
   |:---:|:---------:|:----------------------------------|
-  |  1  | p2        | a vector from the origin to 'p2'  |
-  |  2  | [p2]      | a vector from the origin to 'p2'  |
-  |  3  | [p1, p2]  | a line from 'p1' to 'p2'          |
+  |  1  | p2        | a vector from the origin to \c p2 |
+  |  2  | [p2]      | a vector from the origin to \c p2 |
+  |  3  | [p1, p2]  | a line from \c p1 to \c p2        |
 
   The functions is_point(), is_vector(), is_line(), line_dim(),
   line_tp(), line_ip(), vol_to_point(), and vol_to_origin(), are
@@ -585,8 +585,8 @@
   \subsection data_types_planes Planes
 
   Operators in omdl follow a common convention for defining planes. A
-  \b plane is specified by a [point] located on its surface together
-  with a [normal] vector, denoted by \b pnorm, which is described in
+  \c plane is specified by a [point] located on its surface together
+  with a [normal] vector, denoted by \c pnorm, which is described in
   the following section. The plane definition is therefore represented
   as a list containing both the point and its corresponding normal
   vector, as shown below:
@@ -597,11 +597,11 @@
 
   \subsection data_types_normals Planes' normal
 
-  The data type \b pnorm defines a convention for specifying a
+  The data type \c pnorm defines a convention for specifying a
   direction vector that is perpendicular to a plane. Given three points
-  \c 'p1', \c 'p2', \c 'p3', and three vectors \c 'v1', \c 'v2', \c
-  'vn', the plane [normal] may be expressed using any of the following
-  equivalent forms:
+  \c p1, \c p2, \c p3, and three vectors \c v1, \c v2, \c vn, the plane
+  [normal] may be expressed using any of the following equivalent
+  forms:
 
   | no. | form          | description                                   |
   |:---:|:-------------:|:----------------------------------------------|
