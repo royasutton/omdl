@@ -244,9 +244,27 @@ function mirror_p
               dimensionality of \p c.
 
   \returns  <points-3d | points-2d> A list of rotated coordinate
-            points. Rotation order is rz, ry, rx.
+            points.
 
   \details
+
+    Three rotation branches are selected based on dimensionality and
+    the presence of \p av:
+    - \b 2D (\p d = 2): rotates about point \p o by angle \p az
+      (extracted as \c a[2], or \p a itself when scalar). \p o is
+      the centre of rotation.
+    - \b 3D Euler (\p d = 3, \p av undef or \p a is a list): applies
+      extrinsic rotations in the order Z (`az`), Y (`ay`), X (`ax`),
+      equivalent to the standard OpenSCAD `rotate([ax, ay, az])`
+      convention. Missing angle components default to \b 0.
+    - \b 3D arbitrary axis (\p d = 3, \p av defined, \p a scalar):
+      rotates by \p az about the line through \p o with direction
+      \p av, using the Rodrigues rotation formula. \p av need not be
+      a unit vector; it is normalised internally.
+
+    \note In the 3D Euler branch the origin \p o is silently ignored
+          — rotation always occurs about the world origin. Only the 2D
+          branch and the 3D arbitrary-axis branch respect \p o.
 
     See [Wikipedia] for more information on [transformation matrix]
     and [axis rotation].
@@ -558,8 +576,12 @@ function scale_p
 /***************************************************************************//**
   \param    c      <points-nd> A list of nd coordinate points.
 
-  \param    v      <decimal-list-n> A list of target extents for each
-                   dimension.
+  \param    v      <decimal-list-n | decimal> A list of target extents
+                   for each dimension. When a scalar, the same target
+                   extent is applied to every dimension (the aspect
+                   ratio of the input is not preserved). When a list
+                   shorter than the point dimensionality, missing
+                   elements default to \b 1.
 
   \param    center <boolean> When \b true, the scaled result is centred
                    about the origin. When \b false (default), the
@@ -571,9 +593,9 @@ function scale_p
                    minimum is aligned before scaling. When \b undef
                    (default), the origin is set automatically to
                    \p origin2d or \p origin3d based on the
-                   dimensionality of \p c. When \p center is \b true,
-                   \p o is ignored and the result is centred about the
-                   coordinate origin instead.
+                   dimensionality of \p c. Ignored when \p center is
+                   \b true — the result is centred about the coordinate
+                   origin regardless of \p o.
 
   \returns  <points-nd> A list of proportionately scaled coordinate
             points which exactly fit the region bounds \p v.
