@@ -120,6 +120,7 @@ function translate_p
   c,
   v
 ) = is_undef(v) ? c
+  : (len(c) == 0) ? c
   : let
     (
       d = len(first(c)),
@@ -166,13 +167,15 @@ function mirror_p
   m,
   o
 ) = is_undef(m) ? c
+  : (len(c) == 0) ? c
   : let
     (
       d  = len(first(c)),
       eo = defined_or( o, d == 2 ? origin2d : origin3d ),
       ox = eo[0], oy = eo[1],
       nx = m[0],  ny = m[1],
-      l2 = nx*nx + ny*ny
+      nz = (d == 3) ? m[2] : 0,
+      l2 = nx*nx + ny*ny + nz*nz
     )
     (l2 == 0) ? c
     : (d == 2) ?
@@ -198,10 +201,8 @@ function mirror_p
     : let
       (
         // 3D reflection matrix about plane through o with normal [nx,ny,nz]:
-        nz  = m[2],
-        l2b = l2 + nz*nz,
         oz  = eo[2],
-        f   = 2 / l2b,
+        f   = 2 / l2,
 
         r11 = 1 - f*nx*nx,
         r12 =   - f*nx*ny,
@@ -261,6 +262,7 @@ function rotate_p
   av,
   o
 ) = is_undef(a) ? c
+  : (len(c) == 0) ? c
   : let
     (
       d  = len(first(c)),
@@ -312,24 +314,28 @@ function rotate_p
 
          :  let
             (
-              ox  = eo[0], oy = eo[1], oz = eo[2],
+              // normalise av to a unit vector; all matrix coefficients then
+              // follow the standard unit-vector Rodrigues rotation formula
               ll  = sqrt(l2),
+              ux  = vx/ll, uy = vy/ll, uz = vz/ll,
+              ux2 = ux*ux, uy2 = uy*uy, uz2 = uz*uz,
+              ox  = eo[0], oy = eo[1], oz = eo[2],
               oc  = 1 - cg,
 
-              m11 = vx2+(vy2+vz2)*cg,
-              m12 = vx*vy*oc-vz*ll*sg,
-              m13 = vx*vz*oc+vy*ll*sg,
-              m14 = (ox*(vy2+vz2)-vx*(oy*vy+oz*vz))*oc+(oy*vz-oz*vy)*ll*sg,
-              m21 = vx*vy*oc+vz*ll*sg,
-              m22 = vy2+(vx2+vz2)*cg,
-              m23 = vy*vz*oc-vx*ll*sg,
-              m24 = (oy*(vx2+vz2)-vy*(ox*vx+oz*vz))*oc+(oz*vx-ox*vz)*ll*sg,
-              m31 = vx*vz*oc-vy*ll*sg,
-              m32 = vy*vz*oc+vx*ll*sg,
-              m33 = vz2+(vx2+vy2)*cg,
-              m34 = (oz*(vx2+vy2)-vz*(ox*vx+oy*vy))*oc+(ox*vy-oy*vx)*ll*sg
+              m11 = ux2+(uy2+uz2)*cg,
+              m12 = ux*uy*oc-uz*sg,
+              m13 = ux*uz*oc+uy*sg,
+              m14 = (ox*(uy2+uz2)-ux*(oy*uy+oz*uz))*oc+(oy*uz-oz*uy)*sg,
+              m21 = ux*uy*oc+uz*sg,
+              m22 = uy2+(ux2+uz2)*cg,
+              m23 = uy*uz*oc-ux*sg,
+              m24 = (oy*(ux2+uz2)-uy*(ox*ux+oz*uz))*oc+(oz*ux-ox*uz)*sg,
+              m31 = ux*uz*oc-uy*sg,
+              m32 = uy*uz*oc+ux*sg,
+              m33 = uz2+(ux2+uy2)*cg,
+              m34 = (oz*(ux2+uy2)-uz*(ox*ux+oy*uy))*oc+(ox*uy-oy*ux)*sg
             )
-            multmatrix_p(c, [[m11,m12,m13,m14], [m21,m22,m23,m24], [m31,m32,m33,m34]])/l2
+            multmatrix_p(c, [[m11,m12,m13,m14], [m21,m22,m23,m24], [m31,m32,m33,m34]])
     )
     rc;
 
@@ -458,6 +464,7 @@ function shear_p
   s,
   o
 ) = is_undef(s) ? c
+  : (len(c) == 0) ? c
   : let
     (
       d   = len(first(c)),
@@ -536,6 +543,7 @@ function scale_p
   v,
   o
 ) = is_undef(v) ? c
+  : (len(c) == 0) ? c
   : let
     (
       d  = len(first(c)),
@@ -594,6 +602,7 @@ function resize_p
   center = false,
   o
 ) = is_undef(v) ? c
+  : (len(c) == 0) ? c
   : let
     (
       d  = len(first(c)),
