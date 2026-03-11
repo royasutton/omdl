@@ -261,7 +261,9 @@ BEGIN_SCOPE logo;
     include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
+*/
 
+/*
 BEGIN_SCOPE quickstart;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;

@@ -110,7 +110,7 @@ doxygen_html_css                  := share/doxygen/html_style.css
 doxygen_layout                    := share/doxygen/html_layout.xml
 
 docs_group_id                     := omdl
-project_logo                      := docs_start_logo_top_55x55
+project_logo                      := docs_home_logo_top_55x55
 
 buildinfo_output_prefix           := docs/buildinfo/
 
