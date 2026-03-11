@@ -6,7 +6,7 @@ $(eval $(call clear-local-group))
 
 local_path        :=
 
-local_library     :=  docs_start \
+local_library     :=  docs_home \
                       docs_topics \
                       \
                       omdl-base

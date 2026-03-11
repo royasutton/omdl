@@ -24,11 +24,6 @@
       intro="Library components groups base-page:"
     />
 
-    <tab type="filelist" visible="yes"
-      title="file"
-      intro="Library component files root-page:"
-    />
-
     <tab type="globals" visible="yes"
       title="globals"
       intro="Public components: constants, variables, functions, and modules:"
@@ -37,6 +32,11 @@
     <tab type="examples" visible="yes"
       title="examples"
       intro="Library use examples:"
+    />
+
+    <tab type="filelist" visible="yes"
+      title="file"
+      intro="Library component files root-page:"
     />
 
     <tab type="usergroup" title="GitHub">
