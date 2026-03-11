@@ -15,18 +15,18 @@
     <!-- type=modules -->
     <tab type="modules" visible="yes"
       title="groups"
-      intro="Library component groups base-page:"
+      intro="Library component groups:"
     />
 
     <!-- type=modules changed to type=topics in doxygen 1.9.8 -->
     <tab type="topics" visible="yes"
       title="groups"
-      intro="Library components groups base-page:"
+      intro="Library components groups:"
     />
 
     <tab type="globals" visible="yes"
       title="globals"
-      intro="Public components: constants, variables, functions, and modules:"
+      intro="Library global definitions:"
     />
 
     <tab type="examples" visible="yes"
@@ -36,7 +36,7 @@
 
     <tab type="filelist" visible="yes"
       title="file"
-      intro="Library component files root-page:"
+      intro="Library files:"
     />
 
     <tab type="usergroup" title="GitHub">

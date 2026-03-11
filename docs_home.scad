@@ -1,4 +1,4 @@
-//! Library documentation start page.
+//! Library documentation home page.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

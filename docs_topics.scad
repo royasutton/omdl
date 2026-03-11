@@ -1,4 +1,4 @@
-//! Library documentation topics page.
+//! Library documentation topics.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
