@@ -15,7 +15,9 @@ local_library     :=  docs_group \
 
 local_release_add :=
 
-local_backup_add  :=  diagrams/pipe_oi.svg \
+local_backup_add  :=  group.mk \
+                      \
+                      diagrams/pipe_oi.svg \
                       diagrams/pipe_ot.svg
 
 local_subgroups   :=

@@ -34,7 +34,9 @@ local_library     :=  docs_group \
 
 local_release_add :=
 
-local_backup_add  :=  diagrams/washer_flat.svg \
+local_backup_add  :=  group.mk \
+                      \
+                      diagrams/washer_flat.svg \
                       diagrams/nut_hex.svg \
                       diagrams/nut_hex_flange.svg \
                       diagrams/nut_hex_jam.svg \

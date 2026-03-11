@@ -13,7 +13,7 @@ local_library     :=  docs_home \
 
 local_release_add :=
 
-local_backup_add  :=
+local_backup_add  :=  group.mk
 
 local_subgroups   :=  common \
                       datatypes \

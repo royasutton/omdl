@@ -17,7 +17,7 @@ local_library     :=  docs_group \
 
 local_release_add :=
 
-local_backup_add  :=
+local_backup_add  :=  group.mk
 
 local_subgroups   :=
 
