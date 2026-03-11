@@ -1,4 +1,4 @@
-//! Module: Fasteners, connectors, latches, and hinges.
+//! Group: Fasteners, connectors, latches, and hinges.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

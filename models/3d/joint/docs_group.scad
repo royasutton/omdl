@@ -1,4 +1,4 @@
-//! Module: Models for connecting 3d members.
+//! Group: Models for connecting 3d members.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

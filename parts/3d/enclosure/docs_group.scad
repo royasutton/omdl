@@ -1,4 +1,4 @@
-//! Module: Project boxes, housings and enclosures.
+//! Group: Project boxes, housings and enclosures.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

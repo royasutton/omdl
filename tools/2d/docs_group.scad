@@ -1,4 +1,4 @@
-//! Module: 2d design tools and workflow utilities.
+//! Group: 2d design tools and workflow utilities.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

@@ -1,4 +1,4 @@
-//! Module: 2D drafting and drawing tools for graphical design documentation.
+//! Group: 2D drafting and drawing tools for graphical design documentation.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

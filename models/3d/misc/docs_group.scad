@@ -1,4 +1,4 @@
-//! Module: Miscellaneous auxiliary design models.
+//! Group: Miscellaneous auxiliary design models.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

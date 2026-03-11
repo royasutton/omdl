@@ -1,4 +1,4 @@
-//! Module: Mechanical motion design component specifications.
+//! Group: Mechanical motion design component specifications.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

@@ -1,4 +1,4 @@
-//! Module: Structural component specifications.
+//! Group: Structural component specifications.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

@@ -1,4 +1,4 @@
-//! Module: Core library constants, components, and shared utilities.
+//! Group: Core library constants, components, and shared utilities.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

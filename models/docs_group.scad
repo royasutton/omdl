@@ -1,4 +1,4 @@
-//! Module: Black-box models representing design components.
+//! Group: Black-box models representing design components.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

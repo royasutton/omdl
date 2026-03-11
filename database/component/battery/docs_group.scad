@@ -1,4 +1,4 @@
-//! Module: Electric battery specifications.
+//! Group: Electric battery specifications.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

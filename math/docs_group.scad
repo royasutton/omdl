@@ -1,4 +1,4 @@
-//! Module: Mathematical functions, utilities, and operations.
+//! Group: Mathematical functions, utilities, and operations.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

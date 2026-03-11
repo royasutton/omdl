@@ -1,4 +1,4 @@
-//! Module: Models for connecting 2d planar members.
+//! Group: Models for connecting 2d planar members.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

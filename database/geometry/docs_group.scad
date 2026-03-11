@@ -1,4 +1,4 @@
-//! Module: Geometry shape specifications.
+//! Group: Geometry shape specifications.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

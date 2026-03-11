@@ -1,4 +1,4 @@
-//! Module: Mechanical computer parts.
+//! Group: Mechanical computer parts.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

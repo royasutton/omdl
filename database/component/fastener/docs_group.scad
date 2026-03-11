@@ -1,4 +1,4 @@
-//! Module: Mechanical fastener specifications.
+//! Group: Mechanical fastener specifications.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

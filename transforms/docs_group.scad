@@ -1,4 +1,4 @@
-//! Module: Geometric transformation and shape replication.
+//! Group: Geometric transformation and shape replication.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

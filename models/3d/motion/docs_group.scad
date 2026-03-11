@@ -1,4 +1,4 @@
-//! Module: Building blocks for basic mechanical motion.
+//! Group: Building blocks for basic mechanical motion.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

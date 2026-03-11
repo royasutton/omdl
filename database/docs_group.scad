@@ -1,4 +1,4 @@
-//! Module: Design data storage, specifications, and metadata.
+//! Group: Design data storage, specifications, and metadata.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

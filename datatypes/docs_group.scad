@@ -1,4 +1,4 @@
-//! Module: Data type identification and operations.
+//! Group: Data type identification and operations.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

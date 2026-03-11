@@ -1,4 +1,4 @@
-//! Module: Common geometric shapes and foundational constructs.
+//! Group: Common geometric shapes and foundational constructs.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

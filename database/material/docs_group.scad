@@ -1,4 +1,4 @@
-//! Module: Material specifications.
+//! Group: Material specifications.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

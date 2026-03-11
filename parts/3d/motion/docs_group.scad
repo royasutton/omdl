@@ -1,4 +1,4 @@
-//! Module: Parts that facilitate mechanical motion.
+//! Group: Parts that facilitate mechanical motion.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

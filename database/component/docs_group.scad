@@ -1,4 +1,4 @@
-//! Module: Design component specifications.
+//! Group: Design component specifications.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

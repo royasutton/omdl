@@ -1,4 +1,4 @@
-//! Module: Unit definitions, measurement systems, and conversions.
+//! Group: Unit definitions, measurement systems, and conversions.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

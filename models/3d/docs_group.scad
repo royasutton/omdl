@@ -1,4 +1,4 @@
-//! Module: 3d black-box models of design components.
+//! Group: 3d black-box models of design components.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

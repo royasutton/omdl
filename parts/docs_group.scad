@@ -1,4 +1,4 @@
-//! Module: Parametric design parts, generators, and small assemblies.
+//! Group: Parametric design parts, generators, and small assemblies.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

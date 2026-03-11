@@ -1,4 +1,4 @@
-//! Module: Common design tools and workflow utilities.
+//! Group: Common design tools and workflow utilities.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton

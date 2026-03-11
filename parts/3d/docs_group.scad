@@ -1,4 +1,4 @@
-//! Module: 3d parts, part generators, and small assemblies.
+//! Group: 3d parts, part generators, and small assemblies.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
