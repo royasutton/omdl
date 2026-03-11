@@ -30,7 +30,7 @@
     \amu_define group_name  (Motion)
     \amu_define group_brief (Parts that facilitate mechanical motion.)
 
-  \amu_include (include/amu/pgid_pparent_path_n.amu)
+  \amu_include (include/amu/doxyg_init_ppd_gp.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -38,7 +38,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
 
     See Wikipedia for a introduction to [linear] and [rotational]
     mechanical [bearings].

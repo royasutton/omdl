@@ -30,7 +30,7 @@
     \amu_define group_name  (Operations)
     \amu_define group_brief (Drafting tools and general operations.)
 
-  \amu_include (include/amu/pgid_path_pstem_g.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ig.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -38,7 +38,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
 
   \amu_include (include/amu/scope_diagram_2d_object.amu)
 *******************************************************************************/

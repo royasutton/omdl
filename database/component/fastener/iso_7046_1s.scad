@@ -30,14 +30,14 @@
     \amu_define group_name  (ISO 7046-1s)
     \amu_define group_brief ([metric/screws] Slotted flat head machine screws; ISO 7046-1s; DIN 965.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
   \amu_text parent (${parent}_Metric_Screws)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
   \amu_include (include/amu/includes_required.amu)
 
   \details

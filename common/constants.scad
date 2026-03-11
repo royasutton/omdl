@@ -30,7 +30,7 @@
     \amu_define group_name  (Constant Definitions)
     \amu_define group_brief (Common mechanical design constants.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -38,9 +38,9 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group.amu)
+  \amu_include (include/amu/doxyg_define.amu)
 
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

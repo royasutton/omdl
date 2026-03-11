@@ -30,13 +30,13 @@
     \amu_define group_name  (PCIe Expansion)
     \amu_define group_brief (PCI Express expansion chassis and/or enclosure generator.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
   \amu_define includes_required_add
   (
     shapes/select_common_2d.scad

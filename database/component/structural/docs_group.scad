@@ -30,7 +30,7 @@
     \amu_define group_name  (Structural)
     \amu_define group_brief (Structural component specifications.)
 
-  \amu_include (include/amu/pgid_pparent_path_n.amu)
+  \amu_include (include/amu/doxyg_init_ppd_gp.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -38,7 +38,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
