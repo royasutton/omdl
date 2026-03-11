@@ -37,14 +37,26 @@ define add-group
   # released files are generated targets and the output path of the target
   # must be identified with the macro $(call scopes_target_path,<input-path>).
   # use delayed expansion '$$' for the correct evaluation within this macro.
+  # (a) add to local $(groups_release_add)
+  # (b) add to project $(release_files_add)
   ifneq ($(strip $5),$(empty))
     groups_release_add += $(addprefix $$(call scopes_target_path,$(if $(strip $1),$1/)),$5)
+    release_files_add += $(addprefix $$(call scopes_target_path,$(if $(strip $1),$1/)),$5)
   endif
 
   # $6: groups_backup_add
+  # (a) add to local $(groups_backup_add)
+  # (b) add to project $(backup_files_add)
   ifneq ($(strip $6),$(empty))
     groups_backup_add += $(addprefix $(if $(strip $1),$1/),$6)
+    backup_files_add += $(addprefix $(if $(strip $1),$1/),$6)
   endif
+
+  # auto-record caller makefile as project file
+  # (a) add to local $(groups_project_add)
+  # (b) add to project $(project_files_add)
+  groups_project_add += $(lastword $(MAKEFILE_LIST))
+  project_files_add += $(lastword $(MAKEFILE_LIST))
 
   # $4: (sub)group
   # remove groups in $(groups_exclude) when $(ignore_groups_exclude) not true

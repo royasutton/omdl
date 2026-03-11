@@ -52,6 +52,7 @@ info-groups: | silent
 		groups \
 		groups_release_add \
 		groups_backup_add \
+		groups_project_add \
 	,$(call enumerate_variable,$x,$(false),$(false)))
 
 ################################################################################

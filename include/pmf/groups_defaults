@@ -28,6 +28,7 @@ groups                                  :=
 
 groups_release_add                       =
 groups_backup_add                       :=
+groups_project_add                      :=
 
 ignore_groups_exclude                   := $(false)
 
