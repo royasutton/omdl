@@ -21,7 +21,7 @@ local_library     :=  polyhedra_all \
 
 local_release_add :=
 
-local_backup_add  :=  group.mk
+local_backup_add  :=
 
 local_subgroups   :=
 
