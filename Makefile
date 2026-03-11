@@ -18,7 +18,7 @@ AMU_PM_DESIGN_FLOW                := df1/
 
 # openscad-amu component extensions to for omdl
 AMU_PM_COMPONENTS_LOCAL_PATH      := include/pmf
-AMU_PM_COMPONENTS_LOCAL           := modules \
+AMU_PM_COMPONENTS_LOCAL           := groups \
                                      buildinfo
 
 # Uncomment for increased verbosity and/or debugging.
@@ -62,7 +62,7 @@ include $(AMU_PM_COMPONENTS_LOCAL_PATH)/assertions
 # debug_dif_filter                := $(true)
 # debug_dif_scanner               := $(true)
 
-# ignore_modules_exclude          := $(true)
+# ignore_groups_exclude           := $(true)
 # ignore_scopes_exclude           := $(true)
 
 output_path_add_project_version   := $(false)
@@ -121,11 +121,11 @@ project_files_add                 := $(wildcard include/pmf/*) \
 library_info                      := README.md \
                                      gnu-lgpl-v2.1.txt
 
-# Excluded Modules:
-# to exclude nothing from the command line, use: $ make modules_exclude="" all
-# or set 'ignore_modules_exclude := $(true)' above
+# Excluded Groups:
+# to exclude nothing from the command line, use: $ make groups_exclude="" all
+# or set 'ignore_groups_exclude := $(true)' above
 
-modules_exclude                   := database/material
+groups_exclude                    := database/material
 
 # Excluded Scopes:
 # to exclude nothing from the command line, use: $ make scopes_exclude="" all
@@ -138,18 +138,18 @@ scopes_exclude                    += db_autotest \
 # Release Files Additions:
 # use recursive assignment '=' for references that use derived paths
 release_files_add                  = $(library_info) \
-                                     $(modules_release_add)
+                                     $(groups_release_add)
 
 release_archive_files_add          = $(library_info)
 
 # Backup Files Additions:
 backup_files_add                  := $(library_info) \
-                                     $(modules_backup_add)
+                                     $(groups_backup_add)
 
 #------------------------------------------------------------------------------#
-# Include Root Library Module
+# Include Root Library Group
 #------------------------------------------------------------------------------#
-include module.mk
+include group.mk
 
 #------------------------------------------------------------------------------#
 # Design Flow Rules (DO NO EDIT THIS SECTION)
