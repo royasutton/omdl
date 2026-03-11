@@ -176,7 +176,7 @@
   \section differentiation_summary Differentiation Summary
 
   Feature              | omdl                      | MCAD                      | BOSL2
-  -------------------- | ------------------------- | ------------------------- | ----------------------
+  :-------------------:|:-------------------------:|:-------------------------:|:----------------------:
   Primary Focus        | Mechanical design intent  | Part catalog              | Geometric power tools
   Units                | Explicit, unit-aware      | Implicit                  | Implicit
   Parameter Style      | Structured & named        | Positional                | Mixed

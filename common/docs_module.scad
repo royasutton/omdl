@@ -28,7 +28,7 @@
   \details
 
     \amu_define group_name  (Common)
-    \amu_define group_brief (Core library constants, components, and shared utilitiess.)
+    \amu_define group_brief (Core library constants, components, and shared utilities.)
 
   \amu_include (include/amu/pgid_pparent_path_n.amu)
 *******************************************************************************/
