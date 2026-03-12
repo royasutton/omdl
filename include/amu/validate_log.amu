@@ -1,0 +1,13 @@
+/+
+
+  define the validation result table data.
+
+  requires:
+                ${group}                (from pgid_*.)
+
+ +/
+
+  \amu_include (include/amu/validate_log_th.amu)
+  \amu_include (include/amu/validate_log_td.amu)
+
+/+ end of file  +/
