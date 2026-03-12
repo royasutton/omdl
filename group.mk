@@ -29,6 +29,7 @@ local_subgroups   :=  common \
 
 # add only when directory exists
 local_subgroups  +=  $(wildcard contrib)
+local_subgroups  +=  $(wildcard work)
 
 #------------------------------------------------------------------------------#
 # initialize omdl groups
