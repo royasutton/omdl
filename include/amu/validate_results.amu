@@ -3,7 +3,7 @@
   output validation results details.
 
   requires:
-                ${group}                (from pgid_*.)
+                ${group}                (from doxyg_init_*.)
                 ${parent}
 
                 ${tv_*}                 (from validate_log_{th,td}.amu)

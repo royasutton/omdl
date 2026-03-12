@@ -3,7 +3,7 @@
   output validation results summary table.
 
   requires:
-                ${group}                (from pgid_*.)
+                ${group}                (from doxyg_init_*.)
 
                 ${tv_*}                 (from validate_log_{th,td}.amu)
 

@@ -3,7 +3,7 @@
   define a group.
 
   requires:
-                ${group*}               (from pgid_*.)
+                ${group*}               (from doxyg_init_*.)
 
  +/
 

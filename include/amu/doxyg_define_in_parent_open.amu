@@ -4,7 +4,7 @@
   groups must be explicitly close via @} @}.
 
   requires:
-                ${group*}               (from pgid_*.)
+                ${group*}               (from doxyg_init_*.)
                 ${parent}
 
  +/
