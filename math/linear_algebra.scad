@@ -51,8 +51,8 @@
   \par Conventions
 
     The following conventions apply to all functions in this group.
-    - The first parameter is always \p c — a list of nd coordinate
-      points. All functions return a list of the same length and
+    - The first parameter is always \p c (a list of nd coordinate
+      points). All functions return a list of the same length and
       dimensionality as \p c.
     - Dimensionality \p d is auto-detected from the first element of
       \p c using \c len(first(c)). Passing an empty list always returns

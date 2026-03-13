@@ -33,29 +33,46 @@
   \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// validation.
-//----------------------------------------------------------------------------//
-
+// auto-tests (add to test results page)
 /***************************************************************************//**
-  \amu_include (include/amu/validate_log_th.amu)
-  \amu_include (include/amu/validate_log_td.amu)
+  \amu_include (include/amu/validate_log.amu)
   \amu_include (include/amu/validate_results.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
-
+// group(s) begin (test summary and includes-required)
 /***************************************************************************//**
   \amu_include (include/amu/doxyg_define_in_parent_open.amu)
-  \amu_include (include/amu/includes_required.amu)
-
-  \details
-
   \amu_include (include/amu/validate_summary.amu)
+  \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
+
+// member-wide documentation and conventions
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+  \details
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
+
+  - The primary parameter is \p v (the value to operate on).
+  - The fallback / default parameter is always \p d.
+  - defined_or() treats only \b undef as 'undefined'; \b false, 0, and
+    \p empty_lst are considered defined and are returned unchanged.
+  - index_c() maps any integer \p i (including negative values) into the
+    circular range [f : f+l-1]. Negative \p i wraps from the end: index_c(-1, l)
+    returns the last valid index.
+  - The \p f parameter provides an optional non-zero base offset; it
+    defaults to 0 for zero-based indexing.
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// members
 //----------------------------------------------------------------------------//
 
 //! Return given value, if defined, or a secondary value, if primary is not defined.

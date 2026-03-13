@@ -33,29 +33,48 @@
   \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// validation.
-//----------------------------------------------------------------------------//
-
+// auto-tests (add to test results page)
 /***************************************************************************//**
-  \amu_include (include/amu/validate_log_th.amu)
-  \amu_include (include/amu/validate_log_td.amu)
+  \amu_include (include/amu/validate_log.amu)
   \amu_include (include/amu/validate_results.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
-
+// group(s) begin (test summary and includes-required)
 /***************************************************************************//**
   \amu_include (include/amu/doxyg_define_in_parent_open.amu)
-  \amu_include (include/amu/includes_required.amu)
-
-  \details
-
   \amu_include (include/amu/validate_summary.amu)
+  \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
+
+// member-wide documentation and conventions
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+  \details
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
+
+  - The primary parameter is always \p v (the iterable value under test).
+  - The comparison value is always \p cv.
+  - All \c all_* functions return \b true vacuously for an empty \p v,
+    except all_lists(), all_strings(), all_numbers(), and all_len(),
+    which require at least one matching element (c > 0) and return \b false
+    for an empty iterable.
+  - The parameter \p c in all_lists(), all_strings(), all_numbers(),
+    and all_len() is an \em internal recursion counter. It must not be
+    initialised by callers; doing so produces incorrect results.
+  - When \p v is a non-iterable scalar, functions return the result of
+    applying the predicate directly to \p v rather than returning \b undef.
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// members
 //----------------------------------------------------------------------------//
 
 //! Test if a value has multiple parts and is iterable.

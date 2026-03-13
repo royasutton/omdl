@@ -33,35 +33,56 @@
   \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// validation.
-//----------------------------------------------------------------------------//
-
+// auto-tests (add to test results page)
 /***************************************************************************//**
-  \amu_include (include/amu/validate_log_th.amu)
-  \amu_include (include/amu/validate_log_td.amu)
+  \amu_include (include/amu/validate_log.amu)
   \amu_include (include/amu/validate_results.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
-
+// group(s) begin (test summary and includes-required)
 /***************************************************************************//**
   \amu_include (include/amu/doxyg_define_in_parent_open.amu)
-  \amu_include (include/amu/includes_required.amu)
-
-  \details
-
   \amu_include (include/amu/validate_summary.amu)
+  \amu_include (include/amu/includes_required.amu)
+*******************************************************************************/
 
-    See Wikipedia binary [numbers] and [operations] for more
-    information.
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
+
+// member-wide documentation and conventions
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+  \details
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
+
+  - All functions operate only on \b non-negative integers. Passing a
+    negative integer produces \b undef (after the recommended fix; before
+    the fix, it causes infinite recursion — see Correctness §2.1).
+  - Bit lists (\c <bit-list>) are stored \b LSB-first: the least-significant
+    bit occupies index 0 and the most-significant bit occupies the last index.
+  - The parameter \p bv in binary_and(), binary_or(), binary_xor(),
+    binary_not(), and binary_i2v() is an \em internal recursion accumulator.
+    It must not be initialised by callers.
+  - The parameter \p bm in binary_ishl() is an \em internal bit-mask
+    accumulator. It must not be initialised by callers.
+  - binary_ishl() clips the result to the bit-width of the input \p v.
+    Use binary_iw2i() to extract a fixed-width window from a wider value.
+  - Empty \c <bit-list> or \c <bit-string> inputs return \b undef
+    (after the recommended fix) to distinguish the empty case from zero.
+
+  See Wikipedia binary [numbers] and [operations] for more information.
 
   [numbers]: https://en.wikipedia.org/wiki/Binary_number
   [operations]: https://en.wikipedia.org/wiki/Bitwise_operation
 *******************************************************************************/
 
+//----------------------------------------------------------------------------//
+// members
 //----------------------------------------------------------------------------//
 
 //! Test if a binary bit position of an integer value equals a test bit.

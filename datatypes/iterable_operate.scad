@@ -33,34 +33,50 @@
   \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// validation.
-//----------------------------------------------------------------------------//
-
+// auto-tests (add to test results page)
 /***************************************************************************//**
-  \amu_include (include/amu/validate_log_th.amu)
-  \amu_include (include/amu/validate_log_td.amu)
+  \amu_include (include/amu/validate_log.amu)
   \amu_include (include/amu/validate_results.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
-
+// group(s) begin (test summary and includes-required)
 /***************************************************************************//**
   \amu_include (include/amu/doxyg_define_in_parent_open.amu)
+  \amu_include (include/amu/validate_summary.amu)
   \amu_include (include/amu/includes_required.amu)
+*******************************************************************************/
 
-  \details
-
+// member-wide reference definitions
+/***************************************************************************//**
   \amu_define group_references
   (
     [search]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Other_Language_Features#search
   )
-
-  \amu_include (include/amu/validate_summary.amu)
 *******************************************************************************/
 
+// member-wide documentation and conventions
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+  \details
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
+
+  - The match-value parameter is always \p mv.
+  - The match-count parameter is always \p mc. A value of 0 (or any value
+    <= 0) means 'match all occurrences'. A positive value \p mc means
+    'match at most \p mc occurrences'.
+  - The insert-value parameter in shift_ci() is \p iv, not \p i.
+    The parameter \p i is reserved for index positions throughout the group.
+  - \p mv takes precedence over \p i in functions that accept both: when
+    \p mv is defined, the match is by value; \p i provides an optional
+    secondary element index for structured-element matching.
+  - Functions that return a modified copy of \p v never modify \p v in place.
+  - When \p v is not iterable, most functions return \p v unchanged.
+    Exceptions are documented individually.
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// members
 //----------------------------------------------------------------------------//
 
 //! Returns an element from an iterable if it exists, or a default value if not.

@@ -33,20 +33,56 @@
   \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
+// auto-tests (add to test results page)
+/***************************************************************************//**
+  \amu_include (include/amu/validate_log.amu)
+  \amu_include (include/amu/validate_results.amu)
+*******************************************************************************/
 
+// group(s) begin (test summary and includes-required)
 /***************************************************************************//**
   \amu_include (include/amu/doxyg_define_in_parent_open.amu)
+  \amu_include (include/amu/validate_summary.amu)
   \amu_include (include/amu/includes_required.amu)
-
-  \details
-
-    \amu_define title (Map use)
-    \amu_define scope_id (example_use)
-    \amu_include (include/amu/scope.amu)
 *******************************************************************************/
+
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
+
+// member-wide documentation and conventions
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+  \details
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
+
+  - A map is a \b list of \b [key, value] pairs. Keys must be \b strings.
+  - The map variable is always named \p m; a second map is \p m2.
+  - \c map_merge(m1, m2): when both maps contain the same key, the value
+    from \p m1 takes precedence. Order of keys in the result is unspecified.
+  - \c map_update(m, u): keys in \p u that are also in \p m update the
+    existing value; keys in \p u absent from \p m are appended.
+    Values in \p m absent from \p u are preserved unchanged.
+  - The special variable \c $map_strict controls whether map_get_value()
+    asserts on a missing key (strict=true) or returns \b undef silently
+    (strict=false, the default).
+  - map_errors() returns an empty list when the map is valid; a non-empty
+    list indicates the detected error class(es).
+
+  \b Example
+
+  \amu_define title (Map use)
+  \amu_define scope_id (example_use)
+  \amu_include (include/amu/scope.amu)
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// members
+//----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
 // global configuration variables

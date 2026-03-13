@@ -70,7 +70,7 @@
     <sourcelink visible="yes"/>
     <memberdecl>
       <membergroups visible="yes"/>
-      <functions title="Functions and Modules"/>
+      <functions title="Functions and/or Modules"/>
       <variables title=""/>
     </memberdecl>
     <detaileddescription title="File Details"/>
@@ -90,13 +90,13 @@
       <dirs visible="yes" title=""/>
       <files visible="yes" title=""/>
       <membergroups visible="yes"/>
-      <functions title="Functions and Modules"/>
+      <functions title="Functions and/or Modules"/>
       <variables title=""/>
     </memberdecl>
     <detaileddescription title="Usage Details"/>
     <memberdef>
       <pagedocs/>
-      <functions title="Function and Module Documentation"/>
+      <functions title="Function and/or Module Documentation"/>
       <variables title=""/>
     </memberdef>
     <authorsection visible="yes"/>

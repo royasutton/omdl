@@ -33,28 +33,49 @@
   \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// validation.
-//----------------------------------------------------------------------------//
-
+// auto-tests (add to test results page)
 /***************************************************************************//**
-  \amu_include (include/amu/validate_log_th.amu)
-  \amu_include (include/amu/validate_log_td.amu)
+  \amu_include (include/amu/validate_log.amu)
   \amu_include (include/amu/validate_results.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
-
+// group(s) begin (test summary and includes-required)
 /***************************************************************************//**
   \amu_include (include/amu/doxyg_define_in_parent_open.amu)
-  \amu_include (include/amu/includes_required.amu)
-
-  \details
-
   \amu_include (include/amu/validate_summary.amu)
+  \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
+
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
+
+// member-wide documentation and conventions
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+  \details
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
+
+  - Two-list parameters use \p v1 and \p v2.
+  - The decimal-places parameter is always \p p.
+  - almost_eq() applies a relative tolerance of \c eps (the library
+    epsilon constant) by default; \p p overrides the number of significant
+    decimal places used in the comparison.
+  - compare() establishes a total order across OpenSCAD types:
+    undef < number < boolean < string < list < range.
+    Within each type, the natural ordering applies (numeric for numbers,
+    lexicographic for strings, element-wise for lists).
+  - list_get_value() performs a linear key search; for large maps prefer
+    the map group functions which offer O(1) key lookup via search().
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// members
+//----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
 // Iterable

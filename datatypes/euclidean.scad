@@ -33,29 +33,47 @@
   \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// validation.
-//----------------------------------------------------------------------------//
-
+// auto-tests (add to test results page)
 /***************************************************************************//**
-  \amu_include (include/amu/validate_log_th.amu)
-  \amu_include (include/amu/validate_log_td.amu)
+  \amu_include (include/amu/validate_log.amu)
   \amu_include (include/amu/validate_results.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
-
+// group(s) begin (test summary and includes-required)
 /***************************************************************************//**
   \amu_include (include/amu/doxyg_define_in_parent_open.amu)
-  \amu_include (include/amu/includes_required.amu)
-
-  \details
-
   \amu_include (include/amu/validate_summary.amu)
+  \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
+
+// member-wide documentation and conventions
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+  \details
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
+
+   - Points are represented as \b list-2d [x, y] or \b list-3d [x, y, z].
+   - Lines are represented as \b [p_initial, p_terminal], a two-element list
+     of points. The direction of a line is from p_initial to p_terminal.
+   - Planes are represented as \b [p, n] where \p p is a point on the plane
+     and \p n is the outward unit normal vector.
+   - All angles are in \b degrees, following OpenSCAD convention.
+   - Dimensionality is auto-detected from the input point type (2D vs 3D).
+     Mixing 2D and 3D points in the same call is undefined behaviour.
+   - Functions that return \b undef on invalid input state all validation
+     conditions explicitly in returns. No silent nan or inf is produced.
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// members
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//

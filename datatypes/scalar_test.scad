@@ -33,34 +33,48 @@
   \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// validation.
-//----------------------------------------------------------------------------//
-
+// auto-tests (add to test results page)
 /***************************************************************************//**
-  \amu_include (include/amu/validate_log_th.amu)
-  \amu_include (include/amu/validate_log_td.amu)
+  \amu_include (include/amu/validate_log.amu)
   \amu_include (include/amu/validate_results.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
-
+// group(s) begin (test summary and includes-required)
 /***************************************************************************//**
   \amu_include (include/amu/doxyg_define_in_parent_open.amu)
+  \amu_include (include/amu/validate_summary.amu)
   \amu_include (include/amu/includes_required.amu)
+*******************************************************************************/
 
-  \details
-
+// member-wide reference definitions
+/***************************************************************************//**
   \amu_define group_references
   (
     [ottf]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Type_Test_Functions "OpenSCAD Type Test Functions"
   )
-
-  \amu_include (include/amu/validate_summary.amu)
 *******************************************************************************/
 
+// member-wide documentation and conventions
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+  \details
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
+
+  - The primary parameter is always \p v (the value under test).
+  - All functions whose name begins with \c is_ return \b <boolean>.
+  - \p empty_str and \p empty_lst are treated as iterable, not scalar.
+  - is_integer() and is_decimal() are mutually exclusive; a value cannot
+    satisfy both. is_decimal() requires (v % 1) != 0 (not > 0) so that
+    negative decimals such as -1.5 are correctly identified.
+  - is_between() uses \b inclusive bounds at both ends.
+  - The parameters \p l and \p u in is_between() denote the lower and
+    upper bounds respectively. They are unrelated to \p l = list-length
+    used in other groups; prefer \p vmin / \p vmax in future revisions.
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// members
 //----------------------------------------------------------------------------//
 
 //! Test if a value is a single non-iterable value.

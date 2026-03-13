@@ -116,8 +116,8 @@
     - \p _bm   : the current bit-mask accumulator in binary operations
                  (replaces the public \p bm).
     - \p _i    : an internal index counter (replaces bare \p c used as a
-                 traversal counter in \c all_lists, \c all_strings,
-                 \c all_numbers, and \c all_len).
+                 traversal counter in all_lists(), all_strings(),
+                 all_numbers(), and all_len()).
 
     \par Boolean flag parameters
 
@@ -125,7 +125,7 @@
     purpose readable at the call site without consulting documentation.
 
     - \p use_search      : selects the element-matching method: \b true uses
-                           \c search(), \b false uses \c find(). Replaces
+                           search(), \b false uses find(). Replaces
                            \p s in functions where \p s was used solely as a
                            method selector.
     - \p ri_is_value     : indicates whether a row identifier argument is a
@@ -174,8 +174,8 @@
     - \p ri / \p ci      : a row or column identifier string used to look up
                            a table entry (table group only).
     - \p si              : the sub-element index used as the sort key in
-                           \c sort_q2 (list group only).
-    - \p col             : the column selector index passed to \c select_e
+                           sort_q2() (list group only).
+    - \p col             : the column selector index passed to select_e()
                            and related functions (list group only).
 
   +/
