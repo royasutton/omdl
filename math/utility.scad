@@ -33,21 +33,31 @@
   \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
+// auto-tests (add to test results page)
+/***************************************************************************//**
+  \amu_include (include/amu/validate_log.amu)
+  \amu_include (include/amu/validate_results.amu)
+*******************************************************************************/
 
+// group(s) begin (test summary and includes-required)
 /***************************************************************************//**
   \amu_include (include/amu/doxyg_define_in_parent_open.amu)
+  \amu_include (include/amu/validate_summary.amu)
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
 
+// member-wide documentation and conventions
 /***************************************************************************//**
   \addtogroup \amu_eval(${group})
   \details
-  \anchor utility_conventions
+  \anchor \amu_eval(${group})_conventions
   \par Conventions
 
     The following conventions apply to all functions in this group.
@@ -70,6 +80,8 @@
       \b nan, or \b inf without warning.
 *******************************************************************************/
 
+//----------------------------------------------------------------------------//
+// members
 //----------------------------------------------------------------------------//
 
 //! Return facets number for the given arc radius.

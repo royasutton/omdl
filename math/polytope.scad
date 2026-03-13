@@ -33,20 +33,32 @@
   \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
+// auto-tests (add to test results page)
+/***************************************************************************//**
+  \amu_include (include/amu/validate_log.amu)
+  \amu_include (include/amu/validate_results.amu)
+*******************************************************************************/
 
+// group(s) begin (test summary and includes-required)
 /***************************************************************************//**
   \amu_include (include/amu/doxyg_define_in_parent_open.amu)
+  \amu_include (include/amu/validate_summary.amu)
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
+
+// member-wide documentation and conventions
 /***************************************************************************//**
   \addtogroup \amu_eval(${group})
   \details
-  \anchor polytope_properties_conventions
-  \par Convention
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
 
     - Coordinates are given as \c [[x, y, z], ...] in 3d or \c [[x, y], ...]
       in 2d. Each face in \p f is an ordered list of coordinate indexes
@@ -72,6 +84,10 @@
     - Lengths and bounding-box values are in the units of \p c. Angles are
       in degrees.
 *******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// members
+//----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
 // General

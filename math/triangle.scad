@@ -33,28 +33,38 @@
   \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group and macros.
-//----------------------------------------------------------------------------//
+// auto-tests (add to test results page)
+/***************************************************************************//**
+  \amu_include (include/amu/validate_log.amu)
+  \amu_include (include/amu/validate_results.amu)
+*******************************************************************************/
 
+// group(s) begin (test summary and includes-required)
 /***************************************************************************//**
   \amu_include (include/amu/doxyg_define_in_parent_open.amu)
+  \amu_include (include/amu/validate_summary.amu)
   \amu_include (include/amu/includes_required.amu)
+*******************************************************************************/
+
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define note_no_validation
+  (
+    \note No validation is performed on the input values. Degenerate or
+          invalid input will produce undef, nan, or inf without warning
+          unless an assert is present.
+  )
 
   \amu_define html_image_w  (512)
   \amu_define latex_image_w (2.25in)
   \amu_include (include/amu/scope_diagram_2d_object.amu)
-
-  \details
-
-    See [Wikipedia](https://en.wikipedia.org/wiki/Triangle)
-    for more information.
 *******************************************************************************/
 
+// member-wide documentation and conventions
 /***************************************************************************//**
   \addtogroup \amu_eval(${group})
   \details
-  \anchor triangle_properties_conventions
+  \anchor \amu_eval(${group})_conventions
   \par Conventions
 
     The following conventions apply to all functions in this group.
@@ -85,13 +95,13 @@
     - Lengths are in the units of the input coordinate space; area in
       square units; angles in degrees.
 
-  \amu_define note_no_validation
-  (
-    \note No validation is performed on the input values. Degenerate or
-          invalid input will produce undef, nan, or inf without warning
-          unless an assert is present.
-  )
+  See [Wikipedia](https://en.wikipedia.org/wiki/Triangle) for more
+  general information.
 *******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// members
+//----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
 // shape generation

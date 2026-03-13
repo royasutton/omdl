@@ -33,20 +33,40 @@
   \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
+// auto-tests (add to test results page)
+/***************************************************************************//**
+  \amu_include (include/amu/validate_log.amu)
+  \amu_include (include/amu/validate_results.amu)
+*******************************************************************************/
 
+// group(s) begin (test summary and includes-required)
 /***************************************************************************//**
   \amu_include (include/amu/doxyg_define_in_parent_open.amu)
+  \amu_include (include/amu/validate_summary.amu)
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define note_p_not_defined
+  (
+    \note When \p p is not defined, the listed order of the coordinates
+          will be used.
+  )
+
+  \amu_define warning_secondary_shapes
+  (
+    \warning  This function does not track secondary shapes subtraction
+              as implemented by the polygon() function.
+  )
+*******************************************************************************/
+
+// member-wide documentation and conventions
 /***************************************************************************//**
   \addtogroup \amu_eval(${group})
   \details
-  \anchor polygon_properties_conventions
-  \par Convention
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
 
     All functions in this group operate on polygons defined by a list
     of 2d cartesian coordinates \p c and an optional list of paths \p p,
@@ -72,19 +92,11 @@
       polygon_linear_extrude_pf() — call polygon_is_clockwise() and
       normalise the winding internally; callers are \em not required to
       pre-normalise their input.
-
-  \amu_define note_p_not_defined
-  (
-    \note When \p p is not defined, the listed order of the coordinates
-          will be used.
-  )
-
-  \amu_define warning_secondary_shapes
-  (
-    \warning  This function does not track secondary shapes subtraction
-              as implemented by the polygon() function.
-  )
 *******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// members
+//----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
 // helper functions
