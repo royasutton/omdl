@@ -73,6 +73,15 @@
       When \b undef (default), \p o is set to \p origin2d or \p origin3d
       based on \p d. Exception: in the 3D Euler rotation branch of
       rotate_p(), \p o is silently ignored — see rotate_p() for details.
+      When \p center is \b true, \p o is also ignored — see below.
+    - The optional \p center parameter (default \b false) is available on
+      all spatial functions that have a fixed point (rotate_p(),
+      transform_p(), shear_p(), scale_p(), resize_p()). When \b true,
+      the transformed result is passed through \c center_p() so that the
+      output bounding box is centred about the coordinate origin. Centering
+      is always the last step in the pipeline, applied after all other
+      transformations including translation. When \p center is \b true,
+      \p o is ignored.
     - When a transformation parameter (\p v, \p a, \p m, \p s, \p av)
       is \b undef, that transformation is a no-op and \p c is returned
       unchanged. This allows safe use in composed pipelines without
@@ -301,22 +310,27 @@ function mirror_p
 
 //! Rotate all coordinates about one or more axes in 2D or 3D.
 /***************************************************************************//**
-  \param    c <points-3d | points-2d> A list of 3d or 2d coordinate
-              points.
+  \param    c      <points-3d | points-2d> A list of 3d or 2d coordinate
+                   points.
 
-  \param    a <decimal-list-3 | decimal> The axis rotation angle; A
-              list [ax, ay, az] or a single decimal to specify az only.
-              When \b undef the point list is returned unchanged.
+  \param    a      <decimal-list-3 | decimal> The axis rotation angle; A
+                   list [ax, ay, az] or a single decimal to specify az only.
+                   When \b undef the point list is returned unchanged.
 
-  \param    av <vector-3d> An arbitrary axis for the rotation. When
-              specified, the rotation angle will be \p a or az about
-              the line \p av that passes through point \p o.
+  \param    av     <vector-3d> An arbitrary axis for the rotation. When
+                   specified, the rotation angle will be \p a or az about
+                   the line \p av that passes through point \p o.
 
-  \param    o <point-3d | point-2d> The origin for the rotation. In 2D,
-              the center of rotation. In 3D, used only when \p av is
-              specified. When \b undef (default), the origin is set
-              automatically to \p origin2d or \p origin3d based on the
-              dimensionality of \p c.
+  \param    center <boolean> When \b true, the rotated result is passed
+                   through \c center_p() so that the output bounding box
+                   is centred about the origin. When \b false (default),
+                   the result is positioned as determined by \p o.
+
+  \param    o      <point-3d | point-2d> The origin for the rotation. In 2D,
+                   the center of rotation. In 3D, used only when \p av is
+                   specified. When \b undef (default), the origin is set
+                   automatically to \p origin2d or \p origin3d based on the
+                   dimensionality of \p c. Ignored when \p center is \b true.
 
   \returns  <points-3d | points-2d> A list of rotated coordinate
             points.
@@ -337,6 +351,9 @@ function mirror_p
       \p av, using the Rodrigues rotation formula. \p av need not be
       a unit vector; it is normalised internally.
 
+    When \p center is \b true, \c center_p() is called on the rotated
+    result to centre the output bounding box about the origin.
+
     \note In the 3D Euler branch the origin \p o is silently ignored
           — rotation always occurs about the world origin. Only the 2D
           branch and the 3D arbitrary-axis branch respect \p o.
@@ -353,6 +370,7 @@ function rotate_p
   c,
   a,
   av,
+  center = false,
   o
 ) = is_undef(a) ? c
   : (len(c) == 0) ? c
@@ -430,42 +448,49 @@ function rotate_p
             )
             multmatrix_p(c, [[m11,m12,m13,m14], [m21,m22,m23,m24], [m31,m32,m33,m34]])
     )
-    rc;
+    center ? center_p(rc) : rc;
 
 //! Apply an optional mirror, rotation, and translation to a list of 2D or 3D coordinates.
 /***************************************************************************//**
-  \param    c <points-3d | points-2d> A list of 3d or 2d coordinate
-              points.
+  \param    c      <points-3d | points-2d> A list of 3d or 2d coordinate
+                   points.
 
-  \param    m <vector-3d | vector-2d> The normal vector of the mirror
-              plane or line. The mirror is applied about the plane or
-              line passing through \p o with the given normal. When \b
-              undef (default), no mirror is applied.
+  \param    m      <vector-3d | vector-2d> The normal vector of the mirror
+                   plane or line. The mirror is applied about the plane or
+                   line passing through \p o with the given normal. When \b
+                   undef (default), no mirror is applied.
 
-  \param    a <decimal-list-3 | decimal> The axis rotation angle; A
-              list [ax, ay, az] or a single decimal to specify az only.
-              When \b undef, no rotation is applied.
+  \param    a      <decimal-list-3 | decimal> The axis rotation angle; A
+                   list [ax, ay, az] or a single decimal to specify az only.
+                   When \b undef, no rotation is applied.
 
-  \param    av <vector-3d> An arbitrary axis for the rotation. When
-              specified, the rotation angle will be \p a or az about
-              the line \p av that passes through point \p o.
+  \param    av     <vector-3d> An arbitrary axis for the rotation. When
+                   specified, the rotation angle will be \p a or az about
+                   the line \p av that passes through point \p o.
 
-  \param    o <point-3d | point-2d> The origin for the rotation and
-              mirror. In 2D, the center of rotation. In 3D, used only
-              when \p av is specified. When \b undef (default), the
-              origin is set automatically to \p origin2d or \p origin3d
-              based on the dimensionality of \p c.
+  \param    center <boolean> When \b true, the fully transformed result is
+                   passed through \c center_p() so that the output bounding
+                   box is centred about the origin. Centering is applied
+                   after mirror, rotation, and translation. When \b false
+                   (default), the result is positioned as determined by \p o
+                   and \p t.
 
-  \param    t <point-3d | point-2d> A translation vector applied after
-              mirror and rotation. When \b undef (default), no
-              translation is applied. Translation is always applied
-              last regardless of whether \p a is defined.
+  \param    o      <point-3d | point-2d> The origin for the rotation and
+                   mirror. In 2D, the center of rotation. In 3D, used only
+                   when \p av is specified. When \b undef (default), the
+                   origin is set automatically to \p origin2d or \p origin3d
+                   based on the dimensionality of \p c.
+
+  \param    t      <point-3d | point-2d> A translation vector applied after
+                   mirror and rotation. When \b undef (default), no
+                   translation is applied. Translation is always applied
+                   last before centering.
 
   \returns  <points-3d | points-2d> A list of 3d or 2d transformed
             coordinates. Operations are applied in order: mirror about
-            \p o, rotate about \p o, translate by \p t. In 3D Euler
-            mode, rotation order is extrinsic Z, Y, X (equivalent to
-            OpenSCAD \c rotate([ax,ay,az])).
+            \p o, rotate about \p o, translate by \p t, then optionally
+            centre via \c center_p(). In 3D Euler mode, rotation order is
+            extrinsic Z, Y, X (equivalent to OpenSCAD \c rotate([ax,ay,az])).
 
   \details
 
@@ -476,15 +501,17 @@ function rotate_p
     Rotation \p a is then applied about \p o, followed by the optional
     translation \p t. Any combination of the three operations may be
     used independently — in particular, \p m and \p t may be specified
-    without \p a to mirror and then translate without rotation.
+    without \p a to mirror and then translate without rotation. When
+    \p center is \b true, \c center_p() is called on the final result
+    to centre the output bounding box about the origin.
 
     The mirror normal \p m follows the same convention as OpenSCAD's
     built-in `mirror()` module: a 2D vector `[nx, ny]` defines the
     normal to the mirror line, and a 3D vector `[nx, ny, nz]` defines
     the normal to the mirror plane.
 
-    When \p a, \p m, and \p t are all \b undef the point list is
-    returned unchanged.
+    When \p a, \p m, \p t, and \p center are all \b undef or \b false
+    the point list is returned unchanged.
 
     See [Wikipedia] for more information on [transformation matrix],
     [axis rotation], and [reflection matrix].
@@ -500,27 +527,35 @@ function transform_p
   m,
   a,
   av,
+  center = false,
   o,
   t
-) = translate_p( rotate_p( mirror_p( c, m, o ), a, av, o ), t );
+) = let( r = translate_p( rotate_p( mirror_p( c, m, o ), a, av, o=o ), t ) )
+    center ? center_p(r) : r;
 
 //! Shear all coordinates in 2D or 3D.
 /***************************************************************************//**
-  \param    c <points-3d | points-2d> A list of 3d or 2d coordinate
-              points.
+  \param    c      <points-3d | points-2d> A list of 3d or 2d coordinate
+                   points.
 
-  \param    s <decimal-list> The shear factors. In 2D, a list
-              `[sxy, syx]` where \c sxy shifts x proportional to y and
-              \c syx shifts y proportional to x. In 3D, a list `[sxy,
-              sxz, syx, syz, szx, szy]` following the standard shear
-              matrix convention.
+  \param    s      <decimal-list> The shear factors. In 2D, a list
+                   `[sxy, syx]` where \c sxy shifts x proportional to y and
+                   \c syx shifts y proportional to x. In 3D, a list `[sxy,
+                   sxz, syx, syz, szx, szy]` following the standard shear
+                   matrix convention.
 
-  \param    o <point-3d | point-2d> The origin about which shearing is
-              applied. When \b undef (default), the origin is set
-              automatically to \p origin2d or \p origin3d based on the
-              dimensionality of \p c. Shearing about an explicit origin
-              is equivalent to translating by `-o`, shearing, then
-              translating back by `+o`.
+  \param    center <boolean> When \b true, the sheared result is passed
+                   through \c center_p() so that the output bounding box
+                   is centred about the origin. When \b false (default),
+                   the result is positioned as determined by \p o.
+
+  \param    o      <point-3d | point-2d> The origin about which shearing is
+                   applied. When \b undef (default), the origin is set
+                   automatically to \p origin2d or \p origin3d based on the
+                   dimensionality of \p c. Shearing about an explicit origin
+                   is equivalent to translating by `-o`, shearing, then
+                   translating back by `+o`. Ignored when \p center is
+                   \b true.
 
   \returns  <points-3d | points-2d> A list of sheared coordinate
             points.
@@ -545,7 +580,9 @@ function transform_p
     ```
 
     Missing list elements default to \b 0 (no shear in that direction).
-    When \p s is \b undef the point list is returned unchanged.
+    When \p center is \b true, \c center_p() is called on the sheared
+    result to centre the output bounding box about the origin, and \p o
+    is ignored. When \p s is \b undef the point list is returned unchanged.
 
     See [Wikipedia] for more information on [shear mapping].
 
@@ -556,65 +593,73 @@ function shear_p
 (
   c,
   s,
+  center = false,
   o
 ) = is_undef(s) ? c
   : (len(c) == 0) ? c
   : let
     (
       d   = len(first(c)),
-      eo  = defined_or( o, d == 2 ? origin2d : origin3d )
+      eo  = defined_or( o, d == 2 ? origin2d : origin3d ),
+
+      r   = (d == 2) ?
+              let
+              (
+                ox  = eo[0], oy = eo[1],
+                sxy = defined_e_or(s, 0, 0),
+                syx = defined_e_or(s, 1, 0)
+              )
+              [
+                for (ci=c)
+                  let( dx = ci[0]-ox, dy = ci[1]-oy )
+                  [
+                    ox + dx + sxy*dy,
+                    oy + syx*dx + dy
+                  ]
+              ]
+            : (d == 3) ?
+              let
+              (
+                ox  = eo[0], oy = eo[1], oz = eo[2],
+                sxy = defined_e_or(s, 0, 0),
+                sxz = defined_e_or(s, 1, 0),
+                syx = defined_e_or(s, 2, 0),
+                syz = defined_e_or(s, 3, 0),
+                szx = defined_e_or(s, 4, 0),
+                szy = defined_e_or(s, 5, 0)
+              )
+              [
+                for (ci=c)
+                  let( dx = ci[0]-ox, dy = ci[1]-oy, dz = ci[2]-oz )
+                  [
+                    ox + dx  + sxy*dy + sxz*dz,
+                    oy + syx*dx + dy  + syz*dz,
+                    oz + szx*dx + szy*dy + dz
+                  ]
+              ]
+            : c
     )
-    (d == 2) ?
-      let
-      (
-        ox  = eo[0], oy = eo[1],
-        sxy = defined_e_or(s, 0, 0),
-        syx = defined_e_or(s, 1, 0)
-      )
-      [
-        for (ci=c)
-          let( dx = ci[0]-ox, dy = ci[1]-oy )
-          [
-            ox + dx + sxy*dy,
-            oy + syx*dx + dy
-          ]
-      ]
-    : (d == 3) ?
-      let
-      (
-        ox  = eo[0], oy = eo[1], oz = eo[2],
-        sxy = defined_e_or(s, 0, 0),
-        sxz = defined_e_or(s, 1, 0),
-        syx = defined_e_or(s, 2, 0),
-        syz = defined_e_or(s, 3, 0),
-        szx = defined_e_or(s, 4, 0),
-        szy = defined_e_or(s, 5, 0)
-      )
-      [
-        for (ci=c)
-          let( dx = ci[0]-ox, dy = ci[1]-oy, dz = ci[2]-oz )
-          [
-            ox + dx  + sxy*dy + sxz*dz,
-            oy + syx*dx + dy  + syz*dz,
-            oz + szx*dx + szy*dy + dz
-          ]
-      ]
-    : c;
+    center ? center_p(r) : r;
 
 //! Scale all coordinates dimensions.
 /***************************************************************************//**
-  \param    c <points-nd> A list of nd coordinate points.
+  \param    c      <points-nd> A list of nd coordinate points.
 
-  \param    v <decimal-list-n | decimal> A list of scale factors for
-              each dimension, or a single decimal to scale uniformly
-              across all dimensions.
+  \param    v      <decimal-list-n | decimal> A list of scale factors for
+                   each dimension, or a single decimal to scale uniformly
+                   across all dimensions.
 
-  \param    o <point-nd> The origin about which scaling is applied.
-              When \b undef (default), the origin is set automatically
-              to \p origin2d or \p origin3d based on the dimensionality
-              of \p c. Scaling about an explicit origin is equivalent
-              to translating by `-o`, scaling, then translating back by
-              `+o`.
+  \param    center <boolean> When \b true, the scaled result is passed
+                   through \c center_p() so that the output bounding box
+                   is centred about the origin. When \b false (default),
+                   the result is positioned as determined by \p o.
+
+  \param    o      <point-nd> The origin about which scaling is applied.
+                   When \b undef (default), the origin is set automatically
+                   to \p origin2d or \p origin3d based on the dimensionality
+                   of \p c. Scaling about an explicit origin is equivalent
+                   to translating by `-o`, scaling, then translating back by
+                   `+o`. Ignored when \p center is \b true.
 
   \returns  <points-nd> A list of scaled coordinate points.
 
@@ -624,7 +669,9 @@ function shear_p
     dimension. When \p v is a list shorter than the point dimensionality,
     missing elements default to \b 1 (no scaling). When \p o is the
     origin the result is identical to scaling about the origin. When
-    \p v is \b undef the point list is returned unchanged.
+    \p center is \b true, \c center_p() is called on the scaled result
+    to centre the output bounding box about the origin, and \p o is
+    ignored. When \p v is \b undef the point list is returned unchanged.
 
     See [Wikipedia] for more information on [transformation matrix].
 
@@ -635,6 +682,7 @@ function scale_p
 (
   c,
   v,
+  center = false,
   o
 ) = is_undef(v) ? c
   : (len(c) == 0) ? c
@@ -644,9 +692,11 @@ function scale_p
       eo = defined_or( o, d == 2 ? origin2d : origin3d ),
 
       u  = is_scalar(v) ? v : 1,
-      w  = [for (i=[0 : d-1]) defined_e_or(v, i, u)]
+      w  = [for (i=[0 : d-1]) defined_e_or(v, i, u)],
+
+      r  = [for (ci=c) [for (di=[0 : d-1]) eo[di] + (ci[di] - eo[di]) * w[di]]]
     )
-    [for (ci=c) [for (di=[0 : d-1]) eo[di] + (ci[di] - eo[di]) * w[di]]];
+    center ? center_p(r) : r;
 
 //! Scale all coordinates dimensions proportionately to fit inside a region.
 /***************************************************************************//**
