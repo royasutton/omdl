@@ -33,52 +33,76 @@
   \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
-
+// auto-tests (append to test results page)
 /***************************************************************************//**
-  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
-  \amu_include (include/amu/includes_required.amu)
-
-  \details
-
-    These functions allow for angles to be specified with units.
-    Angles specified with units are independent of (\ref angle_unit_base).
-    There are also unit conversion functions for converting from one unit
-    to another.
-
-    The table below enumerates the supported units.
-
-     units id  | description            | type            |
-    :---------:|:----------------------:|:---------------:|
-     r         | radian                 | decimal         |
-     d         | degree                 | decimal         |
-     dms       | degree, minute, second | decimal-list-3  |
-
-
-    \amu_define title (Angle base unit example)
-    \amu_define scope_id (example)
-    \amu_define output_scad (true)
-    \amu_define output_console (false)
-    \amu_include (include/amu/scope.amu)
-
-    \amu_define output_scad (false)
-    \amu_define output_console (true)
-
-    \amu_define title (angle_unit_base=r)
-    \amu_define scope_id (example_r)
-    \amu_include (include/amu/scope.amu)
-
-    \amu_define title (angle_unit_base=d)
-    \amu_define scope_id (example_d)
-    \amu_include (include/amu/scope.amu)
-
-    \amu_define title (angle_unit_base=dms)
-    \amu_define scope_id (example_dms)
-    \amu_include (include/amu/scope.amu)
+  \amu_include (include/amu/validate_log.amu)
+  \amu_include (include/amu/validate_results.amu)
 *******************************************************************************/
 
+// group(s) begin (test summary and includes-required)
+/***************************************************************************//**
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
+  \amu_include (include/amu/validate_summary.amu)
+  \amu_include (include/amu/includes_required.amu)
+*******************************************************************************/
+
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
+
+// member-wide documentation and conventions
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+  \details
+
+  /+
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
+
+  - Convention list
+  +/
+
+  These functions allow for angles to be specified with units.
+  Angles specified with units are independent of (\ref angle_unit_base).
+  There are also unit conversion functions for converting from one unit
+  to another.
+
+  The table below enumerates the supported units.
+
+   units id  | description            | type            |
+  :---------:|:----------------------:|:---------------:|
+   r         | radian                 | decimal         |
+   d         | degree                 | decimal         |
+   dms       | degree, minute, second | decimal-list-3  |
+
+
+  \amu_define title (Angle base unit example)
+  \amu_define scope_id (example)
+  \amu_define output_scad (true)
+  \amu_define output_console (false)
+  \amu_include (include/amu/scope.amu)
+
+  \amu_define output_scad (false)
+  \amu_define output_console (true)
+
+  \amu_define title (angle_unit_base=r)
+  \amu_define scope_id (example_r)
+  \amu_include (include/amu/scope.amu)
+
+  \amu_define title (angle_unit_base=d)
+  \amu_define scope_id (example_d)
+  \amu_include (include/amu/scope.amu)
+
+  \amu_define title (angle_unit_base=dms)
+  \amu_define scope_id (example_dms)
+  \amu_include (include/amu/scope.amu)
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// members
 //----------------------------------------------------------------------------//
 
 //! <string> The base units for value storage.
@@ -208,6 +232,25 @@ function a_rad(a) = angle(a=a, from="r");
 //----------------------------------------------------------------------------//
 // openscad-amu auxiliary scripts
 //----------------------------------------------------------------------------//
+
+/*
+BEGIN_SCOPE validate;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <common/validation.scad>;
+
+    echo( str("openscad version ", version()) );
+    for (i=[1:3]) echo( "not tested:" );
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
 
 /*
 BEGIN_SCOPE example;

@@ -33,81 +33,105 @@
   \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
+// auto-tests (append to test results page)
+/***************************************************************************//**
+  \amu_include (include/amu/validate_log.amu)
+  \amu_include (include/amu/validate_results.amu)
+*******************************************************************************/
 
+// group(s) begin (test summary and includes-required)
 /***************************************************************************//**
   \amu_include (include/amu/doxyg_define_in_parent_open.amu)
+  \amu_include (include/amu/validate_summary.amu)
   \amu_include (include/amu/includes_required.amu)
+*******************************************************************************/
 
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
+
+// member-wide documentation and conventions
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
   \details
 
-    These functions allow for geometric points in space to be specified
-    using multiple coordinate systems. Some geometric calculations are
-    specified more naturally in one or another coordinate system. These
-    conversion functions allow for the movement between the most
-    convenient for a particular application.
+  /+
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
 
-    For more information see Wikipedia on [coordinate system].
+  - Convention list
+  +/
 
-    The table below enumerates the supported coordinate systems.
+  These functions allow for geometric points in space to be specified
+  using multiple coordinate systems. Some geometric calculations are
+  specified more naturally in one or another coordinate system. These
+  conversion functions allow for the movement between the most
+  convenient for a particular application.
 
-    | system id  | description    | dimensions  | point convention    |
-    |:----------:|:--------------:|:-----------:|:-------------------:|
-    |  c         | [cartesian]    | 2d or 3d    | [x, y] or [x, y, z] |
-    |  p         | [polar]        | 2d          | [r, aa]             |
-    |  y         | [cylindrical]  | 3d          | [r, aa, z]          |
-    |  s         | [spherical]    | 3d          | [r, aa, pa]         |
+  For more information see Wikipedia on [coordinate system].
 
-    The symbols used in the convention column are as follows:
+  The table below enumerates the supported coordinate systems.
 
-    | symbol  | description             | units   | reference           |
-    |:-------:|:------------------------|:-------:|:-------------------:|
-    | x, y, z | coordinate distance     | any     | xyz-axis            |
-    | r       | radial distance         | any     | z-axis / xyz-origin |
-    | aa      | [azimuthal] angle       | degrees | positive x-axis     |
-    | pa      | polar / [zenith] angle  | degrees | positive z-axis     |
+  | system id  | description    | dimensions  | point convention    |
+  |:----------:|:--------------:|:-----------:|:-------------------:|
+  |  c         | [cartesian]    | 2d or 3d    | [x, y] or [x, y, z] |
+  |  p         | [polar]        | 2d          | [r, aa]             |
+  |  y         | [cylindrical]  | 3d          | [r, aa, z]          |
+  |  s         | [spherical]    | 3d          | [r, aa, pa]         |
+
+  The symbols used in the convention column are as follows:
+
+  | symbol  | description             | units   | reference           |
+  |:-------:|:------------------------|:-------:|:-------------------:|
+  | x, y, z | coordinate distance     | any     | xyz-axis            |
+  | r       | radial distance         | any     | z-axis / xyz-origin |
+  | aa      | [azimuthal] angle       | degrees | positive x-axis     |
+  | pa      | polar / [zenith] angle  | degrees | positive z-axis     |
 
   \note The [azimuthal] angle is a measure of the radial vector orthogonal
         projection onto the xy-plane measured from the positive x-axis.
         The polar angle is measured from the z-axis ([zenith]) to the
         radial vector.
 
-    \amu_define title (Coordinate system base example)
-    \amu_define scope_id (example)
-    \amu_define output_scad (true)
-    \amu_define output_console (false)
-    \amu_include (include/amu/scope.amu)
+  \amu_define title (Coordinate system base example)
+  \amu_define scope_id (example)
+  \amu_define output_scad (true)
+  \amu_define output_console (false)
+  \amu_include (include/amu/scope.amu)
 
-    \amu_define output_scad (false)
-    \amu_define output_console (true)
+  \amu_define output_scad (false)
+  \amu_define output_console (true)
 
-    \amu_define title (coordinate_unit_base=c)
-    \amu_define scope_id (example_c)
-    \amu_include (include/amu/scope.amu)
+  \amu_define title (coordinate_unit_base=c)
+  \amu_define scope_id (example_c)
+  \amu_include (include/amu/scope.amu)
 
-    \amu_define title (coordinate_unit_base=p)
-    \amu_define scope_id (example_p)
-    \amu_include (include/amu/scope.amu)
+  \amu_define title (coordinate_unit_base=p)
+  \amu_define scope_id (example_p)
+  \amu_include (include/amu/scope.amu)
 
-    \amu_define title (coordinate_unit_base=y)
-    \amu_define scope_id (example_y)
-    \amu_include (include/amu/scope.amu)
+  \amu_define title (coordinate_unit_base=y)
+  \amu_define scope_id (example_y)
+  \amu_include (include/amu/scope.amu)
 
-    \amu_define title (coordinate_unit_base=s)
-    \amu_define scope_id (example_s)
-    \amu_include (include/amu/scope.amu)
+  \amu_define title (coordinate_unit_base=s)
+  \amu_define scope_id (example_s)
+  \amu_include (include/amu/scope.amu)
 
-    [coordinate system]: https://en.wikipedia.org/wiki/Coordinate_system
-    [cartesian]: https://en.wikipedia.org/wiki/Cartesian_coordinate_system
-    [polar]: https://en.wikipedia.org/wiki/Polar_coordinate_system
-    [cylindrical]: https://en.wikipedia.org/wiki/Cylindrical_coordinate_system
-    [spherical]: https://en.wikipedia.org/wiki/Spherical_coordinate_system
-    [azimuthal]: https://en.wikipedia.org/wiki/Azimuth
-    [zenith]: https://en.wikipedia.org/wiki/Zenith
+  [coordinate system]: https://en.wikipedia.org/wiki/Coordinate_system
+  [cartesian]: https://en.wikipedia.org/wiki/Cartesian_coordinate_system
+  [polar]: https://en.wikipedia.org/wiki/Polar_coordinate_system
+  [cylindrical]: https://en.wikipedia.org/wiki/Cylindrical_coordinate_system
+  [spherical]: https://en.wikipedia.org/wiki/Spherical_coordinate_system
+  [azimuthal]: https://en.wikipedia.org/wiki/Azimuth
+  [zenith]: https://en.wikipedia.org/wiki/Zenith
 *******************************************************************************/
 
+//----------------------------------------------------------------------------//
+// members
 //----------------------------------------------------------------------------//
 
 //! <string> The base units for value storage.
@@ -401,6 +425,25 @@ function coordinate_scale3d_s2c
 //----------------------------------------------------------------------------//
 // openscad-amu auxiliary scripts
 //----------------------------------------------------------------------------//
+
+/*
+BEGIN_SCOPE validate;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <common/validation.scad>;
+
+    echo( str("openscad version ", version()) );
+    for (i=[1:7]) echo( "not tested:" );
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
 
 /*
 BEGIN_SCOPE example;

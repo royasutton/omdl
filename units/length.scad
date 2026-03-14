@@ -33,74 +33,98 @@
   \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
-
+// auto-tests (append to test results page)
 /***************************************************************************//**
-  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
-  \amu_include (include/amu/includes_required.amu)
-
-  \details
-
-    These functions allow for lengths to be specified with units.
-    Lengths specified with units are independent of (\ref length_unit_base).
-    There are also unit conversion functions for converting from one unit
-    to another.
-
-    The table below enumerates the supported units.
-
-     units id  | description
-    :---------:|:----------------------:
-     pm        | picometer
-     nm        | nanometer
-     um        | micrometer
-     mm        | millimeter
-     cm        | centimeter
-     dm        | decimeter
-      m        | meter
-     km        | kilometer
-     thou, mil | thousandth of an inch
-     in        | inch
-     ft        | feet
-     yd        | yard
-     mi        | mile
-
-    \amu_define title (Length base units example)
-    \amu_define scope_id (example)
-    \amu_define output_scad (true)
-    \amu_define output_console (false)
-    \amu_include (include/amu/scope.amu)
-
-    \amu_define output_scad (false)
-    \amu_define output_console (true)
-
-    \amu_define title (length_unit_base=mm)
-    \amu_define scope_id (example_mm)
-    \amu_include (include/amu/scope.amu)
-
-    \amu_define title (length_unit_base=cm)
-    \amu_define scope_id (example_cm)
-    \amu_include (include/amu/scope.amu)
-
-    \amu_define title (length_unit_base=mil)
-    \amu_define scope_id (example_mil)
-    \amu_include (include/amu/scope.amu)
-
-    \amu_define title (length_unit_base=in)
-    \amu_define scope_id (example_in)
-    \amu_include (include/amu/scope.amu)
-
-    /+
-      include diagram
-    +/
-    \amu_define title  (Equivalent lengths)
-    \amu_define image_views   (top)
-    \amu_define image_size    (qvga)
-    \amu_define scope_id      (equivalents)
-    \amu_include (include/amu/scope_diagrams_3d.amu)
+  \amu_include (include/amu/validate_log.amu)
+  \amu_include (include/amu/validate_results.amu)
 *******************************************************************************/
 
+// group(s) begin (test summary and includes-required)
+/***************************************************************************//**
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
+  \amu_include (include/amu/validate_summary.amu)
+  \amu_include (include/amu/includes_required.amu)
+*******************************************************************************/
+
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
+
+// member-wide documentation and conventions
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+  \details
+
+  /+
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
+
+  - Convention list
+  +/
+
+  These functions allow for lengths to be specified with units. Lengths
+  specified with units are independent of (\ref length_unit_base).
+  There are also unit conversion functions for converting from one unit
+  to another.
+
+  The table below enumerates the supported units.
+
+   units id  | description
+  :---------:|:----------------------:
+   pm        | picometer
+   nm        | nanometer
+   um        | micrometer
+   mm        | millimeter
+   cm        | centimeter
+   dm        | decimeter
+    m        | meter
+   km        | kilometer
+   thou, mil | thousandth of an inch
+   in        | inch
+   ft        | feet
+   yd        | yard
+   mi        | mile
+
+  \amu_define title (Length base units example)
+  \amu_define scope_id (example)
+  \amu_define output_scad (true)
+  \amu_define output_console (false)
+  \amu_include (include/amu/scope.amu)
+
+  \amu_define output_scad (false)
+  \amu_define output_console (true)
+
+  \amu_define title (length_unit_base=mm)
+  \amu_define scope_id (example_mm)
+  \amu_include (include/amu/scope.amu)
+
+  \amu_define title (length_unit_base=cm)
+  \amu_define scope_id (example_cm)
+  \amu_include (include/amu/scope.amu)
+
+  \amu_define title (length_unit_base=mil)
+  \amu_define scope_id (example_mil)
+  \amu_include (include/amu/scope.amu)
+
+  \amu_define title (length_unit_base=in)
+  \amu_define scope_id (example_in)
+  \amu_include (include/amu/scope.amu)
+
+  /+
+    include diagram
+  +/
+  \amu_define title  (Equivalent lengths)
+  \amu_define image_views   (top)
+  \amu_define image_size    (qvga)
+  \amu_define scope_id      (equivalents)
+  \amu_include (include/amu/scope_diagrams_3d.amu)
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// members
 //----------------------------------------------------------------------------//
 
 //! <string> The base units for value storage.
@@ -316,6 +340,25 @@ function l_in(v) = length(v=v, from="in");
 //----------------------------------------------------------------------------//
 
 /*
+BEGIN_SCOPE validate;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <common/validation.scad>;
+
+    echo( str("openscad version ", version()) );
+    for (i=[1:3]) echo( "not tested:" );
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
+
+/*
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
@@ -359,7 +402,9 @@ BEGIN_SCOPE example;
     include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
+*/
 
+/*
 BEGIN_SCOPE equivalents;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
