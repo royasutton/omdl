@@ -660,7 +660,8 @@ function scale_p
                    elements default to \b 1.
 
   \param    center <boolean> When \b true, the scaled result is centred
-                   about the origin. When \b false (default), the
+                   about the origin by passing the scaled point list
+                   through \c center_p(). When \b false (default), the
                    bounding box minimum is placed at the origin before
                    scaling so that the result spans `[0, v[i]]` in each
                    dimension.
@@ -683,16 +684,18 @@ function scale_p
     ensures a consistent result regardless of where the input points
     are positioned. When a dimension has zero extent (all points share
     the same coordinate), that dimension is left unchanged to avoid
-    division by zero. When \p center is \b true, the result is centred
-    about the coordinate origin by applying an additional translation
-    of `-v[i] / 2` after scaling, and \p o is ignored. When \p v is
-    \b undef the point list is returned unchanged.
+    division by zero. When \p center is \b true, the scaled result is
+    passed through \c center_p() to centre it about the coordinate
+    origin, and \p o is ignored. When \p v is \b undef the point list
+    is returned unchanged.
 
     \note The bounding box is computed by iterating \p c once per
           dimension, giving O(n*d) total work where n = len(c) and
-          d = len(first(c)). For typical 2D or 3D inputs this is
-          negligible, but callers passing very large point lists should
-          be aware of the linear scaling with both n and d.
+          d = len(first(c)). When \p center is \b true an additional
+          O(n*d) pass is performed by \c center_p(). For typical 2D or
+          3D inputs this is negligible, but callers passing very large
+          point lists should be aware of the linear scaling with both
+          n and d.
 
     See [Wikipedia] for more information on [transformation matrix].
 
@@ -721,10 +724,10 @@ function resize_p
       // per-dimension extent; zero extent yields scale factor 1 (no change)
       s  = [for (i=[0 : d-1]) let (e = bv[i][1] - bv[i][0]) e == 0 ? 1 : w[i]/e],
 
-      // per-dimension placement offset: centre about origin or align min to eo
-      co = [for (i=[0 : d-1]) center ? w[i]/2 : -eo[i]]
+      // scaled result aligned to eo; centering is delegated to center_p()
+      r  = [for (ci=c) [for (di=[0 : d-1]) (ci[di] - bv[di][0]) * s[di] + eo[di]]]
     )
-    [for (ci=c) [for (di=[0 : d-1]) (ci[di] - bv[di][0]) * s[di] - co[di]]];
+    center ? center_p(r) : r;
 
 //! Center all coordinates about the origin.
 /***************************************************************************//**
@@ -746,11 +749,10 @@ function resize_p
     pass, making the total work O(n*d). Passing an empty list returns
     an empty list unchanged.
 
-    \note This function provides the centering step used internally by
-          \c resize_p when its \p center parameter is \b true, factored
-          out as a reusable primitive. It may be composed freely with
-          any other spatial function in this group to post-center the
-          result of an arbitrary transformation pipeline.
+    \note This function is called directly by \c resize_p when its
+          \p center parameter is \b true. It may be composed freely
+          with any other spatial function in this group to post-center
+          the result of an arbitrary transformation pipeline.
 
     See [Wikipedia] for more information on [translation].
 
@@ -787,7 +789,7 @@ BEGIN_SCOPE validate;
     include <common/validation.scad>;
 
     echo( str("openscad version ", version()) );
-    for (i=[1:8]) echo( "not tested:" );
+    for (i=[1:9]) echo( "not tested:" );
 
     // end_include
   END_OPENSCAD;
