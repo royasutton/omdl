@@ -136,7 +136,7 @@ function angle_unit_name
 
   \private
 *******************************************************************************/
-function angle_unit_d2
+function _angle_unit_d2
 (
   a,
   to
@@ -158,7 +158,7 @@ function angle_unit_d2
             Returns \b undef for identifiers that are not defined.
   \private
 *******************************************************************************/
-function angle_unit_2d
+function _angle_unit_2d
 (
   a,
   from
@@ -182,7 +182,7 @@ function angle
   from = angle_unit_default,
   to   = angle_unit_base
 ) = (from == to) ? a
-  : angle_unit_d2( angle_unit_2d( a, from ), to );
+  : _angle_unit_d2( _angle_unit_2d( a, from ), to );
 
 //! Convert an angle from some units to another.
 /***************************************************************************//**
@@ -199,7 +199,7 @@ function angle_inv
   from = angle_unit_base,
   to   = angle_unit_default
 ) = (from == to) ? a
-  : angle_unit_d2( angle_unit_2d( a, from ), to );
+  : _angle_unit_d2( _angle_unit_2d( a, from ), to );
 
 //----------------------------------------------------------------------------//
 // shorthand conversions
