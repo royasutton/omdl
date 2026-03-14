@@ -70,8 +70,8 @@
 
 /*
 
-  Private and public members can segregate members into named member
-  group collections by wrapping the members with open and close group
+  Private and public members can segregate members into collections of
+  named member groups by wrapping the members with open and close group
   comment blobs.
 
   //! \name collection name 1 (subgroup)
