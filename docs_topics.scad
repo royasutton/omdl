@@ -124,18 +124,18 @@
   \subsection workflow_oriented 4. Workflow-Oriented Organization
 
   omdl mirrors how mechanical designs evolve. This is reflected
-  directly in the library structure (in alphabetical order):
+  directly in the library structure:
 
-  - \ref common     "Common"
   - \ref datatypes  "Data Types"
-  - \ref database   "Database"
+  - \ref common     "Common"
+  - \ref units      "Units"
+  - \ref database   "Design Data"
   - \ref math       "Math"
+  - \ref shapes     "Shapes"
+  - \ref transforms "Transforms"
+  - \ref tools      "Tools"
   - \ref models     "Models"
   - \ref parts      "Parts"
-  - \ref shapes     "Shapes"
-  - \ref tools      "Tools"
-  - \ref transforms "Transforms"
-  - \ref units      "Units"
 
   Other libraries are typically organized by shape type, not design
   process.
