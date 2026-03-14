@@ -33,6 +33,30 @@
 //----------------------------------------------------------------------------//
 // The omdl Distinctions
 //----------------------------------------------------------------------------//
+/***************************************************************************//**
+  /+
+
+    pre-define leve-1 group id's to establish order in documentation.
+    group id and count must be kept coherent with groups in
+    documentation.
+
+  +/
+
+  \defgroup datatypes
+  \defgroup common
+  \defgroup units
+  \defgroup database
+  \defgroup math
+  \defgroup shapes
+  \defgroup transforms
+  \defgroup tools
+  \defgroup models
+  \defgroup parts
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// The omdl Distinctions
+//----------------------------------------------------------------------------//
 
 /***************************************************************************//**
   \page omdl_distinctions Distinctions
