@@ -170,7 +170,7 @@ function coordinate_unit_name
 
   \private
 *******************************************************************************/
-function coordinate_unit_c2
+function _coordinate_unit_c2
 (
   c,
   to
@@ -232,7 +232,7 @@ function coordinate_unit_c2
 
   \private
 *******************************************************************************/
-function coordinate_unit_2c
+function _coordinate_unit_2c
 (
   c,
   from
@@ -296,7 +296,7 @@ function coordinate
   from = coordinate_unit_default,
   to   = coordinate_unit_base
 ) = (from == to) ? c
-  : coordinate_unit_c2( coordinate_unit_2c( c, from ), to );
+  : _coordinate_unit_c2( _coordinate_unit_2c( c, from ), to );
 
 //! Convert point from one coordinate system to another.
 /***************************************************************************//**
@@ -315,7 +315,7 @@ function coordinate_inv
   from = coordinate_unit_base,
   to   = coordinate_unit_default
 ) = (from == to) ? c
-  : coordinate_unit_c2( coordinate_unit_2c( c, from ), to );
+  : _coordinate_unit_c2( _coordinate_unit_2c( c, from ), to );
 
 //! Radially scale a list of 2d cartesian coordinates.
 /***************************************************************************//**
