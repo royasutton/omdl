@@ -142,7 +142,7 @@ length_unit_default = "mm";
 
   \private
 *******************************************************************************/
-function length_unit_name_1d
+function _length_unit_name_1d
 (
   u = length_unit_default
 ) = u == "pm"   ? "picometer"
@@ -179,16 +179,16 @@ function length_unit_name
   w = false
 ) = (w == false) ?
     (
-        d == 1 ?      length_unit_name_1d( u )
-      : d == 2 ? str( length_unit_name_1d( u ), "^2" )
-      : d == 3 ? str( length_unit_name_1d( u ), "^3" )
+        d == 1 ?      _length_unit_name_1d( u )
+      : d == 2 ? str( _length_unit_name_1d( u ), "^2" )
+      : d == 3 ? str( _length_unit_name_1d( u ), "^3" )
       : undef
     )
   :
     (
-        d == 1 ?                 length_unit_name_1d( u )
-      : d == 2 ? str( "square ", length_unit_name_1d( u ) )
-      : d == 3 ? str( "cubic ",  length_unit_name_1d( u ) )
+        d == 1 ?                 _length_unit_name_1d( u )
+      : d == 2 ? str( "square ", _length_unit_name_1d( u ) )
+      : d == 3 ? str( "cubic ",  _length_unit_name_1d( u ) )
       : undef
     );
 
@@ -202,7 +202,7 @@ function length_unit_name
 
   \private
 *******************************************************************************/
-function length_unit_mm2
+function _length_unit_mm2
 (
   v,
   to
@@ -232,11 +232,11 @@ function length_unit_mm2
 
   \private
 *******************************************************************************/
-function length_unit_2mm
+function _length_unit_2mm
 (
   v,
   from
-) = v / length_unit_mm2( 1, from );
+) = v / _length_unit_mm2( 1, from );
 
 //! Convert a value from from one units to another.
 /***************************************************************************//**
@@ -249,13 +249,13 @@ function length_unit_2mm
 
   \private
 *******************************************************************************/
-function length_1d
+function _length_1d
 (
   v,
   from = length_unit_default,
   to   = length_unit_base
 ) = (from == to) ? v
-  : length_unit_mm2( length_unit_2mm( v, from ), to );
+  : _length_unit_mm2( _length_unit_2mm( v, from ), to );
 
 //! Convert a value from from one units to another with dimensions.
 /***************************************************************************//**
@@ -274,11 +274,11 @@ function length
   from = length_unit_default,
   to   = length_unit_base,
   d    = 1
-) = d == 1 ?    ( length_1d(v, from, to)    )
+) = d == 1 ?    ( _length_1d(v, from, to)    )
     // for multi-dimension, 'v' must be a scalar
   : is_list(v) ? undef
-  : d == 2 ? pow( length_1d(v, from, to), 2 )
-  : d == 3 ? pow( length_1d(v, from, to), 3 )
+  : d == 2 ? pow( _length_1d(v, from, to), 2 )
+  : d == 3 ? pow( _length_1d(v, from, to), 3 )
     // undefined for other dimensions
   : undef;
 
@@ -299,11 +299,11 @@ function length_inv
   from = length_unit_base,
   to   = length_unit_default,
   d    = 1
-) = d == 1 ?  length_1d(v, from, to)
+) = d == 1 ?  _length_1d(v, from, to)
     // for multi-dimension, 'v' must be a scalar
   : is_list(v) ? undef
-  : d == 2 ? length_1d(pow(v, 1/2), from, to)
-  : d == 3 ? length_1d(pow(v, 1/3), from, to)
+  : d == 2 ? _length_1d(pow(v, 1/2), from, to)
+  : d == 3 ? _length_1d(pow(v, 1/3), from, to)
     // undefined for other dimensions
   : undef;
 
