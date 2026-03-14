@@ -65,7 +65,7 @@
     the fix, it causes infinite recursion — see Correctness §2.1).
   - Bit lists (\c <bit-list>) are stored \b LSB-first: the least-significant
     bit occupies index 0 and the most-significant bit occupies the last index.
-  - The parameter \p bv in binary_and(), binary_or(), binary_xor(),
+  - The parameter \p _bv in binary_and(), binary_or(), binary_xor(),
     binary_not(), and binary_i2v() is an \em internal recursion accumulator.
     It must not be initialised by callers.
   - The parameter \p bm in binary_ishl() is an \em internal bit-mask
@@ -109,7 +109,7 @@ function binary_bit_is
 /***************************************************************************//**
   \param    v <integer> An integer value.
   \param    w <integer> The minimum bit width.
-  \param    bv (an internal recursion loop variable).
+  \param    _bv (an internal recursion loop variable).
 
   \returns  (1) <bit-list> of bits binary encoding of the integer value.
             (2) Returns \b undef when \p v or \p w is not an integer.
@@ -130,12 +130,12 @@ function binary_i2v
   v,
   w = 1,
   // iteration bit value
-  bv = 1
+  _bv = 1
 ) = !is_integer(v) ? undef
   : !is_integer(w) ? undef
-  : ((v == 0) && (bv >= pow(2, w))) ? empty_lst
-  : ((v % 2) > 0) ? concat(binary_i2v(floor(v/2), w, bv*2), 1)
-                  : concat(binary_i2v(floor(v/2), w, bv*2), 0);
+  : ((v == 0) && (_bv >= pow(2, w))) ? empty_lst
+  : ((v % 2) > 0) ? concat(binary_i2v(floor(v/2), w, _bv*2), 1)
+                  : concat(binary_i2v(floor(v/2), w, _bv*2), 0);
 
 //! Decode a binary list of bits to an integer value.
 /***************************************************************************//**
@@ -212,7 +212,7 @@ function binary_iw2i
 /***************************************************************************//**
   \param    v1 <integer> An integer value.
   \param    v2 <integer> An integer value.
-  \param    bv (an internal recursion loop variable).
+  \param    _bv (an internal recursion loop variable).
 
   \returns  (1) <integer> the binary AND of \p v1 and \p v2.
             (2) Returns \b undef when \p v1 or \p v2 is not an integer.
@@ -221,19 +221,19 @@ function binary_and
 (
   v1,
   v2,
-  bv = 1
+  _bv = 1
 ) = !is_integer(v1) ? undef
   : !is_integer(v2) ? undef
   : ((v1 + v2) == 0) ? 0
   : (((v1 % 2) > 0) && ((v2 % 2) > 0)) ?
-    binary_and(floor(v1/2), floor(v2/2), bv*2) + bv
-  : binary_and(floor(v1/2), floor(v2/2), bv*2);
+    binary_and(floor(v1/2), floor(v2/2), _bv*2) + _bv
+  : binary_and(floor(v1/2), floor(v2/2), _bv*2);
 
 //! Base-2 binary OR operation for integers.
 /***************************************************************************//**
   \param    v1 <integer> An integer value.
   \param    v2 <integer> An integer value.
-  \param    bv (an internal recursion loop variable).
+  \param    _bv (an internal recursion loop variable).
 
   \returns  (1) <integer> the binary OR of \p v1 and \p v2.
             (2) Returns \b undef when \p v1 or \p v2 is not an integer.
@@ -242,19 +242,19 @@ function binary_or
 (
   v1,
   v2,
-  bv = 1
+  _bv = 1
 ) = !is_integer(v1) ? undef
   : !is_integer(v2) ? undef
   : ((v1 + v2) == 0) ? 0
   : (((v1 % 2) > 0) || ((v2 % 2) > 0)) ?
-    binary_or(floor(v1/2), floor(v2/2), bv*2) + bv
-  : binary_or(floor(v1/2), floor(v2/2), bv*2);
+    binary_or(floor(v1/2), floor(v2/2), _bv*2) + _bv
+  : binary_or(floor(v1/2), floor(v2/2), _bv*2);
 
 //! Base-2 binary XOR operation for integers.
 /***************************************************************************//**
   \param    v1 <integer> An integer value.
   \param    v2 <integer> An integer value.
-  \param    bv (an internal recursion loop variable).
+  \param    _bv (an internal recursion loop variable).
 
   \returns  (1) <integer> the binary XOR of \p v1 and \p v2.
             (2) Returns \b undef when \p v1 or \p v2 is not an integer.
@@ -263,19 +263,19 @@ function binary_xor
 (
   v1,
   v2,
-  bv = 1
+  _bv = 1
 ) = !is_integer(v1) ? undef
   : !is_integer(v2) ? undef
   : ((v1 + v2) == 0) ? 0
   : (((v1 % 2) > 0) != ((v2 % 2) > 0)) ?
-    binary_xor(floor(v1/2), floor(v2/2), bv*2) + bv
-  : binary_xor(floor(v1/2), floor(v2/2), bv*2);
+    binary_xor(floor(v1/2), floor(v2/2), _bv*2) + _bv
+  : binary_xor(floor(v1/2), floor(v2/2), _bv*2);
 
 //! Base-2 binary NOT operation for an integer.
 /***************************************************************************//**
   \param    v <integer> An integer value.
   \param    w <integer> The minimum bit width.
-  \param    bv (an internal recursion loop variable).
+  \param    _bv (an internal recursion loop variable).
 
   \returns  (1) <integer> the binary NOT of \p v.
             (2) Returns \b undef when \p v or \p w is not an integer.
@@ -284,13 +284,13 @@ function binary_not
 (
   v,
   w = 1,
-  bv = 1
+  _bv = 1
 ) = !is_integer(v) ? undef
   : !is_integer(w) ? undef
-  : ((v == 0) && (bv >= pow(2, w))) ? 0
+  : ((v == 0) && (_bv >= pow(2, w))) ? 0
   : ((v % 2) > 0) ?
-    binary_not(floor(v/2), w, bv*2)
-  : binary_not(floor(v/2), w, bv*2) + bv;
+    binary_not(floor(v/2), w, _bv*2)
+  : binary_not(floor(v/2), w, _bv*2) + _bv;
 
 //! Base-2 binary left-shift operation for an integer.
 /***************************************************************************//**
