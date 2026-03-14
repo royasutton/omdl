@@ -100,7 +100,7 @@ function _polygon_turtle_path_2d_p_repeat
 ) = (n <= 0) ? [empty_lst, h]
   : let
     (
-      result  = polygon_turtle_path_2d_p( sub_s, p0, h, 0, _p0_g, 1 ),
+      result  = polygon_turtle_path_2d_p( sub_s, p0, h, 1, 0, _p0_g ),
       pts     = result[0],
       next_p0 = is_empty(pts) ? p0 : last(pts),
       next_h  = result[1]
@@ -126,15 +126,15 @@ function _polygon_turtle_path_2d_p_repeat
                   positive x-axis, positive angles rotate
                   counter-clockwise.
 
-  \param    _s_n  <integer> The current step number.
-
-  \param    _p0_g  <point-2d> The global origin coordinate [x, y].
-
   \param    m     <integer> The return mode. When \b 0 (default),
                   returns a `<point-2d-list>`. When \b 1, returns
                   `[point-2d-list, decimal]` where the second element
                   is the final heading after all steps have been
                   evaluated.
+
+  \param    _s_n  <integer> The current step number.
+
+  \param    _p0_g  <point-2d> The global origin coordinate [x, y].
 
   \returns  (1) <point-2d-list> when \p m is \b 0;
             (2) <datastruct> `[point-2d-list, decimal]` when \p m is \b 1.
@@ -473,9 +473,9 @@ function polygon_turtle_path_2d_p
   s,
   p0  = origin2d,
   h   = 0,
+  m   = 0,
   _s_n = 0,
-  _p0_g,
-  m   = 0
+  _p0_g
 ) =
   ! is_list( s ) ? ( m == 1 ? [empty_lst, h] : empty_lst )
   : let
@@ -600,7 +600,7 @@ function polygon_turtle_path_2d_p
               ms    = defined_e_or   ( o, 2, true ),
 
               // forward pass — recover points and final heading
-              fwd_r      = polygon_turtle_path_2d_p( sub_s, p0, h, _s_n, _p0_g, 1 ),
+              fwd_r      = polygon_turtle_path_2d_p( sub_s, p0, h, 1, _s_n, _p0_g ),
               fwd        = fwd_r[0],
               fwd_h      = fwd_r[1],
               fwd_p0_end = is_empty(fwd) ? p0 : last(fwd),
@@ -613,7 +613,7 @@ function polygon_turtle_path_2d_p
                            : mirror_p( [fwd_p0_end], [0,1], ax_o )[0],
 
               // mirrored pass: run sub-steps from reflected start
-              mir_raw = polygon_turtle_path_2d_p( sub_s, mir_p0, h, _s_n, _p0_g, 1 ),
+              mir_raw = polygon_turtle_path_2d_p( sub_s, mir_p0, h, 1, _s_n, _p0_g ),
 
               // reflect output points back about the axis using mirror_p
               mir     = mirror_p( mir_raw[0], [0,1], ax_o ),
@@ -638,7 +638,7 @@ function polygon_turtle_path_2d_p
               ms    = defined_e_or   ( o, 2, true ),
 
               // forward pass — recover points and final heading
-              fwd_r      = polygon_turtle_path_2d_p( sub_s, p0, h, _s_n, _p0_g, 1 ),
+              fwd_r      = polygon_turtle_path_2d_p( sub_s, p0, h, 1, _s_n, _p0_g ),
               fwd        = fwd_r[0],
               fwd_h      = fwd_r[1],
               fwd_p0_end = is_empty(fwd) ? p0 : last(fwd),
@@ -651,7 +651,7 @@ function polygon_turtle_path_2d_p
                            : mirror_p( [fwd_p0_end], [1,0], ax_o )[0],
 
               // mirrored pass: run sub-steps from reflected start
-              mir_raw = polygon_turtle_path_2d_p( sub_s, mir_p0, h, _s_n, _p0_g, 1 ),
+              mir_raw = polygon_turtle_path_2d_p( sub_s, mir_p0, h, 1, _s_n, _p0_g ),
 
               // reflect output points back about the axis using mirror_p
               mir     = mirror_p( mir_raw[0], [1,0], ax_o ),
@@ -676,7 +676,7 @@ function polygon_turtle_path_2d_p
               upd   = defined_eonb_or( o, 0, false ),
 
               // evaluate sub-steps — recover points and final heading
-              sub_r = polygon_turtle_path_2d_p( sub_s, p0, h, _s_n, _p0_g, 1 ),
+              sub_r = polygon_turtle_path_2d_p( sub_s, p0, h, 1, _s_n, _p0_g ),
               sub_h = sub_r[1],
 
               // apply mirror about p0, rotation about p0, then translation
@@ -777,7 +777,7 @@ function polygon_turtle_path_2d_p
       term      = len(s) == 1,
 
       rest      = term ? [empty_lst, next_h]
-                : polygon_turtle_path_2d_p( next_s, next_p0, next_h, next_s_n, next_p0_g, 1 ),
+                : polygon_turtle_path_2d_p( next_s, next_p0, next_h, 1, next_s_n, next_p0_g ),
 
       result    = term ? p      : concat( p, rest[0] ),
       final_h   = term ? next_h : rest[1]
