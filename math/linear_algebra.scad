@@ -726,6 +726,53 @@ function resize_p
     )
     [for (ci=c) [for (di=[0 : d-1]) (ci[di] - bv[di][0]) * s[di] - co[di]]];
 
+//! Center all coordinates about the origin.
+/***************************************************************************//**
+  \param    c <points-nd> A list of nd coordinate points.
+
+  \returns  <points-nd> A list of coordinate points translated so that
+            the bounding box of the result is centered about the origin.
+
+  \details
+
+    Computes the per-dimension bounding box midpoint of \p c and
+    translates all points by the negation of that midpoint, so that the
+    output bounding box is symmetric about the origin in every dimension.
+    The shape, size, and relative positions of all points are preserved —
+    only the position of the point cloud as a whole changes.
+
+    Centering is performed by a single bounding-box pass (O(n*d) where
+    n = len(c) and d = len(first(c))) followed by a single translation
+    pass, making the total work O(n*d). Passing an empty list returns
+    an empty list unchanged.
+
+    \note This function provides the centering step used internally by
+          \c resize_p when its \p center parameter is \b true, factored
+          out as a reusable primitive. It may be composed freely with
+          any other spatial function in this group to post-center the
+          result of an arbitrary transformation pipeline.
+
+    See [Wikipedia] for more information on [translation].
+
+  [Wikipedia]: https://en.wikipedia.org/wiki/Translation_(geometry)
+  [translation]: https://en.wikipedia.org/wiki/Translation_(geometry)
+*******************************************************************************/
+function center_p
+(
+  c
+) = (len(c) == 0) ? c
+  : let
+    (
+      d   = len(first(c)),
+
+      // per-dimension [min, max] bounding values
+      bv  = [for (i=[0 : d-1]) let (cv = [for (ci=c) ci[i]]) [min(cv), max(cv)]],
+
+      // per-dimension midpoint of bounding box
+      mid = [for (i=[0 : d-1]) (bv[i][0] + bv[i][1]) / 2]
+    )
+    [for (ci=c) [for (di=[0 : d-1]) ci[di] - mid[di]]];
+
 //! @}
 //! @}
 
