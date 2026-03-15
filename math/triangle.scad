@@ -727,9 +727,9 @@ function triangle2d_vround3_center
 
   \details
 
-    Computes the two points on the edges adjacent to vertex \b v2 (c[1])
-    at which a rounding arc of radius \p r is tangent. t1 lies on the
-    edge v2→v1 and t2 lies on the edge v2→v3.
+    Computes the two points on the edges adjacent to vertex \b v2
+    (c[1]) at which a rounding arc of radius \p r is tangent. t1 lies
+    on the edge v2 to v1 and t2 lies on the edge v2 to v3.
 
     \p r must satisfy \b 0 < r < ir (the triangle's inradius); this
     constraint is enforced by triangle2d_vround3_center(), which is
