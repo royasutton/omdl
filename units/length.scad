@@ -153,8 +153,8 @@ function _length_unit_name_1d
   : u == "dm"   ? "decimeter"
   : u ==  "m"   ? "meter"
   : u == "km"   ? "kilometer"
-  : u == "thou" ? "thousandth"
-  : u == "mil"  ? "thousandth"
+  : u == "thou" ? "thou (thousandth)"
+  : u == "mil"  ? "mil (thousandth)"
   : u == "in"   ? "inch"
   : u == "ft"   ? "feet"
   : u == "yd"   ? "yard"
@@ -236,7 +236,8 @@ function _length_unit_2mm
 (
   v,
   from
-) = v / _length_unit_mm2( 1, from );
+) = let( factor = _length_unit_mm2( 1, from ) )
+    (factor == undef) ? undef : v / factor;
 
 //! Convert a value from from one units to another.
 /***************************************************************************//**
@@ -274,9 +275,11 @@ function length
   from = length_unit_default,
   to   = length_unit_base,
   d    = 1
-) = d == 1 ?    ( _length_1d(v, from, to)    )
-    // for multi-dimension, 'v' must be a scalar
-  : is_list(v) ? undef
+) =
+    // for d>1, 'v' must be a scalar; lists are only valid for d=1
+    (d != 1 && is_list(v)) ? undef
+    // d=1: scalar or list, element-wise conversion via _length_1d
+  : d == 1 ?    ( _length_1d(v, from, to)    )
   : d == 2 ? pow( _length_1d(v, from, to), 2 )
   : d == 3 ? pow( _length_1d(v, from, to), 3 )
     // undefined for other dimensions
@@ -302,8 +305,8 @@ function length_inv
 ) = d == 1 ?  _length_1d(v, from, to)
     // for multi-dimension, 'v' must be a scalar
   : is_list(v) ? undef
-  : d == 2 ? _length_1d(pow(v, 1/2), from, to)
-  : d == 3 ? _length_1d(pow(v, 1/3), from, to)
+  : d == 2 ? _length_1d(sqrt(v),       from, to)
+  : d == 3 ? _length_1d(pow(v, 1/3.0), from, to)
     // undefined for other dimensions
   : undef;
 
