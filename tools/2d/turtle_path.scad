@@ -537,24 +537,28 @@ function _polygon_turtle_path_p_repeat
     1 | decimal               | required      | \p r : rotation angle in degrees, applied about \p p0
     2 | point-2d              | [0, 0]        | \p t : translation vector `[x, y]`; optional
     3 | vector-2d             | undef         | \p mn : mirror normal vector `[nx, ny]`; applied before rotation; optional
-    4 | datastruct            |               | \p o : options `[update]`; optional
+    4 | datastruct            |               | \p o : options `[update_p0, update_h]`; optional
 
   #### transform[4]: o
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
-    0 | boolean               | false         | \p update : when true, update the parent \p p0 and \p h after the operation
+    0 | boolean               | false         | \p update_p0 : when \b true, advance the parent \p p0 to the last transformed point after the operation
+    1 | boolean               | o[0]          | \p update_h : when \b true, update the parent \p h to `h_final + r` after the operation; defaults to \p update_p0 when not specified
 
   Evaluates \p steps to produce a point list, then applies a 2D affine
   transformation to every output point via transform_p(). Mirror \p mn
   is applied first about the entry position \p p0, followed by rotation
   \p r about \p p0, then translation \p t. When \p mn is \b undef no
-  mirror is applied. When \p update is false (the default) the parent
-  \p p0 and \p h are unchanged after the operation, making \p transform
-  a pure geometric post-processor. When \p update is true, \p p0
-  advances to the last transformed point and \p h is updated to
-  `h_final + r`, where \p h_final is the heading at the end of the
-  sub-step sequence. Nesting is supported to arbitrary depth.
+  mirror is applied. When both options are false (the default) the
+  parent \p p0 and \p h are unchanged after the operation, making \p
+  transform a pure geometric post-processor. \p update_p0 and \p
+  update_h may be set independently: for example, pass `[true, false]`
+  to advance \p p0 to the last transformed point while preserving the
+  entry heading, or `[false, true]` to carry the rotated heading forward
+  while keeping the turtle anchored at its entry position. When only
+  \p update_p0 is supplied (e.g. `[true]`), \p update_h inherits the
+  same value. Nesting is supported to arbitrary depth.
 
   ## Point operations
 
@@ -893,12 +897,13 @@ function polygon_turtle_path_p
         : is_oneof( oper, ["transform", "xfrm"] ) && (argc > 1) ?
             let
             (
-              sub_s = a1,
-              r     = a2,
-              t     = defined_or( a3, [0,0] ),
-              mn    = a4,
-              o     = a5,
-              upd   = defined_eonb_or( o, 0, false ),
+              sub_s  = a1,
+              r      = a2,
+              t      = defined_or( a3, [0,0] ),
+              mn     = a4,
+              o      = a5,
+              upd_p0 = defined_eonb_or( o, 0, false ),
+              upd_h  = defined_e_or   ( o, 1, upd_p0 ),
 
               // evaluate sub-steps — recover points and final heading
               sub_r = polygon_turtle_path_p( sub_s, p0, h, 1, _s_n, _p0_g ),
@@ -908,7 +913,7 @@ function polygon_turtle_path_p
               xfmd  = transform_p( c=sub_r[0], m=mn, a=r, t=t, o=p0 ),
 
               // heading: rotated sub-step final heading when updating, else entry heading
-              out_h = upd ? sub_h + r : h
+              out_h = upd_h ? sub_h + r : h
             )
             [ xfmd, out_h ]
 
@@ -943,18 +948,22 @@ function polygon_turtle_path_p
 
       next_s    = tailn(s),
 
-      // transform: advance only when upd=true, else restore entry position
+      // transform: advance only when upd_p0=true, else restore entry position
       // repeat, repeat_mx, repeat_my: always advance to end of combined output
       next_p0   = let ( end_p = is_empty(p) ? p0 : last(p) )
                   is_oneof( oper, ["transform", "xfrm"] ) ?
-                  let ( upd = defined_eonb_or( a5, 0, false ) )
-                  upd ? end_p : p0
+                  let ( upd_p0 = defined_eonb_or( a5, 0, false ) )
+                  upd_p0 ? end_p : p0
                 : end_p,
 
-      // transform: only update when upd=true, heading already encoded in step_h
+      // transform: only update when upd_h=true, heading already encoded in step_h
       next_h    = is_oneof( oper, ["transform", "xfrm"] ) ?
-                  let ( upd = defined_eonb_or( a5, 0, false ) )
-                  upd ? step_h : h
+                  let
+                  (
+                    upd_p0 = defined_eonb_or( a5, 0, false ),
+                    upd_h  = defined_e_or   ( a5, 1, upd_p0 )
+                  )
+                  upd_h ? step_h : h
                 : step_h,
 
       next_s_n  = _s_n + 1,
