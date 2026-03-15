@@ -737,6 +737,82 @@ function polygon_arc_fillet_p
     )
     polygon_arc_sweep_p( r=r, o=fc, v1=a1, v2=a2, fn=fn, cw=cw );
 
+
+//! Compute coordinates for a circular arc blend between two line segments in 2D.
+/***************************************************************************//**
+  \param    p1  <point-2d> The start point of the incoming segment [x, y].
+
+  \param    p2  <point-2d> The corner vertex coordinate [x, y] — the point
+                where the two segments meet.
+
+  \param    p3  <point-2d> The end point of the outgoing segment [x, y].
+
+  \param    r   <decimal> The blend radius. Must be greater than zero.
+
+  \param    fn  <integer> The number of [facets] \(optional\). When
+                undefined, its value is determined by get_fn() evaluated at
+                the blend radius \p r.
+
+  \param    cw  <boolean> Point ordering. When \b true the returned list
+                runs from the tangent point on the incoming segment to the
+                tangent point on the outgoing segment in the clockwise
+                direction; when \b false the list is reversed to run
+                counter-clockwise. Defaults to \b true, consistent with
+                polygon_arc_fillet_p() and the other shape-generation
+                functions in this group.
+
+  \returns  <points-2d> A list of coordinate points [[x, y], ...] tracing
+            the blend arc from the tangent point on the incoming segment
+            to the tangent point on the outgoing segment. Returns
+            \b empty_lst when the two segments are (anti-)parallel within
+            the almost_eq_nv() tolerance.
+
+  \details
+
+    Computes a circular fillet arc of radius \p r that is tangent to
+    both the incoming segment \p p1 to \p p2 and the outgoing segment
+    \p p2 to \p p3. The returned arc replaces the sharp corner at \p p2
+    and can be spliced directly into a polygon path to produce a
+    rounded vertex.
+
+    The function derives the incoming and outgoing ray directions from
+    the three supplied points and delegates to polygon_arc_fillet_p().
+    The corner vertex \p p2 is not included in the returned list; only
+    the arc points between the two tangent points are returned.
+
+    \b Example
+    \code{.C}
+    $fn = 32;
+
+    c = [[0,0], [10,0], [10,10], [0,10]];
+
+    // replace the corner at c[1] with a blend arc of radius 3
+    blend = polygon_arc_blend_p( p1=c[0], p2=c[1], p3=c[2], r=3 );
+
+    polygon( concat( [c[0]], blend, [c[2]], [c[3]] ) );
+    \endcode
+
+  [facets]: \ref get_fn()
+*******************************************************************************/
+function polygon_arc_blend_p
+(
+  p1,
+  p2,
+  p3,
+  r  = 1,
+  fn,
+  cw = true
+) =
+  polygon_arc_fillet_p
+  (
+    r  = r,
+    o  = p2,
+    v1 = p2 - p1,
+    v2 = p3 - p2,
+    fn = fn,
+    cw = cw
+  );
+
 //! Compute coordinates for an elliptical sector in 2D.
 /***************************************************************************//**
   \param    r <decimal-list-2 | decimal> The elliptical radius. A list
