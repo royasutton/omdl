@@ -164,43 +164,45 @@ function _polygon_turtle_path_p_repeat
   The following table summarizes the supported operations, arguments,
   and their semantics.
 
-   operation    | short   | arguments                          | output coordinate point(s)
-  :------------:|:-------:|:----------------------------------:|:-----------------------:
-   \b Heading   ||||
-   turn_left    | tl      | a                                  | (none)
-   turn_right   | tr      | a                                  | (none)
-   \b Lines     ||||
-   close        | cl      | (none) \| wc, fn                   | _p0_g
-   goto_xy      | gxy     | x, y \| x, y, wc, fn               | [x, y]
-   goto_x       | gx      | x \| x, wc, fn                     | [x, p0.y]
-   goto_y       | gy      | y \| y, wc, fn                     | [p0.x, y]
-   delta_xy     | dxy     | x, y \| x, y, wc, fn               | p0 + [x, y]
-   delta_x      | dx      | x \| x, wc, fn                     | p0 + [x, 0]
-   delta_y      | dy      | y \| y, wc, fn                     | p0 + [0, y]
-   delta_xa     | dxa     | x, a \| x, a, wc, fn               | p0 + [ x, x * tan(a) ]
-   delta_ya     | dya     | y, a \| y, a, wc, fn               | p0 + [ y / tan(a), y ]
-   move_ar      | mar     | m, a \| m, a, wc, fn               | p0 + line(m, a)
-   move_rr      | mrr     | m, a \| m, a, wc, fn               | p0 + line(m, h+a)
-   move_fw      | mfw     | m \| m, wc, fn                     | p0 + line(m, h)
-   \b Arcs      ||||
-   arc_fw       | afw     | r, a \| r, a, [o], fn              | (see below)
-   arc_pv       | apv     | c, v, cw, fn                       | (see below)
-   arc_vv       | avv     | v, v, cw, fn                       | (see below)
-   arc_blend    | ab      | p2, p3, r \| p2, p3, r, fn         | (see below)
-   \b Curves    ||||
-   bezier       | bz      | ctrl_pts \| ctrl_pts, [o], fn      | (see below)
-   spline       | spl     | knots \| knots, [o], fn            | (see below)
-   \b Sub-steps ||||
-   repeat       | rpt     | steps \| steps, n                  | (see below)
-   repeat_mx    | rptmx   | steps, axis \| steps, axis, [o]    | (see below)
-   repeat_my    | rptmy   | steps, axis \| steps, axis, [o]    | (see below)
-   transform    | xfrm    | steps, r \| steps, r, t, mn, [o]   | (see below)
-   \b Points    ||||
-   path_p       | pp      | [p1, p2, ..., pn]                  | (see below)
+   operation    | short   | arguments                                    || output coordinate point(s)
+  :------------:|:-------:|:--------------------:|:----------------------:|:-----------------------:
+   ^            | ^       | minimum arguments    | extended arguments     | ^
+   <h3> heading operations </h3> |||||
+   turn_left    | tl      | a                                            || (none)
+   turn_right   | tr      | a                                            || (none)
+   <h3> line operations </h3> |||||
+   close        | cl      | (none)               | wc, fn                 | _p0_g
+   goto_xy      | gxy     | x, y                 | x, y, wc, fn           | [x, y]
+   goto_x       | gx      | x                    | x, wc, fn              | [x, p0.y]
+   goto_y       | gy      | y                    | y, wc, fn              | [p0.x, y]
+   delta_xy     | dxy     | x, y                 | x, y, wc, fn           | p0 + [x, y]
+   delta_x      | dx      | x                    | x, wc, fn              | p0 + [x, 0]
+   delta_y      | dy      | y                    | y, wc, fn              | p0 + [0, y]
+   delta_xa     | dxa     | x, a                 | x, a, wc, fn           | p0 + [ x, x * tan(a) ]
+   delta_ya     | dya     | y, a                 | y, a, wc, fn           | p0 + [ y / tan(a), y ]
+   move_ar      | mar     | m, a                 | m, a, wc, fn           | p0 + line(m, a)
+   move_rr      | mrr     | m, a                 | m, a, wc, fn           | p0 + line(m, h+a)
+   move_fw      | mfw     | m                    | m, wc, fn              | p0 + line(m, h)
+   <h3> arc operations </h3> |||||
+   arc_fw       | afw     | r, a                 | r, a, [o], fn          | (see below)
+   arc_pv       | apv     | c, v, cw, fn                                 || (see below)
+   arc_vv       | avv     | v, v, cw, fn                                 || (see below)
+   arc_blend    | ab      | p2, p3, r            | p2, p3, r, fn          | (see below)
+   <h3> curve operations </h3> |||||
+   bezier       | bz      | ctrl_pts             | ctrl_pts, [o], fn      | (see below)
+   spline       | spl     | knots                | knots, [o], fn         | (see below)
+   <h3> sub-step operations </h3> |||||
+   repeat       | rpt     | steps                | steps, n               | (see below)
+   repeat_mx    | rptmx   | steps, axis          | steps, axis, [o]       | (see below)
+   repeat_my    | rptmy   | steps, axis          | steps, axis, [o]       | (see below)
+   transform    | xfrm    | steps, r             | steps, r, t, mn, [o]   | (see below)
+   <h3> point operations </h3> |||||
+   path_p       | pp      | [p1, p2, ..., pn]                            || (see below)
 
-  The `"|"` separator in the arguments column divides the straight-line
-  form from the wave-line form for line operations, and the basic form
-  from the extended form for sub-step operations.
+  The two argument columns divide the minimum form from the extended
+  form: the left column shows the minimum required arguments, and the
+  right column shows the extended form with additional optional
+  parameters.
 
   Some operations may generate either straight or periodic waveform
   lines. When a periodic waveform line is desired, additional
