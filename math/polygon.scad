@@ -82,7 +82,7 @@
       primary path, matching the convention of OpenSCAD's \c polygon()
       and \c linear_extrude().
     - Shape-generation functions (polygon_regular_p(),
-      polygon_trapezoid_p(), polygon_arc_p(), polygon_elliptical_sector_p(),
+      polygon_trapezoid_p(), polygon_arc_sweep_p(), polygon_elliptical_sector_p(),
       etc.) default to \p cw = \b true and therefore produce
       \b clockwise output.  Callers that pass generated coordinates
       directly to \c polygon() or to property/test functions that assume
@@ -609,7 +609,7 @@ function polygon_line_p
 
   [facets]: \ref get_fn()
 *******************************************************************************/
-function polygon_arc_p
+function polygon_arc_sweep_p
 (
   r  = 1,
   o  = origin2d,
@@ -1592,8 +1592,8 @@ function polygon_round_eve_p
     tc2 = o + vim*unit_l(va2),
 
     // vertex rounding coordinate point list
-    vpl = (m == 1) ? polygon_arc_p(r=r, o=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=true)
-        : (m == 2) ? polygon_arc_p(r=r, o=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=false)
+    vpl = (m == 1) ? polygon_arc_sweep_p(r=r, o=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=true)
+        : (m == 2) ? polygon_arc_sweep_p(r=r, o=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=false)
         : empty_lst,
 
     // cw ordering
@@ -1686,7 +1686,7 @@ function polygon_round_eve_p
     specified \p vr and \p vrm values. The resulting triangle \ref
     triangle2d_incenter "incircles" and \ref triangle2d_excenter
     "excircles" are used to create the round and fillet \ref
-    polygon_arc_p "arc" segments. All arcs and chamfers use constant
+    polygon_arc_sweep_p "arc" segments. All arcs and chamfers use constant
     radius.
 
     \amu_define title           (Rounding example)
@@ -1783,11 +1783,11 @@ function polygon_round_eve_all_p
         // vertex rounding coordinate point list
         vpl = (rm == 0 || rm > 10) ? [vc]
             : (rm == 1) ?
-              polygon_arc_p(r=rr, o=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=!ras)
+              polygon_arc_sweep_p(r=rr, o=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=!ras)
             : (rm == 2 || rm == 3 || rm == 4) ?
-              polygon_arc_p(r=rr, o=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=ras)
+              polygon_arc_sweep_p(r=rr, o=tcc, v1=[tcc, tc1], v2=[tcc, tc2], fn=fn, cw=ras)
             : (rm == 6 || rm == 7 || rm == 8) ?
-              polygon_arc_p(r=rr, o=vc, v1=[vc, tc1], v2=[vc, tc2], fn=fn, cw=!ras)
+              polygon_arc_sweep_p(r=rr, o=vc, v1=[vc, tc1], v2=[vc, tc2], fn=fn, cw=!ras)
             : [tc1, tc2]
       )
       vpl

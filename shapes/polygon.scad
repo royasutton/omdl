@@ -142,7 +142,7 @@ module pg_rectangle_rs
     let
     (
       a = first( s ), a1 = a[0], a2 = a[1], a3 = a[2],
-      p = polygon_arc_p( r=distance_pp(i, a1), o=a1, v1=[a1, i], v2=[a1, a2], cw=a3 )
+      p = polygon_arc_sweep_p( r=distance_pp(i, a1), o=a1, v1=[a1, i], v2=[a1, a2], cw=a3 )
     )
     ( len( s ) == 1 ) ? p : concat( p, pg_rectangle_rs_helper_r( tailn(s), last( p ) ) );
 

@@ -693,7 +693,7 @@ function polygon_turtle_path_2d_p
         : is_oneof( oper, ["arc_pv", "apv"] ) && (argc > 2) ?
             let( v2 = is_list(a2) ? [a1, a2] : a2 )
             [
-              polygon_arc_p( r=distance_pp(p0, a1), o=a1, v1=[a1, p0], v2=v2, cw=a3, fn=a4 ),
+              polygon_arc_sweep_p( r=distance_pp(p0, a1), o=a1, v1=[a1, p0], v2=v2, cw=a3, fn=a4 ),
               h
             ]
 
@@ -707,7 +707,7 @@ function polygon_turtle_path_2d_p
               v2 = is_list(a2) ? [b1, a2] : a2
             )
             [
-              polygon_arc_p( r=distance_pp(p0, b1), o=b1, v1=[b1, p0], v2=v2, cw=a3, fn=a4 ),
+              polygon_arc_sweep_p( r=distance_pp(p0, b1), o=b1, v1=[b1, p0], v2=v2, cw=a3, fn=a4 ),
               h
             ]
 

@@ -961,7 +961,7 @@ module draft_arrow
     else if ( s1 == 5 )
     { // circle
       hull_cs( !s2 )
-      for ( ls = sequence_ns( polygon_arc_p( r=al/3, o=pah, fn=$draft_arrow_fn ), 2, 1 ) )
+      for ( ls = sequence_ns( polygon_arc_sweep_p( r=al/3, o=pah, fn=$draft_arrow_fn ), 2, 1 ) )
         draft_line_pp(ls[0], ls[1], w=w);
     }
   }
@@ -1139,7 +1139,7 @@ module draft_line
 
 //! Draft an arc with configurable style and optional arrowheads.
 /***************************************************************************//**
-  \copydetails polygon_arc_p()
+  \copydetails polygon_arc_sweep_p()
     These coordinates will be used to draft an arc according to the
     following additional parameters.
 
@@ -1191,7 +1191,7 @@ module draft_arc
 
   if ( !all_equal([s1, a1, a2], 0) )
   {
-    pp = polygon_arc_p( r=r, o=o, v1=v1, v2=v2, fn=fn, cw=cw );
+    pp = polygon_arc_sweep_p( r=r, o=o, v1=v1, v2=v2, fn=fn, cw=cw );
 
     if ( s1 == 1 )
     { // solid line
