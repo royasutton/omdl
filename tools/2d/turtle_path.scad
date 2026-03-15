@@ -67,7 +67,7 @@
 
   \private
 *******************************************************************************/
-function _polygon_turtle_path_2d_p_line_p
+function _polygon_turtle_path_p_line_p
 (
   p0,
   t,
@@ -90,7 +90,7 @@ function _polygon_turtle_path_2d_p_line_p
 
   \private
 *******************************************************************************/
-function _polygon_turtle_path_2d_p_repeat
+function _polygon_turtle_path_p_repeat
 (
   sub_s,
   n,
@@ -100,7 +100,7 @@ function _polygon_turtle_path_2d_p_repeat
 ) = (n <= 0) ? [empty_lst, h]
   : let
     (
-      result  = polygon_turtle_path_2d_p( sub_s, p0, h, 1, 0, _p0_g ),
+      result  = polygon_turtle_path_p( sub_s, p0, h, 1, 0, _p0_g ),
       pts     = result[0],
       next_p0 = is_empty(pts) ? p0 : last(pts),
       next_h  = result[1]
@@ -108,7 +108,7 @@ function _polygon_turtle_path_2d_p_repeat
     (n == 1) ? result
     : let
       (
-        rest = _polygon_turtle_path_2d_p_repeat( sub_s, n-1, next_p0, next_h, _p0_g )
+        rest = _polygon_turtle_path_p_repeat( sub_s, n-1, next_p0, next_h, _p0_g )
       )
       [ concat( pts, rest[0] ), rest[1] ];
 
@@ -338,16 +338,16 @@ function _polygon_turtle_path_2d_p_repeat
   :--:|:---------------------:|:-------------:|:------------------------------------
     0 | boolean               | true          | \p update_heading : when \b true the heading is advanced by \p a degrees on exit; when \b false the entry heading \p h is restored
 
-  Sweeps an arc of radius \p r through the signed angle \p a starting
-  from the current position \p p0 and following the current heading \p
-  h. The arc center lies perpendicular to \p h at distance \p r: to the
-  left (`h + 90°`) when \p a is positive and to the right (`h - 90°`)
-  when \p a is negative. The arc is delegated to polygon_arc_sweep_p().
-  Returns \b empty_lst when \p a is zero. By default the heading is
-  updated to `h + a` on exit, so chained `arc_fw` steps flow naturally
-  without manual heading bookkeeping. Pass `[o] = [false]` to suppress
-  the heading update. Pass `[o] = undef` to accept all option defaults
-  while still supplying \p fn.
+  Sweeps an arc of radius \p r through the signed angle \p a starting from
+  the current position \p p0 and following the current heading \p h. The
+  arc center lies perpendicular to \p h at distance \p r: to the left
+  (`h + 90°`) when \p a is positive and to the right (`h - 90°`) when \p a
+  is negative. The arc is delegated to polygon_arc_sweep_p(). Returns
+  \b empty_lst when \p a is zero. By default the heading is updated to
+  `h + a` on exit, so chained `arc_fw` steps flow naturally without manual
+  heading bookkeeping. Pass `[o] = [false]` to suppress the heading update.
+  Pass `[o] = undef` to accept all option defaults while still supplying
+  \p fn.
 
   ### repeat
 
@@ -494,12 +494,11 @@ function _polygon_turtle_path_2d_p_repeat
     3 | integer               |               | \p fn : number of [facets]; optional
 
   Replaces the sharp corner at \p p2 with a circular arc of radius \p r
-  that is tangent to both the incoming segment `[p0, p2]` and the
-  outgoing segment `[p2, p3]`. The current position \p p0 supplies the
-  start point of the incoming segment. Only the arc points are emitted;
-  the corner vertex \p p2 is not included. Delegates to
-  polygon_arc_blend_p(). The heading \p h is not updated by this
-  operation.
+  that is tangent to both the incoming segment `[p0, p2]` and the outgoing
+  segment `[p2, p3]`. The current position \p p0 supplies the start point
+  of the incoming segment. Only the arc points are emitted; the corner
+  vertex \p p2 is not included. Delegates to polygon_arc_blend_p(). The
+  heading \p h is not updated by this operation.
 
   ### bezier
 
@@ -518,11 +517,11 @@ function _polygon_turtle_path_2d_p_repeat
   Evaluates a degree-n Bézier curve defined by the control point list
   \p ctrl_pts using the de Casteljau algorithm. When \p prepend_p0 is
   \b true (the default) the current position \p p0 is inserted as the
-  first control point so the curve departs smoothly from the last
-  emitted point. Pass `[o] = [false]` when \p ctrl_pts already contains
-  the intended start point. Pass `[o] = undef` to accept all option
-  defaults while still supplying \p fn. The heading \p h is not updated
-  by this operation. Delegates to polygon_bezier_p().
+  first control point so the curve departs smoothly from the last emitted
+  point. Pass `[o] = [false]` when \p ctrl_pts already contains the
+  intended start point. Pass `[o] = undef` to accept all option defaults
+  while still supplying \p fn. The heading \p h is not updated by this
+  operation. Delegates to polygon_bezier_p().
 
   ### spline
 
@@ -539,19 +538,19 @@ function _polygon_turtle_path_2d_p_repeat
     0 | boolean               | true          | \p prepend_p0 : when \b true the current position \p p0 is automatically prepended to \p knots as the first knot
     1 | boolean               | false         | \p closed : when \b true a closing segment is added from the last knot back to the first knot
 
-  Evaluates a centripetal Catmull-Rom spline through the knot list \p
-  knots. The curve passes through every knot point. When \p prepend_p0
-  is \b true (the default) the current position \p p0 is inserted as
-  the first knot so the spline departs from the last emitted point.
-  When \p closed is \b true a closing segment from the last knot back
-  to the first is included. Pass `[o] = undef` to accept all option
-  defaults while still supplying \p fn. The heading \p h is not updated
-  by this operation. Delegates to polygon_spline_p().
+  Evaluates a centripetal Catmull-Rom spline through the knot list
+  \p knots. The curve passes through every knot point. When \p prepend_p0
+  is \b true (the default) the current position \p p0 is inserted as the
+  first knot so the spline departs from the last emitted point. When
+  \p closed is \b true a closing segment from the last knot back to the
+  first is included. Pass `[o] = undef` to accept all option defaults while
+  still supplying \p fn. The heading \p h is not updated by this operation.
+  Delegates to polygon_spline_p().
 
   \amu_define title           (Motor mount plate design example)
   \amu_define image_views     (top diag)
   \amu_define image_size      (sxga)
-  \amu_define scope_id        (polygon_turtle_path_2d_p)
+  \amu_define scope_id        (polygon_turtle_path_p)
   \amu_define output_scad     (true)
 
   \amu_include (include/amu/scope_diagrams_3d.amu)
@@ -562,7 +561,7 @@ function _polygon_turtle_path_2d_p_repeat
   [facets]: \ref get_fn()
   [Turtle graphics]: https://en.wikipedia.org/wiki/Turtle_(robot)
 *******************************************************************************/
-function polygon_turtle_path_2d_p
+function polygon_turtle_path_p
 (
   s,
   p0  = origin2d,
@@ -599,62 +598,62 @@ function polygon_turtle_path_2d_p
           //
           is_oneof( oper, ["goto_xy", "gxy"] ) && (argc > 1) ?
             let( t = [a1, a2], wc = a3, fn = a4 )
-            [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
+            [ _polygon_turtle_path_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
         : is_oneof( oper, ["goto_x", "gx"] ) && (argc > 0) ?
             let( t = [a1, p0.y], wc = a2, fn = a3 )
-            [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
+            [ _polygon_turtle_path_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
         : is_oneof( oper, ["goto_y", "gy"] ) && (argc > 0) ?
             let( t = [p0.x, a1], wc = a2, fn = a3 )
-            [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
+            [ _polygon_turtle_path_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
           //
           // lines; delta
           //
         : is_oneof( oper, ["delta_xy", "dxy"] ) && (argc > 1) ?
             let( t = p0 + [a1, a2], wc = a3, fn = a4 )
-            [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
+            [ _polygon_turtle_path_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
         : is_oneof( oper, ["delta_x", "dx"] ) && (argc > 0) ?
             let( t = p0 + [a1, 0], wc = a2, fn = a3 )
-            [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
+            [ _polygon_turtle_path_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
         : is_oneof( oper, ["delta_y", "dy"] ) && (argc > 0) ?
             let( t = p0 + [0, a1], wc = a2, fn = a3 )
-            [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
+            [ _polygon_turtle_path_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
           //
           // lines; delta angle
           //
         : is_oneof( oper, ["delta_xa", "dxa"] ) && (argc > 1) ?
             let( t = p0 + [a1, a1 * tan(a2)], wc = a3, fn = a4 )
-            [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
+            [ _polygon_turtle_path_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
         : is_oneof( oper, ["delta_ya", "dya"] ) && (argc > 1) ?
             let( t = p0 + [a1 / tan(a2), a1], wc = a3, fn = a4 )
-            [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
+            [ _polygon_turtle_path_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
           //
           // lines; move radial absolute
           //
         : is_oneof( oper, ["move_ar", "mar"] ) && (argc > 1) ?
             let( t = line_tp( line2d_new(m=a1, a=a2, p1=p0) ), wc = a3, fn = a4 )
-            [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
+            [ _polygon_turtle_path_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
           //
           // lines; move radial relative (to current heading)
           //
         : is_oneof( oper, ["move_rr", "mrr"] ) && (argc > 1) ?
             let( t = line_tp( line2d_new(m=a1, a=h+a2, p1=p0) ), wc = a3, fn = a4 )
-            [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
+            [ _polygon_turtle_path_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
           //
           // lines; move forward (along current heading)
           //
         : is_oneof( oper, ["move_fw", "mfw"] ) && (argc > 0) ?
             let( t = line_tp( line2d_new(m=a1, a=h, p1=p0) ), wc = a2, fn = a3 )
-            [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
+            [ _polygon_turtle_path_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
           //
           // heading; turn left (counter-clockwise)
@@ -712,7 +711,7 @@ function polygon_turtle_path_2d_p
             (
               sub_s  = a1,
               n      = defined_or( a2, 1 ),
-              result = _polygon_turtle_path_2d_p_repeat( sub_s, n, p0, h, _p0_g )
+              result = _polygon_turtle_path_p_repeat( sub_s, n, p0, h, _p0_g )
             )
             result  // already [pts, final_h]
 
@@ -730,7 +729,7 @@ function polygon_turtle_path_2d_p
               ms    = defined_e_or   ( o, 2, true ),
 
               // forward pass — recover points and final heading
-              fwd_r      = polygon_turtle_path_2d_p( sub_s, p0, h, 1, _s_n, _p0_g ),
+              fwd_r      = polygon_turtle_path_p( sub_s, p0, h, 1, _s_n, _p0_g ),
               fwd        = fwd_r[0],
               fwd_h      = fwd_r[1],
               fwd_p0_end = is_empty(fwd) ? p0 : last(fwd),
@@ -743,7 +742,7 @@ function polygon_turtle_path_2d_p
                            : mirror_p( [fwd_p0_end], [0,1], ax_o )[0],
 
               // mirrored pass: run sub-steps from reflected start
-              mir_raw = polygon_turtle_path_2d_p( sub_s, mir_p0, h, 1, _s_n, _p0_g ),
+              mir_raw = polygon_turtle_path_p( sub_s, mir_p0, h, 1, _s_n, _p0_g ),
 
               // reflect output points back about the axis using mirror_p
               mir     = mirror_p( mir_raw[0], [0,1], ax_o ),
@@ -768,7 +767,7 @@ function polygon_turtle_path_2d_p
               ms    = defined_e_or   ( o, 2, true ),
 
               // forward pass — recover points and final heading
-              fwd_r      = polygon_turtle_path_2d_p( sub_s, p0, h, 1, _s_n, _p0_g ),
+              fwd_r      = polygon_turtle_path_p( sub_s, p0, h, 1, _s_n, _p0_g ),
               fwd        = fwd_r[0],
               fwd_h      = fwd_r[1],
               fwd_p0_end = is_empty(fwd) ? p0 : last(fwd),
@@ -781,7 +780,7 @@ function polygon_turtle_path_2d_p
                            : mirror_p( [fwd_p0_end], [1,0], ax_o )[0],
 
               // mirrored pass: run sub-steps from reflected start
-              mir_raw = polygon_turtle_path_2d_p( sub_s, mir_p0, h, 1, _s_n, _p0_g ),
+              mir_raw = polygon_turtle_path_p( sub_s, mir_p0, h, 1, _s_n, _p0_g ),
 
               // reflect output points back about the axis using mirror_p
               mir     = mirror_p( mir_raw[0], [1,0], ax_o ),
@@ -806,7 +805,7 @@ function polygon_turtle_path_2d_p
               upd   = defined_eonb_or( o, 0, false ),
 
               // evaluate sub-steps — recover points and final heading
-              sub_r = polygon_turtle_path_2d_p( sub_s, p0, h, 1, _s_n, _p0_g ),
+              sub_r = polygon_turtle_path_p( sub_s, p0, h, 1, _s_n, _p0_g ),
               sub_h = sub_r[1],
 
               // apply mirror about p0, rotation about p0, then translation
@@ -895,7 +894,7 @@ function polygon_turtle_path_2d_p
               wc = a1,
               fn = a2
             )
-            [ _polygon_turtle_path_2d_p_line_p( p0=p0, t=g, wc=wc, fn=fn ), h ]
+            [ _polygon_turtle_path_p_line_p( p0=p0, t=g, wc=wc, fn=fn ), h ]
 
           //
           // assert error
@@ -945,7 +944,7 @@ function polygon_turtle_path_2d_p
       term      = len(s) == 1,
 
       rest      = term ? [empty_lst, next_h]
-                : polygon_turtle_path_2d_p( next_s, next_p0, next_h, 1, next_s_n, next_p0_g ),
+                : polygon_turtle_path_p( next_s, next_p0, next_h, 1, next_s_n, next_p0_g ),
 
       result    = term ? p      : concat( p, rest[0] ),
       final_h   = term ? next_h : rest[1]
@@ -960,7 +959,7 @@ function polygon_turtle_path_2d_p
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE polygon_turtle_path_2d_p;
+BEGIN_SCOPE polygon_turtle_path_p;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <tools/2d/turtle_path.scad>;
@@ -984,7 +983,7 @@ BEGIN_SCOPE polygon_turtle_path_2d_p;
     ];
 
     // convert the step moves into coordinates
-    pp = polygon_turtle_path_2d_p( sm );
+    pp = polygon_turtle_path_p( sm );
 
     // round all of the vertices
     rp = polygon_round_eve_all_p( pp, rr );
