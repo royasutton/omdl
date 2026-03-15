@@ -180,12 +180,16 @@ function _polygon_turtle_path_2d_p_repeat
    move_fw      | mfw     | m \| m, wc, fn                     | p0 + line(m, h)
    turn_left    | tl      | a                                  | (none)
    turn_right   | tr      | a                                  | (none)
+   arc_fw       | afw     | r, a \| r, a, [o], fn              | (see below)
    repeat       | rpt     | steps \| steps, n                  | (see below)
    repeat_mx    | rptmx   | steps, axis \| steps, axis, [o]    | (see below)
    repeat_my    | rptmy   | steps, axis \| steps, axis, [o]    | (see below)
    transform    | xfrm    | steps, r \| steps, r, t, mn, [o]   | (see below)
    arc_pv       | apv     | c, v, cw, fn                       | (see below)
    arc_vv       | avv     | v, v, cw, fn                       | (see below)
+   arc_blend    | ab      | p2, p3, r \| p2, p3, r, fn         | (see below)
+   bezier       | bz      | ctrl_pts \| ctrl_pts, [o], fn      | (see below)
+   spline       | spl     | knots \| knots, [o], fn            | (see below)
    path_p       | pp      | [p1, p2, ..., pn]                  | (see below)
 
   The `"|"` separator in the arguments column divides the straight-line
@@ -318,6 +322,32 @@ function _polygon_turtle_path_2d_p_repeat
   Rotates the current heading clockwise by \p a degrees. Produces no
   output coordinate points; only the heading \p h is updated for
   subsequent steps.
+
+  ### arc_fw
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | decimal               | required      | \p r : arc radius; must be positive
+    1 | decimal               | required      | \p a : signed sweep angle in degrees; positive = CCW (left turn), negative = CW (right turn)
+    2 | datastruct            |               | \p [o] : options `[update_heading]`; optional; assign \b undef to accept all option defaults when only \p fn is needed
+    3 | integer               |               | \p fn : number of [facets]; optional
+
+  #### arc_fw[2]: o
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | boolean               | true          | \p update_heading : when \b true the heading is advanced by \p a degrees on exit; when \b false the entry heading \p h is restored
+
+  Sweeps an arc of radius \p r through the signed angle \p a starting
+  from the current position \p p0 and following the current heading \p
+  h. The arc center lies perpendicular to \p h at distance \p r: to the
+  left (`h + 90°`) when \p a is positive and to the right (`h - 90°`)
+  when \p a is negative. The arc is delegated to polygon_arc_sweep_p().
+  Returns \b empty_lst when \p a is zero. By default the heading is
+  updated to `h + a` on exit, so chained `arc_fw` steps flow naturally
+  without manual heading bookkeeping. Pass `[o] = [false]` to suppress
+  the heading update. Pass `[o] = undef` to accept all option defaults
+  while still supplying \p fn.
 
   ### repeat
 
@@ -454,6 +484,70 @@ function _polygon_turtle_path_2d_p_repeat
   should be taken to ensure a smooth transition between the end of the
   previous step and the start of the inserted points.
 
+  ### arc_blend
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | point-2d              | required      | \p p2 : corner vertex coordinate [x, y]; the point where the two segments meet
+    1 | point-2d              | required      | \p p3 : end point of the outgoing segment [x, y]
+    2 | decimal               | required      | \p r : blend radius; must be positive
+    3 | integer               |               | \p fn : number of [facets]; optional
+
+  Replaces the sharp corner at \p p2 with a circular arc of radius \p r
+  that is tangent to both the incoming segment `[p0, p2]` and the
+  outgoing segment `[p2, p3]`. The current position \p p0 supplies the
+  start point of the incoming segment. Only the arc points are emitted;
+  the corner vertex \p p2 is not included. Delegates to
+  polygon_arc_blend_p(). The heading \p h is not updated by this
+  operation.
+
+  ### bezier
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | point-2d-list         | required      | \p ctrl_pts : Bézier control point list [[x, y], ...]
+    1 | datastruct            |               | \p [o] : options `[prepend_p0]`; optional; assign \b undef to accept all option defaults when only \p fn is needed
+    2 | integer               |               | \p fn : number of [facets]; optional
+
+  #### bezier[1]: o
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | boolean               | true          | \p prepend_p0 : when \b true the current position \p p0 is automatically prepended to \p ctrl_pts as the first control point
+
+  Evaluates a degree-n Bézier curve defined by the control point list
+  \p ctrl_pts using the de Casteljau algorithm. When \p prepend_p0 is
+  \b true (the default) the current position \p p0 is inserted as the
+  first control point so the curve departs smoothly from the last
+  emitted point. Pass `[o] = [false]` when \p ctrl_pts already contains
+  the intended start point. Pass `[o] = undef` to accept all option
+  defaults while still supplying \p fn. The heading \p h is not updated
+  by this operation. Delegates to polygon_bezier_p().
+
+  ### spline
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | point-2d-list         | required      | \p knots : Catmull-Rom knot list [[x, y], ...]
+    1 | datastruct            |               | \p [o] : options `[prepend_p0, closed]`; optional; assign \b undef to accept all option defaults when only \p fn is needed
+    2 | integer               |               | \p fn : facets per segment; optional
+
+  #### spline[1]: o
+
+    e | data type             | default value | parameter description
+  :--:|:---------------------:|:-------------:|:------------------------------------
+    0 | boolean               | true          | \p prepend_p0 : when \b true the current position \p p0 is automatically prepended to \p knots as the first knot
+    1 | boolean               | false         | \p closed : when \b true a closing segment is added from the last knot back to the first knot
+
+  Evaluates a centripetal Catmull-Rom spline through the knot list \p
+  knots. The curve passes through every knot point. When \p prepend_p0
+  is \b true (the default) the current position \p p0 is inserted as
+  the first knot so the spline departs from the last emitted point.
+  When \p closed is \b true a closing segment from the last knot back
+  to the first is included. Pass `[o] = undef` to accept all option
+  defaults while still supplying \p fn. The heading \p h is not updated
+  by this operation. Delegates to polygon_spline_p().
+
   \amu_define title           (Motor mount plate design example)
   \amu_define image_views     (top diag)
   \amu_define image_size      (sxga)
@@ -573,6 +667,42 @@ function polygon_turtle_path_2d_p
           //
         : is_oneof( oper, ["turn_right", "tr"] ) && (argc > 0) ?
             [ empty_lst, h - a1 ]
+
+          //
+          // arc; forward sweep (heading-relative, optional heading update)
+          //
+        : is_oneof( oper, ["arc_fw", "afw"] ) && (argc > 1) ?
+            let
+            (
+              r   = a1,
+              a   = a2,
+              o   = a3,
+              fn  = a4,
+              upd = defined_eonb_or( o, 0, true ),
+
+              // arc center: perpendicular to heading, left for a>0 right for a<0
+              perp_sign = (a >= 0) ? 1 : -1,
+              h_perp    = h + perp_sign * 90,
+              c_arc     = p0 + r * [cos(h_perp), sin(h_perp)],
+
+              // start and end angles measured from arc center
+              a_start   = h + perp_sign * (-90),   // direction c_arc → p0
+              a_end     = a_start + a,              // sweep by a (signed)
+
+              pts = (a == 0) ? empty_lst
+                  : polygon_arc_sweep_p
+                    (
+                      r  = r,
+                      o  = c_arc,
+                      v1 = a_start,
+                      v2 = a_end,
+                      fn = fn,
+                      cw = (a < 0)
+                    ),
+
+              out_h = upd ? h + a : h
+            )
+            [ pts, out_h ]
 
           //
           // sub-steps; repeat
@@ -710,6 +840,44 @@ function polygon_turtle_path_2d_p
               polygon_arc_sweep_p( r=distance_pp(p0, b1), o=b1, v1=[b1, p0], v2=v2, cw=a3, fn=a4 ),
               h
             ]
+
+          //
+          // arc; blend corner (tangent arc through corner vertex)
+          //
+        : is_oneof( oper, ["arc_blend", "ab"] ) && (argc > 2) ?
+            [
+              polygon_arc_blend_p( p1=p0, p2=a1, p3=a2, r=a3, fn=a4 ),
+              h
+            ]
+
+          //
+          // curve; Bézier (degree-n, de Casteljau)
+          //
+        : is_oneof( oper, ["bezier", "bz"] ) && (argc > 0) ?
+            let
+            (
+              ctrl_pts  = a1,
+              o         = a2,
+              fn        = a3,
+              pre       = defined_eonb_or( o, 0, true ),
+              pts       = pre ? concat( [p0], ctrl_pts ) : ctrl_pts
+            )
+            [ polygon_bezier_p( c=pts, fn=fn ), h ]
+
+          //
+          // curve; Catmull-Rom spline (through knots)
+          //
+        : is_oneof( oper, ["spline", "spl"] ) && (argc > 0) ?
+            let
+            (
+              knots   = a1,
+              o       = a2,
+              fn      = a3,
+              pre     = defined_eonb_or( o, 0, true ),
+              closed  = defined_e_or   ( o, 1, false ),
+              pts     = pre ? concat( [p0], knots ) : knots
+            )
+            [ polygon_spline_p( c=pts, fn=fn, closed=closed ), h ]
 
           //
           // points
