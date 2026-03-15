@@ -83,7 +83,9 @@
       and \c linear_extrude().
     - Shape-generation functions (polygon_regular_p(),
       polygon_trapezoid_p(), polygon_arc_sweep_p(),
-      polygon_arc_fillet_p(), polygon_elliptical_sector_p(), etc.)
+      polygon_arc_fillet_p(), polygon_arc_blend_p(),
+      polygon_elliptical_sector_p(), etc.) and curve-generation
+      functions (polygon_bezier_p(), polygon_spline_p())
       default to \p cw = \b true and therefore produce \b clockwise
       output.  Callers that pass generated coordinates directly to \c
       polygon() or to property/test functions that assume CCW winding
@@ -146,7 +148,7 @@ function _polygon_is_ear
     vc  = c[path[i]],
     vn  = c[path[in_]],
 
-    // ear tip must be a convex vertex in CCW winding: vc is left of vp→vn
+    // ear tip must be a convex vertex in CCW winding: vc is left of vp to vn
     convex = (is_left_ppp(vp, vn, vc) > 0),
 
     // triangle as a 3-point coordinate list for inclusion test
@@ -977,6 +979,209 @@ function polygon_trapezoid_p
 
     // cw ordering
     pp  = [p1, p2, p3, p4]
+  )
+  (cw == true) ? pp : reverse(pp);
+
+//! @}
+
+//----------------------------------------------------------------------------//
+// curves
+//----------------------------------------------------------------------------//
+
+//! \name Curves
+//! @{
+
+//! Compute coordinates for a degree-n Bézier curve in 2D.
+/***************************************************************************//**
+  \param    c   <points-2d> A list of 2d control point coordinates
+                [[x, y], ...]. The curve interpolates \p c[0] and
+                \p c[last] and approximates the interior control points.
+                Minimum 2 points required (degree 1, linear).
+
+  \param    fn  <integer> The number of [facets] \(optional\). When
+                undefined, its value is determined by get_fn() using the
+                chord length of the control polygon as a proxy radius.
+
+  \param    cw  <boolean> Point ordering. When \b true the returned list
+                is in the natural computed order (t = 0 to 1); when \b
+                false the list is reversed. Defaults to \b true.
+
+  \returns  <points-2d> A list of \p fn + 1 coordinate points [[x, y], ...]
+            sampled uniformly in the parameter \p t member of [0, 1], including
+            both endpoints.
+
+  \details
+
+    Evaluates the Bézier curve defined by the control polygon \p c
+    using the de Casteljau algorithm. The degree of the curve is
+    `len(c) - 1`. Common cases:
+
+    - Degree 1 (2 points): straight line segment.
+    - Degree 2 (3 points): quadratic Bézier.
+    - Degree 3 (4 points): cubic Bézier.
+    - Higher degrees are supported but may exhibit Runge-like oscillation.
+
+    The de Casteljau algorithm is used for its numerical stability. At
+    each parameter value \p t it performs `degree` rounds of linear
+    interpolation on the current level's point list until a single
+    point remains. No external helper functions are required.
+
+    \b Example
+    \code{.C}
+    $fn = 32;
+
+    ctrl = [ [0,0], [5,20], [15,20], [20,0] ];
+
+    polygon( polygon_bezier_p( c=ctrl ) );
+    \endcode
+
+  [facets]: \ref get_fn()
+*******************************************************************************/
+function polygon_bezier_p
+(
+  c,
+  fn,
+  cw = true
+) =
+  let
+  (
+    // chord-length sum as proxy for get_fn() radius
+    chord = sum( [for (i = [0 : len(c)-2]) distance_pp( c[i], c[i+1] )] ),
+    nf    = defined_or( fn, get_fn( chord / (2 * pi) ) ),
+
+    // de Casteljau evaluation at parameter t in [0,1]
+    // recursively interpolates the point list until one point remains
+    de_casteljau =
+      function (cp, t)
+        (len(cp) == 1) ? cp[0]
+        : de_casteljau
+          (
+            [for (i = [0 : len(cp)-2]) (1-t)*cp[i] + t*cp[i+1]],
+            t
+          ),
+
+    pp =
+      [
+        for (i = [0 : nf])
+          de_casteljau( c, i / nf )
+      ]
+  )
+  (cw == true) ? pp : reverse(pp);
+
+//! Compute coordinates for a Catmull-Rom spline through a list of knot points in 2D.
+/***************************************************************************//**
+  \param    c      <points-2d> A list of 2d knot coordinates [[x, y], ...].
+                   The curve passes through every knot. Minimum 2 points
+                   required. When \p closed is \b false the curve runs from
+                   \p c[0] to \p c[last]; when \p closed is \b true it
+                   also returns from \p c[last] back to \p c[0].
+
+  \param    fn     <integer> The number of [facets] per segment \(optional\).
+                   Each segment is the span between two consecutive knot
+                   points. When undefined, the per-segment value is
+                   determined by get_fn() evaluated at the segment chord
+                   length divided by \p 2π.
+
+  \param    closed <boolean> When \b true the spline is closed: a segment
+                   is added from the last knot back to the first, and the
+                   phantom knots at both ends are wrapped accordingly.
+                   Defaults to \b false.
+
+  \param    cw     <boolean> Point ordering. When \b true the returned list
+                   is in the natural computed order; when \b false the list
+                   is reversed. Defaults to \b true.
+
+  \returns  <points-2d> A list of coordinate points [[x, y], ...] tracing
+            the spline. For an open spline with \p n knots and \p fn facets
+            per segment the list contains `(n-1) × fn + 1` points. For a
+            closed spline it contains `n × fn` points (the closing knot is
+            not duplicated).
+
+  \details
+
+    Implements the centripetal Catmull-Rom spline. Each interior segment
+    \p i (from knot \p i to knot \p i+1) uses the four control points
+    \p c[i-1], \p c[i], \p c[i+1], \p c[i+2] to form a smooth
+    cubic. Phantom knots at the ends of an open spline are synthesised by
+    reflecting: the phantom before \p c[0] mirrors \p c[1], and the
+    phantom after \p c[last] mirrors \p c[last-1].
+
+    \b Example
+    \code{.C}
+    $fn = 32;
+
+    knots = [ [0,0], [5,10], [15,10], [20,0], [15,-10], [5,-10] ];
+
+    polygon( polygon_spline_p( c=knots, closed=true ) );
+    \endcode
+
+  [facets]: \ref get_fn()
+*******************************************************************************/
+function polygon_spline_p
+(
+  c,
+  fn,
+  closed = false,
+  cw     = true
+) =
+  let
+  (
+    n  = len(c),
+
+    // build the augmented knot list with phantom end-points
+    // open:   reflect c[1] before c[0] and c[n-2] after c[n-1]
+    // closed: wrap last and first knots to the phantom positions
+    kp =
+      closed ?
+        concat( [c[n-1]], c, [c[0]], [c[1]] )
+      : concat( [2*c[0] - c[1]], c, [2*c[n-1] - c[n-2]] ),
+
+    // number of segments
+    ns = closed ? n : n - 1,
+
+    // Catmull-Rom segment sampler; returns fn+1 or fn points
+    //   kp  — augmented knot array
+    //   seg — segment index (0-based, into original c)
+    //   last_seg — true when this is the final segment of an open spline
+    cr_seg =
+      function (kp, seg, nf, last_seg)
+        let
+        (
+          p0 = kp[seg],        // phantom / previous knot
+          p1 = kp[seg+1],      // segment start knot
+          p2 = kp[seg+2],      // segment end knot
+          p3 = kp[seg+3],      // next / phantom knot
+
+          end_i = last_seg ? nf : nf - 1
+        )
+        [
+          for (i = [0 : end_i])
+            let
+            (
+              t  = i / nf,
+              t2 = t * t,
+              t3 = t2 * t
+            )
+            0.5 * (
+                2*p1
+              + (-p0 + p2)               * t
+              + (2*p0 - 5*p1 + 4*p2 - p3) * t2
+              + (-p0 + 3*p1 - 3*p2 + p3)  * t3
+            )
+        ],
+
+    pp =
+      [
+        for (seg = [0 : ns-1])
+          let
+          (
+            chord  = distance_pp( c[seg % n], c[(seg+1) % n] ),
+            nf     = defined_or( fn, max(1, get_fn( chord / (2*pi) )) ),
+            last_s = (!closed) && (seg == ns-1)
+          )
+          for (pt = cr_seg(kp, seg, nf, last_s))
+            pt
+      ]
   )
   (cw == true) ? pp : reverse(pp);
 
@@ -2015,7 +2220,7 @@ function polygon_round_eve_all_p
     \endcode
 
     where \c wave is the waveform value at the remapped period position
-    \c u ∈ [0, 1).
+    \c u member of [0, 1).
 
     Packed parameters \p a, \p w, \p m, and \p t each accept either a
     single scalar (selecting only the primary value) or a list where
@@ -2385,7 +2590,7 @@ BEGIN_SCOPE validate;
     include <common/validation.scad>;
 
     echo( str("openscad version ", version()) );
-    for (i=[1:21]) echo( "not tested:" );
+    for (i=[1:24]) echo( "not tested:" );
 
     // end_include
   END_OPENSCAD;
