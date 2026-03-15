@@ -602,9 +602,33 @@ function polygon_turtle_path_p
       //
       ph =
           //
+          // heading; turn left (counter-clockwise)
+          //
+          is_oneof( oper, ["turn_left", "tl"] ) && (argc > 0) ?
+            [ empty_lst, h + a1 ]
+
+          //
+          // heading; turn right (clockwise)
+          //
+        : is_oneof( oper, ["turn_right", "tr"] ) && (argc > 0) ?
+            [ empty_lst, h - a1 ]
+
+          //
+          // lines; close path (return to global origin)
+          //
+        : is_oneof( oper, ["close", "cl"] ) ?
+            let
+            (
+              g  = defined_or( _p0_g, p0 ),  // step-1 guard
+              wc = a1,
+              fn = a2
+            )
+            [ _polygon_turtle_path_p_line_p( p0=p0, t=g, wc=wc, fn=fn ), h ]
+
+          //
           // lines; goto (absolute position)
           //
-          is_oneof( oper, ["goto_xy", "gxy"] ) && (argc > 1) ?
+        : is_oneof( oper, ["goto_xy", "gxy"] ) && (argc > 1) ?
             let( t = [a1, a2], wc = a3, fn = a4 )
             [ _polygon_turtle_path_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
@@ -664,18 +688,6 @@ function polygon_turtle_path_p
             [ _polygon_turtle_path_p_line_p( p0=p0, t=t, wc=wc, fn=fn ), h ]
 
           //
-          // heading; turn left (counter-clockwise)
-          //
-        : is_oneof( oper, ["turn_left", "tl"] ) && (argc > 0) ?
-            [ empty_lst, h + a1 ]
-
-          //
-          // heading; turn right (clockwise)
-          //
-        : is_oneof( oper, ["turn_right", "tr"] ) && (argc > 0) ?
-            [ empty_lst, h - a1 ]
-
-          //
           // arc; forward sweep (heading-relative, optional heading update)
           //
         : is_oneof( oper, ["arc_fw", "afw"] ) && (argc > 1) ?
@@ -710,6 +722,68 @@ function polygon_turtle_path_p
               out_h = upd ? h + a : h
             )
             [ pts, out_h ]
+
+          //
+          // arc; center point
+          //
+        : is_oneof( oper, ["arc_pv", "apv"] ) && (argc > 2) ?
+            let( v2 = is_list(a2) ? [a1, a2] : a2 )
+            [
+              polygon_arc_sweep_p( r=distance_pp(p0, a1), o=a1, v1=[a1, p0], v2=v2, cw=a3, fn=a4 ),
+              h
+            ]
+
+          //
+          // arc; center vector
+          //
+        : is_oneof( oper, ["arc_vv", "avv"] ) && (argc > 2) ?
+            let
+            (
+              b1 = line_tp( line2d_new(m=first(a1), a=second(a1), p1=p0) ),
+              v2 = is_list(a2) ? [b1, a2] : a2
+            )
+            [
+              polygon_arc_sweep_p( r=distance_pp(p0, b1), o=b1, v1=[b1, p0], v2=v2, cw=a3, fn=a4 ),
+              h
+            ]
+
+          //
+          // arc; blend corner (tangent arc through corner vertex)
+          //
+        : is_oneof( oper, ["arc_blend", "ab"] ) && (argc > 2) ?
+            [
+              polygon_arc_blend_p( p1=p0, p2=a1, p3=a2, r=a3, fn=a4 ),
+              h
+            ]
+
+          //
+          // curve; Bézier (degree-n, de Casteljau)
+          //
+        : is_oneof( oper, ["bezier", "bz"] ) && (argc > 0) ?
+            let
+            (
+              ctrl_pts  = a1,
+              o         = a2,
+              fn        = a3,
+              pre       = defined_eonb_or( o, 0, true ),
+              pts       = pre ? concat( [p0], ctrl_pts ) : ctrl_pts
+            )
+            [ polygon_bezier_p( c=pts, fn=fn ), h ]
+
+          //
+          // curve; Catmull-Rom spline (through knots)
+          //
+        : is_oneof( oper, ["spline", "spl"] ) && (argc > 0) ?
+            let
+            (
+              knots   = a1,
+              o       = a2,
+              fn      = a3,
+              pre     = defined_eonb_or( o, 0, true ),
+              closed  = defined_e_or   ( o, 1, false ),
+              pts     = pre ? concat( [p0], knots ) : knots
+            )
+            [ polygon_spline_p( c=pts, fn=fn, closed=closed ), h ]
 
           //
           // sub-steps; repeat
@@ -825,84 +899,10 @@ function polygon_turtle_path_p
             [ xfmd, out_h ]
 
           //
-          // arc; center point
-          //
-        : is_oneof( oper, ["arc_pv", "apv"] ) && (argc > 2) ?
-            let( v2 = is_list(a2) ? [a1, a2] : a2 )
-            [
-              polygon_arc_sweep_p( r=distance_pp(p0, a1), o=a1, v1=[a1, p0], v2=v2, cw=a3, fn=a4 ),
-              h
-            ]
-
-          //
-          // arc; center vector
-          //
-        : is_oneof( oper, ["arc_vv", "avv"] ) && (argc > 2) ?
-            let
-            (
-              b1 = line_tp( line2d_new(m=first(a1), a=second(a1), p1=p0) ),
-              v2 = is_list(a2) ? [b1, a2] : a2
-            )
-            [
-              polygon_arc_sweep_p( r=distance_pp(p0, b1), o=b1, v1=[b1, p0], v2=v2, cw=a3, fn=a4 ),
-              h
-            ]
-
-          //
-          // arc; blend corner (tangent arc through corner vertex)
-          //
-        : is_oneof( oper, ["arc_blend", "ab"] ) && (argc > 2) ?
-            [
-              polygon_arc_blend_p( p1=p0, p2=a1, p3=a2, r=a3, fn=a4 ),
-              h
-            ]
-
-          //
-          // curve; Bézier (degree-n, de Casteljau)
-          //
-        : is_oneof( oper, ["bezier", "bz"] ) && (argc > 0) ?
-            let
-            (
-              ctrl_pts  = a1,
-              o         = a2,
-              fn        = a3,
-              pre       = defined_eonb_or( o, 0, true ),
-              pts       = pre ? concat( [p0], ctrl_pts ) : ctrl_pts
-            )
-            [ polygon_bezier_p( c=pts, fn=fn ), h ]
-
-          //
-          // curve; Catmull-Rom spline (through knots)
-          //
-        : is_oneof( oper, ["spline", "spl"] ) && (argc > 0) ?
-            let
-            (
-              knots   = a1,
-              o       = a2,
-              fn      = a3,
-              pre     = defined_eonb_or( o, 0, true ),
-              closed  = defined_e_or   ( o, 1, false ),
-              pts     = pre ? concat( [p0], knots ) : knots
-            )
-            [ polygon_spline_p( c=pts, fn=fn, closed=closed ), h ]
-
-          //
           // points
           //
         : is_oneof( oper, ["path_p", "pp"] ) && (argc > 0) ?
             [ a1, h ]
-
-          //
-          // close path; return to global origin
-          //
-        : is_oneof( oper, ["close", "cl"] ) ?
-            let
-            (
-              g  = defined_or( _p0_g, p0 ),  // step-1 guard
-              wc = a1,
-              fn = a2
-            )
-            [ _polygon_turtle_path_p_line_p( p0=p0, t=g, wc=wc, fn=fn ), h ]
 
           //
           // assert error
