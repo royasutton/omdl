@@ -182,39 +182,39 @@ function _coordinate_unit_c2
   : let( d = line_dim(c) )
 
     // polar (2d)
-    (to == "p") ? (d != 2 ) ? undef
+    (to == "p") ? (d != 2) ? undef
     : (
         let
         (
           r   = sqrt(pow(c[0],2) + pow(c[1],2)),
           aa  = atan2(c[1], c[0]),
-          aap = ((aa<0) && (coordinate_positive_angle==true)) ? aa+360 : aa
+          aap = ((aa<0) && coordinate_positive_angle) ? aa+360 : aa
         )
         [r, aap]
       )
 
     // cylindrical (3d)
-  : (to == "y") ? (d != 3 ) ? undef
+  : (to == "y") ? (d != 3) ? undef
     : (
         let
         (
           r   = sqrt(pow(c[0],2) + pow(c[1],2)),
           aa  = atan2(c[1], c[0]),
-          aap = ((aa<0) && (coordinate_positive_angle==true)) ? aa+360 : aa,
-          z   = (c[2] !=undef) ? c[2] : 0
+          aap = ((aa<0) && coordinate_positive_angle) ? aa+360 : aa
         )
-        [r, aap, z]
+        [r, aap, c[2]]
       )
 
     // spherical (3d)
-  : (to == "s") ? (d != 3 ) ? undef
+  : (to == "s") ? (d != 3) ? undef
     : (
         let
         (
           r   = sqrt(pow(c[0],2) + pow(c[1],2) + pow(c[2],2)),
           aa  = atan2(c[1], c[0]),
-          aap = ((aa<0) && (coordinate_positive_angle==true)) ? aa+360 : aa,
-          pa  = acos(c[2] / r)
+          aap = ((aa<0) && coordinate_positive_angle) ? aa+360 : aa,
+          // guard against r==0 (origin): acos(0/0) is undefined; pa=0 by convention
+          pa  = (r == 0) ? 0 : acos(c[2] / r)
         )
         [r, aap, pa]
       )
@@ -260,10 +260,9 @@ function _coordinate_unit_2c
         let
         (
           x = c[0]*cos(c[1]),
-          y = c[0]*sin(c[1]),
-          z = (c[2] != undef) ? c[2] : 0
+          y = c[0]*sin(c[1])
         )
-        [x, y, z]
+        [x, y, c[2]]
       )
 
     // spherical (3d)
@@ -296,7 +295,9 @@ function coordinate
   from = coordinate_unit_default,
   to   = coordinate_unit_base
 ) = (from == to) ? c
-  : _coordinate_unit_c2( _coordinate_unit_2c( c, from ), to );
+  : let( cc = _coordinate_unit_2c( c, from ) )
+    (cc == undef) ? undef
+  : _coordinate_unit_c2( cc, to );
 
 //! Convert point from one coordinate system to another.
 /***************************************************************************//**
@@ -315,7 +316,9 @@ function coordinate_inv
   from = coordinate_unit_base,
   to   = coordinate_unit_default
 ) = (from == to) ? c
-  : _coordinate_unit_c2( _coordinate_unit_2c( c, from ), to );
+  : let( cc = _coordinate_unit_2c( c, from ) )
+    (cc == undef) ? undef
+  : _coordinate_unit_c2( cc, to );
 
 //! Radially scale a list of 2d cartesian coordinates.
 /***************************************************************************//**
