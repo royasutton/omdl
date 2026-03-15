@@ -139,7 +139,7 @@ function angle_unit_name
 function _angle_unit_d2
 (
   a,
-  to
+  to = angle_unit_base
 ) = to == "r"   ? (a * tau / 360)
   : to == "d"   ? (a)
   : to == "dms" ?
@@ -167,7 +167,7 @@ function _angle_unit_d2
 function _angle_unit_2d
 (
   a,
-  from
+  from = angle_unit_default
 ) = from == "r"   ? (a * 360 / tau)
   : from == "d"   ? (a)
   : from == "dms" ?
@@ -210,10 +210,7 @@ function angle_inv
   a,
   from = angle_unit_base,
   to   = angle_unit_default
-) = (from == to) ? a
-  : let( d = _angle_unit_2d( a, from ) )
-    (d == undef) ? undef
-  : _angle_unit_d2( d, to );
+) = angle(a=a, from=from, to=to);
 
 //----------------------------------------------------------------------------//
 // shorthand conversions
@@ -224,19 +221,23 @@ function angle_inv
 
 //! Shorthand angle conversion for degrees.
 /***************************************************************************//**
-  \param    a <decimal> The angle to convert.
+  \param    a  <decimal> The angle to convert.
+  \param    to <string> The units to which the angle should be converted.
+            Defaults to \ref angle_unit_base.
 
   \returns  <decimal> The conversion result.
 *******************************************************************************/
-function a_deg(a) = angle(a=a, from="d");
+function a_deg(a, to=angle_unit_base) = angle(a=a, from="d", to=to);
 
 //! Shorthand angle conversion for radians.
 /***************************************************************************//**
-  \param    a <decimal> The angle to convert.
+  \param    a  <decimal> The angle to convert.
+  \param    to <string> The units to which the angle should be converted.
+            Defaults to \ref angle_unit_base.
 
   \returns  <decimal> The conversion result.
 *******************************************************************************/
-function a_rad(a) = angle(a=a, from="r");
+function a_rad(a, to=angle_unit_base) = angle(a=a, from="r", to=to);
 
 //! @}
 
