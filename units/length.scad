@@ -205,7 +205,7 @@ function length_unit_name
 function _length_unit_mm2
 (
   v,
-  to
+  to = length_unit_base
 ) = to == "pm"    ? ( v * 1000000000.0 )
   : to == "nm"    ? ( v * 1000000.0 )
   : to == "um"    ? ( v * 1000.0 )
@@ -235,7 +235,7 @@ function _length_unit_mm2
 function _length_unit_2mm
 (
   v,
-  from
+  from = length_unit_default
 ) = let( factor = _length_unit_mm2( 1, from ) )
     (factor == undef) ? undef : v / factor;
 
@@ -302,9 +302,11 @@ function length_inv
   from = length_unit_base,
   to   = length_unit_default,
   d    = 1
-) = d == 1 ?  _length_1d(v, from, to)
-    // for multi-dimension, 'v' must be a scalar
-  : is_list(v) ? undef
+) =
+    // for d>1, 'v' must be a scalar; lists are only valid for d=1
+    (d != 1 && is_list(v)) ? undef
+    // d=1: scalar or list, element-wise conversion via _length_1d
+  : d == 1 ?  _length_1d(v, from, to)
   : d == 2 ? _length_1d(sqrt(v),       from, to)
   : d == 3 ? _length_1d(pow(v, 1/3.0), from, to)
     // undefined for other dimensions
@@ -320,18 +322,20 @@ function length_inv
 //! Shorthand length conversion for millimeters.
 /***************************************************************************//**
   \param    v <decimal> The value to convert.
+  \param    d <integer> The unit dimension. One of [1|2|3].
 
   \returns  <decimal> The conversion result.
 *******************************************************************************/
-function l_mm(v) = length(v=v, from="mm");
+function l_mm(v, d=1) = length(v=v, from="mm", d=d);
 
 //! Shorthand length conversion for inches.
 /***************************************************************************//**
   \param    v <decimal> The value to convert.
+  \param    d <integer> The unit dimension. One of [1|2|3].
 
   \returns  <decimal> The conversion result.
 *******************************************************************************/
-function l_in(v) = length(v=v, from="in");
+function l_in(v, d=1) = length(v=v, from="in", d=d);
 
 //! @}
 
