@@ -140,13 +140,19 @@ function _angle_unit_d2
 (
   a,
   to
-) = to == "r"    ? (a * tau / 360)
-  : to == "d"    ? (a)
-  : to == "dms"  ? ([
-                      floor(a),
-                      floor((a - floor(a)) * 60),
-                      (a - floor(a) - floor((a - floor(a)) * 60) / 60) * 3600
-                   ])
+) = to == "r"   ? (a * tau / 360)
+  : to == "d"   ? (a)
+  : to == "dms" ?
+      // use abs(a) so floor() behaves correctly for negative angles;
+      // sign is preserved on the degrees component only
+      let(
+        sign = (a < 0) ? -1 : 1,
+        aa   = abs(a),
+        deg  = floor(aa),
+        min  = floor((aa - deg) * 60),
+        sec  = (aa - deg - min/60) * 3600
+      )
+      [ sign * deg, min, sec ]
   : undef;
 
 //! Convert an angle from some units to degrees.
@@ -162,9 +168,13 @@ function _angle_unit_2d
 (
   a,
   from
-) = from == "r"    ? (a * 360 / tau)
-  : from == "d"    ? (a)
-  : from == "dms"  ? (a[0] + a[1]/60 + a[2]/3600)
+) = from == "r"   ? (a * 360 / tau)
+  : from == "d"   ? (a)
+  : from == "dms" ?
+      // sign lives on the degrees component only; minutes and seconds
+      // are always non-negative magnitudes
+      let( sign = (a[0] < 0) ? -1 : 1 )
+      sign * (abs(a[0]) + a[1]/60 + a[2]/3600)
   : undef;
 
 //! Convert an angle from some units to another.
@@ -182,7 +192,9 @@ function angle
   from = angle_unit_default,
   to   = angle_unit_base
 ) = (from == to) ? a
-  : _angle_unit_d2( _angle_unit_2d( a, from ), to );
+  : let( d = _angle_unit_2d( a, from ) )
+    (d == undef) ? undef
+  : _angle_unit_d2( d, to );
 
 //! Convert an angle from some units to another.
 /***************************************************************************//**
@@ -199,7 +211,9 @@ function angle_inv
   from = angle_unit_base,
   to   = angle_unit_default
 ) = (from == to) ? a
-  : _angle_unit_d2( _angle_unit_2d( a, from ), to );
+  : let( d = _angle_unit_2d( a, from ) )
+    (d == undef) ? undef
+  : _angle_unit_d2( d, to );
 
 //----------------------------------------------------------------------------//
 // shorthand conversions
