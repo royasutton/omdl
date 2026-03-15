@@ -184,20 +184,20 @@ function _polygon_turtle_path_p_repeat
    \ref move_rr      | mrr     | m, a                 | m, a, wc, fn           | p0 + line(m, h+a)
    \ref move_fw      | mfw     | m                    | m, wc, fn              | p0 + line(m, h)
    <h3> arc operations </h3> |||||
-   \ref arc_fw       | afw     | r, a                 | r, a, [o], fn          | (see below)
-   \ref arc_pv       | apv     | c, v, cw, fn                                 || (see below)
-   \ref arc_vv       | avv     | v, v, cw, fn                                 || (see below)
-   \ref arc_blend    | ab      | p2, p3, r            | p2, p3, r, fn          | (see below)
+   \ref arc_fw       | afw     | r, a                 | r, a, [o], fn          | \ref arc_fw    "(see below)"
+   \ref arc_pv       | apv     | c, v, cw, fn                                 || \ref arc_pv    "(see below)"
+   \ref arc_vv       | avv     | v, v, cw, fn                                 || \ref arc_vv    "(see below)"
+   \ref arc_blend    | ab      | p2, p3, r            | p2, p3, r, fn          | \ref arc_blend "(see below)"
    <h3> curve operations </h3> |||||
-   \ref bezier       | bz      | ctrl_pts             | ctrl_pts, [o], fn      | (see below)
-   \ref spline       | spl     | knots                | knots, [o], fn         | (see below)
+   \ref bezier       | bz      | ctrl_pts             | ctrl_pts, [o], fn      | \ref bezier    "(see below)"
+   \ref spline       | spl     | knots                | knots, [o], fn         | \ref spline    "(see below)"
    <h3> sub-step operations </h3> |||||
-   \ref repeat       | rpt     | steps                | steps, n               | (see below)
-   \ref repeat_mx    | rptmx   | steps, axis          | steps, axis, [o]       | (see below)
-   \ref repeat_my    | rptmy   | steps, axis          | steps, axis, [o]       | (see below)
-   \ref transform    | xfrm    | steps, r             | steps, r, t, mn, [o]   | (see below)
+   \ref repeat       | rpt     | steps                | steps, n               | \ref repeat    "(see below)"
+   \ref repeat_mx    | rptmx   | steps, axis          | steps, axis, [o]       | \ref repeat_mx "(see below)"
+   \ref repeat_my    | rptmy   | steps, axis          | steps, axis, [o]       | \ref repeat_my "(see below)"
+   \ref transform    | xfrm    | steps, r             | steps, r, t, mn, [o]   | \ref transform "(see below)"
    <h3> point operations </h3> |||||
-   \ref path_p       | pp      | [p1, p2, ..., pn]                            || (see below)
+   \ref path_p       | pp      | [p1, p2, ..., pn]                            || \ref path_p    "(see below)"
 
   The two argument columns divide the minimum form from the extended
   form: the left column shows the minimum required arguments, and the
