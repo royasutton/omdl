@@ -209,7 +209,7 @@ function _polygon_turtle_path_p_repeat
   parameters specify the waveform configuration and period fragment
   count as shown in the table above.
 
-  ### Wave-line waveform configuration
+  ## Wave-line waveform configuration
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
@@ -231,6 +231,8 @@ function _polygon_turtle_path_p_repeat
   operations accept the optional \p wc and \p fn parameters to produce
   a wave-line in place of a straight segment.
 
+  ## Heading operations
+
   ### turn_left
 
   Rotates the current heading counter-clockwise by \p a degrees.
@@ -242,6 +244,8 @@ function _polygon_turtle_path_p_repeat
   Rotates the current heading clockwise by \p a degrees. Produces no
   output coordinate points; only the heading \p h is updated for
   subsequent steps.
+
+  ## Line operations
 
   ### close
 
@@ -332,6 +336,8 @@ function _polygon_turtle_path_p_repeat
   Moves forward from the current position by distance \p m along the
   current heading \p h. Equivalent to \p move_rr with \p a set to zero.
 
+  ## Arc operations
+
   ### arc_fw
 
     e | data type             | default value | parameter description
@@ -411,6 +417,8 @@ function _polygon_turtle_path_p_repeat
   polygon_arc_blend_p(). The heading \p h is not updated by this
   operation.
 
+  ## Curve operations
+
   ### bezier
 
     e | data type             | default value | parameter description
@@ -457,6 +465,8 @@ function _polygon_turtle_path_p_repeat
   to the first is included. Pass `[o] = undef` to accept all option
   defaults while still supplying \p fn. The heading \p h is not updated
   by this operation. Delegates to polygon_spline_p().
+
+  ## Sub-step operations
 
   ### repeat
 
@@ -545,6 +555,8 @@ function _polygon_turtle_path_p_repeat
   advances to the last transformed point and \p h is updated to
   `h_final + r`, where \p h_final is the heading at the end of the
   sub-step sequence. Nesting is supported to arbitrary depth.
+
+  ## Point operations
 
   ### path_p
 
