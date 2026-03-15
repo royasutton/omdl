@@ -164,40 +164,40 @@ function _polygon_turtle_path_p_repeat
   The following table summarizes the supported operations, arguments,
   and their semantics.
 
-   operation    | short   | arguments                                    || output coordinate point(s)
-  :------------:|:-------:|:--------------------:|:----------------------:|:-----------------------:
-   ^            | ^       | minimum arguments    | extended arguments     | ^
+   operation         | short   | arguments                                    || output coordinate point(s)
+  :-----------------:|:-------:|:--------------------:|:----------------------:|:-----------------------:
+   ^                 | ^       | minimum arguments    | extended arguments     | ^
    <h3> heading operations </h3> |||||
-   turn_left    | tl      | a                                            || (none)
-   turn_right   | tr      | a                                            || (none)
+   \ref turn_left    | tl      | a                                            || (none)
+   \ref turn_right   | tr      | a                                            || (none)
    <h3> line operations </h3> |||||
-   close        | cl      | (none)               | wc, fn                 | _p0_g
-   goto_xy      | gxy     | x, y                 | x, y, wc, fn           | [x, y]
-   goto_x       | gx      | x                    | x, wc, fn              | [x, p0.y]
-   goto_y       | gy      | y                    | y, wc, fn              | [p0.x, y]
-   delta_xy     | dxy     | x, y                 | x, y, wc, fn           | p0 + [x, y]
-   delta_x      | dx      | x                    | x, wc, fn              | p0 + [x, 0]
-   delta_y      | dy      | y                    | y, wc, fn              | p0 + [0, y]
-   delta_xa     | dxa     | x, a                 | x, a, wc, fn           | p0 + [ x, x * tan(a) ]
-   delta_ya     | dya     | y, a                 | y, a, wc, fn           | p0 + [ y / tan(a), y ]
-   move_ar      | mar     | m, a                 | m, a, wc, fn           | p0 + line(m, a)
-   move_rr      | mrr     | m, a                 | m, a, wc, fn           | p0 + line(m, h+a)
-   move_fw      | mfw     | m                    | m, wc, fn              | p0 + line(m, h)
+   \ref close        | cl      | (none)               | wc, fn                 | _p0_g
+   \ref goto_xy      | gxy     | x, y                 | x, y, wc, fn           | [x, y]
+   \ref goto_x       | gx      | x                    | x, wc, fn              | [x, p0.y]
+   \ref goto_y       | gy      | y                    | y, wc, fn              | [p0.x, y]
+   \ref delta_xy     | dxy     | x, y                 | x, y, wc, fn           | p0 + [x, y]
+   \ref delta_x      | dx      | x                    | x, wc, fn              | p0 + [x, 0]
+   \ref delta_y      | dy      | y                    | y, wc, fn              | p0 + [0, y]
+   \ref delta_xa     | dxa     | x, a                 | x, a, wc, fn           | p0 + [ x, x * tan(a) ]
+   \ref delta_ya     | dya     | y, a                 | y, a, wc, fn           | p0 + [ y / tan(a), y ]
+   \ref move_ar      | mar     | m, a                 | m, a, wc, fn           | p0 + line(m, a)
+   \ref move_rr      | mrr     | m, a                 | m, a, wc, fn           | p0 + line(m, h+a)
+   \ref move_fw      | mfw     | m                    | m, wc, fn              | p0 + line(m, h)
    <h3> arc operations </h3> |||||
-   arc_fw       | afw     | r, a                 | r, a, [o], fn          | (see below)
-   arc_pv       | apv     | c, v, cw, fn                                 || (see below)
-   arc_vv       | avv     | v, v, cw, fn                                 || (see below)
-   arc_blend    | ab      | p2, p3, r            | p2, p3, r, fn          | (see below)
+   \ref arc_fw       | afw     | r, a                 | r, a, [o], fn          | (see below)
+   \ref arc_pv       | apv     | c, v, cw, fn                                 || (see below)
+   \ref arc_vv       | avv     | v, v, cw, fn                                 || (see below)
+   \ref arc_blend    | ab      | p2, p3, r            | p2, p3, r, fn          | (see below)
    <h3> curve operations </h3> |||||
-   bezier       | bz      | ctrl_pts             | ctrl_pts, [o], fn      | (see below)
-   spline       | spl     | knots                | knots, [o], fn         | (see below)
+   \ref bezier       | bz      | ctrl_pts             | ctrl_pts, [o], fn      | (see below)
+   \ref spline       | spl     | knots                | knots, [o], fn         | (see below)
    <h3> sub-step operations </h3> |||||
-   repeat       | rpt     | steps                | steps, n               | (see below)
-   repeat_mx    | rptmx   | steps, axis          | steps, axis, [o]       | (see below)
-   repeat_my    | rptmy   | steps, axis          | steps, axis, [o]       | (see below)
-   transform    | xfrm    | steps, r             | steps, r, t, mn, [o]   | (see below)
+   \ref repeat       | rpt     | steps                | steps, n               | (see below)
+   \ref repeat_mx    | rptmx   | steps, axis          | steps, axis, [o]       | (see below)
+   \ref repeat_my    | rptmy   | steps, axis          | steps, axis, [o]       | (see below)
+   \ref transform    | xfrm    | steps, r             | steps, r, t, mn, [o]   | (see below)
    <h3> point operations </h3> |||||
-   path_p       | pp      | [p1, p2, ..., pn]                            || (see below)
+   \ref path_p       | pp      | [p1, p2, ..., pn]                            || (see below)
 
   The two argument columns divide the minimum form from the extended
   form: the left column shows the minimum required arguments, and the
@@ -233,13 +233,13 @@ function _polygon_turtle_path_p_repeat
 
   ## Heading operations
 
-  ### turn_left
+  \subsubsection turn_left
 
   Rotates the current heading counter-clockwise by \p a degrees.
   Produces no output coordinate points; only the heading \p h is
   updated for subsequent steps.
 
-  ### turn_right
+  \subsubsection turn_right
 
   Rotates the current heading clockwise by \p a degrees. Produces no
   output coordinate points; only the heading \p h is updated for
@@ -247,43 +247,43 @@ function _polygon_turtle_path_p_repeat
 
   ## Line operations
 
-  ### close
+  \subsubsection close
 
   Closes the path by returning to the global origin \p _p0_g with a
   straight or wave-line segment. When no arguments are given, a
   straight line is drawn. The global origin is set automatically on the
   first step and remains fixed for the lifetime of the recursion.
 
-  ### goto_xy
+  \subsubsection goto_xy
 
   Moves to the absolute coordinate `[x, y]`, ignoring the current
   position.
 
-  ### goto_x
+  \subsubsection goto_x
 
   Moves to the absolute x-axis coordinate \p x, retaining the current
   y-axis coordinate.
 
-  ### goto_y
+  \subsubsection goto_y
 
   Moves to the absolute y-axis coordinate \p y, retaining the current
   x-axis coordinate.
 
-  ### delta_xy
+  \subsubsection delta_xy
 
   Moves from the current position by the relative offset `[x, y]`.
 
-  ### delta_x
+  \subsubsection delta_x
 
   Moves from the current position by the relative x-axis offset \p x,
   with no y-axis displacement.
 
-  ### delta_y
+  \subsubsection delta_y
 
   Moves from the current position by the relative y-axis offset \p y,
   with no x-axis displacement.
 
-  ### delta_xa
+  \subsubsection delta_xa
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
@@ -296,7 +296,7 @@ function _polygon_turtle_path_p_repeat
   horizontal extent of a step is known and the slope angle is the
   natural constraint.
 
-  ### delta_ya
+  \subsubsection delta_ya
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
@@ -309,7 +309,7 @@ function _polygon_turtle_path_p_repeat
   delta_xa and is convenient when the vertical extent of a step is
   known and the slope angle is the natural constraint.
 
-  ### move_ar
+  \subsubsection move_ar
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
@@ -320,7 +320,7 @@ function _polygon_turtle_path_p_repeat
   angle \p a, measured from the positive x-axis. The heading \p h is
   not consulted.
 
-  ### move_rr
+  \subsubsection move_rr
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
@@ -331,14 +331,14 @@ function _polygon_turtle_path_p_repeat
   a`, where \p h is the current heading. When \p a is zero this
   operation is equivalent to \p move_fw.
 
-  ### move_fw
+  \subsubsection move_fw
 
   Moves forward from the current position by distance \p m along the
   current heading \p h. Equivalent to \p move_rr with \p a set to zero.
 
   ## Arc operations
 
-  ### arc_fw
+  \subsubsection arc_fw
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
@@ -364,7 +364,7 @@ function _polygon_turtle_path_p_repeat
   the heading update. Pass `[o] = undef` to accept all option defaults
   while still supplying \p fn.
 
-  ### arc_pv
+  \subsubsection arc_pv
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
@@ -382,7 +382,7 @@ function _polygon_turtle_path_p_repeat
   parameter \p fn specifies the number of facets and, when omitted, is
   determined automatically by get_fn().
 
-  ### arc_vv
+  \subsubsection arc_vv
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
@@ -400,7 +400,7 @@ function _polygon_turtle_path_p_repeat
   the stop angle. The optional parameter \p fn specifies the number of
   facets and, when omitted, is determined automatically by get_fn().
 
-  ### arc_blend
+  \subsubsection arc_blend
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
@@ -419,7 +419,7 @@ function _polygon_turtle_path_p_repeat
 
   ## Curve operations
 
-  ### bezier
+  \subsubsection bezier
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
@@ -442,7 +442,7 @@ function _polygon_turtle_path_p_repeat
   defaults while still supplying \p fn. The heading \p h is not updated
   by this operation. Delegates to polygon_bezier_p().
 
-  ### spline
+  \subsubsection spline
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
@@ -468,7 +468,7 @@ function _polygon_turtle_path_p_repeat
 
   ## Sub-step operations
 
-  ### repeat
+  \subsubsection repeat
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
@@ -483,7 +483,7 @@ function _polygon_turtle_path_p_repeat
   once, making \p repeat useful as a plain grouping mechanism. Nesting
   is supported to arbitrary depth.
 
-  ### repeat_mx
+  \subsubsection repeat_mx
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
@@ -506,7 +506,7 @@ function _polygon_turtle_path_p_repeat
   bundle \p o controls winding order, heading continuity, and the start
   point of the mirrored pass. Nesting is supported to arbitrary depth.
 
-  ### repeat_my
+  \subsubsection repeat_my
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
@@ -529,7 +529,7 @@ function _polygon_turtle_path_p_repeat
   bundle \p o controls winding order, heading continuity, and the start
   point of the mirrored pass. Nesting is supported to arbitrary depth.
 
-  ### transform
+  \subsubsection transform
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
@@ -562,7 +562,7 @@ function _polygon_turtle_path_p_repeat
 
   ## Point operations
 
-  ### path_p
+  \subsubsection path_p
 
     e | data type             | default value | parameter description
   :--:|:---------------------:|:-------------:|:------------------------------------
