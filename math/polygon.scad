@@ -82,12 +82,13 @@
       primary path, matching the convention of OpenSCAD's \c polygon()
       and \c linear_extrude().
     - Shape-generation functions (polygon_regular_p(),
-      polygon_trapezoid_p(), polygon_arc_sweep_p(), polygon_elliptical_sector_p(),
-      etc.) default to \p cw = \b true and therefore produce
-      \b clockwise output.  Callers that pass generated coordinates
-      directly to \c polygon() or to property/test functions that assume
-      CCW winding must either pass \p cw = \b false to the generator, or
-      reverse the coordinate list after the fact.
+      polygon_trapezoid_p(), polygon_arc_sweep_p(),
+      polygon_arc_fillet_p(), polygon_elliptical_sector_p(), etc.)
+      default to \p cw = \b true and therefore produce \b clockwise
+      output.  Callers that pass generated coordinates directly to \c
+      polygon() or to property/test functions that assume CCW winding
+      must either pass \p cw = \b false to the generator, or reverse
+      the coordinate list after the fact.
     - Functions in this library that require a specific winding — such as
       polygon_linear_extrude_pf() — call polygon_is_clockwise() and
       normalise the winding internally; callers are \em not required to
@@ -607,6 +608,10 @@ function polygon_line_p
     full circle is returned. When \p fn is undefined, its value is
     determined by get_fn().
 
+    \note To round a polygon corner with a tangent arc whose center is
+          derived automatically from the corner geometry, use
+          polygon_arc_fillet_p().
+
   [facets]: \ref get_fn()
 *******************************************************************************/
 function polygon_arc_sweep_p
@@ -642,6 +647,95 @@ function polygon_arc_sweep_p
       let (aa = iap + as * sas)
       o + r * [cos(aa), sin(aa)]
   ];
+
+//! Compute coordinates for a circular fillet arc between two rays in 2D.
+/***************************************************************************//**
+  \param    r   <decimal> The fillet radius. Must be greater than zero.
+
+  \param    o   <point-2d> The corner coordinate [x, y] — the vertex where
+                the two rays \p v1 and \p v2 meet.
+
+  \param    v1  <line-2d | decimal> The first ray direction (incoming edge).
+                A 2d line, vector, or decimal angle in degrees. The fillet
+                begins at the tangent point on this ray.
+
+  \param    v2  <line-2d | decimal> The second ray direction (outgoing edge).
+                A 2d line, vector, or decimal angle in degrees. The fillet
+                ends at the tangent point on this ray.
+
+  \param    fn  <integer> The number of [facets] \(optional\). When
+                undefined, its value is determined by get_fn() evaluated at
+                the fillet radius \p r.
+
+  \param    cw  <boolean> Point ordering. When \b true the returned list
+                runs from the tangent point on \p v1 to the tangent point
+                on \p v2 in the clockwise direction; when \b false the list
+                is reversed to run counter-clockwise. Defaults to \b true,
+                consistent with polygon_arc_sweep_p() and the other
+                shape-generation functions in this group.
+
+  \returns  <points-2d> A list of coordinates points [[x, y], ...] tracing
+            the fillet arc from the tangent point on \p v1 to the tangent
+            point on \p v2. Returns \b empty_lst when the two rays are
+            (anti-)parallel within the almost_eq_nv() tolerance.
+
+  \details
+
+    A circular fillet of radius \p r is tangent to both rays \p v1 and
+    \p v2 that originate at the corner vertex \p o. The function computes
+    and returns only the arc of the fillet circle that lies between the
+    two tangent points; it does \em not include the corner vertex \p o or
+    the tangent points' projections back along the rays. The resulting
+    point list can be spliced directly into a polygon path in place of the
+    sharp corner at \p o to round it.
+
+  [facets]: \ref get_fn()
+*******************************************************************************/
+function polygon_arc_fillet_p
+(
+  r  = 1,
+  o  = origin2d,
+  v1 = x_axis2d_uv,
+  v2 = y_axis2d_uv,
+  fn,
+  cw = true
+) =
+  assert( r > 0, "polygon_arc_fillet_p: fillet radius r must be greater than zero." )
+  let
+  (
+    // normalise v1 / v2 to unit direction vectors from o
+    d1 = unit_l( is_number(v1) ? [cos(v1), sin(v1)] : (len(v1) == 2 && is_list(v1[0])) ? v1[1] - v1[0] : v1 ),
+    d2 = unit_l( is_number(v2) ? [cos(v2), sin(v2)] : (len(v2) == 2 && is_list(v2[0])) ? v2[1] - v2[0] : v2 ),
+
+    cos_full = d1 * d2,                                  // dot product
+    sin_half = sqrt( max(0, (1 - cos_full) / 2) ),       // sin(α), always ≥ 0
+
+    degenerate = almost_eq_nv(sin_half, 0)
+  )
+  degenerate ? empty_lst
+  : let
+    (
+      // bisector unit vector (points "into" the corner, toward the fillet center)
+      bisector = unit_l(d1 + d2),
+
+      // distance from o to the fillet circle center along the bisector
+      dist_to_center = r / sin_half,
+
+      // fillet circle center
+      fc = o + dist_to_center * bisector,
+
+      // arc start angle: direction from fc toward the tangent point on v1
+      cos_half = sqrt( max(0, (1 + cos_full) / 2) ),
+      tan_half = sin_half / cos_half,
+
+      tp1 = o + (r / tan_half) * d1,
+      tp2 = o + (r / tan_half) * d2,
+
+      // angles from fillet center to each tangent point
+      a1 = angle_ll(x_axis2d_uv, tp1 - fc, false),
+      a2 = angle_ll(x_axis2d_uv, tp2 - fc, false)
+    )
+    polygon_arc_sweep_p( r=r, o=fc, v1=a1, v2=a2, fn=fn, cw=cw );
 
 //! Compute coordinates for an elliptical sector in 2D.
 /***************************************************************************//**
@@ -2215,7 +2309,7 @@ BEGIN_SCOPE validate;
     include <common/validation.scad>;
 
     echo( str("openscad version ", version()) );
-    for (i=[1:20]) echo( "not tested:" );
+    for (i=[1:21]) echo( "not tested:" );
 
     // end_include
   END_OPENSCAD;
