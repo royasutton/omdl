@@ -947,13 +947,13 @@ function polygon_turtle_path_p
       // repeat, repeat_mx, repeat_my: always advance to end of combined output
       next_p0   = let ( end_p = is_empty(p) ? p0 : last(p) )
                   is_oneof( oper, ["transform", "xfrm"] ) ?
-                  let ( upd = defined_eonb_or( a4, 0, false ) )
+                  let ( upd = defined_eonb_or( a5, 0, false ) )
                   upd ? end_p : p0
                 : end_p,
 
       // transform: only update when upd=true, heading already encoded in step_h
       next_h    = is_oneof( oper, ["transform", "xfrm"] ) ?
-                  let ( upd = defined_eonb_or( a4, 0, false ) )
+                  let ( upd = defined_eonb_or( a5, 0, false ) )
                   upd ? step_h : h
                 : step_h,
 
