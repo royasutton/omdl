@@ -78,7 +78,7 @@
       all spatial functions that have a fixed point (rotate_p(),
       transform_p(), shear_p(), scale_p(), resize_p()). When \b true,
       the transformed result is passed through \c center_p() so that the
-      output bounding box is centred about the coordinate origin. Centering
+      output bounding box is centered about the coordinate origin. Centering
       is always the last step in the pipeline, applied after all other
       transformations including translation. When \p center is \b true,
       \p o is ignored.
@@ -323,7 +323,7 @@ function mirror_p
 
   \param    center <boolean> When \b true, the rotated result is passed
                    through \c center_p() so that the output bounding box
-                   is centred about the origin. When \b false (default),
+                   is centered about the origin. When \b false (default),
                    the result is positioned as determined by \p o.
 
   \param    o      <point-3d | point-2d> The origin for the rotation. In 2D,
@@ -341,7 +341,7 @@ function mirror_p
     the presence of \p av:
     - \b 2D (\p d = 2): rotates about point \p o by angle \p az
       (extracted as \c a[2], or \p a itself when scalar). \p o is
-      the centre of rotation.
+      the center of rotation.
     - \b 3D Euler (\p d = 3, \p av undef or \p a is a list): applies
       extrinsic rotations in the order Z (`az`), Y (`ay`), X (`ax`),
       equivalent to the standard OpenSCAD `rotate([ax, ay, az])`
@@ -352,7 +352,7 @@ function mirror_p
       a unit vector; it is normalised internally.
 
     When \p center is \b true, \c center_p() is called on the rotated
-    result to centre the output bounding box about the origin.
+    result to center the output bounding box about the origin.
 
     \note In the 3D Euler branch the origin \p o is silently ignored
           — rotation always occurs about the world origin. Only the 2D
@@ -470,7 +470,7 @@ function rotate_p
 
   \param    center <boolean> When \b true, the fully transformed result is
                    passed through \c center_p() so that the output bounding
-                   box is centred about the origin. Centering is applied
+                   box is centered about the origin. Centering is applied
                    after mirror, rotation, and translation. When \b false
                    (default), the result is positioned as determined by \p o
                    and \p t.
@@ -489,7 +489,7 @@ function rotate_p
   \returns  <points-3d | points-2d> A list of 3d or 2d transformed
             coordinates. Operations are applied in order: mirror about
             \p o, rotate about \p o, translate by \p t, then optionally
-            centre via \c center_p(). In 3D Euler mode, rotation order is
+            center via \c center_p(). In 3D Euler mode, rotation order is
             extrinsic Z, Y, X (equivalent to OpenSCAD \c rotate([ax,ay,az])).
 
   \details
@@ -503,7 +503,7 @@ function rotate_p
     used independently — in particular, \p m and \p t may be specified
     without \p a to mirror and then translate without rotation. When
     \p center is \b true, \c center_p() is called on the final result
-    to centre the output bounding box about the origin.
+    to center the output bounding box about the origin.
 
     The mirror normal \p m follows the same convention as OpenSCAD's
     built-in `mirror()` module: a 2D vector `[nx, ny]` defines the
@@ -546,7 +546,7 @@ function transform_p
 
   \param    center <boolean> When \b true, the sheared result is passed
                    through \c center_p() so that the output bounding box
-                   is centred about the origin. When \b false (default),
+                   is centered about the origin. When \b false (default),
                    the result is positioned as determined by \p o.
 
   \param    o      <point-3d | point-2d> The origin about which shearing is
@@ -581,7 +581,7 @@ function transform_p
 
     Missing list elements default to \b 0 (no shear in that direction).
     When \p center is \b true, \c center_p() is called on the sheared
-    result to centre the output bounding box about the origin, and \p o
+    result to center the output bounding box about the origin, and \p o
     is ignored. When \p s is \b undef the point list is returned unchanged.
 
     See [Wikipedia] for more information on [shear mapping].
@@ -651,7 +651,7 @@ function shear_p
 
   \param    center <boolean> When \b true, the scaled result is passed
                    through \c center_p() so that the output bounding box
-                   is centred about the origin. When \b false (default),
+                   is centered about the origin. When \b false (default),
                    the result is positioned as determined by \p o.
 
   \param    o      <point-nd> The origin about which scaling is applied.
@@ -670,7 +670,7 @@ function shear_p
     missing elements default to \b 1 (no scaling). When \p o is the
     origin the result is identical to scaling about the origin. When
     \p center is \b true, \c center_p() is called on the scaled result
-    to centre the output bounding box about the origin, and \p o is
+    to center the output bounding box about the origin, and \p o is
     ignored. When \p v is \b undef the point list is returned unchanged.
 
     See [Wikipedia] for more information on [transformation matrix].
@@ -709,7 +709,7 @@ function scale_p
                    shorter than the point dimensionality, missing
                    elements default to \b 1.
 
-  \param    center <boolean> When \b true, the scaled result is centred
+  \param    center <boolean> When \b true, the scaled result is centered
                    about the origin by passing the scaled point list
                    through \c center_p(). When \b false (default), the
                    bounding box minimum is placed at the origin before
@@ -721,7 +721,7 @@ function scale_p
                    (default), the origin is set automatically to
                    \p origin2d or \p origin3d based on the
                    dimensionality of \p c. Ignored when \p center is
-                   \b true — the result is centred about the coordinate
+                   \b true — the result is centered about the coordinate
                    origin regardless of \p o.
 
   \returns  <points-nd> A list of proportionately scaled coordinate
@@ -735,7 +735,7 @@ function scale_p
     are positioned. When a dimension has zero extent (all points share
     the same coordinate), that dimension is left unchanged to avoid
     division by zero. When \p center is \b true, the scaled result is
-    passed through \c center_p() to centre it about the coordinate
+    passed through \c center_p() to center it about the coordinate
     origin, and \p o is ignored. When \p v is \b undef the point list
     is returned unchanged.
 
