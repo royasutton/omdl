@@ -256,6 +256,8 @@ function _length_1d
   from = length_unit_default,
   to   = length_unit_base
 ) = (from == to) ? v
+    // short-circuit: 2mm is the final result when target is millimeters
+  : (to == "mm") ? _length_unit_2mm( v, from )
   : _length_unit_mm2( _length_unit_2mm( v, from ), to );
 
 //! Convert a value from from one units to another with dimensions.
@@ -278,10 +280,12 @@ function length
 ) =
     // for d>1, 'v' must be a scalar; lists are only valid for d=1
     (d != 1 && is_list(v)) ? undef
+  : let( c = _length_1d(v, from, to) )
     // d=1: scalar or list, element-wise conversion via _length_1d
-  : d == 1 ?    ( _length_1d(v, from, to)    )
-  : d == 2 ? pow( _length_1d(v, from, to), 2 )
-  : d == 3 ? pow( _length_1d(v, from, to), 3 )
+    d == 1 ? c
+    // d=2,3: scalar only, raise to the power
+  : d == 2 ? pow( c, 2 )
+  : d == 3 ? pow( c, 3 )
     // undefined for other dimensions
   : undef;
 
@@ -306,7 +310,7 @@ function length_inv
     // for d>1, 'v' must be a scalar; lists are only valid for d=1
     (d != 1 && is_list(v)) ? undef
     // d=1: scalar or list, element-wise conversion via _length_1d
-  : d == 1 ?  _length_1d(v, from, to)
+  : d == 1 ? _length_1d(v, from, to)
   : d == 2 ? _length_1d(sqrt(v),       from, to)
   : d == 3 ? _length_1d(pow(v, 1/3.0), from, to)
     // undefined for other dimensions
