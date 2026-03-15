@@ -173,7 +173,7 @@ function coordinate_unit_name
 function _coordinate_unit_c2
 (
   c,
-  to
+  to = coordinate_unit_base
 ) = !is_point(c) ? undef
 
     // cartesian (2d, 3d)
@@ -235,7 +235,7 @@ function _coordinate_unit_c2
 function _coordinate_unit_2c
 (
   c,
-  from
+  from = coordinate_unit_default
 ) = !is_point(c) ? undef
 
     // cartesian (2d, 3d)
@@ -315,10 +315,7 @@ function coordinate_inv
   c,
   from = coordinate_unit_base,
   to   = coordinate_unit_default
-) = (from == to) ? c
-  : let( cc = _coordinate_unit_2c( c, from ) )
-    (cc == undef) ? undef
-  : _coordinate_unit_c2( cc, to );
+) = coordinate(c=c, from=from, to=to);
 
 //! Radially scale a list of 2d cartesian coordinates.
 /***************************************************************************//**
@@ -362,12 +359,12 @@ function coordinate_scale2d_cpc
 *******************************************************************************/
 function coordinate_scale2d_p2c
 (
-  p,
+  c,
   r,
   t = false
 ) =
   [
-    for (i = p)
+    for (i = c)
       coordinate([(t == true) ? r : r*i[0], i[1]], from="p", to="c")
   ];
 
@@ -413,12 +410,12 @@ function coordinate_scale3d_csc
 *******************************************************************************/
 function coordinate_scale3d_s2c
 (
-  s,
+  c,
   r,
   t = false
 ) =
   [
-    for (i = s)
+    for (i = c)
       coordinate([(t == true) ? r : r*i[0], i[1], i[2]], from="s", to="c")
   ];
 
