@@ -173,8 +173,8 @@ function _angle_unit_2d
   : from == "dms" ?
       // sign lives on the degrees component only; minutes and seconds
       // are always non-negative magnitudes
-      let( sign = (a[0] < 0) ? -1 : 1 )
-      sign * (abs(a[0]) + a[1]/60 + a[2]/3600)
+      let( sign = (a[0] < 0) ? -1 : 1, adeg = abs(a[0]) )
+      sign * (adeg + a[1]/60 + a[2]/3600)
   : undef;
 
 //! Convert an angle from some units to another.
@@ -194,6 +194,8 @@ function angle
 ) = (from == to) ? a
   : let( d = _angle_unit_2d( a, from ) )
     (d == undef) ? undef
+    // short-circuit: 2d result is already the answer when target is degrees
+  : (to == "d") ? d
   : _angle_unit_d2( d, to );
 
 //! Convert an angle from some units to another.
