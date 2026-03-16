@@ -93,7 +93,7 @@ function validate
   cv,
   t,
   ev,
-  p = 4,
+  p = 6,
   pf = false
 ) = ( (t == "eq") || (t == "equals") ) ?
     (
@@ -297,8 +297,8 @@ module table_validate
   fn,
   argc,
   fr,
-  t="equals",
-  p=6
+  t = "equals",
+  p = 6
 )
 {
   td = table_validate_get_td(db, id);
@@ -478,8 +478,8 @@ module map_validate
   id,
   argc,
   fr,
-  t="equals",
-  p=6
+  t = "equals",
+  p = 6
 )
 {
   fn = map_validate_get_fn(db);
