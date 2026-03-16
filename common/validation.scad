@@ -358,8 +358,8 @@ function map_validate_init
   \param    td <string> The test description.
   \param    ev <value> The test expect value.
   \param    v1 <value> The test argument value 1.
-  \param    v2 <value> The test argument value 1.
-  \param    v3 <value> The test argument value 1.
+  \param    v2 <value> The test argument value 2.
+  \param    v3 <value> The test argument value 3.
 
   \returns  <datastruct> An test map entry.
 *******************************************************************************/
