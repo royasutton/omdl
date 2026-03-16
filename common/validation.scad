@@ -49,6 +49,9 @@
 //! Value signature assignment for log-value results table to skip a test.
 validation_skip = [number_min, number_max, number_inf];
 
+//! \name Common
+//! @{
+
 //! Compare a computed test value with an known good result.
 /***************************************************************************//**
   \param    d <string> A description.
@@ -142,9 +145,14 @@ module validate_log( t ) { log_type ( "omdl_test", t ); }
 *******************************************************************************/
 module validate_skip( fn ) { validate_log ( str("ignore: '", fn, "'") ); }
 
+//! @}
+
 //----------------------------------------------------------------------------//
 // validation tables
 //----------------------------------------------------------------------------//
+
+//! \name Validation Tables
+//! @{
 
 //! Create data structure for related table validation functions.
 /***************************************************************************//**
@@ -317,9 +325,14 @@ module table_validate
     validate_log( str(id, " -skip-: '", fn, "(", td, ")'") );
 }
 
+//! @}
+
 //----------------------------------------------------------------------------//
 // validation maps
 //----------------------------------------------------------------------------//
+
+//! \name Validation Tables
+//! @{
 
 //! Create data structure for related map validation functions.
 /***************************************************************************//**
@@ -494,6 +507,8 @@ module map_validate
   else
     validate_log( str(id, " -skip-: '", fn, "(", td, ")'") );
 }
+
+//! @}
 
 //! @}
 //! @}
