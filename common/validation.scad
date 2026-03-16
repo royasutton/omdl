@@ -47,7 +47,7 @@
 //----------------------------------------------------------------------------//
 
 //! Value signature assignment for log-value results table to skip a test.
-validation_skip = [number_min, number_max, number_inf];
+validation_skip = "__skip__";
 
 //! \name Common
 //! @{
