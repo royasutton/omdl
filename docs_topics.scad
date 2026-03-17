@@ -36,9 +36,11 @@
 /***************************************************************************//**
   /+
 
-    pre-define leve-1 group id's to establish order in documentation.
-    group id and count must be kept coherent with groups in
-    documentation.
+    Pre-define level-1 group id's to establish order in documentation.
+    These group id must be kept coherent with groups in documentation.
+
+    Each group name and brief is subsequently defined in its
+    docs_group.scad
 
   +/
 
@@ -150,16 +152,16 @@
   omdl mirrors how mechanical designs evolve. This is reflected
   directly in the library structure:
 
-  - \ref datatypes  "Data Types"
-  - \ref common     "Common"
-  - \ref units      "Units"
-  - \ref database   "Design Data"
-  - \ref math       "Math"
-  - \ref shapes     "Shapes"
-  - \ref transforms "Transforms"
-  - \ref tools      "Tools"
-  - \ref models     "Models"
-  - \ref parts      "Parts"
+  - \ref datatypes
+  - \ref common
+  - \ref units
+  - \ref database
+  - \ref math
+  - \ref shapes
+  - \ref transforms
+  - \ref tools
+  - \ref models
+  - \ref parts
 
   Other libraries are typically organized by shape type, not design
   process.
