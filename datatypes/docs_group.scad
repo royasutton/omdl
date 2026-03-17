@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Data Types)
+    \amu_define group_name  (Types)
     \amu_define group_brief (Data type identification and operations.)
 
   \amu_include (include/amu/doxyg_init_ppd_gp.amu)

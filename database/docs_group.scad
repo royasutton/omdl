@@ -27,7 +27,7 @@
 
   \details
 
-    \amu_define group_name  (Design Data)
+    \amu_define group_name  (Data)
     \amu_define group_brief (Design data storage, specifications, and metadata.)
 
   \amu_include (include/amu/doxyg_init_ppd_gp.amu)
