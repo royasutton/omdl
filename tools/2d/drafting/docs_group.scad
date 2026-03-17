@@ -1,4 +1,4 @@
-//! Group: 2D drafting and drawing tools for graphical design documentation.
+//! Group: drafting and drawing tools for graphical design documentation.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -28,21 +28,19 @@
   \details
 
     \amu_define group_name  (Drafting)
-    \amu_define group_brief (2D drafting and drawing tools for graphical design documentation.)
+    \amu_define group_brief (Drafting and drawing tools for graphical design documentation.)
 
   \amu_include (include/amu/doxyg_init_ppd_gp.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
-
+// group begin and includes-required
 /***************************************************************************//**
   \amu_include (include/amu/doxyg_define_in_parent.amu)
 
   /+
-    remove this file and add draft-base.scad file as required include
+    remove *this* file and add draft-base.scad file as required include
   +/
+
   \amu_define FILE_NAME ()
   \amu_define includes_required_add
   (
@@ -53,12 +51,26 @@
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
 
+// member-wide documentation and conventions
 /***************************************************************************//**
   \addtogroup \amu_eval(${group})
-
   \details
+
+  /+
+
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
+
+  - Convention list
+
+  +/
 
     This module provides basic 2D drafting tools. Below is an example
     output (png and svg format) and script. Numerous ways exists to

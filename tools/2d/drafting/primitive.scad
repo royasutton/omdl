@@ -1,4 +1,4 @@
-//! Drafting base functions and primitives.
+//! Drafting: base functions and primitives.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,25 +27,40 @@
 
   \details
 
-    \amu_define group_name  (Primitives)
-    \amu_define group_brief (Drafting base functions and primitives.)
-
-  \amu_include (include/amu/doxyg_init_pd_gds_ig.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ip.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group and macros.
-//----------------------------------------------------------------------------//
-
+// sub-group begin
 /***************************************************************************//**
-  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
+  \amu_include (include/amu/doxyg_add_to_parent_open.amu)
+*******************************************************************************/
 
+// sub-group reference definitions
+/***************************************************************************//**
   \amu_include (include/amu/scope_diagram_2d_object.amu)
+
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
+
+// sub-group documentation and conventions
+/***************************************************************************//**
+  /+
+  \addtogroup \amu_eval(${parent})
+  \details
+  +/
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+// members
+//----------------------------------------------------------------------------//
 
-//! \name Layers
+//----------------------------------------------------------------------------//
+// primitives: layers
+//----------------------------------------------------------------------------//
+
+//! \name Primitives: Layers
 //! @{
 
 //! Check if any identified layers are active.
@@ -63,8 +78,10 @@ function draft_layers_any_active
 //! @}
 
 //----------------------------------------------------------------------------//
+// primitives: placement
+//----------------------------------------------------------------------------//
 
-//! \name Placement
+//! \name Primitives: Placement
 //! @{
 
 //! \cond DOXYGEN_SHOULD_SKIP_THIS
@@ -308,8 +325,10 @@ function draft_sheet_get_zone
 //! @}
 
 //----------------------------------------------------------------------------//
+// primitives: data tables
+//----------------------------------------------------------------------------//
 
-//! \name Tables
+//! \name Primitives: Data Tables
 //! @{
 
 //! Get a coordinate point for a defined draft table column and row.
@@ -778,8 +797,10 @@ module draft_ztable_text
 //! @}
 
 //----------------------------------------------------------------------------//
+// primitives: shapes
+//----------------------------------------------------------------------------//
 
-//! \name Shapes
+//! \name Primitives: Shapes
 //! @{
 
 //! Draft a simple line from an initial to a terminal point.
@@ -1306,8 +1327,10 @@ module draft_polygon
 //! @}
 
 //----------------------------------------------------------------------------//
+// primitives: miscellaneous
+//----------------------------------------------------------------------------//
 
-//! \name Miscellaneous
+//! \name Primitives: Miscellaneous
 //! @{
 
 //! Extrude 2D drafted constructions to 3D if configured.
@@ -1320,6 +1343,8 @@ module draft_polygon
     | see: \ref draft_config_map  |
     |:---------------------------:|
     | make-3d-height              |
+
+  \private
 *******************************************************************************/
 module draft_make_3d_if_configured
 (
@@ -1337,7 +1362,6 @@ module draft_make_3d_if_configured
 
 //! @}
 
-//! @}
 //! @}
 
 //----------------------------------------------------------------------------//

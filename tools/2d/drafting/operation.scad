@@ -1,4 +1,4 @@
-//! Drafting tools and general operations.
+//! Drafting: tools and general operations.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,27 +27,40 @@
 
   \details
 
-    \amu_define group_name  (Operations)
-    \amu_define group_brief (Drafting tools and general operations.)
-
-  \amu_include (include/amu/doxyg_init_pd_gds_ig.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ip.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group and macros.
-//----------------------------------------------------------------------------//
-
+// sub-group begin
 /***************************************************************************//**
-  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
+  \amu_include (include/amu/doxyg_add_to_parent_open.amu)
+*******************************************************************************/
 
+// sub-group reference definitions
+/***************************************************************************//**
   \amu_include (include/amu/scope_diagram_2d_object.amu)
+
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
+
+// sub-group documentation and conventions
+/***************************************************************************//**
+  /+
+  \addtogroup \amu_eval(${parent})
+  \details
+  +/
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-
+// members
 //----------------------------------------------------------------------------//
 
-//! \name Layers
+//----------------------------------------------------------------------------//
+// operations: layers
+//----------------------------------------------------------------------------//
+
+//! \name Operations: Layers
 //! @{
 
 //! Assign one or more layers to child objects.
@@ -72,8 +85,10 @@ module draft_in_layers
 //! @}
 
 //----------------------------------------------------------------------------//
+// operations: placement
+//----------------------------------------------------------------------------//
 
-//! \name Placement
+//! \name Operations: Placement
 //! @{
 
 //! Move one or more child objects to sheet a reference zone.
@@ -138,8 +153,10 @@ module draft_move
 //! @}
 
 //----------------------------------------------------------------------------//
+// operations: sheet
+//----------------------------------------------------------------------------//
 
-//! \name Sheet
+//! \name Operations: Sheet
 //! @{
 
 //! Construct a drafting sheet with frame, zone, grid, and origin.
@@ -588,8 +605,10 @@ module draft_ruler
 //! @}
 
 //----------------------------------------------------------------------------//
+// operations: data tables
+//----------------------------------------------------------------------------//
 
-//! \name Tables
+//! \name Operations: Data Tables
 //! @{
 
 //! Construct a text table that is populated by rows and columns.
@@ -978,7 +997,6 @@ module draft_title_block
 
 //! @}
 
-//! @}
 //! @}
 
 //----------------------------------------------------------------------------//
