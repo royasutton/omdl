@@ -13,14 +13,14 @@
 
     <!-- type=modules -->
     <tab type="modules" visible="yes"
-      title="groups"
-      intro="Library component groups:"
+      title="library"
+      intro="Library API component members and groups:"
     />
 
     <!-- type=modules changed to type=topics in doxygen 1.9.8 -->
     <tab type="topics" visible="yes"
-      title="groups"
-      intro="Library components groups:"
+      title="library"
+      intro="Library API components members and groups:"
     />
 
     <tab type="globals" visible="yes"
