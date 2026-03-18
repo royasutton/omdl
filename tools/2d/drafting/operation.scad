@@ -57,10 +57,10 @@
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
-// operations: layers
+// layer assignment
 //----------------------------------------------------------------------------//
 
-//! \name Operations: Layers
+//! \name Layer Assignment
 //! @{
 
 //! Assign one or more layers to child objects.
@@ -75,20 +75,20 @@
 *******************************************************************************/
 module draft_in_layers
 (
-  layers = draft_get_config("layers-default")
+  layers = _draft_get_config("layers-default")
 )
 {
-  if (draft_layers_any_active(layers))
+  if (_draft_layers_any_active(layers))
     children();
 }
 
 //! @}
 
 //----------------------------------------------------------------------------//
-// operations: placement
+// object placement
 //----------------------------------------------------------------------------//
 
-//! \name Operations: Placement
+//! \name Object Placement
 //! @{
 
 //! Move one or more child objects to sheet a reference zone.
@@ -112,8 +112,6 @@ module draft_in_layers
       2     | index                 | <integer>
 
     \amu_eval ( html_image_w=512 latex_image_w="3.00in" object=draft_move ${object_diagram_2d} )
-
-  \sa draft_sheet_get_zone()
 *******************************************************************************/
 module draft_move
 (
@@ -138,7 +136,7 @@ module draft_move
 
     translate
     (
-      draft_sheet_get_zone
+      _draft_sheet_get_zone
       (
         rx=s[0], ry=s[1],
         ix=n[0], iy=n[1],
@@ -153,10 +151,10 @@ module draft_move
 //! @}
 
 //----------------------------------------------------------------------------//
-// operations: sheet
+// sheet construction
 //----------------------------------------------------------------------------//
 
-//! \name Operations: Sheet
+//! \name Sheet Construction
 //! @{
 
 //! Construct a drafting sheet with frame, zone, grid, and origin.
@@ -204,7 +202,7 @@ module draft_sheet
   grid,
   origin,
   check = false,
-  layers = draft_get_config("layers-sheet")
+  layers = _draft_get_config("layers-sheet")
 )
 {
   assert
@@ -213,8 +211,8 @@ module draft_sheet
     str("unknown sheet configuration [", draft_sheet_config, "]")
   );
 
-  if (draft_layers_any_active(layers))
-  draft_make_3d_if_configured()
+  if (_draft_layers_any_active(layers))
+  _draft_make_3d_if_configured()
   {
     // check tables
     if ( check )
@@ -228,31 +226,31 @@ module draft_sheet
     //
 
     // sheet size
-    sdx = draft_get_sheet_size(ci="sdx") * draft_sheet_scale;
-    sdy = draft_get_sheet_size(ci="sdy") * draft_sheet_scale;
+    sdx = _draft_get_sheet_size(ci="sdx") * draft_sheet_scale;
+    sdy = _draft_get_sheet_size(ci="sdy") * draft_sheet_scale;
 
     // sheet layout
-    sll = draft_get_sheet_config(ci="sll");
+    sll = _draft_get_sheet_config(ci="sll");
 
     // sheet frame and zone margins
-    smx = draft_get_sheet_config(ci="smx") * draft_sheet_scale;
-    smy = draft_get_sheet_config(ci="smy") * draft_sheet_scale;
-    szm = draft_get_sheet_config(ci="szm") * draft_sheet_scale;
+    smx = _draft_get_sheet_config(ci="smx") * draft_sheet_scale;
+    smy = _draft_get_sheet_config(ci="smy") * draft_sheet_scale;
+    szm = _draft_get_sheet_config(ci="szm") * draft_sheet_scale;
 
     // reference zone labels
-    zox = draft_get_sheet_config(ci="zox");
-    zoy = draft_get_sheet_config(ci="zoy");
-    zlx = draft_get_sheet_config(ci="zlx");
-    zly = draft_get_sheet_config(ci="zly");
-    zrf = draft_get_sheet_config(ci="zrf");
-    zfs = draft_get_sheet_config(ci="zfs");
+    zox = _draft_get_sheet_config(ci="zox");
+    zoy = _draft_get_sheet_config(ci="zoy");
+    zlx = _draft_get_sheet_config(ci="zlx");
+    zly = _draft_get_sheet_config(ci="zly");
+    zrf = _draft_get_sheet_config(ci="zrf");
+    zfs = _draft_get_sheet_config(ci="zfs");
 
     // sheet, frame, zone, grid, and origin line configuration
-    slc = draft_get_sheet_config(ci="slc");
-    flc = draft_get_sheet_config(ci="flc");
-    zlc = draft_get_sheet_config(ci="zlc");
-    glc = draft_get_sheet_config(ci="glc");
-    olc = draft_get_sheet_config(ci="olc");
+    slc = _draft_get_sheet_config(ci="slc");
+    flc = _draft_get_sheet_config(ci="flc");
+    zlc = _draft_get_sheet_config(ci="zlc");
+    glc = _draft_get_sheet_config(ci="glc");
+    olc = _draft_get_sheet_config(ci="olc");
 
     // set draft scale for sheet
     $draft_scale = draft_sheet_scale;
@@ -425,11 +423,11 @@ module draft_axes
 
   ts = 0,
 
-  layers = draft_get_config("layers-sheet")
+  layers = _draft_get_config("layers-sheet")
 )
 {
-  if (draft_layers_any_active(layers))
-  draft_make_3d_if_configured()
+  if (_draft_layers_any_active(layers))
+  _draft_make_3d_if_configured()
   {
     axy = is_defined(size) ? size
         : let
@@ -439,16 +437,16 @@ module draft_axes
             //
 
             // sheet size
-            sdx = draft_get_sheet_size(ci="sdx") * draft_sheet_scale,
-            sdy = draft_get_sheet_size(ci="sdy") * draft_sheet_scale,
+            sdx = _draft_get_sheet_size(ci="sdx") * draft_sheet_scale,
+            sdy = _draft_get_sheet_size(ci="sdy") * draft_sheet_scale,
 
             // sheet layout
-            sll = draft_get_sheet_config(ci="sll"),
+            sll = _draft_get_sheet_config(ci="sll"),
 
             // sheet frame and zone margins
-            smx = draft_get_sheet_config(ci="smx") * draft_sheet_scale,
-            smy = draft_get_sheet_config(ci="smy") * draft_sheet_scale,
-            szm = draft_get_sheet_config(ci="szm") * draft_sheet_scale,
+            smx = _draft_get_sheet_config(ci="smx") * draft_sheet_scale,
+            smy = _draft_get_sheet_config(ci="smy") * draft_sheet_scale,
+            szm = _draft_get_sheet_config(ci="szm") * draft_sheet_scale,
 
             //
             // derived values
@@ -539,12 +537,12 @@ module draft_ruler
   label_hide = false,
   order = 1,
   w = 1,
-  layers = draft_get_config("layers-sheet")
+  layers = _draft_get_config("layers-sheet")
 )
 {
 
-  if (draft_layers_any_active(layers))
-  draft_make_3d_if_configured()
+  if (_draft_layers_any_active(layers))
+  _draft_make_3d_if_configured()
   {
     // one mark unit length
     ul = length(mark_size, units);
@@ -605,10 +603,10 @@ module draft_ruler
 //! @}
 
 //----------------------------------------------------------------------------//
-// operations: data tables
+// table construction
 //----------------------------------------------------------------------------//
 
-//! \name Operations: Data Tables
+//! \name Table Construction
 //! @{
 
 //! Construct a text table that is populated by rows and columns.
@@ -637,41 +635,41 @@ module draft_table
   fmap,
   zp = 0,
   window = false,
-  layers = draft_get_config("layers-table")
+  layers = _draft_get_config("layers-table")
 )
 {
-  if (draft_layers_any_active(layers))
-  draft_make_3d_if_configured()
+  if (_draft_layers_any_active(layers))
+  _draft_make_3d_if_configured()
   {
-    translate( -draft_table_get_cell(zp=zp, map=map, fmap=fmap) )
+    translate( -_draft_table_get_cell(zp=zp, map=map, fmap=fmap) )
     if (window)
     { // solid rectangular window
-      polygon(draft_table_get_cell(window=true, map=map, fmap=fmap));
+      polygon(_draft_table_get_cell(window=true, map=map, fmap=fmap));
     }
     else
     {
       //
       // get table format
       //
-      cmh = map_get_firstof2_or(map, fmap, "cmh", draft_get_config("table-cmh")) * $draft_scale;
-      cmv = map_get_firstof2_or(map, fmap, "cmv", draft_get_config("table-cmv")) * $draft_scale;
+      cmh = map_get_firstof2_or(map, fmap, "cmh", _draft_get_config("table-cmh")) * $draft_scale;
+      cmv = map_get_firstof2_or(map, fmap, "cmv", _draft_get_config("table-cmv")) * $draft_scale;
 
-      coh = map_get_firstof2_or(map, fmap, "coh", draft_get_config("table-coh"));
-      cov = map_get_firstof2_or(map, fmap, "cov", draft_get_config("table-cov"));
+      coh = map_get_firstof2_or(map, fmap, "coh", _draft_get_config("table-coh"));
+      cov = map_get_firstof2_or(map, fmap, "cov", _draft_get_config("table-cov"));
 
       //
       // default lines when not in map nor fmap:
       //  no horizontal or vertical lines.
       //
-      hlines  = map_get_firstof2_or(map, fmap, "hlines", draft_get_config("table-hlines"));
-      vlines  = map_get_firstof2_or(map, fmap, "vlines", draft_get_config("table-vlines"));
+      hlines  = map_get_firstof2_or(map, fmap, "hlines", _draft_get_config("table-hlines"));
+      vlines  = map_get_firstof2_or(map, fmap, "vlines", _draft_get_config("table-vlines"));
 
       //
       // cell default text format when not in map nor fmap:
       //
-      tdefs = map_get_firstof2_or(map, fmap, "tdefs", draft_get_config("table-text-format"));
-      hdefs = map_get_firstof2_or(map, fmap, "hdefs", draft_get_config("table-text-format"));
-      edefs = map_get_firstof2_or(map, fmap, "edefs", draft_get_config("table-text-format"));
+      tdefs = map_get_firstof2_or(map, fmap, "tdefs", _draft_get_config("table-text-format"));
+      hdefs = map_get_firstof2_or(map, fmap, "hdefs", _draft_get_config("table-text-format"));
+      edefs = map_get_firstof2_or(map, fmap, "edefs", _draft_get_config("table-text-format"));
 
       //
       // get table contents
@@ -703,8 +701,8 @@ module draft_table
              : (is_undef(heads)  && (i==2)) ? 0
              : lc[1];
 
-          ip = draft_table_get_point( ix=ic, iy=i, map=map, fmap=fmap );
-          tp = draft_table_get_point( ix=tc, iy=i, map=map, fmap=fmap );
+          ip = _draft_table_get_point( ix=ic, iy=i, map=map, fmap=fmap );
+          tp = _draft_table_get_point( ix=tc, iy=i, map=map, fmap=fmap );
 
           draft_line (l=[ip, tp], w=lw, s=ls );
       }
@@ -723,22 +721,22 @@ module draft_table
           lw = lc[0];                             // line weight
           ls = lc[1];                             // line style
 
-          ip = draft_table_get_point( ix=i, iy=ic, map=map, fmap=fmap );
-          tp = draft_table_get_point( ix=i, iy=tc, map=map, fmap=fmap );
+          ip = _draft_table_get_point( ix=i, iy=ic, map=map, fmap=fmap );
+          tp = _draft_table_get_point( ix=i, iy=tc, map=map, fmap=fmap );
 
           draft_line (l=[ip, tp], w=lw, s=ls );
       }
 
       // add title text
-      draft_table_text( 0, 0, title[0], cmh, tdefs, map, fmap );
+      _draft_table_text( 0, 0, title[0], cmh, tdefs, map, fmap );
 
       // add heading entries text
       for ( c = [0:len(cols)-1] )
-        draft_table_text( c, 1, heads[0][c], cmh/2, hdefs, map, fmap );
+        _draft_table_text( c, 1, heads[0][c], cmh/2, hdefs, map, fmap );
 
       // add cell entries text
       for ( r = [2:len(rows)+1], c = [0:len(cols)-1] )
-        draft_table_text( c, r, rows[r-2][0][c], cmh/2, edefs, map, fmap );
+        _draft_table_text( c, r, rows[r-2][0][c], cmh/2, edefs, map, fmap );
 
     } // window
   } // layers
@@ -771,16 +769,16 @@ module draft_ztable
   zp = 0,
   number = false,
   window = false,
-  layers = draft_get_config("layers-table")
+  layers = _draft_get_config("layers-table")
 )
 {
-  if (draft_layers_any_active(layers))
-  draft_make_3d_if_configured()
+  if (_draft_layers_any_active(layers))
+  _draft_make_3d_if_configured()
   {
-    translate( -draft_ztable_get_zone(zp=zp, map=map) )
+    translate( -_draft_ztable_get_zone(zp=zp, map=map) )
     if (window)
     { // solid rectangular window
-      polygon(draft_ztable_get_zone(window=true, map=map));
+      polygon(_draft_ztable_get_zone(window=true, map=map));
     }
     else
     {
@@ -814,8 +812,8 @@ module draft_ztable
           lw = hldata[i][2];      // line weight
           ls = hldata[i][3];      // line style
 
-          ip = draft_ztable_get_point( ix=ic, iy=i, map=map );
-          tp = draft_ztable_get_point( ix=tc, iy=i, map=map );
+          ip = _draft_ztable_get_point( ix=ic, iy=i, map=map );
+          tp = _draft_ztable_get_point( ix=tc, iy=i, map=map );
 
           draft_line (l=[ip, tp], w=lw, s=ls );
 
@@ -835,8 +833,8 @@ module draft_ztable
           lw = vldata[i][2];      // line weight
           ls = vldata[i][3];      // line style
 
-          ip = draft_ztable_get_point( ix=i, iy=ic, map=map );
-          tp = draft_ztable_get_point( ix=i, iy=tc, map=map );
+          ip = _draft_ztable_get_point( ix=i, iy=ic, map=map );
+          tp = _draft_ztable_get_point( ix=i, iy=tc, map=map );
 
           draft_line (l=[ip, tp], w=lw, s=ls );
 
@@ -860,20 +858,20 @@ module draft_ztable
           {
             translate
             (
-              draft_ztable_get_zone( i=i, zp=[1,1], map=map ) - [1/2, 1] * lts
+              _draft_ztable_get_zone( i=i, zp=[1,1], map=map ) - [1/2, 1] * lts
             )
             text ( str( "Z", i ), valign="center", halign="right", size=lts );
           }
 
           // zone heading-text
-          draft_ztable_text( i, zddata[i][3][0], tts, htdefs, zddata[i][3], map );
+          _draft_ztable_text( i, zddata[i][3][0], tts, htdefs, zddata[i][3], map );
 
           // zone entry-text
           et  = (is_empty(text[i]) || is_undef(text[i])) ?
                 zddata[i][4][0]
               : text[i];
 
-          draft_ztable_text( i, et, tts, etdefs, zddata[i][4], map );
+          _draft_ztable_text( i, et, tts, etdefs, zddata[i][4], map );
         } // not hidden
       } // zone text
     } // window
@@ -921,15 +919,15 @@ module draft_note
   size,
   line,
   halign = "left",
-  cmh = draft_get_config("note-cmh"),
-  cmv = draft_get_config("note-cmv"),
+  cmh = _draft_get_config("note-cmh"),
+  cmv = _draft_get_config("note-cmv"),
   zp = 0,
   window = false,
-  layers = draft_get_config("layers-note")
+  layers = _draft_get_config("layers-note")
 )
 {
-  if (draft_layers_any_active(layers))
-  // draft_make_3d_if_configured() handled by draft_table()
+  if (_draft_layers_any_active(layers))
+  // _draft_make_3d_if_configured() handled by draft_table()
   {
     // default line configuration
     lnd = defined_or(line, [1, 1]);
@@ -986,7 +984,7 @@ module draft_title_block
   zp = 0,
   number = false,
   window = false,
-  layers = draft_get_config("layers-titleblock")
+  layers = _draft_get_config("layers-titleblock")
 )
 {
   draft_ztable

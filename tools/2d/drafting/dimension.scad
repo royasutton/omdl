@@ -1,4 +1,4 @@
-//! Drafting: dimension operations.
+//! Drafting: dimensioning operations.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -57,10 +57,10 @@
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
-// operations: dimension
+// dimension
 //----------------------------------------------------------------------------//
 
-//! \name Operations: Dimensioning
+//! \name Dimensioning
 //! @{
 
 //! Construct a dimension leader line at a point.
@@ -111,7 +111,7 @@ module draft_dim_leader
   p = origin2d,
 
   v1 = 30,
-  l1 = draft_get_config("dim-leader-length"),
+  l1 = _draft_get_config("dim-leader-length"),
   v2,
   l2,
 
@@ -122,24 +122,24 @@ module draft_dim_leader
   tr,
   ta = "center",
 
-  bw = draft_get_config("dim-leader-box-weight"),
-  bs = draft_get_config("dim-leader-box-style"),
+  bw = _draft_get_config("dim-leader-box-weight"),
+  bs = _draft_get_config("dim-leader-box-style"),
 
-  w = draft_get_config("dim-leader-weight"),
-  s = draft_get_config("dim-leader-style"),
-  a = draft_get_config("dim-leader-arrow"),
+  w = _draft_get_config("dim-leader-weight"),
+  s = _draft_get_config("dim-leader-style"),
+  a = _draft_get_config("dim-leader-arrow"),
 
-  o  = draft_get_config("dim-offset"),
+  o  = _draft_get_config("dim-offset"),
 
-  cmh = draft_get_config("dim-cmh"),
-  cmv = draft_get_config("dim-cmv"),
+  cmh = _draft_get_config("dim-cmh"),
+  cmv = _draft_get_config("dim-cmv"),
 
   window = false,
-  layers = draft_get_config("layers-dim")
+  layers = _draft_get_config("layers-dim")
 )
 {
-  if (draft_layers_any_active(layers))
-  draft_make_3d_if_configured()
+  if (_draft_layers_any_active(layers))
+  _draft_make_3d_if_configured()
   {
     // offset
     plo = is_undef(o) ? p
@@ -265,31 +265,31 @@ module draft_dim_line
   t,
   u,
 
-  d  = draft_get_config("dim-line-distance"),
-  e  = draft_get_config("dim-line-extension-length"),
-  es = draft_get_config("dim-line-extension-style"),
+  d  = _draft_get_config("dim-line-distance"),
+  e  = _draft_get_config("dim-line-extension-length"),
+  es = _draft_get_config("dim-line-extension-style"),
 
-  w  = draft_get_config("dim-line-weight"),
-  s  = draft_get_config("dim-line-style"),
-  a  = draft_get_config("dim-line-arrow"),
+  w  = _draft_get_config("dim-line-weight"),
+  s  = _draft_get_config("dim-line-style"),
+  a  = _draft_get_config("dim-line-arrow"),
 
   a1,
   a2,
 
-  o  = draft_get_config("dim-offset"),
+  o  = _draft_get_config("dim-offset"),
 
-  ts = draft_get_config("dim-text-size"),
-  tp = draft_get_config("dim-text-place"),
-  rm = draft_get_config("dim-round-mode"),
+  ts = _draft_get_config("dim-text-size"),
+  tp = _draft_get_config("dim-text-place"),
+  rm = _draft_get_config("dim-round-mode"),
 
-  cmh = draft_get_config("dim-cmh"),
-  cmv = draft_get_config("dim-cmv"),
+  cmh = _draft_get_config("dim-cmh"),
+  cmv = _draft_get_config("dim-cmv"),
 
-  layers = draft_get_config("layers-dim")
+  layers = _draft_get_config("layers-dim")
 )
 {
-  if (draft_layers_any_active(layers))
-  draft_make_3d_if_configured()
+  if (_draft_layers_any_active(layers))
+  _draft_make_3d_if_configured()
   {
     // identify measurement reference points
     // only one of 'v1', 'v2' should normally be used at a time
@@ -466,27 +466,27 @@ module draft_dim_radius
 
   d  = false,
 
-  w  = draft_get_config("dim-radius-weight"),
-  s  = draft_get_config("dim-radius-style"),
-  a  = draft_get_config("dim-radius-arrow"),
+  w  = _draft_get_config("dim-radius-weight"),
+  s  = _draft_get_config("dim-radius-style"),
+  a  = _draft_get_config("dim-radius-arrow"),
 
   a1,
   a2,
 
-  o  = draft_get_config("dim-offset"),
+  o  = _draft_get_config("dim-offset"),
 
-  ts = draft_get_config("dim-text-size"),
-  tp = draft_get_config("dim-text-place"),
-  rm = draft_get_config("dim-round-mode"),
+  ts = _draft_get_config("dim-text-size"),
+  tp = _draft_get_config("dim-text-place"),
+  rm = _draft_get_config("dim-round-mode"),
 
-  cmh = draft_get_config("dim-cmh"),
-  cmv = draft_get_config("dim-cmv"),
+  cmh = _draft_get_config("dim-cmh"),
+  cmv = _draft_get_config("dim-cmv"),
 
-  layers = draft_get_config("layers-dim")
+  layers = _draft_get_config("layers-dim")
 )
 {
-  if (draft_layers_any_active(layers))
-  draft_make_3d_if_configured()
+  if (_draft_layers_any_active(layers))
+  _draft_make_3d_if_configured()
   {
     // identify radius reference points
     // create vector if numerical angle has been specified.
@@ -667,30 +667,30 @@ module draft_dim_angle
   t,
   u,
 
-  e  = draft_get_config("dim-angle-extension-ratio"),
-  es = draft_get_config("dim-angle-extension-style"),
+  e  = _draft_get_config("dim-angle-extension-ratio"),
+  es = _draft_get_config("dim-angle-extension-style"),
 
-  w  = draft_get_config("dim-angle-weight"),
-  s  = draft_get_config("dim-angle-style"),
-  a  = draft_get_config("dim-angle-arrow"),
+  w  = _draft_get_config("dim-angle-weight"),
+  s  = _draft_get_config("dim-angle-style"),
+  a  = _draft_get_config("dim-angle-arrow"),
 
   a1,
   a2,
 
-  o  = draft_get_config("dim-offset"),
+  o  = _draft_get_config("dim-offset"),
 
-  ts = draft_get_config("dim-text-size"),
-  tp = draft_get_config("dim-text-place"),
-  rm = draft_get_config("dim-round-mode"),
+  ts = _draft_get_config("dim-text-size"),
+  tp = _draft_get_config("dim-text-place"),
+  rm = _draft_get_config("dim-round-mode"),
 
-  cmh = draft_get_config("dim-cmh"),
-  cmv = draft_get_config("dim-cmv"),
+  cmh = _draft_get_config("dim-cmh"),
+  cmv = _draft_get_config("dim-cmv"),
 
-  layers = draft_get_config("layers-dim")
+  layers = _draft_get_config("layers-dim")
 )
 {
-  if (draft_layers_any_active(layers))
-  draft_make_3d_if_configured()
+  if (_draft_layers_any_active(layers))
+  _draft_make_3d_if_configured()
   {
     // identify measurement reference points at center 'c'
     // handle (1) point, (2) angle, or (3) vector.
@@ -829,19 +829,19 @@ module draft_dim_center
   r,
 
   v = 0,
-  l = draft_get_config("dim-center-length"),
+  l = _draft_get_config("dim-center-length"),
 
   e,
-  es = draft_get_config("dim-angle-extension-style"),
+  es = _draft_get_config("dim-angle-extension-style"),
 
-  w  = draft_get_config("dim-center-weight"),
-  s  = draft_get_config("dim-center-style"),
+  w  = _draft_get_config("dim-center-weight"),
+  s  = _draft_get_config("dim-center-style"),
 
-  layers = draft_get_config("layers-dim")
+  layers = _draft_get_config("layers-dim")
 )
 {
-  if (draft_layers_any_active(layers))
-  draft_make_3d_if_configured()
+  if (_draft_layers_any_active(layers))
+  _draft_make_3d_if_configured()
   {
     // alignment angle
     aa = is_number(v) ? v : angle_ll(x_axis2d_uv, v);

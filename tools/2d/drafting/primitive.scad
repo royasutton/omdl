@@ -69,10 +69,12 @@
 
   \returns  <boolean> \b true if any identified layer is active as
             indicated by \ref draft_layers_show.
+
+  \private
 *******************************************************************************/
-function draft_layers_any_active
+function _draft_layers_any_active
 (
-  layers = draft_get_config("layers-default")
+  layers = _draft_get_config("layers-default")
 ) = exists( is_list(layers) ? layers : [layers], draft_layers_show, true );
 
 //! @}
@@ -111,7 +113,7 @@ function draft_layers_any_active
 
   \private
 *******************************************************************************/
-function draft_sheet_get_window
+function _draft_sheet_get_window
 (
   rx,
   ry,
@@ -127,22 +129,22 @@ function draft_sheet_get_window
     //
 
     // sheet size
-    sdx = draft_get_sheet_size(ci="sdx") * draft_sheet_scale,
-    sdy = draft_get_sheet_size(ci="sdy") * draft_sheet_scale,
+    sdx = _draft_get_sheet_size(ci="sdx") * draft_sheet_scale,
+    sdy = _draft_get_sheet_size(ci="sdy") * draft_sheet_scale,
 
     // sheet layout
-    sll = draft_get_sheet_config(ci="sll"),
+    sll = _draft_get_sheet_config(ci="sll"),
 
     // sheet frame and zone margins
-    smx = draft_get_sheet_config(ci="smx") * draft_sheet_scale,
-    smy = draft_get_sheet_config(ci="smy") * draft_sheet_scale,
-    szm = draft_get_sheet_config(ci="szm") * draft_sheet_scale,
+    smx = _draft_get_sheet_config(ci="smx") * draft_sheet_scale,
+    smy = _draft_get_sheet_config(ci="smy") * draft_sheet_scale,
+    szm = _draft_get_sheet_config(ci="szm") * draft_sheet_scale,
 
     // reference zone labels
-    zox = draft_get_sheet_config(ci="zox"),
-    zoy = draft_get_sheet_config(ci="zoy"),
-    zlx = draft_get_sheet_config(ci="zlx"),
-    zly = draft_get_sheet_config(ci="zly"),
+    zox = _draft_get_sheet_config(ci="zox"),
+    zoy = _draft_get_sheet_config(ci="zoy"),
+    zlx = _draft_get_sheet_config(ci="zlx"),
+    zly = _draft_get_sheet_config(ci="zly"),
 
     // sheet layout dimensions
     ldx = sll ? sdy : sdx,
@@ -235,8 +237,10 @@ function draft_sheet_get_window
     coordinate. For both axes, \b -1 = left/bottom, \b 0 =
     center/middle, and \b +1 = right/top. The windows coordinate points
     [p0, p1, p2, p3] are clockwise ordered with p0=[xmin, ymin].
+
+  \private
 *******************************************************************************/
-function draft_sheet_get_zone
+function _draft_sheet_get_zone
 (
   rx,
   ry,
@@ -251,27 +255,27 @@ function draft_sheet_get_zone
     // get reference window xy-limits
     wl  = !is_list(rx) && !is_list(ix) && !is_list(ry) && !is_list(iy) ?
           // no reference lists, just get single zone window
-          draft_sheet_get_window( rx=rx, ry=ry, ix=ix, iy=iy, frame=frame, limits=true )
+          _draft_sheet_get_window( rx=rx, ry=ry, ix=ix, iy=iy, frame=frame, limits=true )
         : let
           (
             // determine x-limits
             wx  = is_list(ix) ?
                   let
                   (
-                    w1 = draft_sheet_get_window( ix=first(ix), frame=frame, limits=true ),
-                    w2 = draft_sheet_get_window( ix=last(ix),  frame=frame, limits=true )
+                    w1 = _draft_sheet_get_window( ix=first(ix), frame=frame, limits=true ),
+                    w2 = _draft_sheet_get_window( ix=last(ix),  frame=frame, limits=true )
                   )
                   [min(w1[0][0], w2[0][0]), max(w1[0][1], w2[0][1])]
                 : is_list(rx) ?
                   let
                   (
-                    w1 = draft_sheet_get_window( rx=first(rx), frame=frame, limits=true ),
-                    w2 = draft_sheet_get_window( rx=last(rx),  frame=frame, limits=true )
+                    w1 = _draft_sheet_get_window( rx=first(rx), frame=frame, limits=true ),
+                    w2 = _draft_sheet_get_window( rx=last(rx),  frame=frame, limits=true )
                   )
                   [min(w1[0][0], w2[0][0]), max(w1[0][1], w2[0][1])]
                 : let
                   (
-                    w1 = draft_sheet_get_window( rx=rx, ix=ix, frame=frame, limits=true )
+                    w1 = _draft_sheet_get_window( rx=rx, ix=ix, frame=frame, limits=true )
                   )
                   w1[0],
 
@@ -279,20 +283,20 @@ function draft_sheet_get_zone
             wy  = is_list(iy) ?
                   let
                   (
-                    w1 = draft_sheet_get_window( iy=first(iy), frame=frame, limits=true ),
-                    w2 = draft_sheet_get_window( iy=last(iy),  frame=frame, limits=true )
+                    w1 = _draft_sheet_get_window( iy=first(iy), frame=frame, limits=true ),
+                    w2 = _draft_sheet_get_window( iy=last(iy),  frame=frame, limits=true )
                   )
                   [min(w1[1][0], w2[1][0]), max(w1[1][1], w2[1][1])]
                 : is_list(ry) ?
                   let
                   (
-                    w1 = draft_sheet_get_window( ry=first(ry), frame=frame, limits=true ),
-                    w2 = draft_sheet_get_window( ry=last(ry),  frame=frame, limits=true )
+                    w1 = _draft_sheet_get_window( ry=first(ry), frame=frame, limits=true ),
+                    w2 = _draft_sheet_get_window( ry=last(ry),  frame=frame, limits=true )
                   )
                   [min(w1[1][0], w2[1][0]), max(w1[1][1], w2[1][1])]
                 : let
                   (
-                    w1 = draft_sheet_get_window( ry=ry, iy=iy, frame=frame, limits=true )
+                    w1 = _draft_sheet_get_window( ry=ry, iy=iy, frame=frame, limits=true )
                   )
                   w1[1]
           )
@@ -323,10 +327,10 @@ function draft_sheet_get_zone
 //! @}
 
 //----------------------------------------------------------------------------//
-// primitives: data tables
+// primitives: tables
 //----------------------------------------------------------------------------//
 
-//! \name Primitives: Data Tables
+//! \name Primitives: Tables
 //! @{
 
 //! Get a coordinate point for a defined draft table column and row.
@@ -342,7 +346,7 @@ function draft_sheet_get_zone
 
   \private
 *******************************************************************************/
-function draft_table_get_point
+function _draft_table_get_point
 (
   ix,
   iy,
@@ -352,11 +356,11 @@ function draft_table_get_point
   let
   (
     // get table format
-    cmh = map_get_firstof2_or(map, fmap, "cmh", draft_get_config("table-cmh")) * $draft_scale,
-    cmv = map_get_firstof2_or(map, fmap, "cmv", draft_get_config("table-cmv")) * $draft_scale,
+    cmh = map_get_firstof2_or(map, fmap, "cmh", _draft_get_config("table-cmh")) * $draft_scale,
+    cmv = map_get_firstof2_or(map, fmap, "cmv", _draft_get_config("table-cmv")) * $draft_scale,
 
-    coh = map_get_firstof2_or(map, fmap, "coh", draft_get_config("table-coh")),
-    cov = map_get_firstof2_or(map, fmap, "cov", draft_get_config("table-cov")),
+    coh = map_get_firstof2_or(map, fmap, "coh", _draft_get_config("table-coh")),
+    cov = map_get_firstof2_or(map, fmap, "cov", _draft_get_config("table-cov")),
 
     // get table data
     title = map_get_value(map, "title"),
@@ -417,8 +421,10 @@ function draft_table_get_point
     coordinate. For both axes, \b -1 = left/bottom, \b 0 =
     center/middle, and \b +1 = right/top. The windows coordinate points
     [p0, p1, p2, p3] are clockwise ordered with p0=[xmin, ymin].
+
+  \private
 *******************************************************************************/
-function draft_table_get_cell
+function _draft_table_get_cell
 (
   ix,
   iy,
@@ -446,8 +452,8 @@ function draft_table_get_cell
     // get cell window xy-limits [min, max]
     wl =
     [
-      [ for( i=[0, 1] ) draft_table_get_point( ix=lv[i], map=map, fmap=fmap )[0] ],
-      [ for( i=[0, 1] ) draft_table_get_point( iy=lh[i], map=map, fmap=fmap )[1] ]
+      [ for( i=[0, 1] ) _draft_table_get_point( ix=lv[i], map=map, fmap=fmap )[0] ],
+      [ for( i=[0, 1] ) _draft_table_get_point( iy=lh[i], map=map, fmap=fmap )[1] ]
     ]
   )
     limits ?
@@ -523,8 +529,10 @@ function draft_table_get_cell
     \endcode
 
     Unassigned fields are initialized with defaults.
+
+  \private
 *******************************************************************************/
-module draft_table_text
+module _draft_table_text
 (
   ix,
   iy,
@@ -565,7 +573,7 @@ module draft_table_text
   translate
   (
     // cell coordinates
-    draft_table_get_cell( ix=ix, iy=iy, zp=df[1], map=map, fmap=fmap )
+    _draft_table_get_cell( ix=ix, iy=iy, zp=df[1], map=map, fmap=fmap )
     // configured offset
     + [ df[2][0], df[2][1] ] * size * df[5]
     // multi-line offset
@@ -598,7 +606,7 @@ module draft_table_text
 
   \private
 *******************************************************************************/
-function draft_ztable_get_point
+function _draft_ztable_get_point
 (
   ix,
   iy,
@@ -649,8 +657,10 @@ function draft_ztable_get_point
     coordinate. For both axes, \b -1 = left/bottom, \b 0 =
     center/middle, and \b +1 = right/top. The windows coordinate points
     [p0, p1, p2, p3] are clockwise ordered with p0=[xmin, ymin].
+
+  \private
 *******************************************************************************/
-function draft_ztable_get_zone
+function _draft_ztable_get_zone
 (
   i,
   zp = 0,
@@ -672,8 +682,8 @@ function draft_ztable_get_zone
     // get zone window xy-limits [min, max]
     wl =
     [
-      [ for( i=[1, 0] ) draft_ztable_get_point( ix=zx[i], map=map )[0] ],
-      [ for( i=[0, 1] ) draft_ztable_get_point( iy=zy[i], map=map )[1] ]
+      [ for( i=[1, 0] ) _draft_ztable_get_point( ix=zx[i], map=map )[0] ],
+      [ for( i=[0, 1] ) _draft_ztable_get_point( iy=zy[i], map=map )[1] ]
     ]
   )
     limits ?
@@ -748,8 +758,10 @@ function draft_ztable_get_zone
     \endcode
 
     Unassigned fields are initialized with defaults.
+
+  \private
 *******************************************************************************/
-module draft_ztable_text
+module _draft_ztable_text
 (
   i,
   text,
@@ -771,7 +783,7 @@ module draft_ztable_text
   translate
   (
     // zone coordinates
-    draft_ztable_get_zone( i=i, zp=df[1], map=map )
+    _draft_ztable_get_zone( i=i, zp=df[1], map=map )
     // configured offset
     + [ df[2][0], df[2][1] ] * size * df[5]
     // multi-line offset
@@ -798,7 +810,7 @@ module draft_ztable_text
 // primitives: shapes
 //----------------------------------------------------------------------------//
 
-//! \name Primitives: Shapes
+//! \name Shape Primitives
 //! @{
 
 //! Draft a simple line from an initial to a terminal point.
@@ -824,9 +836,9 @@ module draft_line_pp
 )
 {
   $fn = $draft_line_fn;
-  p = draft_get_config("line-width-min") * w * $draft_scale;
+  p = _draft_get_config("line-width-min") * w * $draft_scale;
 
-  if ( draft_get_config("line-use-hull")  )
+  if ( _draft_get_config("line-use-hull")  )
   {
     // hulled end-circles
     hull() { translate(i) circle(d=p); translate(t) circle(d=p); }
@@ -901,10 +913,10 @@ module draft_arrow
     s5  = defined_e_or(s, 4, 1);              // angle multiplier
 
 
-    al  = draft_get_config("arrow-line-length-min") * s4 * $draft_scale;
+    al  = _draft_get_config("arrow-line-length-min") * s4 * $draft_scale;
                                               // length
 
-    ca  = draft_get_config("arrow-angle-min") * s5;
+    ca  = _draft_get_config("arrow-angle-min") * s5;
                                               // cut angle
 
     alx = angle_ll(x_axis2d_uv, l, true);     // line angle
@@ -1066,7 +1078,7 @@ module draft_line
 
   if ( !all_equal([s1, a1, a2], 0) )
   {
-    lsm = draft_get_config("line-segment-min") * $draft_scale;
+    lsm = _draft_get_config("line-segment-min") * $draft_scale;
 
     i  = line_ip(l);
     t  = line_tp(l);
@@ -1344,14 +1356,14 @@ module draft_polygon
 
   \private
 *******************************************************************************/
-module draft_make_3d_if_configured
+module _draft_make_3d_if_configured
 (
 )
 {
   if ( $draft_make_3d )
     linear_extrude
     (
-      height=draft_get_config("make-3d-height") * $draft_scale, center=true
+      height=_draft_get_config("make-3d-height") * $draft_scale, center=true
     )
     children();
   else

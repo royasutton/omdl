@@ -58,7 +58,7 @@
 // configuration: variables
 //----------------------------------------------------------------------------//
 
-//! \name Configuration: Variables
+//! \name Configuration Variables
 //! @{
 
 //! <boolean> Extrude 2D drafted constructions to 3D.
@@ -162,13 +162,14 @@ draft_layers_show = ["all"];
     \b Example:
 
     \verbatim
-      layers = draft_get_config("layers-dim");
-      dimll1 = draft_get_config("dim-leader-length");
+      layers = _draft_get_config("layers-dim");
+      dimll1 = _draft_get_config("dim-leader-length");
     \endverbatim
 
   \sa draft_config_map.
+  \private
 *******************************************************************************/
-function draft_get_config
+function _draft_get_config
 (
   k
 ) = map_get_value(draft_config_map, k);
@@ -176,10 +177,10 @@ function draft_get_config
 //! @}
 
 //----------------------------------------------------------------------------//
-// configuration: maps
+// configuration: style maps
 //----------------------------------------------------------------------------//
 
-//! \name Configuration: Maps
+//! \name Style Maps
 //! @{
 
 //! <map> A drafting configuration map; style1.
@@ -322,7 +323,7 @@ draft_config_map_style1 =
 // configuration: variables
 //----------------------------------------------------------------------------//
 
-//! \name Configuration: Variables
+//! \name Configuration Variables
 //! @{
 
 //! <map> Drafting configuration defaults map.
@@ -380,15 +381,16 @@ draft_config_map = draft_config_map_style1;
     \b Example:
 
     \verbatim
-      std = draft_get_sheet_size(ci="std");
+      std = _draft_get_sheet_size(ci="std");
 
-      sdx = draft_get_sheet_size(ci="sdx") * draft_sheet_scale;
-      sdy = draft_get_sheet_size(ci="sdy") * draft_sheet_scale;
+      sdx = _draft_get_sheet_size(ci="sdx") * draft_sheet_scale;
+      sdy = _draft_get_sheet_size(ci="sdy") * draft_sheet_scale;
     \endverbatim
 
   \sa draft_sheet_size.
+  \private
 *******************************************************************************/
-function draft_get_sheet_size
+function _draft_get_sheet_size
 (
   ci
 ) = table_get_value
@@ -473,15 +475,16 @@ draft_sheet_size_tr =
     \b Example:
 
     \verbatim
-      zoy = draft_get_sheet_config(ci="zoy")
+      zoy = _draft_get_sheet_config(ci="zoy")
 
-      smx = draft_get_sheet_config(ci="smx") * draft_sheet_scale;
-      smy = draft_get_sheet_config(ci="smy") * draft_sheet_scale;
+      smx = _draft_get_sheet_config(ci="smx") * draft_sheet_scale;
+      smy = _draft_get_sheet_config(ci="smy") * draft_sheet_scale;
     \endverbatim
 
   \sa draft_sheet_config.
+  \private
 *******************************************************************************/
-function draft_get_sheet_config
+function _draft_get_sheet_config
 (
   ci
 ) = table_get_value
@@ -544,7 +547,7 @@ draft_sheet_config_tr =
     +1,
     ["A", "B", "C", "D", "E", "F", "G", "H"],
     ["1", "2", "3", "4"],
-    draft_get_config("font-sheet-zone-reference"),
+    _draft_get_config("font-sheet-zone-reference"),
     5/8,
 
     [1,[4,3,2,5]],
@@ -567,7 +570,7 @@ draft_sheet_config_tr =
     +1,
     ["A", "B", "C", "D"],
     ["1", "2", "3", "4", "5", "6", "7", "8"],
-    draft_get_config("font-sheet-zone-reference"),
+    _draft_get_config("font-sheet-zone-reference"),
     5/8,
 
     [1,[4,3,2,5]],
@@ -581,10 +584,10 @@ draft_sheet_config_tr =
 //! @}
 
 //----------------------------------------------------------------------------//
-// configuration: maps
+// configuration: style maps
 //----------------------------------------------------------------------------//
 
-//! \name Configuration: Maps
+//! \name Style Maps
 //! @{
 
 //! <map> A title block map; style 1.
@@ -668,7 +671,7 @@ draft_title_block_map_style1 =
   [ "hdefs",
       [
         empty_str, [ 0, +1], [ 0, -1], [0, -1-4/10],  0,   1,
-        ["center", "center"], draft_get_config("font-title-block-heading")
+        ["center", "center"], _draft_get_config("font-title-block-heading")
       ]
   ],
 
@@ -676,7 +679,7 @@ draft_title_block_map_style1 =
   [ "edefs",
       [
         empty_str, [ 0, +1], [ 0, -2-1/2], [0, -1-4/10],  0, 3/2,
-        ["center", "center"], draft_get_config("font-title-block-entry")
+        ["center", "center"], _draft_get_config("font-title-block-entry")
       ]
   ],
 
@@ -716,7 +719,7 @@ draft_title_block_map_style1 =
   \hideinitializer
   \private
 *******************************************************************************/
-draft_table_format_map_common =
+_draft_table_format_map_common =
 [
   [ "cmh",  length(1/4, "in") ],
   [ "cmv",  length(1/4, "in") ],
@@ -743,7 +746,7 @@ draft_table_format_map_common =
   [ "tdefs",
       [
         empty_str, [ 0, -1], [ 0, -1/2-4/10], [0, -1-2/10], 0, 1,
-        ["center", "center"], draft_get_config("font-table-title")
+        ["center", "center"], _draft_get_config("font-table-title")
       ]
   ]
 ];
@@ -755,18 +758,18 @@ draft_table_format_map_common =
 draft_table_format_map_ccc =
 concat
 (
-  draft_table_format_map_common,
+  _draft_table_format_map_common,
   [
     [ "hdefs",
         [
           empty_str, [ 0, -1], [ 0, -1/2-3/10], [0, -1-2/10], 0, 1,
-          ["center", "center"], draft_get_config("font-table-heading")
+          ["center", "center"], _draft_get_config("font-table-heading")
         ]
     ],
     [ "edefs",
         [
           empty_str, [ 0, -1], [ 0, -1/2-4/10], [0, -1-2/10], 0, 1,
-          ["center", "center"], draft_get_config("font-table-entry")
+          ["center", "center"], _draft_get_config("font-table-entry")
         ]
     ]
   ]
@@ -779,18 +782,18 @@ concat
 draft_table_format_map_cll =
 concat
 (
-  draft_table_format_map_common,
+  _draft_table_format_map_common,
   [
     [ "hdefs",
         [
           empty_str, [-1, -1], [2/5,  -4/5], [0, -1-1/5], 0, 1,
-          ["left", "center"], draft_get_config("font-table-heading")
+          ["left", "center"], _draft_get_config("font-table-heading")
         ]
     ],
     [ "edefs",
         [
           empty_str, [-1, -1], [2/5, -9/10], [0, -1-1/5], 0, 1,
-          ["left", "center"], draft_get_config("font-table-entry")
+          ["left", "center"], _draft_get_config("font-table-entry")
         ]
     ]
   ]
@@ -803,18 +806,18 @@ concat
 draft_table_format_map_crr =
 concat
 (
-  draft_table_format_map_common,
+  _draft_table_format_map_common,
   [
     [ "hdefs",
         [
           empty_str, [+1, -1], [-2/5,  -4/5], [0, -1-1/5], 0, 1,
-          ["right", "center"], draft_get_config("font-table-heading")
+          ["right", "center"], _draft_get_config("font-table-heading")
         ]
     ],
     [ "edefs",
         [
           empty_str, [+1, -1], [-2/5, -9/10], [0, -1-1/5], 0, 1,
-          ["right", "center"], draft_get_config("font-table-entry")
+          ["right", "center"], _draft_get_config("font-table-entry")
         ]
     ]
   ]
