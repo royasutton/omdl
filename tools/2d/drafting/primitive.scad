@@ -65,7 +65,10 @@
 
 //! Check if any identified layers are active.
 /***************************************************************************//**
-  \param    layers <string-list> The list of layer names.
+  \param    layers <string-list> The list of drafting layer names to
+            render this object on. Defaults to the "default" — the general-purpose layer.
+            See \ref draft_layers_show and the layer conventions in
+            \ref tools_drafting "Drafting".
 
   \returns  <boolean> \b true if any identified layer is active as
             indicated by \ref draft_layers_show.
@@ -214,7 +217,7 @@ function _draft_sheet_get_window
   \param    ry <string-list | string> Sheet y-axis zone reference identifier(s).
 
   \param    ix <integer-list | integer> Sheet x-axis zone reference index(es).
-  \param    iy <integer-list | integer> Sheet x-axis zone reference index(es).
+  \param    iy <integer-list | integer> Sheet y-axis zone reference index(es).
 
   \param    zp <integer-list-2 | integer> The window coordinate scaler. A
             list [zpx, zpy] of decimals or a single decimal for (zpx=zpy).
@@ -1222,7 +1225,11 @@ module draft_arc
 
   if ( !all_equal([s1, a1, a2], 0) )
   {
-    pp = polygon_arc_sweep_p( r=r, o=o, v1=v1, v2=v2, fn=fn, cw=cw );
+    // Compute the sweep point array once, shared by line and arrow rendering.
+    // When s1==0 (no line) but arrows are requested we still need the two
+    // endpoint points; polygon_arc_sweep_p is called with a minimal fn so
+    // only the head and tail points are generated in that case.
+    pp = polygon_arc_sweep_p( r=r, o=o, v1=v1, v2=v2, fn=(s1==0 ? 2 : fn), cw=cw );
 
     if ( s1 == 1 )
     { // solid line
@@ -1322,15 +1329,18 @@ module draft_polygon
   s = 1
 )
 {
-  el  = is_defined(e) ? e           // use supplied edge list 'e'
-      : polytope_faces2edges        // construct from paths
-        (
-            is_defined(p) ? p       // use supplied path list 'p'
-          : [consts(len(c))]        // connect all points in order supplied
-        );
+  // Fast path: when neither 'p' nor 'e' is supplied, the polygon is a
+  // simple closed loop of all points in order.  Building the edge list
+  // directly avoids the overhead of polytope_faces2edges([consts(len(c))]),
+  // which allocates and traverses an intermediate face structure.
+  el  = is_defined(e) ? e             // use supplied edge list 'e'
+      : is_defined(p) ?               // use supplied path list 'p'
+          polytope_faces2edges(p)
+      : let( n = len(c) )             // fast sequential closed loop
+          [ for( j=[0:n-1] ) [j, (j+1)%n] ];
 
   // draft each selected edge
-  for (i = index_sel(el, i))        // allow edge selection index
+  for (i = index_sel(el, i))          // allow edge selection index
     draft_line(l=[c[first(el[i])], c[second(el[i])]], w=w, s=s);
 }
 

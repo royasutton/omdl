@@ -65,7 +65,10 @@
 
 //! Assign one or more layers to child objects.
 /***************************************************************************//**
-  \param    layers <string-list> The List of drafting layer names.
+  \param    layers <string-list> The list of drafting layer names to
+            render this object on. Defaults to the "default" — the general-purpose layer.
+            See \ref draft_layers_show and the layer conventions in
+            \ref tools_drafting "Drafting".
 
   \details
 
@@ -91,25 +94,54 @@ module draft_in_layers
 //! \name Object Placement
 //! @{
 
-//! Move one or more child objects to sheet a reference zone.
+//! Move one or more child objects to a sheet reference zone.
 /***************************************************************************//**
-  \param    list <datastruct-list> A List alignment references, zones,
+  \param    list <datastruct-list> A list of alignment references, zones,
             and child object indexes.
 
   \details
 
-    Each list element specified the placement of a child object and has
-    the form:
+    Each list element specifies the placement of one child object and
+    has the form:
 
     \verbatim
     <datastruct> = [ 0:<alignment-point>, 1:<zone-reference>, 2:<child-index> ]
     \endverbatim
 
-     field  | description           | data type
-    :------:|-----------------------|:--------------------------
-      0     | [px, py]              | <decimal-list-2>
-      1     | [rx, ry] or [ix, iy]  | <string-list-2 \| decimal-list-2>
-      2     | index                 | <integer>
+     field  | data type                           | default      | description
+    :------:|:------------------------------------|:------------:|:------------------------------------
+      0     | \<decimal-list-2\>                  | [0,0]        | alignment point [px, py]
+      1     | \<string-list-2 \| decimal-list-2\> | sheet centre | zone: [rx,ry]=string or [ix,iy]=int
+      2     | \<integer\>                         | loop index   | child object index
+
+    The alignment point \c [px, py] linearly scales the position within
+    the target zone: \b -1 = left/bottom edge, \b 0 = centre/middle,
+    \b +1 = right/top edge.
+
+    The zone reference field accepts either string labels (e.g.
+    \c ["H","4"]) that match the zone label identifiers configured in
+    \ref draft_sheet_config, or integer indexes (e.g. \c [7,3]) that
+    address zones by their numeric position.  When field 1 is omitted,
+    the object is placed at the sheet centre.
+
+    When field 2 is omitted, child \c i is mapped to list entry \c i
+    in document order.  When the list is longer than the number of
+    children, the last child is reused for surplus entries.
+
+    \b Example:
+
+    \code{.C}
+    draft_move
+    (
+      [
+        [[-1,  1]],               // child 0 → sheet top-left
+        [[ 1, -1]],               // child 1 → sheet bottom-right
+        [[ 0,  0], ["H","4"]],    // child 2 → centre of zone H4
+        [[ 0,  0], [3, 1], 0]    // child 0 again → centre of zone [3,1]
+      ]
+    )
+    { ... }
+    \endcode
 
     \amu_eval ( html_image_w=512 latex_image_w="3.00in" object=draft_move ${object_diagram_2d} )
 *******************************************************************************/
@@ -120,7 +152,8 @@ module draft_move
 {
   // do nothing when no children
   if ( $children )
-  for ( i = [0:max($children-1, len(list)-1)] )
+  let( imax = max($children-1, len(list)-1) )
+  for ( i = [0:imax] )
   {
     e = list[i];
 
@@ -129,7 +162,7 @@ module draft_move
 
     // numerical or string references
     n = all_numbers(e[1]) ? e[1] : [undef, undef];
-    s = all_strings(e[1]) ? e[1] : [undef, undef];;
+    s = all_strings(e[1]) ? e[1] : [undef, undef];
 
     // child index default
     c = defined_or(e[2], i);
@@ -170,17 +203,24 @@ module draft_move
   \param    origin <value-list-4> An origin line configuration that
             overrides origin line <width, [style], length, [arrow]>.
 
-  \param    check <boolean> Check current sheet configuration.
+  \param    check <boolean> When \b true, validates the current sheet
+            configuration and size tables and prints a diagnostic report
+            to the console via \c table_check(). No geometry is affected.
+            Useful during design setup to confirm that \ref draft_sheet_config
+            and \ref draft_sheet_size are pointing to recognised entries.
 
-  \param    layers <string-list> The List of drafting layer names.
+  \param    layers <string-list> The list of drafting layer names to
+            render this object on. Defaults to the "sheet" — rendered with sheet frame and rulers.
+            See \ref draft_layers_show and the layer conventions in
+            \ref tools_drafting "Drafting".
 
   \details
 
-    When a parameter is not specified, the default value is use for the
+    When a parameter is not specified, the default value is used for the
     current sheet configuration. The sheet configuration defaults are
     set by \ref draft_sheet_config.
 
-    The parameters \p sheet, \p frame, \p zone, \p and grid accepts a
+    The parameters \p sheet, \p frame, \p zone, and \p grid each accept a
     list of two values. The first value sets the construction line
     width and the second sets the construction line style; <width,
     style>. The style value may also be a list to configure the details
@@ -401,7 +441,10 @@ module draft_sheet
 
   \param    ts <decimal> The axes label text size.
 
-  \param    layers <string-list> The List of drafting layer names.
+  \param    layers <string-list> The list of drafting layer names to
+            render this object on. Defaults to the "sheet" — rendered with sheet frame and rulers.
+            See \ref draft_layers_show and the layer conventions in
+            \ref tools_drafting "Drafting".
 
   \details
 
@@ -520,7 +563,10 @@ module draft_axes
 
   \param    w <decimal> The line segment weight.
 
-  \param    layers <string-list> The List of drafting layer names.
+  \param    layers <string-list> The list of drafting layer names to
+            render this object on. Defaults to the "sheet" — rendered with sheet frame and rulers.
+            See \ref draft_layers_show and the layer conventions in
+            \ref tools_drafting "Drafting".
 
   \details
 
@@ -619,7 +665,10 @@ module draft_ruler
 
   \param    window <boolean> Return table window rectangle.
 
-  \param    layers <string-list> The List of drafting layer names.
+  \param    layers <string-list> The list of drafting layer names to
+            render this object on. Defaults to the "table" — rendered with tables.
+            See \ref draft_layers_show and the layer conventions in
+            \ref tools_drafting "Drafting".
 
   \details
 
@@ -679,15 +728,26 @@ module draft_table
       cols  = map_get_value(map, "cols");
       rows  = map_get_value(map, "rows");
 
+      // Pre-compute all vertical-line x-coordinates and horizontal-line y-coordinates
+      // once here so the per-iteration calls to _draft_table_get_point (which each
+      // re-traverse map/fmap) are replaced by simple index lookups.
+      // Each _draft_table_get_point call re-resolves cmh, cmv, coh, cov and sums
+      // column/row units, so hoisting these arrays eliminates O(cols * rows) redundant
+      // map traversals.
+      nc = len(cols);
+      nr = len(rows);
+      xs = [ for( i=[0:nc] ) _draft_table_get_point( ix=i, map=map, fmap=fmap )[0] ];
+      ys = [ for( i=[0:nr+2] ) _draft_table_get_point( iy=i, map=map, fmap=fmap )[1] ];
+
       // draw hlines
-      for( i=[0:len(rows)+2] )
+      for( i=[0:nr+2] )
       {
           ic = 0;                                 // from left
-          tc = len(cols);                         // to right
+          tc = nc;                               // to right
 
           // get line configuration
           lc = (i == 0) ? hlines[0]               // top
-             : (i == len(rows)+2) ? hlines[1]     // bottom
+             : (i == nr+2) ? hlines[1]           // bottom
              : (i == 1) ? hlines[2]               // title
              : (i == 2) ? hlines[3]               // headings
              : hlines[4];                         // rows
@@ -701,28 +761,28 @@ module draft_table
              : (is_undef(heads)  && (i==2)) ? 0
              : lc[1];
 
-          ip = _draft_table_get_point( ix=ic, iy=i, map=map, fmap=fmap );
-          tp = _draft_table_get_point( ix=tc, iy=i, map=map, fmap=fmap );
+          ip = [ xs[ic], ys[i] ];
+          tp = [ xs[tc], ys[i] ];
 
           draft_line (l=[ip, tp], w=lw, s=ls );
       }
 
       // draw vlines
-      for( i=[0:len(cols)] )
+      for( i=[0:nc] )
       {
-          ic = (i==0||i==len(cols)) ? 0 : 1;      // left & right start at top
-          tc = len(rows)+2;                       // to bottom of table
+          ic = (i==0||i==nc) ? 0 : 1;           // left & right start at top
+          tc = nr+2;                             // to bottom of table
 
           // get line configuration
           lc = (i == 0) ? vlines[0]               // left
-             : (i == len(cols)) ? vlines[1]       // right
+             : (i == nc) ? vlines[1]             // right
              : vlines[2];                         // columns
 
           lw = lc[0];                             // line weight
           ls = lc[1];                             // line style
 
-          ip = _draft_table_get_point( ix=i, iy=ic, map=map, fmap=fmap );
-          tp = _draft_table_get_point( ix=i, iy=tc, map=map, fmap=fmap );
+          ip = [ xs[i], ys[ic] ];
+          tp = [ xs[i], ys[tc] ];
 
           draft_line (l=[ip, tp], w=lw, s=ls );
       }
@@ -731,11 +791,11 @@ module draft_table
       _draft_table_text( 0, 0, title[0], cmh, tdefs, map, fmap );
 
       // add heading entries text
-      for ( c = [0:len(cols)-1] )
+      for ( c = [0:nc-1] )
         _draft_table_text( c, 1, heads[0][c], cmh/2, hdefs, map, fmap );
 
       // add cell entries text
-      for ( r = [2:len(rows)+1], c = [0:len(cols)-1] )
+      for ( r = [2:nr+1], c = [0:nc-1] )
         _draft_table_text( c, r, rows[r-2][0][c], cmh/2, edefs, map, fmap );
 
     } // window
@@ -756,7 +816,10 @@ module draft_table
   \param    number <boolean> Number the defined table zones.
   \param    window <boolean> Return table window rectangle.
 
-  \param    layers <string-list> The List of drafting layer names.
+  \param    layers <string-list> The list of drafting layer names to
+            render this object on. Defaults to the "table" — rendered with tables.
+            See \ref draft_layers_show and the layer conventions in
+            \ref tools_drafting "Drafting".
 
   \details
 
@@ -878,7 +941,7 @@ module draft_ztable
   } // layers
 }
 
-//! Construct a text note with optional heading and boarder.
+//! Construct a text note with optional heading and border.
 /***************************************************************************//**
   \param    head <string> The optional note heading.
   \param    note <string | string-list> A single or multi-line note
@@ -886,7 +949,7 @@ module draft_ztable
 
   \param    size <decimal-list-3> A list of decimals that define the
             <width, line-height, heading-height> of the note.
-  \param    line <value-list-2> The boarder line configuration override
+  \param    line <value-list-2> The border line configuration override
             that sets the line construction width and style;
             <width, [style]>.
 
@@ -901,11 +964,17 @@ module draft_ztable
 
   \param    window <boolean> Return table window rectangle.
 
-  \param    layers <string-list> The List of drafting layer names.
+  \param    layers <string-list> The list of drafting layer names to
+            render this object on. Defaults to the "titleblock" — rendered with the title block.
+            See \ref draft_layers_show and the layer conventions in
+            \ref tools_drafting "Drafting".
+            render this object on. Defaults to the "note" — rendered with text notes.
+            See \ref draft_layers_show and the layer conventions in
+            \ref tools_drafting "Drafting".
 
   \details
 
-    The boarder line style value may be configure as as documented in
+    The border line style value may be configured as documented in
     draft_line().
 
     \amu_eval ( html_image_w=768 latex_image_w="4.50in" object=draft_note ${object_diagram_2d} )

@@ -68,27 +68,150 @@
   \anchor \amu_eval(${group})_conventions
   \par Conventions
 
-  - Convention list
+  \b Naming
+
+  All public modules and functions are prefixed with \c draft_.
+  Internal (private) identifiers carry an additional leading underscore:
+  \c _draft_.  Configuration getter functions follow the form
+  \c _draft_get_* and are private; callers should use the public
+  variable \ref draft_config_map together with the \c map_merge
+  override pattern shown in that variable's documentation.
+
+  \b Common \b Parameters
+
+  The following short-name parameters carry consistent meaning across
+  all modules in this library:
+
+   parameter | meaning                                       | data type
+  :----------:|:----------------------------------------------|:-------------------------------
+   \c w       | line weight (width multiplier)                | \<decimal\>
+   \c s       | line style; see \ref draft_line()             | \<integer \| integer-list\>
+   \c a       | arrowhead style; see \ref draft_arrow()       | \<integer \| integer-list-5\>
+   \c a1, a2  | per-endpoint arrowhead overrides              | \<integer \| integer-list-5\>
+   \c o       | origin or center coordinate (primitives) †    | \<point-2d\>
+   \c c       | center coordinate (dimension modules) †       | \<point-2d\>
+   \c t       | text string or measured-value override        | \<string \| string-list\>
+   \c u       | unit identifier for measured values           | \<string\>
+   \c ts      | text size \<width, line-height, heading-height\> | \<decimal-list-3\>
+   \c tp      | text placement [-1…+1 per axis]; optional \c tp[2] pivot offset (angle dims); optional \c tp[3] rotation offset | \<decimal-list-2..4\>
+   \c rm      | measurement rounding mode: 0=none, 1=round_d, 2=round_s | \<integer \| integer-list-2\>
+   \c cmh     | minimum horizontal cell size                  | \<decimal\>
+   \c cmv     | minimum vertical cell size                    | \<decimal\>
+   \c layers  | drafting layer names to render this object on | \<string-list\>
+   \c window  | return bounding rectangle instead of geometry | \<boolean\>
+   \c zp      | zone/window alignment scaler [-1…+1]          | \<decimal-list-2 \| decimal\>
+   \c line    | border line config \<width, [style]\>         | \<value-list-2\>
+
+  † <b>Known naming inconsistency:</b> the center/origin point is
+  named \c o in primitive modules (draft_arc, draft_rectangle) but
+  \c c in dimension modules (draft_dim_radius, draft_dim_angle,
+  draft_dim_center).  The parameter \c o is also reused as an offset
+  distance in dimension modules.  A future refactor will rename the
+  offset parameter to \c off and unify center/origin as \c o.  Until
+  then, consult each module's individual parameter table.
+
+  \b Scale \b Variables
+
+  Two scale variables govern geometry size and must be kept in sync:
+
+  - \ref draft_sheet_scale — a plain variable set once at design time.
+    Scales all sheet-level constructions (frame, zones, title block, tables).
+    Does \b not propagate through children automatically.
+  - \c $draft_scale — a special variable that \b does propagate through
+    the OpenSCAD child scope.  Set it explicitly inside composite
+    operations so that objects placed via \ref draft_move inherit the
+    correct scale:
+
+    \code{.C}
+    draft_move ( [ ... ] )
+    {
+      $draft_scale = draft_sheet_scale;
+      // child objects here inherit $draft_scale automatically
+    }
+    \endcode
+
+  \b Layers
+
+  Every module accepts a \c layers parameter.  The global variable
+  \ref draft_layers_show lists the layers that will actually be rendered;
+  all others are suppressed.  Setting it to \c ["all"] renders
+  everything — \c "all" is a wildcard that matches any layer list.
+
+  Default layer assignments by module category:
+
+   category        | default layer name
+  :----------------|:-------------------
+   general geometry | \c "default"
+   sheet / frame   | \c "sheet"
+   tables          | \c "table"
+   notes           | \c "note"
+   title block     | \c "titleblock"
+   dimensions      | \c "dim"
+
+  To isolate a drawing phase, restrict \ref draft_layers_show:
+
+  \code{.C}
+  draft_layers_show = ["default", "dim"];   // geometry + dimensions only
+  \endcode
+
+  \b Configuration \b and \b Style \b Maps
+
+  All style defaults live in \ref draft_config_map, initialised to
+  \ref draft_config_map_style1.  Apply selective overrides with
+  \c map_merge, placing overrides first so they take precedence:
+
+  \code{.C}
+  draft_config_map =
+    map_merge
+    (
+      [ ["dim-offset", length(3)], ["line-use-hull", false] ],
+      draft_config_map_style1
+    );
+  \endcode
+
+  All dimension values in configuration maps should be expressed via
+  \c length() or \c angle() with an explicit unit string so that designs
+  remain unit-independent.
+
+  \b Typical \b Workflow
+
+  A minimal complete script follows the pattern shown in the auxiliary
+  example block at the bottom of this file:
+
+  -# Include \c omdl-base.scad and \c tools/2d/drafting/draft-base.scad.
+  -# Set \ref length_unit_base and \ref draft_layers_show.
+  -# Optionally override \ref draft_config_map with \c map_merge.
+  -# Call \ref draft_sheet() to establish the frame and zones.
+  -# Use \ref draft_move() to place the title block, tables, and notes
+     into named or indexed sheet zones.
+  -# Draw geometry inside \ref draft_in_layers() to assign it to a layer,
+     then annotate with \ref draft_dim_line(), \ref draft_dim_radius(),
+     etc.
 
   +/
 
-    This module provides basic 2D drafting tools. Below is an example
-    output (png and svg format) and script. Numerous ways exists to
-    generate a printable form of the 2D result. For example: (1) Render
-    the 2D design. (2) Export as DXF. (3) Open the exported DXF file
-    using [LibreCAD]. (4) Select print preview and change the print
-    scale as needed for the sheet size and target output page. (5)
-    Finally print or save a PDF file.
+  This module provides basic drafting tools. An example script and
+  its output are shown below. There are numerous ways to generate a
+  printable form of a 2D result. For example: (1) render the 2D
+  design; (2) export it as a DXF file; (3) open the exported DXF file
+  in [LibreCAD]; (4) select print preview and adjust the print scale
+  as needed for the target sheet size and output format; (5) then
+  print or save the result as a PDF.
 
-    \amu_define title             (Drafting example)
-    \amu_define image_views       (top)
-    \amu_define image_size        (uxga)
-    \amu_define html_image_w      (768)
-    \amu_define output_scad_last  (true)
+  \amu_define title             (Drafting example)
+  \amu_define image_views       (top)
+  \amu_define image_size        (uxga)
+  \amu_define html_image_w      (768)
+  \amu_define output_scad_last  (true)
 
-    \amu_include (include/amu/scope_diagrams_3d.amu)
+  \amu_include (include/amu/scope_diagrams_3d.amu)
 
-  \todo parameter o reserved for origin. rename c to o and assign new
+  \todo Naming inconsistency: \p c (center) clashes with the \p o (origin)
+        convention used in primitive modules, and \p o (offset) is a
+        different concept again.  Planned fix: rename the offset parameter
+        \p o to \p off across all dimension modules and unify center/origin
+        as \p o.  See the parameter conventions table in
+        \ref tools_drafting "Drafting" for the current interim guidance.
 
   [LibreCAD]: https://librecad.org
 *******************************************************************************/

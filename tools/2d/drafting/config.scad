@@ -71,9 +71,59 @@ $draft_line_fn = 4;
 $draft_arrow_fn = 8;
 
 //! <integer> Line construction drafting scale multiplier.
+/***************************************************************************//**
+  \details
+
+    This is a special variable (prefixed with \c $) that propagates
+    automatically through the OpenSCAD child scope.  It scales
+    line-level constructions such as line widths and arrowhead sizes.
+
+    It is distinct from \ref draft_sheet_scale, which is a plain
+    variable that scales sheet-level geometry but does not propagate
+    through children.  In typical use both are set to the same value:
+
+    \code{.C}
+    draft_sheet_scale = 2;       // scale sheet frame and zones
+
+    draft_move ( [ ... ] )
+    {
+      $draft_scale = draft_sheet_scale;   // propagate to children
+      // ...
+    }
+    \endcode
+
+  \sa draft_sheet_scale
+*******************************************************************************/
 $draft_scale = 1;
 
 //! <integer> Sheet construction drafting scale multiplier.
+/***************************************************************************//**
+  \details
+
+    This is a plain (non-special) variable set once at design time.
+    It scales all sheet-level constructions — frame dimensions, zone
+    widths, title-block sizes, and table cell sizes — by the given
+    factor.  It does \b not propagate automatically through the
+    OpenSCAD child scope.
+
+    Contrast with \c $draft_scale, which is a special variable that
+    \b does propagate through children.  When constructing elements
+    that must track sheet scale dynamically (e.g., objects placed via
+    \ref draft_move), set \c $draft_scale explicitly inside the child
+    block:
+
+    \code{.C}
+    draft_move ( [ ... ] )
+    {
+      $draft_scale = draft_sheet_scale;
+      // child objects here inherit $draft_scale
+    }
+    \endcode
+
+    Both variables default to \c 1 (no scaling).
+
+  \sa $draft_scale
+*******************************************************************************/
 draft_sheet_scale = 1;
 
 //! <string> Drafting sheet size identifier.
@@ -121,15 +171,52 @@ draft_sheet_config = "L84TS";
 /***************************************************************************//**
   \details
 
-    Layer identifiers may be assigned arbitrary names. A set of default
-    names are used when not explicitly assigned. Multiple layers can be
-    set active as in the following example.
+    Controls which layers are rendered.  Only modules whose \c layers
+    parameter contains at least one name that also appears in this list
+    will produce geometry.
 
-    \b Example:
+    The string \b "all" is a wildcard that matches every layer list,
+    so setting this variable to \c ["all"] renders everything regardless
+    of individual layer assignments.
+
+    Layer names are arbitrary strings.  The library assigns the
+    following default names by module category:
+
+     layer name     | category
+    :---------------|:---------------------------
+     \c "default"   | general-purpose geometry (\ref draft_in_layers)
+     \c "sheet"     | sheet frame, zones, rulers, axes
+     \c "table"     | tables (\ref draft_table, \ref draft_ztable)
+     \c "note"      | text notes (\ref draft_note)
+     \c "titleblock"| title block (\ref draft_title_block)
+     \c "dim"       | all dimension modules
+
+    Custom layer names can be used freely — pass any string as the
+    \c layers argument to any module, then include that same string
+    here to enable it.
+
+    \b Example — render geometry and dimensions only:
 
     \code{.C}
-    draft_layers_show = ["default", "sheet", "dim"];
+    draft_layers_show = ["default", "dim"];
     \endcode
+
+    \b Example — render everything:
+
+    \code{.C}
+    draft_layers_show = ["all"];
+    \endcode
+
+    \b Example — render a custom layer alongside the sheet:
+
+    \code{.C}
+    draft_layers_show = ["sheet", "mypart"];
+
+    draft_in_layers(["mypart"])
+      import("mypart.dxf");
+    \endcode
+
+  \sa _draft_layers_any_active()
 *******************************************************************************/
 draft_layers_show = ["all"];
 
@@ -193,7 +280,7 @@ function _draft_get_config
     desired.
 
     \amu_define title (style1)
-    \amu_define scope_id (dfraft_style1)
+    \amu_define scope_id (draft_style1)
     \amu_define output_scad (false)
     \amu_define output_console (false)
     \amu_define notes_table (All dimensions are in millimeters.)
@@ -832,7 +919,7 @@ concat
 //----------------------------------------------------------------------------//
 
 /*
-BEGIN_SCOPE dfraft_style1;
+BEGIN_SCOPE draft_style1;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
     include <tools/2d/drafting/draft-base.scad>;

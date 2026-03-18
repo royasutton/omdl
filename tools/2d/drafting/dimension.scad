@@ -76,20 +76,27 @@
 
   \param    h <string> An optional text heading.
   \param    t <string | string-list> A single or multi-line text string.
-  \param    ts <decimal-list-3> A list of decimals that define the
-            <width, line-height, heading-height> of the text.
+  \param    ts <decimal-list-3> The text size specification
+            <width, line-height, heading-height>. Sets the note box cell
+            size in units of \p cmh / \p cmv.  Passed directly to
+            \ref draft_note() as its \p size parameter.
   \param    tp <integer-list-2> The text alignment point.
             A list [tpx, tpy] of decimals. Requires \p tr.
   \param    tr <decimal> The text rotation angle.
   \param    ta <string> The text horizontal alignment. One of:
             < \b "left" | \b "center" | \b "right" >.
 
-  \param    bw <decimal> The boarder line weight.
-  \param    bs <integer | integer-list> The boarder line [style].
+  \param    line <value-list-2> The note box border line configuration;
+            <width, [style]>. Consistent with the \p line parameter of
+            \ref draft_note(). When not specified, the defaults
+            \c dim-leader-box-weight and \c dim-leader-box-style from
+            \ref draft_config_map are used.
 
   \param    w <decimal> The line weight.
   \param    s <integer | integer-list> The line [style].
-  \param    a <integer | integer-list-5> The arrowhead [style][arrow].
+  \param    a <integer | integer-list-5> The arrowhead style. A single integer selects
+            the style; a list of up to 5 fields customises fill, side, length, and angle
+            — see the field table in [arrow].
 
   \param    o <decimal> The leader point offset.
 
@@ -97,7 +104,10 @@
   \param    cmv <decimal> The vertical height minimum unit cell size.
 
   \param    window <boolean> Return text window rectangle.
-  \param    layers <string-list> The List of drafting layer names.
+  \param    layers <string-list> The list of drafting layer names to
+            render this object on. Defaults to the "dim" — rendered with dimension annotations.
+            See \ref draft_layers_show and the layer conventions in
+            \ref tools_drafting "Drafting".
 
   \details
 
@@ -122,8 +132,7 @@ module draft_dim_leader
   tr,
   ta = "center",
 
-  bw = _draft_get_config("dim-leader-box-weight"),
-  bs = _draft_get_config("dim-leader-box-style"),
+  line,
 
   w = _draft_get_config("dim-leader-weight"),
   s = _draft_get_config("dim-leader-style"),
@@ -141,6 +150,10 @@ module draft_dim_leader
   if (_draft_layers_any_active(layers))
   _draft_make_3d_if_configured()
   {
+    // resolve border line config: caller-supplied 'line' overrides individual defaults
+    bw = _draft_get_config("dim-leader-box-weight");
+    bs = _draft_get_config("dim-leader-box-style");
+    lnd = is_undef(line) ? [bw, bs] : line;
     // offset
     plo = is_undef(o) ? p
         : is_number(v1)  ? line_tp(line2d_new(m=o, a=v1, p1=p))
@@ -183,7 +196,7 @@ module draft_dim_leader
       head=h,
       note=t,
       size=ts,
-      line=[bw, bs],
+      line=lnd,
       halign=ta,
       cmh=cmh,
       cmv=cmv,
@@ -213,32 +226,46 @@ module draft_dim_leader
   \param    d <decimal | decimal-list-2> The minimum distance between the
             reference point and the start of the extension line.
             A list [d1, d2] of decimals or a single decimal for (d1=d2).
+            When d1 ≠ d2 the extension lines begin at independent distances
+            from their respective reference points; both arrowheads are
+            then projected onto the dimension line of the farther endpoint
+            so that the dimension line remains straight.
   \param    e <decimal | decimal-list-2> The length of the extension line.
             A list [e1, e2] of decimals or a single decimal for (e1=e2).
   \param    es <integer | integer-list> The extension line [style].
 
   \param    w <decimal> The line weight.
   \param    s <integer | integer-list> The line [style].
-  \param    a <integer | integer-list-5> The arrowheads [style][arrow].
+  \param    a <integer | integer-list-5> The arrowhead style applied to both ends. A
+            single integer selects the style; a list of up to 5 fields customises fill,
+            side, length, and angle — see the field table in [arrow].
 
-  \param    a1 <integer | integer-list-5> The arrowhead 1 [style][arrow]
-            override.
-  \param    a2 <integer | integer-list-5> The arrowhead 2 [style][arrow]
-            override.
+  \param    a1 <integer | integer-list-5> The arrowhead 1 override; when set, takes
+            precedence over \p a for endpoint 1. See the field table in [arrow].
+  \param    a2 <integer | integer-list-5> The arrowhead 2 override; when set, takes
+            precedence over \p a for endpoint 2. See the field table in [arrow].
 
   \param    o <decimal> The dimension line offset.
 
-  \param    ts <decimal-list-3> A list of decimals that define the
-            <width, line-height, heading-height> of the text.
-  \param    tp <integer-list-2> The text alignment point.
-            A list [tpx, tpy] of decimals.
+  \param    ts <decimal-list-3> The text size specification
+            <width, line-height, heading-height>. Sets the note box cell
+            size in units of \p cmh / \p cmv.  Passed directly to
+            \ref draft_note() as its \p size parameter.
+  \param    tp <decimal-list-2..4> The text placement point.
+            A list [tpx, tpy] of decimals that scales the note box
+            position along each axis (−1=left/bottom … +1=right/top).
+            An optional 4th element \c tp[3] adds a rotation offset in
+            degrees applied on top of the computed text angle.
   \param    rm <integer> The measurement rounding mode.
             One of: 0=none, 1=[round_d], and 2=[round_s].
 
   \param    cmh <decimal> The horizontal width minimum unit cell size.
   \param    cmv <decimal> The vertical height minimum unit cell size.
 
-  \param    layers <string-list> The List of drafting layer names.
+  \param    layers <string-list> The list of drafting layer names to
+            render this object on. Defaults to the "dim" — rendered with dimension annotations.
+            See \ref draft_layers_show and the layer conventions in
+            \ref tools_drafting "Drafting".
 
   \details
 
@@ -288,6 +315,12 @@ module draft_dim_line
   layers = _draft_get_config("layers-dim")
 )
 {
+  assert
+  (
+    distance_pp(p1, p2) > 0,
+    str("draft_dim_line: p1 and p2 must be distinct points; got p1=", p1, " p2=", p2)
+  );
+
   if (_draft_layers_any_active(layers))
   _draft_make_3d_if_configured()
   {
@@ -313,22 +346,26 @@ module draft_dim_line
     // construct perpendicular to line form by reference points
     ape = angle_ll(x_axis2d_uv, [mr1, mr2]) + 90;
 
-    // minimum distances to dimension line
-    dmt = max(dm1, dm2);
+    // extension line end points: each offset by its own independent distance
+    pe1 = line_tp(line2d_new(m=dm1, a=ape, p1=mr1));
+    pe2 = line_tp(line2d_new(m=dm2, a=ape, p1=mr2));
 
-    // extension line end points
-    pe1 = line_tp(line2d_new(m=dmt, a=ape, p1=mr1));
-    pe2 = line_tp(line2d_new(m=dmt, a=ape, p1=mr2));
+    // project pe1/pe2 onto a common dimension line through the farther end-point
+    // so both arrowheads lie on the same line, preserving visual alignment
+    dmt = max(dm1, dm2);
+    pa1 = line_tp(line2d_new(m=dmt-dm1, a=ape, p1=pe1));
+    pa2 = line_tp(line2d_new(m=dmt-dm2, a=ape, p1=pe2));
 
     // dimension line offset at extension line end-points
-    pd1 = line_tp(line2d_new(m=-o, a=ape, p1=pe1));
-    pd2 = line_tp(line2d_new(m=-o, a=ape, p1=pe2));
+    pd1 = line_tp(line2d_new(m=-o, a=ape, p1=pa1));
+    pd2 = line_tp(line2d_new(m=-o, a=ape, p1=pa2));
 
     //
     // draft
     //
 
-    // extension lines
+    // extension lines: drawn from reference point outward to dimension line,
+    // each starting at its independently-offset end-point pe1/pe2
     draft_line(l=line2d_new(m=-de1, a=ape, p1=pe1), w=w/2, s=es);
     draft_line(l=line2d_new(m=-de2, a=ape, p1=pe2), w=w/2, s=es);
 
@@ -409,9 +446,12 @@ module draft_dim_line
   \param    c <point-2d> The radius center point.
 
   \param    p <point-2d> A point on the radius.
+            When \p p is specified, \p v is ignored — \p p takes
+            precedence.  Use either \p p \b or \p v, not both.
   \param    r <decimal> The radius length.
   \param    v <line-2d | decimal> The dimension line angle for radius \p r.
-            A 2d line, vector, or decimal angle.
+            A 2d line, vector, or decimal angle.  Ignored when \p p is
+            also specified.
 
   \param    t <string | string-list> A single or multi-line text string
             that overrides the measured length.
@@ -422,27 +462,37 @@ module draft_dim_line
 
   \param    w <decimal> The line weight.
   \param    s <integer | integer-list> The line [style].
-  \param    a <integer | integer-list-5> The arrowheads [style][arrow].
+  \param    a <integer | integer-list-5> The arrowhead style applied to both ends. A
+            single integer selects the style; a list of up to 5 fields customises fill,
+            side, length, and angle — see the field table in [arrow].
 
-  \param    a1 <integer | integer-list-5> The arrowhead 1 [style][arrow]
-            override.
-  \param    a2 <integer | integer-list-5> The arrowhead 2 [style][arrow]
-            override.
+  \param    a1 <integer | integer-list-5> The arrowhead 1 override; when set, takes
+            precedence over \p a for endpoint 1. See the field table in [arrow].
+  \param    a2 <integer | integer-list-5> The arrowhead 2 override; when set, takes
+            precedence over \p a for endpoint 2. See the field table in [arrow].
 
   \param    o <decimal | decimal-list-2> The dimension line offset. A list
             [o1, o2] of decimals or a single decimal for (o1=o2).
 
-  \param    ts <decimal-list-3> A list of decimals that define the
-            <width, line-height, heading-height> of the text.
-  \param    tp <integer-list-2> The text alignment point.
-            A list [tpx, tpy] of decimals.
+  \param    ts <decimal-list-3> The text size specification
+            <width, line-height, heading-height>. Sets the note box cell
+            size in units of \p cmh / \p cmv.  Passed directly to
+            \ref draft_note() as its \p size parameter.
+  \param    tp <decimal-list-2..4> The text placement point.
+            A list [tpx, tpy] of decimals that scales the note box
+            position along each axis (−1=left/bottom … +1=right/top).
+            An optional 4th element \c tp[3] adds a rotation offset in
+            degrees applied on top of the computed text angle.
   \param    rm <integer> The measurement rounding mode.
             One of: 0=none, 1=[round_d], and 2=[round_s].
 
   \param    cmh <decimal> The horizontal width minimum unit cell size.
   \param    cmv <decimal> The vertical height minimum unit cell size.
 
-  \param    layers <string-list> The List of drafting layer names.
+  \param    layers <string-list> The list of drafting layer names to
+            render this object on. Defaults to the "dim" — rendered with dimension annotations.
+            See \ref draft_layers_show and the layer conventions in
+            \ref tools_drafting "Drafting".
 
   \details
 
@@ -485,11 +535,18 @@ module draft_dim_radius
   layers = _draft_get_config("layers-dim")
 )
 {
+  assert
+  (
+    !(is_defined(p) && is_defined(v)),
+    "draft_dim_radius: supply either p or v, not both; p takes precedence and v is ignored"
+  );
+
   if (_draft_layers_any_active(layers))
   _draft_make_3d_if_configured()
   {
     // identify radius reference points
     // create vector if numerical angle has been specified.
+    // p takes precedence over v when both are supplied (guarded above).
     rr1 = c;
     rr2 = is_defined(p)  ? p
         : is_undef(v) ? line_tp(line2d_new(m=r, p1=c))
@@ -618,27 +675,38 @@ module draft_dim_radius
 
   \param    w <decimal> The arc weight.
   \param    s <integer | integer-list> The arc [style].
-  \param    a <integer | integer-list-5> The arrowheads [style][arrow].
+  \param    a <integer | integer-list-5> The arrowhead style applied to both ends. A
+            single integer selects the style; a list of up to 5 fields customises fill,
+            side, length, and angle — see the field table in [arrow].
 
-  \param    a1 <integer | integer-list-5> The arrowhead 1 [style][arrow]
-            override.
-  \param    a2 <integer | integer-list-5> The arrowhead 2 [style][arrow]
-            override.
+  \param    a1 <integer | integer-list-5> The arrowhead 1 override; when set, takes
+            precedence over \p a for endpoint 1. See the field table in [arrow].
+  \param    a2 <integer | integer-list-5> The arrowhead 2 override; when set, takes
+            precedence over \p a for endpoint 2. See the field table in [arrow].
 
   \param    o <decimal> The dimension arc offset.
 
-  \param    ts <decimal-list-3> A list of decimals that define the
-            <width, line-height, heading-height> of the text.
-  \param    tp <integer-list-4> The text alignment point.
-            A list [tpx, tpy, tpa, tra] of decimals, where \p tpa is
-            the text pivot angle and \p tra is the text rotation angle.
+  \param    ts <decimal-list-3> The text size specification
+            <width, line-height, heading-height>. Sets the note box cell
+            size in units of \p cmh / \p cmv.  Passed directly to
+            \ref draft_note() as its \p size parameter.
+  \param    tp <decimal-list-2..4> The text placement point.
+            A list [tpx, tpy] of decimals that scales the note box
+            position along each axis (−1=left/bottom … +1=right/top).
+            An optional 3rd element \c tp[2] offsets the text pivot
+            angle (degrees) along the arc, and an optional 4th element
+            \c tp[3] adds a rotation offset in degrees applied on top
+            of the computed text angle.
   \param    rm <integer> The measurement rounding mode.
             One of: 0=none, 1=[round_d], and 2=[round_s].
 
   \param    cmh <decimal> The horizontal width minimum unit cell size.
   \param    cmv <decimal> The vertical height minimum unit cell size.
 
-  \param    layers <string-list> The List of drafting layer names.
+  \param    layers <string-list> The list of drafting layer names to
+            render this object on. Defaults to the "dim" — rendered with dimension annotations.
+            See \ref draft_layers_show and the layer conventions in
+            \ref tools_drafting "Drafting".
 
   \details
 
@@ -650,8 +718,12 @@ module draft_dim_radius
   [round_d]: \ref round_d()
   [round_s]: \ref round_s()
 
-  \todo parameter o reserved for origin. rename c to o and assign new
-        name to existing o.
+  \todo Naming inconsistency: \p c (center) clashes with the \p o (origin)
+        convention used in primitive modules, and \p o (offset) is a
+        different concept again.  Planned fix: rename the offset parameter
+        \p o to \p off across all dimension modules and unify center/origin
+        as \p o.  See the parameter conventions table in
+        \ref tools_drafting "Drafting" for the current interim guidance.
 *******************************************************************************/
 module draft_dim_angle
 (
@@ -810,11 +882,15 @@ module draft_dim_angle
             A list [e1, e2, e3, e4] of decimals or a single decimal for
             (e1=e2=e3=e4).
   \param    es <integer | integer-list> The extension line [style].
+            Defaults to \c dim-center-extension-style from \ref draft_config_map.
 
   \param    w <decimal> The line weight.
   \param    s <integer | integer-list> The line [style].
 
-  \param    layers <string-list> The List of drafting layer names.
+  \param    layers <string-list> The list of drafting layer names to
+            render this object on. Defaults to the "dim" — rendered with dimension annotations.
+            See \ref draft_layers_show and the layer conventions in
+            \ref tools_drafting "Drafting".
 
   \details
 
@@ -832,7 +908,7 @@ module draft_dim_center
   l = _draft_get_config("dim-center-length"),
 
   e,
-  es = _draft_get_config("dim-angle-extension-style"),
+  es = _draft_get_config("dim-center-extension-style"),
 
   w  = _draft_get_config("dim-center-weight"),
   s  = _draft_get_config("dim-center-style"),
