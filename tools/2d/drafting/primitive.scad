@@ -84,8 +84,6 @@ function draft_layers_any_active
 //! \name Primitives: Placement
 //! @{
 
-//! \cond DOXYGEN_SHOULD_SKIP_THIS
-
 //! Get sheet, sheet-frame, or sheet-zone reference window or limits.
 /***************************************************************************//**
   \param    rx <string> A sheet x-axis zone reference identifier.
@@ -192,21 +190,21 @@ function draft_sheet_get_window
     wx  = is_defined(ix) || is_defined(rx) ?
           [zxs, zxs + fdx/len(zlx)]
         : frame ?
-          [-fdx/2, fdx/2]
-        : [-wdx/2, wdx/2],
+            [-fdx/2, fdx/2]
+          : [-wdx/2, wdx/2],
     wy  = is_defined(iy) || is_defined(ry) ?
           [zys, zys + fdy/len(zly)]
         : frame ?
-          [-fdy/2, fdy/2]
-        : [-wdy/2, wdy/2]
-  )
-    limits ?
-    // limits: [[xmin, xmax], [ymin, ymax]
-    [wx, wy]
-    // window points in cw order from [xmin, ymin]
-  : [[wx[0],wy[0]], [wx[0],wy[1]], [wx[1],wy[1]], [wx[1],wy[0]]];
+            [-fdy/2, fdy/2]
+          : [-wdy/2, wdy/2],
 
-//! \endcond
+    // limits: [[xmin, xmax], [ymin, ymax]
+    window_limits = [wx, wy],
+
+    // window points in cw order from [xmin, ymin]
+    window_coords = [ [wx[0],wy[0]], [wx[0],wy[1]], [wx[1],wy[1]], [wx[1],wy[0]] ]
+  )
+  limits ? window_limits : window_coords;
 
 //! Get sheet, sheet-frame, or sheet-zone reference coordinates.
 /***************************************************************************//**
