@@ -108,11 +108,11 @@ module draft_in_layers
     <datastruct> = [ 0:<alignment-point>, 1:<zone-reference>, 2:<child-index> ]
     \endverbatim
 
-     field  | data type                           | default      | description
-    :------:|:------------------------------------|:------------:|:------------------------------------
-      0     | \<decimal-list-2\>                  | [0,0]        | alignment point [px, py]
-      1     | \<string-list-2 \| decimal-list-2\> | sheet centre | zone: [rx,ry]=string or [ix,iy]=int
-      2     | \<integer\>                         | loop index   | child object index
+     field  | data type                       | default      | description
+    :------:|:--------------------------------|:------------:|:------------------------------------
+      0     | decimal-list-2                  | [0,0]        | alignment point [px, py]
+      1     | string-list-2 \| decimal-list-2 | sheet centre | zone: [rx,ry]=string or [ix,iy]=int
+      2     | integer                         | loop index   | child object index
 
     The alignment point \c [px, py] linearly scales the position within
     the target zone: \b -1 = left/bottom edge, \b 0 = centre/middle,

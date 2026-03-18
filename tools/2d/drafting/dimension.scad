@@ -98,7 +98,7 @@
             the style; a list of up to 5 fields customises fill, side, length, and angle
             — see the field table in [arrow].
 
-  \param    o <decimal> The leader point offset.
+  \param    off <decimal> The leader point offset.
 
   \param    cmh <decimal> The horizontal width minimum unit cell size.
   \param    cmv <decimal> The vertical height minimum unit cell size.
@@ -138,7 +138,7 @@ module draft_dim_leader
   s = _draft_get_config("dim-leader-style"),
   a = _draft_get_config("dim-leader-arrow"),
 
-  o  = _draft_get_config("dim-offset"),
+  off  = _draft_get_config("dim-offset"),
 
   cmh = _draft_get_config("dim-cmh"),
   cmv = _draft_get_config("dim-cmv"),
@@ -155,13 +155,13 @@ module draft_dim_leader
     bs = _draft_get_config("dim-leader-box-style");
     lnd = is_undef(line) ? [bw, bs] : line;
     // offset
-    plo = is_undef(o) ? p
-        : is_number(v1)  ? line_tp(line2d_new(m=o, a=v1, p1=p))
-        :                  line_tp(line2d_new(m=o, v=v1, p1=p));
+    plo = is_undef(off) ? p
+        : is_number(v1) ? line_tp(line2d_new(m=off, a=v1, p1=p))
+        :                 line_tp(line2d_new(m=off, v=v1, p1=p));
 
     // leader 1
-    ll1 = is_number(v1)  ? line2d_new(m=l1, a=v1, p1=plo)
-        :                  line2d_new(m=l1, v=v1, p1=plo);
+    ll1 = is_number(v1) ? line2d_new(m=l1, a=v1, p1=plo)
+        :                 line2d_new(m=l1, v=v1, p1=plo);
 
     draft_line(l=ll1, w=w, s=s, a1=a);
 
@@ -245,7 +245,7 @@ module draft_dim_leader
   \param    a2 <integer | integer-list-5> The arrowhead 2 override; when set, takes
             precedence over \p a for endpoint 2. See the field table in [arrow].
 
-  \param    o <decimal> The dimension line offset.
+  \param    off <decimal> The dimension line offset.
 
   \param    ts <decimal-list-3> The text size specification
             <width, line-height, heading-height>. Sets the note box cell
@@ -303,7 +303,7 @@ module draft_dim_line
   a1,
   a2,
 
-  o  = _draft_get_config("dim-offset"),
+  off  = _draft_get_config("dim-offset"),
 
   ts = _draft_get_config("dim-text-size"),
   tp = _draft_get_config("dim-text-place"),
@@ -357,8 +357,8 @@ module draft_dim_line
     pa2 = line_tp(line2d_new(m=dmt-dm2, a=ape, p1=pe2));
 
     // dimension line offset at extension line end-points
-    pd1 = line_tp(line2d_new(m=-o, a=ape, p1=pa1));
-    pd2 = line_tp(line2d_new(m=-o, a=ape, p1=pa2));
+    pd1 = line_tp(line2d_new(m=-off, a=ape, p1=pa1));
+    pd2 = line_tp(line2d_new(m=-off, a=ape, p1=pa2));
 
     //
     // draft
@@ -443,7 +443,7 @@ module draft_dim_line
 
 //! Construct a radial dimension line.
 /***************************************************************************//**
-  \param    c <point-2d> The radius center point.
+  \param    o <point-2d> The radius center point.
 
   \param    p <point-2d> A point on the radius.
             When \p p is specified, \p v is ignored — \p p takes
@@ -471,7 +471,7 @@ module draft_dim_line
   \param    a2 <integer | integer-list-5> The arrowhead 2 override; when set, takes
             precedence over \p a for endpoint 2. See the field table in [arrow].
 
-  \param    o <decimal | decimal-list-2> The dimension line offset. A list
+  \param    off <decimal | decimal-list-2> The dimension line offset. A list
             [o1, o2] of decimals or a single decimal for (o1=o2).
 
   \param    ts <decimal-list-3> The text size specification
@@ -505,7 +505,7 @@ module draft_dim_line
 *******************************************************************************/
 module draft_dim_radius
 (
-  c = origin2d,
+  o = origin2d,
 
   p,
   r = 1,
@@ -523,7 +523,7 @@ module draft_dim_radius
   a1,
   a2,
 
-  o  = _draft_get_config("dim-offset"),
+  off  = _draft_get_config("dim-offset"),
 
   ts = _draft_get_config("dim-text-size"),
   tp = _draft_get_config("dim-text-place"),
@@ -547,11 +547,11 @@ module draft_dim_radius
     // identify radius reference points
     // create vector if numerical angle has been specified.
     // p takes precedence over v when both are supplied (guarded above).
-    rr1 = c;
-    rr2 = is_defined(p)  ? p
-        : is_undef(v) ? line_tp(line2d_new(m=r, p1=c))
-        : is_number(v)   ? line_tp(line2d_new(m=r, a=v, p1=c))
-        :                  line_tp(line2d_new(m=r, v=v, p1=c));
+    rr1 = o;
+    rr2 = is_defined(p) ? p
+        : is_undef(v)   ? line_tp(line2d_new(m=r, p1=o))
+        : is_number(v)  ? line_tp(line2d_new(m=r, a=v, p1=o))
+        :                 line_tp(line2d_new(m=r, v=v, p1=o));
 
     // identify measurement reference points
     mr1 = d ? line_tp(line2d_new(m=distance_pp(rr1, rr2), v=[rr2, rr1], p1=rr1))
@@ -559,8 +559,8 @@ module draft_dim_radius
     mr2 = rr2;
 
     // minimum distance from reference points to dimension line
-    do1 = defined_e_or(o, 0, o);
-    do2 = defined_e_or(o, 1, d ? do1 : 0);
+    do1 = defined_e_or(off, 0, off);
+    do2 = defined_e_or(off, 1, d ? do1 : 0);
 
     // dimension lines angle
     ape = angle_ll(x_axis2d_uv, [mr1, mr2]);
@@ -651,7 +651,7 @@ module draft_dim_radius
 
 //! Construct a angular dimension arc.
 /***************************************************************************//**
-  \param    c <point-2d> The arc center point.
+  \param    o <point-2d> The arc center point.
   \param    r <decimal> The arc radius length.
 
   \param    v1 <line-2d | decimal> The arc initial angle.
@@ -684,7 +684,7 @@ module draft_dim_radius
   \param    a2 <integer | integer-list-5> The arrowhead 2 override; when set, takes
             precedence over \p a for endpoint 2. See the field table in [arrow].
 
-  \param    o <decimal> The dimension arc offset.
+  \param    off <decimal> The dimension arc offset.
 
   \param    ts <decimal-list-3> The text size specification
             <width, line-height, heading-height>. Sets the note box cell
@@ -718,16 +718,14 @@ module draft_dim_radius
   [round_d]: \ref round_d()
   [round_s]: \ref round_s()
 
-  \todo Naming inconsistency: \p c (center) clashes with the \p o (origin)
-        convention used in primitive modules, and \p o (offset) is a
-        different concept again.  Planned fix: rename the offset parameter
-        \p o to \p off across all dimension modules and unify center/origin
-        as \p o.  See the parameter conventions table in
-        \ref tools_drafting "Drafting" for the current interim guidance.
+  \todo Naming inconsistency now resolved in signature: \p c renamed to \p o
+        (center/origin) and \p o renamed to \p off (offset) in this module.
+        See the parameter conventions table in
+        \ref tools_drafting "Drafting".
 *******************************************************************************/
 module draft_dim_angle
 (
-  c = origin2d,
+  o = origin2d,
   r = 1,
 
   v1,
@@ -749,7 +747,7 @@ module draft_dim_angle
   a1,
   a2,
 
-  o  = _draft_get_config("dim-offset"),
+  off  = _draft_get_config("dim-offset"),
 
   ts = _draft_get_config("dim-text-size"),
   tp = _draft_get_config("dim-text-place"),
@@ -764,35 +762,34 @@ module draft_dim_angle
   if (_draft_layers_any_active(layers))
   _draft_make_3d_if_configured()
   {
-    // identify measurement reference points at center 'c'
-    // handle (1) point, (2) angle, or (3) vector.
+    // identify measurement reference points at center 'o'
     mr1 = is_point(v1)  ? v1
-        : is_number(v1) ? line_tp(line2d_new(a=v1, p1=c))
-        :                 line_tp(line2d_new(v=v1, p1=c));
+        : is_number(v1) ? line_tp(line2d_new(a=v1, p1=o))
+        :                 line_tp(line2d_new(v=v1, p1=o));
     mr2 = is_point(v2)  ? v2
-        : is_number(v2) ? line_tp(line2d_new(a=v2, p1=c))
-        :                 line_tp(line2d_new(v=v2, p1=c));
+        : is_number(v2) ? line_tp(line2d_new(a=v2, p1=o))
+        :                 line_tp(line2d_new(v=v2, p1=o));
 
     // extension line to radius ratio
     er1 = defined_e_or(e, 0, e);
     er2 = defined_e_or(e, 1, er1);
 
     // extension line end points
-    pe1 = line_tp(line2d_new(m=r, v=[c, mr1], p1=c));
-    pe2 = line_tp(line2d_new(m=r, v=[c, mr2], p1=c));
+    pe1 = line_tp(line2d_new(m=r, v=[o, mr1], p1=o));
+    pe2 = line_tp(line2d_new(m=r, v=[o, mr2], p1=o));
 
     // dimension text angle and position
     dta = angle_ll(x_axis2d_uv, cw ? [mr1, mr2] : [mr2, mr1], false)
         + defined_or(third(tp), 0);
-    dtp = line_tp(line2d_new(m=r-o, a=dta+90, p1=c));
+    dtp = line_tp(line2d_new(m=r-off, a=dta+90, p1=o));
 
     //
     // draft
     //
 
     // extension lines (back towards center point)
-    draft_line(l=line2d_new(m=r*er1, v=[mr1, c], p1=pe1), w=w/2, s=es);
-    draft_line(l=line2d_new(m=r*er2, v=[mr2, c], p1=pe2), w=w/2, s=es);
+    draft_line(l=line2d_new(m=r*er1, v=[mr1, o], p1=pe1), w=w/2, s=es);
+    draft_line(l=line2d_new(m=r*er2, v=[mr2, o], p1=pe2), w=w/2, s=es);
 
     // dimension text
     dt = is_defined(t) ? t
@@ -800,8 +797,8 @@ module draft_dim_angle
          (
            // measure angle between reference points
            ma = cw ?
-                angle_ll([c, mr2], [c, mr1], false)
-              : angle_ll([c, mr1], [c, mr2], false),
+                angle_ll([o, mr2], [o, mr1], false)
+              : angle_ll([o, mr1], [o, mr2], false),
 
            // use specified units 'u'
            au = is_undef(u) ? ma
@@ -826,7 +823,7 @@ module draft_dim_angle
     difference()
     {
       // remove window from dimension line for text
-      draft_arc(r=r-o, o=c, v1=[c, pe1], v2=[c, pe2], fn=fn, cw=cw, w=w, s=s, a1=da1, a2=da2);
+      draft_arc(r=r-off, o=o, v1=[o, pe1], v2=[o, pe2], fn=fn, cw=cw, w=w, s=s, a1=da1, a2=da2);
 
       translate( dtp )
       rotate( [0, 0, dta + defined_or(tp[3], 0)] )
@@ -846,7 +843,7 @@ module draft_dim_angle
     }
     else
     {
-      draft_arc(r=r-o, o=c, v1=[c, pe1], v2=[c, pe2], fn=fn, cw=cw, w=w, s=s, a1=da1, a2=da2);
+      draft_arc(r=r-off, o=o, v1=[o, pe1], v2=[o, pe2], fn=fn, cw=cw, w=w, s=s, a1=da1, a2=da2);
     }
 
     if ( !is_empty(dt)  )
@@ -870,7 +867,7 @@ module draft_dim_angle
 
 //! Construct a center mark dimension cross.
 /***************************************************************************//**
-  \param    c <point-2d> The center point.
+  \param    o <point-2d> The center point.
 
   \param    r <decimal> A circular arc radius.
 
@@ -900,7 +897,7 @@ module draft_dim_angle
 *******************************************************************************/
 module draft_dim_center
 (
-  c = origin2d,
+  o = origin2d,
 
   r,
 
@@ -930,7 +927,7 @@ module draft_dim_center
     for ( q = [0,1] )
     {
       la = aa + 90*q;
-      p1 = c - l * [cos(la), sin(la)];
+      p1 = o - l * [cos(la), sin(la)];
 
       draft_line(l=line2d_new(m=l*2, a=la, p1=p1), w=w, s=s);
     }
@@ -940,8 +937,8 @@ module draft_dim_center
     for ( q = [0:3] )
     {
       la = aa + 90*q;
-      p1 = c + (r-l) * [cos(la), sin(la)];      // radius
-      p2 = c + (r-l/2)/2 * [cos(la), sin(la)];  // mid
+      p1 = o + (r-l) * [cos(la), sin(la)];      // radius
+      p2 = o + (r-l/2)/2 * [cos(la), sin(la)];  // mid
 
       draft_line(l=line2d_new(m=l*2, a=la, p1=p1), w=w, s=s);
       draft_line(l=line2d_new(m=l/2, a=la, p1=p2), w=w, s=s);
@@ -955,7 +952,7 @@ module draft_dim_center
     for ( q = [0:3] )
     {
       la = aa + 90*q;
-      p1 = c + rs * [cos(la), sin(la)];         // start point
+      p1 = o + rs * [cos(la), sin(la)];         // start point
       el = defined_e_or(e, q, dl) - rs;         // individual lengths
 
       if (el > 0)
