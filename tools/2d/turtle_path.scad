@@ -723,7 +723,7 @@ function polygon_turtle_path_p
               c_arc     = p0 + r * [cos(h_perp), sin(h_perp)],
 
               // start and end angles measured from arc center
-              a_start   = h + perp_sign * (-90),   // direction c_arc → p0
+              a_start   = h + perp_sign * (-90),   // direction c_arc to p0
               a_end     = a_start + a,              // sweep by a (signed)
 
               pts = (a == 0) ? empty_lst

@@ -301,7 +301,7 @@ function _length_unit_2mm
   \param    to   <string> The units to which the value should be
                  converted. Defaults to \ref length_unit_base.
                  Conversion to \c "mm" is short-circuited: the
-                 intermediate mm→to step is skipped.
+                 intermediate mm to step is skipped.
 
   \returns  <decimal-list | decimal> The conversion result.
             Returns \b undef for identifiers that are not defined.

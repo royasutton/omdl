@@ -256,7 +256,7 @@ function _angle_unit_2d
                  Defaults to \ref angle_unit_default.
   \param    to   <string> The units to which the angle should be converted.
                  Defaults to \ref angle_unit_base. Conversion to \c "d"
-                 is short-circuited: the intermediate d→to step is
+                 is short-circuited: the intermediate d to step is
                  skipped.
 
   \returns  <decimal | decimal-list-3> The conversion result. Return
