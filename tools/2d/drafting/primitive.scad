@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2019
+  \date   2019,2026
 
   \copyright
 
@@ -106,10 +106,10 @@ function _draft_layers_any_active
 
     The returned datastruct will be one of the following forms:
 
-     limits | description                     | data type
-    :------:|:--------------------------------|:------------------------
-     true   | [[xmin, xmax], [ymin, ymax]]    | <decimal-list-2-list-2>
-     false  | [p0, p1, p2, p3], pn=[x,y]      | <point-2d-list-4>
+      limits | data type             | description
+    :-------:|:---------------------:|:-----------------------------
+       true  | decimal-list-2-list-2 | [[xmin, xmax], [ymin, ymax]]
+      false  | point-2d-list-4       | [p0, p1, p2, p3], pn=[x,y]
 
     The windows coordinate points [p0, p1, p2, p3] are clockwise
     ordered with p0=[xmin, ymin].
@@ -231,10 +231,10 @@ function _draft_sheet_get_window
 
     The returned datastruct will be one of the following forms:
 
-     window | description                     | data type
-    :------:|:--------------------------------|:------------------------
-     true   | [p0, p1, p2, p3], pn=[x,y]      | <point-2d-list-4>
-     false  | [x, y]                          | <point-2d>
+      window | data type       | description
+    :-------:|:---------------:|:---------------------------
+       true  | point-2d-list-4 | [p0, p1, p2, p3], pn=[x,y]
+      false  | point-2d        | [x, y]
 
     The parameter \p zp is used to linearly scale the window
     coordinate. For both axes, \b -1 = left/bottom, \b 0 =
@@ -414,11 +414,11 @@ function _draft_table_get_point
 
     The returned datastruct will be one of the following forms:
 
-     limits | window | description                     | data type
-    :------:|:------:|:--------------------------------|:------------------------
-     true   | -      | [[xmin, xmax], [ymin, ymax]]    | <decimal-list-2-list-2>
-     false  | true   | [p0, p1, p2, p3], pn=[x,y]      | <point-2d-list-4>
-     false  | false  | [x, y]                          | <point-2d>
+      limits | window | data type             | description
+    :-------:|:------:|:---------------------:|:-----------------------------
+       true  |   -    | decimal-list-2-list-2 | [[xmin, xmax], [ymin, ymax]]
+      false  |  true  | point-2d-list-4       | [p0, p1, p2, p3], pn=[x,y]
+      false  | false  | point-2d              | [x, y]
 
     The parameter \p zp is used to linearly scale the window
     coordinate. For both axes, \b -1 = left/bottom, \b 0 =
@@ -511,20 +511,20 @@ function _draft_table_get_cell
     ]
     \endverbatim
 
-     field  | description           | data type
-    :------:|-----------------------|:--------------------------
-      0     | text                  | <string>
-      1     | [h-align, v-align]    | <decimal-list-2>
-      2     | [h-offset, v-offset]  | <decimal-list-2>
-      3     | [h-offset, v-offset]  | <decimal-list-2>
-      4     | rotate                | <decimal>
-      5     | text-scale            | <decimal>
-      6     | [h-align, v-align]    | <string-list-2>
-      7     | font                  | <string>
-      8     | spacing               | <decimal>
-      9     | direction             | <string>
-      10    | language              | <string>
-      11    | script                | <string>
+      field | data type      | description
+    :------:|:--------------:|:---------------------
+        0   | string         | text
+        1   | decimal-list-2 | [h-align, v-align]
+        2   | decimal-list-2 | [h-offset, v-offset]
+        3   | decimal-list-2 | [h-offset, v-offset]
+        4   | decimal        | rotate
+        5   | decimal        | text-scale
+        6   | string-list-2  | [h-align, v-align]
+        7   | string         | font
+        8   | decimal        | spacing
+        9   | string         | direction
+        10  | string         | language
+        11  | string         | script
 
     \b Example
     \code{.C}
@@ -650,11 +650,11 @@ function _draft_ztable_get_point
 
     The returned datastruct will be one of the following forms:
 
-     limits | window | description                     | data type
-    :------:|:------:|:--------------------------------|:------------------------
-     true   | -      | [[xmin, xmax], [ymin, ymax]]    | <decimal-list-2-list-2>
-     false  | true   | [p0, p1, p2, p3], pn=[x,y]      | <point-2d-list-4>
-     false  | false  | [x, y]                          | <point-2d>
+      limits | window | data type             | description
+    :-------:|:------:|:---------------------:|:-----------------------------
+       true  |   -    | decimal-list-2-list-2 | [[xmin, xmax], [ymin, ymax]]
+      false  |  true  | point-2d-list-4       | [p0, p1, p2, p3], pn=[x,y]
+      false  | false  | point-2d              | [x, y]
 
     The parameter \p zp is used to linearly scale the window
     coordinate. For both axes, \b -1 = left/bottom, \b 0 =
@@ -740,20 +740,20 @@ function _draft_ztable_get_zone
     ]
     \endverbatim
 
-     field  | description           | data type
-    :------:|-----------------------|:--------------------------
-      0     | text                  | <string>
-      1     | [h-align, v-align]    | <decimal-list-2>
-      2     | [h-offset, v-offset]  | <decimal-list-2>
-      3     | [h-offset, v-offset]  | <decimal-list-2>
-      4     | rotate                | <decimal>
-      5     | text-scale            | <decimal>
-      6     | [h-align, v-align]    | <string-list-2>
-      7     | font                  | <string>
-      8     | spacing               | <decimal>
-      9     | direction             | <string>
-      10    | language              | <string>
-      11    | script                | <string>
+      field | data type      | description
+    :------:|:--------------:|:---------------------
+        0   | string         | text
+        1   | decimal-list-2 | [h-align, v-align]
+        2   | decimal-list-2 | [h-offset, v-offset]
+        3   | decimal-list-2 | [h-offset, v-offset]
+        4   | decimal        | rotate
+        5   | decimal        | text-scale
+        6   | string-list-2  | [h-align, v-align]
+        7   | string         | font
+        8   | decimal        | spacing
+        9   | string         | direction
+        10  | string         | language
+        11  | string         | script
 
     \b Example
     \code{.C}
@@ -868,25 +868,25 @@ module draft_line_pp
     The style can be customize via the following optional parameter
     list fields.
 
-     field  | description                     | data type           | default
-    :------:|:--------------------------------|:--------------------|:-------:
-      0     | style                           | <integer>           | 0
-      1     | fill: 0,1 or true,false         | <integer \| boolean>| 0
-      2     | side: 0=both, 1=left, 2=right   | <integer>           | 0
-      3     | length multiplier               | <decimal>           | 1
-      4     | angle multiplier                | <decimal>           | 1
+      field | data type           |         default     | description
+    :------:|:-------------------:|:-------------------:|:------------------------------
+        0   | integer             |            0        | style
+        1   | integer \| boolean  | 0,1 or true,false   | fill
+        2   | integer             |            0        | side: 0=both, 1=left, 2=right
+        3   | decimal             |            1        | length multiplier
+        4   | decimal             |            1        | angle multiplier
 
     When parameter \p s is assigned a single integer it sets the style
     and the other fields are assigned their default values.
 
-     style  | description
-    :------:|:--------------------------
-      0     | no arrowhead
-      1     | closed 3-point arrowhead
-      2     | closed 4-point arrowhead
-      3     | open 3-point arrowhead
-      4     | slash / cross arrowhead
-      5     | circle arrowhead
+      style | description
+    :-----:|:-------------------------
+        0   | no arrowhead
+        1   | closed 3-point arrowhead
+        2   | closed 4-point arrowhead
+        3   | open 3-point arrowhead
+        4   | slash / cross arrowhead
+        5   | circle arrowhead
 
     \amu_eval ( object=draft_arrow ${object_diagram_2d} )
 
@@ -1015,50 +1015,50 @@ module draft_arrow
     with its default optional values. The line style \p s can be one of
     the following:
 
-     style  | description
-    :------:|:--------------------------
-      0     | no line
-      1     | solid line
-      2     | single dash pattern centered
-      3     | dual overlapped dash patterns
-      4     | both ends and center
-      5     | line section break
+      style | description
+    :------:|:------------------------------
+        0   | no line
+        1   | solid line
+        2   | single dash pattern centered
+        3   | dual overlapped dash patterns
+        4   | both ends and center
+        5   | line section break
 
     Each style can be customize via optional parameter list fields. The
     options differ by style:
 
     <b>style 2</b>
 
-     field  | description                     | data type           | default
-    :------:|:--------------------------------|:--------------------|:-------:
-      1     | length multiplier               | <decimal>           | 1
-      2     | stride                          | <decimal>           | 2
+      field | data type | default | description
+    :------:|:---------:|:-------:|:------------------
+        1   | decimal   |    1    | length multiplier
+        2   | decimal   |    2    | stride
 
     <b>style 3</b>
 
-     field  | description                     | data type           | default
-    :------:|:--------------------------------|:--------------------|:-------:
-      1     | length multiplier 1             | <decimal>           | 1
-      2     | stride 1                        | <decimal>           | 2
-      3     | length multiplier 2             | <decimal>           | 2
-      4     | stride 2                        | <decimal>           | 3
+      field | data type | default | description
+    :------:|:---------:|:-------:|:--------------------
+        1   | decimal   |    1    | length multiplier 1
+        2   | decimal   |    2    | stride 1
+        3   | decimal   |    2    | length multiplier 2
+        4   | decimal   |    3    | stride 2
 
     <b>style 4</b>
 
-     field  | description                     | data type           | default
-    :------:|:--------------------------------|:--------------------|:-------:
-      1     | number of centered segments     | <decimal>           | 1
-      2     | centered-length multiplier      | <decimal>           | 1
-      3     | end-length multiplier           | <decimal>           | 1
+      field | data type | default | description
+    :------:|:---------:|:-------:|:----------------------------
+        1   | decimal   |    1    | number of centered segments
+        2   | decimal   |    1    | centered-length multiplier
+        3   | decimal   |    1    | end-length multiplier
 
     <b>style 5</b>
 
-     field  | description                     | data type           | default
-    :------:|:--------------------------------|:--------------------|:-------:
-      1     | number of breaks                | <decimal>           | 1
-      2     | break length multiplier         | <decimal>           | 2
-      3     | break width multiplier          | <decimal>           | 2
-      4     | break angle                     | <decimal>           | 67.5
+      field | data type | default | description
+    :------:|:---------:|:-------:|:------------------------
+        1   | decimal   |    1    | number of breaks
+        2   | decimal   |    2    | break length multiplier
+        3   | decimal   |    2    | break width multiplier
+        4   | decimal   |   67.5  | break angle
 
     \amu_eval ( object=draft_line ${object_diagram_2d} )
 
@@ -1188,19 +1188,19 @@ module draft_line
     with its default optional values. The line style \p s can be one of
     the following:
 
-     style  | description
-    :------:|:--------------------------
-      0     | no line
-      1     | solid line
-      2     | single dash pattern
+      style | description
+    :------:|:--------------------
+        0   | no line
+        1   | solid line
+        2   | single dash pattern
 
     Style 2 can be customize via optional parameter as shown below:
 
     <b>style 2</b>
 
-     field  | description                     | data type           | default
-    :------:|:--------------------------------|:--------------------|:-------:
-      1     | stride                          | <decimal>           | 2
+      field | data type | default | description
+    :------:|:---------:|:-------:|:------------
+        1   | decimal   |    2    | stride
 
     \amu_eval ( object=draft_arc ${object_diagram_2d} )
 

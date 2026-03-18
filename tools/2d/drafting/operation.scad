@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2019-2023
+  \date   2019-2023,2026
 
   \copyright
 
@@ -108,21 +108,21 @@ module draft_in_layers
     <datastruct> = [ 0:<alignment-point>, 1:<zone-reference>, 2:<child-index> ]
     \endverbatim
 
-     field  | data type                       | default      | description
-    :------:|:--------------------------------|:------------:|:------------------------------------
-      0     | decimal-list-2                  | [0,0]        | alignment point [px, py]
-      1     | string-list-2 \| decimal-list-2 | sheet centre | zone: [rx,ry]=string or [ix,iy]=int
-      2     | integer                         | loop index   | child object index
+      field | data type                       |   default     | description
+    :------:|:-------------------------------:|:-------------:|:-------------------------
+        0   | decimal-list-2                  | [0, 0]        | alignment point [px, py]
+        1   | string-list-2 \| decimal-list-2 | sheet center  | zone: [rx,ry]=string or [ix,iy]=int
+        2   | integer                         | loop index    | child object index
 
     The alignment point \c [px, py] linearly scales the position within
-    the target zone: \b -1 = left/bottom edge, \b 0 = centre/middle,
+    the target zone: \b -1 = left/bottom edge, \b 0 = center/middle,
     \b +1 = right/top edge.
 
     The zone reference field accepts either string labels (e.g.
     \c ["H","4"]) that match the zone label identifiers configured in
     \ref draft_sheet_config, or integer indexes (e.g. \c [7,3]) that
     address zones by their numeric position.  When field 1 is omitted,
-    the object is placed at the sheet centre.
+    the object is placed at the sheet center.
 
     When field 2 is omitted, child \c i is mapped to list entry \c i
     in document order.  When the list is longer than the number of
@@ -134,10 +134,10 @@ module draft_in_layers
     draft_move
     (
       [
-        [[-1,  1]],               // child 0 → sheet top-left
-        [[ 1, -1]],               // child 1 → sheet bottom-right
-        [[ 0,  0], ["H","4"]],    // child 2 → centre of zone H4
-        [[ 0,  0], [3, 1], 0]    // child 0 again → centre of zone [3,1]
+        [[-1,  1]],               // child 0 to sheet top-left
+        [[ 1, -1]],               // child 1 to sheet bottom-right
+        [[ 0,  0], ["H","4"]],    // child 2 to center of zone H4
+        [[ 0,  0], [3, 1], 0]     // child 0 again to center of zone [3,1]
       ]
     )
     { ... }

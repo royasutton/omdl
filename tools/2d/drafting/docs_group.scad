@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2019-2024
+  \date   2019-2024,2026
 
   \copyright
 
@@ -79,25 +79,25 @@
   The following short-name parameters carry consistent meaning across
   all modules in this library:
 
-   parameter    | meaning                                         | data type
-  :------------:|:------------------------------------------------|:-------------------------------
-   \c w         | line weight (width multiplier)                  | decimal
-   \c s         | line style; see \ref draft_line()               | integer \| integer-list
-   \c a         | arrowhead style; see \ref draft_arrow()         | integer \| integer-list-5
-   \c a1, \c a2 | per-endpoint arrowhead overrides                | integer \| integer-list-5
-   \c o         | origin or center coordinate (1)                 | point-2d
-   \c off       | dimension line offset distance (1)              | decimal \| decimal-list-2
-   \c t         | text string or measured-value override          | string \| string-list
-   \c u         | unit identifier for measured values             | string
-   \c ts        | text size [width, line-height, heading-height]  | decimal-list-3
-   \c tp        | text placement [-1, +1 per axis] (2)            | decimal-list-2..4
-   \c rm        | measurement rounding mode (3)                   | integer \| integer-list-2
-   \c cmh       | minimum horizontal cell size                    | decimal
-   \c cmv       | minimum vertical cell size                      | decimal
-   \c layers    | drafting layer names to render this object on   | string-list
-   \c window    | return bounding rectangle instead of geometry   | boolean
-   \c zp        | zone/window alignment scaler [-1, +1]           | decimal-list-2 \| decimal
-   \c line      | border line config [width, [style]]             | value-list-2
+   parameter    | data type                 | meaning
+  :------------:|:-------------------------:|:----------------------------------------------
+   \c w         | decimal                   | line weight (width multiplier)
+   \c s         | integer \| integer-list   | line style; see \ref draft_line()
+   \c a         | integer \| integer-list-5 | arrowhead style; see \ref draft_arrow()
+   \c a1, \c a2 | integer \| integer-list-5 | per-endpoint arrowhead overrides
+   \c o         | point-2d                  | origin or center coordinate (1)
+   \c off       | decimal \| decimal-list-2 | dimension line offset distance (1)
+   \c t         | string \| string-list     | text string or measured-value override
+   \c u         | string                    | unit identifier for measured values
+   \c ts        | decimal-list-3            | text size [width, line-height, heading-height]
+   \c tp        | decimal-list-2..4         | text placement [-1, +1 per axis] (2)
+   \c rm        | integer \| integer-list-2 | measurement rounding mode (3)
+   \c cmh       | decimal                   | minimum horizontal cell size
+   \c cmv       | decimal                   | minimum vertical cell size
+   \c layers    | string-list               | drafting layer names to render this object on
+   \c window    | boolean                   | return bounding rectangle instead of geometry
+   \c zp        | decimal-list-2 \| decimal | zone/window alignment scaler [-1, +1]
+   \c line      | value-list-2              | border line config [width, [style]]
 
   (1) \c o is the unified name for origin and center coordinates across
       all modules.  Dimension modules currently use \c c for this
@@ -139,14 +139,14 @@
 
   Default layer assignments by module category:
 
-   category         | default layer name
-  :-----------------|:-------------------
-   general geometry | \c "default"
-   sheet / frame    | \c "sheet"
-   tables           | \c "table"
-   notes            | \c "note"
-   title block      | \c "titleblock"
-   dimensions       | \c "dim"
+    category          | default layer name
+  :-------------------|:------------------:
+    general geometry  | \c "default"
+    sheet / frame     | \c "sheet"
+    tables            | \c "table"
+    notes             | \c "note"
+    title block       | \c "titleblock"
+    dimensions        | \c "dim"
 
   To isolate a drawing phase, restrict \ref draft_layers_show:
 
