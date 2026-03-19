@@ -109,6 +109,9 @@ doxygen_html_footer               := share/doxygen/html_footer.html
 doxygen_html_css                  := share/doxygen/html_style.css
 doxygen_layout                    := share/doxygen/html_layout.xml
 
+example_path_add                  := share/examples/ \
+                                     share/templates/
+
 docs_group_id                     := omdl
 project_logo                      := docs_home_logo_top_55x55
 

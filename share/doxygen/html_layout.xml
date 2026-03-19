@@ -20,7 +20,7 @@
     <!-- type=modules changed to type=topics in doxygen 1.9.8 -->
     <tab type="topics" visible="yes"
       title="library"
-      intro="Library API components members and groups:"
+      intro="Library API component members and groups:"
     />
 
     <tab type="globals" visible="yes"
@@ -28,14 +28,14 @@
       intro="Library global definitions:"
     />
 
-    <tab type="examples" visible="yes"
-      title="examples"
-      intro="Library use examples:"
+    <tab type="filelist" visible="yes"
+      title="files"
+      intro="Library files:"
     />
 
-    <tab type="filelist" visible="yes"
-      title="file"
-      intro="Library files:"
+    <tab type="examples" visible="yes"
+      title="examples"
+      intro="Library components and use examples:"
     />
 
     <tab type="usergroup" title="GitHub">
