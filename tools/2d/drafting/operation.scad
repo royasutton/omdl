@@ -584,7 +584,7 @@ module draft_axes
 *******************************************************************************/
 module draft_ruler
 (
-  units = "mm",
+  units = length_unit_base,
   marks = 10,
   groups = 5,
   mark_size = 1,
