@@ -933,7 +933,9 @@ BEGIN_SCOPE draft_style1;
     include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
+*/
 
+/*
 BEGIN_SCOPE sheet_sizes;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
@@ -952,7 +954,9 @@ BEGIN_SCOPE sheet_sizes;
     include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
+*/
 
+/*
 BEGIN_SCOPE sheet_config;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
@@ -968,7 +972,9 @@ BEGIN_SCOPE sheet_config;
     include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
+*/
 
+/*
 BEGIN_SCOPE sheet_config_keys;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;

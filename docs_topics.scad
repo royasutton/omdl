@@ -450,9 +450,6 @@
   - Developers can maintain control over which features are integrated,
     supporting flexible recomposition and integration with other
     libraries.
-
-  For practical examples of how to include additional modules, see the
-  script in \ref tools_drafting.
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//

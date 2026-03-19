@@ -46,6 +46,8 @@
     [round_d]: \ref round_d()
     [round_s]: \ref round_s()
     [style]: \ref draft_line()
+
+    [conventions]: \ref tools_2d_drafting_conventions
   )
 *******************************************************************************/
 
@@ -99,9 +101,10 @@
 
   \param    w <decimal> The line weight.
   \param    s <integer | integer-list> The line [style].
-  \param    a <integer | integer-list-5> The arrowhead style. A single integer selects
-            the style; a list of up to 5 fields customises fill, side, length, and angle
-            — see the field table in [arrow].
+  \param    a <integer | integer-list-5> The arrowhead style. A single
+            integer selects the style; a list of up to 5 fields
+            customizes fill, side, length, and angle — see the field
+            table in [arrow].
 
   \param    off <decimal> The leader point offset.
 
@@ -110,9 +113,9 @@
 
   \param    window <boolean> Return text window rectangle.
   \param    layers <string-list> The list of drafting layer names to
-            render this object on. Defaults to the "dim" — rendered with dimension annotations.
-            See \ref draft_layers_show and the layer conventions in
-            \ref tools_drafting "Drafting".
+            render this object on. Defaults to the "dim"; rendered
+            with dimension annotations. See \ref draft_layers_show and
+            the layer [conventions].
 
   \details
 
@@ -240,14 +243,17 @@ module draft_dim_leader
 
   \param    w <decimal> The line weight.
   \param    s <integer | integer-list> The line [style].
-  \param    a <integer | integer-list-5> The arrowhead style applied to both ends. A
-            single integer selects the style; a list of up to 5 fields customises fill,
-            side, length, and angle — see the field table in [arrow].
 
-  \param    a1 <integer | integer-list-5> The arrowhead 1 override; when set, takes
-            precedence over \p a for endpoint 1. See the field table in [arrow].
-  \param    a2 <integer | integer-list-5> The arrowhead 2 override; when set, takes
-            precedence over \p a for endpoint 2. See the field table in [arrow].
+  \param    a <integer | integer-list-5> The arrowhead style applied to
+            both ends. A single integer selects the style; a list of up
+            to 5 fields customises fill, side, length, and angle; see
+            the field table in [arrow].
+  \param    a1 <integer | integer-list-5> The arrowhead 1 override;
+            when set, takes precedence over \p a for endpoint 1. See
+            the field table in [arrow].
+  \param    a2 <integer | integer-list-5> The arrowhead 2 override;
+            when set, takes precedence over \p a for endpoint 2. See
+            the field table in [arrow].
 
   \param    off <decimal> The dimension line offset.
 
@@ -257,7 +263,7 @@ module draft_dim_leader
             \ref draft_note() as its \p size parameter.
   \param    tp <decimal-list-2..4> The text placement point.
             A list [tpx, tpy] of decimals that scales the note box
-            position along each axis (−1=left/bottom … +1=right/top).
+            position along each axis (−1=left/bottom, +1=right/top).
             An optional 4th element \c tp[3] adds a rotation offset in
             degrees applied on top of the computed text angle.
   \param    rm <integer> The measurement rounding mode.
@@ -267,9 +273,9 @@ module draft_dim_leader
   \param    cmv <decimal> The vertical height minimum unit cell size.
 
   \param    layers <string-list> The list of drafting layer names to
-            render this object on. Defaults to the "dim" — rendered with dimension annotations.
-            See \ref draft_layers_show and the layer conventions in
-            \ref tools_drafting "Drafting".
+            render this object on. Defaults to the "dim"; rendered with
+            dimension annotations. See \ref draft_layers_show and the
+            layer [conventions].
 
   \details
 
@@ -463,17 +469,20 @@ module draft_dim_line
 
   \param    w <decimal> The line weight.
   \param    s <integer | integer-list> The line [style].
-  \param    a <integer | integer-list-5> The arrowhead style applied to both ends. A
-            single integer selects the style; a list of up to 5 fields customises fill,
-            side, length, and angle — see the field table in [arrow].
 
-  \param    a1 <integer | integer-list-5> The arrowhead 1 override; when set, takes
-            precedence over \p a for endpoint 1. See the field table in [arrow].
-  \param    a2 <integer | integer-list-5> The arrowhead 2 override; when set, takes
-            precedence over \p a for endpoint 2. See the field table in [arrow].
+  \param    a <integer | integer-list-5> The arrowhead style applied to
+            both ends. A single integer selects the style; a list of up
+            to 5 fields customizes fill, side, length, and angle; see
+            the field table in [arrow].
+  \param    a1 <integer | integer-list-5> The arrowhead 1 override;
+            when set, takes precedence over \p a for endpoint 1. See
+            the field table in [arrow].
+  \param    a2 <integer | integer-list-5> The arrowhead 2 override;
+            when set, takes precedence over \p a for endpoint 2. See
+            the field table in [arrow].
 
-  \param    off <decimal | decimal-list-2> The dimension line offset. A list
-            [o1, o2] of decimals or a single decimal for (o1=o2).
+  \param    off <decimal | decimal-list-2> The dimension line offset. A
+            list [o1, o2] of decimals or a single decimal for (o1=o2).
 
   \param    ts <decimal-list-3> The text size specification
             <width, line-height, heading-height>. Sets the note box cell
@@ -481,7 +490,7 @@ module draft_dim_line
             \ref draft_note() as its \p size parameter.
   \param    tp <decimal-list-2..4> The text placement point.
             A list [tpx, tpy] of decimals that scales the note box
-            position along each axis (−1=left/bottom … +1=right/top).
+            position along each axis (−1=left/bottom, +1=right/top).
             An optional 4th element \c tp[3] adds a rotation offset in
             degrees applied on top of the computed text angle.
   \param    rm <integer> The measurement rounding mode.
@@ -491,9 +500,9 @@ module draft_dim_line
   \param    cmv <decimal> The vertical height minimum unit cell size.
 
   \param    layers <string-list> The list of drafting layer names to
-            render this object on. Defaults to the "dim" — rendered with dimension annotations.
-            See \ref draft_layers_show and the layer conventions in
-            \ref tools_drafting "Drafting".
+            render this object on. Defaults to the "dim"; rendered with
+            dimension annotations. See \ref draft_layers_show and the
+            layer [conventions].
 
   \details
 
@@ -673,14 +682,17 @@ module draft_dim_radius
 
   \param    w <decimal> The arc weight.
   \param    s <integer | integer-list> The arc [style].
-  \param    a <integer | integer-list-5> The arrowhead style applied to both ends. A
-            single integer selects the style; a list of up to 5 fields customises fill,
-            side, length, and angle — see the field table in [arrow].
 
-  \param    a1 <integer | integer-list-5> The arrowhead 1 override; when set, takes
-            precedence over \p a for endpoint 1. See the field table in [arrow].
-  \param    a2 <integer | integer-list-5> The arrowhead 2 override; when set, takes
-            precedence over \p a for endpoint 2. See the field table in [arrow].
+  \param    a <integer | integer-list-5> The arrowhead style applied to
+            both ends. A single integer selects the style; a list of up
+            to 5 fields customises fill, side, length, and angle; see
+            the field table in [arrow].
+  \param    a1 <integer | integer-list-5> The arrowhead 1 override;
+            when set, takes precedence over \p a for endpoint 1. See
+            the field table in [arrow].
+  \param    a2 <integer | integer-list-5> The arrowhead 2 override;
+            when set, takes precedence over \p a for endpoint 2. See
+            the field table in [arrow].
 
   \param    off <decimal> The dimension arc offset.
 
@@ -690,7 +702,7 @@ module draft_dim_radius
             \ref draft_note() as its \p size parameter.
   \param    tp <decimal-list-2..4> The text placement point.
             A list [tpx, tpy] of decimals that scales the note box
-            position along each axis (−1=left/bottom … +1=right/top).
+            position along each axis (−1=left/bottom, +1=right/top).
             An optional 3rd element \c tp[2] offsets the text pivot
             angle (degrees) along the arc, and an optional 4th element
             \c tp[3] adds a rotation offset in degrees applied on top
@@ -702,9 +714,9 @@ module draft_dim_radius
   \param    cmv <decimal> The vertical height minimum unit cell size.
 
   \param    layers <string-list> The list of drafting layer names to
-            render this object on. Defaults to the "dim" — rendered with dimension annotations.
-            See \ref draft_layers_show and the layer conventions in
-            \ref tools_drafting "Drafting".
+            render this object on. Defaults to the "dim"; rendered with
+            dimension annotations. See \ref draft_layers_show and the
+            layer [conventions].
 
   \details
 
@@ -864,19 +876,20 @@ module draft_dim_angle
             A 2d line, vector, or decimal angle.
   \param    l <decimal> The cross line length.
 
-  \param    e <decimal | decimal-list-4> The length of the extension lines.
-            A list [e1, e2, e3, e4] of decimals or a single decimal for
-            (e1=e2=e3=e4).
+  \param    e <decimal | decimal-list-4> The length of the extension
+            lines. A list [e1, e2, e3, e4] of decimals or a single
+            decimal for (e1=e2=e3=e4).
   \param    es <integer | integer-list> The extension line [style].
-            Defaults to \c dim-center-extension-style from \ref draft_config_map.
+            Defaults to \c dim-center-extension-style from \ref
+            draft_config_map.
 
   \param    w <decimal> The line weight.
   \param    s <integer | integer-list> The line [style].
 
   \param    layers <string-list> The list of drafting layer names to
-            render this object on. Defaults to the "dim" — rendered with dimension annotations.
-            See \ref draft_layers_show and the layer conventions in
-            \ref tools_drafting "Drafting".
+            render this object on. Defaults to the "dim"; rendered with
+            dimension annotations. See \ref draft_layers_show and the
+            layer [conventions].
 
   \details
 

@@ -41,6 +41,7 @@
 
   \amu_define group_references
   (
+    [conventions]: \ref tools_2d_drafting_conventions
   )
 *******************************************************************************/
 
@@ -66,13 +67,14 @@
 //! Check if any identified layers are active.
 /***************************************************************************//**
   \param    layers <string-list> The list of drafting layer names to
-            render this object on. Defaults to the "default" — the general-purpose layer.
-            See \ref draft_layers_show and the layer conventions in
-            \ref tools_drafting "Drafting".
+            render this object on. Defaults to the "default"; the
+            general-purpose layer. See \ref draft_layers_show and the
+            layer [conventions].
 
   \returns  <boolean> \b true if any identified layer is active as
             indicated by \ref draft_layers_show.
 
+  \amu_eval(${group_references})
   \private
 *******************************************************************************/
 function _draft_layers_any_active

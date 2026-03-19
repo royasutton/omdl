@@ -41,6 +41,13 @@
 
   \amu_define group_references
   (
+    [style]: \ref draft_line()
+    [arrow]: \ref draft_arrow()
+
+    [styles]: \ref draft_line()
+    [arrows]: \ref draft_arrow()
+
+    [conventions]: \ref tools_2d_drafting_conventions
   )
 *******************************************************************************/
 
@@ -66,15 +73,17 @@
 //! Assign one or more layers to child objects.
 /***************************************************************************//**
   \param    layers <string-list> The list of drafting layer names to
-            render this object on. Defaults to the "default" — the general-purpose layer.
-            See \ref draft_layers_show and the layer conventions in
-            \ref tools_drafting "Drafting".
+            render this object on. Defaults to the "default"; the
+            general-purpose layer. See \ref draft_layers_show and the
+            layer [conventions].
 
   \details
 
     All children will be assigned the specified layer or layers and
     will be subsequently shown only when one of these layers are active
     as indicated by \ref draft_layers_show.
+
+  \amu_eval(${group_references})
 *******************************************************************************/
 module draft_in_layers
 (
@@ -204,15 +213,16 @@ module draft_move
             overrides origin line <width, [style], length, [arrow]>.
 
   \param    check <boolean> When \b true, validates the current sheet
-            configuration and size tables and prints a diagnostic report
-            to the console via \c table_check(). No geometry is affected.
-            Useful during design setup to confirm that \ref draft_sheet_config
-            and \ref draft_sheet_size are pointing to recognised entries.
+            configuration and size tables and prints a diagnostic
+            report to the console via \c table_check(). No geometry is
+            affected. Useful during design setup to confirm that \ref
+            draft_sheet_config and \ref draft_sheet_size are pointing
+            to recognized entries.
 
   \param    layers <string-list> The list of drafting layer names to
-            render this object on. Defaults to the "sheet" — rendered with sheet frame and rulers.
-            See \ref draft_layers_show and the layer conventions in
-            \ref tools_drafting "Drafting".
+            render this object on. Defaults to the "sheet"; rendered
+            with sheet frame and rulers. See \ref draft_layers_show and
+            the layer [conventions].
 
   \details
 
@@ -220,19 +230,18 @@ module draft_move
     current sheet configuration. The sheet configuration defaults are
     set by \ref draft_sheet_config.
 
-    The parameters \p sheet, \p frame, \p zone, and \p grid each accept a
-    list of two values. The first value sets the construction line
+    The parameters \p sheet, \p frame, \p zone, and \p grid each accept
+    a list of two values. The first value sets the construction line
     width and the second sets the construction line style; <width,
-    style>. The style value may also be a list to configure the details
+    [style]>. The style value may also be a list to configure the details
     of the style as documented in draft_line(). The parameter \p origin
-    accepts a list of four values: <width, style, length, arrow>. The
-    style may be any of those available in draft_line() and the arrow
-    may be any available in draft_arrow().
+    accepts a list of four values: <width, [style], length, [arrow]>.
+    The style may be any of those available in draft_line() and the
+    arrow may be any available in draft_arrow().
 
     \amu_eval ( html_image_w=512 latex_image_w="3.00in" object=draft_sheet ${object_diagram_2d} )
 
-  [style]: \ref draft_line()
-  [arrow]: \ref draft_arrow()
+  \amu_eval(${group_references})
 *******************************************************************************/
 module draft_sheet
 (
@@ -442,9 +451,9 @@ module draft_sheet
   \param    ts <decimal> The axes label text size.
 
   \param    layers <string-list> The list of drafting layer names to
-            render this object on. Defaults to the "sheet" — rendered with sheet frame and rulers.
-            See \ref draft_layers_show and the layer conventions in
-            \ref tools_drafting "Drafting".
+            render this object on. Defaults to the "sheet"; rendered
+            with sheet frame and rulers. See \ref draft_layers_show and
+            the layer [conventions].
 
   \details
 
@@ -453,8 +462,7 @@ module draft_sheet
     When \p size is not specified, the axes will span the entire sheet
     frame.
 
-  [styles]: \ref draft_line()
-  [arrows]: \ref draft_arrow()
+  \amu_eval(${group_references})
 *******************************************************************************/
 module draft_axes
 (
@@ -564,13 +572,15 @@ module draft_axes
   \param    w <decimal> The line segment weight.
 
   \param    layers <string-list> The list of drafting layer names to
-            render this object on. Defaults to the "sheet" — rendered with sheet frame and rulers.
-            See \ref draft_layers_show and the layer conventions in
-            \ref tools_drafting "Drafting".
+            render this object on. Defaults to the "sheet"; rendered
+            with sheet frame and rulers. See \ref draft_layers_show and
+            the layer [conventions].
 
   \details
 
     \amu_eval ( html_image_w=512 latex_image_w="3.00in" object=draft_ruler ${object_diagram_2d} )
+
+  \amu_eval(${group_references})
 *******************************************************************************/
 module draft_ruler
 (
@@ -666,9 +676,9 @@ module draft_ruler
   \param    window <boolean> Return table window rectangle.
 
   \param    layers <string-list> The list of drafting layer names to
-            render this object on. Defaults to the "table" — rendered with tables.
-            See \ref draft_layers_show and the layer conventions in
-            \ref tools_drafting "Drafting".
+            render this object on. Defaults to the "table"; rendered
+            with tables. See \ref draft_layers_show and the layer
+            [conventions].
 
   \details
 
@@ -677,6 +687,8 @@ module draft_ruler
     | see: \ref draft_config_map  |
     |:---------------------------:|
     | table-text-format           |
+
+  \amu_eval(${group_references})
 *******************************************************************************/
 module draft_table
 (
@@ -817,13 +829,15 @@ module draft_table
   \param    window <boolean> Return table window rectangle.
 
   \param    layers <string-list> The list of drafting layer names to
-            render this object on. Defaults to the "table" — rendered with tables.
-            See \ref draft_layers_show and the layer conventions in
-            \ref tools_drafting "Drafting".
+            render this object on. Defaults to the "table"; rendered
+            with tables. See \ref draft_layers_show and the layer
+            [conventions].
 
   \details
 
     \amu_eval ( html_image_w=768 latex_image_w="4.50in" object=draft_ztable ${object_diagram_2d} )
+
+  \amu_eval(${group_references})
 *******************************************************************************/
 module draft_ztable
 (
@@ -965,12 +979,9 @@ module draft_ztable
   \param    window <boolean> Return table window rectangle.
 
   \param    layers <string-list> The list of drafting layer names to
-            render this object on. Defaults to the "titleblock" — rendered with the title block.
-            See \ref draft_layers_show and the layer conventions in
-            \ref tools_drafting "Drafting".
-            render this object on. Defaults to the "note" — rendered with text notes.
-            See \ref draft_layers_show and the layer conventions in
-            \ref tools_drafting "Drafting".
+            render this object on. Defaults to the "note"; rendered
+            with text notes. See \ref draft_layers_show and the layer
+            [conventions].
 
   \details
 
@@ -979,7 +990,7 @@ module draft_ztable
 
     \amu_eval ( html_image_w=768 latex_image_w="4.50in" object=draft_note ${object_diagram_2d} )
 
-  [style]: \ref draft_line()
+  \amu_eval(${group_references})
 *******************************************************************************/
 module draft_note
 (
@@ -1041,8 +1052,7 @@ module draft_note
   \details
 
     A title block is a ztable with a predetermined layout specified by
-    a style map. See the \ref tools_drafting_config "configuration"
-    section for the available title block style maps.
+    a style map.
 
   \sa draft_title_block_map_style1.
 *******************************************************************************/
