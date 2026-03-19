@@ -41,6 +41,11 @@
 
   \amu_define group_references
   (
+    [arrow]: \ref draft_arrow()
+    [facets]: \ref get_fn()
+    [round_d]: \ref round_d()
+    [round_s]: \ref round_s()
+    [style]: \ref draft_line()
   )
 *******************************************************************************/
 
@@ -113,8 +118,7 @@
 
     \amu_eval ( html_image_w=256 latex_image_w="1.50in" object=draft_dim_leader ${object_diagram_2d} )
 
-  [style]: \ref draft_line()
-  [arrow]: \ref draft_arrow()
+  \amu_eval(${group_references})
 *******************************************************************************/
 module draft_dim_leader
 (
@@ -276,10 +280,7 @@ module draft_dim_leader
 
     \amu_eval ( html_image_w=512 latex_image_w="3.00in" object=draft_dim_line ${object_diagram_2d} )
 
-  [style]: \ref draft_line()
-  [arrow]: \ref draft_arrow()
-  [round_d]: \ref round_d()
-  [round_s]: \ref round_s()
+  \amu_eval(${group_references})
 *******************************************************************************/
 module draft_dim_line
 (
@@ -498,10 +499,7 @@ module draft_dim_line
 
     \amu_eval ( html_image_w=256 latex_image_w="1.50in" object=draft_dim_radius ${object_diagram_2d} )
 
-  [style]: \ref draft_line()
-  [arrow]: \ref draft_arrow()
-  [round_d]: \ref round_d()
-  [round_s]: \ref round_s()
+  \amu_eval(${group_references})
 *******************************************************************************/
 module draft_dim_radius
 (
@@ -712,16 +710,7 @@ module draft_dim_radius
 
     \amu_eval ( html_image_w=256 latex_image_w="1.50in" object=draft_dim_angle ${object_diagram_2d} )
 
-  [facets]: \ref get_fn()
-  [style]: \ref draft_line()
-  [arrow]: \ref draft_arrow()
-  [round_d]: \ref round_d()
-  [round_s]: \ref round_s()
-
-  \todo Naming inconsistency now resolved in signature: \p c renamed to \p o
-        (center/origin) and \p o renamed to \p off (offset) in this module.
-        See the parameter conventions table in
-        \ref tools_drafting "Drafting".
+  \amu_eval(${group_references})
 *******************************************************************************/
 module draft_dim_angle
 (
@@ -893,7 +882,7 @@ module draft_dim_angle
 
     \amu_eval ( html_image_w=512 latex_image_w="3.00in" object=draft_dim_center ${object_diagram_2d} )
 
-  [style]: \ref draft_line()
+  \amu_eval(${group_references})
 *******************************************************************************/
 module draft_dim_center
 (
