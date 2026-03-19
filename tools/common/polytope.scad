@@ -78,7 +78,7 @@
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 
-  [specification]: \ref dt_index
+  [specification]: \ref index_sel()
 *******************************************************************************/
 module polytope_number
 (
@@ -211,7 +211,7 @@ module polytope_number
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 
-  [specification]: \ref dt_index
+  [specification]: \ref index_sel()
 *******************************************************************************/
 module polytope_frame
 (

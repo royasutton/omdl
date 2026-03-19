@@ -1316,7 +1316,7 @@ module draft_rectangle
 
     The line segments are constructed by draft_line().
 
-  [specification]: \ref dt_index
+  [specification]: \ref index_sel()
 *******************************************************************************/
 module draft_polygon
 (
