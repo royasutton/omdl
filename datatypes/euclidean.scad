@@ -50,6 +50,8 @@
 /***************************************************************************//**
   \amu_define group_references
   (
+    [line conventions]: \ref data_types_lines
+    [plane normal]: \ref data_types_normals
   )
 *******************************************************************************/
 
@@ -89,7 +91,9 @@
 
   \details
 
-    See \ref dt_line for argument specification and conventions.
+    See [line conventions] for more information.
+
+  \amu_eval(${group_references})
 *******************************************************************************/
 function is_point
 (
@@ -108,7 +112,9 @@ function is_point
 
   \details
 
-    See \ref dt_line for argument specification and conventions.
+    See [line conventions] for more information.
+
+  \amu_eval(${group_references})
 *******************************************************************************/
 function is_vector
 (
@@ -127,7 +133,9 @@ function is_vector
 
   \details
 
-    See \ref dt_line for argument specification and conventions.
+    See [line conventions] for more information.
+
+  \amu_eval(${group_references})
 *******************************************************************************/
 function is_line
 (
@@ -148,7 +156,9 @@ function is_line
 
   \details
 
-    See \ref dt_line for argument specification and conventions.
+    See [line conventions] for more information.
+
+  \amu_eval(${group_references})
 *******************************************************************************/
 function is_vol
 (
@@ -166,7 +176,9 @@ function is_vol
 
   \details
 
-    See \ref dt_line for argument specification and conventions.
+    See [line conventions] for more information.
+
+  \amu_eval(${group_references})
 *******************************************************************************/
 function is_plane
 (
@@ -241,7 +253,7 @@ function distance_pl
 //! Compute the shortest distance between a point and a plane.
 /***************************************************************************//**
   \param    p <point> A point coordinate.
-  \param    n <pnorm> A plane normal [specification].
+  \param    n <pnorm> A [plane normal].
   \param    np <point> A point coordinate on the plane \p n.
 
   \returns  (1) <decimal> The shortest distance between the point and
@@ -253,7 +265,7 @@ function distance_pl
 
   \sa point_closest_pn().
 
-  [specification]: \ref dt_pnorm
+  \amu_eval(${group_references})
 *******************************************************************************/
 function distance_pn
 (
@@ -321,7 +333,7 @@ function point_closest_pl
 //! Compute the coordinates of the closest point on a plane to a given point.
 /***************************************************************************//**
   \param    p <point> A point coordinate.
-  \param    n <pnorm> A plane normal [specification].
+  \param    n <pnorm> A [plane normal].
   \param    np <point> A point coordinate on the plane \p n.
 
   \returns  (1) <point-3d> The coordinates of the point on the plane
@@ -329,7 +341,7 @@ function point_closest_pl
             (2) Returns \b undef when \p p or \p np is not a point or
                 when \p n is not a plane.
 
-  [specification]: \ref dt_pnorm
+  \amu_eval(${group_references})
 *******************************************************************************/
 function point_closest_pn
 (
@@ -441,7 +453,9 @@ function interpolate2d_l_pp
     terminal point (or head) can be specified by one of, in order of
     precedence, \p p2, \p v, or \p a.
 
-    See \ref dt_line for argument specification and conventions.
+    See [line conventions] for more information.
+
+  \amu_eval(${group_references})
 *******************************************************************************/
 function line2d_new
 (
@@ -484,7 +498,9 @@ function line2d_new
     terminal point (or head) can be specified by one of, in order of
     precedence, \p p2, \p v, or \p a and \p t.
 
-    See \ref dt_line for argument specification and conventions.
+    See [line conventions] for more information.
+
+  \amu_eval(${group_references})
 *******************************************************************************/
 function line3d_new
 (
@@ -534,7 +550,9 @@ function line3d_new
     function has more overhead when compared to line2d_new() and
     line3d_new().
 
-    See \ref dt_line for argument specification and conventions.
+    See [line conventions] for more information.
+
+  \amu_eval(${group_references})
 *******************************************************************************/
 function line_new
 (
@@ -588,7 +606,9 @@ function line_new
 
   \details
 
-    See \ref dt_line for argument specification and conventions.
+    See [line conventions] for more information.
+
+  \amu_eval(${group_references})
 *******************************************************************************/
 function line_dim
 (
@@ -606,7 +626,9 @@ function line_dim
 
   \details
 
-    See \ref dt_line for argument specification and conventions.
+    See [line conventions] for more information.
+
+  \amu_eval(${group_references})
 *******************************************************************************/
 function line_tp
 (
@@ -624,7 +646,9 @@ function line_tp
 
   \details
 
-    See \ref dt_line for argument specification and conventions.
+    See [line conventions] for more information.
+
+  \amu_eval(${group_references})
 *******************************************************************************/
 function line_ip
 (
@@ -647,7 +671,9 @@ function line_ip
 
   \details
 
-    See \ref dt_line for argument specification and conventions.
+    See [line conventions] for more information.
+
+  \amu_eval(${group_references})
 *******************************************************************************/
 function vol_to_origin
 (
@@ -672,7 +698,9 @@ function vol_to_origin
     When \p p is not specified, the line or vector is moved to the
     origin.
 
-    See \ref dt_line for argument specification and conventions.
+    See [line conventions] for more information.
+
+  \amu_eval(${group_references})
 *******************************************************************************/
 function vol_to_point
 (
@@ -699,14 +727,11 @@ function vol_to_point
 
   \details
 
-    This function supports the abstraction outlined in \ref dt_line.
-    The built-in operation will be more efficient in situations that do
-    not make use of this abstraction.
-
-    See \ref dt_line for argument specification and conventions. See
+    This function supports the abstraction in [line conventions]. See
     [Wikipedia] for more information.
 
-    [Wikipedia]: https://en.wikipedia.org/wiki/Dot_product
+  [Wikipedia]: https://en.wikipedia.org/wiki/Dot_product
+  \amu_eval(${group_references})
 *******************************************************************************/
 function dot_ll
 (
@@ -729,17 +754,15 @@ function dot_ll
 
   \details
 
-    This function supports the abstraction outlined in \ref dt_line.
-    The built-in operation will be more efficient in situations that do
-    not make use of the aforementioned abstraction.
+    This function supports the abstraction in [line conventions]. See
+    [Wikipedia] for more information.
 
-    See \ref dt_line for argument specification and conventions. See
-    Wikipedia [cross] and [determinant] for more information.
 
   \note     This function returns the 2x2 determinant for 2d vectors.
 
   [cross]: https://en.wikipedia.org/wiki/Cross_product
   [determinant]: https://en.wikipedia.org/wiki/Determinant
+  \amu_eval(${group_references})
 *******************************************************************************/
 function cross_ll
 (
@@ -770,10 +793,11 @@ function cross_ll
     [l1, l2, l3] = l1 * (l2 x l3)
     \endverbatim
 
-    See \ref dt_line for argument specification and conventions. See
-    [Wikipedia] for more information.
+    See [line conventions] for more information. See [Wikipedia] for
+    more information.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Triple_product
+  \amu_eval(${group_references})
 *******************************************************************************/
 function striple_lll
 (
@@ -809,9 +833,10 @@ function striple_lll
     the positive angle, and the plane and axis of rotation will be that
     which fits this assumed positive angle.
 
-    See \ref dt_line for argument specification and conventions.
+    See [line conventions] for more information.
 
   \sa angle_lll().
+  \amu_eval(${group_references})
 *******************************************************************************/
 function angle_ll
 (
@@ -851,9 +876,10 @@ function angle_ll
 
   \details
 
-    See \ref dt_line for argument specification and conventions.
+    See [line conventions] for more information.
 
   \sa angle_ll().
+  \amu_eval(${group_references})
 *******************************************************************************/
 function angle_lll
 (
@@ -876,7 +902,9 @@ function angle_lll
 
   \details
 
-    See \ref dt_line for argument specification and conventions.
+    See [line conventions] for more information.
+
+  \amu_eval(${group_references})
 *******************************************************************************/
 function unit_l
 (
@@ -898,14 +926,15 @@ function unit_l
 
   \details
 
-    See \ref dt_line for argument specification and conventions. See
-    [Wikipedia] for more information.
+    See [line conventions] for more information. See [Wikipedia] for
+    more information.
 
   \note     When lines or vectors are specified with start and end
             points, this function tests if they are in a planes
             parallel to the coplanar.
 
   [Wikipedia]: https://en.wikipedia.org/wiki/Coplanarity
+  \amu_eval(${group_references})
 *******************************************************************************/
 function are_coplanar_lll
 (
@@ -926,7 +955,7 @@ function are_coplanar_lll
 
 //! Convert a planes' normal specification into a normal vector.
 /***************************************************************************//**
-  \param    n <pnorm> A plane normal [specification].
+  \param    n <pnorm> A [plane normal].
 
   \param    cw <boolean> Point ordering. When the plane specified as
             non-collinear points, this indicates ordering.
@@ -939,9 +968,7 @@ function are_coplanar_lll
     When \p n is not a valid plane, \b undef is returned. The computed
     normal vector is not normalized to its unit vector.
 
-    See \ref dt_pnorm for argument specification and conventions.
-
-  [specification]: \ref dt_pnorm
+  \amu_eval(${group_references})
 *******************************************************************************/
 function plane_to_normal
 (
