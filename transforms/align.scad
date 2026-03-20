@@ -54,7 +54,18 @@
   \anchor \amu_eval(${group})_conventions
   \par Conventions
 
-  - Convention list
+  - The subject line is the line or axis to be moved and is named \p l
+    in all modules. The reference line is the target to align toward
+    and is named \p r in all modules.
+
+  - Alignment point selectors \p lp and \p rp are integers that
+    identify the point on the respective line at which the translation
+    is anchored.
+
+  - The override coordinates \p lpo and \p rpo are only used when \p lp
+    or \p rp is 4.
+
+  - All angles are in degrees.
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -72,15 +83,17 @@
 
     Rotates children so that the direction of \p l is aligned with the
     direction of \p r, then applies an optional axial roll \p ar about
-    \p r.  No translation is performed; use align_ll() when translation
-    to a specific point along \p r is also required.
+    \p r.  The rotation pivot is always the world origin; no
+    translation is performed.  Use align_ll() when translation to a
+    specific point along \p r is also required.
 
     When \p l and \p r are parallel or anti-parallel their cross
     product is the zero vector, which would leave rotate() undefined.
     In that case a perpendicular fallback axis is derived
     automatically: \c cross(ll,x_axis3d_uv) is tried first, then \c
     cross(ll,y_axis3d_uv) if \p l happens to be collinear with the
-    x-axis.
+    x-axis.  The threshold for treating the cross product as near-zero
+    is the library constant grid_fine.
 
     See [line conventions] for more information.
 
@@ -133,6 +146,17 @@ module orient_ll
 
     The specified alignment point for the line \p l will be translated
     to the specified alignment point for the reference line \p r.
+
+    The transform is applied in four layers, from outermost to
+    innermost. First, the world origin is translated to the selected
+    alignment point on \p r. Second, the child is oriented so that the
+    direction of \p l matches the direction of \p r, and the axial roll
+    \p ar is applied about \p r. Third, the offset translation \p to
+    and offset rotation \p ro are applied in the frame of \p r after
+    orientation, meaning \p to shifts along and perpendicular to the
+    reference direction rather than in world coordinates. Fourth, the
+    selected alignment point on \p l is translated back to the origin
+    to anchor the child at the correct position.
 
     | lp, rp  | alignment point                   |
     |:-------:|:----------------------------------|
@@ -214,8 +238,8 @@ module align_ll
     Because the subject line is always the selected Cartesian axis
     rooted at the world origin, the alignment point on the subject line
     is always the origin and cannot be overridden.  The parameters \p
-    lp and \p lpo of align_ll() are therefore fixed to 0 and origin3d
-    respectively and are not exposed here.
+    lp and \p lpo of align_ll() are therefore fixed to \c 0 and \c
+    origin3d respectively and are not exposed here.
 
     | rp      | alignment point                   |
     |:-------:|:----------------------------------|
