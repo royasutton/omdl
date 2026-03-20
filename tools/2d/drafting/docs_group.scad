@@ -85,13 +85,13 @@
    \c s         | integer \| integer-list   | line style; see \ref draft_line()
    \c a         | integer \| integer-list-5 | arrowhead style; see \ref draft_arrow()
    \c a1, \c a2 | integer \| integer-list-5 | per-endpoint arrowhead overrides
-   \c o         | point-2d                  | origin or center coordinate (1)
-   \c off       | decimal \| decimal-list-2 | dimension line offset distance (1)
+   \c o         | point-2d                  | origin or center coordinate
+   \c off       | decimal \| decimal-list-2 | dimension line offset distance
    \c t         | string \| string-list     | text string or measured-value override
    \c u         | string                    | unit identifier for measured values
    \c ts        | decimal-list-3            | text size [width, line-height, heading-height]
-   \c tp        | decimal-list-2..4         | text placement [-1, +1 per axis] (2)
-   \c rm        | integer \| integer-list-2 | measurement rounding mode (3)
+   \c tp        | decimal-list-2..4         | text placement [-1, +1 per axis] (1)
+   \c rm        | integer \| integer-list-2 | measurement rounding mode (2)
    \c cmh       | decimal                   | minimum horizontal cell size
    \c cmv       | decimal                   | minimum vertical cell size
    \c layers    | string-list               | drafting layer names to render this object on
@@ -99,16 +99,10 @@
    \c zp        | decimal-list-2 \| decimal | zone/window alignment scaler [-1, +1]
    \c line      | value-list-2              | border line config [width, [style]]
 
-  (1) \c o is the unified name for origin and center coordinates across
-      all modules.  Dimension modules currently use \c c for this
-      purpose and \c o for the offset distance — a known inconsistency
-      being resolved by renaming the offset parameter to \c off.  Until
-      each module is updated, consult its individual parameter table.
-
-  (2) text placement [-1, +1] per axis with optional \c tp[2] pivot
+  (1) text placement [-1, +1] per axis with optional \c tp[2] pivot
       offset (angle dims) and optional \c tp[3] rotation offset.
 
-  (3) measurement rounding mode: 0=none, 1=round_d, 2=round_s.
+  (2) measurement rounding mode: 0=none, 1=round_d, 2=round_s.
 
   \b Scale \b Variables
 
@@ -135,7 +129,7 @@
   Every module accepts a \c layers parameter.  The global variable \ref
   draft_layers_show lists the layers that will actually be rendered;
   all others are suppressed.  Setting it to \c ["all"] renders
-  everything — \c "all" is a wildcard that matches any layer list.
+  everything; \c "all" is a wildcard that matches any layer list.
 
   Default layer assignments by module category:
 
@@ -157,8 +151,8 @@
   \b Configuration \b and \b Style \b Maps
 
   All style defaults live in \ref draft_config_map, initialised to \ref
-  draft_config_map_style1.  Apply selective overrides with \c
-  map_merge, placing overrides first so they take precedence:
+  draft_config_map_style1.  Apply selective overrides with map_merge(),
+  placing overrides first so they take precedence:
 
   \code{.C}
   draft_config_map =
