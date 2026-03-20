@@ -154,9 +154,9 @@ module align_ll
   rp  = 0,
   ar  = 0,
   to  = origin3d,
-  ro  = zero3d,
-  lpo = origin3d,
-  rpo = origin3d
+  ro  = origin3d,
+  lpo,
+  rpo
 )
 {
   li = point_to_3d(line_ip(l));
@@ -211,6 +211,12 @@ module align_ll
     the reference line \p r.  Equivalent to calling align_ll() with \p
     l fixed to the Cartesian axis selected by \p a.
 
+    Because the subject line is always the selected Cartesian axis
+    rooted at the world origin, the alignment point on the subject line
+    is always the origin and cannot be overridden.  The parameters \p
+    lp and \p lpo of align_ll() are therefore fixed to 0 and origin3d
+    respectively and are not exposed here.
+
     | rp      | alignment point                   |
     |:-------:|:----------------------------------|
     |  0      | none (no translation)             |
@@ -230,8 +236,8 @@ module align_al
   rp  = 0,
   ar  = 0,
   to  = origin3d,
-  ro  = zero3d,
-  rpo = origin3d
+  ro  = origin3d,
+  rpo
 )
 {
   assert
