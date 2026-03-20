@@ -93,8 +93,8 @@ module orient_ll
   ar = 0
 )
 {
-  ll = vol_to_origin(l);
-  lr = vol_to_origin(r);
+  ll = point_to_3d(vol_to_origin(l));
+  lr = point_to_3d(vol_to_origin(r));
 
   ax = cross(ll, lr);
 
@@ -174,17 +174,18 @@ module align_ll
   // translate reference
   translate(select_ci([origin3d, ri, rm, rt, point_to_3d(rpo)], rp))
 
-  // orient and roll line about reference
-  rotate(ar, vol_to_origin(lr))
-  rotate(angle_ll(ll, lr), cross_ll(ll, lr))
+  // orient and roll line about reference (delegates to orient_ll so that the
+  // parallel / anti-parallel fallback axis logic is not duplicated here)
+  orient_ll(ll, lr, ar)
+  {
+    // apply offsets
+    translate(to)
+    rotate(ro)
 
-  // apply offsets
-  translate(to)
-  rotate(ro)
-
-  // translate alignment point
-  translate(-select_ci([origin3d, li, lm, lt, point_to_3d(lpo)], lp))
-  children();
+    // translate alignment point
+    translate(-select_ci([origin3d, li, lm, lt, point_to_3d(lpo)], lp))
+    children();
+  }
 }
 
 //! Align an objects Cartesian axis to reference line or vector.
