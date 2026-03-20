@@ -258,8 +258,8 @@ function distance_pl
 
   \returns  (1) <decimal> The shortest distance between the point and
                 the plane.
-            (2) Returns \b undef when \p p is not a point or \p l is
-                not a line.
+            (2) Returns \b undef when \p p or \p np is not a point or
+                when \p n is not a plane.
 
   \details
 
