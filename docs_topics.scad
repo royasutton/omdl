@@ -362,7 +362,7 @@
   \code{bash}
   $ mkdir tmp && cd tmp
 
-  $ wget https://git.io/setup-omdl.bash
+  $ wget https://raw.githubusercontent.com/royasutton/omdl/master/share/scripts/setup-omdl.bash
 
   $ chmod +x setup-omdl.bash
   \endcode

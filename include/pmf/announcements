@@ -20,7 +20,8 @@ define ANNOUNCE_AMU_VERSION
 
   To install the version:
 
-  $$ wget http://git.io/setup-amu.bash && chmod +x setup-amu.bash
+  $$ wget https://raw.githubusercontent.com/royasutton/openscad-amu/master/share/scripts/setup-amu.bash
+  $$ chmod +x setup-amu.bash
   $$ ./setup-amu.bash --branch $(AMU_TOOL_VERSION) --yes --build --sudo --install
 
 endef
