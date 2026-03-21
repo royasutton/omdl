@@ -75,6 +75,10 @@ define ANNOUNCE_DOXYGEN_VERSION
 
   See: https://github.com/raspberrypi/pico-sdk/issues/1563
 
+  Prebuilt binaries available for manual installation:
+
+  See: https://github.com/doxygen/doxygen/releases/tag/Release_1_9_4
+
 endef
 
 ################################################################################
