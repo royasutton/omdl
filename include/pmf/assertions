@@ -27,6 +27,13 @@ $(call check_version,doxygen,le,1.8.9.1,$(true), \
 endif
 
 #------------------------------------------------------------------------------#
+# require doxygen version 1.9.4 or less
+#------------------------------------------------------------------------------#
+$(call check_version,doxygen,le,1.9.4,$(true), \
+  $(call ANNOUNCE_DOXYGEN_VERSION,1.9.4) \
+)
+
+#------------------------------------------------------------------------------#
 # require imagemagick/convert utility has eps-coder access rights.
 #------------------------------------------------------------------------------#
 ifneq ($(shell identify -list policy | $(grep) EPS),)

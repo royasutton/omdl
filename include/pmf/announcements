@@ -60,6 +60,22 @@ define ANNOUNCE_IMAGEMAGICK_POLICY
 
 endef
 
+define ANNOUNCE_DOXYGEN_VERSION
+
+  This library has been tested to work with Doxygen versions upto $1.
+  Please make sure the installed is less than or equal to this version.
+
+  The formatting breaks when upgrading Doxygen from version 1.9.4 to
+  1.9.8 are primarily due to changes in default configuration settings
+  and stricter Markdown parsing rules. Key changes include how empty
+  lines and indentation are interpreted in comment blocks.
+
+  Formatting migration is underway.
+
+  See: https://github.com/raspberrypi/pico-sdk/issues/1563
+
+endef
+
 ################################################################################
 # eof
 ################################################################################
