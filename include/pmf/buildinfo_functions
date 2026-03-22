@@ -59,7 +59,7 @@ define build_info_general
   omdl version^ $(project_version)^
   openscad-amu version^ $(AMU_TOOL_VERSION)^
   openscad-amu prefix^ $(AMU_TOOL_PREFIX)^
-  selected modules^ $(words $(modules))^
+  selected groups^ $(words $(groups))^
   library files^ $(words $(src_files))^
   embedded scripts^ $(words $(scopes_scripts_source))^
   selected makefiles^ $(words $(scopes_mf))^
@@ -102,11 +102,11 @@ define build_info_scopes
   scopes_mf^ $(words $(scopes_mf))^ $(if $(scopes_mf),...,---)^
 endef
 
-# build_info_modules (empty)
-define build_info_modules
-  ignore_modules_exclude^ ---^ \$(call bool_string,$(ignore_modules_exclude))^
-  modules_exclude^ $(words $(modules_exclude))^ $(if $(modules_exclude),$(modules_exclude),---)^
-  modules^ $(words $(modules))^ $(if $(modules),...,---)^
+# build_info_groups (empty)
+define build_info_groups
+  ignore_groups_exclude^ ---^ \$(call bool_string,$(ignore_groups_exclude))^
+  groups_exclude^ $(words $(groups_exclude))^ $(if $(groups_exclude),$(groups_exclude),---)^
+  groups^ $(words $(groups))^ $(if $(groups),...,---)^
 endef
 
 # build_info_sources (empty)

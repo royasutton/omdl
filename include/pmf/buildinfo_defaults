@@ -35,7 +35,7 @@ buildinfo_groups                        := general \
                                            toolchain \
                                            components \
                                            scopes \
-                                           modules \
+                                           groups \
                                            sources
 
 # output file names

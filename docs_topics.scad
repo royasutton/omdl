@@ -836,17 +836,17 @@
     cell_texts="${bi_scopes}"
   )
 
-  \section build_modules Modules
+  \section build_groups Groups
 
-  \amu_file bi_modules (file="${DOXYGEN_OUTPUT}buildinfo/modules.amu" ++read)
+  \amu_file bi_groups (file="${DOXYGEN_OUTPUT}buildinfo/groups.amu" ++read)
   \amu_table
   (
-    id="bi_modules"
-    table_caption="Modules"
+    id="bi_groups"
+    table_caption="Groups"
     columns="3"
     table_class="amuBuildInfo"
     column_headings="name^count^value"
-    cell_texts="${bi_modules}"
+    cell_texts="${bi_groups}"
   )
 
   \section build_sources Sources
