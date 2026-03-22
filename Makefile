@@ -16,8 +16,10 @@ AMU_PM_INIT                       := $(AMU_PM_PREFIX)amu_pm_init
 AMU_PM_RULES                      := $(AMU_PM_PREFIX)amu_pm_rules
 AMU_PM_DESIGN_FLOW                := df1/
 
+OMDL_MF_LOCAL_PATH                := include/mf
+
 # openscad-amu component extensions to for omdl
-AMU_PM_COMPONENTS_LOCAL_PATH      := include/pmf
+AMU_PM_COMPONENTS_LOCAL_PATH      := $(OMDL_MF_LOCAL_PATH)/df
 AMU_PM_COMPONENTS_LOCAL           := groups \
                                      buildinfo
 
@@ -37,7 +39,7 @@ path_doxygen                      :=
 # Design Flow Init (DO NO EDIT THIS SECTION)
 #------------------------------------------------------------------------------#
 # Include asserts announcements
-include $(AMU_PM_COMPONENTS_LOCAL_PATH)/announcements
+include $(OMDL_MF_LOCAL_PATH)/announcements
 
 ifeq ($(wildcard $(AMU_PM_INIT)),)
   $(info $(call ANNOUNCE_AMU_INIT,AMU_PM_INIT,$(AMU_PM_INIT)))
@@ -51,7 +53,7 @@ version_checks                    := $(true)
 version_checks_skip_warnings      := $(false)
 
 # Include tools and configurations assertions
-include $(AMU_PM_COMPONENTS_LOCAL_PATH)/assertions
+include $(OMDL_MF_LOCAL_PATH)/assertions
 
 #------------------------------------------------------------------------------#
 # Overrides to Default Design Flow Configuration
