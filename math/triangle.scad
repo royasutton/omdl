@@ -804,10 +804,10 @@ BEGIN_SCOPE diagram;
         os = shift_cd(shift_cd(v=c, n=i, r=false), 1, r=false, d=true);
 
         if ( !is_empty( find( mv=i, v=vl )) )
-        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s*1, cmv=s);
+        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), s=0, cmh=s*1, cmv=s);
 
         if ( !is_empty( find( mv=i, v=al )) )
-        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
+        draft_dim_angle(o=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
 
         if ( !is_empty( find( mv=i, v=sl )) )
         draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);
