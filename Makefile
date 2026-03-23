@@ -38,7 +38,7 @@ path_doxygen                      :=
 # Design Flow Init (DO NO EDIT THIS SECTION)
 #------------------------------------------------------------------------------#
 # Include asserts announcements
-include $(AMU_PM_LOCAL_PATH)/announcements
+include $(AMU_PM_LOCAL_PATH)/announcements.mk
 
 ifeq ($(wildcard $(AMU_PM_INIT)),)
   $(info $(call ANNOUNCE_AMU_INIT,AMU_PM_INIT,$(AMU_PM_INIT)))
@@ -52,7 +52,7 @@ version_checks                    := $(true)
 version_checks_skip_warnings      := $(false)
 
 # Include tools and configurations assertions
-include $(AMU_PM_LOCAL_PATH)/assertions
+include $(AMU_PM_LOCAL_PATH)/assertions.mk
 
 #------------------------------------------------------------------------------#
 # Overrides to Default Design Flow Configuration
