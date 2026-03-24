@@ -61,9 +61,11 @@ define build_info_general
   openscad-amu prefix^ $(AMU_TOOL_PREFIX)^
   selected groups^ $(words $(groups))^
   library files^ $(words $(src_files))^
-  embedded scripts^ $(words $(scopes_scripts_source))^
-  selected makefiles^ $(words $(scopes_mf))^
-  selected scripts^ $(words $(scopes_mf))^
+  project makefiles^ $(words $(MAKEFILE_LIST))^
+  source-embedded openscad-amu auxiliary scripts^ $(words $(scopes_scripts_source))^
+  selected auxiliary scripts^ $(words $(scopes_scripts_selected))^
+  selected auxiliary makefile scripts^ $(words $(scopes_mfs))^
+  selected auxiliary makefiles^ $(words $(scopes_mf))^
   build os^ $(os)^
   architecture^ $(arch)^
   build date^ $(datetime)^
@@ -81,13 +83,16 @@ endef
 
 # build_info_components (empty)
 define build_info_components
+  OMDL_PM_PATH^ ---^$(OMDL_PM_PATH)^
   AMU_TOOL_PREFIX^ ---^$(AMU_TOOL_PREFIX)^
   AMU_LIB_PATH^ ---^$(AMU_LIB_PATH)^
+  AMU_PM_PREFIX^ ---^$(AMU_PM_PREFIX)^
+  AMU_PM_SUFFIX^ ---^$(AMU_PM_SUFFIX)^
   AMU_PM_DESIGN_FLOW^ ---^$(AMU_PM_DESIGN_FLOW)^
   AMU_PM_COMPONENTS^ $(words $(AMU_PM_COMPONENTS))^ $(if $(AMU_PM_COMPONENTS),$(AMU_PM_COMPONENTS),---)^
-  AMU_PM_COMPONENTS_ADD^ $(words $(AMU_PM_COMPONENTS_ADD))^ $(if $(AMU_PM_COMPONENTS_ADD),$(AMU_PM_COMPONENTS_ADD),---)^
+  AMU_PM_PREFIX_LOCAL^ ---^$(AMU_PM_PREFIX_LOCAL)^
+  AMU_PM_SUFFIX_LOCAL^ ---^$(AMU_PM_SUFFIX_LOCAL)^
   AMU_PM_COMPONENTS_LOCAL^ $(words $(AMU_PM_COMPONENTS_LOCAL))^ $(if $(AMU_PM_COMPONENTS_LOCAL),$(AMU_PM_COMPONENTS_LOCAL),---)^
-  AMU_PM_COMPONENTS_LOCAL_PATH^ ---^$(AMU_PM_COMPONENTS_LOCAL_PATH)^
 endef
 
 # build_info_scopes (empty)
