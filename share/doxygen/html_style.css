@@ -25,12 +25,16 @@ div.contents code
 
 */
 
+/* use fixed size for amuBuildInfo */
 table.amuBuildInfo
 {
   table-layout: auto;
   width: 75%;
 }
 
+/* margins */
+table.amuTable,
+table.amuImageTable,
 table.amuValidate,
 table.amuBuildInfo,
 table.doxtable,
@@ -42,19 +46,21 @@ table.markdownTable
   margin-bottom: auto;
 }
 
-table.amuValidate td,
-table.amuValidate th,
-table.amuBuildInfo td,
-table.amuBuildInfo th,
-table.doxtable td,
-table.doxtable th,
-table.markdownTable td,
-table.markdownTable th
+/* table boarders */
+table.amuTable td,      table.amuTable th,
+table.amuImageTable td, table.amuImageTable th,
+table.amuValidate td,   table.amuValidate th,
+table.amuBuildInfo td,  table.amuBuildInfo th,
+table.doxtable td,      table.doxtable th,
+table.markdownTable td, table.markdownTable th
 {
   border: 1px solid #2D4068;
   padding: 3px 7px 2px;
 }
 
+/* table headings */
+table.amuTable th,
+table.amuImageTable th,
 table.amuValidate th,
 table.amuBuildInfo th,
 table.doxtable th,
@@ -67,48 +73,50 @@ table.markdownTable th
   padding-top: 5px;
 }
 
-
-/*
-
-  table link
-
-*/
-
-table.doxtable th a,
-table.markdownTable th a
-{ color: white; }
-
-table.doxtable th a:visited,
-table.markdownTable th a:visited
-{ color: lightgray; }
-
-table.doxtable th a:hover,
-table.markdownTable th a:hover
-{ color: gray; }
-
-table.doxtable th a:active,
-table.markdownTable th a:active
-{ color: black; }
-
-
-/*
-
-  table styling
-
-*/
-
+/* alternate table row background colors */
+table.amuTable tr:nth-child(odd) td,
 table.doxtable tr:nth-child(odd) td,
 table.markdownTable tr:nth-child(odd) td
 {
   background-color: #F7F8FB;
 }
 
+/* center columns 2 and 3 in amuBuildInfo */
 table.amuBuildInfo td:nth-child(2),
 table.amuBuildInfo td:nth-child(3)
 {
   text-align: center;
 }
 
+/*
+
+  table links: link, visited, hover, active
+
+*/
+
+table.amuTable th a,
+table.amuImageTable th a,
+table.doxtable th a,
+table.markdownTable th a
+{ color: white; }
+
+table.amuTable th a:visited,
+table.amuImageTable th a:visited,
+table.doxtable th a:visited,
+table.markdownTable th a:visited
+{ color: lightgray; }
+
+table.amuTable th a:hover,
+table.amuImageTable th a:hover,
+table.doxtable th a:hover,
+table.markdownTable th a:hover
+{ color: gray; }
+
+table.amuTable th a:active,
+table.amuImageTable th a:active,
+table.doxtable th a:active,
+table.markdownTable th a:active
+{ color: black; }
 
 
 /* eof */

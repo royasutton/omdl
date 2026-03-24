@@ -6,21 +6,22 @@
 #
 ################################################################################
 
-AMU_TOOL_VERSION                  := v3.5
+OMDL_PM_PATH                      := include/mk
+
+AMU_TOOL_VERSION                  := v3.6
 
 AMU_TOOL_PREFIX                   := /usr/local/bin/
 AMU_LIB_PATH                      := /usr/local/share/openscad-amu/$(AMU_TOOL_VERSION)
 
-AMU_PM_PREFIX                     := $(AMU_LIB_PATH)/include/pmf/
-AMU_PM_INIT                       := $(AMU_PM_PREFIX)amu_pm_init
-AMU_PM_RULES                      := $(AMU_PM_PREFIX)amu_pm_rules
-AMU_PM_DESIGN_FLOW                := df1/
+AMU_PM_DESIGN_FLOW                := df1
+AMU_PM_COMPONENTS_ADD             := groups
+AMU_PM_PREFIX                     := $(AMU_LIB_PATH)/include/mk/df/
+AMU_PM_INIT                       := $(AMU_PM_PREFIX)amu_pm_init.mk
+AMU_PM_RULES                      := $(AMU_PM_PREFIX)amu_pm_rules.mk
 
 # openscad-amu local component extensions to for omdl
-AMU_PM_LOCAL_PATH                 := include/mk
-AMU_PM_COMPONENTS_LOCAL_PATH      := $(AMU_PM_LOCAL_PATH)/df
-AMU_PM_COMPONENTS_LOCAL           := groups \
-                                     buildinfo
+AMU_PM_PREFIX_LOCAL               := $(OMDL_PM_PATH)/df/
+AMU_PM_COMPONENTS_LOCAL           := buildinfo
 
 # Uncomment for increased verbosity and/or debugging.
 # AMU_PM_VERBOSE                  := defined
@@ -38,7 +39,7 @@ path_doxygen                      :=
 # Design Flow Init (DO NO EDIT THIS SECTION)
 #------------------------------------------------------------------------------#
 # Include asserts announcements
-include $(AMU_PM_LOCAL_PATH)/announcements.mk
+include $(OMDL_PM_PATH)/announcements.mk
 
 ifeq ($(wildcard $(AMU_PM_INIT)),)
   $(info $(call ANNOUNCE_AMU_INIT,AMU_PM_INIT,$(AMU_PM_INIT)))
@@ -52,7 +53,7 @@ version_checks                    := $(true)
 version_checks_skip_warnings      := $(false)
 
 # Include tools and configurations assertions
-include $(AMU_PM_LOCAL_PATH)/assertions.mk
+include $(OMDL_PM_PATH)/assertions.mk
 
 #------------------------------------------------------------------------------#
 # Overrides to Default Design Flow Configuration
