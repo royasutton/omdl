@@ -42,7 +42,20 @@ $(amu_pm_d1)
 	$$(file > $$@,$$(call build_info_$1))
 	$$(call target_end)
 
-# add buildinfo_stamp dependency
+# add dependency on source files unconditional
+$(call buildinfo_target_name,$1): $(src_files)
+
+# add dependency on project files as configured
+ifeq ($(targets_depends_project),$(true))
+$(call buildinfo_target_name,$1): $(MAKEFILE_LIST) $(project_files_add)
+endif
+
+# add dependency on scopes stamp as configured
+ifeq ($(buildinfo_depends_scopes),$(true))
+$(call buildinfo_target_name,$1): $(scopes_stamp)
+endif
+
+# add buildinfo_stamp dependency on this target
 $(buildinfo_stamp): $(call buildinfo_target_name,$1)
 
 # add to clean file list

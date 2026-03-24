@@ -33,16 +33,6 @@ ifeq ($(generate_buildinfo),$(true))
 all-buildinfo: $(buildinfo_stamp)
 endif
 
-# make buildinfo_stamp depend on project files as configured
-ifeq ($(targets_depends_project),$(true))
-$(buildinfo_stamp): $(MAKEFILE_LIST) $(project_files_add)
-endif
-
-# make buildinfo_stamp depend on scopes as configured
-ifeq ($(buildinfo_depends_scopes),$(true))
-$(buildinfo_stamp): $(scopes_stamp)
-endif
-
 # make doxygen depend on buildinfo_stamp as configured
 ifeq ($(doxygen_depends_buildinfo),$(true))
 $(doxygen_stamp): $(buildinfo_stamp)
