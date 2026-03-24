@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2017-2024
+  \date   2017-2024,2026
 
   \copyright
 
@@ -30,17 +30,64 @@
     \amu_define group_name  (Polytopes)
     \amu_define group_brief (Polytope mathematical functions.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
-
+// auto-tests (add to test results page)
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/validate_log.amu)
+  \amu_include (include/amu/validate_results.amu)
+*******************************************************************************/
+
+// group(s) begin (test summary and includes-required)
+/***************************************************************************//**
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
+  \amu_include (include/amu/validate_summary.amu)
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
+
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
+
+// member-wide documentation and conventions
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+  \details
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
+
+    - Coordinates are given as \c [[x, y, z], ...] in 3d or \c [[x, y], ...]
+      in 2d. Each face in \p f is an ordered list of coordinate indexes
+      into \p c.
+    - For polygons \p f is optional; when omitted the listed order of \p c
+      forms the single implicit path.
+    - Face vertex indexes are ordered \b clockwise when viewed from
+      \b outside the solid (right-hand rule outward normal). The \p cw
+      parameter defaults to \b true (clockwise); set it to \b false to
+      negate the returned normal for counter-clockwise faces.
+    - Normals are derived from the \b first three vertices of a face only.
+      A collinear first triple produces a zero normal vector silently.
+      Normal vectors are \b not normalised to unit length unless stated.
+    - To identify a face, \p l (explicit index list) takes precedence over
+      \p i (index into \p f). Passing both is permitted; \p l wins silently.
+      Returns \b undef when a required identification is absent.
+    - Edges are represented as \c [[i0, i1], ...] sorted smallest-index-first.
+      The optional \p e parameter is computed on-demand when omitted; callers
+      iterating over edges \b must pre-compute and pass \p e explicitly.
+    - Functions whose names include the \c _ft_ infix use \b fan triangulation,
+      which is correct for \b convex faces only. Fan triangulation preserves
+      vertex winding; use an ear-clipping triangulator for concave faces.
+    - Lengths and bounding-box values are in the units of \p c. Angles are
+      in degrees.
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// members
+//----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
 // General
@@ -96,6 +143,17 @@ function polytope_faces2edges
 
   \details
 
+    Two mutually exclusive methods identify the line:
+    - When \p l is defined it takes precedence over \p i. The line is
+      constructed directly from the two coordinate indexes in \p l and
+      neither \p f nor \p e is consulted. \p r has no effect in this path.
+    - When only \p i is given the edge list is used to look up the two
+      endpoint indexes. \p r reverses the returned point order: when
+      \b false (default) the line runs from \c el[i][0] to \c el[i][1];
+      when \b true it runs from \c el[i][1] to \c el[i][0].
+
+    Returns \b undef when neither \p l nor \p i is provided.
+
   \note     Parameter \p f is optional for polygons. When it is not
             given, the listed order of the coordinates \p c establishes
             the polygon path.
@@ -119,8 +177,8 @@ function polytope_line
       sl = el[i]
     )
     (r == false)
-  ? [c[second(sl)], c[first(sl)]]
-  : [c[first(sl)], c[second(sl)]];
+  ? [c[first(sl)], c[second(sl)]]
+  : [c[second(sl)], c[first(sl)]];
 
 //! Determine the bounding limits of a polytope.
 /***************************************************************************//**
@@ -232,7 +290,7 @@ function polytope_bounding_box_pf
 ) = let
     (
       b = polytope_limits(c=c, f=f, a=a, s=false),
-      d  = len([for (i=b) if (i != [undef, undef]) i])
+      d  = len(b)
     )
     (d == 3) ?
       [ [for (x=b[0], y=b[1], z=b[2]) [x, y, z]],
@@ -246,17 +304,26 @@ function polytope_bounding_box_pf
             the shape where each face is a list of coordinate indexes.
 
   \returns  <integer-list-3-list> A list of triangular faces that enclose
-            the polytope where each face is a list of three coordinate
-            indexes with vertex ordering is maintained.
+            the polytope, where each face is a list of exactly three
+            coordinate indexes.
 
   \details
+
+    Each n-vertex face produces n-2 triangles by fanning from its first
+    vertex: triangle k is \c [fi[0], fi[k], fi[k+1]] for k in [1, n-2].
+    Vertex winding is preserved: all output triangles inherit the winding
+    direction of their source face, so outward normals remain consistent
+    with the input. The total number of output triangles equals the sum
+    of (vertex_count - 2) over all input faces.
 
     See [Wikipedia] for more information on [fan triangulation].
 
     [Wikipedia]: https://en.wikipedia.org/wiki/Polygon_triangulation
     [fan triangulation]: https://en.wikipedia.org/wiki/Fan_triangulation
 
-  \warning  This method does not support concave polytopes.
+  \warning  Fan triangulation is only correct for convex faces. Concave
+            faces will produce overlapping or inverted triangles. For
+            concave polytopes use an ear-clipping triangulator instead.
 *******************************************************************************/
 function polytope_ft_triangulate
 (
@@ -289,11 +356,11 @@ function polytope_ft_triangulate
   \details
 
     The adjacent vertices are those neighboring vertices that are
-    directly connected to the given vertex by a common edge.
-
-  \note     Parameter \p f is optional for polygons. When it is not
-            given, the listed order of the coordinates \p c establishes
-            the polygon path.
+    directly connected to the given vertex by a common edge. The
+    returned list contains coordinate indexes, not coordinates; pass
+    them into \p c to obtain the actual points. The result is
+    deduplicated so each adjacent vertex index appears exactly once,
+    even when it is shared by multiple faces.
 *******************************************************************************/
 function polytope_vertex_adjacent_vertices
 (
@@ -437,7 +504,11 @@ function polytope_edge_normal
   \param    l <integer-list> The face-plane specified as a list of three
             or more coordinate indexes that are a part of the face.
 
-  \param    cw <boolean> Face vertex ordering.
+  \param    cw <boolean> Face vertex ordering. When \b true the face
+            vertices are assumed to be wound \b clockwise when viewed
+            from outside the solid, and the returned normal points
+            outward (away from the interior). When \b false the vertices
+            are assumed counter-clockwise and the normal is negated.
 
   \returns  <vector-3d> The normal vector of a polytope face.
 
@@ -445,6 +516,13 @@ function polytope_edge_normal
 
     The face can be identified using either parameter \p i or \p l.
     When using \p l, the parameter \p f is not required.
+
+    The normal is computed from the first three vertices of the resolved
+    face only. For triangulated faces this is exact. For higher-arity
+    faces (quads, n-gons) the first three vertices must not be collinear;
+    if they are, the returned vector will be a zero vector. Callers
+    working with untriangulated meshes should ensure the face is planar
+    and that its first three vertices form a non-degenerate triangle.
 
   \note     Parameter \p f is optional for polygons. When it is not
             given, the listed order of the coordinates \p c establishes
@@ -460,7 +538,7 @@ function polytope_face_normal
 ) = let
     (
       ci = is_defined(l) ? l : defined_or(f, [consts(len(c))])[i],
-      pc = [for (i = [0:2]) let (p = c[ci[i]]) (len(p) == 3) ? p : [p[0], p[1], 0]]
+      pc = [for (vi = [0:2]) let (p = c[ci[vi]]) (len(p) == 3) ? p : [p[0], p[1], 0]]
     )
     cross(pc[0]-pc[1], pc[2]-pc[1]) * ((cw == true) ? 1 : -1);
 
@@ -472,6 +550,20 @@ function polytope_face_normal
 
 //! \name Faces
 //! @{
+
+/***************************************************************************//**
+  \par Face Identification Convention
+    Several functions in this group accept two mutually exclusive parameters
+    for identifying a face:
+    - \p i <integer> selects the face by its index into \p f.
+    - \p l <integer-list> provides the face directly as an explicit list of
+      coordinate indexes (e.g. a single face from \p f, or a custom subset).
+
+    When \p l is defined it takes precedence over \p i and \p f is not
+    consulted. When only \p i is given, \p f must be provided (except for
+    polygons, where the implicit single-path default applies). Passing both
+    \p l and \p i is permitted; \p l wins silently.
+*******************************************************************************/
 
 //! Get the mean coordinate of all vertices of a polytope face.
 /***************************************************************************//**
@@ -503,34 +595,17 @@ function polytope_face_mean
 ) = let
     (
       ci = is_defined(l) ? l : defined_or(f, [consts(len(c))])[i],
-      pc = [for (i = ci) c[i]]
+      pc = [for (ci_idx = ci) c[ci_idx]]
     )
     mean(pc);
 
 //! Get the mean coordinate and normal vector of a polytope face.
 /***************************************************************************//**
-  \param    c <points-3d | points-2d> A list of 3d or 2d coordinate points.
-  \param    f <integer-list-list> A list of faces (or paths) that enclose
-            the shape where each face is a list of coordinate indexes.
+  \copydetails polytope_face_plane()
 
-  \param    i <integer> The face specified as an face index.
-  \param    l <integer-list> The face specified as a list of all the
-            coordinate indexes that define it.
-
-  \param    cw <boolean> Face vertex ordering.
-
-  \returns  <plane> <tt>[mp, nv]</tt>, where \c mp is \c points-3d, the
-            mean coordinate, and \c nv is \c vector-3d, the normal
-            vector, of the polytope face-plane.
-
-  \details
-
-    The face can be identified using either parameter \p i or \p l.
-    When using \p l, the parameter \p f is not required.
-
-  \note     Parameter \p f is optional for polygons. When it is not
-            given, the listed order of the coordinates \p c establishes
-            the polygon path.
+  \note     This function is an alias for polytope_face_plane(). It is
+            retained for compatibility with existing call sites. Prefer
+            polytope_face_plane() in new code.
 *******************************************************************************/
 function polytope_face_mean_normal
 (
@@ -539,11 +614,38 @@ function polytope_face_mean_normal
   i,
   l,
   cw = true
-) = [polytope_face_mean(c, f, i, l), polytope_face_normal(c, f, i, l, cw)];
+) = polytope_face_plane(c, f, i, l, cw);
 
-//! Get a plane for a polytope face.
+//! Get a plane defined by the mean coordinate and normal vector of a polytope face.
 /***************************************************************************//**
-  \copydetails polytope_face_mean_normal()
+  \param    c <points-3d | points-2d> A list of 3d or 2d coordinate points.
+  \param    f <integer-list-list> A list of faces (or paths) that enclose
+            the shape where each face is a list of coordinate indexes.
+
+  \param    i <integer> The face specified as a face index.
+  \param    l <integer-list> The face specified as a list of all the
+            coordinate indexes that define it.
+
+  \param    cw <boolean> Face vertex ordering. Passed directly to
+            polytope_face_normal(); see that function for the full
+            description. Default \b true (clockwise, outward normals).
+
+  \returns  <plane> <tt>[mp, nv]</tt>, where \c mp is a \c point-3d
+            giving the mean of all face vertices, and \c nv is a
+            \c vector-3d giving the face normal. Together they fully
+            define the face-plane and can be passed directly to any
+            function that expects a \c plane argument.
+
+  \details
+
+    Combines polytope_face_mean() and polytope_face_normal() into a
+    single call. The face can be identified using either \p i or \p l;
+    see the \ref Faces "Face Identification Convention" for the
+    precedence rule.
+
+  \note     Parameter \p f is optional for polygons. When it is not
+            given, the listed order of the coordinates \p c establishes
+            the polygon path.
 *******************************************************************************/
 function polytope_face_plane
 (
@@ -551,8 +653,8 @@ function polytope_face_plane
   f,
   i,
   l,
-  cw=true
-) = polytope_face_mean_normal(c, f, i, l, cw);
+  cw = true
+) = [polytope_face_mean(c, f, i, l), polytope_face_normal(c, f, i, l, cw)];
 
 //! List the vertex counts for all polytope faces.
 /***************************************************************************//**
@@ -572,31 +674,55 @@ function polytope_face_vertex_counts
             [[x, y, z], ...].
   \param    f <integer-list-list> A list of faces that enclose
             the shape where each face is a list of coordinate indexes.
+  \param    cw <boolean> Face vertex ordering. Passed directly to
+            polytope_face_normal(); see that function for the full
+            description. Default \b true (clockwise, outward normals).
 
-  \returns  <decimal-list> A list of the polyhedron adjacent face angles.
+  \returns  <decimal-list> A list of angles (in degrees) between the
+            normal vectors of every pair of adjacent faces. Each entry
+            is the angle between the outward normals of two faces that
+            share at least one vertex, which equals the supplement of
+            the interior dihedral angle (i.e. 180° minus the interior
+            dihedral angle for a convex edge).
 
   \details
+
+    For each face \p i, all faces that share at least one vertex are
+    found and the angle between their respective normal vectors is
+    computed via angle_ll(). Both normals are obtained by delegating
+    to polytope_face_normal() with the same \p cw convention, so the
+    result is consistent regardless of mesh winding.
+
+    The normal of each face is derived from its first three vertices
+    only; see polytope_face_normal() for the implications of this for
+    non-triangulated or degenerate faces.
 
     See [Wikipedia] for more information on dihedral angles.
 
     [Wikipedia]: https://en.wikipedia.org/wiki/Dihedral_angle
+
+  \warning  Each adjacent face pair appears twice in the output list
+            (once from face i's perspective and once from face u's),
+            so the list length equals twice the number of adjacent
+            face pairs.
 *******************************************************************************/
 function polytope_face_angles
 (
   c,
-  f
+  f,
+  cw = true
 ) =
   [
     for (i=[0 : len(f)-1])
     let
     (
-      n1 = cross_ll([c[f[i][0]], c[f[i][1]]], [c[f[i][0]], c[f[i][2]]]),
+      n1 = polytope_face_normal(c, f, i, cw=cw),
       af = [for (v=f[i]) for (j=[0 : len(f)-1]) if (j != i && exists(v, f[j])) j]
     )
       for (u=unique(af))
       let
       (
-        n2 = cross_ll([c[f[u][0]], c[f[u][1]]], [c[f[u][0]], c[f[u][2]]])
+        n2 = polytope_face_normal(c, f, u, cw=cw)
       )
         angle_ll(n1, n2)
   ];
@@ -661,13 +787,27 @@ function polytope_edge_angles
             the shape where each face is a list of coordinate indexes.
   \param    e <integer-list-2-list> A list of edges where each edge is
             a list of two coordinate indexes.
-  \param    d <integer> The number of significant figures used when
-            comparing lengths and angles.
+  \param    d <integer> The number of significant figures to retain when
+            rounding lengths and angles before comparing them for
+            uniqueness. Increase \p d to tighten the comparison tolerance;
+            decrease it to allow more floating-point variation. Default 6.
 
-  \returns  <boolean> \b true when there is both a single edge length
-            and a single edge angle and \b false otherwise.
+  \returns  <boolean> \b true when all edge lengths are equal and all
+            adjacent edge angles are equal (to \p d significant figures),
+            \b false otherwise.
 
   \details
+
+    All edge lengths are collected via polytope_edge_lengths() and all
+    adjacent edge angles via polytope_edge_angles(). Each list is rounded
+    to \p d significant figures with round_s() and then deduplicated with
+    unique(). The polytope is considered regular iff both deduplicated
+    lists contain exactly one distinct value.
+
+    Note that this tests geometric regularity of the edges and vertex
+    angles, not full face regularity. For a polyhedron with non-planar
+    or non-congruent faces, the test may return \b true even though the
+    faces are not regular polygons.
 
   \note     When \p e is not specified, it is computed from \p f using
             polytope_faces2edges().
@@ -692,6 +832,29 @@ function polytope_faces_are_regular
 
 //! @}
 //! @}
+
+//----------------------------------------------------------------------------//
+// openscad-amu auxiliary scripts
+//----------------------------------------------------------------------------//
+
+/*
+BEGIN_SCOPE validate;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <common/validation.scad>;
+
+    echo( str("openscad version ", version()) );
+    for (i=[1:19]) echo( "not tested:" );
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
 
 //----------------------------------------------------------------------------//
 // end of file

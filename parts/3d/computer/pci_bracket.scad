@@ -30,7 +30,7 @@
     \amu_define group_name  (PCI bracket)
     \amu_define group_brief (PCI slot cover bracket generator.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -38,7 +38,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
@@ -76,33 +76,33 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <integer>         | 0                 | vent hole count
-      1 | <decimal>         | 3.0               | vent hole radius
+      0 | integer           | 0                 | vent hole count
+      1 | decimal           | 3.0               | vent hole radius
 
     \b ribs
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <integer>         | 3                 | location (0=top, 1=none, 2=bottom, 3=both)
-      1 | <integer>         | 1                 | shape (0=cylinder, 1=ellipse)
-      2 | <integer>         | 10                | number of divisions
-      3 | <decimal-list-n>  | [3, 7]            | division positions list [p1, p2, ..., pn]
+      0 | integer           | 3                 | location (0=top, 1=none, 2=bottom, 3=both)
+      1 | integer           | 1                 | shape (0=cylinder, 1=ellipse)
+      2 | integer           | 10                | number of divisions
+      3 | decimal-list-n    | [3, 7]            | division positions list [p1, p2, ..., pn]
 
     \b tabs
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal-list-3>  |                   | tab-0: [offset-y, offset-x, hole-diameter]
+      0 | decimal-list-3    |                   | tab-0: [offset-y, offset-x, hole-diameter]
      ...| ...               |                   | ...
-      n | <decimal-list-3>  |                   | tab-n: [offset-y, offset-x, hole-diameter]
+      n | decimal-list-3    |                   | tab-n: [offset-y, offset-x, hole-diameter]
 
     \b align
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <integer>         | 0                 | align-x
-      1 | <integer>         | 0                 | align-y
-      2 | <integer>         | 0                 | align-z
+      0 | integer           | 0                 | align-x
+      1 | integer           | 0                 | align-y
+      2 | integer           | 0                 | align-z
 
     The possible x, y, and z alignment locations and configuration
     values are described in the following table:
@@ -342,10 +342,10 @@ module pci_bracket
               extrude_linear_mss(h=col-brd)
               ellipse(size=[1,1/2]*brd);
               rotate([0,90,0])
-              ellipsoid([1,2]*brd);
+              ellipsoid([1/2,2]*brd, center=true);
               translate([0,0,col-brd])
               rotate([0,90,0])
-              ellipsoid([1,2]*brd);
+              ellipsoid([1/2,2]*brd, center=true);
             }
           }
 
@@ -404,7 +404,7 @@ module pci_bracket
       {
         translate([sv05/2, vho + (y-1)*vhs, -mth/2-mth])
         extrude_linear_mss(h=mth*4)
-        ngon(n=6, r=vhr, vr=vhr/2);
+        ngon([vhr, 6], vr=vhr/2);
       }
     }
   }
@@ -422,7 +422,7 @@ module pci_bracket
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <transforms/base_cs.scad>;
     include <parts/3d/computer/pci_bracket.scad>;
 
     pci_bracket

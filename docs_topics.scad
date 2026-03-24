@@ -1,4 +1,4 @@
-//! Library documentation topics page.
+//! Library documentation topics.
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
@@ -27,7 +27,197 @@
 
   \details
 
-  \amu_include (include/amu/pgid_pparent_path_n.amu)
+  \amu_include (include/amu/doxyg_init_ppd_gp.amu)
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// The omdl Distinctions
+//----------------------------------------------------------------------------//
+/***************************************************************************//**
+  /+
+
+    Pre-define level-1 group id's to establish order in documentation.
+    These group id must be kept coherent with groups in documentation.
+
+    Each group name and brief is subsequently defined in its
+    docs_group.scad
+
+  +/
+
+  \defgroup datatypes
+  \defgroup common
+  \defgroup units
+  \defgroup database
+  \defgroup math
+  \defgroup shapes
+  \defgroup transforms
+  \defgroup tools
+  \defgroup models
+  \defgroup parts
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// The omdl Distinctions
+//----------------------------------------------------------------------------//
+
+/***************************************************************************//**
+  \page omdl_distinctions Distinctions
+
+  \section distinctions What Makes omdl Distinct from Other OpenSCAD Libraries
+
+  The OpenSCAD Mechanical Design Library ([omdl]) began as the work of
+  an electrical engineer without formal training in mechanical
+  engineering or graphical design. Its approach reflects patterns drawn
+  from electrical hardware description languages, which may feel
+  unconventional to designers accustomed to geometry-first or
+  graphics-driven workflows.
+
+  It is intentionally positioned differently from widely used OpenSCAD
+  libraries such as [MCAD] and [BOSL2]. While all three support
+  parametric modeling, they target different abstraction levels and
+  workflows.
+
+  \subsection engineering_first 1. Mechanical-Engineering-First Abstraction
+
+  omdl is designed around mechanical design intent, not just
+  geometry creation.
+
+  - Parameters represent physical concepts (lengths, angles,
+    tolerances, fits)
+
+  - Modules reflect mechanical parts and operations, not just shapes
+
+  - Design choices emphasize manufacturability and assembly
+
+  In contrast:
+
+  - \b [MCAD] focuses on providing a catalog of reusable mechanical
+    parts
+
+  - \b [BOSL2] focuses on robust geometric primitives and utilities
+
+  omdl treats geometry as a consequence of mechanical decisions, not
+  the starting point.
+
+
+  \subsection structured_parameters 2. Emphasis on Structured Parameters
+
+  omdl encourages the use of structured, self-describing parameters
+  rather than long positional argument lists.
+
+  omdl takes the view that design application flexibility is increased
+  by providing detailed construction options through careful
+  parameterization and by managing those parameters as configurations
+  with defaults, inheritance, and instance-level control. Designers
+  should be able to create useful mechanical parts using defaults,
+  while still retaining the ability to drill down into low-level
+  geometric details when required.
+
+  This results in:
+
+  - More readable designs
+  - Fewer silent failures
+  - Easier long-term maintenance
+
+  By comparison:
+
+  - \b [MCAD] often relies on positional parameters
+
+  - \b [BOSL2] provides powerful helpers but leaves structure decisions
+    to the user
+
+
+  \subsection unit_aware_design 3. Unit-Aware Design Philosophy
+
+  omdl natively supports unit-aware modeling, making mixed-unit
+  mechanical work safer and clearer.
+
+  Key ideas:
+
+  - Explicit unit conversion (`length()`, `angle()`)
+  - Reduced risk of inch/mm confusion
+  - Clear documentation of expected units
+
+  Most other libraries:
+
+  - Assume a single unit system (usually millimeters)
+  - Leave unit discipline entirely to user convention
+
+  For mechanical engineers working from drawings or standards, this is
+  a major differentiator.
+
+
+  \subsection workflow_oriented 4. Workflow-Oriented Organization
+
+  omdl mirrors how mechanical designs evolve. This is reflected
+  directly in the library structure:
+
+  - \ref datatypes
+  - \ref common
+  - \ref units
+  - \ref database
+  - \ref math
+  - \ref shapes
+  - \ref transforms
+  - \ref tools
+  - \ref models
+  - \ref parts
+
+  Other libraries are typically organized by shape type, not design
+  process.
+
+
+  \subsection documentation_first_class 5. Documentation as a First-Class Feature
+
+  omdl is written to be self-documenting by design:
+
+  - Doxygen-style comments embedded in source
+  - Generated API documentation in multiple output formats (HTML, PDF, etc.)
+  - Parameters explained in engineering terms
+
+  The goal is that reading the documentation teaches mechanical design
+  usage, not just syntax.
+
+  By contrast:
+
+  - \b [MCAD] documentation is sparse and example-driven
+  - \b [BOSL2] documentation is extensive but geometry-centric
+
+
+  \subsection conservative_behavior 6. Conservative, Predictable Behavior
+
+  omdl favors:
+
+  - Explicit behavior over “magic”
+  - Predictable defaults
+  - Minimal global state
+
+  This makes designs:
+
+  - Easier to audit
+  - Easier to debug
+  - More suitable for long-lived or shared projects
+
+
+  \section differentiation_summary Differentiation Summary
+
+  Feature              | omdl                      | MCAD                      | BOSL2
+  :-------------------:|:-------------------------:|:-------------------------:|:----------------------:
+  Primary Focus        | Mechanical design intent  | Part catalog              | Geometric power tools
+  Units                | Explicit, unit-aware      | Implicit                  | Implicit
+  Parameter Style      | Structured & named        | Positional                | Mixed
+  Workflow Orientation | Yes                       | No                        | No
+  Documentation Depth  | High, engineering-centric | Minimal                   | High, geometry-centric
+  Target User          | Mechanical engineers      | Hobbyists & general users | Power users
+
+  omdl is not just a geometry library, it is a mechanical design
+  framework for OpenSCAD, built to reflect how engineers think,
+  document, and maintain real mechanical systems.
+
+
+  [omdl]: https://royasutton.github.io/omdl
+  [MCAD]: https://github.com/openscad/MCAD
+  [BOSL2]: https://github.com/BelfrySCAD/BOSL2
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -146,18 +336,20 @@
 
   - Separate intent from implementation: Modules should express what
     the design is supposed to do independently from how the geometry is
-    actually created/
+    actually created.
 
   - Thoughtful Parameter Contracts: Modules should define and enforce
     their inputs to ensure predictable, safe, and reusable designs.
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// Building and installing
+// Building and Installing
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page building_and_installing Building and installing
+  \page building_and_installing Building and Installing
+
+  \section setup_script Setup Script
 
   A script is provided to build the library documentation. If the setup
   script does not detect that [openscad-amu], the development environment
@@ -169,29 +361,32 @@
   Download the omdl setup script:
   \code{bash}
   $ mkdir tmp && cd tmp
-  $ wget https://git.io/setup-omdl.bash
+
+  $ wget https://raw.githubusercontent.com/royasutton/omdl/master/share/scripts/setup-omdl.bash
+
   $ chmod +x setup-omdl.bash
   \endcode
 
   Fetch and install the latest library distribution:
   \code{bash}
-  ./setup-omdl.bash --branch-list tags1 --yes --install
+  $ ./setup-omdl.bash --branch-list tags1 --yes --install
   \endcode
 
   or, a specific version, say v0.9.6, can be installed using:
   \code{bash}
-  ./setup-omdl.bash --branch v0.9.6 --yes --install
+  $ ./setup-omdl.bash --branch v0.9.6 --yes --install
   \endcode
 
   View documentation:
   \code{bash}
-  $ google-chrome .local/share/OpenSCAD/docs/html/index.html
+  $ google-chrome ~/.local/share/OpenSCAD/docs/html/index.html
   \endcode
 
   The generated HTML documentation will be installed to the OpenSCAD
-  user library path in a subfolder named 'docs/html'. The example above
-  assumes a Linux operating system; paths may differ on other
-  platforms.
+  user library path in a subfolder named 'docs/html'.
+
+  The example above assumes a Linux operating system; paths may differ
+  on other platforms.
 
   [omdl]: https://royasutton.github.io/omdl
   [repository]: https://github.com/royasutton/omdl
@@ -206,9 +401,9 @@
 /***************************************************************************//**
   \page library_usage Library Usage
 
-  \section module_inclusion Module Inclusion Workflow
+  \section module_inclusion Module Inclusion
 
-  he standard library includes are encapsulated within the base include
+  The standard library includes are encapsulated within the base include
   file omdl-base.scad. This file provides only the minimal subset of
   commonly used functionality, consisting primarily of core utilities
   and geometric primitives, in order to maintain a lightweight
@@ -231,8 +426,11 @@
 
   \code{.C}
   include <omdl-base.scad>;
+  include <models/3d/misc/omdl_logo.scad>;
 
-  ...
+  $fn = 36;
+
+  omdl_logo(c=false, b=true, t=true);
   \endcode
 
   This process reads the \b \amu_eval(${omdl_base_cnt}) files listed in
@@ -252,39 +450,16 @@
   - Developers can maintain control over which features are integrated,
     supporting flexible recomposition and integration with other
     libraries.
-
-  For practical examples of how to include additional modules, see the
-  script in \ref tools_drafting.
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// Development conventions
+// Type Conventions
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page conventions Development conventions
+  \page type_conventions Type Conventions
 
-  /+
-    add to main conventions page until the section contents grows
-
-    \li \subpage data_types
-
-  \page data_types Data types and values
-  \tableofcontents
-  +/
-
-    \li \subpage data_types_base
-    \li \subpage data_types_index
-    \li \subpage data_types_euclidean
-*******************************************************************************/
-
-//----------------------------------------------------------------------------//
-// Data types and values
-//----------------------------------------------------------------------------//
-
-// Base types and values
-/***************************************************************************//**
-  \page data_types_base Base types and values
+  \section types_values Types and Values
 
   OpenSCAD defines a value as one of the following: a number, boolean,
   string, range, vector, or the undefined value. Within omdl, what the
@@ -293,16 +468,18 @@
   collections of general or compound values and [Euclidean vectors]
   representing numeric coordinates.
 
+  \subsection base_types Base types
+
   | type      | description                                         |
   |:---------:|:----------------------------------------------------|
-  | boolean   | a binary logic value (\b true or \b false)          |
+  | boolean   | a binary logic value (\c true or \c false)          |
   | number    | a numerical value                                   |
   | string    | an iterable sequence of of character values         |
-  | list      | an iterable sequential of arbitrary values          |
+  | list      | an iterable sequence of arbitrary values            |
   | range     | an arithmetic sequence                              |
   | function  | a function literal or variable containing functions |
 
-  \subsubsection special_values Special values
+  \subsection special_values Special values
 
   | value     | description                                         |
   |:---------:|:----------------------------------------------------|
@@ -312,22 +489,22 @@
   | [nan]     | a numerical value which is not a number             |
   | [inf]     | a numerical value which is infinite                 |
 
-  \subsubsection data_types_conventions Specification conventions
+  \subsection type_naming_conventions Type naming conventions
 
   For clarity and consistency, the following naming conventions are
   used when referring to common [data types] within the library.
 
   | name          | description                                       |
   |:-------------:|:--------------------------------------------------|
-  | [value]       | any dataum that can be stored in OpenSCAD         |
+  | [value]       | any datum that can be stored in OpenSCAD          |
   | [scalar]      | a single non-iterable value                       |
   | [iterable]    | any value with iterable elements                  |
   | [empty]       | any iterable value with zero elements             |
-  | [bit]         | a binary numerical value (0 or 1)                 |
+  | [bit]         | a binary numerical value ( \c 0 or \c 1 )         |
   | [integer]     | a positive, negative, or zero whole number        |
   | [even]        | an even integer                                   |
   | [odd]         | an odd integer                                    |
-  | [decimal]     | integer numbers with a fractional part            |
+  | [decimal]     | a real number with a fractional part              |
   | [index]       | a list index sequence                             |
   | [datastruct]  | a defined data structure                          |
   | [data]        | an arbitrary data structure                       |
@@ -335,103 +512,30 @@
   | [table]       | data store of values arranged in rows and columns |
 
 
-  When a list has an expected number of elements, the suffix '-n' is
-  appended to indicate the required element count. If a range of
-  acceptable element counts is allowed, the lower and upper bounds are
-  appended using the form l:u.
+  \subsection list_naming_conventions List naming conventions
 
-  When list elements are expected to be of a specific data type, the
-  element type is prefixed to the list name. These conventions provide
-  a concise way to describe parameter contracts and expected data
-  structures throughout the documentation.
+  When a value is a list and has an expected number of elements, the
+  suffix \c -n is appended to indicate the required element count. If a
+  range of acceptable elements is allowed, the lower and upper bounds
+  are appended using the form \c l:u.
+
+  When values list elements are expected to be of a specific data type,
+  the element type is prefixed to the value list name. These
+  conventions provide a concise way to describe parameter value
+  contracts and expected data structures throughout the documentation.
 
   See the tables below for examples.
 
-  | name          | description                                       |
-  |:-------------:|:--------------------------------------------------|
-  | list-n        | a list of of n elements values                    |
-  | list-l:u      | a list of l to u elements values                  |
-  | type-list     | a list of elements with an expected type          |
-  | type-list-n   | a list of n elements with an expected type        |
+  | name                | description                               |
+  |:-------------------:|:------------------------------------------|
+  | list-n              | a list of \c n values                     |
+  | list-l:u            | a list of \c l to \c u values             |
+  | typed-list          | a list of \c typed values                 |
+  | typed-list-n        | a list of \c n \c typed values            |
+  | typed-list-m-list-n | \c m lists of \c n \c typed value lists   |
 
-  [OpenSCAD types]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Values_and_data_types
-  [nan]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Infinities_and_NaNs
-  [inf]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Infinities_and_NaNs
 
-  [data types]: https://en.wikipedia.org/wiki/Data_type
-
-  [value]: https://en.wikipedia.org/wiki/Value_(computer_science)
-  [scalar]: https://en.wikipedia.org/wiki/Variable_(computer_science)
-  [iterable]: https://en.wikipedia.org/wiki/Iterator
-  [empty]: https://en.wikipedia.org/wiki/Empty_set
-
-  [bit]: https://en.wikipedia.org/wiki/Bit
-
-  [integer]: https://en.wikipedia.org/wiki/Integer
-  [even]: https://en.wikipedia.org/wiki/Parity_(mathematics)
-  [odd]: https://en.wikipedia.org/wiki/Parity_(mathematics)
-
-  [decimal]: https://en.wikipedia.org/wiki/Decimal
-  [index]: \ref data_types_index
-  [datastruct]: https://en.wikipedia.org/wiki/Data_structure
-  [data]: https://en.wikipedia.org/wiki/Data
-
-  [map]: https://en.wikipedia.org/wiki/Associative_array
-  [table]: https://en.wikipedia.org/wiki/Table_(information)
-
-  [Euclidean vectors]: https://en.wikipedia.org/wiki/Euclidean_vector
-*******************************************************************************/
-
-// Index sequence generation
-/***************************************************************************//**
-  \page data_types_index Element index selection
-
-  The data type index describes how one or more elements of a list are
-  selected by their index positions. Rather than requiring indices to
-  be specified explicitly in every case, this data type supports
-  several convenient shorthand forms for common selection patterns.
-
-  An index selection may be expressed using any of the following forms:
-
-  | value / form    | description                                   |
-  |:---------------:|:----------------------------------------------|
-  | \b true         | All index positions of the list [0:size-1]    |
-  | \b false        | No index positions                            |
-  | "all"           | All index positions of the list [0:size-1]    |
-  | "none"          | No index positions                            |
-  | "rands"         | Random index selection of the list [0:size-1] |
-  | "even"          | The even index of the list [0:size-1]         |
-  | "odd"           | The odd index of the list [0:size-1]          |
-  | <integer>       | The single position given by an <integer>     |
-  | <range>         | The range of positions given by a <range>     |
-  | <integer-list>  | The list of positions give in <integer-list>  |
-
-  To obtain the explicit sequence of list element indices represented
-  by a value of this data type, the function index_sel() may be used.
-  This function resolves an index specification into a concrete list of
-  index positions, translating shorthand or abstract selection patterns
-  into an explicit iterable form.
-
-  Within omdl, index_sel() serves as the normalization step between
-  flexible input specifications and deterministic implementation
-  behavior, allowing modules to accept expressive selection syntax
-  while maintaining consistent parameter contracts during evaluation.
-
-  \b Example
-
-  \code{.c}
-  // list
-  l1 = [a,b,c,d,e,f]
-
-  // index sequence
-  index_sel(l1)          = [0,1,2,3,4,5]
-  index_sel(l1, "rands") = [0,2,5]
-  \endcode
-*******************************************************************************/
-
-// Euclidean space data types
-/***************************************************************************//**
-  \page data_types_euclidean Euclidean space data types
+  \section euclidean_types Euclidean Space Types
 
   For [geometric] specifications and [geometric algebra], omdl adopts
   the following type definitions and conventions.
@@ -447,23 +551,23 @@
   | [matrix]    | a rectangular array of values                     |
 
   When a particular dimension is expected, the dimensional expectation
-  is appended to the end of the name after a '-' dash as in the
+  is appended to the end of the name after a \c '-' dash as in the
   following table.
 
   | name        | description                                       |
   |:-----------:|:--------------------------------------------------|
-  | point-Nd    | a point in an 'N' dimensional space               |
-  | vector-Nd   | a vector in an 'N' dimensional space              |
-  | line-Nd     | a line in an 'N' dimensional space                |
-  | matrix-MxN  | a 'M' by 'N' matrix of values                     |
+  | point-nd    | a point in an \c n dimensional space              |
+  | vector-nd   | a vector in an \c n dimensional space             |
+  | line-nd     | a line in an \c n dimensional space               |
+  | matrix-mxn  | an \c m by \c n matrix of values                  |
 
-  When a type is specified in plural form, such as \b points, it
-  implies a list of the specified type. For example, \b points is
-  equivalent to a \b point-list.
+  When a type is specified in plural form, such as \c points, it
+  implies a list of the specified type. For example, \c points is
+  equivalent to a \c point-list.
 
-  \subsubsection data_types_lines Lines and vectors
+  \subsection data_types_lines Lines and vectors
 
-  A \b vector has both direction and magnitude in space. A \b line
+  A \c vector has both direction and magnitude in space. A \c line
   likewise has direction and magnitude, but also includes location, as
   it begins at one point in space and ends at another. Although a line
   may be defined in one dimension, most library functions operate on
@@ -471,19 +575,19 @@
   common convention for representing Euclidean vectors and straight
   lines, as summarized in the following table:
 
-  Given two points \c 'p1' and \c 'p2', in space:
+  Given two points \c p1 and \c p2, in space:
 
   | no. | form      | description                       |
   |:---:|:---------:|:----------------------------------|
-  |  1  | p2        | a vector from the origin to 'p2'  |
-  |  2  | [p2]      | a vector from the origin to 'p2'  |
-  |  3  | [p1, p2]  | a line from 'p1' to 'p2'          |
+  |  1  | p2        | a vector from the origin to \c p2 |
+  |  2  | [p2]      | a vector from the origin to \c p2 |
+  |  3  | [p1, p2]  | a line from \c p1 to \c p2        |
 
   The functions is_point(), is_vector(), is_line(), line_dim(),
   line_tp(), line_ip(), vol_to_point(), and vol_to_origin(), are
   available for type identification and conversion.
 
-  \b Example
+  \b Examples
 
   \code{.c}
   // points
@@ -501,11 +605,11 @@
   v1 == v2 == v3, iff p1 == origin3d
   \endcode
 
-  \subsubsection data_types_planes Planes
+  \subsection data_types_planes Planes
 
   Operators in omdl follow a common convention for defining planes. A
-  \b plane is specified by a [point] located on its surface together
-  with a [normal] vector, denoted by \b pnorm, which is described in
+  \c plane is specified by a [point] located on its surface together
+  with a [normal] vector, denoted by \c pnorm, which is described in
   the following section. The plane definition is therefore represented
   as a list containing both the point and its corresponding normal
   vector, as shown below:
@@ -514,13 +618,13 @@
   |:-------:|:-------------------:|
   | [plane] | [[point], [pnorm]]  |
 
-  \subsubsection data_types_planes_normal Planes' normal
+  \subsection data_types_normals Planes' normal
 
-  The data type \b pnorm defines a convention for specifying a
+  The data type \c pnorm defines a convention for specifying a
   direction vector that is perpendicular to a plane. Given three points
-  \c 'p1', \c 'p2', \c 'p3', and three vectors \c 'v1', \c 'v2', \c
-  'vn', the plane [normal] may be expressed using any of the following
-  equivalent forms:
+  \c p1, \c p2, \c p3, and three vectors \c v1, \c v2, \c vn, the plane
+  [normal] may be expressed using any of the following equivalent
+  forms:
 
   | no. | form          | description                                   |
   |:---:|:-------------:|:----------------------------------------------|
@@ -563,6 +667,46 @@
   pn1 == pn4
   \endcode
 
+
+  /+
+
+    References: Value Types
+
+  +/
+
+  [OpenSCAD types]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Values_and_data_types
+  [nan]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Infinities_and_NaNs
+  [inf]: https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/The_OpenSCAD_Language#Infinities_and_NaNs
+
+  [data types]: https://en.wikipedia.org/wiki/Data_type
+
+  [value]: https://en.wikipedia.org/wiki/Value_(computer_science)
+  [scalar]: https://en.wikipedia.org/wiki/Variable_(computer_science)
+  [iterable]: https://en.wikipedia.org/wiki/Iterator
+  [empty]: https://en.wikipedia.org/wiki/Empty_set
+
+  [bit]: https://en.wikipedia.org/wiki/Bit
+
+  [integer]: https://en.wikipedia.org/wiki/Integer
+  [even]: https://en.wikipedia.org/wiki/Parity_(mathematics)
+  [odd]: https://en.wikipedia.org/wiki/Parity_(mathematics)
+
+  [decimal]: https://en.wikipedia.org/wiki/Decimal
+  [index]: \ref index_sel()
+  [datastruct]: https://en.wikipedia.org/wiki/Data_structure
+  [data]: https://en.wikipedia.org/wiki/Data
+
+  [map]: https://en.wikipedia.org/wiki/Associative_array
+  [table]: https://en.wikipedia.org/wiki/Table_(information)
+
+  [Euclidean vectors]: https://en.wikipedia.org/wiki/Euclidean_vector
+
+  /+
+
+    References: Euclidean Space Types
+
+  +/
+
   [geometric]: https://en.wikipedia.org/wiki/Geometry
   [geometric algebra]: https://en.wikipedia.org/wiki/Geometric_algebra
 
@@ -578,13 +722,20 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// Auto-tests and validation
+// Examples
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page tv Auto-tests and validation
+*******************************************************************************/
 
-  ### Scripts and Results ###
+//----------------------------------------------------------------------------//
+// Auto-tests and Validation
+//----------------------------------------------------------------------------//
+
+/***************************************************************************//**
+  \page tv Auto-tests and Validation
+
+  \section auto_test_results Library Build Test Results
 
   The documentation for [omdl] is generated using [openscad-amu].
   An integral part of the documentation build process is the validation
@@ -601,18 +752,19 @@
   | \subpage tv_fail "Fail" | A flat list of current test failures.
   | \subpage tv_warn "Warn" | A flat list of current test warnings.
 
-  #### Current Test Failures and Warnings ####
+  \section auto_test_issues Build Test Failures and Warnings
 
   [omdl]: https://royasutton.github.io/omdl
   [openscad-amu]: https://royasutton.github.io/openscad-amu
   [OpenSCAD]: http://www.openscad.org
 *******************************************************************************/
 
-// Validation Tests and Results
+// Tests and Results
 /***************************************************************************//**
   /+
       Define separate pages for validation results. Modules can
-      attached results to the related page reference.
+      attached results to the related page reference show below in this
+      section.
   +/
 
   \page tv_tree Validation Tests and Results
@@ -626,11 +778,13 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// Build versions
+// Build Information
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page build_information Build information
+  \page build_information Build Information
+
+  \section build_general General
 
   \amu_file bi_general (file="${DOXYGEN_OUTPUT}buildinfo/general.amu" ++read)
   \amu_table
@@ -638,9 +792,12 @@
     id="bi_general"
     table_caption="General"
     columns="2"
+    table_class="amuBuildInfo"
     column_headings="name^value"
     cell_texts="${bi_general}"
   )
+
+  \section build_toolchain Toolchain
 
   \amu_file bi_toolchain (file="${DOXYGEN_OUTPUT}buildinfo/toolchain.amu" ++read)
   \amu_table
@@ -648,9 +805,12 @@
     id="bi_toolchain"
     table_caption="Toolchain"
     columns="3"
+    table_class="amuBuildInfo"
     column_headings="name^version^path"
     cell_texts="${bi_toolchain}"
   )
+
+  \section build_components Components
 
   \amu_file bi_components (file="${DOXYGEN_OUTPUT}buildinfo/components.amu" ++read)
   \amu_table
@@ -658,9 +818,12 @@
     id="bi_components"
     table_caption="Components"
     columns="3"
+    table_class="amuBuildInfo"
     column_headings="name^count^value"
     cell_texts="${bi_components}"
   )
+
+  \section build_scopes Scopes
 
   \amu_file bi_scopes (file="${DOXYGEN_OUTPUT}buildinfo/scopes.amu" ++read)
   \amu_table
@@ -668,19 +831,25 @@
     id="bi_scopes"
     table_caption="Scopes"
     columns="3"
+    table_class="amuBuildInfo"
     column_headings="name^count^value"
     cell_texts="${bi_scopes}"
   )
 
-  \amu_file bi_modules (file="${DOXYGEN_OUTPUT}buildinfo/modules.amu" ++read)
+  \section build_groups Groups
+
+  \amu_file bi_groups (file="${DOXYGEN_OUTPUT}buildinfo/groups.amu" ++read)
   \amu_table
   (
-    id="bi_modules"
-    table_caption="Modules"
+    id="bi_groups"
+    table_caption="Groups"
     columns="3"
+    table_class="amuBuildInfo"
     column_headings="name^count^value"
-    cell_texts="${bi_modules}"
+    cell_texts="${bi_groups}"
   )
+
+  \section build_sources Sources
 
   \amu_file bi_sources (file="${DOXYGEN_OUTPUT}buildinfo/sources.amu" ++read)
   \amu_table
@@ -688,18 +857,20 @@
     id="bi_sources"
     table_caption="Sources"
     columns="3"
+    table_class="amuBuildInfo"
     column_headings="name^count^value"
     cell_texts="${bi_sources}"
   )
-
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// Copyright notice
+// Copyright Notice
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \page Copyright Copyright notice
+  \page Copyright Copyright Notice
+
+  \section copyright GNU Lesser General Public License
 
   \verbatim
   \amu_include (gnu-lgpl-v2.1.txt)

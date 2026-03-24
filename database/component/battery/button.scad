@@ -30,13 +30,13 @@
     \amu_define group_name  (Button cell)
     \amu_define group_brief (Button cell batteries data table.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
   \amu_include (include/amu/includes_required.amu)
 
   \details
@@ -109,9 +109,8 @@ dtr_battery_button =
 BEGIN_SCOPE diagram;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/align.scad>;
-    include <tools/operation_cs.scad>;
-    include <tools/drafting/draft-base.scad>;
+    include <transforms/base_cs.scad>;
+    include <tools/2d/drafting/draft-base.scad>;
     include <database/component/battery/cylindrical.scad>;
 
     $fn=36;

@@ -30,7 +30,7 @@
     \amu_define group_name  (Polygons)
     \amu_define group_brief (Roundable polygons generated in 2D space.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -38,7 +38,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
   \amu_include (include/amu/includes_required.amu)
 
   \amu_define image_view (top)
@@ -54,10 +54,10 @@
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
-// rounding
+// round edge
 //----------------------------------------------------------------------------//
 
-//! \name Rounding
+//! \name Round edge
 //! @{
 
 /***************************************************************************//**
@@ -95,12 +95,12 @@ module pg_corner_round
 (
   r  = 1,
   m  = 1,
-  c  = origin2d,
+  o  = origin2d,
   v1 = x_axis2d_uv,
   v2 = y_axis2d_uv
 )
 {
-  p = concat([c], polygon_round_eve_p(r=r, m=m, c=c, v1=v1, v2=v2));
+  p = concat([o], polygon_round_eve_p(r=r, m=m, o=o, v1=v1, v2=v2));
 
   polygon(p);
 }
@@ -138,6 +138,14 @@ module pg_rectangle_rs
   center = false
 )
 {
+  function pg_rectangle_rs_helper_r ( s, i ) =
+    let
+    (
+      a = first( s ), a1 = a[0], a2 = a[1], a3 = a[2],
+      p = polygon_arc_sweep_p( r=distance_pp(i, a1), o=a1, v1=[a1, i], v2=[a1, a2], cw=a3 )
+    )
+    ( len( s ) == 1 ) ? p : concat( p, pg_rectangle_rs_helper_r( tailn(s), last( p ) ) );
+
   sx = defined_e_or(size, 0, size);
   sy = defined_e_or(size, 1, sx);
 
@@ -153,13 +161,13 @@ module pg_rectangle_rs
 
   ts =
   [ // centered around origin
-    ["arc_pv", [[  0, +ry], [-sx, +sy]/2, cwx]],
-    ["arc_pv", [[-rx,   0], [-sx, -sy]/2, cwy]],
-    ["arc_pv", [[  0, -ry], [+sx, -sy]/2, cwx]],
-    ["arc_pv", [[+rx,   0], [+sx, +sy]/2, cwy]]
+    [[  0, +ry], [-sx, +sy]/2, cwx],
+    [[-rx,   0], [-sx, -sy]/2, cwy],
+    [[  0, -ry], [+sx, -sy]/2, cwx],
+    [[+rx,   0], [+sx, +sy]/2, cwy]
   ];
 
-  c = polygon_turtle_p( ts, i=[sx,sy]/2 );
+  c = pg_rectangle_rs_helper_r( ts, i=[sx,sy]/2 );
 
   p = (center == true)  &&  is_undef( o ) ? c
     : (center == true)  && !is_undef( o ) ? translate_p(c, o)
@@ -189,13 +197,13 @@ module pg_rectangle_rs
 module pg_elliptical_sector
 (
   r = 1,
-  c = origin2d,
+  o = origin2d,
   v1 = x_axis2d_uv,
   v2 = x_axis2d_uv,
   s = true
 )
 {
-  p = polygon_elliptical_sector_p(r=r, c=c, v1=v1, v2=v2, s=s);
+  p = polygon_elliptical_sector_p(r=r, o=o, v1=v1, v2=v2, s=s);
 
   polygon(p);
 }
@@ -337,7 +345,7 @@ module pg_rhombus
 *******************************************************************************/
 module pg_ngon
 (
-  n = 3,
+  n = 5,
   r = 1,
   o,
   vr,
@@ -348,7 +356,7 @@ module pg_ngon
 {
   z = (center == true) ? origin2d : [r, r];
 
-  c = polygon_regular_p(n=n, r=r, c=z);
+  c = polygon_regular_p(n=n, r=r, o=z);
 
   m = is_undef(  o ) ? c : translate_p(c, o);
   p = is_undef( vr ) ? m : polygon_round_eve_all_p(c=m, vr=vr, vrm=vrm, vfn=vfn);
@@ -621,12 +629,14 @@ BEGIN_SCOPE diagram;
     include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
+*/
 
+/*
 BEGIN_SCOPE diagram_label;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
-    include <tools/drafting/draft-base.scad>;
+    include <transforms/base_cs.scad>;
+    include <tools/2d/drafting/draft-base.scad>;
 
     module dt (vl = empty_lst, al = empty_lst, sl = empty_lst)
     {
@@ -645,10 +655,10 @@ BEGIN_SCOPE diagram_label;
         os = shift_cd(shift_cd(v=c, n=i, r=false), 1, r=false, d=true);
 
         if ( !is_empty( find( mv=i, v=vl )) )
-        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), bs=0, cmh=s*1, cmv=s);
+        draft_dim_leader(cv, v1=[mean(os), cv], l1=5, t=str("v", i+1), s=0, cmh=s*1, cmv=s);
 
         if ( !is_empty( find( mv=i, v=al )) )
-        draft_dim_angle(c=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
+        draft_dim_angle(o=cv, r=r, v1=[cv, second(os)], v2=[cv, first(os)], t=str("a", i+1), a=0, cmh=s, cmv=s);
 
         if ( !is_empty( find( mv=i, v=sl )) )
         draft_dim_line(p1=first(os), p2=second(os), t=str("s", i+1), cmh=s, cmv=s);

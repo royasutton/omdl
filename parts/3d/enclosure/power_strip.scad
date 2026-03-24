@@ -30,16 +30,16 @@
     \amu_define group_name  (Power Strip)
     \amu_define group_brief (Electrical receptacle power strip generator.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
   \amu_define includes_required_add
   (
-    tools/operation_cs.scad
+    transforms/base_cs.scad
     models/3d/misc/omdl_logo.scad
     models/3d/fastener/screws.scad
     parts/3d/fastener/clamps.scad
@@ -970,7 +970,7 @@ module power_strip_sg
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <transforms/base_cs.scad>;
     include <models/3d/misc/omdl_logo.scad>;
     include <models/3d/fastener/screws.scad>;
     include <parts/3d/fastener/clamps.scad>;
@@ -1018,7 +1018,7 @@ END_SCOPE;
 BEGIN_SCOPE box_default;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <transforms/base_cs.scad>;
     include <models/3d/misc/omdl_logo.scad>;
     include <models/3d/fastener/screws.scad>;
     include <parts/3d/fastener/clamps.scad>;
@@ -1044,7 +1044,7 @@ END_SCOPE;
 BEGIN_SCOPE mount_default;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <transforms/base_cs.scad>;
     include <models/3d/misc/omdl_logo.scad>;
     include <models/3d/fastener/screws.scad>;
     include <parts/3d/fastener/clamps.scad>;
@@ -1070,7 +1070,7 @@ END_SCOPE;
 BEGIN_SCOPE cover_default;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <transforms/base_cs.scad>;
     include <models/3d/misc/omdl_logo.scad>;
     include <models/3d/fastener/screws.scad>;
     include <parts/3d/fastener/clamps.scad>;

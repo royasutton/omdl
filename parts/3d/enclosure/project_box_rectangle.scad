@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2024
+  \date   2024,2026
 
   \copyright
 
@@ -30,7 +30,7 @@
     \amu_define group_name  (Rectangular Project Box)
     \amu_define group_brief (Rectangular prism project box generator.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -38,10 +38,13 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
   \amu_define includes_required_add
   (
-    tools/operation_cs.scad
+    shapes/select_common_2d.scad
+    shapes/select_common_3d.scad
+    transforms/base_cs.scad
+    transforms/layout.scad
   )
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
@@ -83,6 +86,10 @@
   \param  wall  <datastruct> interior walls; structured data.
 
   \param  post  <datastruct> posts; structured data.
+
+  \param  hole  <datastruct> holes; structured data.
+
+  \param  shape <datastruct> shapes; structured data.
 
   \param  align <integer-list-3> box alignment; a list [x, y, z].
 
@@ -299,10 +306,10 @@
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | decimal           | wth               | rib base width
-      1 | decimal-list-2    |[[wth, \em rib_edx]]| x-axis oriented rib height extrusion
-      2 | decimal-list-2    |[[wth, \em rib_edy]]| y-axis oriented rib height extrusion
+      1 | decimal-list-2    |[[wth, rib_edx]]   | x-axis oriented rib height extrusion
+      2 | decimal-list-2    |[[wth, rib_edy]]   | y-axis oriented rib height extrusion
 
-    The constants \em rib_edx and \em rib_edy are defaults that
+    The constants \c rib_edx and \c rib_edy are defaults that
     approximates a half-ellipse rib-like shape. To specify alternative
     custom extrusions, see the documentation for the extrusion function
     extrude_linear_mss().
@@ -372,32 +379,32 @@
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
       0 | decimal           | wth               | width
-      1 | datastruct        | \em cfg_he        | extrusion
+      1 | datastruct        | cfg_he            | extrusion
       2 | decimal-list-4 \| decimal | wth       | rounding radius
-      3 | integer-list-4 \| integer |\em cfg_vrm| rounding mode
+      3 | integer-list-4 \| integer | cfg_vrm   | rounding mode
 
-    The constants \em cfg_he and \em cfg_vrm define defaults that may
+    The constants \c cfg_he and \c cfg_vrm define defaults that may
     be used to round the top, base, and edges of a wall.
 
     ##### wall[1]: instance
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | integer                     | required      | type {0: x-axis, 1:y-axis}
-      1 | decimal-list-3:2 \| decimal | [0, 0, 0]     | move
-      2 | decimal-list-3:2 \| decimal | [1, 1, 1]     | scale
-      3 | decimal-list-3:1 \| decimal | [0, 0, 0]     | rotate
-      4 | decimal-list-2              | \em tdef_s    | size
-      5 | decimal-list-2              | \em tdef_he   | extrusion
-      6 | decimal-list-4   \| decimal | \em tdef_vr   | rounding radius
-      7 | integer-list-4   \| integer | \em tdef_vrm  | rounding mode
+      0 | integer                     | required   | type {0: x-axis, 1:y-axis}
+      1 | decimal-list-3:2 \| decimal | [0, 0, 0]  | move
+      2 | decimal-list-3:2 \| decimal | [1, 1, 1]  | scale
+      3 | decimal-list-3:1 \| decimal | [0, 0, 0]  | rotate
+      4 | decimal-list-2              | tdef_s     | size
+      5 | decimal-list-2              | tdef_he    | extrusion
+      6 | decimal-list-4   \| decimal | tdef_vr    | rounding radius
+      7 | integer-list-4   \| integer | tdef_vrm   | rounding mode
 
-    The constants \em tdef_s, \em tdef_he, \em tdef_vr, and \em
-    tdef_vrm are default values that depend on the wall type being
-    constructed. For example, \em tdef_s = [max_x, wth] for wall type 0
-    and \em tdef_s = [wth, max_y] for wall type 1. These default may be
-    overridden to provide custom wall sizes, wall rounding and/or
-    height extrusions for each wall instance.
+    The constants \c tdef_s, \c tdef_he, \c tdef_vr, and \c tdef_vrm
+    are default values that depend on the wall type being constructed.
+    For example, `tdef_s = [max_x, wth]` for wall type \c 0 and `tdef_s
+    = [wth, max_y]` for wall type \c 1. These default may be overridden
+    to provide custom wall sizes, wall rounding and/or height
+    extrusions for each wall instance.
 
     ### post
 
@@ -524,8 +531,8 @@
       2 | decimal           | wth               | width
       3 | decimal           | 1/5               | post diameter fraction
       4 | decimal           | 5/8               | post height fraction
-      5 | decimal-list-3 \| decimal | \em def_f0_vr  | rounding radius
-      6 | integer-list-3 \| integer | \em def_f0_vrm | rounding mode
+      5 | decimal-list-3 \| decimal | def_f0_vr  | rounding radius
+      6 | integer-list-3 \| integer | def_f0_vrm | rounding mode
 
     The constants \em def_f0_vr and \em def_f0_vrm define defaults for
     fin rounding and may be overridden if needed. See the source code
@@ -540,8 +547,8 @@
       2 | decimal           | wth               | width
       3 | decimal           | 1/2               | post diameter fraction
       4 | decimal           | 1                 | post height fraction
-      5 | decimal-list-4 \| decimal | \em def_f1_vr  | rounding radius
-      6 | integer-list-4 \| integer | \em def_f1_vrm | rounding mode
+      5 | decimal-list-4 \| decimal | def_f1_vr  | rounding radius
+      6 | integer-list-4 \| integer | def_f1_vrm | rounding mode
 
     The constants \em def_f1_vr and \em def_f1_vrm define defaults for
     fin rounding and may be overridden if needed. See the source code
@@ -613,6 +620,63 @@
     value in the interval (-1, 0), to set the post zero alignment
     position along the enclosure lid height.
 
+    ### hole
+
+    #### Data structure schema:
+
+    This parameter can be used to create holes in the enclosure using
+    common or user-defined 2D shapes. Typical applications include
+    openings for vent holes, LEDs, switches, and fans. For more
+    information on defining and using custom shapes, see
+    select_common_2d_shape(). Hole placement is performed using
+    layout_grid_rp(); refer to its documentation for details on usage
+    and configuration options. The layout bounding box is the center of
+    the enclosure walls.
+
+    name            | schema
+    ---------------:|:----------------------------------------------
+    hole            | [instances]
+    instances       | [instance, instance, ..., instance ]
+
+    #### Data structure fields: instance
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | datastruct \| integer | 1             | 2d shape selections (see: select_common_2d_shape())
+      1 | decimal               | 0             | shape extrusion height (see note below)
+      2 | datastruct            | [0]           | shape layout (see: layout_grid_rp()
+
+    When the shape extrusion height is \p 0, the height is
+    automatically derived from the maximum enclosure dimension. When
+    set to \p −1, \p −2, or \p −3, the height is derived from the
+    width, length, or height dimension, respectively. Any other
+    positive value explicitly sets the extrusion height.
+
+    ### shape
+
+    This parameter can be used to add features to the enclosure design
+    using common or user-defined 3D shapes. Typical applications
+    include standoffs, feet, handles, and cosmetic detailing. For more
+    information on defining and using custom shapes, see
+    select_common_3d_shape(). Shape placement is performed using
+    layout_grid_rp(); refer to its documentation for details on usage
+    and configuration options. The layout bounding box is the center of
+    the enclosure walls.
+
+    #### Data structure schema:
+
+    name            | schema
+    ---------------:|:----------------------------------------------
+    shape           | [instances]
+    instances       | [instance, instance, ..., instance ]
+
+    #### Data structure fields: instance
+
+      e | data type         | default value     | parameter description
+    ---:|:-----------------:|:-----------------:|:------------------------------------
+      0 | datastruct \| integer | 1             | 3d shape selections (see: select_common_3d_shape())
+      1 | datastruct            | [0]           | shape layout (see: layout_grid_rp()
+
     ### align
 
     The x, y, and z axis of the box can be aligned independently using
@@ -663,6 +727,8 @@
       7 | do not construct ribs
       8 | do not construct interior walls
       9 | do not construct posts
+     10 | do not construct holes
+     11 | do not construct shapes
 
     (1) When rounding mode limiting is disabled, the rounding mode
     value, \p vrm, is no longer mapped to \em bevel or \em rounded and
@@ -699,6 +765,8 @@ module project_box_rectangle
   rib,
   wall,
   post,
+  hole,
+  shape,
 
   align,
   mode = 0,
@@ -710,6 +778,91 @@ module project_box_rectangle
   // helper modules and functions
   //
   //
+
+  // hole construction
+  module construct_holes()
+  {
+    insts = defined_or(hole, empty_lst);
+
+    // use center of enclosure walls
+    bsize = [szint_x, szint_y, szint_z] + [wth, wth, wth];
+
+    for (inst = insts)
+    {
+      shape   = defined_e_or (inst, 0, 1);
+      h_p     = defined_e_or (inst, 1, 0);
+      layout  = defined_e_or (inst, 2, [0]);
+
+      s_type  = is_list(shape) ? first(shape) : shape;
+      s_argv  = is_list(shape) ? tailn(shape, 1) : undef;
+
+      /*
+
+        auto-extrusion calculation: add wall thickness
+
+           0 = max(w,l,h)
+          -1 = w, -2 = l, -3 = h
+          >0 = supplied value
+
+      */
+
+      h       = (h_p < 0)  ? bsize[abs(h_p+1)] + wth + eps*8
+              : (h_p == 0) ? max(bsize) + wth + eps*8
+              : h_p;
+
+      // move layout to enclosure center
+      translate([0, 0, bsize.z/2])
+      layout_grid_rp(t=layout, b=bsize, center=true, verb=verb-1)
+      extrude_linear_uss(h, center=true)
+      select_common_2d_shape(type=s_type, argv=s_argv, center=true, verb=verb-1);
+
+      if (verb > 1)
+      {
+        echo(shape=shape, type=s_type, argv=s_argv);
+        echo(height=h);
+        echo(layout=layout);
+      }
+    }
+
+    if (verb > 0)
+    {
+      echo(strl(["hole: instances = ", insts]));
+    }
+  }
+
+  // shape construction
+  module construct_shapes()
+  {
+    insts = defined_or(shape, empty_lst);
+
+    // use center of enclosure walls
+    bsize = [szint_x, szint_y, szint_z] + [wth, wth, wth];
+
+    for (inst = insts)
+    {
+      shape   = defined_e_or (inst, 0, 1);
+      layout  = defined_e_or (inst, 1, [0]);
+
+      s_type  = is_list(shape) ? first(shape) : shape;
+      s_argv  = is_list(shape) ? tailn(shape, 1) : undef;
+
+      // move layout to enclosure center
+      translate([0, 0, bsize.z/2])
+      layout_grid_rp(t=layout, b=bsize, center=true, verb=verb-1)
+      select_common_3d_shape(type=s_type, argv=s_argv, center=true, verb=verb-1);
+
+      if (verb > 1)
+      {
+        echo(shape=shape, type=s_type, argv=s_argv);
+        echo(layout=layout);
+      }
+    }
+
+    if (verb > 0)
+    {
+      echo(strl(["shape: instances = ", insts]));
+    }
+  }
 
   // exterior walls
   module construct_exterior_walls( envelop=false )
@@ -1805,7 +1958,13 @@ module project_box_rectangle
     if ( is_defined( post ) && binary_bit_is(mode, 9, 0) )
     {
       envelop_assembly( mode_int_mask == true )
-      construct_posts( add=true);
+      construct_posts( add=true );
+    }
+
+    if ( is_defined( shape ) && binary_bit_is(mode, 11, 0) )
+    {
+      // should not be enclosure envelope limited
+      construct_shapes();
     }
   }
 
@@ -1814,7 +1973,12 @@ module project_box_rectangle
   {
     if ( is_defined( post ) && binary_bit_is(mode, 9, 0) )
     {
-      construct_posts( remove=true);
+      construct_posts( remove=true );
+    }
+
+    if ( is_defined( hole ) && binary_bit_is(mode, 10, 0) )
+    {
+      construct_holes();
     }
   }
 
@@ -1990,7 +2154,10 @@ function project_box_rectangle_size
 BEGIN_SCOPE example_multiple;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <shapes/select_common_2d.scad>;
+    include <shapes/select_common_3d.scad>;
+    include <transforms/base_cs.scad>;
+    include <transforms/layout.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
 
     wth = 2; h = 8; sx = 75; sy = 50; vr = 5; vrm = 2;
@@ -2026,7 +2193,10 @@ END_SCOPE;
 BEGIN_SCOPE example_bottom;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <shapes/select_common_2d.scad>;
+    include <shapes/select_common_3d.scad>;
+    include <transforms/base_cs.scad>;
+    include <transforms/layout.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
 
     $fn = 18;
@@ -2090,7 +2260,10 @@ END_SCOPE;
 BEGIN_SCOPE example_lip;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <shapes/select_common_2d.scad>;
+    include <shapes/select_common_3d.scad>;
+    include <transforms/base_cs.scad>;
+    include <transforms/layout.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
 
     wth  = 2;

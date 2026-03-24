@@ -1,0 +1,14 @@
+/+
+
+  add to a parent group and leave groups open. group must be explicitly
+  close via @}.
+
+  requires:
+                ${parent}               (from doxyg_init_*.)
+
+ +/
+
+  \addtogroup \amu_eval(${parent})
+  @{
+
+/+ end of file  +/

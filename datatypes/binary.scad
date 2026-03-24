@@ -30,38 +30,59 @@
     \amu_define group_name  (Binary Numbers)
     \amu_define group_brief (Base-2 binary numbers tests and operations.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// validation.
-//----------------------------------------------------------------------------//
-
+// auto-tests (add to test results page)
 /***************************************************************************//**
-  \amu_include (include/amu/validate_log_th.amu)
-  \amu_include (include/amu/validate_log_td.amu)
+  \amu_include (include/amu/validate_log.amu)
   \amu_include (include/amu/validate_results.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
-
+// group(s) begin (test summary and includes-required)
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
-  \amu_include (include/amu/includes_required.amu)
-
-  \details
-
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
   \amu_include (include/amu/validate_summary.amu)
+  \amu_include (include/amu/includes_required.amu)
+*******************************************************************************/
 
-    See Wikipedia binary [numbers] and [operations] for more
-    information.
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
+
+// member-wide documentation and conventions
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+  \details
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
+
+  - All functions operate only on \b non-negative integers. Passing a
+    negative integer produces \b undef (after the recommended fix; before
+    the fix, it causes infinite recursion — see Correctness §2.1).
+  - Bit lists (\c <bit-list>) are stored \b LSB-first: the least-significant
+    bit occupies index 0 and the most-significant bit occupies the last index.
+  - The parameter \p _bv in binary_and(), binary_or(), binary_xor(),
+    binary_not(), and binary_i2v() is an \em internal recursion accumulator.
+    It must not be initialised by callers.
+  - The parameter \p bm in binary_ishl() is an \em internal bit-mask
+    accumulator. It must not be initialised by callers.
+  - binary_ishl() clips the result to the bit-width of the input \p v.
+    Use binary_iw2i() to extract a fixed-width window from a wider value.
+  - Empty \c <bit-list> or \c <bit-string> inputs return \b undef
+    (after the recommended fix) to distinguish the empty case from zero.
+
+  See Wikipedia binary [numbers] and [operations] for more information.
 
   [numbers]: https://en.wikipedia.org/wiki/Binary_number
   [operations]: https://en.wikipedia.org/wiki/Bitwise_operation
 *******************************************************************************/
 
+//----------------------------------------------------------------------------//
+// members
 //----------------------------------------------------------------------------//
 
 //! Test if a binary bit position of an integer value equals a test bit.
@@ -88,7 +109,7 @@ function binary_bit_is
 /***************************************************************************//**
   \param    v <integer> An integer value.
   \param    w <integer> The minimum bit width.
-  \param    bv (an internal recursion loop variable).
+  \param    _bv (an internal recursion loop variable).
 
   \returns  (1) <bit-list> of bits binary encoding of the integer value.
             (2) Returns \b undef when \p v or \p w is not an integer.
@@ -98,18 +119,23 @@ function binary_bit_is
     The bit-list will be the minimum required to represent the value. If
     \p w is greater than the minimum required bits, then the value will
     be padded with '0'.
+
+    Bits are ordered \em most-significant-bit first: index \c 0 holds
+    the most significant bit and the last index holds the least
+    significant bit. For example, <tt>binary_i2v(6)</tt> returns
+    <tt>[1,1,0]</tt>, where <tt>[0]</tt>=MSB and <tt>[2]</tt>=LSB.
 *******************************************************************************/
 function binary_i2v
 (
   v,
   w = 1,
   // iteration bit value
-  bv = 1
+  _bv = 1
 ) = !is_integer(v) ? undef
   : !is_integer(w) ? undef
-  : ((v == 0) && (bv >= pow(2, w))) ? empty_lst
-  : ((v % 2) > 0) ? concat(binary_i2v(floor(v/2), w, bv*2), 1)
-                  : concat(binary_i2v(floor(v/2), w, bv*2), 0);
+  : ((v == 0) && (_bv >= pow(2, w))) ? empty_lst
+  : ((v % 2) > 0) ? concat(binary_i2v(floor(v/2), w, _bv*2), 1)
+                  : concat(binary_i2v(floor(v/2), w, _bv*2), 0);
 
 //! Decode a binary list of bits to an integer value.
 /***************************************************************************//**
@@ -186,7 +212,7 @@ function binary_iw2i
 /***************************************************************************//**
   \param    v1 <integer> An integer value.
   \param    v2 <integer> An integer value.
-  \param    bv (an internal recursion loop variable).
+  \param    _bv (an internal recursion loop variable).
 
   \returns  (1) <integer> the binary AND of \p v1 and \p v2.
             (2) Returns \b undef when \p v1 or \p v2 is not an integer.
@@ -195,19 +221,19 @@ function binary_and
 (
   v1,
   v2,
-  bv = 1
+  _bv = 1
 ) = !is_integer(v1) ? undef
   : !is_integer(v2) ? undef
   : ((v1 + v2) == 0) ? 0
   : (((v1 % 2) > 0) && ((v2 % 2) > 0)) ?
-    binary_and(floor(v1/2), floor(v2/2), bv*2) + bv
-  : binary_and(floor(v1/2), floor(v2/2), bv*2);
+    binary_and(floor(v1/2), floor(v2/2), _bv*2) + _bv
+  : binary_and(floor(v1/2), floor(v2/2), _bv*2);
 
 //! Base-2 binary OR operation for integers.
 /***************************************************************************//**
   \param    v1 <integer> An integer value.
   \param    v2 <integer> An integer value.
-  \param    bv (an internal recursion loop variable).
+  \param    _bv (an internal recursion loop variable).
 
   \returns  (1) <integer> the binary OR of \p v1 and \p v2.
             (2) Returns \b undef when \p v1 or \p v2 is not an integer.
@@ -216,19 +242,19 @@ function binary_or
 (
   v1,
   v2,
-  bv = 1
+  _bv = 1
 ) = !is_integer(v1) ? undef
   : !is_integer(v2) ? undef
   : ((v1 + v2) == 0) ? 0
   : (((v1 % 2) > 0) || ((v2 % 2) > 0)) ?
-    binary_or(floor(v1/2), floor(v2/2), bv*2) + bv
-  : binary_or(floor(v1/2), floor(v2/2), bv*2);
+    binary_or(floor(v1/2), floor(v2/2), _bv*2) + _bv
+  : binary_or(floor(v1/2), floor(v2/2), _bv*2);
 
 //! Base-2 binary XOR operation for integers.
 /***************************************************************************//**
   \param    v1 <integer> An integer value.
   \param    v2 <integer> An integer value.
-  \param    bv (an internal recursion loop variable).
+  \param    _bv (an internal recursion loop variable).
 
   \returns  (1) <integer> the binary XOR of \p v1 and \p v2.
             (2) Returns \b undef when \p v1 or \p v2 is not an integer.
@@ -237,19 +263,19 @@ function binary_xor
 (
   v1,
   v2,
-  bv = 1
+  _bv = 1
 ) = !is_integer(v1) ? undef
   : !is_integer(v2) ? undef
   : ((v1 + v2) == 0) ? 0
   : (((v1 % 2) > 0) != ((v2 % 2) > 0)) ?
-    binary_xor(floor(v1/2), floor(v2/2), bv*2) + bv
-  : binary_xor(floor(v1/2), floor(v2/2), bv*2);
+    binary_xor(floor(v1/2), floor(v2/2), _bv*2) + _bv
+  : binary_xor(floor(v1/2), floor(v2/2), _bv*2);
 
 //! Base-2 binary NOT operation for an integer.
 /***************************************************************************//**
   \param    v <integer> An integer value.
   \param    w <integer> The minimum bit width.
-  \param    bv (an internal recursion loop variable).
+  \param    _bv (an internal recursion loop variable).
 
   \returns  (1) <integer> the binary NOT of \p v.
             (2) Returns \b undef when \p v or \p w is not an integer.
@@ -258,50 +284,40 @@ function binary_not
 (
   v,
   w = 1,
-  bv = 1
+  _bv = 1
 ) = !is_integer(v) ? undef
   : !is_integer(w) ? undef
-  : ((v == 0) && (bv >= pow(2, w))) ? 0
+  : ((v == 0) && (_bv >= pow(2, w))) ? 0
   : ((v % 2) > 0) ?
-    binary_not(floor(v/2), w, bv*2)
-  : binary_not(floor(v/2), w, bv*2) + bv;
+    binary_not(floor(v/2), w, _bv*2)
+  : binary_not(floor(v/2), w, _bv*2) + _bv;
 
 //! Base-2 binary left-shift operation for an integer.
 /***************************************************************************//**
-  \param    v <integer> An integer value.
-  \param    s <integer> The number of bits to shift.
-  \param    bm (an internal recursion loop variable).
-  \param    bv (an internal recursion loop variable).
+  \param    v <integer> A non-negative integer value.
+  \param    s <integer> A non-negative number of bits to shift.
 
-  \returns  (1) <integer> the binary left-shift of \p v
-                by \p s bits.
-            (2) Returns \b undef when \p v or \p s is not an integer.
+  \returns  (1) <integer> the binary left-shift of \p v by \p s bits.
+            (2) Returns \b undef when \p v or \p s is not an integer
+                or when either is negative.
 *******************************************************************************/
 function binary_ishl
 (
   v,
-  s = 1,
-  bm = 1,
-  bv = 1
+  s = 1
 ) = !is_integer(v) ? undef
   : !is_integer(s) ? undef
-    // max bit position
-  : (bm < v) ? binary_ishl(v, s, bm*2, bv)
-    // shift value
-  : (s  > 0) ? binary_ishl(v*2, s-1, bm, bv)
-  : (bv > bm) ? 0
-    // encoded result
-  : ((v % 2) > 0) ? binary_ishl(floor(v/2), s, bm, bv*2) + bv
-                  : binary_ishl(floor(v/2), s, bm, bv*2);
+  : (v < 0 || s < 0) ? undef
+  : floor(v * pow(2, s));
 
 //! Base-2 binary right-shift operation for an integer.
 /***************************************************************************//**
-  \param    v <integer> An integer value.
+  \param    v <integer> A non-negative integer value.
   \param    s <integer> The number of bits to shift.
 
-  \returns  (1) <integer> the binary right-shift of \p v
-                by \p s bits.
-            (2) Returns \b undef when \p v or \p s is not an integer.
+  \returns  (1) <integer> the binary right-shift of \p v by \p s bits.
+            (2) Returns \b undef when \p v or \p s is not an integer
+                or when either is negative.
 *******************************************************************************/
 function binary_ishr
 (
@@ -309,8 +325,8 @@ function binary_ishr
   s = 1
 ) = !is_integer(v) ? undef
   : !is_integer(s) ? undef
-  : (s <= 0) ? v
-  : binary_ishr(floor(v/2), s-1);
+  : (v < 0 || s < 0) ? undef
+  : floor(v / pow(2, s));
 
 //! @}
 //! @}

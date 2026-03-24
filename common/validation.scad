@@ -30,7 +30,7 @@
     \amu_define group_name  (Validation Functions)
     \amu_define group_brief (Run-time test and validation functions.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -38,7 +38,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
@@ -47,7 +47,10 @@
 //----------------------------------------------------------------------------//
 
 //! Value signature assignment for log-value results table to skip a test.
-validation_skip = [number_min, number_max, number_inf];
+validation_skip = "__skip__";
+
+//! \name Common
+//! @{
 
 //! Compare a computed test value with an known good result.
 /***************************************************************************//**
@@ -67,11 +70,11 @@ validation_skip = [number_min, number_max, number_inf];
 
      validation types             | pass if (else fail)
     :----------------------------:|:----------------------------:
-     "ae" \| "almost"             | \p cv almost equals \p ev
-     "eq" \| "equals"             | \p cv equals \p ev
-     "ne" \|    "not"             | \p cv not equal to \p ev
-      "t" \|   "true" \| \b true  | \p cv is \b true
-      "f" \|  "false" \| \b false | \p cv is \b false
+     "ae" \| "almost"             | cv almost equals ev
+     "eq" \| "equals"             | cv equals ev
+     "ne" \|    "not"             | cv not equal to ev
+      "t" \|   "true" \| true     | cv is true
+      "f" \|  "false" \| false    | cv is false
 
   \note     When performing an \b "almost" equal validation, the
             comparison precision is controlled by \p p. This specifies
@@ -90,7 +93,7 @@ function validate
   cv,
   t,
   ev,
-  p = 4,
+  p = 6,
   pf = false
 ) = ( (t == "eq") || (t == "equals") ) ?
     (
@@ -142,9 +145,14 @@ module validate_log( t ) { log_type ( "omdl_test", t ); }
 *******************************************************************************/
 module validate_skip( fn ) { validate_log ( str("ignore: '", fn, "'") ); }
 
+//! @}
+
 //----------------------------------------------------------------------------//
 // validation tables
 //----------------------------------------------------------------------------//
+
+//! \name Validation Tables
+//! @{
 
 //! Create data structure for related table validation functions.
 /***************************************************************************//**
@@ -289,8 +297,8 @@ module table_validate
   fn,
   argc,
   fr,
-  t="equals",
-  p=6
+  t = "equals",
+  p = 6
 )
 {
   td = table_validate_get_td(db, id);
@@ -317,9 +325,14 @@ module table_validate
     validate_log( str(id, " -skip-: '", fn, "(", td, ")'") );
 }
 
+//! @}
+
 //----------------------------------------------------------------------------//
 // validation maps
 //----------------------------------------------------------------------------//
+
+//! \name Validation Tables
+//! @{
 
 //! Create data structure for related map validation functions.
 /***************************************************************************//**
@@ -345,8 +358,8 @@ function map_validate_init
   \param    td <string> The test description.
   \param    ev <value> The test expect value.
   \param    v1 <value> The test argument value 1.
-  \param    v2 <value> The test argument value 1.
-  \param    v3 <value> The test argument value 1.
+  \param    v2 <value> The test argument value 2.
+  \param    v3 <value> The test argument value 3.
 
   \returns  <datastruct> An test map entry.
 *******************************************************************************/
@@ -465,8 +478,8 @@ module map_validate
   id,
   argc,
   fr,
-  t="equals",
-  p=6
+  t = "equals",
+  p = 6
 )
 {
   fn = map_validate_get_fn(db);
@@ -494,6 +507,8 @@ module map_validate
   else
     validate_log( str(id, " -skip-: '", fn, "(", td, ")'") );
 }
+
+//! @}
 
 //! @}
 //! @}

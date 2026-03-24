@@ -1,0 +1,15 @@
+/+
+
+  define a group and leave groups open. groups must be explicitly
+  close via @}.
+
+  requires:
+                ${group*}               (from doxyg_init_*.)
+
+ +/
+
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
+  @{
+
+/+ end of file  +/

@@ -30,93 +30,183 @@
     \amu_define group_name  (Coordinates Systems)
     \amu_define group_brief (Coordinate systems and conversions.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
-
+// auto-tests (append to test results page)
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/validate_log.amu)
+  \amu_include (include/amu/validate_results.amu)
+*******************************************************************************/
+
+// group(s) begin (test summary and includes-required)
+/***************************************************************************//**
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
+  \amu_include (include/amu/validate_summary.amu)
   \amu_include (include/amu/includes_required.amu)
+*******************************************************************************/
 
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
+
+// member-wide documentation and conventions
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
   \details
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
 
-    These functions allow for geometric points in space to be specified
-    using multiple coordinate systems. Some geometric calculations are
-    specified more naturally in one or another coordinate system. These
-    conversion functions allow for the movement between the most
-    convenient for a particular application.
+  \b Parameter \b naming
 
-    For more information see Wikipedia on [coordinate system].
+  - \p c is the coordinate point (or list of coordinate points for
+    the scale utility functions) to convert. It has no default and must
+    always be supplied by the caller. Its required dimensionality
+    depends on the target or source system (see Dimension requirements
+    below).
+  - \p from identifies the source coordinate system; defaults to
+    \ref coordinate_unit_default.
+  - \p to identifies the target coordinate system; defaults to
+    \ref coordinate_unit_base.
+  - \p s is the coordinate system identifier string used in
+    \ref coordinate_unit_name. It is distinct from \p c (a numeric
+    point) in both type and role; defaults to
+    \ref coordinate_unit_default.
+  - \p r is a radial scale factor used in the scale utility functions.
+  - \p t is a boolean flag in the scale utility functions: \b true
+    translates all points to exactly radius \p r; \b false scales
+    each point's existing radius by \p r.
 
-    The table below enumerates the supported coordinate systems.
+  \b Return \b values
 
-    | system id  | description    | dimensions  | point convention    |
-    |:----------:|:--------------:|:-----------:|:-------------------:|
-    |  c         | [cartesian]    | 2d or 3d    | [x, y] or [x, y, z] |
-    |  p         | [polar]        | 2d          | [r, aa]             |
-    |  y         | [cylindrical]  | 3d          | [r, aa, z]          |
-    |  s         | [spherical]    | 3d          | [r, aa, pa]         |
+  - All conversion functions return \b undef for unrecognised system
+    identifiers, for input points of wrong dimensionality, or for
+    inputs that are not valid points.
 
-    The symbols used in the convention column are as follows:
+  \b Dimension \b requirements
 
-    | symbol  | description             | units   | reference           |
-    |:-------:|:------------------------|:-------:|:-------------------:|
-    | x, y, z | coordinate distance     | any     | xyz-axis            |
-    | r       | radial distance         | any     | z-axis / xyz-origin |
-    | aa      | [azimuthal] angle       | degrees | positive x-axis     |
-    | pa      | polar / [zenith] angle  | degrees | positive z-axis     |
+  - \c "c" (cartesian) accepts both 2d \c [x,y] and 3d \c [x,y,z].
+  - \c "p" (polar) requires a 2d point \c [r,aa]; a 3d input returns
+    \b undef.
+  - \c "y" (cylindrical) and \c "s" (spherical) require a 3d point;
+    a 2d input returns \b undef.
+
+  \b Angular \b convention
+
+  - All angular components (\c aa, \c pa) are in degrees.
+  - The azimuthal angle \c aa is measured from the positive x-axis
+    in the xy-plane. When \ref coordinate_positive_angle is \b true,
+    negative azimuthal results are shifted by +360° so that \c aa is
+    always in [0°, 360°). This applies to polar, cylindrical, and
+    spherical output.
+  - The polar angle \c pa (spherical only) is always in [0°, 180°]
+    and is not affected by \ref coordinate_positive_angle.
+  - When the input point is the origin \c [0,0,0], the polar angle
+    \c pa is defined as 0° by convention.
+
+  \b Global \b configuration
+
+  - \ref coordinate_unit_base sets the target system when \p to is
+    omitted. Defaults to \c "c". Intended to be overridden at the top
+    of a design file or child scope before any coordinate function is
+    called.
+  - \ref coordinate_unit_default sets the assumed source system when
+    \p from or \p s is omitted. Defaults to \c "c".
+  - \ref coordinate_positive_angle controls whether negative azimuthal
+    angles are normalised to [0°, 360°). Defaults to \b true. Unlike
+    \ref coordinate_unit_base and \ref coordinate_unit_default, this
+    variable may be changed between individual calls to alter angle
+    normalisation on a per-conversion basis.
+
+  These functions allow for geometric points in space to be specified
+  using multiple coordinate systems. Some geometric calculations are
+  specified more naturally in one or another coordinate system. These
+  conversion functions allow for the movement between the most
+  convenient for a particular application.
+
+  For more information see Wikipedia on [coordinate system].
+
+  The table below enumerates the supported coordinate systems.
+
+  | system id  | description    | dimensions  | point convention    |
+  |:----------:|:--------------:|:-----------:|:-------------------:|
+  |  c         | [cartesian]    | 2d or 3d    | [x, y] or [x, y, z] |
+  |  p         | [polar]        | 2d          | [r, aa]             |
+  |  y         | [cylindrical]  | 3d          | [r, aa, z]          |
+  |  s         | [spherical]    | 3d          | [r, aa, pa]         |
+
+  The symbols used in the convention column are as follows:
+
+  | symbol  | description             | units   | reference           |
+  |:-------:|:------------------------|:-------:|:-------------------:|
+  | x, y, z | coordinate distance     | any     | xyz-axis            |
+  | r       | radial distance         | any     | z-axis / xyz-origin |
+  | aa      | [azimuthal] angle       | degrees | positive x-axis     |
+  | pa      | polar / [zenith] angle  | degrees | positive z-axis     |
 
   \note The [azimuthal] angle is a measure of the radial vector orthogonal
         projection onto the xy-plane measured from the positive x-axis.
         The polar angle is measured from the z-axis ([zenith]) to the
         radial vector.
 
-    \amu_define title (Coordinate system base example)
-    \amu_define scope_id (example)
-    \amu_define output_scad (true)
-    \amu_define output_console (false)
-    \amu_include (include/amu/scope.amu)
+  \amu_define title           (Coordinate system base example)
+  \amu_define scope_id        (example)
+  \amu_define output_scad     (true)
+  \amu_define output_console  (false)
+  \amu_include (include/amu/scope.amu)
 
-    \amu_define output_scad (false)
-    \amu_define output_console (true)
+  \amu_define output_scad     (false)
+  \amu_define output_console  (true)
 
-    \amu_define title (coordinate_unit_base=c)
-    \amu_define scope_id (example_c)
-    \amu_include (include/amu/scope.amu)
+  \amu_define title           (coordinate_unit_base=c)
+  \amu_define scope_id        (example_c)
+  \amu_include (include/amu/scope.amu)
 
-    \amu_define title (coordinate_unit_base=p)
-    \amu_define scope_id (example_p)
-    \amu_include (include/amu/scope.amu)
+  \amu_define title           (coordinate_unit_base=p)
+  \amu_define scope_id        (example_p)
+  \amu_include (include/amu/scope.amu)
 
-    \amu_define title (coordinate_unit_base=y)
-    \amu_define scope_id (example_y)
-    \amu_include (include/amu/scope.amu)
+  \amu_define title           (coordinate_unit_base=y)
+  \amu_define scope_id        (example_y)
+  \amu_include (include/amu/scope.amu)
 
-    \amu_define title (coordinate_unit_base=s)
-    \amu_define scope_id (example_s)
-    \amu_include (include/amu/scope.amu)
+  \amu_define title           (coordinate_unit_base=s)
+  \amu_define scope_id        (example_s)
+  \amu_include (include/amu/scope.amu)
 
-    [coordinate system]: https://en.wikipedia.org/wiki/Coordinate_system
-    [cartesian]: https://en.wikipedia.org/wiki/Cartesian_coordinate_system
-    [polar]: https://en.wikipedia.org/wiki/Polar_coordinate_system
-    [cylindrical]: https://en.wikipedia.org/wiki/Cylindrical_coordinate_system
-    [spherical]: https://en.wikipedia.org/wiki/Spherical_coordinate_system
-    [azimuthal]: https://en.wikipedia.org/wiki/Azimuth
-    [zenith]: https://en.wikipedia.org/wiki/Zenith
+  [coordinate system]: https://en.wikipedia.org/wiki/Coordinate_system
+  [cartesian]: https://en.wikipedia.org/wiki/Cartesian_coordinate_system
+  [polar]: https://en.wikipedia.org/wiki/Polar_coordinate_system
+  [cylindrical]: https://en.wikipedia.org/wiki/Cylindrical_coordinate_system
+  [spherical]: https://en.wikipedia.org/wiki/Spherical_coordinate_system
+  [azimuthal]: https://en.wikipedia.org/wiki/Azimuth
+  [zenith]: https://en.wikipedia.org/wiki/Zenith
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
+// members
+//----------------------------------------------------------------------------//
 
 //! <string> The base units for value storage.
+//! \note This variable is intended to be overridden at the top of a
+//!   design file or in a child scope. All coordinate functions that
+//!   omit the \p to parameter will convert to this system.
 coordinate_unit_base = "c";
 
 //! <string> The default units when unspecified.
+//! \note This variable is intended to be overridden at the top of a
+//!   design file or in a child scope. All coordinate functions that
+//!   omit the \p from or \p s parameter will assume this system.
 coordinate_unit_default = "c";
 
 //! <boolean> When converting to angular measures add 360 to negative angles.
+//! \note When \b true, any negative azimuthal angle \c aa produced during
+//!   conversion is shifted by +360° so that \c aa is always in [0°, 360°).
+//!   Applies to polar, cylindrical, and spherical output. May be changed
+//!   between individual calls; does not affect the polar angle \c pa.
 coordinate_positive_angle = true;
 
 //! Return the name of the given coordinate system identifier.
@@ -137,19 +227,28 @@ function coordinate_unit_name
 
 //! Convert a point from Cartesian to other coordinate systems.
 /***************************************************************************//**
-  \param    c <point> A point to convert.
+  \param    c  <point> A point to convert. Must be 2d for \c "p" output,
+               and 3d for \c "y" or \c "s" output. Cartesian \c "c"
+               accepts both 2d and 3d.
   \param    to <string> The coordinate system identifier to which the point
-            should be converted.
+               should be converted. Defaults to \ref coordinate_unit_base.
 
   \returns  <point> The converted result.
-            Returns \b undef for identifiers that are not defined.
+            Returns \b undef for identifiers that are not defined, or
+            if \p c is not a valid point, or if the dimensionality of
+            \p c does not match the requirements of \p to.
+
+  \note     Azimuthal angle normalisation is controlled by
+            \ref coordinate_positive_angle.
+  \note     For spherical output, when \p c is the origin \c [0,0,0]
+            the polar angle \c pa is defined as 0° by convention.
 
   \private
 *******************************************************************************/
-function coordinate_unit_c2
+function _coordinate_unit_c2
 (
   c,
-  to
+  to = coordinate_unit_base
 ) = !is_point(c) ? undef
 
     // cartesian (2d, 3d)
@@ -158,39 +257,39 @@ function coordinate_unit_c2
   : let( d = line_dim(c) )
 
     // polar (2d)
-    (to == "p") ? (d != 2 ) ? undef
+    (to == "p") ? (d != 2) ? undef
     : (
         let
         (
           r   = sqrt(pow(c[0],2) + pow(c[1],2)),
           aa  = atan2(c[1], c[0]),
-          aap = ((aa<0) && (coordinate_positive_angle==true)) ? aa+360 : aa
+          aap = ((aa<0) && coordinate_positive_angle) ? aa+360 : aa
         )
         [r, aap]
       )
 
     // cylindrical (3d)
-  : (to == "y") ? (d != 3 ) ? undef
+  : (to == "y") ? (d != 3) ? undef
     : (
         let
         (
           r   = sqrt(pow(c[0],2) + pow(c[1],2)),
           aa  = atan2(c[1], c[0]),
-          aap = ((aa<0) && (coordinate_positive_angle==true)) ? aa+360 : aa,
-          z   = (c[2] !=undef) ? c[2] : 0
+          aap = ((aa<0) && coordinate_positive_angle) ? aa+360 : aa
         )
-        [r, aap, z]
+        [r, aap, c[2]]
       )
 
     // spherical (3d)
-  : (to == "s") ? (d != 3 ) ? undef
+  : (to == "s") ? (d != 3) ? undef
     : (
         let
         (
           r   = sqrt(pow(c[0],2) + pow(c[1],2) + pow(c[2],2)),
           aa  = atan2(c[1], c[0]),
-          aap = ((aa<0) && (coordinate_positive_angle==true)) ? aa+360 : aa,
-          pa  = acos(c[2] / r)
+          aap = ((aa<0) && coordinate_positive_angle) ? aa+360 : aa,
+          // guard against r==0 (origin): acos(0/0) is undefined; pa=0 by convention
+          pa  = (r == 0) ? 0 : acos(c[2] / r)
         )
         [r, aap, pa]
       )
@@ -199,19 +298,23 @@ function coordinate_unit_c2
 
 //! Convert a point from some coordinate system to the Cartesian coordinate system.
 /***************************************************************************//**
-  \param    c <point> A point to convert.
+  \param    c    <point> A point to convert. Must be 2d for \c "p" input,
+                 and 3d for \c "y" or \c "s" input. Cartesian \c "c"
+                 accepts both 2d and 3d.
   \param    from <string> The coordinate system identifier of the point
-            to be converted.
+                 to be converted. Defaults to \ref coordinate_unit_default.
 
   \returns  <point> The converted result.
-            Returns \b undef for identifiers that are not defined.
+            Returns \b undef for identifiers that are not defined, or
+            if \p c is not a valid point, or if the dimensionality of
+            \p c does not match the requirements of \p from.
 
   \private
 *******************************************************************************/
-function coordinate_unit_2c
+function _coordinate_unit_2c
 (
   c,
-  from
+  from = coordinate_unit_default
 ) = !is_point(c) ? undef
 
     // cartesian (2d, 3d)
@@ -236,10 +339,9 @@ function coordinate_unit_2c
         let
         (
           x = c[0]*cos(c[1]),
-          y = c[0]*sin(c[1]),
-          z = (c[2] != undef) ? c[2] : 0
+          y = c[0]*sin(c[1])
         )
-        [x, y, z]
+        [x, y, c[2]]
       )
 
     // spherical (3d)
@@ -255,16 +357,23 @@ function coordinate_unit_2c
       )
   : undef;
 
-//! Convert point from one coordinate system to another.
+//! Convert a point from one coordinate system to another.
 /***************************************************************************//**
-  \param    c <point> A point to convert.
+  \param    c    <point> A point to convert. Dimensionality must satisfy
+                 the requirements of both \p from and \p to.
   \param    from <string> The coordinate system identifier of the point
-            to be converted.
-  \param    to <string> The coordinate system identifier to which the point
-            should be converted.
+                 to be converted. Defaults to \ref
+                 coordinate_unit_default.
+  \param    to   <string> The coordinate system identifier to which the
+                 point should be converted. Defaults to \ref
+                 coordinate_unit_base.
 
   \returns  <point> The converted result.
-            Returns \b undef for identifiers that are not defined.
+            Returns \b undef for unrecognised identifiers, invalid
+            points, or dimensionality mismatches.
+
+  \note     \c "p" requires 2d input; \c "y" and \c "s" require 3d input;
+            \c "c" accepts both. See conventions for full details.
 *******************************************************************************/
 function coordinate
 (
@@ -272,26 +381,35 @@ function coordinate
   from = coordinate_unit_default,
   to   = coordinate_unit_base
 ) = (from == to) ? c
-  : coordinate_unit_c2( coordinate_unit_2c( c, from ), to );
+  : let( cc = _coordinate_unit_2c( c, from ) )
+    (cc == undef) ? undef
+  : _coordinate_unit_c2( cc, to );
 
-//! Convert point from one coordinate system to another.
+//! Convert a point from one coordinate system to another (direction-swapped defaults).
 /***************************************************************************//**
-  \param    c <point> A point to convert.
+  \param    c    <point> A point to convert. Dimensionality must satisfy
+                 the requirements of both \p from and \p to.
   \param    from <string> The coordinate system identifier of the point
-            to be converted.
-  \param    to <string> The coordinate system identifier to which the point
-            should be converted.
+                 to be converted. Defaults to \ref coordinate_unit_base.
+  \param    to   <string> The coordinate system identifier to which the
+                 point should be converted. Defaults to
+                 \ref coordinate_unit_default.
 
   \returns  <point> The converted result.
-            Returns \b undef for identifiers that are not defined.
+            Returns \b undef for unrecognised identifiers, invalid
+            points, or dimensionality mismatches.
+
+  \note     This is a convenience alias for \ref coordinate with \p from
+            and \p to defaults swapped. It is useful when the natural
+            direction of a design is from the base system back to a
+            display or input system.
 *******************************************************************************/
 function coordinate_inv
 (
   c,
   from = coordinate_unit_base,
   to   = coordinate_unit_default
-) = (from == to) ? c
-  : coordinate_unit_c2( coordinate_unit_2c( c, from ), to );
+) = coordinate(c=c, from=from, to=to);
 
 //! Radially scale a list of 2d cartesian coordinates.
 /***************************************************************************//**
@@ -335,12 +453,12 @@ function coordinate_scale2d_cpc
 *******************************************************************************/
 function coordinate_scale2d_p2c
 (
-  p,
+  c,
   r,
   t = false
 ) =
   [
-    for (i = p)
+    for (i = c)
       coordinate([(t == true) ? r : r*i[0], i[1]], from="p", to="c")
   ];
 
@@ -386,12 +504,12 @@ function coordinate_scale3d_csc
 *******************************************************************************/
 function coordinate_scale3d_s2c
 (
-  s,
+  c,
   r,
   t = false
 ) =
   [
-    for (i = s)
+    for (i = c)
       coordinate([(t == true) ? r : r*i[0], i[1], i[2]], from="s", to="c")
   ];
 
@@ -401,6 +519,25 @@ function coordinate_scale3d_s2c
 //----------------------------------------------------------------------------//
 // openscad-amu auxiliary scripts
 //----------------------------------------------------------------------------//
+
+/*
+BEGIN_SCOPE validate;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <common/validation.scad>;
+
+    echo( str("openscad version ", version()) );
+    for (i=[1:7]) echo( "not tested:" );
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
 
 /*
 BEGIN_SCOPE example;

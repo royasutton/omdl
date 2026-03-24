@@ -30,32 +30,50 @@
     \amu_define group_name  (List Operations)
     \amu_define group_brief (Operations for list data types.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// validation.
-//----------------------------------------------------------------------------//
-
+// auto-tests (add to test results page)
 /***************************************************************************//**
-  \amu_include (include/amu/validate_log_th.amu)
-  \amu_include (include/amu/validate_log_td.amu)
+  \amu_include (include/amu/validate_log.amu)
   \amu_include (include/amu/validate_results.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
-
+// group(s) begin (test summary and includes-required)
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
-  \amu_include (include/amu/includes_required.amu)
-
-  \details
-
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
   \amu_include (include/amu/validate_summary.amu)
+  \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
 
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
+
+// member-wide documentation and conventions
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+  \details
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
+
+  - The primary list parameter is always \p v.
+  - \p l denotes a \b length or \b count (number of elements to take/skip).
+  - \p u denotes an \b upper bound (exclusive end index) only in limit().
+    This dual usage of \p l is a known inconsistency; see Parameter §3.
+  - sort_q() sorts by the natural OpenSCAD comparison of elements.
+    sort_q2() sorts by a sub-element index \p i, enabling sort of
+    structured (tuple) lists.
+  - sum() returns a scalar for a flat numeric list and performs
+    element-wise vector addition for a list of equal-length numeric lists.
+  - merge_s() flattens two lists into one; merge_p() interleaves them.
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// members
 //----------------------------------------------------------------------------//
 
 //! Convert a list of values to a concatenated string.
@@ -209,7 +227,7 @@ function strl_html
   \param    u <boolean> Element values are \b undef.
 
   \returns  (1) \<list> A list of \p l of constand or incrementing
-            sequential elements.
+                sequential elements.
             (2) Returns \b empty_lst when \p l is not a positive number.
 
   \details
@@ -231,17 +249,49 @@ function consts
 //! Selected element indices of a given list according to a selection scheme.
 /***************************************************************************//**
   \param    l \<list> The list.
-  \param    s <index> The index sequence \ref dt_index "specification".
+  \param    s <index> The index selection.
   \param    rs <number> A random number sequence seed.
 
-  \returns  (1) <list-l> The element indices per the specified selection scheme.
-            (2) Returns \b empty_lst when \p l is not a list or for any
-                \p v that does not fall into one of the specification
-                forms.
+  \returns  (1) <list> The selected element indices.
+            (2) Returns \b empty_lst when \p l is not a list or when
+                the selection does not exists.
 
   \details
 
-    See \ref dt_index for argument specification and conventions.
+    This function provides a way to select one or more elements of a
+    list using a convenient shorthand forms for common selection
+    patterns.
+
+    An index selection may be expressed using any of the following
+    forms:
+
+    | value / form    | description                                   |
+    |:---------------:|:----------------------------------------------|
+    | true            | All index positions of the list [0:size-1]    |
+    | false           | No index positions                            |
+    | "all"           | All index positions of the list [0:size-1]    |
+    | "none"          | No index positions                            |
+    | "rands"         | Random index selection of the list [0:size-1] |
+    | "even"          | The even index of the list [0:size-1]         |
+    | "odd"           | The odd index of the list [0:size-1]          |
+    | integer         | The single position given by an <integer>     |
+    | range           | The range of positions given by a <range>     |
+    | integer-list    | The list of positions give in <integer-list>  |
+
+    This function resolves an index specification into a concrete list
+    of index positions, converting shorthand or abstract selection
+    patterns into an explicit, iterable list.
+
+    \b Example
+
+    \code{.c}
+    // list
+    l1 = [a,b,c,d,e,f]
+
+    // index sequence
+    index_sel(l1)          = [0,1,2,3,4,5]
+    index_sel(l1, "rands") = [0,2,5]
+    \endcode
 *******************************************************************************/
 function index_sel
 (
@@ -348,7 +398,14 @@ function limit
                 index range.
             (2) Returns \b undef when list is empty, non-numeric, when
                  an index is specified and does not exists in the list
-                 \p v, or when \p i1 > \p i2.
+                 \p v, or when \p i1 > \\p i2.
+
+  \details
+
+    When the elements of \p v are themselves lists (e.g. 2d or 3d
+    vectors), the result is the element-wise sum across all vectors,
+    equivalent to component-wise vector addition. For example,
+    <tt>sum([[1,2],[3,4],[5,6]])</tt> returns <tt>[9,12]</tt>.
 *******************************************************************************/
 function sum
 (

@@ -1,0 +1,19 @@
+/+
+
+  define a group and add to a parent group.
+
+  requires:
+                ${group*}               (from doxyg_init_*.)
+                ${parent}
+
+ +/
+
+  \addtogroup \amu_eval(${parent})
+  @{
+
+  \defgroup \amu_eval(${group} ${group_name})
+  \brief    \amu_eval(${group_brief})
+
+  @}
+
+/+ end of file  +/

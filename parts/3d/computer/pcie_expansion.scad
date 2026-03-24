@@ -30,17 +30,20 @@
     \amu_define group_name  (PCIe Expansion)
     \amu_define group_brief (PCI Express expansion chassis and/or enclosure generator.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
   \amu_define includes_required_add
   (
-    tools/operation_cs.scad
-    models/2d/joints/dovetail.scad
+    shapes/select_common_2d.scad
+    shapes/select_common_3d.scad
+    transforms/base_cs.scad
+    transforms/layout.scad
+    models/2d/joint/dovetail.scad
     parts/3d/fastener/clamps.scad
     parts/3d/enclosure/project_box_rectangle.scad
   )
@@ -157,17 +160,17 @@ riser_map_doc =
 riser_PCE164P_NO3_VER_007 =
 [
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
-  ["bottom_clearance",        3],         // riser bottom electronics h-clearance
-  ["slot_count",              1],         // riser physical slot count
-  ["vslot_count",             0],         // riser virtual slot count
-  ["multi_slot_offset",   20.32],         // standard pcie multi-slot spacing
-  ["slot1_to_edge1",         15],         // riser slot-1 to pcb adjacent dimension
-  ["slotn_to_edgen",         28],         // riser slot-n to pcb adjacent dimension
-  ["slot_key_to_edgef",  113.25],         // riser key to pcb length to front
-  ["slot_link_width",        16],         // slot connector link width {1, 4, 8, or 16}
-  ["pcb_length",         127.75],         // riser board pcb length rear to front
-  ["pcb_th",               1.75],         // riser pcb thickness
-  ["mount_holes",                         // riser mount holes; ref = slot-1 key
+  ["bottom_clearance",        3],
+  ["slot_count",              1],
+  ["vslot_count",             0],
+  ["multi_slot_offset",   20.32],
+  ["slot1_to_edge1",         15],
+  ["slotn_to_edgen",         28],
+  ["slot_key_to_edgef",  113.25],
+  ["slot_link_width",        16],
+  ["pcb_length",         127.75],
+  ["pcb_th",               1.75],
+  ["mount_holes",
     let
     (
       w1 = 36.00,
@@ -181,11 +184,11 @@ riser_PCE164P_NO3_VER_007 =
       [w1, l1] + ko
     ]
   ],
-  ["mount_holes_add",     undef],         // riser mount holes additions
-  ["post_rotate",            45],         // mount post rotation
-  ["post_fins",             [4]],         // mount post fin configuration
-  ["post_hole_d",          3.00],         // mount post hole diameter
-  ["post_pad_d",    2.75 * 3.00]          // mount post diameter
+  ["mount_holes_add",     undef],
+  ["post_rotate",            45],
+  ["post_fins",             [4]],
+  ["post_hole_d",          3.00],
+  ["post_pad_d",    2.75 * 3.00]
   //! \endcond
 ];
 
@@ -207,17 +210,17 @@ riser_PCE164P_NO3_VER_007 =
 riser_AAAPCIE4HUB =
 [
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
-  ["bottom_clearance",        3],         // riser bottom electronics h-clearance
-  ["slot_count",              4],         // riser physical slot count
-  ["vslot_count",             0],         // riser virtual slot count
-  ["multi_slot_offset",   20.32],         // standard pcie multi-slot spacing
-  ["slot1_to_edge1",         12],         // riser slot-1 to pcb adjacent dimension
-  ["slotn_to_edgen",         12],         // riser slot-n to pcb adjacent dimension
-  ["slot_key_to_edgef",      74],         // riser key to pcb length to front
-  ["slot_link_width",         1],         // slot connector link width {1, 4, 8, or 16}
-  ["pcb_length",             99],         // riser board pcb length rear to front
-  ["pcb_th",                1.5],         // riser pcb thickness
-  ["mount_holes",                         // riser mount holes; ref = slot-1 key
+  ["bottom_clearance",        3],
+  ["slot_count",              4],
+  ["vslot_count",             0],
+  ["multi_slot_offset",   20.32],
+  ["slot1_to_edge1",         12],
+  ["slotn_to_edgen",         12],
+  ["slot_key_to_edgef",      74],
+  ["slot_link_width",         1],
+  ["pcb_length",             99],
+  ["pcb_th",                1.5],
+  ["mount_holes",
     let
     (
       w1 = 20.00,
@@ -234,11 +237,11 @@ riser_AAAPCIE4HUB =
       [w2, l1] + ko
     ]
   ],
-  ["mount_holes_add",     undef],         // riser mount holes additions
-  ["post_rotate",            45],         // mount post rotation
-  ["post_fins",             [4]],         // mount post fin configuration
-  ["post_hole_d",          3.00],         // mount post hole diameter
-  ["post_pad_d",    2.75 * 3.00]          // mount post diameter
+  ["mount_holes_add",     undef],
+  ["post_rotate",            45],
+  ["post_fins",             [4]],
+  ["post_hole_d",          3.00],
+  ["post_pad_d",    2.75 * 3.00]
   //! \endcond
 ];
 
@@ -260,17 +263,17 @@ riser_AAAPCIE4HUB =
 riser_SFF_8612_4X_to_PCI_E_16X =
 [
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
-  ["bottom_clearance",        0],         // riser bottom electronics h-clearance
-  ["slot_count",              1],         // riser physical slot count
-  ["vslot_count",             0],         // riser virtual slot count
-  ["multi_slot_offset",   20.32],         // standard pcie multi-slot spacing
-  ["slot1_to_edge1",       5.75],         // riser slot-1 to pcb adjacent dimension
-  ["slotn_to_edgen",      37.00],         // riser slot-n to pcb adjacent dimension
-  ["slot_key_to_edgef",   89.50],         // riser key to pcb length to front
-  ["slot_link_width",        16],         // slot connector link width {1, 4, 8, or 16}
-  ["pcb_length",         122.00],         // riser board pcb length rear to front
-  ["pcb_th",               1.75],         // riser pcb thickness
-  ["mount_holes",                         // riser mount holes; ref = slot-1 key
+  ["bottom_clearance",        0],
+  ["slot_count",              1],
+  ["vslot_count",             0],
+  ["multi_slot_offset",   20.32],
+  ["slot1_to_edge1",       5.75],
+  ["slotn_to_edgen",      37.00],
+  ["slot_key_to_edgef",   89.50],
+  ["slot_link_width",        16],
+  ["pcb_length",         122.00],
+  ["pcb_th",               1.75],
+  ["mount_holes",
     let
     (
       w1 =  37.00,
@@ -284,11 +287,11 @@ riser_SFF_8612_4X_to_PCI_E_16X =
       [w1, l1] + ko
     ]
   ],
-  ["mount_holes_add",     undef],         // riser mount holes additions
-  ["post_rotate",            45],         // mount post rotation
-  ["post_fins",             [4]],         // mount post fin configuration
-  ["post_hole_d",          2.75],         // mount post hole diameter
-  ["post_pad_d",    2.75 * 2.75]          // mount post diameter
+  ["mount_holes_add",     undef],
+  ["post_rotate",            45],
+  ["post_fins",             [4]],
+  ["post_hole_d",          2.75],
+  ["post_pad_d",    2.75 * 2.75]
   //! \endcond
 ];
 
@@ -325,7 +328,12 @@ enclosure_map_doc =
   ["posts_cover",         "Post instances cover only: see project_box_rectangle()"],
   ["posts",               "Post instances for sides, base and cover: see project_box_rectangle()"],
   ["clamps_base",         "Enclosure base clamps: see clamp_zt_1p()"],
-  ["holes_sides",         "Enclosure side hole instances"],
+  ["holes_sides",         "Enclosure side hole instances: see project_box_rectangle()"],
+  ["holes_base",          "Enclosure base hole instances: see project_box_rectangle()"],
+  ["holes_cover",         "Enclosure cover hole instances: see project_box_rectangle()"],
+  ["shapes_sides",        "Enclosure side shapes instances: see project_box_rectangle()"],
+  ["shapes_base",         "Enclosure base shapes instances: see project_box_rectangle()"],
+  ["shapes_cover",        "Enclosure cover shapes instances: see project_box_rectangle()"],
   ["bracket_window_gap",  "Bracket connector window gap [w]"],
   ["bracket_shoe_gap_p",  "Bracket shoe gap% [w, l, h]"],
   ["bracket_shoe_offset", "Bracket shoe vertical offset [h]"],
@@ -360,9 +368,9 @@ enclosure_map_doc =
       0 | decimal           |                   | thickness
       1 | decimal           |                   | tab-boarders (width addition)
       2 | decimal           |                   | screw hole diameter
-      3 | <decimal-list-4\|decimal> |           | tab rounding
-      4 | <decimal-list-4\|decimal> |           | tab rounding modes
-      4 | <decimal-list-5\|decimal> |           | dovetail configuration: see dovetail2d() \p t
+      3 | decimal-list-4 \| decimal |           | tab rounding
+      4 | decimal-list-4 \| decimal |           | tab rounding modes
+      4 | decimal-list-5 \| decimal |           | dovetail configuration: see joint2d_dovetail() \p t
 
     ### clamps_base
 
@@ -376,66 +384,53 @@ enclosure_map_doc =
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal-list-2>        |                   | wire hole size [w, h]
-      1 | <decimal-list-2>        |                   | zip-tie hole size [w, h]
-      2 | <decimal-list-3>        |                   | clamp envelope size [w, h, d]
-      3 | <datastruct>            |                   | tunnel configuration: see clamp_zt_1p() \p tunnel
-      4 | <decimal-list3-list-4>  |                   | vr [clamp, wire, tunnel]
-      5 | <integer-list3-list-4>  |                   | vrm [clamp, wire, tunnel]
+      0 | decimal-list-2       |                | wire hole size [w, h]
+      1 | decimal-list-2       |                | zip-tie hole size [w, h]
+      2 | decimal-list-3       |                | clamp envelope size [w, h, d]
+      3 | datastruct           |                | tunnel configuration: see clamp_zt_1p() \p tunnel
+      4 | decimal-list3-list-4 |                | vr [clamp, wire, tunnel]
+      5 | integer-list3-list-4 |                | vrm [clamp, wire, tunnel]
 
     #### Data structure fields: clamps_base[1]: instances
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <integer-list-2>  |                   | enclosure side [w, l]
-      1 | <decimal>         |                   | clamp rotate [z]
-      2 | <integer>         |                   | clamp align [d]
-      3 | <decimal-list-2>  |                   | clamp move [w, l]
-      4 | <datastruct>      |                   | side passage hole
+      0 | integer-list-2    |                   | enclosure side [w, l]
+      1 | decimal           |                   | clamp rotate [z]
+      2 | integer           |                   | clamp align [d]
+      3 | decimal-list-2    |                   | clamp move [w, l]
+      4 | datastruct        |                   | side passage hole
 
     #### Data structure fields: clamps_base[1]: instances[4]: side passage hole
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <binary>          |                   | enabled
-      1 | <decimal>         |                   | vertical cut extension
-      2 | <datastruct>      |                   | wall cone: see clamp_cg() \p cone
+      0 | binary            |                   | enabled
+      1 | decimal           |                   | vertical cut extension
+      2 | datastruct        |                   | wall cone: see clamp_cg() \p cone
 
     ### cut_sides
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal-list-4>  |                   | edge cut insets: [bb, bt, ft, fb]
-      1 | <decimal-list-4>  |                   | cut rounding: [bb, bt, ft, fb]
-      2 | <integer-list-4>  |                   | cut rounding mode: [bb, bt, ft, fb]
+      0 | decimal-list-4    |                   | edge cut insets: [bb, bt, ft, fb]
+      1 | decimal-list-4    |                   | cut rounding: [bb, bt, ft, fb]
+      2 | integer-list-4    |                   | cut rounding mode: [bb, bt, ft, fb]
 
     ### holes_sides
 
-    #### Data structure schema:
+    See the documentation for project_box_rectangle() under the section
+    for \p hole configuration for more details on hole specification.
 
-    name            | schema
-    ---------------:|:----------------------------------------------
-    holes_sides     | [instances]
+    ### shapes_sides
 
-    #### Data structure fields: holes_sides[*]: instances
-
-      e | data type         | default value     | parameter description
-    ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <integer-list-3>  |                   | enclosure side [w, l, h]
-      1 | <decimal>         |                   | side rotate (group)
-      2 | <decimal-list-2>  |                   | offsets (group) [w/l, h]
-      3 | <integer-list-2>  |                   | shape counts [w/l, h]
-      4 | <decimal-list-2>  |                   | shape grid spacing [w/l, h]
-      5 | <decimal-list-2>  |                   | offset to group  center [w/l, h]
-      6 | <decimal-list-2\|decimal> |           | shape diameter (integer or list)
-      7 | <integer>         |                   | shape facets ($fn)
-      8 | <decimal>         |                   | shape rotate
-      9 | <decimal>         |                   | shape extrusion height
+    See the documentation for project_box_rectangle() under the section
+    for \p shape configuration for more details on shape specification.
 
     ### posts
 
-    See project_box_rectangle() on \p post configuration for
-    documentation on the post defaults and post instances.
+    See the documentation for project_box_rectangle() under the section
+    for \p post configuration for more details on post specification.
 
     ### mode_sides
 
@@ -459,35 +454,35 @@ enclosure_map_doc =
 enclosure_def =
 [
   //! \cond DOXYGEN_SHOULD_SKIP_THIS
-  ["rounding",                  6.75],    // corner rounding radius
-  ["wth",                        2.0],    // minimum wall thickness
+  ["rounding",                  6.75],
+  ["wth",                        2.0],
 
-  ["board_count",                  1],    // riser board count
-  ["multi_board_offset",           0],    // multi-riser inter board offset
+  ["board_count",                  1],
+  ["multi_board_offset",           0],
 
-  ["space_add_edge1",              0],    // add space to riser edge-1
-  ["space_add_edgen",              0],    // add space to riser edge-n
-  ["space_add_length",             0],    // add space to riser end length
-  ["space_add_height",             0],    // add space to enclosure height
+  ["space_add_edge1",              0],
+  ["space_add_edgen",              0],
+  ["space_add_length",             0],
+  ["space_add_height",             0],
 
-  ["space_min_length",             0],    // enclosure minimum interior length
-  ["space_min_height",             0],    // enclosure minimum interior height
+  ["space_min_length",             0],
+  ["space_min_height",             0],
 
-  ["rb_min_clearance",             0],    // riser board minimum bottom clearance
+  ["rb_min_clearance",             0],
 
-  ["rib_pcb_gap",                1/2],    // rib removal gap for pcie and riser board pcb
+  ["rib_pcb_gap",                1/2],
 
-  ["lips_sides",               1 + 8],    // sides lips specification (top and bottom)
-  ["lips_base",                    1],    // base lips specification
-  ["lips_cover",                   2],    // cover lips specification
+  ["lips_sides",               1 + 8],
+  ["lips_base",                    1],
+  ["lips_cover",                   2],
 
-  ["walls",                               // enclosure walls
+  ["walls",
     undef
   ],
 
-  ["ribs",                         0],    // rib specification
+  ["ribs",                         0],
 
-  ["posts_sides_conf",                    // post configuration sides: [mode, default]
+  ["posts_sides_conf",
     [
       0,                                  //  mode (binary encoded integer)
       [                                   //  defaults
@@ -502,7 +497,7 @@ enclosure_def =
       ]
     ]
   ],
-  ["posts_base_conf",                     // post configuration base: [mode, default]
+  ["posts_base_conf",
     [
       0,                                  //  mode (binary encoded integer)
       [                                   //  defaults
@@ -517,7 +512,7 @@ enclosure_def =
       ]
     ]
   ],
-  ["posts_cover_conf",                    // post configuration cover: [mode, default]
+  ["posts_cover_conf",
     [
       0,                                  //  mode (binary encoded integer)
       [                                   //  defaults
@@ -532,7 +527,7 @@ enclosure_def =
       ]
     ]
   ],
-  ["posts_sides",                         // post instances sides only
+  ["posts_sides",
     let(u=undef, t=2, o=7.5, f=[4, 120, u, 1/6])
     [
       [t, [-1,-1], [+o,+o], 180, u, u, u, f],
@@ -541,7 +536,7 @@ enclosure_def =
       [t, [+1,+1], [-o,-o], 000, u, u, u, f]
     ]
   ],
-  ["posts_base",                          // post instances base only
+  ["posts_base",
     let(u=undef, t=3, o=7.5, f=[2, 180, u, 1/6])
     [
       [t, [-1,-1], [+o,+o], 000, u, u, u, f],
@@ -550,7 +545,7 @@ enclosure_def =
       [t, [+1,+1], [-o,-o], 180, u, u, u, f]
     ]
   ],
-  ["posts_cover",                         // post instances cover only
+  ["posts_cover",
     let(u=undef, t=3, o=7.5, f=[2, 180, u, 1/6])
     [
       [t, [-1,-1], [+o,+o], 000, u, u, u, f],
@@ -559,11 +554,11 @@ enclosure_def =
       [t, [+1,+1], [-o,-o], 180, u, u, u, f]
     ]
   ],
-  ["posts",                               // post instances for sides, base and cover
+  ["posts",
     undef
   ],
 
-  ["clamps_base",                         // base clamps
+  ["clamps_base",
     [                                     // clamp set list [[conf, inst]]
       [                                   // set-0: [conf, inst]
         [                                 // set-0, 0: configuration
@@ -599,52 +594,72 @@ enclosure_def =
     ]
   ],
 
-  ["holes_sides",                         // enclosure side hole instances
-    [                                     // instance list
+  ["holes_sides",
+    [
       [
-        [0,0,+1/2],                       // 0: enclosure side [w, l, h]
-        90,                               // 1: side rotate (group)
-        [0, -10],                         // 2: offsets (group) [w/l, h]
-        [ 20,  3],                        // 3: shape counts [w/l, h]
-        [+10.75, -10.75],                 // 4: shape grid spacing [w/l, h]
-        [true, false],                    // 5: offset to group  center [w/l, h]
-        5,                                // 6: shape diameter (integer or list)
-                                          //    integer: n-gon
-                                          //       list: rectangle [size, vr, vrm, vfn]
-        6,                                // 7: shape facets ($fn) (integer or list)
-        30,                               // 8: shape rotate
-        500                               // 9: shape extrusion height
+        [2, [5/2, 6]],
+        -1,
+        [
+          0,
+          [0,0,1/2],
+          [90,0,90],
+          0,
+          30,
+          [0, -10],
+          [20, 3],
+          [+10.75, -10.75],
+          [true, false]
+        ]
       ],
       [
-        [0,0,-1/2],
-        90,
-        [0, +5],
-        [ 18,  1],
-        [+10.75, +10.75],
-        [true, false],
-        [[2.5,10], 1.5],
-        undef,
-        0,
-        500
-      ],
+        [3, [5/2,10], 1.5],
+        -1,
+        [
+          0,
+          [0,0,-1/2],
+          [90,0,90],
+          0,
+          0,
+          [0, +5.5],
+          18,
+          10.75,
+          true
+        ]
+      ]
     ]
   ],
+  ["holes_base",
+    undef
+  ],
+  ["holes_cover",
+    undef
+  ],
 
-  ["bracket_window_gap",        2.00],    // bracket connector window gap [w]
-  ["bracket_shoe_gap_p",      25/100],    // bracket shoe gap% [w, l, h]
-  ["bracket_shoe_offset",      -2.00],    // bracket shoe vertical offset [h]
-  ["bracket_mount_tab",                   // bracket mount tab
+  ["shapes_sides",
+    undef
+  ],
+  ["shapes_base",
+    undef
+  ],
+  ["shapes_cover",
+    undef
+  ],
+
+  ["bracket_window_gap",        2.00],
+  ["bracket_shoe_gap_p",      25/100],
+  ["bracket_shoe_offset",      -2.00],
+  ["bracket_mount_tab",
     [
       3.25,                               // thickness
       4.00,                               // tab-boarders (width addition)
       3.125,                              // screw hole diameter
       [3,3,5,5],                          // tab rounding
       [1,1,4,3],                          // tab rounding modes
-      [5.0, 6.0, 2.0, 3/4, 1/4]           // dovetail configuration: see dovetail2d(t)
+      [5.0, 6.0, 2.0, 3/4, 1/4]           // dovetail configuration: see joint2d_dovetail(t)
     ]
   ],
 
-  ["cut_sides",                           // enclosure sides cut [insets, vr, vrm]
+  ["cut_sides",
     [
       [18, 12, 10, 10],                   // edge cut insets: [bb, bt, ft, fb]
       [10, 15, 0, 0],                     // cut rounding: [bb, bt, ft, fb]
@@ -652,10 +667,10 @@ enclosure_def =
     ]
   ],
 
-  ["mode_rounding",                2],    // rounding mode: 0, 1, 2
-  ["mode_sides",                   0],    // enclosure sides mode
-  ["mode_proj_box",                0],    // project_box_rectangle() mode
-  ["verb_proj_box",                0]     // project_box_rectangle() verbosity
+  ["mode_rounding",                2],
+  ["mode_sides",                   0],
+  ["mode_proj_box",                0],
+  ["verb_proj_box",                0]
   //! \endcond
 ];
 
@@ -991,7 +1006,7 @@ if ( pcie_expansion_debug )
     Before fabricating a design that includes a dovetailed bracket
     mount tab, create and assemble a dovetail test joint to verify
     proper fit. Enable the test joint by setting part bit 6 to 1 (for
-    example, \p part = pow(2, 6)). To refine or evaluate the dovetail
+    example, `part = pow(2, 6))`. To refine or evaluate the dovetail
     configuration, model an assembled test joint by enabling \p part
     bit 5.
 
@@ -1032,6 +1047,8 @@ module pcie_expansion
 
     // base
     encl_bracket_shoe_offset  = map_get_value(enclosure, "bracket_shoe_offset");
+    encl_holes_base           = map_get_value(enclosure, "holes_base");
+    encl_shapes_base          = map_get_value(enclosure, "shapes_base");
 
     // sides and base
     encl_clamps_base          = map_get_value(enclosure, "clamps_base");
@@ -1217,6 +1234,8 @@ module pcie_expansion
           rib   = encl_ribs,
           wall  = encl_walls,
           post  = encl_posts_base_all,
+          hole  = encl_holes_base,
+          shape = encl_shapes_base,
           vr    = encl_rounding,
           vrm   = encl_mode_rounding,
           align = [0, 0, 0],
@@ -1249,7 +1268,7 @@ module pcie_expansion
           extrude_linear_uss(tab_tl)
           {
             pg_rectangle([tab_tw, tab_th]);
-            pg_trapezoid(b=[tab_tw, tab_bw], h=tab_th, a=145, o=[0, tab_th]);
+            pg_trapezoid(b=[tab_tw, tab_bw], h=tab_th, a=117.125, o=[0, tab_th]);
           }
 
       // remove wire clamp tunnels
@@ -1303,6 +1322,7 @@ module pcie_expansion
     encl_mode_sides           = map_get_value(enclosure, "mode_sides");
     encl_cut_sides            = map_get_value(enclosure, "cut_sides");
     encl_holes_sides          = map_get_value(enclosure, "holes_sides");
+    encl_shapes_sides         = map_get_value(enclosure, "shapes_sides");
     encl_bracket_mount_tab    = map_get_value(enclosure, "bracket_mount_tab");
 
     // sides and base
@@ -1310,7 +1330,7 @@ module pcie_expansion
     encl_bracket_window_gap   = map_get_value(enclosure, "bracket_window_gap");
 
     // construct wire clamps and passage ways
-    module wire_clamps_passage(mode)
+    module wire_clamps_passage( mode )
     {
       for (clamp_sets = encl_clamps_base)
       {
@@ -1358,7 +1378,7 @@ module pcie_expansion
     (
       inplace = true,
       dovetail = false,
-      dovetail_mode = 1
+      dovetail_type = 0
     )
     {
       // selective move to bottom of sides with y-offset by encl_wth
@@ -1416,21 +1436,21 @@ module pcie_expansion
 
           translate([w_o, l_o, h_o])
           extrude_linear_uss(wth, center=false)
-          dovetail2d(t=dt, d=d, w=w, center=true, mode=dovetail_mode);
+          joint2d_dovetail(t=dt, d=d, w=w, center=true, type=dovetail_type);
         }
     }
 
     // cut enclosure sides
-    module cut_enclosure_sides()
+    module cut_enclosure_sides( cut_sides )
     {
       // external enclosure size (ignoring protrusions).
       es  = encl_size_wlh
           + [2, 2, 1] * encl_wth
           + [4, 4, 2] * eps;
 
-      sco = defined_e_or(encl_cut_sides, 0, es.y/10);
-      vr  = defined_e_or(encl_cut_sides, 1, 0);
-      vrm = defined_e_or(encl_cut_sides, 2, 0);
+      sco = defined_e_or(cut_sides, 0, es.y/10);
+      vr  = defined_e_or(cut_sides, 1, 0);
+      vrm = defined_e_or(cut_sides, 2, 0);
 
       bbo = defined_e_or(sco, 0, sco);
       bto = defined_e_or(sco, 1, bbo);
@@ -1519,6 +1539,8 @@ module pcie_expansion
           rib   = encode_ribs,
           wall  = encl_walls,
           post  = encl_posts_sides_all,
+          hole  = encl_holes_sides,
+          shape = encl_shapes_sides,
           vr    = encl_rounding,
           vrm   = encl_mode_rounding,
           align = [0, 0, 0],
@@ -1656,74 +1678,20 @@ module pcie_expansion
       translate(wlh_s2b_ao)
       wire_clamps_passage(0);
 
-      // remove component/venting holes (n-gon and/or rectangular)
-      for (inst = encl_holes_sides)
-      {
-        s = defined_e_or(inst, 0, [0,0,0]);           // enclosure side [w, l, h]
-        r = defined_e_or(inst, 1, 0);                 // side-rotate
-
-        o = defined_e_or(inst, 2, [0,0]);             // offsets [w/l, h]
-        n = defined_e_or(inst, 3, [1,1]);             // shape counts [w/l, h]
-        g = defined_e_or(inst, 4, [0,0]);             // grid spacing [w/l, h]
-        c = defined_e_or(inst, 5, [false, false]);    // offset to center [w/l, h]
-
-        d = defined_e_or(inst, 6, 3);                 // shape diameter (or list)
-                                                      //  list: [size, vr, vrm, vfn]
-        f = defined_e_or(inst, 7, 6);                 // shape sides
-        q = defined_e_or(inst, 8, 0);                 // shape rotate
-        h = defined_e_or(inst, 9, encl_wth*2+eps*4);  // shape extrusion height
-
-        m =                                           // group center offsets
-        [
-          (first(n)-1) * first(g)/2 * (defined_e_or(c, 0, false) ? 1 : 0),
-          (second(n)-1) * second(g)/2 * (defined_e_or(c, 1, false) ? 1 : 0)
-        ];
-
-        translate
-        (
-          [
-            first(encl_size_wlh) * first(s),
-            second(encl_size_wlh) * second(s),
-            third(encl_size_wlh) * (1/2 + third(s)),
-          ]
-        )
-        rotate([90, 0, r])
-        translate(o - m)
-        for (i = [0:first(n)-1], j = [0:second(n)-1])
-        translate([first(g) * i, second(g) * j, 0])
-        rotate(q)
-        if ( is_list(d) )
-        {
-          extrude_linear_uss(h=h, center=true)
-          pg_rectangle
-          (
-            size    = defined_e_or(d, 0, d),
-            vr      = defined_e_or(d, 1, undef),
-            vrm     = defined_e_or(d, 2, 1),
-            vfn     = f,
-            center  = true
-          );
-        }
-        else
-        {
-          cylinder(d=d, h=h, center=true, $fn=f);
-        }
-      }
-
       // mode_sides B5: cut sides for open enclosure modes
       if ( binary_bit_is(encl_mode_sides, 5, 1) )
-      cut_enclosure_sides();
+      cut_enclosure_sides( encl_cut_sides );
 
       // remove bracket mount tab shelf dovetail slots
       if ( binary_bit_is(enable, 4, 1) && binary_bit_is(encl_mode_sides, 0, 1) )
-        bracket_mount_tab_shelf(inplace=true, dovetail=true, dovetail_mode=0);
+        bracket_mount_tab_shelf(inplace=true, dovetail=true, dovetail_type=2);
     }
 
     //
     // separate bracket mount tab shelf with dovetail joint
     //
     if ( binary_bit_is(enable, 5, 1) && binary_bit_is(encl_mode_sides, 0, 1) )
-      bracket_mount_tab_shelf(inplace=false, dovetail=true, dovetail_mode=1);
+      bracket_mount_tab_shelf(inplace=false, dovetail=true, dovetail_type=0);
   }
 
   //
@@ -1732,6 +1700,10 @@ module pcie_expansion
   module enclosure_cover(enable = 1)
   {
     // enable: B0: base
+
+    // cover
+    encl_holes_cover          = map_get_value(enclosure, "holes_cover");
+    encl_shapes_cover         = map_get_value(enclosure, "shapes_cover");
 
     // merge all posts
     encl_posts_cover_all =
@@ -1757,6 +1729,8 @@ module pcie_expansion
       rib   = encl_ribs,
       wall  = encl_walls,
       post  = encl_posts_cover_all,
+      hole  = encl_holes_cover,
+      shape = encl_shapes_cover,
       vr    = encl_rounding,
       vrm   = encl_mode_rounding,
       align = [0, 0, 0],
@@ -1787,13 +1761,13 @@ module pcie_expansion
         translate([-x/2, +eps*2, -wth/2-eps*2])
         cube([w+x, d-eps*4, wth*3/2], center=false);
         extrude_linear_uss(wth, center=false)
-        dovetail2d(t=dt, d=d, w=w, center=true, mode=0);
+        joint2d_dovetail(t=dt, d=d, w=w, center=true, type=2);
       }
 
       #union()
       {
         extrude_linear_uss(wth, center=false)
-        dovetail2d(t=dt, d=d, w=w, center=true, mode=1);
+        joint2d_dovetail(t=dt, d=d, w=w, center=true, type=0);
         translate([-x/2, -d, 0])
         cube([w+x, d, wth], center=false);
       }
@@ -1810,7 +1784,7 @@ module pcie_expansion
         translate([-x/2, +eps*2, -wth/2-eps*2])
         cube([w+x, d-eps*4, wth*3/2], center=false);
         extrude_linear_uss(wth, center=false)
-        dovetail2d(t=dt, d=d, w=w, center=true, mode=0);
+        joint2d_dovetail(t=dt, d=d, w=w, center=true, type=2);
       }
 
       // female joint printed vertically
@@ -1820,7 +1794,7 @@ module pcie_expansion
         translate([-x/2, +eps*2, -wth/2-eps*2])
         cube([w+x, d-eps*4, wth*3/2], center=false);
         extrude_linear_uss(wth, center=false)
-        dovetail2d(t=dt, d=d, w=w, center=true, mode=0);
+        joint2d_dovetail(t=dt, d=d, w=w, center=true, type=2);
       }
 
       // male joint
@@ -1828,7 +1802,7 @@ module pcie_expansion
       union()
       {
         extrude_linear_uss(wth, center=false)
-        dovetail2d(t=dt, d=d, w=w, center=true, mode=1);
+        joint2d_dovetail(t=dt, d=d, w=w, center=true, type=0);
         translate([-x/2, -d, 0])
         cube([w+x, d, wth], center=false);
       }
@@ -2064,7 +2038,11 @@ module pcie_expansion
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <shapes/select_common_2d.scad>;
+    include <shapes/select_common_3d.scad>;
+    include <transforms/base_cs.scad>;
+    include <transforms/layout.scad>;
+    include <models/2d/joint/dovetail.scad>;
     include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/computer/pcie_expansion.scad>;
@@ -2103,7 +2081,7 @@ END_SCOPE;
 BEGIN_SCOPE riser_PCE164P_NO3_VER_007;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <transforms/base_cs.scad>;
     include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/computer/pcie_expansion.scad>;
@@ -2127,7 +2105,7 @@ END_SCOPE;
 BEGIN_SCOPE riser_AAAPCIE4HUB;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <transforms/base_cs.scad>;
     include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/computer/pcie_expansion.scad>;
@@ -2151,7 +2129,7 @@ END_SCOPE;
 BEGIN_SCOPE riser_SFF_8612_4X_to_PCI_E_16X;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <transforms/base_cs.scad>;
     include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/computer/pcie_expansion.scad>;
@@ -2177,7 +2155,7 @@ END_SCOPE;
 BEGIN_SCOPE enclosure_def;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <transforms/base_cs.scad>;
     include <parts/3d/fastener/clamps.scad>;
     include <parts/3d/enclosure/project_box_rectangle.scad>;
     include <parts/3d/computer/pcie_expansion.scad>;

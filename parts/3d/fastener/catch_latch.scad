@@ -30,7 +30,7 @@
     \amu_define group_name  (Catch latch)
     \amu_define group_brief (Catch latch generator.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -38,7 +38,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
   \amu_define includes_required_add
   (
     models/3d/fastener/screws.scad
@@ -94,9 +94,9 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal-list-3>  | [0, 0, 0]         | \p bevel; [f, v, h]
-      1 | <decimal-list-3>  | [60, 100, 10]     | \p width; [t, c, h]
-      2 | <decimal-list-3>  | [20, 40, 60]      | \p length; [t, s, e]
+      0 | decimal-list-3    | [0, 0, 0]         | \p bevel; [f, v, h]
+      1 | decimal-list-3    | [60, 100, 10]     | \p width; [t, c, h]
+      2 | decimal-list-3    | [20, 40, 60]      | \p length; [t, s, e]
 
       \p bevel: a list [f, v, h], the flat-height, bevel-height,
       bevel-width, specified as a percentage of the latch height.

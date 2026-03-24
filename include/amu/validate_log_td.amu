@@ -3,7 +3,7 @@
   define the validation result table data.
 
   requires:
-                ${group}                (from pgid_*.)
+                ${group}                (from doxyg_init_*.)
 
                 ${tv_*}                 (from validate_log_th.amu)
 

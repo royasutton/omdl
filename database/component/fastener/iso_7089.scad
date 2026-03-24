@@ -30,14 +30,14 @@
     \amu_define group_name  (ISO 7089)
     \amu_define group_brief ([metric/washers] Standard flat washer; ISO 7089; DIN 125 A.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
   \amu_text parent (${parent}_Metric_Washers)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
   \amu_include (include/amu/includes_required.amu)
 
   \details

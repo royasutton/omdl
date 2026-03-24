@@ -3,12 +3,11 @@
   define the validation result table headings.
 
   requires:
-                ${tv_th}                (from validate_log_th.amu)
+    none.
 
  +/
 
   \amu_define tv_th (file^group^script^results^no test^skipped^passed^failed^warning)
   \amu_word   tv_tc (tokenizer="^" words=${tv_th} ++count)
-
 
 /+ end of file  +/

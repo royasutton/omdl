@@ -6,20 +6,22 @@
 #
 ################################################################################
 
-AMU_TOOL_VERSION                  := v3.5
+OMDL_PM_PATH                      := include/mk
+
+AMU_TOOL_VERSION                  := v3.6
 
 AMU_TOOL_PREFIX                   := /usr/local/bin/
 AMU_LIB_PATH                      := /usr/local/share/openscad-amu/$(AMU_TOOL_VERSION)
 
-AMU_PM_PREFIX                     := $(AMU_LIB_PATH)/include/pmf/
-AMU_PM_INIT                       := $(AMU_PM_PREFIX)amu_pm_init
-AMU_PM_RULES                      := $(AMU_PM_PREFIX)amu_pm_rules
-AMU_PM_DESIGN_FLOW                := df1/
+AMU_PM_DESIGN_FLOW                := df1
+AMU_PM_COMPONENTS_ADD             := groups
+AMU_PM_PREFIX                     := $(AMU_LIB_PATH)/include/mk/df/
+AMU_PM_INIT                       := $(AMU_PM_PREFIX)amu_pm_init.mk
+AMU_PM_RULES                      := $(AMU_PM_PREFIX)amu_pm_rules.mk
 
-# openscad-amu component extensions to for omdl
-AMU_PM_COMPONENTS_LOCAL_PATH      := include/pmf
-AMU_PM_COMPONENTS_LOCAL           := modules \
-                                     buildinfo
+# openscad-amu local component extensions to for omdl
+AMU_PM_PREFIX_LOCAL               := $(OMDL_PM_PATH)/df/
+AMU_PM_COMPONENTS_LOCAL           := buildinfo
 
 # Uncomment for increased verbosity and/or debugging.
 # AMU_PM_VERBOSE                  := defined
@@ -37,7 +39,7 @@ path_doxygen                      :=
 # Design Flow Init (DO NO EDIT THIS SECTION)
 #------------------------------------------------------------------------------#
 # Include asserts announcements
-include $(AMU_PM_COMPONENTS_LOCAL_PATH)/announcements
+include $(OMDL_PM_PATH)/announcements.mk
 
 ifeq ($(wildcard $(AMU_PM_INIT)),)
   $(info $(call ANNOUNCE_AMU_INIT,AMU_PM_INIT,$(AMU_PM_INIT)))
@@ -51,7 +53,7 @@ version_checks                    := $(true)
 version_checks_skip_warnings      := $(false)
 
 # Include tools and configurations assertions
-include $(AMU_PM_COMPONENTS_LOCAL_PATH)/assertions
+include $(OMDL_PM_PATH)/assertions.mk
 
 #------------------------------------------------------------------------------#
 # Overrides to Default Design Flow Configuration
@@ -62,7 +64,7 @@ include $(AMU_PM_COMPONENTS_LOCAL_PATH)/assertions
 # debug_dif_filter                := $(true)
 # debug_dif_scanner               := $(true)
 
-# ignore_modules_exclude          := $(true)
+# ignore_groups_exclude           := $(true)
 # ignore_scopes_exclude           := $(true)
 
 output_path_add_project_version   := $(false)
@@ -109,8 +111,11 @@ doxygen_html_footer               := share/doxygen/html_footer.html
 doxygen_html_css                  := share/doxygen/html_style.css
 doxygen_layout                    := share/doxygen/html_layout.xml
 
+example_path_add                  := share/examples/ \
+                                     share/templates/
+
 docs_group_id                     := omdl
-project_logo                      := docs_start_logo_top_55x55
+project_logo                      := docs_home_logo_top_55x55
 
 buildinfo_output_prefix           := docs/buildinfo/
 
@@ -121,11 +126,11 @@ project_files_add                 := $(wildcard include/pmf/*) \
 library_info                      := README.md \
                                      gnu-lgpl-v2.1.txt
 
-# Excluded Modules:
-# to exclude nothing from the command line, use: $ make modules_exclude="" all
-# or set 'ignore_modules_exclude := $(true)' above
+# Excluded Groups:
+# to exclude nothing from the command line, use: $ make groups_exclude="" all
+# or set 'ignore_groups_exclude := $(true)' above
 
-modules_exclude                   := database/material
+groups_exclude                    := database/material
 
 # Excluded Scopes:
 # to exclude nothing from the command line, use: $ make scopes_exclude="" all
@@ -138,18 +143,18 @@ scopes_exclude                    += db_autotest \
 # Release Files Additions:
 # use recursive assignment '=' for references that use derived paths
 release_files_add                  = $(library_info) \
-                                     $(modules_release_add)
+                                     $(groups_release_add)
 
 release_archive_files_add          = $(library_info)
 
 # Backup Files Additions:
 backup_files_add                  := $(library_info) \
-                                     $(modules_backup_add)
+                                     $(groups_backup_add)
 
 #------------------------------------------------------------------------------#
-# Include Root Library Module
+# Include Root Library Group
 #------------------------------------------------------------------------------#
-include module.mk
+include group.mk
 
 #------------------------------------------------------------------------------#
 # Design Flow Rules (DO NO EDIT THIS SECTION)

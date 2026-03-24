@@ -30,7 +30,7 @@
     \amu_define group_name  (Linear rod bearing)
     \amu_define group_brief (Linear rod ball and sled bearing.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -38,10 +38,10 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
   \amu_define includes_required_add
   (
-    tools/operation_cs.scad
+    transforms/base_cs.scad
   )
   \amu_include (include/amu/includes_required.amu)
 *******************************************************************************/
@@ -103,7 +103,7 @@
     specifications for \p h:
 
      parameter h            | value description
-    :-----------------------|:--------------------------------------------------------
+    :----------------------:|:--------------------------------------------------------
      10.5                   | bearing block height, defaults for remaining
      [10.5]                 | same as above
      [10.5, 5]              | block height and end cap thickness
@@ -154,7 +154,7 @@
 
     \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
-module make_bearing_linear_rod
+module bearing_linear_rod
 (
   pipe,
   ball,
@@ -390,7 +390,7 @@ module make_bearing_linear_rod
 BEGIN_SCOPE example;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
-    include <tools/operation_cs.scad>;
+    include <transforms/base_cs.scad>;
     include <parts/3d/motion/bearing_linear_rod.scad>;
 
     emt  = [length(0.706, "in"), length(0.622, "in")];
@@ -398,7 +398,7 @@ BEGIN_SCOPE example;
 
     r = 21.5; h = ball*8; c = 6; a = 85;
 
-    make_bearing_linear_rod
+    bearing_linear_rod
     (
        pipe = emt,
        ball = ball,
@@ -411,7 +411,7 @@ BEGIN_SCOPE example;
     minkowski()
     {
       linear_extrude(h-ball, center=true)
-      rotate(a) ngon(n=c, r=r);
+      rotate(a) ngon([r, c]);
       sphere(r=ball/2);
     }
 

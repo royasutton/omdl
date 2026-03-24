@@ -31,7 +31,11 @@ mkdir tmp && cd tmp
 ```
 
 ```bash
-wget https://git.io/setup-omdl.bash && chmod +x setup-omdl.bash
+wget https://raw.githubusercontent.com/royasutton/omdl/master/share/scripts/setup-omdl.bash
+```
+
+```bash
+chmod +x setup-omdl.bash
 ```
 
 ```bash

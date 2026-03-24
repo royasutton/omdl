@@ -3,7 +3,7 @@
   output validation results details.
 
   requires:
-                ${group}                (from pgid_*.)
+                ${group}                (from doxyg_init_*.)
                 ${parent}
 
                 ${tv_*}                 (from validate_log_{th,td}.amu)
@@ -25,10 +25,10 @@
   \page tv_\amu_eval(${group})_r Results
 
     ### Summary ###
-    \amu_table (columns=${tv_tc} column_headings=${tv_th} cell_texts=${tv_td})
+    \amu_table (columns=${tv_tc} table_class="amuValidate" column_headings=${tv_th} cell_texts=${tv_td})
 
     ### \amu_if( -z ${tv_fail_td} ) {All Passed} else {Failed} endif ###
-    \amu_table (columns=1 cell_texts=${tv_fail_td})
+    \amu_table (columns=1 table_class="amuValidate" cell_texts=${tv_fail_td})
 
     ### All ###
     \code
@@ -36,7 +36,7 @@
     \endcode
 
   \page tv_list
-    \amu_table (columns=${tv_tc} cell_texts=${tv_td})
+    \amu_table (columns=${tv_tc} table_class="amuValidate" cell_texts=${tv_td})
 
   \page tv_fail
     \amu_if ( -n ${tv_fail} ) {\ref ${group} failed ${tv_fail_c}} endif

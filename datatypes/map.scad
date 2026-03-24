@@ -30,23 +30,59 @@
     \amu_define group_name  (Maps)
     \amu_define group_brief (Map data type and operations.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
-
+// auto-tests (add to test results page)
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
-  \amu_include (include/amu/includes_required.amu)
-
-  \details
-
-    \amu_define title (Map use)
-    \amu_define scope_id (example_use)
-    \amu_include (include/amu/scope.amu)
+  \amu_include (include/amu/validate_log.amu)
+  \amu_include (include/amu/validate_results.amu)
 *******************************************************************************/
+
+// group(s) begin (test summary and includes-required)
+/***************************************************************************//**
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
+  \amu_include (include/amu/validate_summary.amu)
+  \amu_include (include/amu/includes_required.amu)
+*******************************************************************************/
+
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
+
+// member-wide documentation and conventions
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+  \details
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
+
+  - A map is a \b list of \b [key, value] pairs. Keys must be \b strings.
+  - The map variable is always named \p m; a second map is \p m2.
+  - \c map_merge(m1, m2): when both maps contain the same key, the value
+    from \p m1 takes precedence. Order of keys in the result is unspecified.
+  - \c map_update(m, u): keys in \p u that are also in \p m update the
+    existing value; keys in \p u absent from \p m are appended.
+    Values in \p m absent from \p u are preserved unchanged.
+  - The special variable \c $map_strict controls whether map_get_value()
+    asserts on a missing key (strict=true) or returns \b undef silently
+    (strict=false, the default).
+  - map_errors() returns an empty list when the map is valid; a non-empty
+    list indicates the detected error class(es).
+
+  \b Example
+
+  \amu_define title (Map use)
+  \amu_define scope_id (example_use)
+  \amu_include (include/amu/scope.amu)
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// members
+//----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
 // global configuration variables
@@ -70,10 +106,10 @@ $map_strict = false;
 //! Return the index of a map key.
 /***************************************************************************//**
   \param    m <map> A list of N key-value map pairs.
-  \param    k <string> A map key.
+  \param    k \<value> A map key.
 
   \returns  <integer> The index of the map entry if it exists.
-            Returns \b undef if \p key is not a string or does not exists.
+            Returns \b undef if \p key does not exist.
 *******************************************************************************/
 function map_get_index
 (
@@ -85,7 +121,7 @@ function map_get_index
 //! Test if a key exists.
 /***************************************************************************//**
   \param    m <map> A list of N key-value map pairs.
-  \param    k <string> A map key.
+  \param    k \<value> A map key.
 
   \returns  <boolean> \b true when the key exists and \b false otherwise.
 *******************************************************************************/
@@ -98,10 +134,12 @@ function map_exists
 //! Get the map value associated with a key.
 /***************************************************************************//**
   \param    m <map> A list of N key-value map pairs.
-  \param    k <string> A map key.
+  \param    k \<value> A map key.
 
-  \returns  \<value> The value associated  with \p key.
-            Returns \b undef if \p key does not exists.
+  \returns  \<value> The value associated with \p key.
+            Returns \b undef if \p key does not exist and
+            \b $map_strict is \b false. Raises an assertion if
+            \p key does not exist and \b $map_strict is \b true.
 *******************************************************************************/
 function map_get_value
 (
@@ -115,7 +153,7 @@ function map_get_value
 /***************************************************************************//**
   \param    m <map> A list of N key-value map pairs.
 
-  \returns  <string-list-N> A list of key strings for all N map entries.
+  \returns  <list-N> A list of keys for all N map entries.
 *******************************************************************************/
 function map_get_keys
 (
@@ -137,7 +175,7 @@ function map_get_values
 /***************************************************************************//**
   \param    m1 <map> A list of N key-value map pairs.
   \param    m2 <map> A list of N key-value map pairs.
-  \param    k <string> A map key.
+  \param    k \<value> A map key.
   \param    d \<value> A default return value.
 
   \returns  \<value> The first value associated with \p key that exists
@@ -207,7 +245,7 @@ function map_update
       mk = map_get_keys(m),
       uk = map_get_keys(u),
 
-      ak = common(uk, not_common(mk, uk)),
+      ak = [for (k = uk) if (!map_exists(m, k)) k],
 
       missing_keys = is_empty( ak ) || ignore
     )
@@ -329,9 +367,9 @@ function map_to_table
 
   \details
 
-    Check that: (1) each entry has key-value 2-tuple, (2) each key is a
-    string, and (3) key identifiers are unique. When there are no
-    errors, the \b empty_lst is returned.
+    Check that: (1) each entry has key-value 2-tuple and (2) key
+    identifiers are unique. When there are no errors, the \b empty_lst
+    is returned.
 *******************************************************************************/
 function map_errors
 (
@@ -376,8 +414,8 @@ function map_errors
 
   \details
 
-    Check that: (1) each entry has key-value 2-tuple, (2) each key is a
-    string, and (3) key identifiers are unique.
+    Check that: (1) each entry has key-value 2-tuple and (2) key
+    identifiers are unique.
 *******************************************************************************/
 module map_check
 (
@@ -574,6 +612,25 @@ module map_write
 //----------------------------------------------------------------------------//
 
 /*
+BEGIN_SCOPE validate;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <common/validation.scad>;
+
+    echo( str("openscad version ", version()) );
+    for (i=[1:13]) echo( "not tested:" );
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
+
+/*
 BEGIN_SCOPE example_use;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
@@ -622,7 +679,9 @@ BEGIN_SCOPE example_use;
     include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
+*/
 
+/*
 BEGIN_SCOPE example_table;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;

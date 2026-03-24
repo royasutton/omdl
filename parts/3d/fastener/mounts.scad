@@ -30,7 +30,7 @@
     \amu_define group_name  (Mounts)
     \amu_define group_brief (Screw mounts tabs, mount slots, mount posts, etc.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -38,7 +38,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
   \amu_define includes_required_add
   (
     models/3d/fastener/screws.scad
@@ -84,7 +84,7 @@
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | required          | \p d: bore diameter
+      0 | decimal           | required          | \p d: bore diameter
       1 | (see below)       | \b undef          | \p h: screw head
       2 | (see below)       | \b undef          | \p t: tolerance
 
@@ -199,8 +199,8 @@ module mount_screw_tab
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | required          | \p d : neck diameter
-      1 | <datastruct>      | [d*2, d/2]        | \p h : screw head
+      0 | decimal           | required          | \p d : neck diameter
+      1 | datastruct        | [d*2, d/2]        | \p h : screw head
 
       See screw_bore() for documentation of the data types for the
       screw parameters \p d and \p h.
@@ -354,8 +354,8 @@ module mount_screw_slot
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | required          | \p d : neck diameter
-      1 | <datastruct>      | [d*2, d/2]        | \p h : screw head
+      0 | decimal           | required          | \p d : neck diameter
+      1 | datastruct        | [d*2, d/2]        | \p h : screw head
 
       See screw_bore() for documentation of the data types for the
       screw parameters \p d and \p h.
@@ -366,8 +366,8 @@ module mount_screw_slot
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <integer>         | required          | \p sc : slot count
-      1 | <decimal>         | 360/sc            | \p sa : slot separation angle
+      0 | integer           | required          | \p sc : slot count
+      1 | decimal           | 360/sc            | \p sa : slot separation angle
 
     \amu_define scope_id      (example_mount_screw_slot_md)
     \amu_define title         (Multi-directional screw mount slot example)
@@ -462,10 +462,10 @@ module mount_screw_slot_md
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal-list-2 \| decimal>           | required  | \p pd: post diameter(s)
-      1 | <decimal>                             | required  | \p ph: post height
-      2 | <integer-list-4 \| integer \| string> | 0         | rounding mode
-      3 | <decimal-list-4 \| decimal>           | min(pd)/8 | rounding radius
+      0 | decimal-list-2 \| decimal             | required  | \p pd: post diameter(s)
+      1 | decimal                               | required  | \p ph: post height
+      2 | integer-list-4 \| integer \| string   | 0         | rounding mode
+      3 | decimal-list-4 \| decimal             | min(pd)/8 | rounding radius
 
       The post base and top can have different diameters by assigning a
       list [pdb, pdt]. This is useful for 3D printing unsupported wall
@@ -488,12 +488,12 @@ module mount_screw_slot_md
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | required          | \p d: bore diameter
-      1 | <decimal>         | pd                | \p l: bore length
-      2 | <datastruct>      | undef             | \p h: screw head
-      3 | <datastruct>      | undef             | \p n: screw nut
-      4 | <datastruct>      | undef             | \p s: nut slot cutout
-      5 | <datastruct>      | undef             | \p f: bore scale factor
+      0 | decimal           | required          | \p d: bore diameter
+      1 | decimal           | pd                | \p l: bore length
+      2 | datastruct        | undef             | \p h: screw head
+      3 | datastruct        | undef             | \p n: screw nut
+      4 | datastruct        | undef             | \p s: nut slot cutout
+      5 | datastruct        | undef             | \p f: bore scale factor
 
       See screw_bore() for documentation of the data types for the
       screw parameters.
@@ -504,9 +504,9 @@ module mount_screw_slot_md
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | required          | \p d: bore diameter
-      1 | <decimal>         | pd                | \p l: bore length
-      2 | <datastruct>      | undef             | \p t: thread engagement
+      0 | decimal           | required          | \p d: bore diameter
+      1 | decimal           | pd                | \p l: bore length
+      2 | datastruct        | undef             | \p t: thread engagement
 
       See screw_bore_tsf() for documentation of the data types for the
       self-forming threads screw bore parameters.
@@ -517,12 +517,12 @@ module mount_screw_slot_md
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <integer>         | required          | fin count
-      1 | <integer>         | 0                 | fin type: {0=triangular, 1=rectangular}
-      2 | <decimal-list-3 \| decimal>           | [ph*5/8, pd/4, pd/8] | size scale factors: [h, l, w]
-      3 | <integer-list-n \| integer \| string> | 0                    | rounding mode
-      4 | <decimal-list-n \| decimal>           | (see below)          | rounding radius
-      5 | <decimal>                             | 360                  | distribution angle
+      0 | integer           | required          | fin count
+      1 | integer           | 0                 | fin type: {0=triangular, 1=rectangular}
+      2 | decimal-list-3 \| decimal             | [ph*5/8, pd/4, pd/8] | size scale factors: [h, l, w]
+      3 | integer-list-n \| integer \| string   | 0                    | rounding mode
+      4 | decimal-list-n \| decimal             | (see below)          | rounding radius
+      5 | decimal                               | 360                  | distribution angle
 
       The rounding mode can be assigned one of the preset configuration
       strings: {"p1", ..., "p6"} or assigned custom values. Both the
@@ -539,10 +539,10 @@ module mount_screw_slot_md
 
       e | data type         | default value     | parameter description
     ---:|:-----------------:|:-----------------:|:------------------------------------
-      0 | <decimal>         | 0                 | cut x-angle
-      1 | <decimal>         | 0                 | cut post base offset
-      2 | <decimal>         | 0                 | cut z-rotation
-      3 | <decimal>         | 4                 | cube removal scale
+      0 | decimal           | 0                 | cut x-angle
+      1 | decimal           | 0                 | cut post base offset
+      2 | decimal           | 0                 | cut z-rotation
+      3 | decimal           | 4                 | cube removal scale
 
       The \p cut parameter can be used to cut the base of the post at
       an angle. As previously discussed, this is useful for 3D-printing

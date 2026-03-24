@@ -27,7 +27,7 @@
 
   \details
 
-  \amu_include (include/amu/pgid_pparent_path_n.amu)
+  \amu_include (include/amu/doxyg_init_ppd_gp.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -46,7 +46,7 @@ include <datatypes/iterable_test.scad>;
 include <datatypes/iterable_operate.scad>;
 
 include <datatypes/list_operate.scad>;
-include <datatypes/list_compare.scad>;
+include <datatypes/list_inspect.scad>;
 
 include <datatypes/euclidean.scad>;
 include <datatypes/binary.scad>;
@@ -69,15 +69,16 @@ include <math/utility.scad>;
 //----------------------------------------------------------------------------//
 // shapes
 //----------------------------------------------------------------------------//
-include <shapes/basic_2d.scad>;
-include <shapes/basic_3d.scad>;
+include <shapes/common_2d.scad>;
+include <shapes/common_3d.scad>;
 include <shapes/polygon.scad>;
 
 //----------------------------------------------------------------------------//
 // tools
 //----------------------------------------------------------------------------//
-include <tools/extrude.scad>;
-include <tools/repeat.scad>;
+include <transforms/align.scad>;
+include <transforms/repeat.scad>;
+include <transforms/extrude.scad>;
 
 //----------------------------------------------------------------------------//
 // units

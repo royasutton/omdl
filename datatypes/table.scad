@@ -30,29 +30,67 @@
     \amu_define group_name  (Tables)
     \amu_define group_brief (Table data type and operations.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
-//----------------------------------------------------------------------------//
-// group.
-//----------------------------------------------------------------------------//
-
+// auto-tests (add to test results page)
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
-  \amu_include (include/amu/includes_required.amu)
-
-  \details
-
-    The table functions were originally coded with the row and column
-    data as separate parameters. Some equivalent functions are provided
-    that accept the row and column data as a single combined parameter,
-    where <tt>t = [r, c];</tt> for convenience and are prefaced with
-    the letter 'c'.
-
-    \amu_define title (Table use)
-    \amu_define scope_id (example_use)
-    \amu_include (include/amu/scope.amu)
+  \amu_include (include/amu/validate_log.amu)
+  \amu_include (include/amu/validate_results.amu)
 *******************************************************************************/
+
+// group(s) begin (test summary and includes-required)
+/***************************************************************************//**
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
+  \amu_include (include/amu/validate_summary.amu)
+  \amu_include (include/amu/includes_required.amu)
+*******************************************************************************/
+
+// member-wide reference definitions
+/***************************************************************************//**
+  \amu_define group_references
+  (
+  )
+*******************************************************************************/
+
+// member-wide documentation and conventions
+/***************************************************************************//**
+  \addtogroup \amu_eval(${group})
+  \details
+  \anchor \amu_eval(${group})_conventions
+  \par Conventions
+
+  - A table is a pair (\p r, \p c) where \p r is the row matrix and
+    \p c is the column-identifier matrix.
+  - The first column of every table must have the identifier \c "id".
+    Row identity is keyed on this column.
+  - The \c ctable_* functions wrap a compact table \p t = [r, c] and
+    delegate to the corresponding \c table_* function. They are provided
+    for convenience; all semantics are identical.
+  - Row identifiers (\p ri) and column identifiers (\p ci) are the string
+    values stored in the id column and column-id row respectively, not
+    integer indices.
+  - table_get() returns \b undef when the row or column identifier is not
+    found; callers must check the return value before use.
+  - table_errors() returns an empty list for a valid table; a non-empty
+    list contains string error descriptors.
+
+  The table functions were originally coded with the row and column
+  data as separate parameters. Some equivalent functions are provided
+  that accept the row and column data as a single combined parameter,
+  where <tt>t = [r, c];</tt> for convenience and are prefaced with the
+  letter 'c'.
+
+  \b Example
+
+  \amu_define title (Table use)
+  \amu_define scope_id (example_use)
+  \amu_include (include/amu/scope.amu)
+*******************************************************************************/
+
+//----------------------------------------------------------------------------//
+// members
+//----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
 // global configuration variables
@@ -183,11 +221,13 @@ function table_get_columns
   \param    ci <string> The column identifier.
 
   \returns  (1) \<value> The value of the table cell <tt>[ri, ci]</tt>
-            when both \p ri and \p ci are defined. (2) The row <list-R>
-            when only \p ri is defined. (3) The column <list-C> when
-            only \p ci is defined. (4) Returns \b undef when the
-            specified row or column identifier is not present in the
-            table or when both are undefined.
+                when both \p ri and \p ci are defined.
+            (2) The row <list-R> when only \p ri is defined.
+            (3) The column <list-C> when only \p ci is defined.
+            (4) Returns \b undef when the specified row or column
+                identifier is not present in the table.
+            (5) Returns \b undef when both \p ri and \p ci are
+                undefined.
 
   \details
 
@@ -986,6 +1026,25 @@ function ctable_errors( t ) = table_errors( first(t), second(t) );
 //----------------------------------------------------------------------------//
 
 /*
+BEGIN_SCOPE validate;
+  BEGIN_OPENSCAD;
+    include <omdl-base.scad>;
+    include <common/validation.scad>;
+
+    echo( str("openscad version ", version()) );
+    for (i=[1:14]) echo( "not tested:" );
+
+    // end_include
+  END_OPENSCAD;
+
+  BEGIN_MFSCRIPT;
+    include --path "${INCLUDE_PATH}" {var_init,var_gen_term}.mfs;
+    include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
+  END_MFSCRIPT;
+END_SCOPE;
+*/
+
+/*
 BEGIN_SCOPE example_use;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
@@ -1057,7 +1116,9 @@ BEGIN_SCOPE example_use;
     include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
+*/
 
+/*
 BEGIN_SCOPE example_table;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;

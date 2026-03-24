@@ -2,7 +2,7 @@
 /***************************************************************************//**
   \file
   \author Roy Allen Sutton
-  \date   2024
+  \date   2024,2026
 
   \copyright
 
@@ -30,7 +30,7 @@
     \amu_define group_name  (Polyhedrons db)
     \amu_define group_brief (Sizable polyhedra generated from shape database.)
 
-  \amu_include (include/amu/pgid_path_pstem_pg.amu)
+  \amu_include (include/amu/doxyg_init_pd_gds_ipg.amu)
 *******************************************************************************/
 
 //----------------------------------------------------------------------------//
@@ -38,7 +38,7 @@
 //----------------------------------------------------------------------------//
 
 /***************************************************************************//**
-  \amu_include (include/amu/group_in_parent_start.amu)
+  \amu_include (include/amu/doxyg_define_in_parent_open.amu)
   \amu_define includes_required_add
   (
     database/geometry/polyhedra/polyhedra_all.scad
@@ -110,38 +110,38 @@ function ph_db_get_id
   \param    align <decimal-list-3 | decimal> A list [x, y, z] of decimals
             or a single decimal for (x=y=z).
 
-  \param    yz <boolean> An internal dataset rotation control variable.
-
   \param    tr \<table> The polyhedra data table rows.
   \param    tc <map> The polyhedra data table columns.
 
   \details
 
-    Each axis may be assigned an alignment value of 0, 1 or 2 as
-    summarized in the following table.
+  The polyhedron is constructed at the origin and can be repositioned
+  using \p align. Each axis is aligned independently, with 0 indicating
+  the center, +1 the positive bounds, and -1 the negative bounds.
+  Fractional alignments and alignment values with magnitudes greater
+  than 1 are also supported.
 
-       align          | value description
-      :---------------|:---------------------------------
-       0              | do not align axis
-       1              | align axis at lower shape bounds
-       2              | align axis at upper shape bounds
+   align | value description
+  :-----:|:---------------------------------
+     0   | align at bounding box center
+    -1   | align axis at lower shape bounds
+    +1   | align axis at upper shape bounds
 
-    Using this module, polyhedron can be incorporated into designs as
-    shown in this simple example.
+  Using this module, polyhedron can be incorporated into designs as
+  shown in this simple example.
 
-    \amu_define title         (Design example)
-    \amu_define image_views   (front diag)
-    \amu_define image_size    (sxga)
-    \amu_define scope_id      (example_design)
+  \amu_define title         (Design example)
+  \amu_define image_views   (front diag)
+  \amu_define image_size    (sxga)
+  \amu_define scope_id      (example_design)
 
-    \amu_include (include/amu/scope_diagrams_3d.amu)
+  \amu_include (include/amu/scope_diagrams_3d.amu)
 *******************************************************************************/
 module ph_db_polyhedron
 (
   id,
   size,
   align,
-  yz = true,
   tr = ph_db_dtr,
   tc = ph_db_dtc
 )
@@ -166,32 +166,30 @@ module ph_db_polyhedron
     c  = table_get_value(tr, tc, id, "c");
     f  = table_get_value(tr, tc, id, "f");
 
-    // data structured more for shape viewing; rotate y to z
-    r  = rotate_p(c, [yz ? 90 : 0, 0, 0]);
-
     // x, y, and z size
     sx = defined_e_or(size, 0, size);
     sy = defined_e_or(size, 1, sx);
     sz = defined_e_or(size, 2, sy);
 
-    // resize iff size has be defined
-    s = is_undef(size) ? r : resize_p(r, [sx, sy, sz]);
-
-    // get bounding box for alignment
-    b = polytope_limits(s, f, s=false);
-
+    // decode alignment
     ax = defined_e_or(align, 0, 0);
     ay = defined_e_or(align, 1, 0);
     az = defined_e_or(align, 2, 0);
 
-    tx = defined_e_or(b[0], ax-1, 0);
-    ty = defined_e_or(b[1], ay-1, 0);
-    tz = defined_e_or(b[2], az-1, 0);
+    // resize iff size has been defined
+    s = is_undef(size) ? c : resize_p(c, [sx, sy, sz]);
+
+    // get bounding box for alignment
+    b = polytope_limits(s, f, s=false);
+
+    // calculate bounding box center location
+    z = [for (i = b) (first(i)+second(i))/2 ];
+
+    // calculate bounding box range (from center to bounds)
+    r = [for (i = b) (second(i)-first(i))/2 ];
 
     // translate to alignment location
-    m = yz
-      ? translate_p(s, [tx, ty, -tz] )
-      : translate_p(s, [tx, -ty, tz] );
+    m = translate_p(s, [r.x * ax - z.x, r.y * ay - z.y, r.z * az - z.z] );
 
     polyhedron(m, f);
   }
@@ -223,7 +221,8 @@ BEGIN_SCOPE example;
 
     for ( i = [ 1 : ph_db_get_size() ] )
       translate([sx * (i%gx), sy * (floor(i/gx)%gy), 0])
-        ph_db_polyhedron( id=ph_db_get_id(i) );
+        rotate([90, 0, 0])
+          ph_db_polyhedron( id=ph_db_get_id(i) );
 
     // end_include
   END_OPENSCAD;
@@ -241,7 +240,9 @@ BEGIN_SCOPE example;
     include --path "${INCLUDE_PATH}" scr_make_mf.mfs;
   END_MFSCRIPT;
 END_SCOPE;
+*/
 
+/*
 BEGIN_SCOPE example_design;
   BEGIN_OPENSCAD;
     include <omdl-base.scad>;
@@ -254,19 +255,20 @@ BEGIN_SCOPE example_design;
     $fn = 5;
 
     // shape sizes
-    h1 = 1; s1 = [10, 10, h1];
+    h1 = 1; s1 = [10, h1, 10];
     h2 = 5; s2 = 2;
-    h3 = 3; s3 = [15, 15, h3];
+    h3 = 3; s3 = [15, h3, 15];
 
     translate([0, 0, h1])
     {
-      ph_db_polyhedron( id=ph_db_get_id(65), size=s1, align=[0,0,2] );
+      rotate([90,0,0])
+      ph_db_polyhedron( id=ph_db_get_id(65), size=s1, align=[0,-1,0] );
 
       rotate(-360/4/$fn)
       cylinder(r=s2, h=h2);
 
-      translate([0, 0, h2]) mirror([0,0,1])
-      ph_db_polyhedron( id=ph_db_get_id(41), size=s3, align=[0,0,2] );
+      translate([0, 0, h2]) mirror([0,0,1]) rotate([90,0,0])
+      ph_db_polyhedron( id=ph_db_get_id(41), size=s3, align=[0,-1,0] );
     }
 
     // end_include
