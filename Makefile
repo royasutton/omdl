@@ -122,9 +122,10 @@ project_logo                      := docs_home_logo_top_55x55
 
 buildinfo_output_prefix           := docs/buildinfo/
 
-project_files_add                 := $(wildcard include/pmf/*) \
+project_files_add                 := $(wildcard include/amu/*.amu) \
                                      $(wildcard include/mfs/*.mfs) \
-                                     $(wildcard include/amu/*.amu)
+                                     $(wildcard include/mk/*.mk) \
+                                     $(wildcard include/mk/df/*.mk)
 
 library_info                      := README.md \
                                      gnu-lgpl-v2.1.txt
