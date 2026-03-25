@@ -13,8 +13,10 @@ AMU_TOOL_VERSION                  := v3.6
 AMU_TOOL_PREFIX                   := /usr/local/bin/
 AMU_LIB_PATH                      := /usr/local/share/openscad-amu/$(AMU_TOOL_VERSION)
 
+# Design flow and components
 AMU_PM_DESIGN_FLOW                := df1
-AMU_PM_COMPONENTS_ADD             := groups
+AMU_PM_COMPONENTS                 := scopes doxygen groups
+
 AMU_PM_PREFIX                     := $(AMU_LIB_PATH)/include/mk/df/
 AMU_PM_INIT                       := $(AMU_PM_PREFIX)amu_pm_init.mk
 AMU_PM_RULES                      := $(AMU_PM_PREFIX)amu_pm_rules.mk
@@ -23,7 +25,7 @@ AMU_PM_RULES                      := $(AMU_PM_PREFIX)amu_pm_rules.mk
 AMU_PM_PREFIX_LOCAL               := $(OMDL_PM_PATH)/df/
 AMU_PM_COMPONENTS_LOCAL           := buildinfo
 
-# Uncomment for increased verbosity and/or debugging.
+# Verbosity and debugging control
 # AMU_PM_VERBOSE                  := defined
 # AMU_PM_DEBUG                    := defined
 
@@ -38,9 +40,10 @@ path_doxygen                      :=
 #------------------------------------------------------------------------------#
 # Design Flow Init (DO NO EDIT THIS SECTION)
 #------------------------------------------------------------------------------#
-# Include asserts announcements
+# Assertions announcement macros
 include $(OMDL_PM_PATH)/announcements.mk
 
+# Init design flow
 ifeq ($(wildcard $(AMU_PM_INIT)),)
   $(info $(call ANNOUNCE_AMU_INIT,AMU_PM_INIT,$(AMU_PM_INIT)))
   $(error unable to continue.)
@@ -48,11 +51,11 @@ else
   include $(AMU_PM_INIT)
 endif
 
-# Design Flow toolchain version checks or warnings
+# Version check configuration
 version_checks                    := $(true)
 version_checks_skip_warnings      := $(false)
 
-# Include tools and configurations assertions
+# Tools and/or configurations assertions
 include $(OMDL_PM_PATH)/assertions.mk
 
 #------------------------------------------------------------------------------#
